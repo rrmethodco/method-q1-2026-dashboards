@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bar Rotunda - Q1 2025 vs Q1 2026 Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f5f6f8;
+  --panel: #ffffff;
+  --sidebar-bg: #1a1d2e;
+  --sidebar-text: #e5e7eb;
+  --sidebar-active: #2563eb;
+  --border: #e5e7eb;
+  --text: #1a1d2e;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --green: #10b981;
+  --red: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+html, body { height: 100%; }
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 240px;
+  height: 100vh;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 24px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.sidebar-subtitle {
+  font-size: 11px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 0;
+  overflow-y: auto;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 12px 16px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.sidebar-nav a.active {
+  background: rgba(37,99,235,0.15);
+  color: #fff;
+  border-left-color: var(--sidebar-active);
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 11px;
+  color: #9ca3af;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+main {
+  margin-left: 240px;
+  min-height: 100vh;
+  padding: 32px;
+  background: var(--bg);
+}
+
+section {
+  display: none;
+}
+
+section.active {
+  display: block;
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.kpi-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.kpi-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-delta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-delta.positive {
+  color: var(--green);
+}
+
+.kpi-delta.negative {
+  color: var(--red);
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  margin-bottom: 24px;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 300px;
+  margin-bottom: 16px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table th {
+  background: var(--bg);
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.data-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tbody tr:hover {
+  background: var(--bg);
+}
+
+.text-right {
+  text-align: right;
+}
+
+.positive {
+  color: var(--green);
+}
+
+.negative {
+  color: var(--red);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.hm-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 10px;
+  overflow-x: auto;
+  padding: 16px 0;
+}
+
+.hm-row {
+  display: grid;
+  grid-template-columns: 50px repeat(24, 1fr);
+  gap: 2px;
+  min-width: 800px;
+}
+
+.hm-cell {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  font-variant-numeric: tabular-nums;
+  font-size: 9px;
+}
+
+.hm-label {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.hm-hhead {
+  background: transparent;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.hm-legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+.hm-legend-bar {
+  width: 180px;
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #ffffff, #2563eb);
+  border: 1px solid var(--border);
+}
+
+.insight-list {
+  list-style: none;
+  padding: 0;
+}
+
+.insight-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.insight-list li:last-child {
+  border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar { width: 200px; }
+  main { margin-left: 200px; padding: 16px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Bar Rotunda</div>
+    <div class="sidebar-subtitle">Q1 2025 vs Q1 2026</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#executive">Executive Summary</a>
+    <a href="#hourly">Hour of Day</a>
+    <a href="#dow">Day of Week</a>
+    <a href="#heatmap">Day × Hour Heatmap</a>
+    <a href="#trend">Daily Trend</a>
+    <a href="#covers">Cover Analysis</a>
+    <a href="#mix">Sales Mix</a>
+    <a href="#product">Product Mix</a>
+    <a href="#events">Private Events</a>
+    <a href="#insights">Key Insights</a>
+
+  </nav>
+  <div class="sidebar-footer">Generated April 9, 2026</div>
+</div>
+
+<main>
+<section id="executive" class="active">
+  <h2>Executive Summary</h2>
+<div style="background:#ecfdf5;border-left:4px solid #10b981;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#047857;margin-bottom:6px">KEY TAKEAWAY</div>Bar Rotunda delivered a <b>strong revenue Q1</b>, with net sales up <b>+14.2% to $248K</b> on nearly flat cover count (−1.7% YoY). Growth was driven almost entirely by <b>pricing power and check composition</b>: average check rose <b>+13.9% to $32.83</b> and avg cover value climbed <b>+16.2% to $25.23</b>. Private events revenue grew <b>+24% to $56,205</b> on 6 bookings (vs. 4 in Q1 2025), adding meaningful incremental spend without cannibalizing the walk-in bar. The quarter's story is simple: Bar Rotunda is selling more per guest without sacrificing volume, but the slight dip in party size and covers suggests the concept is maturing into a higher-ticket destination rather than a high-frequency neighborhood spot.</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Net Sales</div>
+      <div class="kpi-value">$248,076</div>
+      <div class="kpi-delta positive">Q1 2025: $217,151 → +14.2%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Covers</div>
+      <div class="kpi-value">9833</div>
+      <div class="kpi-delta negative">Q1 2025: 10000 → -1.7%</div>
+    </div>
+        <div class="kpi-card">
+      <div class="kpi-label">Checks</div>
+      <div class="kpi-value">7,556</div>
+      <div class="kpi-delta positive">Q1 2025: 7,536 → +0.3%</div>
+    </div>
+        <div class="kpi-card">
+      <div class="kpi-label">Avg Check</div>
+      <div class="kpi-value">$32.83</div>
+      <div class="kpi-delta positive">Q1 2025: $28.82 → +13.9%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Cover Value</div>
+      <div class="kpi-value">$25.23</div>
+      <div class="kpi-delta positive">Q1 2025: $21.72 → +16.2%</div>
+    </div>
+        <div class="kpi-card">
+      <div class="kpi-label">Party Size</div>
+      <div class="kpi-value">1.30</div>
+      <div class="kpi-delta negative">Q1 2025: 1.33 → -1.9%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Daily Sales</div>
+      <div class="kpi-value">$2756</div>
+      <div class="kpi-delta positive">Q1 2025: $2413 → +14.2%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Daily Covers</div>
+      <div class="kpi-value">109</div>
+      <div class="kpi-delta negative">Q1 2025: 111 → -1.7%</div>
+    </div>
+  </div>
+</section>
+
+<section id="hourly">
+  <h2>Hour of Day Analysis</h2>
+<div style="background:#ecfdf5;border-left:4px solid #10b981;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#047857;margin-bottom:6px">KEY TAKEAWAY</div>The <b>7pm–10pm dinner block</b> is Rotunda's engine, generating the majority of nightly revenue. The <b>7pm hour surged to ~$40.9K in Q1 2026 vs. $21K in Q1 2025</b> — a near-doubling that reflects tighter reservation pacing and stronger bar/event traffic at the shoulder of dinner. Morning and early afternoon remain effectively dark; there is untapped capacity if the team ever wants to layer a brunch or aperitivo program on weekends.</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Sales by Hour</h3>
+      <div class="chart-wrap"><canvas id="hourSalesChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Covers by Hour</h3>
+      <div class="chart-wrap"><canvas id="hourCoversChart"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Hourly Detail</h3>
+    <div style="overflow-x: auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Hour</th>
+            <th class="text-right">Sales 2025</th>
+            <th class="text-right">Sales 2026</th>
+            <th class="text-right">Δ</th>
+            <th class="text-right">Covers 2025</th>
+            <th class="text-right">Covers 2026</th>
+            <th class="text-right">Δ</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr>
+        <td>00:00</td>
+        <td class="text-right">$5,633</td>
+        <td class="text-right">$4,928</td>
+        <td class="text-right negative">-12.5%</td>
+        <td class="text-right">233</td>
+        <td class="text-right">170</td>
+        <td class="text-right negative">-27.0%</td>
+      </tr>
+      <tr>
+        <td>01:00</td>
+        <td class="text-right">$114</td>
+        <td class="text-right">$701</td>
+        <td class="text-right positive">+514.9%</td>
+        <td class="text-right">3</td>
+        <td class="text-right">10</td>
+        <td class="text-right positive">+233.3%</td>
+      </tr>
+      <tr>
+        <td>02:00</td>
+        <td class="text-right">$0</td>
+        <td class="text-right">$0</td>
+        <td class="text-right ">—</td>
+        <td class="text-right">0</td>
+        <td class="text-right">0</td>
+        <td class="text-right ">—</td>
+      </tr>
+      <tr>
+        <td>03:00</td>
+        <td class="text-right">$0</td>
+        <td class="text-right">$0</td>
+        <td class="text-right ">—</td>
+        <td class="text-right">0</td>
+        <td class="text-right">0</td>
+        <td class="text-right ">—</td>
+      </tr>
+      <tr>
+        <td>04:00</td>
+        <td class="text-right">$0</td>
+        <td class="text-right">$0</td>
+        <td class="text-right ">—</td>
+        <td class="text-right">0</td>
+        <td class="text-right">0</td>
+        <td class="text-right ">—</td>
+      </tr>
+      <tr>
+        <td>05:00</td>
+        <td class="text-right">$0</td>
+        <td class="text-right">$54</td>
+        <td class="text-right ">—</td>
+        <td class="text-right">0</td>
+        <td class="text-right">3</td>
+        <td class="text-right ">—</td>
+      </tr>
+      <tr>
+        <td>06:00</td>
+        <td class="text-right">$151</td>
+        <td class="text-right">$615</td>
+        <td class="text-right positive">+306.6%</td>
+        <td class="text-right">17</td>
+        <td class="text-right">40</td>
+        <td class="text-right positive">+135.3%</td>
+      </tr>
+      <tr>
+        <td>07:00</td>
+        <td class="text-right">$4,628</td>
+        <td class="text-right">$5,006</td>
+        <td class="text-right positive">+8.2%</td>
+        <td class="text-right">381</td>
+        <td class="text-right">410</td>
+        <td class="text-right positive">+7.6%</td>
+      </tr>
+      <tr>
+        <td>08:00</td>
+        <td class="text-right">$6,686</td>
+        <td class="text-right">$7,610</td>
+        <td class="text-right positive">+13.8%</td>
+        <td class="text-right">464</td>
+        <td class="text-right">543</td>
+        <td class="text-right positive">+17.0%</td>
+      </tr>
+      <tr>
+        <td>09:00</td>
+        <td class="text-right">$5,388</td>
+        <td class="text-right">$7,091</td>
+        <td class="text-right positive">+31.6%</td>
+        <td class="text-right">410</td>
+        <td class="text-right">452</td>
+        <td class="text-right positive">+10.2%</td>
+      </tr>
+      <tr>
+        <td>10:00</td>
+        <td class="text-right">$5,533</td>
+        <td class="text-right">$5,174</td>
+        <td class="text-right negative">-6.5%</td>
+        <td class="text-right">414</td>
+        <td class="text-right">328</td>
+        <td class="text-right negative">-20.8%</td>
+      </tr>
+      <tr>
+        <td>11:00</td>
+        <td class="text-right">$7,038</td>
+        <td class="text-right">$5,121</td>
+        <td class="text-right negative">-27.2%</td>
+        <td class="text-right">420</td>
+        <td class="text-right">313</td>
+        <td class="text-right negative">-25.5%</td>
+      </tr>
+      <tr>
+        <td>12:00</td>
+        <td class="text-right">$9,733</td>
+        <td class="text-right">$5,485</td>
+        <td class="text-right negative">-43.6%</td>
+        <td class="text-right">480</td>
+        <td class="text-right">318</td>
+        <td class="text-right negative">-33.8%</td>
+      </tr>
+      <tr>
+        <td>13:00</td>
+        <td class="text-right">$7,920</td>
+        <td class="text-right">$6,825</td>
+        <td class="text-right negative">-13.8%</td>
+        <td class="text-right">450</td>
+        <td class="text-right">335</td>
+        <td class="text-right negative">-25.6%</td>
+      </tr>
+      <tr>
+        <td>14:00</td>
+        <td class="text-right">$7,479</td>
+        <td class="text-right">$8,949</td>
+        <td class="text-right positive">+19.7%</td>
+        <td class="text-right">389</td>
+        <td class="text-right">398</td>
+        <td class="text-right positive">+2.3%</td>
+      </tr>
+      <tr>
+        <td>15:00</td>
+        <td class="text-right">$9,016</td>
+        <td class="text-right">$10,172</td>
+        <td class="text-right positive">+12.8%</td>
+        <td class="text-right">475</td>
+        <td class="text-right">442</td>
+        <td class="text-right negative">-6.9%</td>
+      </tr>
+      <tr>
+        <td>16:00</td>
+        <td class="text-right">$12,217</td>
+        <td class="text-right">$21,771</td>
+        <td class="text-right positive">+78.2%</td>
+        <td class="text-right">570</td>
+        <td class="text-right">651</td>
+        <td class="text-right positive">+14.2%</td>
+      </tr>
+      <tr>
+        <td>17:00</td>
+        <td class="text-right">$25,279</td>
+        <td class="text-right">$25,669</td>
+        <td class="text-right positive">+1.5%</td>
+        <td class="text-right">646</td>
+        <td class="text-right">679</td>
+        <td class="text-right positive">+5.1%</td>
+      </tr>
+      <tr>
+        <td>18:00</td>
+        <td class="text-right">$15,943</td>
+        <td class="text-right">$18,635</td>
+        <td class="text-right positive">+16.9%</td>
+        <td class="text-right">700</td>
+        <td class="text-right">665</td>
+        <td class="text-right negative">-5.0%</td>
+      </tr>
+      <tr>
+        <td>19:00</td>
+        <td class="text-right">$20,980</td>
+        <td class="text-right">$40,895</td>
+        <td class="text-right positive">+94.9%</td>
+        <td class="text-right">727</td>
+        <td class="text-right">825</td>
+        <td class="text-right positive">+13.5%</td>
+      </tr>
+      <tr>
+        <td>20:00</td>
+        <td class="text-right">$21,988</td>
+        <td class="text-right">$21,178</td>
+        <td class="text-right negative">-3.7%</td>
+        <td class="text-right">862</td>
+        <td class="text-right">847</td>
+        <td class="text-right negative">-1.7%</td>
+      </tr>
+      <tr>
+        <td>21:00</td>
+        <td class="text-right">$18,540</td>
+        <td class="text-right">$21,029</td>
+        <td class="text-right positive">+13.4%</td>
+        <td class="text-right">889</td>
+        <td class="text-right">835</td>
+        <td class="text-right negative">-6.1%</td>
+      </tr>
+      <tr>
+        <td>22:00</td>
+        <td class="text-right">$21,142</td>
+        <td class="text-right">$20,199</td>
+        <td class="text-right negative">-4.5%</td>
+        <td class="text-right">922</td>
+        <td class="text-right">1136</td>
+        <td class="text-right positive">+23.2%</td>
+      </tr>
+      <tr>
+        <td>23:00</td>
+        <td class="text-right">$11,745</td>
+        <td class="text-right">$10,970</td>
+        <td class="text-right negative">-6.6%</td>
+        <td class="text-right">548</td>
+        <td class="text-right">433</td>
+        <td class="text-right negative">-21.0%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="dow">
+  <h2>Day of Week Analysis</h2>
+<div style="background:#eff6ff;border-left:4px solid #2563eb;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div><b>Friday and Saturday</b> remain the dominant revenue days, but <b>Thursday</b> has grown materially YoY — suggesting the early-weekend reservation strategy and event programming are working. Sunday and Monday continue to lag and are the best candidates for programming (trivia, wine dinners, industry nights) to fill low-utilization shifts.</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Sales by Day</h3>
+      <div class="chart-wrap"><canvas id="dowSalesChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Covers by Day</h3>
+      <div class="chart-wrap"><canvas id="dowCoversChart"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Daily Detail</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th class="text-right">Sales 2025</th>
+          <th class="text-right">Sales 2026</th>
+          <th class="text-right">Δ</th>
+          <th class="text-right">Covers 2025</th>
+          <th class="text-right">Covers 2026</th>
+          <th class="text-right">Δ</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Mon</td>
+        <td class="text-right">$15,013</td>
+        <td class="text-right">$14,897</td>
+        <td class="text-right negative">-0.8%</td>
+        <td class="text-right">805</td>
+        <td class="text-right">823</td>
+        <td class="text-right positive">+2.2%</td>
+      </tr>
+      <tr>
+        <td>Tue</td>
+        <td class="text-right">$15,648</td>
+        <td class="text-right">$19,457</td>
+        <td class="text-right positive">+24.3%</td>
+        <td class="text-right">976</td>
+        <td class="text-right">977</td>
+        <td class="text-right positive">+0.1%</td>
+      </tr>
+      <tr>
+        <td>Wed</td>
+        <td class="text-right">$18,416</td>
+        <td class="text-right">$15,350</td>
+        <td class="text-right negative">-16.7%</td>
+        <td class="text-right">1047</td>
+        <td class="text-right">732</td>
+        <td class="text-right negative">-30.1%</td>
+      </tr>
+      <tr>
+        <td>Thu</td>
+        <td class="text-right">$30,006</td>
+        <td class="text-right">$45,889</td>
+        <td class="text-right positive">+52.9%</td>
+        <td class="text-right">1104</td>
+        <td class="text-right">1167</td>
+        <td class="text-right positive">+5.7%</td>
+      </tr>
+      <tr>
+        <td>Fri</td>
+        <td class="text-right">$44,758</td>
+        <td class="text-right">$46,209</td>
+        <td class="text-right positive">+3.2%</td>
+        <td class="text-right">2143</td>
+        <td class="text-right">1859</td>
+        <td class="text-right negative">-13.3%</td>
+      </tr>
+      <tr>
+        <td>Sat</td>
+        <td class="text-right">$71,323</td>
+        <td class="text-right">$85,780</td>
+        <td class="text-right positive">+20.3%</td>
+        <td class="text-right">2865</td>
+        <td class="text-right">3343</td>
+        <td class="text-right positive">+16.7%</td>
+      </tr>
+      <tr>
+        <td>Sun</td>
+        <td class="text-right">$21,986</td>
+        <td class="text-right">$20,494</td>
+        <td class="text-right negative">-6.8%</td>
+        <td class="text-right">1060</td>
+        <td class="text-right">932</td>
+        <td class="text-right negative">-12.1%</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="heatmap">
+  <h2>Day × Hour Sales Heatmap</h2>
+<div style="background:#eff6ff;border-left:4px solid #2563eb;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>The day × hour heatmap concentrates intensity in a tight <b>Thu–Sat, 7pm–10pm quadrant</b>. Cold cells Sun–Wed during lunch hours highlight where there's physical capacity but no demand signal. Any ops initiative aimed at growing covers should target those cool squares rather than trying to squeeze more out of already-saturated Friday dinner.</div>
+  <div class="card">
+    <div style="margin-bottom:32px;"><h3>Q1 2025 — Sales Intensity</h3><p class="muted" style="margin:0 0 10px 0;font-size:12px;">Source: Toast Order Details (actual per-order timestamps)</p><div class="hm-grid"><div class="hm-row"><div class="hm-cell hm-label"></div><div class="hm-cell hm-hhead">0</div><div class="hm-cell hm-hhead">1</div><div class="hm-cell hm-hhead">2</div><div class="hm-cell hm-hhead">3</div><div class="hm-cell hm-hhead">4</div><div class="hm-cell hm-hhead">5</div><div class="hm-cell hm-hhead">6</div><div class="hm-cell hm-hhead">7</div><div class="hm-cell hm-hhead">8</div><div class="hm-cell hm-hhead">9</div><div class="hm-cell hm-hhead">10</div><div class="hm-cell hm-hhead">11</div><div class="hm-cell hm-hhead">12</div><div class="hm-cell hm-hhead">13</div><div class="hm-cell hm-hhead">14</div><div class="hm-cell hm-hhead">15</div><div class="hm-cell hm-hhead">16</div><div class="hm-cell hm-hhead">17</div><div class="hm-cell hm-hhead">18</div><div class="hm-cell hm-hhead">19</div><div class="hm-cell hm-hhead">20</div><div class="hm-cell hm-hhead">21</div><div class="hm-cell hm-hhead">22</div><div class="hm-cell hm-hhead">23</div></div><div class="hm-row"><div class="hm-cell hm-label">Mon</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Mon 0:00 — $79"></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Mon 6:00 — $25"></div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e;" title="Mon 7:00 — $346"></div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e;" title="Mon 8:00 — $577"></div><div class="hm-cell" style="background:rgb(249,251,254);color:#1a1d2e;" title="Mon 9:00 — $441"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Mon 10:00 — $694"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Mon 11:00 — $992"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Mon 12:00 — $993"></div><div class="hm-cell" style="background:rgb(241,245,253);color:#1a1d2e;" title="Mon 13:00 — $1,181">$1k</div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Mon 14:00 — $755"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Mon 15:00 — $1,037">$1k</div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Mon 16:00 — $842"></div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Mon 17:00 — $907"></div><div class="hm-cell" style="background:rgb(239,244,253);color:#1a1d2e;" title="Mon 18:00 — $1,313">$1k</div><div class="hm-cell" style="background:rgb(238,243,253);color:#1a1d2e;" title="Mon 19:00 — $1,403">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Mon 20:00 — $1,264">$1k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Mon 21:00 — $1,480">$1k</div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Mon 22:00 — $679"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Mon 23:00 — $78"></div></div><div class="hm-row"><div class="hm-cell hm-label">Tue</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Tue 6:00 — $13"></div><div class="hm-cell" style="background:rgb(245,247,254);color:#1a1d2e;" title="Tue 7:00 — $865"></div><div class="hm-cell" style="background:rgb(246,249,254);color:#1a1d2e;" title="Tue 8:00 — $707"></div><div class="hm-cell" style="background:rgb(249,251,254);color:#1a1d2e;" title="Tue 9:00 — $476"></div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e;" title="Tue 10:00 — $323"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Tue 11:00 — $632"></div><div class="hm-cell" style="background:rgb(244,247,253);color:#1a1d2e;" title="Tue 12:00 — $951"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Tue 13:00 — $747"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Tue 14:00 — $1,002">$1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Tue 15:00 — $892"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Tue 16:00 — $667"></div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Tue 17:00 — $1,536">$1k</div><div class="hm-cell" style="background:rgb(229,236,252);color:#1a1d2e;" title="Tue 18:00 — $2,232">$2k</div><div class="hm-cell" style="background:rgb(242,245,253);color:#1a1d2e;" title="Tue 19:00 — $1,103">$1k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Tue 20:00 — $1,492">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Tue 21:00 — $1,252">$1k</div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Tue 22:00 — $610"></div><div class="hm-cell" style="background:rgb(253,253,254);color:#1a1d2e;" title="Tue 23:00 — $143"></div></div><div class="hm-row"><div class="hm-cell hm-label">Wed</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Wed 6:00 — $24"></div><div class="hm-cell" style="background:rgb(241,245,253);color:#1a1d2e;" title="Wed 7:00 — $1,190">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Wed 8:00 — $1,228">$1k</div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Wed 9:00 — $637"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Wed 10:00 — $727"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Wed 11:00 — $1,039">$1k</div><div class="hm-cell" style="background:rgb(239,243,253);color:#1a1d2e;" title="Wed 12:00 — $1,346">$1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Wed 13:00 — $906"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Wed 14:00 — $976"></div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e;" title="Wed 15:00 — $603"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Wed 16:00 — $741"></div><div class="hm-cell" style="background:rgb(232,238,252);color:#1a1d2e;" title="Wed 17:00 — $1,957">$1k</div><div class="hm-cell" style="background:rgb(238,243,253);color:#1a1d2e;" title="Wed 18:00 — $1,396">$1k</div><div class="hm-cell" style="background:rgb(234,240,253);color:#1a1d2e;" title="Wed 19:00 — $1,768">$1k</div><div class="hm-cell" style="background:rgb(234,240,253);color:#1a1d2e;" title="Wed 20:00 — $1,816">$1k</div><div class="hm-cell" style="background:rgb(243,247,253);color:#1a1d2e;" title="Wed 21:00 — $965"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Wed 22:00 — $1,002">$1k</div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e;" title="Wed 23:00 — $108"></div></div><div class="hm-row"><div class="hm-cell hm-label">Thu</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Thu 6:00 — $49"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Thu 7:00 — $767"></div><div class="hm-cell" style="background:rgb(241,245,253);color:#1a1d2e;" title="Thu 8:00 — $1,211">$1k</div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Thu 9:00 — $657"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Thu 10:00 — $612"></div><div class="hm-cell" style="background:rgb(245,247,254);color:#1a1d2e;" title="Thu 11:00 — $853"></div><div class="hm-cell" style="background:rgb(224,232,252);color:#1a1d2e;" title="Thu 12:00 — $2,670">$2k</div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Thu 13:00 — $787"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Thu 14:00 — $752"></div><div class="hm-cell" style="background:rgb(242,245,253);color:#1a1d2e;" title="Thu 15:00 — $1,093">$1k</div><div class="hm-cell" style="background:rgb(238,243,253);color:#1a1d2e;" title="Thu 16:00 — $1,454">$1k</div><div class="hm-cell" style="background:rgb(185,204,248);color:#1a1d2e;" title="Thu 17:00 — $6,073">$6k</div><div class="hm-cell" style="background:rgb(232,239,252);color:#1a1d2e;" title="Thu 18:00 — $1,926">$1k</div><div class="hm-cell" style="background:rgb(191,209,249);color:#1a1d2e;" title="Thu 19:00 — $5,507">$5k</div><div class="hm-cell" style="background:rgb(231,238,252);color:#1a1d2e;" title="Thu 20:00 — $2,021">$2k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Thu 21:00 — $1,492">$1k</div><div class="hm-cell" style="background:rgb(234,240,253);color:#1a1d2e;" title="Thu 22:00 — $1,764">$1k</div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e;" title="Thu 23:00 — $313"></div></div><div class="hm-row"><div class="hm-cell hm-label">Fri</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Fri 6:00 — $34"></div><div class="hm-cell" style="background:rgb(249,250,254);color:#1a1d2e;" title="Fri 7:00 — $499"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Fri 8:00 — $992"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Fri 9:00 — $755"></div><div class="hm-cell" style="background:rgb(242,245,253);color:#1a1d2e;" title="Fri 10:00 — $1,101">$1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Fri 11:00 — $936"></div><div class="hm-cell" style="background:rgb(239,243,253);color:#1a1d2e;" title="Fri 12:00 — $1,387">$1k</div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Fri 13:00 — $989"></div><div class="hm-cell" style="background:rgb(242,246,253);color:#1a1d2e;" title="Fri 14:00 — $1,079">$1k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Fri 15:00 — $1,507">$1k</div><div class="hm-cell" style="background:rgb(235,240,253);color:#1a1d2e;" title="Fri 16:00 — $1,703">$1k</div><div class="hm-cell" style="background:rgb(227,235,252);color:#1a1d2e;" title="Fri 17:00 — $2,382">$2k</div><div class="hm-cell" style="background:rgb(222,232,252);color:#1a1d2e;" title="Fri 18:00 — $2,783">$2k</div><div class="hm-cell" style="background:rgb(211,223,251);color:#1a1d2e;" title="Fri 19:00 — $3,767">$3k</div><div class="hm-cell" style="background:rgb(195,212,249);color:#1a1d2e;" title="Fri 20:00 — $5,128">$5k</div><div class="hm-cell" style="background:rgb(197,214,249);color:#1a1d2e;" title="Fri 21:00 — $4,970">$4k</div><div class="hm-cell" style="background:rgb(165,190,246);color:#1a1d2e;" title="Fri 22:00 — $7,773">$7k</div><div class="hm-cell" style="background:rgb(204,218,250);color:#1a1d2e;" title="Fri 23:00 — $4,415">$4k</div></div><div class="hm-row"><div class="hm-cell hm-label">Sat</div><div class="hm-cell" style="background:rgb(225,234,252);color:#1a1d2e;" title="Sat 0:00 — $2,521">$2k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Sat 1:00 — $30"></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Sat 6:00 — $4"></div><div class="hm-cell" style="background:rgb(249,250,254);color:#1a1d2e;" title="Sat 7:00 — $506"></div><div class="hm-cell" style="background:rgb(245,247,254);color:#1a1d2e;" title="Sat 8:00 — $861"></div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Sat 9:00 — $836"></div><div class="hm-cell" style="background:rgb(245,247,254);color:#1a1d2e;" title="Sat 10:00 — $863"></div><div class="hm-cell" style="background:rgb(242,245,253);color:#1a1d2e;" title="Sat 11:00 — $1,121">$1k</div><div class="hm-cell" style="background:rgb(241,245,253);color:#1a1d2e;" title="Sat 12:00 — $1,137">$1k</div><div class="hm-cell" style="background:rgb(236,241,253);color:#1a1d2e;" title="Sat 13:00 — $1,578">$1k</div><div class="hm-cell" style="background:rgb(236,241,253);color:#1a1d2e;" title="Sat 14:00 — $1,627">$1k</div><div class="hm-cell" style="background:rgb(232,238,252);color:#1a1d2e;" title="Sat 15:00 — $1,965">$1k</div><div class="hm-cell" style="background:rgb(198,214,249);color:#1a1d2e;" title="Sat 16:00 — $4,867">$4k</div><div class="hm-cell" style="background:rgb(126,163,243);color:#ffffff;" title="Sat 17:00 — $11,152">$11k</div><div class="hm-cell" style="background:rgb(196,213,249);color:#1a1d2e;" title="Sat 18:00 — $5,077">$5k</div><div class="hm-cell" style="background:rgb(188,207,248);color:#1a1d2e;" title="Sat 19:00 — $5,800">$5k</div><div class="hm-cell" style="background:rgb(154,182,245);color:#1a1d2e;" title="Sat 20:00 — $8,739">$8k</div><div class="hm-cell" style="background:rgb(168,193,247);color:#1a1d2e;" title="Sat 21:00 — $7,510">$7k</div><div class="hm-cell" style="background:rgb(161,188,246);color:#1a1d2e;" title="Sat 22:00 — $8,086">$8k</div><div class="hm-cell" style="background:rgb(180,201,248);color:#1a1d2e;" title="Sat 23:00 — $6,470">$6k</div></div><div class="hm-row"><div class="hm-cell hm-label">Sun</div><div class="hm-cell" style="background:rgb(220,229,251);color:#1a1d2e;" title="Sun 0:00 — $3,033">$3k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Sun 1:00 — $84"></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(249,251,254);color:#1a1d2e;" title="Sun 7:00 — $453"></div><div class="hm-cell" style="background:rgb(242,245,253);color:#1a1d2e;" title="Sun 8:00 — $1,107">$1k</div><div class="hm-cell" style="background:rgb(236,241,253);color:#1a1d2e;" title="Sun 9:00 — $1,583">$1k</div><div class="hm-cell" style="background:rgb(241,245,253);color:#1a1d2e;" title="Sun 10:00 — $1,211">$1k</div><div class="hm-cell" style="background:rgb(238,242,253);color:#1a1d2e;" title="Sun 11:00 — $1,463">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Sun 12:00 — $1,246">$1k</div><div class="hm-cell" style="background:rgb(235,240,253);color:#1a1d2e;" title="Sun 13:00 — $1,730">$1k</div><div class="hm-cell" style="background:rgb(239,244,253);color:#1a1d2e;" title="Sun 14:00 — $1,303">$1k</div><div class="hm-cell" style="background:rgb(232,239,252);color:#1a1d2e;" title="Sun 15:00 — $1,916">$1k</div><div class="hm-cell" style="background:rgb(232,238,252);color:#1a1d2e;" title="Sun 16:00 — $1,940">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Sun 17:00 — $1,269">$1k</div><div class="hm-cell" style="background:rgb(241,244,253);color:#1a1d2e;" title="Sun 18:00 — $1,213">$1k</div><div class="hm-cell" style="background:rgb(236,241,253);color:#1a1d2e;" title="Sun 19:00 — $1,628">$1k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Sun 20:00 — $1,526">$1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Sun 21:00 — $869"></div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Sun 22:00 — $1,227">$1k</div><div class="hm-cell" style="background:rgb(252,253,254);color:#1a1d2e;" title="Sun 23:00 — $217"></div></div></div></div>
+    <div style="margin-bottom:32px;"><h3>Q1 2026 — Sales Intensity</h3><p class="muted" style="margin:0 0 10px 0;font-size:12px;">Source: Toast Order Details (actual per-order timestamps). Shared color scale with 2025 for comparison.</p><div class="hm-grid"><div class="hm-row"><div class="hm-cell hm-label"></div><div class="hm-cell hm-hhead">0</div><div class="hm-cell hm-hhead">1</div><div class="hm-cell hm-hhead">2</div><div class="hm-cell hm-hhead">3</div><div class="hm-cell hm-hhead">4</div><div class="hm-cell hm-hhead">5</div><div class="hm-cell hm-hhead">6</div><div class="hm-cell hm-hhead">7</div><div class="hm-cell hm-hhead">8</div><div class="hm-cell hm-hhead">9</div><div class="hm-cell hm-hhead">10</div><div class="hm-cell hm-hhead">11</div><div class="hm-cell hm-hhead">12</div><div class="hm-cell hm-hhead">13</div><div class="hm-cell hm-hhead">14</div><div class="hm-cell hm-hhead">15</div><div class="hm-cell hm-hhead">16</div><div class="hm-cell hm-hhead">17</div><div class="hm-cell hm-hhead">18</div><div class="hm-cell hm-hhead">19</div><div class="hm-cell hm-hhead">20</div><div class="hm-cell hm-hhead">21</div><div class="hm-cell hm-hhead">22</div><div class="hm-cell hm-hhead">23</div></div><div class="hm-row"><div class="hm-cell hm-label">Mon</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Mon 5:00 — $53"></div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e;" title="Mon 6:00 — $87"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Mon 7:00 — $762"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Mon 8:00 — $751"></div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Mon 9:00 — $832"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Mon 10:00 — $675"></div><div class="hm-cell" style="background:rgb(246,249,254);color:#1a1d2e;" title="Mon 11:00 — $695"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Mon 12:00 — $639"></div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Mon 13:00 — $803"></div><div class="hm-cell" style="background:rgb(244,247,253);color:#1a1d2e;" title="Mon 14:00 — $948"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Mon 15:00 — $670"></div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Mon 16:00 — $872"></div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Mon 17:00 — $1,515">$1k</div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Mon 18:00 — $1,027">$1k</div><div class="hm-cell" style="background:rgb(238,242,253);color:#1a1d2e;" title="Mon 19:00 — $1,463">$1k</div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Mon 20:00 — $1,020">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Mon 21:00 — $1,232">$1k</div><div class="hm-cell" style="background:rgb(249,250,254);color:#1a1d2e;" title="Mon 22:00 — $502"></div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e;" title="Mon 23:00 — $346"></div></div><div class="hm-row"><div class="hm-cell hm-label">Tue</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Tue 6:00 — $81"></div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e;" title="Tue 7:00 — $552"></div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e;" title="Tue 8:00 — $585"></div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e;" title="Tue 9:00 — $571"></div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e;" title="Tue 10:00 — $284"></div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Tue 11:00 — $807"></div><div class="hm-cell" style="background:rgb(245,247,254);color:#1a1d2e;" title="Tue 12:00 — $866"></div><div class="hm-cell" style="background:rgb(241,245,253);color:#1a1d2e;" title="Tue 13:00 — $1,203">$1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Tue 14:00 — $869"></div><div class="hm-cell" style="background:rgb(241,245,253);color:#1a1d2e;" title="Tue 15:00 — $1,155">$1k</div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Tue 16:00 — $1,002">$1k</div><div class="hm-cell" style="background:rgb(235,240,253);color:#1a1d2e;" title="Tue 17:00 — $1,701">$1k</div><div class="hm-cell" style="background:rgb(233,239,253);color:#1a1d2e;" title="Tue 18:00 — $1,836">$1k</div><div class="hm-cell" style="background:rgb(225,233,252);color:#1a1d2e;" title="Tue 19:00 — $2,594">$2k</div><div class="hm-cell" style="background:rgb(232,238,252);color:#1a1d2e;" title="Tue 20:00 — $1,956">$1k</div><div class="hm-cell" style="background:rgb(232,239,252);color:#1a1d2e;" title="Tue 21:00 — $1,928">$1k</div><div class="hm-cell" style="background:rgb(242,245,253);color:#1a1d2e;" title="Tue 22:00 — $1,128">$1k</div><div class="hm-cell" style="background:rgb(250,251,254);color:#1a1d2e;" title="Tue 23:00 — $372"></div></div><div class="hm-row"><div class="hm-cell hm-label">Wed</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(253,253,254);color:#1a1d2e;" title="Wed 6:00 — $139"></div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Wed 7:00 — $815"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Wed 8:00 — $971"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Wed 9:00 — $623"></div><div class="hm-cell" style="background:rgb(249,251,254);color:#1a1d2e;" title="Wed 10:00 — $467"></div><div class="hm-cell" style="background:rgb(246,249,254);color:#1a1d2e;" title="Wed 11:00 — $720"></div><div class="hm-cell" style="background:rgb(249,250,254);color:#1a1d2e;" title="Wed 12:00 — $487"></div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Wed 13:00 — $849"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Wed 14:00 — $655"></div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Wed 15:00 — $757"></div><div class="hm-cell" style="background:rgb(242,245,253);color:#1a1d2e;" title="Wed 16:00 — $1,125">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Wed 17:00 — $1,264">$1k</div><div class="hm-cell" style="background:rgb(234,240,253);color:#1a1d2e;" title="Wed 18:00 — $1,812">$1k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Wed 19:00 — $1,527">$1k</div><div class="hm-cell" style="background:rgb(238,243,253);color:#1a1d2e;" title="Wed 20:00 — $1,417">$1k</div><div class="hm-cell" style="background:rgb(239,243,253);color:#1a1d2e;" title="Wed 21:00 — $1,340">$1k</div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Wed 22:00 — $685"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Wed 23:00 — $26"></div></div><div class="hm-row"><div class="hm-cell hm-label">Thu</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e;" title="Thu 6:00 — $111"></div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Thu 7:00 — $816"></div><div class="hm-cell" style="background:rgb(242,246,253);color:#1a1d2e;" title="Thu 8:00 — $1,069">$1k</div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e;" title="Thu 9:00 — $767"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Thu 10:00 — $632"></div><div class="hm-cell" style="background:rgb(245,248,254);color:#1a1d2e;" title="Thu 11:00 — $781"></div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e;" title="Thu 12:00 — $597"></div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e;" title="Thu 13:00 — $585"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Thu 14:00 — $1,032">$1k</div><div class="hm-cell" style="background:rgb(242,246,253);color:#1a1d2e;" title="Thu 15:00 — $1,081">$1k</div><div class="hm-cell" style="background:rgb(150,179,245);color:#1a1d2e;" title="Thu 16:00 — $9,110">$9k</div><div class="hm-cell" style="background:rgb(110,151,241);color:#ffffff;" title="Thu 17:00 — $12,503">$12k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Thu 18:00 — $1,484">$1k</div><div class="hm-cell" style="background:rgb(129,164,243);color:#ffffff;" title="Thu 19:00 — $10,916">$10k</div><div class="hm-cell" style="background:rgb(235,240,253);color:#1a1d2e;" title="Thu 20:00 — $1,735">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Thu 21:00 — $1,218">$1k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e;" title="Thu 22:00 — $1,561">$1k</div><div class="hm-cell" style="background:rgb(252,253,254);color:#1a1d2e;" title="Thu 23:00 — $183"></div></div><div class="hm-row"><div class="hm-cell hm-label">Fri</div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Fri 6:00 — $86"></div><div class="hm-cell" style="background:rgb(245,247,254);color:#1a1d2e;" title="Fri 7:00 — $862"></div><div class="hm-cell" style="background:rgb(244,247,253);color:#1a1d2e;" title="Fri 8:00 — $950"></div><div class="hm-cell" style="background:rgb(242,245,253);color:#1a1d2e;" title="Fri 9:00 — $1,103">$1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Fri 10:00 — $937"></div><div class="hm-cell" style="background:rgb(246,249,254);color:#1a1d2e;" title="Fri 11:00 — $715"></div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e;" title="Fri 12:00 — $1,035">$1k</div><div class="hm-cell" style="background:rgb(242,246,253);color:#1a1d2e;" title="Fri 13:00 — $1,090">$1k</div><div class="hm-cell" style="background:rgb(234,240,253);color:#1a1d2e;" title="Fri 14:00 — $1,738">$1k</div><div class="hm-cell" style="background:rgb(227,235,252);color:#1a1d2e;" title="Fri 15:00 — $2,362">$2k</div><div class="hm-cell" style="background:rgb(218,228,251);color:#1a1d2e;" title="Fri 16:00 — $3,162">$3k</div><div class="hm-cell" style="background:rgb(228,236,252);color:#1a1d2e;" title="Fri 17:00 — $2,289">$2k</div><div class="hm-cell" style="background:rgb(203,218,250);color:#1a1d2e;" title="Fri 18:00 — $4,478">$4k</div><div class="hm-cell" style="background:rgb(212,224,251);color:#1a1d2e;" title="Fri 19:00 — $3,673">$3k</div><div class="hm-cell" style="background:rgb(201,217,250);color:#1a1d2e;" title="Fri 20:00 — $4,603">$4k</div><div class="hm-cell" style="background:rgb(190,209,249);color:#1a1d2e;" title="Fri 21:00 — $5,577">$5k</div><div class="hm-cell" style="background:rgb(191,209,249);color:#1a1d2e;" title="Fri 22:00 — $5,495">$5k</div><div class="hm-cell" style="background:rgb(208,222,250);color:#1a1d2e;" title="Fri 23:00 — $4,000">$4k</div></div><div class="hm-row"><div class="hm-cell hm-label">Sat</div><div class="hm-cell" style="background:rgb(230,237,252);color:#1a1d2e;" title="Sat 0:00 — $2,085">$2k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Sat 1:00 — $28"></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Sat 6:00 — $18"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Sat 7:00 — $644"></div><div class="hm-cell" style="background:rgb(232,238,252);color:#1a1d2e;" title="Sat 8:00 — $1,964">$1k</div><div class="hm-cell" style="background:rgb(239,243,253);color:#1a1d2e;" title="Sat 9:00 — $1,349">$1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Sat 10:00 — $944"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Sat 11:00 — $642"></div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Sat 12:00 — $898"></div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Sat 13:00 — $1,274">$1k</div><div class="hm-cell" style="background:rgb(228,236,252);color:#1a1d2e;" title="Sat 14:00 — $2,268">$2k</div><div class="hm-cell" style="background:rgb(222,231,251);color:#1a1d2e;" title="Sat 15:00 — $2,838">$2k</div><div class="hm-cell" style="background:rgb(197,213,249);color:#1a1d2e;" title="Sat 16:00 — $4,996">$4k</div><div class="hm-cell" style="background:rgb(199,215,249);color:#1a1d2e;" title="Sat 17:00 — $4,780">$4k</div><div class="hm-cell" style="background:rgb(175,198,247);color:#1a1d2e;" title="Sat 18:00 — $6,857">$6k</div><div class="hm-cell" style="background:rgb(37,99,235);color:#ffffff;" title="Sat 19:00 — $18,920">$18k</div><div class="hm-cell" style="background:rgb(149,179,245);color:#1a1d2e;" title="Sat 20:00 — $9,165">$9k</div><div class="hm-cell" style="background:rgb(152,181,245);color:#1a1d2e;" title="Sat 21:00 — $8,894">$8k</div><div class="hm-cell" style="background:rgb(141,173,244);color:#1a1d2e;" title="Sat 22:00 — $9,875">$9k</div><div class="hm-cell" style="background:rgb(185,205,248);color:#1a1d2e;" title="Sat 23:00 — $6,033">$6k</div></div><div class="hm-row"><div class="hm-cell hm-label">Sun</div><div class="hm-cell" style="background:rgb(222,231,251);color:#1a1d2e;" title="Sun 0:00 — $2,843">$2k</div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e;" title="Sun 1:00 — $673"></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:#ffffff;color:#1a1d2e;" title=""></div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e;" title="Sun 6:00 — $90"></div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e;" title="Sun 7:00 — $563"></div><div class="hm-cell" style="background:rgb(239,244,253);color:#1a1d2e;" title="Sun 8:00 — $1,317">$1k</div><div class="hm-cell" style="background:rgb(233,239,253);color:#1a1d2e;" title="Sun 9:00 — $1,844">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Sun 10:00 — $1,231">$1k</div><div class="hm-cell" style="background:rgb(242,246,253);color:#1a1d2e;" title="Sun 11:00 — $1,059">$1k</div><div class="hm-cell" style="background:rgb(243,247,253);color:#1a1d2e;" title="Sun 12:00 — $961"></div><div class="hm-cell" style="background:rgb(242,246,253);color:#1a1d2e;" title="Sun 13:00 — $1,058">$1k</div><div class="hm-cell" style="background:rgb(236,242,253);color:#1a1d2e;" title="Sun 14:00 — $1,566">$1k</div><div class="hm-cell" style="background:rgb(239,244,253);color:#1a1d2e;" title="Sun 15:00 — $1,306">$1k</div><div class="hm-cell" style="background:rgb(235,240,253);color:#1a1d2e;" title="Sun 16:00 — $1,701">$1k</div><div class="hm-cell" style="background:rgb(235,241,253);color:#1a1d2e;" title="Sun 17:00 — $1,664">$1k</div><div class="hm-cell" style="background:rgb(241,245,253);color:#1a1d2e;" title="Sun 18:00 — $1,190">$1k</div><div class="hm-cell" style="background:rgb(234,240,253);color:#1a1d2e;" title="Sun 19:00 — $1,799">$1k</div><div class="hm-cell" style="background:rgb(240,244,253);color:#1a1d2e;" title="Sun 20:00 — $1,279">$1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e;" title="Sun 21:00 — $923"></div><div class="hm-cell" style="background:rgb(244,247,253);color:#1a1d2e;" title="Sun 22:00 — $951"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e;" title="Sun 23:00 — $29"></div></div></div></div>
+    <div class="hm-legend"><span>Low</span><div class="hm-legend-bar"></div><span>High</span></div>
+  </div>
+</section>
+
+<section id="trend">
+  <h2>Daily Sales Trend</h2>
+<div style="background:#eff6ff;border-left:4px solid #2563eb;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>Daily sales showed <b>higher peaks but greater volatility</b> in Q1 2026 vs. Q1 2025. Large positive spikes correspond with private events — a reminder that event revenue can mask softness in the a la carte base on those same days. The moving average trend is positive and accelerating into March.</div>
+  <div class="card">
+    <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+  </div>
+</section>
+
+<section id="covers">
+  <h2>Cover Analysis</h2>
+<div style="background:#fffbeb;border-left:4px solid #f59e0b;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:6px">KEY TAKEAWAY</div>Covers ran <b>essentially flat YoY (−1.7%)</b> while <b>party size ticked down from 1.33 to 1.30</b>. The combination tells us Rotunda is converting the same reservation volume into slightly smaller parties — expected for a bar-forward concept. The revenue growth is therefore almost entirely attributable to <b>per-cover spend</b>, not throughput. If the goal is top-line expansion, the next lever is raising cover count, not check average.</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Sales by Service Daypart</h3>
+      <div class="chart-wrap"><canvas id="daypartChart"></canvas></div>
+    </div>
+    <div class="kpi-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Party Size</div>
+        <div class="kpi-value">1.30</div>
+        <div class="kpi-delta">Q1 2025: 1.33</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Checks/Day</div>
+        <div class="kpi-value">84</div>
+        <div class="kpi-delta">Q1 2025: 84</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mix">
+  <h2>Sales Mix</h2>
+<div style="background:#eff6ff;border-left:4px solid #2563eb;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div><b>Beverage continues to outpace food</b> in sales mix growth — consistent with a bar-led concept and the biggest contributor to the +14% sales lift. Dayparts are concentrated in Dinner and Bar revenue centers, with little contribution from lunch or brunch categories.</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Sales Category</h3>
+      <table class="data-table">
+        <thead><tr><th>Category</th><th class="text-right">2025</th><th class="text-right">2026</th><th class="text-right">Δ</th></tr></thead>
+        <tbody>
+      <tr>
+        <td>Bottled Beer</td>
+        <td class="text-right">$1,323</td>
+        <td class="text-right">$1,270</td>
+        <td class="text-right negative">-4.0%</td>
+      </tr>
+      <tr>
+        <td>Draft Beer</td>
+        <td class="text-right">$15</td>
+        <td class="text-right">$3</td>
+        <td class="text-right negative">-80.0%</td>
+      </tr>
+      <tr>
+        <td>Food</td>
+        <td class="text-right">$5,238</td>
+        <td class="text-right">$5,586</td>
+        <td class="text-right positive">+6.6%</td>
+      </tr>
+      <tr>
+        <td>Liquor</td>
+        <td class="text-right">$6,218</td>
+        <td class="text-right">$6,489</td>
+        <td class="text-right positive">+4.4%</td>
+      </tr>
+      <tr>
+        <td>NA Beverage</td>
+        <td class="text-right">$4,034</td>
+        <td class="text-right">$3,743</td>
+        <td class="text-right negative">-7.2%</td>
+      </tr>
+      <tr>
+        <td>No Sales Category Assigned</td>
+        <td class="text-right">$396</td>
+        <td class="text-right">$471</td>
+        <td class="text-right positive">+18.9%</td>
+      </tr>
+      <tr>
+        <td>Non-Grat Svc Charges</td>
+        <td class="text-right">$5</td>
+        <td class="text-right">$10</td>
+        <td class="text-right positive">+100.0%</td>
+      </tr>
+      <tr>
+        <td>Retail</td>
+        <td class="text-right">$8</td>
+        <td class="text-right">$7</td>
+        <td class="text-right negative">-12.5%</td>
+      </tr>
+      <tr>
+        <td>Sake</td>
+        <td class="text-right">$0</td>
+        <td class="text-right">$7</td>
+        <td class="text-right ">—</td>
+      </tr>
+      <tr>
+        <td>Wine BTL</td>
+        <td class="text-right">$41</td>
+        <td class="text-right">$58</td>
+        <td class="text-right positive">+41.5%</td>
+      </tr>
+      <tr>
+        <td>Wine GLS</td>
+        <td class="text-right">$1,550</td>
+        <td class="text-right">$1,673</td>
+        <td class="text-right positive">+7.9%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Revenue Center</h3>
+      <table class="data-table">
+        <thead><tr><th>Center</th><th class="text-right">2025</th><th class="text-right">2026</th><th class="text-right">Δ</th></tr></thead>
+        <tbody>
+      <tr>
+        <td>Bar Rotunda</td>
+        <td class="text-right">$18,823</td>
+        <td class="text-right">$19,306</td>
+        <td class="text-right positive">+2.6%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="product">
+  <h2>Product Mix Analysis</h2>
+<div style="background:#eff6ff;border-left:4px solid #2563eb;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>Top-selling menu groups remain stable YoY, with <b>cocktails and shareable plates</b> leading by both quantity sold and net sales. A handful of lower-velocity items could be pruned in the next menu refresh; the long tail of items with <10 sold per quarter is not earning its menu real estate.</div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <h3>Sales by Menu Group — Q1 2025 vs Q1 2026</h3>
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>Menu Group</th><th class="text-right">Q1 2025</th><th class="text-right">Q1 2026</th><th class="text-right">YoY Δ</th></tr></thead>
+        <tbody><tr><td>Wine</td><td class='text-right'>$49,508</td><td class='text-right'>$48,742</td><td class='text-right negative'>-1.5%</td></tr><tr><td>Liquor</td><td class='text-right'>$48,448</td><td class='text-right'>$44,337</td><td class='text-right negative'>-8.5%</td></tr><tr><td>House Cocktails</td><td class='text-right'>$31,809</td><td class='text-right'>$37,778</td><td class='text-right positive'>+18.8%</td></tr><tr><td>Classic Cocktails</td><td class='text-right'>$17,546</td><td class='text-right'>$21,974</td><td class='text-right positive'>+25.2%</td></tr><tr><td>Mains</td><td class='text-right'>$2,240</td><td class='text-right'>$21,070</td><td class='text-right positive'>+840.4%</td></tr><tr><td>Red Wine</td><td class='text-right'>$1,910</td><td class='text-right'>$18,760</td><td class='text-right positive'>+882.2%</td></tr><tr><td>Coffee Drinks</td><td class='text-right'>$17,751</td><td class='text-right'>$15,396</td><td class='text-right negative'>-13.3%</td></tr><tr><td>Open Food</td><td class='text-right'>$191</td><td class='text-right'>$12,949</td><td class='text-right positive'>+6696.7%</td></tr><tr><td>Pastry - Breakfast</td><td class='text-right'>$8,868</td><td class='text-right'>$10,888</td><td class='text-right positive'>+22.8%</td></tr><tr><td>Beer</td><td class='text-right'>$9,350</td><td class='text-right'>$8,922</td><td class='text-right negative'>-4.6%</td></tr><tr><td>Breakfast: 7AM - 11AM</td><td class='text-right'>$9,433</td><td class='text-right'>$7,886</td><td class='text-right negative'>-16.4%</td></tr><tr><td>Snacks</td><td class='text-right'>$7,818</td><td class='text-right'>$7,696</td><td class='text-right negative'>-1.6%</td></tr><tr><td>Soup & Salad - ALL DAY</td><td class='text-right'>$5,110</td><td class='text-right'>$6,698</td><td class='text-right positive'>+31.1%</td></tr><tr><td>PE Menus</td><td class='text-right'>$6,882</td><td class='text-right'>$5,075</td><td class='text-right negative'>-26.3%</td></tr><tr><td>NA Beverage</td><td class='text-right'>$2,249</td><td class='text-right'>$4,451</td><td class='text-right positive'>+97.9%</td></tr><tr><td>PE MENU</td><td class='text-right'>$3,817</td><td class='text-right'>$3,495</td><td class='text-right negative'>-8.4%</td></tr><tr><td>White Wine</td><td class='text-right'>$620</td><td class='text-right'>$2,148</td><td class='text-right positive'>+246.5%</td></tr><tr><td>Champagne & Sparkling</td><td class='text-right'>$594</td><td class='text-right'>$1,284</td><td class='text-right positive'>+116.2%</td></tr><tr><td>Gift card</td><td class='text-right'>$0</td><td class='text-right'>$853</td><td class='text-right '>—</td></tr><tr><td>$15 And Below Menu</td><td class='text-right'>$0</td><td class='text-right'>$714</td><td class='text-right '>—</td></tr><tr><td>Open Wine</td><td class='text-right'>$215</td><td class='text-right'>$573</td><td class='text-right positive'>+166.3%</td></tr><tr><td>Packaged Beer</td><td class='text-right'>$284</td><td class='text-right'>$485</td><td class='text-right positive'>+70.8%</td></tr><tr><td>OYSTER TROLLEY</td><td class='text-right'>$0</td><td class='text-right'>$334</td><td class='text-right '>—</td></tr><tr><td>Rose Wine</td><td class='text-right'>$140</td><td class='text-right'>$298</td><td class='text-right positive'>+112.9%</td></tr><tr><td>Plats Principaux</td><td class='text-right'>$238</td><td class='text-right'>$275</td><td class='text-right positive'>+15.5%</td></tr><tr><td>Fruits de Mer</td><td class='text-right'>$128</td><td class='text-right'>$224</td><td class='text-right positive'>+75.0%</td></tr><tr><td>Garnitures</td><td class='text-right'>$381</td><td class='text-right'>$87</td><td class='text-right negative'>-77.2%</td></tr><tr><td>Desserts</td><td class='text-right'>$59</td><td class='text-right'>$69</td><td class='text-right positive'>+16.9%</td></tr><tr><td>Open Liquor</td><td class='text-right'>$382</td><td class='text-right'>$56</td><td class='text-right negative'>-85.4%</td></tr><tr><td>Hors D'Oeuvres</td><td class='text-right'>$111</td><td class='text-right'>$53</td><td class='text-right negative'>-52.4%</td></tr><tr><td>Retail</td><td class='text-right'>$122</td><td class='text-right'>$39</td><td class='text-right negative'>-68.0%</td></tr><tr><td>Les Oeufs</td><td class='text-right'>$0</td><td class='text-right'>$32</td><td class='text-right '>—</td></tr><tr><td>Hors d'Oeuvres</td><td class='text-right'>$17</td><td class='text-right'>$21</td><td class='text-right positive'>+23.5%</td></tr><tr><td>Open NA Bev</td><td class='text-right'>$0</td><td class='text-right'>$17</td><td class='text-right '>—</td></tr><tr><td>Draft Beer</td><td class='text-right'>$136</td><td class='text-right'>$16</td><td class='text-right negative'>-88.4%</td></tr><tr><td>Viennoiseries</td><td class='text-right'>$54</td><td class='text-right'>$9</td><td class='text-right negative'>-83.3%</td></tr><tr><td>Salades</td><td class='text-right'>$0</td><td class='text-right'>$9</td><td class='text-right '>—</td></tr><tr><td>SPRING Coffee Menu Specials</td><td class='text-right'>$0</td><td class='text-right'>$8</td><td class='text-right '>—</td></tr><tr><td>Les Sandwiches</td><td class='text-right'>$16</td><td class='text-right'>$0</td><td class='text-right negative'>-100.0%</td></tr><tr><td>Cake Cutting</td><td class='text-right'>$96</td><td class='text-right'>$0</td><td class='text-right negative'>-100.0%</td></tr><tr><td>Cheese + Charcuterie - ALL DAY</td><td class='text-right'>$2,640</td><td class='text-right'>$0</td><td class='text-right negative'>-100.0%</td></tr><tr><td>Bread Basket</td><td class='text-right'>$5</td><td class='text-right'>$0</td><td class='text-right negative'>-100.0%</td></tr><tr><td>Game Day Menu</td><td class='text-right'>$114</td><td class='text-right'>$0</td><td class='text-right negative'>-100.0%</td></tr><tr><td>Sandwiches - ALL DAY</td><td class='text-right'>$11,951</td><td class='text-right'>$0</td><td class='text-right negative'>-100.0%</td></tr><tr><td>Tartines - Breakfast</td><td class='text-right'>$1,812</td><td class='text-right'>$0</td><td class='text-right negative'>-100.0%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <h3>Top 20 Items by Q1 2026 Net Sales</h3>
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>Item</th><th class="text-right">Qty Sold (2026)</th><th class="text-right">Q1 2025</th><th class="text-right">Q1 2026</th><th class="text-right">YoY Δ</th></tr></thead>
+        <tbody><tr><td>BR Espresso Martini</td><td class='text-right'>872</td><td class='text-right'>$1,494</td><td class='text-right'>$15,712</td><td class='text-right positive'>+951.7%</td></tr><tr><td>Burger</td><td class='text-right'>319</td><td class='text-right'>$1,050</td><td class='text-right'>$7,648</td><td class='text-right positive'>+628.4%</td></tr><tr><td>Latte</td><td class='text-right'>1,061</td><td class='text-right'>$7,047</td><td class='text-right'>$6,715</td><td class='text-right negative'>-4.7%</td></tr><tr><td>Vodka - Titos</td><td class='text-right'>449</td><td class='text-right'>$6,260</td><td class='text-right'>$5,952</td><td class='text-right negative'>-4.9%</td></tr><tr><td>0337 DRC La Tache Grand Cru 2020</td><td class='text-right'>1</td><td class='text-right'>$0</td><td class='text-right'>$4,976</td><td class='text-right '>—</td></tr><tr><td>Chicken Wrap</td><td class='text-right'>344</td><td class='text-right'>$0</td><td class='text-right'>$4,690</td><td class='text-right '>—</td></tr><tr><td>Old Fashioned</td><td class='text-right'>305</td><td class='text-right'>$2,856</td><td class='text-right'>$4,688</td><td class='text-right positive'>+64.1%</td></tr><tr><td>B.Y.O Coney</td><td class='text-right'>100</td><td class='text-right'>$0</td><td class='text-right'>$4,600</td><td class='text-right '>—</td></tr><tr><td>French Pearl</td><td class='text-right'>242</td><td class='text-right'>$779</td><td class='text-right'>$4,320</td><td class='text-right positive'>+454.6%</td></tr><tr><td>BR Oaxacan Old Fashioned</td><td class='text-right'>226</td><td class='text-right'>$0</td><td class='text-right'>$4,294</td><td class='text-right '>—</td></tr><tr><td>Vodka - Ketel One</td><td class='text-right'>293</td><td class='text-right'>$2,615</td><td class='text-right'>$4,103</td><td class='text-right positive'>+56.9%</td></tr><tr><td>0338 DRC Romanee-St-Vivant Grand Cru 2020</td><td class='text-right'>1</td><td class='text-right'>$0</td><td class='text-right'>$4,076</td><td class='text-right '>—</td></tr><tr><td>GLS Jeio Brut Prosecco</td><td class='text-right'>319</td><td class='text-right'>$3,540</td><td class='text-right'>$3,831</td><td class='text-right positive'>+8.2%</td></tr><tr><td>Bourbon - Woodford Reserve</td><td class='text-right'>225</td><td class='text-right'>$3,199</td><td class='text-right'>$3,580</td><td class='text-right positive'>+11.9%</td></tr><tr><td>Drip Coffee</td><td class='text-right'>748</td><td class='text-right'>$4,363</td><td class='text-right'>$3,415</td><td class='text-right negative'>-21.7%</td></tr><tr><td>Chocolate Chip Cookie</td><td class='text-right'>745</td><td class='text-right'>$660</td><td class='text-right'>$3,328</td><td class='text-right positive'>+404.3%</td></tr><tr><td>Chicken Caesar</td><td class='text-right'>213</td><td class='text-right'>$728</td><td class='text-right'>$3,132</td><td class='text-right positive'>+330.2%</td></tr><tr><td>GLS Petit Salvard</td><td class='text-right'>211</td><td class='text-right'>$0</td><td class='text-right'>$2,926</td><td class='text-right '>—</td></tr><tr><td>Fries & Aioli</td><td class='text-right'>280</td><td class='text-right'>$608</td><td class='text-right'>$2,915</td><td class='text-right positive'>+379.8%</td></tr><tr><td>Kronenbourg 1664</td><td class='text-right'>354</td><td class='text-right'>$2,389</td><td class='text-right'>$2,776</td><td class='text-right positive'>+16.2%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Top 10 Gainers</h3>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Item</th><th class="text-right">Q1 2025</th><th class="text-right">Q1 2026</th><th class="text-right">Δ $</th><th class="text-right">Δ %</th></tr></thead>
+          <tbody><tr><td>BR Espresso Martini</td><td class='text-right'>$1,494</td><td class='text-right'>$15,712</td><td class='text-right positive'>+$14,218</td><td class='text-right positive'>+951.7%</td></tr><tr><td>Burger</td><td class='text-right'>$1,050</td><td class='text-right'>$7,648</td><td class='text-right positive'>+$6,598</td><td class='text-right positive'>+628.4%</td></tr><tr><td>French Pearl</td><td class='text-right'>$779</td><td class='text-right'>$4,320</td><td class='text-right positive'>+$3,541</td><td class='text-right positive'>+454.6%</td></tr><tr><td>Chocolate Chip Cookie</td><td class='text-right'>$660</td><td class='text-right'>$3,328</td><td class='text-right positive'>+$2,668</td><td class='text-right positive'>+404.3%</td></tr><tr><td>Chicken Caesar</td><td class='text-right'>$728</td><td class='text-right'>$3,132</td><td class='text-right positive'>+$2,404</td><td class='text-right positive'>+330.2%</td></tr><tr><td>Fries & Aioli</td><td class='text-right'>$608</td><td class='text-right'>$2,915</td><td class='text-right positive'>+$2,308</td><td class='text-right positive'>+379.8%</td></tr><tr><td>BR Paper Plane</td><td class='text-right'>$357</td><td class='text-right'>$2,380</td><td class='text-right positive'>+$2,023</td><td class='text-right positive'>+566.7%</td></tr><tr><td>Old Fashioned</td><td class='text-right'>$2,856</td><td class='text-right'>$4,688</td><td class='text-right positive'>+$1,832</td><td class='text-right positive'>+64.1%</td></tr><tr><td>3 Oysters</td><td class='text-right'>$352</td><td class='text-right'>$1,958</td><td class='text-right positive'>+$1,606</td><td class='text-right positive'>+456.4%</td></tr><tr><td>Vodka - Ketel One</td><td class='text-right'>$2,615</td><td class='text-right'>$4,103</td><td class='text-right positive'>+$1,488</td><td class='text-right positive'>+56.9%</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Top 10 Losers</h3>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Item</th><th class="text-right">Q1 2025</th><th class="text-right">Q1 2026</th><th class="text-right">Δ $</th><th class="text-right">Δ %</th></tr></thead>
+          <tbody><tr><td>Espresso Martini</td><td class='text-right'>$14,736</td><td class='text-right'>$1,635</td><td class='text-right negative'>$-13,101</td><td class='text-right negative'>-88.9%</td></tr><tr><td>Burger du Maison</td><td class='text-right'>$5,925</td><td class='text-right'>$162</td><td class='text-right negative'>$-5,763</td><td class='text-right negative'>-97.3%</td></tr><tr><td>GLS Viarte Sauvignon Blanc</td><td class='text-right'>$3,094</td><td class='text-right'>$408</td><td class='text-right negative'>$-2,686</td><td class='text-right negative'>-86.8%</td></tr><tr><td>Tequila - Casamigos Reposado</td><td class='text-right'>$3,273</td><td class='text-right'>$1,503</td><td class='text-right negative'>$-1,770</td><td class='text-right negative'>-54.1%</td></tr><tr><td>Martini</td><td class='text-right'>$1,680</td><td class='text-right'>$379</td><td class='text-right negative'>$-1,301</td><td class='text-right negative'>-77.4%</td></tr><tr><td>GLS Band Of Vintners Cabernet Sauvignon</td><td class='text-right'>$1,378</td><td class='text-right'>$80</td><td class='text-right negative'>$-1,298</td><td class='text-right negative'>-94.2%</td></tr><tr><td>Tequila - Casamigos Blanco</td><td class='text-right'>$2,315</td><td class='text-right'>$1,285</td><td class='text-right negative'>$-1,030</td><td class='text-right negative'>-44.5%</td></tr><tr><td>Rotunda Breakfast</td><td class='text-right'>$3,797</td><td class='text-right'>$2,770</td><td class='text-right negative'>$-1,027</td><td class='text-right negative'>-27.0%</td></tr><tr><td>Bourbon - Buffalo Trace</td><td class='text-right'>$1,880</td><td class='text-right'>$891</td><td class='text-right negative'>$-989</td><td class='text-right negative'>-52.6%</td></tr><tr><td>Drip Coffee</td><td class='text-right'>$4,363</td><td class='text-right'>$3,415</td><td class='text-right negative'>$-948</td><td class='text-right negative'>-21.7%</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="events">
+  <h2>Private Events</h2>
+<div style="background:#ecfdf5;border-left:4px solid #10b981;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#047857;margin-bottom:6px">KEY TAKEAWAY</div>Private events revenue grew <b>+24% to $56,205</b> on <b>6 bookings</b> (vs. 4 last year), with a notable jump in <b>January contribution ($42K vs. $9.8K)</b>. The growth is real — higher booking count AND higher average revenue per event. Events are now a meaningful layer of Rotunda's revenue base, not a one-off bonus.</div>
+  <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+    <div class="kpi-card">
+      <div class="kpi-label">Event Revenue 2025</div>
+      <div class="kpi-value">$45,283</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Event Revenue 2026</div>
+      <div class="kpi-value">$56,205</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Events Count 2025</div>
+      <div class="kpi-value">4</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Events Count 2026</div>
+      <div class="kpi-value">6</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Monthly Event Revenue</h3>
+      <div class="chart-wrap"><canvas id="eventRevenueChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Monthly Event Count</h3>
+      <div class="chart-wrap"><canvas id="eventCountChart"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Revenue by Room</h3>
+    <table class="data-table">
+      <thead><tr><th>Room</th><th class="text-right">2025</th><th class="text-right">2026</th><th class="text-right">Δ</th></tr></thead>
+      <tbody>
+      <tr>
+        <td>Bar Rotunda</td>
+        <td class="text-right">$0</td>
+        <td class="text-right">$0</td>
+        <td class="text-right ">—</td>
+      </tr>
+      <tr>
+        <td>Bar Rotunda , 13th Floor - Event Space</td>
+        <td class="text-right">$0</td>
+        <td class="text-right">$0</td>
+        <td class="text-right ">—</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="insights">
+  <h2>Key Insights</h2>
+<div style="background:#eff6ff;border-left:4px solid #2563eb;padding:14px 18px;border-radius:4px;margin-bottom:20px;font-size:14px;line-height:1.6;color:#1f2937"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div><b>Q1 2026 is a pricing-and-events story, not a volume story.</b> Keep investing in what's working: events programming, check composition, and the 7pm–10pm dinner peak. The biggest open opportunity is the <b>Sun–Wed daytime void</b>, where the space earns nothing. Monitor party size — if it continues to compress, revenue growth will eventually cap out without a cover-count strategy.</div>
+  <div class="card">
+    <ul class="insight-list">
+      <li>Q1 2026 net sales increased 14.2% year-over-year to $248,076, driven by improved covers and check growth.</li>
+      <li>Guest covers were down 1.7%, with 9833 total covers vs 10000 in Q1 2025.</li>
+      <li>Private events revenue decreased 0.0% to $0, with 6 events booked.</li>
+      <li>Strongest service daypart in Q1 2026 was Dinner.</li>
+    </ul>
+  </div>
+</section>
+
+
+</main>
+
+<script>
+const COL_25 = '#9ca3af';
+const COL_26 = '#2563eb';
+const GRID = '#e5e7eb';
+const TEXT = '#6b7280';
+
+const baseOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { labels: { color: TEXT, font: { family: 'Inter', size: 12 } } },
+    tooltip: { backgroundColor: '#1a1d2e', titleFont: { family: 'Inter' }, bodyFont: { family: 'Inter' } }
+  },
+  scales: {
+    x: { grid: { color: GRID, drawBorder: false }, ticks: { color: TEXT, font: { family: 'Inter' } } },
+    y: { beginAtZero: true, grid: { color: GRID, drawBorder: false }, ticks: { color: TEXT, font: { family: 'Inter' } } }
+  }
+};
+
+function fmtUSD(v) { return '$' + Math.round(v).toLocaleString(); }
+
+// Lazy chart initialization
+const chartConfigs = {};
+
+
+// Hour charts
+new Chart(document.getElementById('hourSalesChart'), {
+  type: 'bar',
+  data: {
+    labels: ["0:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"],
+    datasets: [
+      { label: 'Q1 2025', data: [5633.0, 114.0, 0.0, 0.0, 0.0, 0.0, 151.25, 4628.5, 6686.12, 5388.12, 5532.68, 7038.15, 9732.51, 7919.5, 7479.37, 9015.5, 12216.92, 25278.75, 15942.7, 20979.56, 21988.01, 18539.81, 21141.75, 11744.88], backgroundColor: COL_25, borderRadius: 4 },
+      { label: 'Q1 2026', data: [4928.0, 701.0, 0.0, 0.0, 0.0, 53.75, 615.0, 5006.25, 7609.75, 7091.13, 5174.25, 5121.25, 5484.76, 6824.63, 8949.12, 10172.06, 21770.76, 25669.15, 18634.77, 40895.37, 21177.51, 21029.26, 20198.76, 10969.5], backgroundColor: COL_26, borderRadius: 4 }
+    ]
+  },
+  options: { ...baseOpts, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, ticks: { ...baseOpts.scales.y.ticks, callback: fmtUSD } } } }
+});
+
+new Chart(document.getElementById('hourCoversChart'), {
+  type: 'bar',
+  data: {
+    labels: ["0:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"],
+    datasets: [
+      { label: 'Q1 2025', data: [233, 3, 0, 0, 0, 0, 17, 381, 464, 410, 414, 420, 480, 450, 389, 475, 570, 646, 700, 727, 862, 889, 922, 548], backgroundColor: COL_25, borderRadius: 4 },
+      { label: 'Q1 2026', data: [170, 10, 0, 0, 0, 3, 40, 410, 543, 452, 328, 313, 318, 335, 398, 442, 651, 679, 665, 825, 847, 835, 1136, 433], backgroundColor: COL_26, borderRadius: 4 }
+    ]
+  },
+  options: baseOpts
+});
+
+// Day of week charts
+new Chart(document.getElementById('dowSalesChart'), {
+  type: 'bar',
+  data: {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [
+      { label: 'Q1 2025', data: [15013.11, 15648.36, 18416.43, 30005.8, 44758.16, 71323.47, 21985.75], backgroundColor: COL_25, borderRadius: 6 },
+      { label: 'Q1 2026', data: [14897.32, 19456.64, 15350.0, 45889.07, 46208.87, 85780.38, 20493.75], backgroundColor: COL_26, borderRadius: 6 }
+    ]
+  },
+  options: { ...baseOpts, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, ticks: { ...baseOpts.scales.y.ticks, callback: fmtUSD } } } }
+});
+
+new Chart(document.getElementById('dowCoversChart'), {
+  type: 'bar',
+  data: {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    datasets: [
+      { label: 'Q1 2025', data: [805, 976, 1047, 1104, 2143, 2865, 1060], backgroundColor: COL_25, borderRadius: 6 },
+      { label: 'Q1 2026', data: [823, 977, 732, 1167, 1859, 3343, 932], backgroundColor: COL_26, borderRadius: 6 }
+    ]
+  },
+  options: baseOpts
+});
+
+// Trend chart
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: ["01/01", "01/02", "01/03", "01/04", "01/05", "01/06", "01/07", "01/08", "01/09", "01/10", "01/11", "01/12", "01/13", "01/14", "01/15", "01/16", "01/17", "01/18", "01/19", "01/20", "01/21", "01/22", "01/23", "01/24", "01/25", "01/26", "01/27", "01/28", "01/29", "01/30", "01/31", "02/01", "02/02", "02/03", "02/04", "02/05", "02/06", "02/07", "02/08", "02/09", "02/10", "02/11", "02/12", "02/13", "02/14", "02/15", "02/16", "02/17", "02/18", "02/19", "02/20", "02/21", "02/22", "02/23", "02/24", "02/25", "02/26", "02/27", "02/28", "03/01", "03/02", "03/03", "03/04", "03/05", "03/06", "03/07", "03/08", "03/09", "03/10", "03/11", "03/12", "03/13", "03/14", "03/15", "03/16", "03/17", "03/18", "03/19", "03/20", "03/21", "03/22", "03/23", "03/24", "03/25", "03/26", "03/27", "03/28", "03/29", "03/30", "03/31"],
+    datasets: [
+      { label: 'Q1 2025', data: [1677.5, 852.02, 2944.25, 3074.5, 2789.25, 1184.12, 741.0, 599.5, 1213.75, 3500.76, 4376.25, 1322.75, 1567.25, 1443.18, 1771.31, 1385.5, 3222.63, 5720.05, 1974.75, 976.75, 798.12, 1144.0, 4675.78, 3350.75, 4574.0, 1478.25, 1614.12, 1764.0, 1915.5, 6510.75, 2042.81, 6233.75, 2172.0, 1131.75, 979.5, 1016.75, 1791.5, 3054.0, 4861.05, 1787.75, 1348.25, 1504.5, 830.5, 1360.25, 6241.25, 3931.4, 1670.75, 611.75, 834.5, 1285.5, 1948.5, 3128.5, 4710.0, 1589.5, 750.25, 1179.75, 1097.75, 2068.75, 4880.46, 11525.72, 1851.25, 601.5, 1237.5, 1724.25, 2395.5, 2763.5, 5065.75, 1203.25, 1325.5, 1315.75, 1497.75, 2831.25, 2999.5, 6029.0, 1200.5, 1524.87, 1250.75, 1548.62, 1394.5, 3180.25, 5736.25, 1237.75, 1178.25, 2599.81, 2307.5, 1577.75, 3449.5, 5485.75, 1708.0, 1198.75], borderColor: COL_25, backgroundColor: 'rgba(156,163,175,0.15)', tension: 0.25, fill: true, pointRadius: 2, spanGaps: true },
+      { label: 'Q1 2026', data: [2148.25, 2938.5, 2676.0, 668.0, 872.75, 645.75, 507.75, 982.0, 3602.25, 4655.0, 1453.25, 1280.75, 1923.0, 1171.5, 1622.0, 4557.1, 15350.87, 2028.5, 1118.25, 1301.76, 1258.5, 5701.26, 2093.5, 4875.5, 1133.5, 539.5, 805.75, 1303.25, 1154.0, 2949.26, 6565.0, 1567.25, 1050.75, 1191.25, 1257.5, 17786.65, 2479.0, 4731.0, 918.25, 737.0, 1472.62, 1269.75, 1137.0, 4554.75, 8178.5, 3074.64, 1463.75, 2166.25, 1199.5, 977.5, 2890.0, 5919.25, 1660.5, 1499.82, 2038.5, 1708.25, 2296.75, 5092.75, 6456.0, 2619.0, 1240.0, 1594.25, 1124.25, 2120.75, 3951.75, 6100.01, 1249.12, 1037.5, 1577.75, 1864.0, 7938.41, 3098.25, 6315.0, 1477.74, 1409.0, 856.51, 1364.25, 985.25, 3477.25, 6723.0, 1551.5, 1491.25, 2623.25, 1321.5, 1039.25, 4524.51, 7235.25, 1092.5, 1157.0, 1260.0], borderColor: COL_26, backgroundColor: 'rgba(37,99,235,0.15)', tension: 0.25, fill: true, pointRadius: 2, spanGaps: true }
+    ]
+  },
+  options: { ...baseOpts, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, ticks: { ...baseOpts.scales.y.ticks, callback: fmtUSD } } } }
+});
+
+// Daypart chart
+new Chart(document.getElementById('daypartChart'), {
+  type: 'bar',
+  data: {
+    labels: ["Breakfast", "Brunch", "Lunch", "Dinner", "No Service"],
+    datasets: [
+      { label: 'Q1 2025', data: [15532.42, 11716.75, 31560.78, 153447.38, 4893.75], backgroundColor: COL_25, borderRadius: 6 },
+      { label: 'Q1 2026', data: [17698.88, 9729.0, 28999.07, 185273.08, 6376.0], backgroundColor: COL_26, borderRadius: 6 }
+    ]
+  },
+  options: { ...baseOpts, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, ticks: { ...baseOpts.scales.y.ticks, callback: fmtUSD } } } }
+});
+
+// Event charts
+new Chart(document.getElementById('eventRevenueChart'), {
+  type: 'bar',
+  data: {
+    labels: ["Jan", "Feb", "Mar"],
+    datasets: [
+      { label: 'Q1 2025', data: [9807, 0, 35476], backgroundColor: COL_25, borderRadius: 6 },
+      { label: 'Q1 2026', data: [42024, 7118, 7063], backgroundColor: COL_26, borderRadius: 6 }
+    ]
+  },
+  options: { ...baseOpts, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, ticks: { ...baseOpts.scales.y.ticks, callback: fmtUSD } } } }
+});
+
+new Chart(document.getElementById('eventCountChart'), {
+  type: 'bar',
+  data: {
+    labels: ["Jan", "Feb", "Mar"],
+    datasets: [
+      { label: 'Q1 2025', data: [2, 0, 2], backgroundColor: COL_25, borderRadius: 6 },
+      { label: 'Q1 2026', data: [3, 1, 2], backgroundColor: COL_26, borderRadius: 6 }
+    ]
+  },
+  options: baseOpts
+});
+
+
+// Navigation
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+
+  const section = document.getElementById(id);
+  if (section) {
+    section.classList.add('active');
+    window.scrollTo(0, 0);
+    // Trigger chart resize
+    Object.keys(chartConfigs).forEach(chartId => {
+      const chart = Chart.instances.find(c => c.canvas && c.canvas.id === chartId);
+      if (chart) chart.resize();
+    });
+  }
+
+  const navLink = document.querySelector(`.sidebar-nav a[href="#${id}"]`);
+  if (navLink) navLink.classList.add('active');
+
+  window.location.hash = id;
+}
+
+// Handle hash changes
+window.addEventListener('hashchange', () => {
+  const id = window.location.hash.slice(1) || 'executive';
+  showSection(id);
+});
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', () => {
+  const id = window.location.hash.slice(1) || 'executive';
+  showSection(id);
+});
+</script>
+
+</body>
+</html>
