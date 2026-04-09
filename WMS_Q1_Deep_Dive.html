@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wm. Mulherin's Sons — Q1 Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f5f6f8; --panel: #ffffff; --text: #1a1d2e; --muted: #6b7280;
+  --accent: #2563eb; --accent2: #9ca3af; --border: #e5e7eb; --sidebar: #1a1d2e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); }
+
+/* Sidebar */
+.sidebar { width:240px; position:fixed; top:0; left:0; height:100vh; background:var(--sidebar);
+  display:flex; flex-direction:column; padding:24px 0; overflow-y:auto; z-index:100; }
+.sidebar-title { color:#fff; font-size:15px; font-weight:700; padding:0 20px 4px; line-height:1.3; }
+.sidebar-subtitle { color:#9ca3af; font-size:11px; padding:0 20px 20px; text-transform:uppercase; letter-spacing:.5px; }
+.sidebar-nav { flex:1; }
+.sidebar-nav a { display:block; padding:10px 20px; color:#9ca3af; text-decoration:none; font-size:13px;
+  font-weight:500; border-left:3px solid transparent; transition:all .15s; }
+.sidebar-nav a:hover { color:#fff; background:rgba(255,255,255,.05); }
+.sidebar-nav a.active { color:#fff; border-left-color:var(--accent); background:rgba(37,99,235,.15); }
+.sidebar-footer { padding:16px 20px; color:#4b5563; font-size:11px; border-top:1px solid rgba(255,255,255,.1); }
+
+/* Content */
+.content { margin-left:240px; padding:40px; max-width:1200px; }
+section { display:none; }
+section.active { display:block; }
+h2 { font-size:22px; font-weight:700; margin-bottom:16px; color:var(--text); }
+h3 { font-size:16px; font-weight:600; margin:24px 0 12px; color:var(--text); }
+
+/* Cards */
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.kpi-card { background:var(--panel); border-radius:12px; padding:20px; border:1px solid var(--border); }
+.kpi-label { font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+.kpi-value { font-size:24px; font-weight:700; color:var(--text); }
+.kpi-delta { font-size:14px; font-weight:600; margin-top:4px; }
+.kpi-prev { font-size:12px; color:var(--muted); margin-top:4px; }
+
+/* Charts */
+.chart-wrap { background:var(--panel); border-radius:12px; padding:20px; border:1px solid var(--border); margin-bottom:20px; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+/* Tables */
+.data-table { width:100%; border-collapse:collapse; font-size:13px; background:var(--panel); border-radius:12px; overflow:hidden; border:1px solid var(--border); }
+.data-table th { background:var(--sidebar); color:#fff; padding:10px 14px; text-align:left; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.3px; }
+.data-table td { padding:8px 14px; border-bottom:1px solid var(--border); }
+.data-table tr:hover { background:#f9fafb; }
+.data-table tr:last-child td { border-bottom:none; }
+
+/* Heatmap */
+.heatmap-grid { display:grid; grid-template-columns:60px repeat(24,1fr) 80px; gap:2px; font-size:10px; }
+.hm-corner { background:var(--sidebar); border-radius:4px 0 0 0; }
+.hm-hdr { background:var(--sidebar); color:#fff; text-align:center; padding:4px 2px; font-weight:600; font-size:10px; }
+.hm-row-label { background:var(--sidebar); color:#fff; padding:6px 8px; font-weight:600; font-size:11px; }
+.hm-cell { text-align:center; padding:6px 2px; border-radius:2px; font-size:9px; font-weight:500; cursor:default; }
+.hm-total { background:#f3f4f6; text-align:center; padding:6px 4px; font-weight:600; font-size:11px; }
+
+/* Mix bars */
+.mix-row { display:grid; grid-template-columns:180px 1fr 280px; align-items:center; padding:6px 0; border-bottom:1px solid var(--border); }
+.mix-name { font-size:13px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mix-bars { display:flex; flex-direction:column; gap:2px; padding:0 12px; }
+.mix-bar { height:10px; border-radius:4px; min-width:2px; }
+.mix-vals { font-size:12px; text-align:right; white-space:nowrap; }
+
+/* Narrative box */
+.narrative { border-radius:4px; padding:14px 18px; margin-bottom:20px; font-size:14px; line-height:1.6; color:#1f2937; }
+
+/* Concentration KPI */
+.conc-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.conc-card { background:var(--panel); border-radius:12px; padding:16px; border:1px solid var(--border); text-align:center; }
+.conc-label { font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; margin-bottom:6px; }
+.conc-value { font-size:20px; font-weight:700; }
+.conc-sub { font-size:12px; color:var(--muted); margin-top:4px; }
+
+@media (max-width:900px) {
+  .sidebar { width:200px; }
+  .content { margin-left:200px; padding:20px; }
+  .kpi-grid { grid-template-columns:repeat(2,1fr); }
+  .chart-row { grid-template-columns:1fr; }
+  .conc-grid { grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-title">Wm. Mulherin's Sons</div>
+  <div class="sidebar-subtitle">Q1 2026 vs 2025 Deep Dive</div>
+  <div class="sidebar-nav">
+    <a href="#executive" class="active" onclick="showSection('executive')">Executive Summary</a>
+    <a href="#hourly" onclick="showSection('hourly')">Hour of Day</a>
+    <a href="#dow" onclick="showSection('dow')">Day of Week</a>
+    <a href="#heatmap" onclick="showSection('heatmap')">Day × Hour Heatmap</a>
+    <a href="#trend" onclick="showSection('trend')">Daily Trend</a>
+    <a href="#deepdive" onclick="showSection('deepdive')">Hour/Day Deep Dive</a>
+    <a href="#daypart" onclick="showSection('daypart')">Dayparts</a>
+    <a href="#mix" onclick="showSection('mix')">Product Mix</a>
+    <a href="#items" onclick="showSection('items')">Top Items</a>
+    <a href="#kitchen" onclick="showSection('kitchen')">Kitchen Performance</a>
+    <a href="#events" onclick="showSection('events')">Private Events</a>
+    <a href="#nps" onclick="showSection('nps')">NPS & Guest Experience</a>
+    <a href="#servers" onclick="showSection('servers')">Server Performance</a>
+    <a href="#resyconfig" onclick="showSection('resyconfig')">Resy Config Analysis</a>
+  </div>
+  <div class="sidebar-footer">Method Co F&B Analytics<br>Generated Apr 09, 2026</div>
+</nav>
+
+<main class="content">
+
+<!-- 1. EXECUTIVE SUMMARY -->
+<section id="executive" class="active">
+  <h2>Executive Summary</h2>
+  <div class="narrative" style="background:#fef2f2;border-left:4px solid #ef4444">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#b91c1c;margin-bottom:6px">KEY TAKEAWAY</div>
+    Q1 2026 net sales of <b>$824,046</b> are down <b>10.7%</b> from Q1 2025's $923,184 — but the trajectory is what matters: January was only -3.1%, February accelerated to -13.0%, and March hit -15.1%. This is a <b>worsening trend, not a stable decline</b>. The loss is volume-driven — covers dropped 4.8% — but it's heavily concentrated in <b>midweek and Sunday</b>: Wednesday (-25.8%), Sunday (-28.4%), and Thursday (-20.5%) account for the vast majority of lost revenue. Weekends are holding: Saturday is essentially flat (-2.8%) and Friday average check actually <i>rose</i> from $157 to $167 — guests who come on peak nights are spending more. The split story — shrinking weekday traffic but premiumizing weekends — suggests Mulherin's may be losing casual/repeat diners while retaining special-occasion guests. Brunch took a major hit, with orders dropping 30% (706 → 497). Three fewer operating days in Q1 2026 account for roughly $30K of the gap, but the remaining ~$69K is real demand erosion. Bright spot: NPS jumped from 61 to 69, and negative comment rates halved (26% → 14%). <b>Q2 priority: rebuild weekday and Sunday traffic without diluting the premium weekend positioning.</b></div>
+  <div class="kpi-grid"><div class="kpi-card">
+      <div class="kpi-label">Net Sales</div>
+      <div class="kpi-value">$824,046</div>
+      <div class="kpi-delta" style="color:#ef4444">↓ -10.7%</div>
+      <div class="kpi-prev">Q1 2025: $923,184</div>
+    </div><div class="kpi-card">
+      <div class="kpi-label">Covers</div>
+      <div class="kpi-value">12,863</div>
+      <div class="kpi-delta" style="color:#ef4444">↓ -4.8%</div>
+      <div class="kpi-prev">Q1 2025: 13,512</div>
+    </div><div class="kpi-card">
+      <div class="kpi-label">Checks</div>
+      <div class="kpi-value">5,451</div>
+      <div class="kpi-delta" style="color:#ef4444">↓ -9.6%</div>
+      <div class="kpi-prev">Q1 2025: 6,030</div>
+    </div><div class="kpi-card">
+      <div class="kpi-label">Avg Check</div>
+      <div class="kpi-value">$151</div>
+      <div class="kpi-delta" style="color:#ef4444">↓ -1.3%</div>
+      <div class="kpi-prev">Q1 2025: $153</div>
+    </div><div class="kpi-card">
+      <div class="kpi-label">Avg Cover Value</div>
+      <div class="kpi-value">$64.06</div>
+      <div class="kpi-delta" style="color:#ef4444">↓ -6.2%</div>
+      <div class="kpi-prev">Q1 2025: $68.32</div>
+    </div><div class="kpi-card">
+      <div class="kpi-label">Party Size</div>
+      <div class="kpi-value">2.36</div>
+      <div class="kpi-delta" style="color:#10b981">↑ +5.3%</div>
+      <div class="kpi-prev">Q1 2025: 2.24</div>
+    </div><div class="kpi-card">
+      <div class="kpi-label">Avg Daily Sales</div>
+      <div class="kpi-value">$9,472</div>
+      <div class="kpi-delta" style="color:#ef4444">↓ -7.7%</div>
+      <div class="kpi-prev">Q1 2025: $10,258</div>
+    </div><div class="kpi-card">
+      <div class="kpi-label">Avg Daily Covers</div>
+      <div class="kpi-value">148</div>
+      <div class="kpi-delta" style="color:#ef4444">↓ -1.5%</div>
+      <div class="kpi-prev">Q1 2025: 150</div>
+    </div></div>
+</section>
+
+<!-- 2. HOUR OF DAY -->
+<section id="hourly">
+  <h2>Hour of Day</h2>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>
+    The core <b>5PM–8PM</b> dinner window still drives the business, but it's compressing. 6PM held almost perfectly ($218.5K → $216.6K, basically flat), which means <b>prime-time demand is intact</b>. The damage is on the edges: <b>5PM dropped 21%</b> ($185K → $146K) — early diners are evaporating — and <b>9PM dropped 33%</b> ($68K → $45K), signaling that late seatings are drying up. This "peak compression" means the restaurant is doing nearly the same volume but cramming it into a tighter window, which strains the kitchen during peak and leaves dead air before and after. The 11AM–1PM brunch band is also noticeably thinner, consistent with the 30% brunch order decline.</div>
+  <div class="chart-row">
+    <div class="chart-wrap" style="height:340px"><canvas id="chartHourlySales"></canvas></div>
+    <div class="chart-wrap" style="height:340px"><canvas id="chartHourlyCovers"></canvas></div>
+  </div>
+</section>
+
+<!-- 3. DAY OF WEEK -->
+<section id="dow">
+  <h2>Day of Week</h2>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>
+    The pattern is stark: <b>midweek is collapsing while weekends hold</b>. Wednesday shed 25.8% ($77K → $57K) and average check dropped from $162 to $135 — fewer guests <i>and</i> lower spending per visit. Thursday followed the same pattern (-20.5%, check down $12). Sunday was the biggest shock at -28.4%, driven by a 27.6% cover drop (2,230 → 1,614) — this is likely brunch weakness compounding dinner erosion. Meanwhile, <b>Friday and Saturday average checks actually increased</b> ($157→$167 and $157→$164 respectively), indicating weekend guests are trading <i>up</i>. Monday was the lone positive (+2.4%). This suggests the restaurant is losing its "midweek regular" base — the lower-check, higher-frequency diners — while special-occasion and weekend traffic remains strong.</div>
+  <div class="chart-row">
+    <div class="chart-wrap" style="height:340px"><canvas id="chartDowSales"></canvas></div>
+    <div class="chart-wrap" style="height:340px"><canvas id="chartDowCovers"></canvas></div>
+  </div>
+</section>
+
+<!-- 4. HEATMAP -->
+<section id="heatmap">
+  <h2>Day × Hour Heatmap</h2>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>
+    The heatmaps reveal where demand vanished at the cell level. Compare the 2026 grid to 2025 and look for cells that went from deep blue to pale — those are your lost revenue pockets. The <b>Wednesday and Thursday 5PM–6PM</b> blocks lightened significantly, and <b>Sunday across all hours</b> is visibly paler. Saturday 6PM–7PM remains the darkest block in both years — that's your fortress. Use this to guide staffing: if midweek early-evening is thinning, you may be overstaffed at 5PM on Wed/Thu while still needing full deployment at 6PM on Fri/Sat.</div>
+  <h3 style="margin:16px 0 8px;font-size:15px;color:#1a1d2e">Q1 2026</h3><div class="heatmap-grid"><div class="hm-corner"></div><div class="hm-hdr">12AM</div><div class="hm-hdr">1AM</div><div class="hm-hdr">2AM</div><div class="hm-hdr">3AM</div><div class="hm-hdr">4AM</div><div class="hm-hdr">5AM</div><div class="hm-hdr">6AM</div><div class="hm-hdr">7AM</div><div class="hm-hdr">8AM</div><div class="hm-hdr">9AM</div><div class="hm-hdr">10AM</div><div class="hm-hdr">11AM</div><div class="hm-hdr">12PM</div><div class="hm-hdr">1PM</div><div class="hm-hdr">2PM</div><div class="hm-hdr">3PM</div><div class="hm-hdr">4PM</div><div class="hm-hdr">5PM</div><div class="hm-hdr">6PM</div><div class="hm-hdr">7PM</div><div class="hm-hdr">8PM</div><div class="hm-hdr">9PM</div><div class="hm-hdr">10PM</div><div class="hm-hdr">11PM</div><div class="hm-hdr">Total</div><div class="hm-row-label">Mon</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 10AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Mon 11AM — $230">$230</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 12PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 1PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 2PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 3PM — $0"></div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e" title="Mon 4PM — $1,180">$1.2k</div><div class="hm-cell" style="background:rgb(221,230,251);color:#1a1d2e" title="Mon 5PM — $10,236">$10.2k</div><div class="hm-cell" style="background:rgb(185,205,248);color:#1a1d2e" title="Mon 6PM — $21,172">$21.2k</div><div class="hm-cell" style="background:rgb(210,223,250);color:#1a1d2e" title="Mon 7PM — $13,499">$13.5k</div><div class="hm-cell" style="background:rgb(232,238,252);color:#1a1d2e" title="Mon 8PM — $6,941">$6.9k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Mon 9PM — $165">$165</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Mon 10PM — $100">$100</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 11PM — $0"></div><div class="hm-total">$53,523</div><div class="hm-row-label">Tue</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 8AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Tue 9AM — $300">$300</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 10AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Tue 11AM — $50">$50</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Tue 12PM — $50">$50</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 1PM — $0"></div><div class="hm-cell" style="background:rgb(247,249,254);color:#1a1d2e" title="Tue 2PM — $2,376">$2.4k</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 3PM — $0"></div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e" title="Tue 4PM — $924">$924</div><div class="hm-cell" style="background:rgb(214,226,251);color:#1a1d2e" title="Tue 5PM — $12,252">$12.3k</div><div class="hm-cell" style="background:rgb(188,207,248);color:#1a1d2e" title="Tue 6PM — $20,314">$20.3k</div><div class="hm-cell" style="background:rgb(191,209,249);color:#1a1d2e" title="Tue 7PM — $19,359">$19.4k</div><div class="hm-cell" style="background:rgb(230,237,252);color:#1a1d2e" title="Tue 8PM — $7,405">$7.4k</div><div class="hm-cell" style="background:rgb(252,253,254);color:#1a1d2e" title="Tue 9PM — $811">$811</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Tue 10PM — $75">$75</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 11PM — $0"></div><div class="hm-total">$63,916</div><div class="hm-row-label">Wed</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 8AM — $0"></div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e" title="Wed 9AM — $350">$350</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Wed 10AM — $200">$200</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 11AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 12PM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Wed 1PM — $300">$300</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Wed 2PM — $100">$100</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 3PM — $0"></div><div class="hm-cell" style="background:rgb(250,251,254);color:#1a1d2e" title="Wed 4PM — $1,320">$1.3k</div><div class="hm-cell" style="background:rgb(225,233,252);color:#1a1d2e" title="Wed 5PM — $8,928">$8.9k</div><div class="hm-cell" style="background:rgb(183,203,248);color:#1a1d2e" title="Wed 6PM — $21,720">$21.7k</div><div class="hm-cell" style="background:rgb(190,208,249);color:#1a1d2e" title="Wed 7PM — $19,510">$19.5k</div><div class="hm-cell" style="background:rgb(236,241,253);color:#1a1d2e" title="Wed 8PM — $5,731">$5.7k</div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e" title="Wed 9PM — $350">$350</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Wed 10PM — $100">$100</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 11PM — $0"></div><div class="hm-total">$58,609</div><div class="hm-row-label">Thu</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 8AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Thu 9AM — $150">$150</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Thu 10AM — $100">$100</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 11AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Thu 12PM — $100">$100</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Thu 1PM — $250">$250</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 2PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 3PM — $0"></div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e" title="Thu 4PM — $1,191">$1.2k</div><div class="hm-cell" style="background:rgb(219,229,251);color:#1a1d2e" title="Thu 5PM — $10,828">$10.8k</div><div class="hm-cell" style="background:rgb(157,185,246);color:#1a1d2e" title="Thu 6PM — $29,459">$29.5k</div><div class="hm-cell" style="background:rgb(169,194,247);color:#1a1d2e" title="Thu 7PM — $25,797">$25.8k</div><div class="hm-cell" style="background:rgb(214,226,251);color:#1a1d2e" title="Thu 8PM — $12,148">$12.1k</div><div class="hm-cell" style="background:rgb(244,247,254);color:#1a1d2e" title="Thu 9PM — $3,167">$3.2k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Thu 10PM — $152">$152</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 11PM — $0"></div><div class="hm-total">$83,342</div><div class="hm-row-label">Fri</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 7AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Fri 8AM — $100">$100</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Fri 9AM — $250">$250</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 10AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Fri 11AM — $100">$100</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Fri 12PM — $200">$200</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 1PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 2PM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Fri 3PM — $100">$100</div><div class="hm-cell" style="background:rgb(250,251,254);color:#1a1d2e" title="Fri 4PM — $1,316">$1.3k</div><div class="hm-cell" style="background:rgb(142,174,244);color:#fff" title="Fri 5PM — $34,236">$34.2k</div><div class="hm-cell" style="background:rgb(127,163,243);color:#fff" title="Fri 6PM — $38,581">$38.6k</div><div class="hm-cell" style="background:rgb(37,99,235);color:#fff" title="Fri 7PM — $66,112">$66.1k</div><div class="hm-cell" style="background:rgb(135,169,244);color:#fff" title="Fri 8PM — $36,350">$36.3k</div><div class="hm-cell" style="background:rgb(198,214,249);color:#1a1d2e" title="Fri 9PM — $17,112">$17.1k</div><div class="hm-cell" style="background:rgb(239,243,253);color:#1a1d2e" title="Fri 10PM — $4,752">$4.8k</div><div class="hm-cell" style="background:rgb(252,253,254);color:#1a1d2e" title="Fri 11PM — $622">$622</div><div class="hm-total">$199,830</div><div class="hm-row-label">Sat</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 5AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Sat 6AM — $100">$100</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 10AM — $0"></div><div class="hm-cell" style="background:rgb(193,210,249);color:#1a1d2e" title="Sat 11AM — $18,685">$18.7k</div><div class="hm-cell" style="background:rgb(223,232,252);color:#1a1d2e" title="Sat 12PM — $9,492">$9.5k</div><div class="hm-cell" style="background:rgb(221,231,251);color:#1a1d2e" title="Sat 1PM — $10,135">$10.1k</div><div class="hm-cell" style="background:rgb(238,243,253);color:#1a1d2e" title="Sat 2PM — $4,895">$4.9k</div><div class="hm-cell" style="background:rgb(249,250,254);color:#1a1d2e" title="Sat 3PM — $1,740">$1.7k</div><div class="hm-cell" style="background:rgb(223,232,252);color:#1a1d2e" title="Sat 4PM — $9,558">$9.6k</div><div class="hm-cell" style="background:rgb(89,136,239);color:#fff" title="Sat 5PM — $50,088">$50.1k</div><div class="hm-cell" style="background:rgb(52,109,236);color:#fff" title="Sat 6PM — $61,467">$61.5k</div><div class="hm-cell" style="background:rgb(112,153,241);color:#fff" title="Sat 7PM — $43,128">$43.1k</div><div class="hm-cell" style="background:rgb(132,167,243);color:#fff" title="Sat 8PM — $37,241">$37.2k</div><div class="hm-cell" style="background:rgb(180,201,248);color:#1a1d2e" title="Sat 9PM — $22,672">$22.7k</div><div class="hm-cell" style="background:rgb(235,240,253);color:#1a1d2e" title="Sat 10PM — $5,993">$6.0k</div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e" title="Sat 11PM — $394">$394</div><div class="hm-total">$275,588</div><div class="hm-row-label">Sun</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 1AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Sun 2AM — $100">$100</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 6AM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Sun 7AM — $200">$200</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 9AM — $0"></div><div class="hm-cell" style="background:rgb(253,253,254);color:#1a1d2e" title="Sun 10AM — $452">$452</div><div class="hm-cell" style="background:rgb(227,235,252);color:#1a1d2e" title="Sun 11AM — $8,331">$8.3k</div><div class="hm-cell" style="background:rgb(228,235,252);color:#1a1d2e" title="Sun 12PM — $8,069">$8.1k</div><div class="hm-cell" style="background:rgb(234,240,253);color:#1a1d2e" title="Sun 1PM — $6,083">$6.1k</div><div class="hm-cell" style="background:rgb(237,242,253);color:#1a1d2e" title="Sun 2PM — $5,328">$5.3k</div><div class="hm-cell" style="background:rgb(251,252,254);color:#1a1d2e" title="Sun 3PM — $1,192">$1.2k</div><div class="hm-cell" style="background:rgb(249,250,254);color:#1a1d2e" title="Sun 4PM — $1,763">$1.8k</div><div class="hm-cell" style="background:rgb(188,207,248);color:#1a1d2e" title="Sun 5PM — $20,028">$20.0k</div><div class="hm-cell" style="background:rgb(175,198,247);color:#1a1d2e" title="Sun 6PM — $24,032">$24.0k</div><div class="hm-cell" style="background:rgb(216,227,251);color:#1a1d2e" title="Sun 7PM — $11,770">$11.8k</div><div class="hm-cell" style="background:rgb(231,237,252);color:#1a1d2e" title="Sun 8PM — $7,207">$7.2k</div><div class="hm-cell" style="background:rgb(250,251,254);color:#1a1d2e" title="Sun 9PM — $1,311">$1.3k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Sun 10PM — $172">$172</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 11PM — $0"></div><div class="hm-total">$96,038</div></div>
+  <h3 style="margin:16px 0 8px;font-size:15px;color:#1a1d2e">Q1 2025</h3><div class="heatmap-grid"><div class="hm-corner"></div><div class="hm-hdr">12AM</div><div class="hm-hdr">1AM</div><div class="hm-hdr">2AM</div><div class="hm-hdr">3AM</div><div class="hm-hdr">4AM</div><div class="hm-hdr">5AM</div><div class="hm-hdr">6AM</div><div class="hm-hdr">7AM</div><div class="hm-hdr">8AM</div><div class="hm-hdr">9AM</div><div class="hm-hdr">10AM</div><div class="hm-hdr">11AM</div><div class="hm-hdr">12PM</div><div class="hm-hdr">1PM</div><div class="hm-hdr">2PM</div><div class="hm-hdr">3PM</div><div class="hm-hdr">4PM</div><div class="hm-hdr">5PM</div><div class="hm-hdr">6PM</div><div class="hm-hdr">7PM</div><div class="hm-hdr">8PM</div><div class="hm-hdr">9PM</div><div class="hm-hdr">10PM</div><div class="hm-hdr">11PM</div><div class="hm-hdr">Total</div><div class="hm-row-label">Mon</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 10AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 11AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 12PM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Mon 1PM — $150">$150</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 2PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 3PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 4PM — $0"></div><div class="hm-cell" style="background:rgb(221,231,251);color:#1a1d2e" title="Mon 5PM — $10,362">$10.4k</div><div class="hm-cell" style="background:rgb(204,218,250);color:#1a1d2e" title="Mon 6PM — $15,774">$15.8k</div><div class="hm-cell" style="background:rgb(200,216,250);color:#1a1d2e" title="Mon 7PM — $16,955">$17.0k</div><div class="hm-cell" style="background:rgb(233,239,253);color:#1a1d2e" title="Mon 8PM — $6,588">$6.6k</div><div class="hm-cell" style="background:rgb(248,250,254);color:#1a1d2e" title="Mon 9PM — $2,074">$2.1k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Mon 10PM — $152">$152</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Mon 11PM — $0"></div><div class="hm-total">$52,056</div><div class="hm-row-label">Tue</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 10AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 11AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 12PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 1PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 2PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 3PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 4PM — $0"></div><div class="hm-cell" style="background:rgb(222,231,252);color:#1a1d2e" title="Tue 5PM — $10,038">$10.0k</div><div class="hm-cell" style="background:rgb(171,195,247);color:#1a1d2e" title="Tue 6PM — $26,041">$26.0k</div><div class="hm-cell" style="background:rgb(190,209,249);color:#1a1d2e" title="Tue 7PM — $19,973">$20.0k</div><div class="hm-cell" style="background:rgb(227,235,252);color:#1a1d2e" title="Tue 8PM — $8,693">$8.7k</div><div class="hm-cell" style="background:rgb(246,248,254);color:#1a1d2e" title="Tue 9PM — $2,732">$2.7k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Tue 10PM — $62">$62</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Tue 11PM — $0"></div><div class="hm-total">$67,538</div><div class="hm-row-label">Wed</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 10AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 11AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 12PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 1PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 2PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 3PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Wed 4PM — $0"></div><div class="hm-cell" style="background:rgb(213,225,251);color:#1a1d2e" title="Wed 5PM — $13,010">$13.0k</div><div class="hm-cell" style="background:rgb(169,193,247);color:#1a1d2e" title="Wed 6PM — $26,689">$26.7k</div><div class="hm-cell" style="background:rgb(173,196,247);color:#1a1d2e" title="Wed 7PM — $25,270">$25.3k</div><div class="hm-cell" style="background:rgb(224,233,252);color:#1a1d2e" title="Wed 8PM — $9,416">$9.4k</div><div class="hm-cell" style="background:rgb(246,249,254);color:#1a1d2e" title="Wed 9PM — $2,513">$2.5k</div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e" title="Wed 10PM — $428">$428</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Wed 11PM — $27">$27</div><div class="hm-total">$77,352</div><div class="hm-row-label">Thu</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 10AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 11AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 12PM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Thu 1PM — $100">$100</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 2PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 3PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 4PM — $0"></div><div class="hm-cell" style="background:rgb(211,223,251);color:#1a1d2e" title="Thu 5PM — $13,517">$13.5k</div><div class="hm-cell" style="background:rgb(148,178,245);color:#1a1d2e" title="Thu 6PM — $33,151">$33.2k</div><div class="hm-cell" style="background:rgb(138,171,244);color:#fff" title="Thu 7PM — $36,183">$36.2k</div><div class="hm-cell" style="background:rgb(204,218,250);color:#1a1d2e" title="Thu 8PM — $15,743">$15.7k</div><div class="hm-cell" style="background:rgb(238,243,253);color:#1a1d2e" title="Thu 9PM — $5,041">$5.0k</div><div class="hm-cell" style="background:rgb(253,254,254);color:#1a1d2e" title="Thu 10PM — $318">$318</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Thu 11PM — $0"></div><div class="hm-total">$104,053</div><div class="hm-row-label">Fri</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 10AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 11AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 12PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 1PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 2PM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Fri 3PM — $0"></div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Fri 4PM — $72">$72</div><div class="hm-cell" style="background:rgb(108,150,241);color:#fff" title="Fri 5PM — $45,581">$45.6k</div><div class="hm-cell" style="background:rgb(112,152,241);color:#fff" title="Fri 6PM — $44,475">$44.5k</div><div class="hm-cell" style="background:rgb(108,150,241);color:#fff" title="Fri 7PM — $45,718">$45.7k</div><div class="hm-cell" style="background:rgb(118,157,242);color:#fff" title="Fri 8PM — $42,490">$42.5k</div><div class="hm-cell" style="background:rgb(183,204,248);color:#1a1d2e" title="Fri 9PM — $22,190">$22.2k</div><div class="hm-cell" style="background:rgb(230,237,252);color:#1a1d2e" title="Fri 10PM — $7,686">$7.7k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Fri 11PM — $266">$266</div><div class="hm-total">$208,477</div><div class="hm-row-label">Sat</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 10AM — $0"></div><div class="hm-cell" style="background:rgb(223,232,252);color:#1a1d2e" title="Sat 11AM — $9,701">$9.7k</div><div class="hm-cell" style="background:rgb(216,227,251);color:#1a1d2e" title="Sat 12PM — $11,895">$11.9k</div><div class="hm-cell" style="background:rgb(219,229,251);color:#1a1d2e" title="Sat 1PM — $11,028">$11.0k</div><div class="hm-cell" style="background:rgb(227,235,252);color:#1a1d2e" title="Sat 2PM — $8,538">$8.5k</div><div class="hm-cell" style="background:rgb(253,253,254);color:#1a1d2e" title="Sat 3PM — $508">$508</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sat 4PM — $0"></div><div class="hm-cell" style="background:rgb(37,99,235);color:#fff" title="Sat 5PM — $67,957">$68.0k</div><div class="hm-cell" style="background:rgb(112,153,241);color:#fff" title="Sat 6PM — $44,284">$44.3k</div><div class="hm-cell" style="background:rgb(76,127,238);color:#fff" title="Sat 7PM — $55,585">$55.6k</div><div class="hm-cell" style="background:rgb(139,172,244);color:#fff" title="Sat 8PM — $36,038">$36.0k</div><div class="hm-cell" style="background:rgb(159,186,246);color:#1a1d2e" title="Sat 9PM — $29,863">$29.9k</div><div class="hm-cell" style="background:rgb(233,239,253);color:#1a1d2e" title="Sat 10PM — $6,686">$6.7k</div><div class="hm-cell" style="background:rgb(252,253,254);color:#1a1d2e" title="Sat 11PM — $664">$664</div><div class="hm-total">$282,747</div><div class="hm-row-label">Sun</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 12AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 1AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 2AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 3AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 4AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 5AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 6AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 7AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 8AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 9AM — $0"></div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 10AM — $0"></div><div class="hm-cell" style="background:rgb(208,221,250);color:#1a1d2e" title="Sun 11AM — $14,458">$14.5k</div><div class="hm-cell" style="background:rgb(213,225,251);color:#1a1d2e" title="Sun 12PM — $12,938">$12.9k</div><div class="hm-cell" style="background:rgb(227,235,252);color:#1a1d2e" title="Sun 1PM — $8,487">$8.5k</div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e" title="Sun 2PM — $3,617">$3.6k</div><div class="hm-cell" style="background:rgb(254,254,254);color:#1a1d2e" title="Sun 3PM — $73">$73</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 4PM — $0"></div><div class="hm-cell" style="background:rgb(173,196,247);color:#1a1d2e" title="Sun 5PM — $25,293">$25.3k</div><div class="hm-cell" style="background:rgb(163,189,246);color:#1a1d2e" title="Sun 6PM — $28,533">$28.5k</div><div class="hm-cell" style="background:rgb(203,217,250);color:#1a1d2e" title="Sun 7PM — $16,123">$16.1k</div><div class="hm-cell" style="background:rgb(225,234,252);color:#1a1d2e" title="Sun 8PM — $9,114">$9.1k</div><div class="hm-cell" style="background:rgb(243,246,253);color:#1a1d2e" title="Sun 9PM — $3,583">$3.6k</div><div class="hm-cell" style="background:rgb(221,231,251);color:#1a1d2e" title="Sun 10PM — $10,415">$10.4k</div><div class="hm-cell" style="background:rgb(255,255,255);color:#1a1d2e" title="Sun 11PM — $0"></div><div class="hm-total">$132,633</div></div>
+</section>
+
+<!-- 5. DAILY TREND -->
+<section id="trend">
+  <h2>Daily Sales Trend</h2>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>
+    The daily overlay exposes the <b>widening gap as the quarter progressed</b>. January's lines tracked close together — many days in 2026 actually topped 2025. By February, the 2026 line consistently ran below, and March showed sustained separation. This isn't random variation — it's a trend with momentum. Look for the weekly rhythm: weekend spikes remain comparable in height, but the weekday valleys in 2026 are deeper and wider. Valentine's Day and holiday weekends provided temporary lifts but didn't reverse the trajectory.</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="chartTrend"></canvas></div>
+</section>
+
+<!-- 6. DEEP DIVE -->
+<section id="deepdive">
+  <h2>Hour/Day Deep Dive</h2>
+  
+  <h3>6.1 YoY Attribution — Where the Decline Came From</h3>
+  <div class="narrative" style="background:#fef2f2;border-left:4px solid #ef4444">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#b91c1c;margin-bottom:6px">KEY TAKEAWAY</div>
+    The 5PM hour alone accounts for <b>$39K of lost revenue</b> — more than any other single slot. Combined with 9PM's $22.5K loss, the bookend hours represent over 60% of the hourly decline. On the DOW side, <b>Sunday (-$37.6K) and Wednesday (-$19.9K)</b> are the dominant drivers. This tells a clear story: you're not losing your peak — you're losing your shoulder hours and shoulder days. The guests who used to fill the 5PM and 9PM slots, and who dined midweek, have stopped coming. These are typically locals and regulars, not weekend/special-occasion guests.</div>
+  <div class="chart-row">
+    <div class="chart-wrap" style="height:340px"><canvas id="chartAttrHr"></canvas></div>
+    <div class="chart-wrap" style="height:340px"><canvas id="chartAttrDow"></canvas></div>
+  </div>
+  
+  <h3>6.2 Sales Concentration — Peak Dependency</h3>
+  <div class="conc-grid">
+    <div class="conc-card">
+      <div class="conc-label">Top 3 Hours % of Sales</div>
+      <div class="conc-value">68.2%</div>
+      <div class="conc-sub">2025: 67.1%</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Top 6 Hours % of Sales</div>
+      <div class="conc-value">90.6%</div>
+      <div class="conc-sub">2025: 91.1%</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Top 2 Days % of Sales</div>
+      <div class="conc-value">57.4%</div>
+      <div class="conc-sub">2025: 53.1%</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Hour HHI Index</div>
+      <div class="conc-value">1834</div>
+      <div class="conc-sub">2025: 1784</div>
+    </div>
+  </div>
+  
+  <h3>6.3 Revenue Per Active Hour</h3>
+  <div class="conc-grid" style="grid-template-columns:repeat(2,1fr)">
+    <div class="conc-card">
+      <div class="conc-label">RPH Q1 2025</div>
+      <div class="conc-value">$76,932</div>
+      <div class="conc-sub">12 active hours (>$500)</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">RPH Q1 2026</div>
+      <div class="conc-value">$63,388</div>
+      <div class="conc-sub">13 active hours (>$500)</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. DAYPARTS -->
+<section id="daypart">
+  <h2>Daypart Analysis</h2>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>
+    Dinner still dominates at ~91% of revenue in both years, so the daypart mix itself is stable. But the <b>Brunch daypart dropped 10.4%</b> in revenue ($75.4K → $67.6K) and lost <b>30% of its orders</b> (706 → 497) — meaning fewer brunch guests but higher per-order spending. This suggests the brunch crowd that remains is ordering more, but the casual brunch-goer has disappeared. If Sunday traffic is a priority for Q2, brunch reactivation (promotions, menu refresh, or social push) could be the lever with the most upside.</div>
+  <div class="chart-wrap" style="height:340px"><canvas id="chartDaypart"></canvas></div>
+</section>
+
+<!-- 8. PRODUCT MIX -->
+<section id="mix">
+  <h2>Product Mix — Menu Groups</h2>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>
+    <b>Food revenue dropped 14.8%</b> ($555K → $473K), outpacing the overall 10.7% decline — guests aren't just visiting less, they're ordering less food per visit. Food's share of the mix fell from 60.2% to 57.4%. <b>BTB (by-the-bottle) Wine collapsed</b> from $24.7K to $5.3K — a 79% drop that points to fewer large-party/celebration occasions mid-quarter or corporate dinner attrition. Meanwhile, a new "Retail" category appeared at $13.8K, suggesting merchandise or takeaway is finding traction. Liquor held its share at ~22%, meaning bar spend is resilient even as food declines — guests may be shortening meals but maintaining their drink spend.</div>
+  <div style="background:var(--panel);border-radius:12px;padding:20px;border:1px solid var(--border)">
+    <div class="mix-row">
+          <div class="mix-name">500000002794251757</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:100.0%;background:#9ca3af" title="2025: $137,709"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$137,709</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000061323697015</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:89.93427249411387%;background:#2563eb" title="2026: $123,848"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$123,848</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(12.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002785298904</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:72.89775350961702%;background:#9ca3af" title="2025: $100,387"></div>
+            <div class="mix-bar" style="width:80.57928768442721%;background:#2563eb" title="2026: $110,965"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$100,387</span> → <span style="font-weight:600">$110,965</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+10.5%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(10.9%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002788526760</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:73.06350100686612%;background:#9ca3af" title="2025: $100,615"></div>
+            <div class="mix-bar" style="width:75.51375370190591%;background:#2563eb" title="2026: $103,990"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$100,615</span> → <span style="font-weight:600">$103,990</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+3.4%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(10.3%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002785298902</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:72.50597217460789%;background:#9ca3af" title="2025: $99,848"></div>
+            <div class="mix-bar" style="width:53.457572670928144%;background:#2563eb" title="2026: $73,616"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$99,848</span> → <span style="font-weight:600">$73,616</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-26.3%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(7.3%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002785298903</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:70.2280024750658%;background:#9ca3af" title="2025: $96,711"></div>
+            <div class="mix-bar" style="width:63.27346260209992%;background:#2563eb" title="2026: $87,134"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$96,711</span> → <span style="font-weight:600">$87,134</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-9.9%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(8.6%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789737807</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:67.43603036160113%;background:#9ca3af" title="2025: $92,866"></div>
+            <div class="mix-bar" style="width:53.28388091247464%;background:#2563eb" title="2026: $73,377"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$92,866</span> → <span style="font-weight:600">$73,377</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-21.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(7.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002798212550</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:67.33725719807069%;background:#9ca3af" title="2025: $92,730"></div>
+            <div class="mix-bar" style="width:55.01457525034408%;background:#2563eb" title="2026: $75,760"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$92,730</span> → <span style="font-weight:600">$75,760</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-18.3%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(7.5%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789780387</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:37.8489583904433%;background:#9ca3af" title="2025: $52,122"></div>
+            <div class="mix-bar" style="width:27.362671572260062%;background:#2563eb" title="2026: $37,681"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$52,122</span> → <span style="font-weight:600">$37,681</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-27.7%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(3.7%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002954175921</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:22.808888887597924%;background:#9ca3af" title="2025: $31,410"></div>
+            <div class="mix-bar" style="width:22.96138384673182%;background:#2563eb" title="2026: $31,620"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$31,410</span> → <span style="font-weight:600">$31,620</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.7%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(3.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000006328891804</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:22.812229253369427%;background:#9ca3af" title="2025: $31,415"></div>
+            <div class="mix-bar" style="width:13.579022561048271%;background:#2563eb" title="2026: $18,700"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$31,415</span> → <span style="font-weight:600">$18,700</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-40.5%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.8%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002785298905</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:20.164720697857597%;background:#9ca3af" title="2025: $27,769"></div>
+            <div class="mix-bar" style="width:15.620414485655926%;background:#2563eb" title="2026: $21,511"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$27,769</span> → <span style="font-weight:600">$21,511</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-22.5%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(2.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000005030320907</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:18.29373099758499%;background:#9ca3af" title="2025: $25,192"></div>
+            <div class="mix-bar" style="width:4.723712900790337%;background:#2563eb" title="2026: $6,505"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$25,192</span> → <span style="font-weight:600">$6,505</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-74.2%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.6%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000061987549279</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:17.595013618162934%;background:#2563eb" title="2026: $24,230"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$24,230</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(2.4%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789780385</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:17.578239172658204%;background:#9ca3af" title="2025: $24,207"></div>
+            <div class="mix-bar" style="width:13.579204102666287%;background:#2563eb" title="2026: $18,700"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$24,207</span> → <span style="font-weight:600">$18,700</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-22.7%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.8%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000006339883451</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:17.512811573525045%;background:#9ca3af" title="2025: $24,117"></div>
+            <div class="mix-bar" style="width:15.704918478010264%;background:#2563eb" title="2026: $21,627"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$24,117</span> → <span style="font-weight:600">$21,627</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-10.3%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(2.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002798742740</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:15.027884429444105%;background:#9ca3af" title="2025: $20,695"></div>
+            <div class="mix-bar" style="width:11.64786996856498%;background:#2563eb" title="2026: $16,040"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$20,695</span> → <span style="font-weight:600">$16,040</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-22.5%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.6%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000024849596250</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:14.777705556487872%;background:#9ca3af" title="2025: $20,350"></div>
+            <div class="mix-bar" style="width:1.4094891222804067%;background:#2563eb" title="2026: $1,941"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$20,350</span> → <span style="font-weight:600">$1,941</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-90.5%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789705154</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:13.901004774762404%;background:#2563eb" title="2026: $19,143"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$19,143</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.9%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000003288219048</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:12.316030262842489%;background:#9ca3af" title="2025: $16,960"></div>
+            <div class="mix-bar" style="width:10.804471181248465%;background:#2563eb" title="2026: $14,879"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$16,960</span> → <span style="font-weight:600">$14,879</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-12.3%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.5%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000006339825600</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:12.130029982687466%;background:#9ca3af" title="2025: $16,704"></div>
+            <div class="mix-bar" style="width:7.277640383047005%;background:#2563eb" title="2026: $10,022"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$16,704</span> → <span style="font-weight:600">$10,022</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-40.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000040204008580</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:10.173882740235657%;background:#9ca3af" title="2025: $14,010"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$14,010</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789710664</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:9.82430620058301%;background:#2563eb" title="2026: $13,529"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$13,529</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.3%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000053627641400</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:9.82430620058301%;background:#2563eb" title="2026: $13,529"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$13,529</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.3%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000006328169383</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:8.37734688834399%;background:#9ca3af" title="2025: $11,536"></div>
+            <div class="mix-bar" style="width:8.097257218403353%;background:#2563eb" title="2026: $11,151"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$11,536</span> → <span style="font-weight:600">$11,151</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-3.3%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(1.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789780381</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:6.30537609359763%;background:#9ca3af" title="2025: $8,683"></div>
+            <div class="mix-bar" style="width:6.45433462201256%;background:#2563eb" title="2026: $8,888"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$8,683</span> → <span style="font-weight:600">$8,888</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+2.4%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.9%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000005030271579</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:6.2959722377843725%;background:#9ca3af" title="2025: $8,670"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$8,670</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">-5</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:1.1967223459650234%;background:#9ca3af" title="2025: $1,648"></div>
+            <div class="mix-bar" style="width:4.937932010049853%;background:#2563eb" title="2026: $6,800"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$1,648</span> → <span style="font-weight:600">$6,800</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+312.6%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.7%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000062711630603</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:4.20014687443064%;background:#2563eb" title="2026: $5,784"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$5,784</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.6%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000034990568919</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:3.931465279766163%;background:#9ca3af" title="2025: $5,414"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$5,414</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789906241</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:3.631558526802841%;background:#9ca3af" title="2025: $5,001"></div>
+            <div class="mix-bar" style="width:1.786224287988328%;background:#2563eb" title="2026: $2,460"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$5,001</span> → <span style="font-weight:600">$2,460</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-50.8%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002801992613</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:2.3035452826882565%;background:#9ca3af" title="2025: $3,172"></div>
+            <div class="mix-bar" style="width:3.2431320808946547%;background:#2563eb" title="2026: $4,466"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$3,172</span> → <span style="font-weight:600">$4,466</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+40.8%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.4%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000034990568922</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:2.943878877756192%;background:#9ca3af" title="2025: $4,054"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$4,054</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000006328604853</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:1.5314850895875207%;background:#9ca3af" title="2025: $2,109"></div>
+            <div class="mix-bar" style="width:2.8887628425263707%;background:#2563eb" title="2026: $3,978"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$2,109</span> → <span style="font-weight:600">$3,978</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+88.6%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.4%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000063230961209</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:2.8284184086976736%;background:#2563eb" title="2026: $3,895"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$3,895</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.4%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000034990568927</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:2.606937634717496%;background:#9ca3af" title="2025: $3,590"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$3,590</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002469141021</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:1.6019232373779377%;background:#9ca3af" title="2025: $2,206"></div>
+            <div class="mix-bar" style="width:2.528685935687647%;background:#2563eb" title="2026: $3,482"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$2,206</span> → <span style="font-weight:600">$3,482</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+57.9%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.3%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000006327170390</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:2.4197900115366067%;background:#9ca3af" title="2025: $3,332"></div>
+            <div class="mix-bar" style="width:2.280583898841525%;background:#2563eb" title="2026: $3,141"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$3,332</span> → <span style="font-weight:600">$3,141</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-5.8%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.3%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000003522003844</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.9687496437245745%;background:#9ca3af" title="2025: $1,334"></div>
+            <div class="mix-bar" style="width:2.062675863903913%;background:#2563eb" title="2026: $2,840"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$1,334</span> → <span style="font-weight:600">$2,840</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+112.9%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.3%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000052328856356</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:2.01511195998358%;background:#2563eb" title="2026: $2,775"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$2,775</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.3%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789780383</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:1.8618908343776213%;background:#9ca3af" title="2025: $2,564"></div>
+            <div class="mix-bar" style="width:0.9766939049289782%;background:#2563eb" title="2026: $1,345"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$2,564</span> → <span style="font-weight:600">$1,345</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-47.5%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789710662</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.8350226749111735%;background:#2563eb" title="2026: $2,527"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$2,527</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000053626940815</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.8350226749111735%;background:#2563eb" title="2026: $2,527"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$2,527</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000052593869920</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.7930502528257497%;background:#2563eb" title="2026: $2,469"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$2,469</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000034990568925</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:1.7921788530592702%;background:#9ca3af" title="2025: $2,468"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$2,468</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000002789710656</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.7870956877548072%;background:#2563eb" title="2026: $2,461"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$2,461</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000053627449103</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.7870956877548072%;background:#2563eb" title="2026: $2,461"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$2,461</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000003141736461</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:1.6475264918236925%;background:#9ca3af" title="2025: $2,269"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$2,269</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000061323697011</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.5379770178477923%;background:#2563eb" title="2026: $2,118"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$2,118</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000063149019514</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.5314850895875207%;background:#2563eb" title="2026: $2,109"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$2,109</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000042458103392</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:1.2664343272833742%;background:#9ca3af" title="2025: $1,744"></div>
+            <div class="mix-bar" style="width:1.4122340315448167%;background:#2563eb" title="2026: $1,945"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$1,744</span> → <span style="font-weight:600">$1,945</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+11.5%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000006339824896</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.9672537407921183%;background:#9ca3af" title="2025: $1,332"></div>
+            <div class="mix-bar" style="width:1.2883282464161687%;background:#2563eb" title="2026: $1,774"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$1,332</span> → <span style="font-weight:600">$1,774</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+33.2%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000061323697017</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.1836513494678327%;background:#2563eb" title="2026: $1,630"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$1,630</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000052592337703</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.1818359332876671%;background:#2563eb" title="2026: $1,628"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$1,628</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.2%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000034990568917</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:1.0565722168562555%;background:#9ca3af" title="2025: $1,455"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$1,455</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000061323697013</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:1.0471320527193955%;background:#2563eb" title="2026: $1,442"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$1,442</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000046689175952</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:0.9963003996747646%;background:#2563eb" title="2026: $1,372"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$1,372</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000060351514209</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:0.9004609486914734%;background:#2563eb" title="2026: $1,240"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$1,240</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000034990568915</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.9004464253620321%;background:#9ca3af" title="2025: $1,240"></div>
+            <div class="mix-bar" style="width:0.0%;background:#2563eb" title="2026: $0"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$1,240</span> → <span style="font-weight:600">$0</span>
+            <span style="color:#ef4444;font-size:12px;margin-left:6px">-100.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.0%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000006329544567</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.5228398598876315%;background:#9ca3af" title="2025: $720"></div>
+            <div class="mix-bar" style="width:0.7639271286135949%;background:#2563eb" title="2026: $1,052"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$720</span> → <span style="font-weight:600">$1,052</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+46.1%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.1%)</span>
+          </div>
+        </div><div class="mix-row">
+          <div class="mix-name">500000061987549281</div>
+          <div class="mix-bars">
+            <div class="mix-bar" style="width:0.0%;background:#9ca3af" title="2025: $0"></div>
+            <div class="mix-bar" style="width:0.755213130948801%;background:#2563eb" title="2026: $1,040"></div>
+          </div>
+          <div class="mix-vals">
+            <span style="color:#6b7280">$0</span> → <span style="font-weight:600">$1,040</span>
+            <span style="color:#10b981;font-size:12px;margin-left:6px">+0.0%</span>
+            <span style="color:#9ca3af;font-size:11px;margin-left:4px">(0.1%)</span>
+          </div>
+        </div>
+  </div>
+</section>
+
+<!-- 9. TOP ITEMS -->
+<section id="items">
+  <h2>Top Menu Items</h2>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>
+    Look beyond the sales rank and focus on the <b>delta column</b> — items with large negative swings may signal menu fatigue or availability issues (recall the 2025 complaint about being out of branzino and burrata). Items with positive deltas on a declining topline are gaining share and represent your strongest performers. Cross-reference high-quantity items with low average price to identify potential upsell opportunities.</div>
+  <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Item</th><th>Group</th><th>Sales 2025</th><th>Sales 2026</th><th>Δ</th><th>Qty 2025</th><th>Qty 2026</th></tr></thead><tbody><tr><td>500000002785298902</td><td style="color:#6b7280">500000006227781708</td><td>$37,236</td><td>$32,492</td><td style="color:#ef4444">$-4,744</td><td>874</td><td>662</td></tr><tr><td>500000002785298904</td><td style="color:#6b7280">500000003001942642</td><td>$34,544</td><td>$29,140</td><td style="color:#ef4444">$-5,404</td><td>1,261</td><td>1,171</td></tr><tr><td>500000002794251757</td><td style="color:#6b7280">500000050362247375</td><td>$0</td><td>$31,398</td><td style="color:#10b981">$+31,398</td><td>0</td><td>1,336</td></tr><tr><td>500000002794251757</td><td style="color:#6b7280">500000044165665119</td><td>$30,564</td><td>$0</td><td style="color:#ef4444">$-30,564</td><td>1,046</td><td>0</td></tr><tr><td>500000002794251757</td><td style="color:#6b7280">500000050362247374</td><td>$0</td><td>$29,982</td><td style="color:#10b981">$+29,982</td><td>0</td><td>1,236</td></tr><tr><td>500000002794251757</td><td style="color:#6b7280">500000044165705802</td><td>$27,192</td><td>$0</td><td style="color:#ef4444">$-27,192</td><td>1,145</td><td>0</td></tr><tr><td>500000002794251757</td><td style="color:#6b7280">500000044156691076</td><td>$25,000</td><td>$23,179</td><td style="color:#ef4444">$-1,822</td><td>727</td><td>669</td></tr><tr><td>500000002785298903</td><td style="color:#6b7280">500000002469141027</td><td>$23,698</td><td>$17,887</td><td style="color:#ef4444">$-5,811</td><td>1,014</td><td>765</td></tr><tr><td>500000006328891804</td><td style="color:#6b7280">500000002798254712</td><td>$20,635</td><td>$11,062</td><td style="color:#ef4444">$-9,573</td><td>1,109</td><td>603</td></tr><tr><td>500000002954175921</td><td style="color:#6b7280">500000021733878579</td><td>$19,475</td><td>$17,005</td><td style="color:#ef4444">$-2,470</td><td>205</td><td>179</td></tr><tr><td>500000002785298903</td><td style="color:#6b7280">500000044103081069</td><td>$18,396</td><td>$14,255</td><td style="color:#ef4444">$-4,141</td><td>726</td><td>527</td></tr><tr><td>500000002785298902</td><td style="color:#6b7280">500000028876590266</td><td>$17,898</td><td>$648</td><td style="color:#ef4444">$-17,250</td><td>138</td><td>5</td></tr><tr><td>500000002785298904</td><td style="color:#6b7280">500000050088409634</td><td>$2,736</td><td>$17,393</td><td style="color:#10b981">$+14,657</td><td>120</td><td>747</td></tr><tr><td>500000002788526760</td><td style="color:#6b7280">500000048257587134</td><td>$16,122</td><td>$17,211</td><td style="color:#10b981">$+1,089</td><td>813</td><td>866</td></tr><tr><td>500000002788526760</td><td style="color:#6b7280">500000044064044501</td><td>$16,772</td><td>$0</td><td style="color:#ef4444">$-16,772</td><td>994</td><td>0</td></tr><tr><td>500000002785298903</td><td style="color:#6b7280">500000047861465019</td><td>$0</td><td>$16,682</td><td style="color:#10b981">$+16,682</td><td>0</td><td>775</td></tr><tr><td>500000002785298904</td><td style="color:#6b7280">500000038190887700</td><td>$16,514</td><td>$3,770</td><td style="color:#ef4444">$-12,744</td><td>1,051</td><td>241</td></tr><tr><td>500000002785298902</td><td style="color:#6b7280">500000028594324579</td><td>$16,210</td><td>$0</td><td style="color:#ef4444">$-16,210</td><td>319</td><td>0</td></tr><tr><td>500000002785298903</td><td style="color:#6b7280">500000002469141025</td><td>$15,768</td><td>$16,123</td><td style="color:#10b981">$+354</td><td>890</td><td>893</td></tr><tr><td>500000002788526760</td><td style="color:#6b7280">500000043699751026</td><td>$15,622</td><td>$0</td><td style="color:#ef4444">$-15,622</td><td>981</td><td>0</td></tr><tr><td>500000002785298904</td><td style="color:#6b7280">500000014124194830</td><td>$15,416</td><td>$0</td><td style="color:#ef4444">$-15,416</td><td>1,296</td><td>0</td></tr><tr><td>500000002785298904</td><td style="color:#6b7280">500000050088308844</td><td>$2,142</td><td>$14,854</td><td style="color:#10b981">$+12,712</td><td>241</td><td>1,631</td></tr><tr><td>500000002794251757</td><td style="color:#6b7280">500000044165685079</td><td>$14,130</td><td>$0</td><td style="color:#ef4444">$-14,130</td><td>727</td><td>0</td></tr><tr><td>500000002788526760</td><td style="color:#6b7280">500000047735051583</td><td>$13,850</td><td>$0</td><td style="color:#ef4444">$-13,850</td><td>762</td><td>0</td></tr><tr><td>500000002788526760</td><td style="color:#6b7280">500000058887084121</td><td>$0</td><td>$13,651</td><td style="color:#10b981">$+13,651</td><td>0</td><td>811</td></tr><tr><td>500000002785298904</td><td style="color:#6b7280">500000024001589614</td><td>$13,468</td><td>$0</td><td style="color:#ef4444">$-13,468</td><td>637</td><td>0</td></tr><tr><td>500000002789780387</td><td style="color:#6b7280">500000046997941886</td><td>$13,332</td><td>$0</td><td style="color:#ef4444">$-13,332</td><td>806</td><td>0</td></tr><tr><td>500000002785298902</td><td style="color:#6b7280">500000015419094538</td><td>$12,056</td><td>$13,052</td><td style="color:#10b981">$+996</td><td>323</td><td>339</td></tr><tr><td>500000002785298904</td><td style="color:#6b7280">500000050088176576</td><td>$1,642</td><td>$12,817</td><td style="color:#10b981">$+11,174</td><td>113</td><td>872</td></tr><tr><td>500000002785298904</td><td style="color:#6b7280">500000023582921732</td><td>$0</td><td>$12,482</td><td style="color:#10b981">$+12,482</td><td>0</td><td>542</td></tr></tbody></table></div>
+</section>
+
+<!-- 10. KITCHEN -->
+<section id="kitchen">
+  <h2>Kitchen Performance</h2>
+  <div class="narrative" style="background:#fef2f2;border-left:4px solid #ef4444">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#b91c1c;margin-bottom:6px">KEY TAKEAWAY</div>
+    Kitchen fulfillment slowed from <b>8.1 to 8.9 minutes (+9.9%)</b> despite processing <b>14% fewer tickets</b> (18,317 → 15,756). That's a red flag — ticket times should improve when volume drops, not worsen. Possible causes: staffing reductions that outpaced the volume decline, menu complexity changes, or station reorganization. If the kitchen is slower on fewer covers, adding volume back (the Q2 goal) will pressure times further unless the root cause is addressed. Check the hourly breakdown: if the slowdown is concentrated at 6PM–7PM peak, it's a line capacity issue; if it's spread evenly, it's likely a staffing or process change.</div>
+  <div class="conc-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="conc-card">
+      <div class="conc-label">Avg Fulfillment</div>
+      <div class="conc-value">8.9 min</div>
+      <div class="conc-sub">2025: 8.1 min</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Total Tickets</div>
+      <div class="conc-value">15,756</div>
+      <div class="conc-sub">2025: 18,317</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Δ Time</div>
+      <div class="conc-value" style="color:#ef4444">+0.7 min</div>
+      <div class="conc-sub">+9.1%</div>
+    </div>
+  </div>
+  <div class="chart-row">
+    <div class="chart-wrap" style="height:340px"><canvas id="chartKitHour"></canvas></div>
+    <div class="chart-wrap" style="height:340px"><canvas id="chartKitDow"></canvas></div>
+  </div>
+</section>
+
+<!-- 11. EVENTS -->
+<section id="events">
+  <h2>Private Events</h2>
+  <div class="narrative" style="background:#fef2f2;border-left:4px solid #ef4444">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#b91c1c;margin-bottom:6px">KEY TAKEAWAY</div>
+    Events revenue dropped <b>39.5%</b> ($76.4K → $46.3K) despite the same event count (19 each year) — meaning <b>average event revenue fell from $4,023 to $2,435</b>. This suggests smaller events or lower minimum spend commitments, not fewer bookings. Since event revenue = Event Actual + Unmet Minimum, lower numbers could also mean more events hitting their minimums (good) but with lower minimums set. Worth reviewing minimum pricing strategy — if Q1 2025 minimums drove $76K on 19 events, current pricing may be leaving money on the table.</div>
+  <div class="conc-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="conc-card">
+      <div class="conc-label">Total Event Revenue</div>
+      <div class="conc-value">$46,266</div>
+      <div class="conc-sub">2025: $76,426</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Events Count</div>
+      <div class="conc-value">19</div>
+      <div class="conc-sub">2025: 19</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Avg Revenue/Event</div>
+      <div class="conc-value">$2,435</div>
+      <div class="conc-sub">2025: $4,022</div>
+    </div>
+  </div>
+  <div class="chart-wrap" style="height:300px"><canvas id="chartEvents"></canvas></div>
+  <h3>Event Detail</h3>
+  <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Year</th><th>Date</th><th>Event</th><th>Room</th><th>Type</th><th>Revenue</th></tr></thead><tbody><tr><td>2025</td><td>1/3/2026</td><td></td><td></td><td></td><td>$3,698</td></tr><tr><td>2025</td><td>1/15/2026</td><td></td><td></td><td></td><td>$4,392</td></tr><tr><td>2025</td><td>1/17/2026</td><td></td><td></td><td></td><td>$1,366</td></tr><tr><td>2025</td><td>1/23/2026</td><td></td><td></td><td></td><td>$22,000</td></tr><tr><td>2025</td><td>1/24/2026</td><td></td><td></td><td></td><td>$3,354</td></tr><tr><td>2025</td><td>1/28/2026</td><td></td><td></td><td></td><td>$1,150</td></tr><tr><td>2025</td><td>1/31/2026</td><td></td><td></td><td></td><td>$1,236</td></tr><tr><td>2025</td><td>2/1/2026</td><td></td><td></td><td></td><td>$1,215</td></tr><tr><td>2025</td><td>2/6/2026</td><td></td><td></td><td></td><td>$1,992</td></tr><tr><td>2025</td><td>2/21/2026</td><td></td><td></td><td></td><td>$1,164</td></tr><tr><td>2025</td><td>2/26/2026</td><td></td><td></td><td></td><td>$300</td></tr><tr><td>2025</td><td>2/28/2026</td><td></td><td></td><td></td><td>$20,749</td></tr><tr><td>2025</td><td>3/1/2026</td><td></td><td></td><td></td><td>$1,120</td></tr><tr><td>2025</td><td>3/6/2026</td><td></td><td></td><td></td><td>$1,330</td></tr><tr><td>2025</td><td>3/7/2026</td><td></td><td></td><td></td><td>$3,940</td></tr><tr><td>2025</td><td>3/11/2026</td><td></td><td></td><td></td><td>$2,720</td></tr><tr><td>2025</td><td>3/15/2026</td><td></td><td></td><td></td><td>$900</td></tr><tr><td>2025</td><td>3/24/2026</td><td></td><td></td><td></td><td>$950</td></tr><tr><td>2025</td><td>3/27/2026</td><td></td><td></td><td></td><td>$2,850</td></tr><tr><td>2026</td><td>1/17/2025</td><td></td><td></td><td></td><td>$2,364</td></tr><tr><td>2026</td><td>1/19/2025</td><td></td><td></td><td></td><td>$10,093</td></tr><tr><td>2026</td><td>1/24/2025</td><td></td><td></td><td></td><td>$3,830</td></tr><tr><td>2026</td><td>1/25/2025</td><td></td><td></td><td></td><td>$3,017</td></tr><tr><td>2026</td><td>1/26/2025</td><td></td><td></td><td></td><td>$1,016</td></tr><tr><td>2026</td><td>1/30/2025</td><td></td><td></td><td></td><td>$1,247</td></tr><tr><td>2026</td><td>2/1/2025</td><td></td><td></td><td></td><td>$4,751</td></tr><tr><td>2026</td><td>2/2/2025</td><td></td><td></td><td></td><td>$841</td></tr><tr><td>2026</td><td>2/5/2025</td><td></td><td></td><td></td><td>$2,555</td></tr><tr><td>2026</td><td>2/21/2025</td><td></td><td></td><td></td><td>$1,359</td></tr><tr><td>2026</td><td>2/22/2025</td><td></td><td></td><td></td><td>$930</td></tr><tr><td>2026</td><td>2/26/2025</td><td></td><td></td><td></td><td>$2,429</td></tr><tr><td>2026</td><td>2/26/2025</td><td></td><td></td><td></td><td>$1,845</td></tr><tr><td>2026</td><td>3/7/2025</td><td></td><td></td><td></td><td>$200</td></tr><tr><td>2026</td><td>3/8/2025</td><td></td><td></td><td></td><td>$2,925</td></tr><tr><td>2026</td><td>3/8/2025</td><td></td><td></td><td></td><td>$1,443</td></tr><tr><td>2026</td><td>3/20/2025</td><td></td><td></td><td></td><td>$1,168</td></tr><tr><td>2026</td><td>3/23/2025</td><td></td><td></td><td></td><td>$678</td></tr><tr><td>2026</td><td>3/29/2025</td><td></td><td></td><td></td><td>$3,575</td></tr></tbody></table></div>
+</section>
+
+<!-- 12. NPS -->
+<section id="nps">
+  <h2>NPS & Guest Experience</h2>
+  <div class="narrative" style="background:#ecfdf5;border-left:4px solid #10b981">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#047857;margin-bottom:6px">KEY TAKEAWAY</div>
+    NPS improved from <b>61 to 69</b> — and the quality of the improvement matters. Detractors (scores 1-6) dropped from 14 to 6, meaning the bottom-end bad experiences are being eliminated. Negative comment rates fell from 26% to 14% of responses. But here's the tension: <b>NPS is rising because you're losing the guests who were unhappy</b>. If the departed covers were disproportionately detractors (who scored low and complained about noise, wait times, and limited menu modifications), their absence mechanically boosts NPS. The challenge is whether you can recapture volume without re-introducing the friction that generated those complaints — which means the operational improvements need to scale.</div>
+  <div class="conc-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="conc-card">
+      <div class="conc-label">NPS Q1 2026</div>
+      <div class="conc-value" style="color:#10b981">69</div>
+      <div class="conc-sub">2025: 61</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Promoters (9-10)</div>
+      <div class="conc-value" style="color:#10b981">47</div>
+      <div class="conc-sub">2025: 92</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Passives (7-8)</div>
+      <div class="conc-value" style="color:#f59e0b">6</div>
+      <div class="conc-sub">2025: 22</div>
+    </div>
+    <div class="conc-card">
+      <div class="conc-label">Detractors (1-6)</div>
+      <div class="conc-value" style="color:#ef4444">6</div>
+      <div class="conc-sub">2025: 14</div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. SERVER PERFORMANCE -->
+<section id="servers">
+  <h2>Server Performance</h2>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">KEY TAKEAWAY</div>
+    Server scores from Resy surveys reflect perceived service quality per server across the quarter. Note the <b>roster turnover</b>: several 2025 names (Carzell Anderson, Peter Berger, Alexandra Scott) don't appear in 2026, replaced by new staff. New servers starting in Q1 — historically a slower quarter — get time to onboard before peak season. Compare scores for servers who appear in both years to identify genuine improvement vs. roster composition effects. The consistently high scores across 2026 newcomers (multiple at 100) could reflect either excellent onboarding or small sample sizes — check the survey count per server.</div>
+  <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Server</th><th>Score 2025</th><th>Score 2026</th></tr></thead><tbody><tr><td>Alexandra Scott</td><td>100.0</td><td>—</td></tr><tr><td>Ally Scott</td><td>99.0</td><td>93.0</td></tr><tr><td>Cari Brezina</td><td>85.0</td><td>—</td></tr><tr><td>Carzell Anderson</td><td>96.0</td><td>—</td></tr><tr><td>Damon</td><td>—</td><td>100.0</td></tr><tr><td>Dillon Snyder</td><td>75.0</td><td>—</td></tr><tr><td>Elyssa</td><td>—</td><td>100.0</td></tr><tr><td>Franklin</td><td>92.0</td><td>—</td></tr><tr><td>Gillian</td><td>—</td><td>93.0</td></tr><tr><td>Gillian Sommerville</td><td>98.0</td><td>—</td></tr><tr><td>Grace</td><td>—</td><td>96.0</td></tr><tr><td>Grace B</td><td>—</td><td>95.0</td></tr><tr><td>Jason Coopman</td><td>100.0</td><td>—</td></tr><tr><td>Jaz Murray</td><td>93.0</td><td>97.0</td></tr><tr><td>Jen Babiarz</td><td>89.0</td><td>—</td></tr><tr><td>Jimmy Trainer</td><td>95.0</td><td>—</td></tr><tr><td>Joni N</td><td>—</td><td>100.0</td></tr><tr><td>Kaitlin  Kobasic</td><td>—</td><td>100.0</td></tr><tr><td>Madison</td><td>—</td><td>100.0</td></tr><tr><td>Madison A</td><td>—</td><td>98.0</td></tr><tr><td>Michaela Litwin</td><td>91.0</td><td>100.0</td></tr><tr><td>Morgan  King</td><td>—</td><td>98.0</td></tr><tr><td>Peter Berger</td><td>96.0</td><td>—</td></tr><tr><td>Seantel</td><td>—</td><td>94.0</td></tr><tr><td>Whitney Cox</td><td>99.0</td><td>—</td></tr><tr><td>William M</td><td>—</td><td>94.0</td></tr><tr><td>William Maldonado</td><td>—</td><td>96.0</td></tr></tbody></table></div>
+</section>
+
+
+<!-- 14. RESY CONFIGURATION ANALYSIS -->
+<section id="resyconfig">
+  <h2>Resy Configuration vs. Revenue Analysis</h2>
+  <div class="narrative" style="background:#fef2f2;border-left:4px solid #ef4444">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#b91c1c;margin-bottom:6px">KEY FINDING</div>
+    Mon-Wed and Sunday dinner shifts allocate their guaranteed online tables exclusively to <b>outdoor seating (garden/streetery)</b> that is closed November through March. This means Q1's effective indoor online inventory is <b>zero guaranteed tables</b> on the days declining 20-29%. Meanwhile, Friday and Saturday allocate 44-45 tables to indoor online — and are declining only 4%. The correlation between effective winter online inventory and revenue resilience is near-perfect. Combined with conservative pacing (400 covers Mon-Wed vs 1,900 Fri-Sat) and bar tops locked to in-house, the weakest shifts are structurally invisible to online guests during Q1.</div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi-card" style="border-left:4px solid #ef4444">
+      <div class="kpi-label">Total Q1 Revenue Decline</div>
+      <div class="kpi-value">-$94,010</div>
+      <div class="kpi-delta" style="color:#ef4444">-10.2% YoY</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #ef4444">
+      <div class="kpi-label">Sun + Wed + Thu Share of Loss</div>
+      <div class="kpi-value">80.8%</div>
+      <div class="kpi-delta" style="color:#ef4444">-$76,049 of -$94,010</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #10b981">
+      <div class="kpi-label">Fri + Sat Revenue Decline</div>
+      <div class="kpi-value">-$15,807</div>
+      <div class="kpi-delta" style="color:#10b981">Only -3.3% combined</div>
+    </div>
+  </div>
+
+  <!-- Configuration Comparison Table -->
+  <h3>Shift Configuration Summary (Q1 = Winter — Outdoor Closed)</h3>
+  <div style="overflow-x:auto;margin-bottom:24px">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Shift</th>
+        <th>Service Window</th>
+        <th>Total Online</th>
+        <th style="background:#b91c1c">Indoor Online (Q1 Effective)</th>
+        <th>Mixed</th>
+        <th>Bar Online</th>
+        <th>Pacing Cap</th>
+        <th>Q1 Rev/Day</th>
+        <th>YoY Change</th>
+        <th>Revenue Gap</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Mon Dinner</b></td>
+        <td>5:00-9:45 PM (5 hrs)</td>
+        <td>6</td>
+        <td style="color:#ef4444;font-weight:700">0 &#9888;</td>
+        <td>49</td>
+        <td style="color:#ef4444">Never</td>
+        <td>400</td>
+        <td>$4,117</td>
+        <td style="color:#10b981;font-weight:600">+2.7%</td>
+        <td style="color:#10b981">+$1,387</td>
+      </tr>
+      <tr>
+        <td><b>Tue Dinner</b></td>
+        <td>5:00-9:45 PM (5 hrs)</td>
+        <td>6</td>
+        <td style="color:#ef4444;font-weight:700">0 &#9888;</td>
+        <td>49</td>
+        <td style="color:#ef4444">Never</td>
+        <td>400</td>
+        <td>$4,917</td>
+        <td style="color:#ef4444;font-weight:600">-9.5%</td>
+        <td style="color:#ef4444">-$6,397</td>
+      </tr>
+      <tr>
+        <td><b>Wed Dinner</b></td>
+        <td>5:00-9:45 PM (5 hrs)</td>
+        <td>6</td>
+        <td style="color:#ef4444;font-weight:700">0 &#9888;</td>
+        <td>49</td>
+        <td style="color:#ef4444">Never</td>
+        <td>400</td>
+        <td>$4,884</td>
+        <td style="color:#ef4444;font-weight:600">-25.5%</td>
+        <td style="color:#ef4444">-$19,693</td>
+      </tr>
+      <tr style="background:#f0f9ff">
+        <td><b>Thu Dinner</b></td>
+        <td>5:00-9:45 PM (5 hrs)</td>
+        <td>14</td>
+        <td style="color:#f59e0b;font-weight:700">14</td>
+        <td>34</td>
+        <td style="color:#f59e0b">Partial</td>
+        <td>600</td>
+        <td>$6,411</td>
+        <td style="color:#ef4444;font-weight:600">-20.4%</td>
+        <td style="color:#ef4444">-$21,211</td>
+      </tr>
+      <tr style="background:#f0fdf4">
+        <td><b>Fri Dinner</b></td>
+        <td>4:00-10:00 PM (6 hrs)</td>
+        <td>45</td>
+        <td style="color:#10b981;font-weight:700">45</td>
+        <td>0</td>
+        <td style="color:#10b981">Yes (walk-in)</td>
+        <td>1,900</td>
+        <td>$15,372</td>
+        <td style="color:#ef4444;font-weight:600">-4.5%</td>
+        <td style="color:#ef4444">-$9,397</td>
+      </tr>
+      <tr style="background:#f0fdf4">
+        <td><b>Sat Dinner</b></td>
+        <td>4:00-10:45 PM (7 hrs)</td>
+        <td>44</td>
+        <td style="color:#10b981;font-weight:700">44</td>
+        <td>20</td>
+        <td style="color:#10b981">After build</td>
+        <td>1,900</td>
+        <td>$17,734</td>
+        <td style="color:#ef4444;font-weight:600">-4.4%</td>
+        <td style="color:#ef4444">-$10,536</td>
+      </tr>
+      <tr>
+        <td><b>Sun Dinner</b></td>
+        <td>5:00-9:45 PM (5 hrs)</td>
+        <td>6</td>
+        <td style="color:#ef4444;font-weight:700">0 &#9888;</td>
+        <td>43</td>
+        <td style="color:#ef4444">Never</td>
+        <td>400</td>
+        <td>$5,524</td>
+        <td style="color:#ef4444;font-weight:600">-28.8%</td>
+        <td style="color:#ef4444">-$26,777</td>
+      </tr>
+      <tr style="border-top:2px solid #1a1d2e">
+        <td><b>Sat Brunch</b></td>
+        <td>11:00 AM-2:45 PM (4 hrs)</td>
+        <td>11</td>
+        <td style="color:#f59e0b;font-weight:700">~5</td>
+        <td>47</td>
+        <td style="color:#ef4444">Never</td>
+        <td>800</td>
+        <td>$3,465</td>
+        <td style="color:#10b981;font-weight:600">+8.1%</td>
+        <td style="color:#10b981">+$3,376</td>
+      </tr>
+      <tr>
+        <td><b>Sun Brunch</b></td>
+        <td>11:00 AM-2:45 PM (4 hrs)</td>
+        <td>11</td>
+        <td style="color:#f59e0b;font-weight:700">~5</td>
+        <td>47</td>
+        <td style="color:#ef4444">Never</td>
+        <td>800</td>
+        <td>$2,480</td>
+        <td style="color:#ef4444;font-weight:600">-24.8%</td>
+        <td style="color:#ef4444">-$9,818</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- Charts Row 1: Online Tables vs Revenue Performance -->
+  <div class="chart-row" style="margin-bottom:20px">
+    <div class="chart-wrap"><div style="height:320px"><canvas id="chartResyOnline"></canvas></div></div>
+    <div class="chart-wrap"><div style="height:320px"><canvas id="chartResyPacing"></canvas></div></div>
+  </div>
+
+  <!-- Revenue Attribution Waterfall -->
+  <div class="chart-wrap" style="margin-bottom:20px"><div style="height:360px"><canvas id="chartResyWaterfall"></canvas></div></div>
+
+  <!-- Seasonal Impact Analysis -->
+  <h3>Seasonal Online Inventory: Full Year vs. Q1 Winter</h3>
+  <div class="narrative" style="background:#fffbeb;border-left:4px solid #f59e0b">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#92400e;margin-bottom:6px">SEASONAL CONFIGURATION GAP</div>
+    Outdoor tables (garden, sidewalk, streetery) are only bookable <b>April through October</b>. During the 5 winter months (November-March), any shift that relies on outdoor tables for its online inventory loses those seats entirely. The table below shows how the "headline" online table count collapses when you remove outdoor seats. Fri-Sat dinner configs are barely affected because their online allocation is overwhelmingly indoor. Mon-Wed and Sunday dinner configs lose <b>100% of their guaranteed online inventory</b> — every single guaranteed-online table is in the garden.</div>
+
+  <div style="overflow-x:auto;margin-bottom:24px">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Shift</th>
+        <th>Apr-Oct Online<br>(Full Inventory)</th>
+        <th>Nov-Mar Online<br>(Indoor Only)</th>
+        <th style="background:#b91c1c">Winter Reduction</th>
+        <th>Online as % of Total Tables</th>
+        <th>Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Mon-Wed Dinner</b></td>
+        <td>6 + 49 mixed = 55 potential</td>
+        <td style="color:#ef4444;font-weight:700">0 guaranteed + 49 mixed</td>
+        <td style="color:#ef4444;font-weight:700">-100% guaranteed</td>
+        <td>0% guaranteed / ~67% with mixed</td>
+        <td>All 6 guaranteed online tables are garden seats</td>
+      </tr>
+      <tr>
+        <td><b>Thu Dinner</b></td>
+        <td>14 + 34 mixed = 48 potential</td>
+        <td style="color:#10b981;font-weight:700">14 guaranteed + 34 mixed</td>
+        <td style="color:#10b981;font-weight:700">0% — all indoor</td>
+        <td>19% guaranteed / ~66% with mixed</td>
+        <td>Garden set to in-house; online is indoor</td>
+      </tr>
+      <tr style="background:#f0fdf4">
+        <td><b>Fri Dinner</b></td>
+        <td>45 + 0 mixed = 45 locked</td>
+        <td style="color:#10b981;font-weight:700">45 guaranteed (indoor)</td>
+        <td style="color:#10b981;font-weight:700">0% — all indoor</td>
+        <td>62% guaranteed</td>
+        <td>Garden online too but indoor covers the base</td>
+      </tr>
+      <tr style="background:#f0fdf4">
+        <td><b>Sat Dinner</b></td>
+        <td>44 + 20 mixed = 64 potential</td>
+        <td style="color:#10b981;font-weight:700">44 guaranteed + 20 mixed</td>
+        <td style="color:#10b981;font-weight:700">0% — all indoor</td>
+        <td>60% guaranteed / ~88% with mixed</td>
+        <td>Garden online too but indoor covers the base</td>
+      </tr>
+      <tr>
+        <td><b>Sun Dinner</b></td>
+        <td>6 + 43 mixed = 49 potential</td>
+        <td style="color:#ef4444;font-weight:700">0 guaranteed + 43 mixed</td>
+        <td style="color:#ef4444;font-weight:700">-100% guaranteed</td>
+        <td>0% guaranteed / ~59% with mixed</td>
+        <td>All 6 guaranteed online tables are garden seats</td>
+      </tr>
+      <tr>
+        <td><b>Sat-Sun Brunch</b></td>
+        <td>11 + 47 mixed = 58 potential</td>
+        <td style="color:#f59e0b;font-weight:700">~5 guaranteed + 47 mixed</td>
+        <td style="color:#f59e0b;font-weight:700">-55% guaranteed</td>
+        <td>~7% guaranteed / ~73% with mixed</td>
+        <td>6 of 11 online tables are garden/streetery</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- Charts Row 2: Correlation scatter + Bar analysis -->
+  <div class="chart-row" style="margin-bottom:20px">
+    <div class="chart-wrap"><div style="height:320px"><canvas id="chartResyScatter"></canvas></div></div>
+    <div class="chart-wrap"><div style="height:320px"><canvas id="chartResyBar"></canvas></div></div>
+  </div>
+
+  <!-- Revenue Impact Quantification -->
+  <h3>Revenue Impact Quantification</h3>
+  <div class="narrative" style="background:#f0fdf4;border-left:4px solid #10b981">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#065f46;margin-bottom:6px">OPPORTUNITY SIZING</div>
+    If Mon-Wed and Sunday dinner shifted from their current 0 indoor online / 400 pacing configuration to <b>Thursday's model</b> (14 indoor online, 600 pacing), the implied improvement — based on Thursday's -20.4% vs the average -21.3% for these days — is modest (~$3-5K/quarter). But if they adopted the <b>Fri-Sat model</b> (44+ indoor online, 1,900 pacing, bar accessible), and achieved even half the performance gap reduction (moving from -21.3% to -12.8%), the implied Q1 revenue recovery is <b>~$32,000-$40,000</b> — roughly a third of the total $94K decline. This is conservative: it assumes the config change closes only half the gap, with the remainder attributed to macro demand factors beyond Resy's control.<br><br>
+    <b>Three zero-cost changes for immediate testing:</b><br>
+    (1) Move Mon-Wed & Sunday's 6 guaranteed-online tables from garden to indoor dining — eliminates the winter ghost inventory problem.<br>
+    (2) Increase Mon-Wed & Sunday pacing from 400 to 600+ — stops the system from throttling bookings on days running at &lt;10% capacity.<br>
+    (3) Open bar tops (B1-B14) to online booking Mon-Wed 5:00-7:00 PM — makes 14 empty seats visible to the solo/couple diner browsing Resy.</div>
+
+  <!-- Detailed Zone Analysis -->
+  <h3>Table Zone Configuration by Shift</h3>
+  <div style="overflow-x:auto;margin-bottom:24px">
+  <table class="data-table" style="font-size:12px">
+    <thead>
+      <tr>
+        <th>Zone</th>
+        <th>Tables</th>
+        <th>Q1 Status</th>
+        <th>Mon-Wed</th>
+        <th>Thursday</th>
+        <th>Fri-Sat</th>
+        <th>Sunday</th>
+        <th>Brunch</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Bar Top</b></td>
+        <td>B1-B14 (14 × 1-top)</td>
+        <td style="color:#10b981">Open year-round</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td style="color:#f59e0b">Partial online</td>
+        <td style="color:#10b981">After build period</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td style="color:#ef4444">All in-house</td>
+      </tr>
+      <tr>
+        <td><b>Indoor Dining</b></td>
+        <td>~35 tables (2-8 tops)</td>
+        <td style="color:#10b981">Open year-round</td>
+        <td style="color:#f59e0b">Mostly mixed</td>
+        <td style="color:#f59e0b">Mostly mixed</td>
+        <td style="color:#10b981">Mostly guaranteed online</td>
+        <td style="color:#f59e0b">Mostly mixed</td>
+        <td style="color:#10b981">Mostly online</td>
+      </tr>
+      <tr>
+        <td><b>Lounge</b></td>
+        <td>L1-L4 (4 × 1-top)</td>
+        <td style="color:#10b981">Open year-round</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td style="color:#ef4444">Walk-in / in-house</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td style="color:#ef4444">Walk-in</td>
+      </tr>
+      <tr style="background:#fff7ed">
+        <td><b>Garden</b></td>
+        <td>201-223 (~12 tables)</td>
+        <td style="color:#ef4444;font-weight:600">CLOSED Nov-Mar</td>
+        <td style="color:#f59e0b">Partial online *</td>
+        <td>All in-house</td>
+        <td style="color:#10b981">All online</td>
+        <td style="color:#f59e0b">Partial online *</td>
+        <td>Split</td>
+      </tr>
+      <tr style="background:#fff7ed">
+        <td><b>Sidewalk</b></td>
+        <td>81-85 (5 tables)</td>
+        <td style="color:#ef4444;font-weight:600">CLOSED Nov-Mar</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td style="color:#ef4444">All in-house</td>
+        <td>N/A</td>
+      </tr>
+      <tr style="background:#fff7ed">
+        <td><b>Streetery</b></td>
+        <td>93-98 (6 tables)</td>
+        <td style="color:#ef4444;font-weight:600">CLOSED Nov-Mar</td>
+        <td style="color:#10b981">All online *</td>
+        <td style="color:#10b981">All online</td>
+        <td style="color:#10b981">All online</td>
+        <td style="color:#10b981">All online *</td>
+        <td style="color:#10b981">All online</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div style="font-size:12px;color:#6b7280;margin-bottom:24px">* These outdoor tables marked online are the source of the "6 online tables" in Mon-Wed and Sunday configs — but they are physically closed in Q1, making the effective guaranteed online count zero.</div>
+
+  <!-- Revenue by DOW + Config overlay -->
+  <h3>Revenue Per Operating Day vs. Configuration Profile</h3>
+  <div class="chart-wrap" style="margin-bottom:20px"><div style="height:380px"><canvas id="chartResyRevDay"></canvas></div></div>
+
+  <!-- Avg Check Divergence -->
+  <h3>Average Check Divergence: Premiumization on Open Days, Erosion on Restricted Days</h3>
+  <div class="narrative" style="background:#eff6ff;border-left:4px solid #2563eb">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1e40af;margin-bottom:6px">CHECK BEHAVIOR SPLIT</div>
+    Friday avg check rose from $156 to $167 (+6.7%) and Saturday from $156 to $163 (+4.4%) — the guests who book on open-config nights are trading <i>up</i>. Meanwhile, Wednesday check dropped from $161 to $137 (-14.8%) and Sunday from $145 to $130 (-10.5%). This divergence suggests the restricted-config days aren't just losing volume — they're losing their <b>highest-value guests</b> first. Premium diners who plan ahead via Resy see no availability and shift to Fri-Sat or choose competitors. The remaining midweek guests are more price-sensitive walk-ins spending less per visit.</div>
+
+  <div class="chart-wrap" style="margin-bottom:20px"><div style="height:320px"><canvas id="chartResyCheck"></canvas></div></div>
+
+  <!-- Cover Analysis -->
+  <h3>Cover Trends: Weekend Growing, Sunday Collapsing</h3>
+  <div class="chart-row" style="margin-bottom:20px">
+    <div class="chart-wrap"><div style="height:320px"><canvas id="chartResyCovers"></canvas></div></div>
+    <div class="chart-wrap"><div style="height:320px"><canvas id="chartResySunday"></canvas></div></div>
+  </div>
+
+  <!-- Recommendations -->
+  <h3>Recommended Configuration Changes</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+    <div class="kpi-card" style="border-top:4px solid #ef4444">
+      <div class="kpi-label" style="color:#ef4444">Priority 1 — Immediate</div>
+      <div style="font-size:14px;font-weight:600;margin:8px 0">Move Online Tables Indoors</div>
+      <div style="font-size:13px;color:#6b7280;line-height:1.5">Reassign Mon-Wed &amp; Sunday's 6 guaranteed-online garden tables to indoor dining tables. Eliminates the Q1 ghost inventory problem. Zero cost, reversible in 5 minutes.</div>
+    </div>
+    <div class="kpi-card" style="border-top:4px solid #f59e0b">
+      <div class="kpi-label" style="color:#f59e0b">Priority 2 — This Week</div>
+      <div style="font-size:14px;font-weight:600;margin:8px 0">Increase Pacing to 600+</div>
+      <div style="font-size:13px;color:#6b7280;line-height:1.5">Raise Mon-Wed &amp; Sunday from 400 to at least 600 total covers (Thursday level). Current utilization is &lt;10% of cap — no overseat risk. Higher pacing lets Resy accept more bookings per slot.</div>
+    </div>
+    <div class="kpi-card" style="border-top:4px solid #2563eb">
+      <div class="kpi-label" style="color:#2563eb">Priority 3 — Test in Q2</div>
+      <div style="font-size:14px;font-weight:600;margin:8px 0">Open Bar Tops Online</div>
+      <div style="font-size:13px;color:#6b7280;line-height:1.5">Make B1-B14 bookable online Mon-Wed &amp; Sun 5:00-7:00 PM. Saturday already opens bar after build period. 14 empty 1-tops visible to solo/couple diners browsing Resy.</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px">
+    <div class="kpi-card" style="border-top:4px solid #6366f1">
+      <div class="kpi-label" style="color:#6366f1">Priority 4 — Seasonal SOP</div>
+      <div style="font-size:14px;font-weight:600;margin:8px 0">Create Winter Config Template</div>
+      <div style="font-size:13px;color:#6b7280;line-height:1.5">Build a "Nov-Mar" shift template that automatically reallocates outdoor online tables to indoor. Switch configs each April 1 and November 1. Prevents this issue from recurring annually.</div>
+    </div>
+    <div class="kpi-card" style="border-top:4px solid #8b5cf6">
+      <div class="kpi-label" style="color:#8b5cf6">Priority 5 — Brunch Specific</div>
+      <div style="font-size:14px;font-weight:600;margin:8px 0">Winter Brunch Config</div>
+      <div style="font-size:13px;color:#6b7280;line-height:1.5">Sunday brunch orders dropped 28% (359→257). Reallocate the 6 garden/streetery online tables to indoor for winter. Consider opening bar tops for brunch — 14 seats ideal for solo/couple brunch.</div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+const COL_25 = '#9ca3af';
+const COL_26 = '#2563eb';
+const GRID = '#e5e7eb';
+const TEXT = '#6b7280';
+
+function barOpts(title) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: TEXT, font: { family: 'Inter', size: 12 } } },
+               title: { display: !!title, text: title, color: '#1a1d2e', font: { family: 'Inter', size: 14, weight: '600' } },
+               tooltip: { backgroundColor: '#1a1d2e', titleFont: { family: 'Inter' }, bodyFont: { family: 'Inter' },
+                          callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.raw.toLocaleString() } } },
+    scales: {
+      x: { grid: { color: GRID, drawBorder: false }, ticks: { color: TEXT, font: { family: 'Inter' } } },
+      y: { beginAtZero: true, grid: { color: GRID, drawBorder: false }, ticks: { color: TEXT, font: { family: 'Inter' },
+            callback: v => '$' + (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) } }
+    }
+  };
+}
+
+function coverOpts(title) {
+  const o = barOpts(title);
+  o.scales.y.ticks.callback = v => v.toLocaleString();
+  o.plugins.tooltip.callbacks.label = ctx => ctx.dataset.label + ': ' + ctx.raw.toLocaleString();
+  return o;
+}
+
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+  const section = document.getElementById(id);
+  if (section) {
+    section.classList.add('active');
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      Object.values(Chart.instances).forEach(chart => {
+        try { chart.resize(); } catch(e) {}
+      });
+    }, 50);
+  }
+  const navLink = document.querySelector('.sidebar-nav a[href="#' + id + '"]');
+  if (navLink) navLink.classList.add('active');
+  window.location.hash = id;
+}
+
+// Hash routing
+window.addEventListener('hashchange', () => {
+  const id = window.location.hash.slice(1);
+  if (id) showSection(id);
+});
+if (window.location.hash) showSection(window.location.hash.slice(1));
+
+// === CHARTS ===
+
+// Hourly Sales
+new Chart(document.getElementById('chartHourlySales'), {
+  type: 'bar',
+  data: { labels: ["12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"], datasets: [
+    { label: 'Q1 2025', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24008.9, 24782.98, 19414.85, 11955.9, 581.0, 72.0, 185332.16, 218524.07, 215730.92, 128080.22, 67996.42, 25747.69, 957.0], backgroundColor: COL_25, borderRadius: 4 },
+    { label: 'Q1 2026', data: [0.0, 0, 0.0, 0.0, 0, 0, 0.0, 0.0, 0.0, 0.0, 152.0, 27015.95, 17311.0, 15968.0, 12598.25, 2832.0, 16416.5, 146346.65, 216595.9, 199099.93, 112463.1, 45437.53, 10918.82, 890.5], backgroundColor: COL_26, borderRadius: 4 }
+  ] },
+  options: barOpts('Sales by Hour')
+});
+
+// Hourly Covers
+new Chart(document.getElementById('chartHourlyCovers'), {
+  type: 'bar',
+  data: { labels: ["12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9AM", "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"], datasets: [
+    { label: 'Q1 2025', data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 568, 619, 499, 294, 20, 35, 2359, 2936, 2876, 1853, 1075, 348, 30], backgroundColor: COL_25, borderRadius: 4 },
+    { label: 'Q1 2026', data: [1, 0, 1, 1, 0, 0, 1, 1, 1, 6, 5, 512, 423, 344, 214, 70, 329, 2339, 2883, 2719, 1807, 898, 275, 33], backgroundColor: COL_26, borderRadius: 4 }
+  ] },
+  options: coverOpts('Covers by Hour')
+});
+
+// DOW Sales
+new Chart(document.getElementById('chartDowSales'), {
+  type: 'bar',
+  data: { labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], datasets: [
+    { label: 'Q1 2025', data: [51755.61, 67537.86, 77252.45, 103829.51, 208152.1, 282197.48, 132459.1], backgroundColor: COL_25, borderRadius: 4 },
+    { label: 'Q1 2026', data: [53017.9, 63341.16, 57309.36, 82566.87, 198505.22, 274427.91, 94877.71], backgroundColor: COL_26, borderRadius: 4 }
+  ] },
+  options: barOpts('Sales by Day of Week')
+});
+
+// DOW Covers
+new Chart(document.getElementById('chartDowCovers'), {
+  type: 'bar',
+  data: { labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], datasets: [
+    { label: 'Q1 2025', data: [812, 952, 1020, 1449, 2826, 4223, 2230], backgroundColor: COL_25, borderRadius: 4 },
+    { label: 'Q1 2026', data: [830, 992, 952, 1305, 2906, 4264, 1614], backgroundColor: COL_26, borderRadius: 4 }
+  ] },
+  options: coverOpts('Covers by Day of Week')
+});
+
+// Daily Trend
+new Chart(document.getElementById('chartTrend'), {
+  type: 'line',
+  data: { labels: Array.from({length: Math.max(90, 89)}, (_,i) => 'Day ' + (i+1)),
+    datasets: [
+      { label: 'Q1 2025', data: [24.0, 5915.0, 12155.0, 17600.8, 6593.0, 3357.0, 5081.6, 5854.4, 6839.0, 14009.5, 18249.5, 5049.6, 3769.0, 6922.0, 5827.8, 6352.0, 15540.92, 19756.01, 17723.59, 3589.6, 4719.5, 6474.0, 7091.0, 17811.9, 21532.36, 4560.58, 4787.0, 6403.4, 5605.0, 9366.41, 14889.0, 23611.53, 10506.43, 3434.0, 3953.0, 7440.55, 5240.0, 15582.1, 23311.11, 4028.0, 3704.01, 3501.55, 4640.0, 13832.1, 17699.4, 20381.5, 17239.2, 4806.0, 5633.8, 6458.2, 7348.2, 19068.17, 22566.91, 11056.5, 4212.6, 3904.2, 11020.2, 7954.0, 17605.0, 20495.51, 10049.2, 3023.8, 6858.5, 5005.4, 8769.4, 15770.0, 24122.9, 11286.9, 5008.0, 6026.7, 5805.6, 8831.8, 16791.5, 22722.5, 9578.5, 3868.1, 5569.0, 7677.8, 7979.6, 15692.0, 22142.5, 13625.6, 3192.8, 8964.61, 5419.5, 8311.0, 15537.61, 25704.35, 11162.0, 5003.7], borderColor: COL_25, backgroundColor: 'transparent', tension: 0.3, pointRadius: 1 },
+      { label: 'Q1 2026', data: [0.0, 13796.2, 21621.9, 4676.5, 4662.5, 2306.0, 2383.0, 7605.0, 16543.01, 18810.0, 5529.5, 2659.5, 7459.7, 4851.5, 11231.16, 14121.6, 19618.3, 6886.5, 5426.5, 2644.0, 4019.0, 7712.0, 23100.0, 18413.7, 2163.0, 2757.0, 5895.5, 5059.4, 13458.0, 19342.55, 9041.76, 3213.6, 5514.6, 4967.5, 5543.4, 15593.6, 17987.0, 2272.0, 4534.0, 2875.1, 4359.5, 6992.0, 16562.0, 29350.0, 16460.6, 6040.3, 5897.6, 3789.0, 7035.5, 14153.0, 22788.5, 1606.4, 0.0, 4580.0, 6349.75, 6207.5, 13219.01, 23736.0, 10701.3, 2748.0, 2311.0, 4359.6, 4137.7, 13624.0, 22698.96, 9672.0, 7808.5, 8504.0, 6539.0, 5476.5, 13586.2, 17389.4, 10453.25, 4321.0, 5610.1, 3343.0, 6460.0, 13264.5, 22586.4, 9385.4, 4516.0, 6188.06, 6453.01, 9106.71, 17484.1, 20085.2, 8192.5, 4925.0, 6694.0], borderColor: COL_26, backgroundColor: 'transparent', tension: 0.3, pointRadius: 1 }
+    ] },
+  options: barOpts('Daily Net Sales')
+});
+
+// Attribution - Hour
+new Chart(document.getElementById('chartAttrHr'), {
+  type: 'bar',
+  data: { labels: ["5PM", "9PM", "7PM", "8PM", "10PM", "12PM", "1PM", "6PM", "10AM", "2PM", "3PM", "11AM", "4PM"], datasets: [{ label: 'YoY Δ', data: [-38986, -22559, -16631, -15617, -14829, -7472, -3447, -1928, 152, 642, 2251, 3007, 16344], backgroundColor: ["#ef4444", "#ef4444", "#ef4444", "#ef4444", "#ef4444", "#ef4444", "#ef4444", "#ef4444", "#10b981", "#10b981", "#10b981", "#10b981", "#10b981"], borderRadius: 4 }] },
+  options: { ...barOpts('Hourly Attribution'), plugins: { ...barOpts('Hourly Attribution').plugins, legend: { display: false } } }
+});
+
+// Attribution - DOW
+new Chart(document.getElementById('chartAttrDow'), {
+  type: 'bar',
+  data: { labels: ["Sun", "Thu", "Wed", "Fri", "Sat", "Tue", "Mon"], datasets: [{ label: 'YoY Δ', data: [-37581, -21263, -19943, -9647, -7770, -4197, 1262], backgroundColor: ["#ef4444", "#ef4444", "#ef4444", "#ef4444", "#ef4444", "#ef4444", "#10b981"], borderRadius: 4 }] },
+  options: { ...barOpts('DOW Attribution'), plugins: { ...barOpts('DOW Attribution').plugins, legend: { display: false } } }
+});
+
+// Daypart
+new Chart(document.getElementById('chartDaypart'), {
+  type: 'bar',
+  data: { labels: ["Brunch", "Dinner", "No Service"], datasets: [
+    { label: 'Q1 2025', data: [75378.63, 841483.48, 6322.0], backgroundColor: COL_25, borderRadius: 4 },
+    { label: 'Q1 2026', data: [67553.7, 747278.43, 9214.0], backgroundColor: COL_26, borderRadius: 4 }
+  ] },
+  options: barOpts('Revenue by Daypart')
+});
+
+// Kitchen by Hour
+new Chart(document.getElementById('chartKitHour'), {
+  type: 'bar',
+  data: { labels: ["10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM", "8PM", "9PM", "10PM", "11PM"], datasets: [
+    { label: 'Q1 2025', data: [0, 11.6, 10.7, 11.3, 9.4, 10.9, 6.4, 8.2, 7.5, 7.8, 8.0, 7.8, 7.8, 6.8], backgroundColor: COL_25, borderRadius: 4 },
+    { label: 'Q1 2026', data: [15.0, 8.8, 8.9, 9.0, 9.5, 8.8, 9.2, 9.1, 8.6, 9.1, 8.9, 8.5, 7.6, 12.8], backgroundColor: COL_26, borderRadius: 4 }
+  ] },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { title: { display: true, text: 'Avg Fulfillment by Hour (min)', color: '#1a1d2e', font: { family: 'Inter', size: 14, weight: '600' } },
+               legend: { labels: { color: TEXT, font: { family: 'Inter' } } },
+               tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw.toFixed(1) + ' min' } } },
+    scales: {
+      x: { grid: { color: GRID }, ticks: { color: TEXT, font: { family: 'Inter' } } },
+      y: { beginAtZero: true, grid: { color: GRID }, ticks: { color: TEXT, callback: v => v + ' min' } }
+    }
+  }
+});
+
+// Kitchen by DOW
+new Chart(document.getElementById('chartKitDow'), {
+  type: 'bar',
+  data: { labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], datasets: [
+    { label: 'Q1 2025', data: [8.0, 7.3, 7.8, 8.1, 7.8, 8.4, 8.9], backgroundColor: COL_25, borderRadius: 4 },
+    { label: 'Q1 2026', data: [10.6, 9.5, 9.4, 8.5, 8.2, 8.7, 9.1], backgroundColor: COL_26, borderRadius: 4 }
+  ] },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { title: { display: true, text: 'Avg Fulfillment by DOW (min)', color: '#1a1d2e', font: { family: 'Inter', size: 14, weight: '600' } },
+               legend: { labels: { color: TEXT, font: { family: 'Inter' } } },
+               tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw.toFixed(1) + ' min' } } },
+    scales: {
+      x: { grid: { color: GRID }, ticks: { color: TEXT, font: { family: 'Inter' } } },
+      y: { beginAtZero: true, grid: { color: GRID }, ticks: { color: TEXT, callback: v => v + ' min' } }
+    }
+  }
+});
+
+// Events by Month
+new Chart(document.getElementById('chartEvents'), {
+  type: 'bar',
+  data: { labels: ["Jan", "Feb", "Mar"], datasets: [
+    { label: 'Q1 2025', data: [37196.299999999996, 25420.0, 13810.0], backgroundColor: COL_25, borderRadius: 4 },
+    { label: 'Q1 2026', data: [21567.0, 14710.0, 9989.0], backgroundColor: COL_26, borderRadius: 4 }
+  ] },
+  options: barOpts('Event Revenue by Month')
+});
+
+
+// ========== RESY CONFIG CHARTS ==========
+
+// Online Tables vs YoY Revenue Change (Bar chart)
+new Chart(document.getElementById('chartResyOnline'), {
+  type: 'bar',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      { label: 'Q1 Indoor Online Tables', data: [0, 0, 0, 14, 45, 44, 0],
+        backgroundColor: '#2563eb', borderRadius: 4, yAxisID: 'y' },
+      { label: 'YoY Revenue Change (%)', data: [2.7, -9.5, -25.5, -20.4, -4.5, -4.4, -28.8],
+        type: 'line', borderColor: '#ef4444', backgroundColor: '#ef4444', pointRadius: 6,
+        pointBackgroundColor: '#ef4444', borderWidth: 2, tension: 0, yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Indoor Online Tables vs. YoY Revenue Change', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { labels: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.datasetIndex === 0 ? ctx.raw + ' tables' : ctx.raw.toFixed(1) + '%') } }
+    },
+    scales: {
+      y: { position: 'left', beginAtZero: true, max: 50, grid: { color: '#e5e7eb' },
+        ticks: { color: '#1a1d2e', callback: v => v + ' tables' } },
+      y1: { position: 'right', min: -35, max: 10, grid: { drawOnChartArea: false },
+        ticks: { color: '#ef4444', callback: v => v + '%' } },
+      x: { grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', font: { family: 'Inter' } } }
+    }
+  }
+});
+
+// Pacing vs Revenue
+new Chart(document.getElementById('chartResyPacing'), {
+  type: 'bar',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      { label: 'Pacing Cap (covers)', data: [400, 400, 400, 600, 1900, 1900, 400],
+        backgroundColor: '#9ca3af', borderRadius: 4, yAxisID: 'y' },
+      { label: 'YoY Revenue Change (%)', data: [2.7, -9.5, -25.5, -20.4, -4.5, -4.4, -28.8],
+        type: 'line', borderColor: '#ef4444', backgroundColor: '#ef4444', pointRadius: 6,
+        pointBackgroundColor: '#ef4444', borderWidth: 2, tension: 0, yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Pacing Cap vs. YoY Revenue Change', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { labels: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.datasetIndex === 0 ? ctx.raw.toLocaleString() : ctx.raw.toFixed(1) + '%') } }
+    },
+    scales: {
+      y: { position: 'left', beginAtZero: true, grid: { color: '#e5e7eb' },
+        ticks: { color: '#1a1d2e', callback: v => v.toLocaleString() } },
+      y1: { position: 'right', min: -35, max: 10, grid: { drawOnChartArea: false },
+        ticks: { color: '#ef4444', callback: v => v + '%' } },
+      x: { grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', font: { family: 'Inter' } } }
+    }
+  }
+});
+
+// Revenue Gap Waterfall
+new Chart(document.getElementById('chartResyWaterfall'), {
+  type: 'bar',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun Din', 'Sun Brn', 'Sat Brn', 'TOTAL'],
+    datasets: [{
+      label: 'Revenue Gap ($)',
+      data: [1387, -6397, -19693, -21211, -9397, -10536, -26777, -9818, 3376, -94010],
+      backgroundColor: [
+        '#10b981', '#ef4444', '#ef4444', '#ef4444', '#f59e0b', '#f59e0b', '#ef4444', '#ef4444', '#10b981', '#1a1d2e'
+      ],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Q1 Revenue Gap by Shift ($)', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '$' + ctx.raw.toLocaleString() } }
+    },
+    scales: {
+      y: { grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', callback: v => '$' + v.toLocaleString() } },
+      x: { grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', font: { family: 'Inter', size: 11 } } }
+    }
+  }
+});
+
+// Scatter: Online tables vs YoY %
+new Chart(document.getElementById('chartResyScatter'), {
+  type: 'scatter',
+  data: {
+    datasets: [{
+      label: 'Dinner Shifts',
+      data: [
+        {x: 0, y: 2.7, label: 'Mon'}, {x: 0, y: -9.5, label: 'Tue'}, {x: 0, y: -25.5, label: 'Wed'},
+        {x: 14, y: -20.4, label: 'Thu'}, {x: 45, y: -4.5, label: 'Fri'}, {x: 44, y: -4.4, label: 'Sat'},
+        {x: 0, y: -28.8, label: 'Sun'}
+      ],
+      backgroundColor: '#2563eb', pointRadius: 8, pointHoverRadius: 10
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Effective Indoor Online Tables vs. Revenue Change', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { display: false },
+      tooltip: { callbacks: {
+        label: ctx => ctx.raw.label + ': ' + ctx.raw.x + ' online tables, ' + ctx.raw.y.toFixed(1) + '% YoY'
+      }}
+    },
+    scales: {
+      x: { title: { display: true, text: 'Effective Indoor Online Tables (Q1)', color: '#6b7280' },
+        grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e' }, min: -5, max: 55 },
+      y: { title: { display: true, text: 'YoY Revenue Change (%)', color: '#6b7280' },
+        grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', callback: v => v + '%' }, min: -35, max: 10 }
+    }
+  }
+});
+
+// Bar Online Analysis
+new Chart(document.getElementById('chartResyBar'), {
+  type: 'bar',
+  data: {
+    labels: ['Mon-Wed', 'Thu', 'Fri-Sat', 'Sun', 'Brunch'],
+    datasets: [
+      { label: 'Bar Seats Online', data: [0, 4, 14, 0, 0], backgroundColor: '#2563eb', borderRadius: 4 },
+      { label: 'Bar Seats In-House', data: [14, 10, 0, 14, 14], backgroundColor: '#e5e7eb', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Bar Top (14 seats) Online Availability', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { labels: { color: '#1a1d2e', font: { family: 'Inter' } } }
+    },
+    scales: {
+      x: { stacked: true, grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      y: { stacked: true, max: 16, grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', callback: v => v + ' seats' } }
+    }
+  }
+});
+
+// Revenue per day
+new Chart(document.getElementById('chartResyRevDay'), {
+  type: 'bar',
+  data: {
+    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    datasets: [
+      { label: 'Q1 2025 Rev/Day', data: [4004, 5628, 5950, 8004, 16037, 21750, 10203], backgroundColor: COL_25, borderRadius: 4 },
+      { label: 'Q1 2026 Rev/Day', data: [4117, 4917, 4884, 6411, 15372, 21199, 8003], backgroundColor: COL_26, borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Average Revenue Per Operating Day — Config Profile Overlay', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { labels: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.raw.toLocaleString() } },
+      annotation: undefined
+    },
+    scales: {
+      x: { grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      y: { beginAtZero: true, grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', callback: v => '$' + v.toLocaleString() } }
+    }
+  }
+});
+
+// Avg Check Divergence
+new Chart(document.getElementById('chartResyCheck'), {
+  type: 'bar',
+  data: {
+    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    datasets: [
+      { label: 'Q1 2025 Avg Check', data: [129, 153, 161, 153, 156, 156, 145], backgroundColor: COL_25, borderRadius: 4 },
+      { label: 'Q1 2026 Avg Check', data: [129, 145, 137, 142, 167, 163, 130], backgroundColor: COL_26, borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Average Check by Day of Week — Premium vs. Restricted Config Days', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { labels: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.raw } }
+    },
+    scales: {
+      x: { grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      y: { min: 100, grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', callback: v => '$' + v } }
+    }
+  }
+});
+
+// Covers per operating day
+new Chart(document.getElementById('chartResyCovers'), {
+  type: 'bar',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      { label: 'Q1 2025 Covers/Day', data: [62, 79, 79, 112, 218, 325, 172], backgroundColor: COL_25, borderRadius: 4 },
+      { label: 'Q1 2026 Covers/Day', data: [64, 76, 80, 101, 224, 332, 136], backgroundColor: COL_26, borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Covers Per Operating Day', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { labels: { color: '#1a1d2e', font: { family: 'Inter' } } }
+    },
+    scales: {
+      x: { grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      y: { beginAtZero: true, grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e' } }
+    }
+  }
+});
+
+// Sunday dinner by month
+new Chart(document.getElementById('chartResySunday'), {
+  type: 'bar',
+  data: {
+    labels: ['January', 'February', 'March'],
+    datasets: [
+      { label: 'Q1 2025', data: [26433, 28659, 37968], backgroundColor: COL_25, borderRadius: 4 },
+      { label: 'Q1 2026', data: [12750, 20092, 33441], backgroundColor: COL_26, borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      title: { display: true, text: 'Sunday Dinner Revenue by Month (0 Indoor Online)', color: '#1a1d2e',
+        font: { family: 'Inter', size: 14, weight: '600' } },
+      legend: { labels: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.raw.toLocaleString() } }
+    },
+    scales: {
+      x: { grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', font: { family: 'Inter' } } },
+      y: { beginAtZero: true, grid: { color: '#e5e7eb' }, ticks: { color: '#1a1d2e', callback: v => '$' + v.toLocaleString() } }
+    }
+  }
+});
+
+</script>
+</body>
+</html>
