@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lowland Executive Dashboard | Helixo Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #1a2332;
+  --navy-light: #243044;
+  --navy-dark: #111924;
+  --gold: #c9a96e;
+  --gold-light: #d4bc8a;
+  --gold-dark: #b08f4f;
+  --white: #ffffff;
+  --gray-50: #f8f9fa;
+  --gray-100: #f1f3f5;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #868e96;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --red: #e74c3c;
+  --red-light: #fdf0ef;
+  --green: #27ae60;
+  --green-light: #eafaf1;
+  --blue: #3498db;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --transition: 0.3s ease;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-800);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sticky Nav */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.top-nav a {
+  color: var(--gray-400);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.85rem 1rem;
+  transition: color var(--transition), border-color var(--transition);
+  border-bottom: 2px solid transparent;
+  letter-spacing: 0.02em;
+}
+.top-nav a:hover, .top-nav a.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: var(--white);
+  padding: 3.5rem 2rem 3rem;
+  text-align: center;
+}
+.header h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.25rem;
+}
+.header .subtitle {
+  color: var(--gold);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.header .date-range {
+  color: var(--gray-500);
+  font-size: 0.85rem;
+}
+
+/* Thesis */
+.thesis {
+  max-width: 960px;
+  margin: -1.5rem auto 2rem;
+  background: var(--white);
+  border-left: 5px solid var(--gold);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 2rem 2.5rem;
+  position: relative;
+  z-index: 10;
+}
+.thesis-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 0.75rem;
+}
+.thesis p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  font-weight: 400;
+}
+.thesis strong { color: var(--navy); font-weight: 600; }
+
+/* Container */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+/* Section */
+.section {
+  margin-top: 3rem;
+}
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-title .num {
+  background: var(--navy);
+  color: var(--gold);
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.kpi-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  transition: transform var(--transition), box-shadow var(--transition);
+  opacity: 0;
+  transform: translateY(20px);
+}
+.kpi-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.kpi-card.concern {
+  border-left: 4px solid var(--red);
+}
+.kpi-card.good {
+  border-left: 4px solid var(--green);
+}
+.kpi-card.neutral {
+  border-left: 4px solid var(--blue);
+}
+.kpi-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gray-600);
+  margin-bottom: 0.5rem;
+}
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+}
+.kpi-trend {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+.kpi-trend.up { color: var(--green); }
+.kpi-trend.down { color: var(--red); }
+.kpi-trend.stable { color: var(--gray-600); }
+.kpi-trend.concern { color: var(--red); font-weight: 600; }
+
+/* Tables */
+.table-wrap {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+thead th {
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--gray-100);
+  white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--gray-50); }
+td.metric-name { font-weight: 600; color: var(--navy); }
+td.improving { color: var(--green); font-weight: 600; }
+td.worsening { color: var(--red); font-weight: 600; }
+td.neutral { color: var(--gray-700); }
+
+/* Chart Cards */
+.chart-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.chart-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.chart-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.35rem;
+}
+.chart-card .chart-subtitle {
+  font-size: 0.82rem;
+  color: var(--gray-600);
+  margin-bottom: 1.25rem;
+}
+.chart-container {
+  position: relative;
+  width: 100%;
+}
+.chart-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Heatmap */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: 160px repeat(3, 1fr);
+  gap: 2px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.heatmap-header {
+  background: var(--navy);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.6rem;
+  text-align: center;
+}
+.heatmap-header:first-child { text-align: left; border-radius: 6px 0 0 0; }
+.heatmap-header:last-child { border-radius: 0 6px 0 0; }
+.heatmap-label {
+  background: var(--gray-50);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  color: var(--gray-700);
+}
+.heatmap-cell {
+  padding: 0.7rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+}
+
+/* Complaints */
+.complaint-stats {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+.quotes-section {
+  margin-top: 1.5rem;
+}
+.quote-card {
+  background: var(--gray-50);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--gray-700);
+  font-style: italic;
+}
+.quote-card .quote-meta {
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--gray-500);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+.quote-card .quote-meta .rec-score {
+  color: var(--red);
+  font-weight: 700;
+}
+.score-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.score-box {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid var(--gray-200);
+}
+.score-box .label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-600); }
+.score-box .val { font-size: 1.6rem; font-weight: 800; color: var(--navy); margin-top: 0.25rem; }
+.score-box .sub { font-size: 0.72rem; color: var(--gray-500); margin-top: 0.15rem; }
+.score-box.negative .val { color: var(--red); }
+
+/* Recommendations */
+.rec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.rec-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  padding: 1.5rem;
+  border-top: 4px solid var(--gold);
+}
+.rec-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.25rem;
+}
+.rec-card .rec-timeline {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+}
+.rec-card ul {
+  list-style: none;
+  padding: 0;
+}
+.rec-card li {
+  font-size: 0.85rem;
+  color: var(--gray-700);
+  padding: 0.4rem 0;
+  padding-left: 1.25rem;
+  position: relative;
+  line-height: 1.5;
+}
+.rec-card li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+/* Target KPIs */
+.target-table td.impact {
+  font-size: 0.82rem;
+  color: var(--gray-600);
+  white-space: normal;
+  min-width: 200px;
+}
+
+/* Footer */
+.footer {
+  background: var(--navy);
+  color: var(--gray-500);
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.8rem;
+  margin-top: 3rem;
+}
+.footer strong { color: var(--gold); }
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Print */
+@media print {
+  .top-nav { display: none; }
+  .header { padding: 1.5rem; }
+  .thesis { box-shadow: none; border: 1px solid var(--gray-300); margin-top: 0; }
+  .kpi-card, .chart-card { box-shadow: none; border: 1px solid var(--gray-300); opacity: 1 !important; transform: none !important; }
+  .chart-card { break-inside: avoid; page-break-inside: avoid; }
+  .container { padding: 0 0.5rem; }
+  .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+  .rec-grid { grid-template-columns: repeat(3, 1fr); }
+  body { background: white; }
+  .footer { background: white; color: var(--gray-600); border-top: 1px solid var(--gray-300); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid-2 { grid-template-columns: 1fr; }
+  .rec-grid { grid-template-columns: 1fr; }
+  .complaint-stats { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .header h1 { font-size: 1.6rem; }
+  .score-compare { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="#kpis">KPIs</a>
+  <a href="#yoy">Year-over-Year</a>
+  <a href="#charts">Charts</a>
+  <a href="#complaints">Complaints</a>
+  <a href="#recommendations">Recommendations</a>
+  <a href="#targets">Targets</a>
+</nav>
+
+<header class="header">
+  <div class="subtitle">Lowland Restaurant</div>
+  <h1>Executive Operations Analysis</h1>
+  <div class="date-range">May 2024 &mdash; April 2026 &nbsp;|&nbsp; 51,609 Orders &nbsp;|&nbsp; 3,610 Surveys</div>
+</header>
+
+<div class="thesis" id="thesis">
+  <div class="thesis-label">Executive Thesis</div>
+  <p><strong>Course pacing at Lowland is remarkably consistent &mdash; and consistently problematic.</strong> Average inter-course gaps hold steady at 22&ndash;24 minutes across all years, all volume levels, and all seasons. Over half of all multi-course tables (53&ndash;57%) experience 30+ minute waits between courses, and this long-wait percentage is the pacing metric most connected to guest perception (r&nbsp;=&nbsp;-0.30 vs recommend scores). Meanwhile, 9% of guests explicitly cite wait times in their surveys, rating service 0.5 points lower and recommend 1.0 point lower than average. The pacing issue is structural &mdash; it persists across all servers, all days, and all volume levels. <strong>Reducing the long-wait percentage is the highest-ROI operational improvement available.</strong></p>
+  <p style="font-size:0.82rem;color:var(--gray-600);margin-top:0.75rem"><em>Note: October 2024 originally showed a 51-min avg gap due to a single data artifact (held-open tab with 872-min &ldquo;gap&rdquo;). All figures in this report use corrected data &mdash; Oct 2024&rsquo;s actual avg gap was 22.8 min.</em></p>
+</div>
+
+<div class="container">
+
+  <!-- KPI Summary -->
+  <section class="section" id="kpis">
+    <div class="section-title"><span class="num">1</span> Key Performance Indicators</div>
+    <div class="kpi-grid">
+      <div class="kpi-card good">
+        <div class="kpi-label">Avg Service Score</div>
+        <div class="kpi-value">4.85</div>
+        <div class="kpi-trend up">&#9650; Trending up</div>
+      </div>
+      <div class="kpi-card good">
+        <div class="kpi-label">Avg Recommend</div>
+        <div class="kpi-value">9.33</div>
+        <div class="kpi-trend up">&#9650; Strong</div>
+      </div>
+      <div class="kpi-card neutral">
+        <div class="kpi-label">Avg Course Gap</div>
+        <div class="kpi-value">24.4<span style="font-size:1rem;font-weight:500"> min</span></div>
+        <div class="kpi-trend stable">&#9644; Stable</div>
+      </div>
+      <div class="kpi-card concern">
+        <div class="kpi-label">Long Wait %</div>
+        <div class="kpi-value">53.6%</div>
+        <div class="kpi-trend concern">&#9888; Above target</div>
+      </div>
+      <div class="kpi-card neutral">
+        <div class="kpi-label">Avg Dwell Time</div>
+        <div class="kpi-value">139<span style="font-size:1rem;font-weight:500"> min</span></div>
+        <div class="kpi-trend stable">&#9644; Stable</div>
+      </div>
+      <div class="kpi-card neutral">
+        <div class="kpi-label">Avg Ticket</div>
+        <div class="kpi-value">$70.35</div>
+        <div class="kpi-trend stable">&#9644; Stable</div>
+      </div>
+      <div class="kpi-card good">
+        <div class="kpi-label">Total Orders</div>
+        <div class="kpi-value">51,609</div>
+        <div class="kpi-trend up">&#9650; Growing</div>
+      </div>
+      <div class="kpi-card neutral">
+        <div class="kpi-label">Total Surveys</div>
+        <div class="kpi-value">3,610</div>
+        <div class="kpi-trend stable">7.0% response rate</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Year-over-Year -->
+  <section class="section" id="yoy">
+    <div class="section-title"><span class="num">2</span> Year-over-Year Comparison</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th style="text-align:center">2024</th>
+            <th style="text-align:center">2025</th>
+            <th style="text-align:center">2026 YTD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="metric-name">Service Score</td><td class="neutral" style="text-align:center">4.80</td><td class="improving" style="text-align:center">4.85</td><td class="improving" style="text-align:center">4.88</td></tr>
+          <tr><td class="metric-name">Food Score</td><td class="neutral" style="text-align:center">4.78</td><td class="improving" style="text-align:center">4.88</td><td class="worsening" style="text-align:center">4.77</td></tr>
+          <tr><td class="metric-name">Recommend Score</td><td class="neutral" style="text-align:center">9.23</td><td class="improving" style="text-align:center">9.38</td><td class="neutral" style="text-align:center">9.38</td></tr>
+          <tr><td class="metric-name">Avg Dwell (min)</td><td class="neutral" style="text-align:center">131.3</td><td class="neutral" style="text-align:center">133.6</td><td class="worsening" style="text-align:center">153.5</td></tr>
+          <tr><td class="metric-name">Avg Course Gap (min)*</td><td class="neutral" style="text-align:center">22.7</td><td class="neutral" style="text-align:center">23.6</td><td class="neutral" style="text-align:center">24.0</td></tr>
+          <tr><td class="metric-name">Median Course Gap (min)</td><td class="neutral" style="text-align:center">18.1</td><td class="neutral" style="text-align:center">18.7</td><td class="neutral" style="text-align:center">18.2</td></tr>
+          <tr><td class="metric-name">P90 Course Gap (min)</td><td class="neutral" style="text-align:center">44.3</td><td class="neutral" style="text-align:center">44.7</td><td class="worsening" style="text-align:center">45.9</td></tr>
+          <tr><td class="metric-name">Long Wait %</td><td class="neutral" style="text-align:center">53.2%</td><td class="improving" style="text-align:center">52.0%</td><td class="worsening" style="text-align:center">56.7%</td></tr>
+          <tr><td class="metric-name">Avg Ticket</td><td class="neutral" style="text-align:center">$65.86</td><td class="improving" style="text-align:center">$72.86</td><td class="neutral" style="text-align:center">$72.33</td></tr>
+          <tr><td class="metric-name">Daily Covers</td><td class="neutral" style="text-align:center">109</td><td class="improving" style="text-align:center">147</td><td class="improving" style="text-align:center">154</td></tr>
+          <tr><td class="metric-name">Turns/Seat</td><td class="neutral" style="text-align:center">1.83</td><td class="improving" style="text-align:center">1.93</td><td class="improving" style="text-align:center">1.95</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <section class="section" id="charts">
+    <div class="section-title"><span class="num">3</span> Trend Analysis</div>
+
+    <!-- Chart 1: Monthly Scores + Gap -->
+    <div class="chart-card">
+      <h3>Monthly Service & Food Scores with Course Gap</h3>
+      <div class="chart-subtitle">Dual axis: scores (left) vs. average inter-course gap in minutes (right). Oct 2024 corrected; May 2025 elevated gap flagged.</div>
+      <div class="chart-container" style="height:380px">
+        <canvas id="chart1"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid-2">
+      <!-- Chart 2: Heatmap -->
+      <div class="chart-card">
+        <h3>Correlation Matrix</h3>
+        <div class="chart-subtitle">Pearson correlations (corrected, n=27). Long Wait % is the strongest pacing signal. Red = negative, green = positive.</div>
+        <div id="heatmap-container"></div>
+      </div>
+
+      <!-- Chart 3: Scatter -->
+      <div class="chart-card">
+        <h3>Course Gap vs. Food Score</h3>
+        <div class="chart-subtitle">Each point is one month (corrected). May 2025 elevated gap is a possible data quality issue.</div>
+        <div class="chart-container" style="height:320px">
+          <canvas id="chart3"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 4: Covers & Dwell -->
+    <div class="chart-card">
+      <h3>Monthly Covers & Dwell Time</h3>
+      <div class="chart-subtitle">Both volume and dwell are growing simultaneously, increasing pressure on table turns.</div>
+      <div class="chart-container" style="height:340px">
+        <canvas id="chart4"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 5: Long Wait % -->
+    <div class="chart-card">
+      <h3>Long Wait Percentage Trend</h3>
+      <div class="chart-subtitle">Percentage of multi-course orders with 30+ minute inter-course gap. Red line = 40% target.</div>
+      <div class="chart-container" style="height:300px">
+        <canvas id="chart5"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Complaints -->
+  <section class="section" id="complaints">
+    <div class="section-title"><span class="num">4</span> Survey Complaint Analysis</div>
+
+    <div class="complaint-stats">
+      <div>
+        <div class="chart-card" style="margin-bottom:1rem">
+          <h3>Complaint Incidence</h3>
+          <div class="chart-subtitle">330 of 3,610 surveys flagged a complaint (9.1%)</div>
+          <div class="chart-container" style="height:220px">
+            <canvas id="chartPie"></canvas>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Year</th><th style="text-align:center">Complaint Rate</th></tr></thead>
+            <tbody>
+              <tr><td class="metric-name">2024</td><td class="neutral" style="text-align:center">9.2%</td></tr>
+              <tr><td class="metric-name">2025</td><td class="improving" style="text-align:center">8.9%</td></tr>
+              <tr><td class="metric-name">2026 YTD</td><td class="improving" style="text-align:center">6.7%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="chart-card" style="margin-bottom:0">
+          <h3>Score Impact of Complaints</h3>
+          <div class="chart-subtitle">Guests who complain rate significantly lower across all metrics.</div>
+          <div class="score-compare">
+            <div class="score-box">
+              <div class="label">Overall Avg Service</div>
+              <div class="val">4.85</div>
+              <div class="sub">All respondents</div>
+            </div>
+            <div class="score-box negative">
+              <div class="label">Complainers Avg Service</div>
+              <div class="val">4.40</div>
+              <div class="sub">-0.45 gap</div>
+            </div>
+            <div class="score-box">
+              <div class="label">Overall Avg Recommend</div>
+              <div class="val">9.33</div>
+              <div class="sub">All respondents</div>
+            </div>
+            <div class="score-box negative">
+              <div class="label">Complainers Avg Recommend</div>
+              <div class="val">8.22</div>
+              <div class="sub">-1.11 gap</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quotes-section">
+      <h3 style="font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:1rem;">Representative Guest Feedback</h3>
+      <div class="quote-card">
+        &ldquo;Love your restaurant and usually service is outstanding. Last night was an exception. Long long wait between first course and second, least 20 minutes.&rdquo;
+        <div class="quote-meta">March 2026 &nbsp;|&nbsp; Recommend: <span class="rec-score">8/10</span></div>
+      </div>
+      <div class="quote-card">
+        &ldquo;The food was delicious, but the service was slow. We waited 20+ minutes between apps and entrees. Our white wine was warm by the time our entrees came.&rdquo;
+        <div class="quote-meta">March 2026 &nbsp;|&nbsp; Recommend: <span class="rec-score">6/10</span></div>
+      </div>
+      <div class="quote-card">
+        &ldquo;Service very very slow tonight. Food was delicious as expected, but the burger, ordered well done, was only seared and left uncooked inside. After a very long wait.&rdquo;
+        <div class="quote-meta">January 2026 &nbsp;|&nbsp; Recommend: <span class="rec-score">5/10</span></div>
+      </div>
+      <div class="quote-card">
+        &ldquo;Unfortunately this was a terrible experience for us. We arrived a little before our 7:45 pm reservation and was told it would still be a 30 minute wait, even though we had reservations.&rdquo;
+        <div class="quote-meta">August 2025 &nbsp;|&nbsp; Recommend: <span class="rec-score">3/10</span></div>
+      </div>
+      <div class="quote-card">
+        &ldquo;Our table wasn&rsquo;t ready. We waited 30 minutes to be seated. Our server rushed us to get our order in because the kitchen was closing.&rdquo;
+        <div class="quote-meta">October 2024 &nbsp;|&nbsp; Recommend: <span class="rec-score">3/10</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommendations -->
+  <section class="section" id="recommendations">
+    <div class="section-title"><span class="num">5</span> Recommendations</div>
+    <div class="rec-grid">
+      <div class="rec-card">
+        <div class="rec-timeline">Immediate &mdash; 0-30 Days</div>
+        <h4>Kitchen Workflow Audit</h4>
+        <ul>
+          <li>Adopt <strong>Long Wait %</strong> as the primary pacing KPI &mdash; not average gap time</li>
+          <li>Audit kitchen expo workflow to identify why 55% of tables hit 30+ min gaps</li>
+          <li>Implement visual course timer on KDS flagging tables approaching 20 minutes</li>
+        </ul>
+      </div>
+      <div class="rec-card">
+        <div class="rec-timeline">Short-term &mdash; 30-90 Days</div>
+        <h4>Pacing Improvements</h4>
+        <ul>
+          <li>Target P90 course gap below 35 minutes</li>
+          <li>Pilot &ldquo;next course alert&rdquo; system between FOH and kitchen</li>
+          <li>Establish weekly pacing reports for management review</li>
+        </ul>
+      </div>
+      <div class="rec-card">
+        <div class="rec-timeline">Medium-term &mdash; 90-180 Days</div>
+        <h4>Structural Changes</h4>
+        <ul>
+          <li>Reduce long-wait percentage below 40%</li>
+          <li>Investigate May 2025 elevated gap (34.8 min) for possible data/operational issue</li>
+          <li>Establish 20-minute course pacing SLA with server communication protocol</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Targets -->
+  <section class="section" id="targets">
+    <div class="section-title"><span class="num">6</span> Target KPIs</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>KPI</th>
+            <th style="text-align:center">Current</th>
+            <th style="text-align:center">Target</th>
+            <th>Rationale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="metric-name">Long Wait % (30+ min)</td>
+            <td style="text-align:center">55%</td>
+            <td class="improving" style="text-align:center">&lt; 40%</td>
+            <td class="impact">Primary pacing KPI &mdash; most correlated with guest scores (r = -0.30)</td>
+          </tr>
+          <tr>
+            <td class="metric-name">P90 Course Gap</td>
+            <td style="text-align:center">45 min</td>
+            <td class="improving" style="text-align:center">35 min</td>
+            <td class="impact">Eliminates worst tail experiences</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Avg Course Gap</td>
+            <td style="text-align:center">23 min</td>
+            <td class="improving" style="text-align:center">18 min</td>
+            <td class="impact">Achievable &mdash; median already at 18 min</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Complaint Rate</td>
+            <td style="text-align:center">9%</td>
+            <td class="improving" style="text-align:center">&lt; 5%</td>
+            <td class="impact">Measurable in survey data</td>
+          </tr>
+          <tr>
+            <td class="metric-name">Recommend Score</td>
+            <td style="text-align:center">9.38</td>
+            <td class="improving" style="text-align:center">9.50+</td>
+            <td class="impact">Based on best-month performance</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  Prepared by <strong>Helixo</strong> &nbsp;|&nbsp; Data: May 2024 &ndash; April 2026 &nbsp;|&nbsp; Generated April 2026
+</footer>
+
+<script>
+// ── Intersection Observer for Animations ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.kpi-card, .chart-card').forEach(el => observer.observe(el));
+
+// ── Active Nav ──
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.top-nav a');
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.top-nav a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => navObserver.observe(s));
+
+// ── Chart Defaults ──
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#495057';
+
+const NAVY = '#1a2332';
+const GOLD = '#c9a96e';
+const BLUE = '#3498db';
+const RED = '#e74c3c';
+const GREEN = '#27ae60';
+
+// ── Data ──
+const months = ['May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24','Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
+const svc = [4.68,4.93,4.67,4.74,4.93,4.64,4.79,4.65,4.44,4.93,4.94,4.93,4.74,4.83,4.94,5.00,5.00,5.00,4.86,4.90,4.71,5.00,5.00];
+const food = [4.79,4.82,4.83,4.86,4.87,4.53,4.73,4.78,4.69,4.85,4.86,5.00,4.85,4.84,4.93,4.92,4.97,4.94,4.89,4.90,4.68,4.85,4.78];
+const gap = [22.7,22.5,22.4,22.0,22.7,22.8,24.2,23.3,22.5,21.6,23.5,22.5,34.8,21.2,22.2,22.5,21.9,22.5,23.3,23.0,25.2,23.9,23.3];
+
+const months4 = ['May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24','Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26'];
+const covers = [110,121,85,86,109,125,110,134,147,147,213,133,184,192,113,113,99,112,140,163,110,134,196,214];
+const dwell = [126,132,126,115,129,131,147,143,144,135,141,132,136,125,126,127,126,132,145,140,149,154,154,161];
+const longWait = [51.3,50.4,51.0,53.0,55.6,55.3,58.9,56.7,52.2,51.9,55.1,51.1,54.5,47.5,50.7,52.9,49.2,52.3,53.7,53.3,58.2,56.1,56.7,54.3];
+
+// ── Chart 1: Scores + Gap ──
+new Chart(document.getElementById('chart1'), {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [
+      {
+        type: 'line',
+        label: 'Service Score',
+        data: svc,
+        borderColor: BLUE,
+        backgroundColor: BLUE,
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        tension: 0.3,
+        yAxisID: 'y',
+        order: 1
+      },
+      {
+        type: 'line',
+        label: 'Food Score',
+        data: food,
+        borderColor: GREEN,
+        backgroundColor: GREEN,
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        tension: 0.3,
+        yAxisID: 'y',
+        order: 2
+      },
+      {
+        type: 'bar',
+        label: 'Avg Course Gap (min)',
+        data: gap,
+        backgroundColor: gap.map(v => v > 35 ? 'rgba(231,76,60,0.7)' : 'rgba(201,169,110,0.4)'),
+        borderColor: gap.map(v => v > 35 ? RED : GOLD),
+        borderWidth: 1,
+        yAxisID: 'y1',
+        order: 3,
+        barPercentage: 0.6
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.datasetIndex < 2) return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2);
+            return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + ' min';
+          }
+        }
+      },
+      legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } },
+      annotation: undefined
+    },
+    scales: {
+      y: {
+        position: 'left',
+        min: 4.0,
+        max: 5.2,
+        title: { display: true, text: 'Score', font: { weight: '600' } },
+        ticks: { stepSize: 0.2 },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      y1: {
+        position: 'right',
+        min: 15,
+        max: 40,
+        title: { display: true, text: 'Course Gap (min)', font: { weight: '600' } },
+        grid: { drawOnChartArea: false }
+      },
+      x: {
+        ticks: { maxRotation: 45, font: { size: 10 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// ── Chart 2: Heatmap (HTML) ──
+const heatmapData = [
+  { label: 'Long Wait %', svc: -0.04, food: -0.24, rec: -0.30 },
+  { label: 'Course Gap', svc: -0.14, food: -0.04, rec: 0.08 },
+  { label: 'Dwell Time', svc: -0.03, food: null, rec: -0.14 },
+  { label: 'Daily Covers', svc: 0.04, food: null, rec: 0.12 },
+  { label: 'Avg Ticket', svc: 0.08, food: null, rec: null }
+];
+
+function corrColor(v) {
+  if (v === null) return { bg: '#f1f3f5', text: '#adb5bd' };
+  const abs = Math.abs(v);
+  if (abs < 0.10) return { bg: '#f1f3f5', text: '#868e96' };
+  if (v < 0 && abs >= 0.40) return { bg: '#e74c3c', text: '#fff' };
+  if (v < 0 && abs >= 0.25) return { bg: '#e8917e', text: '#fff' };
+  if (v < 0) return { bg: '#f5c6c0', text: '#c0392b' };
+  if (v > 0 && abs >= 0.25) return { bg: '#27ae60', text: '#fff' };
+  return { bg: '#d5f5e3', text: '#1e8449' };
+}
+
+const hm = document.getElementById('heatmap-container');
+let html = '<div class="heatmap-grid">';
+html += '<div class="heatmap-header"></div><div class="heatmap-header">Service</div><div class="heatmap-header">Food</div><div class="heatmap-header">Recommend</div>';
+heatmapData.forEach(row => {
+  html += `<div class="heatmap-label">${row.label}</div>`;
+  [row.svc, row.food, row.rec].forEach(v => {
+    const c = corrColor(v);
+    const display = v !== null ? (v > 0 ? '+' : '') + v.toFixed(2) : '&mdash;';
+    html += `<div class="heatmap-cell" style="background:${c.bg};color:${c.text}">${display}</div>`;
+  });
+});
+html += '</div>';
+hm.innerHTML = html;
+
+// ── Chart 3: Scatter ──
+const scatterData = gap.map((g, i) => ({ x: g, y: food[i] }));
+// Compute trend line
+const n = gap.length;
+const sumX = gap.reduce((a,b) => a+b, 0);
+const sumY = food.reduce((a,b) => a+b, 0);
+const sumXY = gap.reduce((a, g, i) => a + g * food[i], 0);
+const sumX2 = gap.reduce((a, g) => a + g * g, 0);
+const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+const intercept = (sumY - slope * sumX) / n;
+const trendX = [20, 37];
+const trendY = trendX.map(x => slope * x + intercept);
+
+new Chart(document.getElementById('chart3'), {
+  type: 'scatter',
+  data: {
+    datasets: [
+      {
+        label: 'Monthly Data',
+        data: scatterData,
+        backgroundColor: scatterData.map(d => d.x > 30 ? RED : NAVY),
+        pointRadius: scatterData.map(d => d.x > 30 ? 7 : 5),
+        pointHoverRadius: 8
+      },
+      {
+        label: 'Trend (r = -0.04, corrected)',
+        data: trendX.map((x, i) => ({ x, y: trendY[i] })),
+        type: 'line',
+        borderColor: 'rgba(173,181,189,0.5)',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.datasetIndex === 1) return '';
+            const pt = ctx.raw;
+            const label = pt.x === 34.8 ? ' (May 2025 — possible data issue)' : '';
+            return `Gap: ${pt.x} min, Food: ${pt.y}${label}`;
+          }
+        }
+      },
+      legend: { display: true, labels: { usePointStyle: true, padding: 12 } }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Avg Course Gap (min)', font: { weight: '600' } },
+        min: 18,
+        max: 38,
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      y: {
+        title: { display: true, text: 'Food Score', font: { weight: '600' } },
+        min: 4.4,
+        max: 5.05,
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      }
+    }
+  }
+});
+
+// ── Chart 4: Covers & Dwell ──
+new Chart(document.getElementById('chart4'), {
+  type: 'bar',
+  data: {
+    labels: months4,
+    datasets: [
+      {
+        type: 'bar',
+        label: 'Daily Covers',
+        data: covers,
+        backgroundColor: 'rgba(26,35,50,0.65)',
+        borderColor: NAVY,
+        borderWidth: 1,
+        yAxisID: 'y',
+        barPercentage: 0.65,
+        order: 2
+      },
+      {
+        type: 'line',
+        label: 'Avg Dwell (min)',
+        data: dwell,
+        borderColor: GOLD,
+        backgroundColor: GOLD,
+        borderWidth: 2.5,
+        pointRadius: 3,
+        tension: 0.3,
+        yAxisID: 'y1',
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } }
+    },
+    scales: {
+      y: {
+        position: 'left',
+        title: { display: true, text: 'Daily Covers', font: { weight: '600' } },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      y1: {
+        position: 'right',
+        title: { display: true, text: 'Dwell Time (min)', font: { weight: '600' } },
+        min: 100,
+        max: 175,
+        grid: { drawOnChartArea: false }
+      },
+      x: {
+        ticks: { maxRotation: 45, font: { size: 10 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// ── Chart 5: Long Wait % ──
+new Chart(document.getElementById('chart5'), {
+  type: 'line',
+  data: {
+    labels: months4,
+    datasets: [
+      {
+        label: 'Long Wait %',
+        data: longWait,
+        borderColor: RED,
+        backgroundColor: 'rgba(231,76,60,0.1)',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        tension: 0.3,
+        fill: true
+      },
+      {
+        label: 'Target (40%)',
+        data: Array(months4.length).fill(40),
+        borderColor: GREEN,
+        borderWidth: 2,
+        borderDash: [8, 4],
+        pointRadius: 0,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%';
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        min: 35,
+        max: 65,
+        title: { display: true, text: '% of Orders with 30+ min Gap', font: { weight: '600' } },
+        ticks: { callback: v => v + '%' },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      x: {
+        ticks: { maxRotation: 45, font: { size: 10 } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// ── Pie Chart: Complaints ──
+new Chart(document.getElementById('chartPie'), {
+  type: 'doughnut',
+  data: {
+    labels: ['No Complaint (90.9%)', 'Complaint (9.1%)'],
+    datasets: [{
+      data: [3280, 330],
+      backgroundColor: ['rgba(26,35,50,0.75)', RED],
+      borderColor: ['#fff', '#fff'],
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '55%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { padding: 12, usePointStyle: true, font: { size: 11 } }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
