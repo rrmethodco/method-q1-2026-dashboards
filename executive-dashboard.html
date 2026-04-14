@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Method Co | Executive Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;font-size:13px}
+body{min-height:100vh;background:#f5f6f8;color:#1e293b;display:flex}
+
+/* ── Icon Rail (far left) ─────────────────────────────────── */
+.icon-rail{width:52px;background:#1e293b;display:flex;flex-direction:column;align-items:center;position:fixed;top:0;left:0;bottom:0;z-index:20;padding:12px 0}
+.icon-rail .rail-logo{width:32px;height:32px;background:#3b82f6;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-weight:800;color:#fff;font-size:14px;letter-spacing:-0.5px}
+.icon-rail .rail-group{display:flex;flex-direction:column;gap:4px;width:100%;padding:0 6px}
+.icon-rail .rail-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;border-radius:6px;cursor:pointer;color:#94a3b8;transition:all .15s;text-decoration:none;border:none;background:none;font-family:inherit}
+.icon-rail .rail-btn:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
+.icon-rail .rail-btn.active{background:rgba(255,255,255,.12);color:#fff}
+.icon-rail .rail-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icon-rail .rail-btn span{font-size:9px;font-weight:500;letter-spacing:.3px}
+.icon-rail .rail-spacer{flex:1}
+.icon-rail .rail-avatar{width:30px;height:30px;background:#3b82f6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:11px;margin-top:auto;margin-bottom:8px;cursor:pointer}
+
+/* ── Nav Panel ────────────────────────────────────────────── */
+.nav-panel{width:190px;background:#fff;border-right:1px solid #e5e7eb;position:fixed;top:0;left:52px;bottom:0;z-index:15;display:flex;flex-direction:column;overflow-y:auto}
+.nav-header{padding:16px 16px 12px;border-bottom:1px solid #e5e7eb}
+.nav-section-label{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#94a3b8;padding:16px 16px 6px}
+.nav-links{padding:0 8px;flex:1}
+.nav-links a{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;color:#475569;text-decoration:none;font-size:13px;font-weight:500;transition:all .12s}
+.nav-links a:hover{background:#f1f5f9;color:#1e293b}
+.nav-links a.active{background:#eef2ff;color:#1e3a5f;font-weight:600}
+.nav-links a svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.nav-links .sub{padding-left:20px}
+.nav-links .sub a{font-size:12px;padding:6px 12px;color:#64748b}
+.nav-links .sub a.active{color:#1e3a5f;background:#eef2ff}
+.nav-bottom{padding:12px 16px;border-top:1px solid #e5e7eb}
+.nav-bottom .btn-pdf{width:100%;background:#1e293b;color:#fff;border:none;border-radius:6px;padding:8px 12px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-bottom .btn-pdf:hover{background:#334155}
+.nav-bottom .btn-pdf svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ── Main Content ─────────────────────────────────────────── */
+.main{margin-left:242px;flex:1;min-height:100vh}
+
+/* ── Content Header ───────────────────────────────────────── */
+.content-header{padding:24px 32px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.content-header h1{font-size:22px;font-weight:700;color:#0f172a;letter-spacing:-.3px}
+.header-filters{display:flex;align-items:center;gap:8px}
+.header-filters select{background:#fff;color:#1e293b;border:1px solid #d1d5db;border-radius:6px;padding:7px 12px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;outline:none;appearance:none;min-width:0}
+.header-filters select:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.header-updated{font-size:11px;color:#94a3b8;font-weight:400}
+
+/* ── Content Area ─────────────────────────────────────────── */
+.content-area{padding:20px 32px 48px}
+
+
+/* ── Section Cards ────────────────────────────────────────── */
+.section-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:20px}
+.section-card-header{padding:16px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between}
+.section-card-header h2{font-size:14px;font-weight:600;color:#0f172a;letter-spacing:-.1px}
+.section-card-header .badge{font-size:11px;background:#f1f5f9;color:#64748b;padding:3px 10px;border-radius:99px;font-weight:500}
+
+/* ── Table ─────────────────────────────────────────────────── */
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+thead th{text-align:center;padding:10px 14px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;background:#fafbfc;border-bottom:1px solid #f1f5f9;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+tbody tr{border-top:1px solid #f1f5f9;transition:background .1s}
+tbody tr:hover{background:#fafbfc}
+td{padding:10px 14px;font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;text-align:center}
+td.loc{font-weight:600;color:#1e293b;text-align:left}
+td.actual{font-weight:700;color:#0f172a}
+td.muted{color:#94a3b8}
+td.var-up{font-weight:600;color:#16a34a}
+td.var-down{font-weight:600;color:#dc2626}
+td.var-neutral{font-weight:600;color:#94a3b8}
+td.labor-green{font-weight:700;color:#16a34a}
+td.labor-yellow{font-weight:700;color:#d97706}
+td.labor-red{font-weight:700;color:#dc2626}
+
+/* ── Total Row ─────────────────────────────────────────────── */
+tr.total-row{background:#1e293b !important;border-top:none}
+tr.total-row td{font-weight:700;color:#fff}
+tr.total-row td.loc{color:#fff}
+tr.total-row td.muted{color:#94a3b8}
+tr.total-row td.var-up{color:#4ade80 !important}
+tr.total-row td.var-down{color:#fca5a5 !important}
+tr.total-row td.var-neutral{color:#94a3b8 !important}
+tr.total-row .nps-resp{color:#94a3b8 !important}
+
+/* ── NPS ───────────────────────────────────────────────────── */
+.nps-score{font-weight:700}
+.nps-resp{font-size:10px;color:#94a3b8;font-weight:400}
+
+/* ── Loading ───────────────────────────────────────────────── */
+.loading{text-align:center;padding:120px 20px;color:#94a3b8}
+.spinner{display:inline-block;width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#3b82f6;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Charts ────────────────────────────────────────────────── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.chart-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:20px;overflow:hidden}
+.chart-card h3{font-size:13px;font-weight:600;color:#0f172a;margin-bottom:12px}
+.chart-card canvas{width:100%!important;max-height:240px}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media(max-width:900px){
+  .icon-rail,.nav-panel{display:none}
+  .main{margin-left:0}
+  .charts-grid{grid-template-columns:1fr}
+  .content-area{padding:16px}
+  .content-header{padding:16px 16px 0}
+  td,th{padding:7px 8px;font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<!-- Icon Rail -->
+<div class="icon-rail">
+  <div class="rail-logo">M</div>
+  <div class="rail-group">
+    <a href="#" class="rail-btn active" title="Executive">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Exec</span>
+    </a>
+    <a href="#revenue" class="rail-btn" title="Revenue">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      <span>Revenue</span>
+    </a>
+    <a href="#labor" class="rail-btn" title="Labor">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <span>Labor</span>
+    </a>
+    <a href="#nps" class="rail-btn" title="Guest Experience">
+      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      <span>NPS</span>
+    </a>
+  </div>
+  <div class="rail-spacer"></div>
+  <div class="rail-group">
+    <button class="rail-btn" title="Settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+  </div>
+  <div class="rail-avatar" title="RR">RR</div>
+</div>
+
+<!-- Nav Panel -->
+<nav class="nav-panel">
+  <div class="nav-header" style="padding:16px;border-bottom:1px solid #e5e7eb">
+    <div style="font-size:15px;font-weight:700;color:#0f172a;letter-spacing:-.2px">Method Co</div>
+    <div style="font-size:11px;color:#94a3b8;margin-top:2px">Executive Dashboard</div>
+  </div>
+  <div class="nav-section-label">Intelligence</div>
+  <div class="nav-links">
+    <a href="#" class="active">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Executive Summary
+    </a>
+    <a href="#revenue">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Revenue
+    </a>
+    <a href="#labor">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Labor
+    </a>
+    <a href="#nps">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      Guest Satisfaction
+    </a>
+  </div>
+  <div class="nav-bottom">
+    <button class="btn-pdf" id="btnPdf">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export PDF
+    </button>
+  </div>
+</nav>
+
+<!-- Main -->
+<div class="main">
+  <div class="content-header">
+    <h1>Executive Summary</h1>
+    <div class="header-filters">
+      <select id="locationSelect"><option value="">All Locations</option></select>
+      <select id="weekEndingSelect"></select>
+      <select id="yearSelect">
+        <option value="2025">FY 2025</option>
+        <option value="2026" selected>FY 2026</option>
+      </select>
+      <span class="header-updated" id="headerSubtitle">Loading...</span>
+    </div>
+  </div>
+
+  <div class="content-area">
+    <div id="loadingState" class="loading">
+      <div class="spinner"></div>
+      <p>Loading executive dashboard...</p>
+    </div>
+    <div id="content" style="display:none;">
+
+      <!-- Charts (single location only) -->
+      <div id="chartsSection" style="display:none;">
+        <div class="charts-grid">
+          <div class="chart-card"><h3>Daily Revenue vs Budget</h3><canvas id="chartRevenue"></canvas></div>
+          <div class="chart-card"><h3>Daily Labor %</h3><canvas id="chartLabor"></canvas></div>
+          <div class="chart-card"><h3>Revenue Cumulative</h3><canvas id="chartCumulative"></canvas></div>
+          <div class="chart-card"><h3>NPS Trend (30-Day Rolling)</h3><canvas id="chartNps"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Revenue Table -->
+      <div class="section-card" id="revenue">
+        <div class="section-card-header">
+          <h2>Revenue</h2>
+          <span class="badge" id="revBadge"></span>
+        </div>
+        <table>
+          <colgroup>
+            <col style="width:16%">
+            <col style="width:12%"><col style="width:12%"><col style="width:12%">
+            <col style="width:12%"><col style="width:12%">
+            <col style="width:12%"><col style="width:12%">
+          </colgroup>
+          <thead><tr>
+            <th style="text-align:left">Location</th>
+            <th class="num">Actual</th>
+            <th class="num">Budget</th>
+            <th class="num">vs Bud</th>
+            <th class="num">Forecast</th>
+            <th class="num">vs Fcst</th>
+            <th class="num">LY</th>
+            <th class="num">vs LY</th>
+          </tr></thead>
+          <tbody id="revenueBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Labor Table -->
+      <div class="section-card" id="labor">
+        <div class="section-card-header">
+          <h2>Labor</h2>
+          <span class="badge" id="labBadge"></span>
+        </div>
+        <table>
+          <colgroup>
+            <col style="width:16%">
+            <col style="width:10.5%"><col style="width:10.5%">
+            <col style="width:10.5%"><col style="width:10.5%"><col style="width:10.5%">
+            <col style="width:10.5%"><col style="width:10.5%"><col style="width:10.5%">
+          </colgroup>
+          <thead><tr>
+            <th style="text-align:left">Location</th>
+            <th class="num">Actual $</th>
+            <th class="num">Actual %</th>
+            <th class="num">Budget $</th>
+            <th class="num">Budget %</th>
+            <th class="num">vs Budget</th>
+            <th class="num">Threshold $</th>
+            <th class="num">Threshold %</th>
+            <th class="num">vs Threshold</th>
+          </tr></thead>
+          <tbody id="laborBody"></tbody>
+        </table>
+      </div>
+
+      <!-- NPS Table -->
+      <div class="section-card" id="nps">
+        <div class="section-card-header">
+          <h2>Guest Satisfaction (NPS)</h2>
+          <span class="badge" id="npsBadge"></span>
+        </div>
+        <table>
+          <colgroup>
+            <col style="width:16%">
+            <col style="width:16.8%"><col style="width:16.8%"><col style="width:16.8%">
+            <col style="width:16.8%"><col style="width:16.8%">
+          </colgroup>
+          <thead><tr>
+            <th style="text-align:left">Location</th>
+            <th class="num">Week</th>
+            <th class="num">30-Day</th>
+            <th class="num">60-Day</th>
+            <th class="num">90-Day</th>
+            <th class="num">1-Year</th>
+          </tr></thead>
+          <tbody id="npsBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://mmwislzsgnjxjxssynwm.supabase.co';
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1td2lzbHpzZ25qeGp4c3N5bndtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0ODk1MDIsImV4cCI6MjA5MDA2NTUwMn0.18jH33IqyVE_4mLVKMGa0D-7CIuUE3mWAX6CmP796PE';
+const HEADERS = { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY };
+
+// ── Fiscal calendar ─────────────────────────────────────────────
+function fyStart(fyYear) {
+  return new Date(fyYear - 1, 11, 29);
+}
+
+function buildPeriods(fyYear) {
+  const start = fyStart(fyYear);
+  const periods = [];
+  for (let p = 1; p <= 13; p++) {
+    const pStart = new Date(start);
+    pStart.setDate(start.getDate() + (p - 1) * 28);
+    const pEnd = new Date(pStart);
+    pEnd.setDate(pStart.getDate() + 27);
+    const weeks = [];
+    for (let w = 1; w <= 4; w++) {
+      const wStart = new Date(pStart);
+      wStart.setDate(pStart.getDate() + (w - 1) * 7);
+      const wEnd = new Date(wStart);
+      wEnd.setDate(wStart.getDate() + 6);
+      weeks.push({ week: w, start: wStart, end: wEnd });
+    }
+    periods.push({ period: p, start: pStart, end: pEnd, weeks });
+  }
+  return periods;
+}
+
+// ── Date helpers ────────────────────────────────────────────────
+function fmtDate(d) { return d.toISOString().slice(0, 10); }
+function fmtShort(d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+function fmtMonthName(d) { return d.toLocaleDateString('en-US', { month: 'long' }); }
+function today() { return new Date(); }
+
+// ── Format helpers ──────────────────────────────────────────────
+function fmtK(v) {
+  if (v == null || isNaN(v)) return '--';
+  const abs = Math.abs(v);
+  if (abs >= 1000000) return (v < 0 ? '-' : '') + '$' + (abs / 1000000).toFixed(1) + 'M';
+  if (abs >= 1000) return (v < 0 ? '-' : '') + '$' + Math.round(abs / 1000) + 'K';
+  return '$' + Math.round(v).toLocaleString();
+}
+function fmt(v) {
+  if (v == null || isNaN(v)) return '--';
+  return '$' + Math.round(v).toLocaleString();
+}
+function fmtPct(v, decimals = 1) {
+  if (v == null || isNaN(v)) return '--';
+  return v.toFixed(decimals) + '%';
+}
+function fmtVar(v) {
+  if (v == null || isNaN(v)) return '--';
+  return (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+}
+function varClass(v) {
+  if (v == null || isNaN(v)) return 'var-neutral';
+  return v >= 0 ? 'var-up' : 'var-down';
+}
+function laborColorClass(laborPct, thresholdPct) {
+  if (laborPct == null) return '';
+  if (thresholdPct != null && laborPct <= thresholdPct) return 'labor-green';
+  if (laborPct > 25) return 'labor-red';
+  if (laborPct > 20) return 'labor-yellow';
+  return 'labor-green';
+}
+function npsColor(score) {
+  if (score == null) return '#94a3b8';
+  if (score >= 70) return '#16a34a';
+  if (score >= 50) return '#d97706';
+  return '#dc2626';
+}
+
+
+
+// ── Supabase fetch ──────────────────────────────────────────────
+async function sbFetch(table, params, limit) {
+  const url = new URL(`${SUPABASE_URL}/rest/v1/${table}`);
+  if (params) { for (const [k, v] of params) url.searchParams.append(k, v); }
+  const hdrs = { ...HEADERS };
+  if (limit) hdrs['Range'] = `0-${limit - 1}`;
+  const res = await fetch(url.toString(), { headers: hdrs });
+  if (!res.ok) throw new Error(`Supabase ${table}: ${res.status}`);
+  return res.json();
+}
+
+// ── State ───────────────────────────────────────────────────────
+let locations = [];
+let periods = [];
+let allWeeks = [];
+let state = { weekEndIdx: null, locationId: null, fyYear: 2026 };
+
+// ── Init ────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', init);
+
+async function init() {
+  try {
+    locations = await sbFetch('locations', [['is_active', 'eq.true'], ['select', 'id,name,type,city,labor_budget_pct']]);
+    locations.sort((a, b) => a.name.localeCompare(b.name));
+
+    state.fyYear = parseInt(document.getElementById('yearSelect').value);
+    periods = buildPeriods(state.fyYear);
+    buildAllWeeks();
+    populateWeekEndingSelect();
+    populateLocationSelect();
+    bindControls();
+    await refresh();
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+    setInterval(refresh, 5 * 60 * 1000);
+  } catch (e) {
+    console.error(e);
+    document.getElementById('loadingState').innerHTML = '<p style="color:#dc2626">Failed to load: ' + e.message + '</p>';
+  }
+}
+
+function buildAllWeeks() {
+  allWeeks = [];
+  periods.forEach(p => {
+    p.weeks.forEach(w => {
+      allWeeks.push({ period: p.period, week: w.week, start: w.start, end: w.end });
+    });
+  });
+}
+
+function populateWeekEndingSelect() {
+  const sel = document.getElementById('weekEndingSelect');
+  const now = today();
+  sel.innerHTML = '<option value="ytd">YTD</option>';
+  let defaultIdx = null;
+  allWeeks.forEach((w, i) => {
+    const endLabel = w.end.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
+    sel.innerHTML += `<option value="${i}">Week Ending ${endLabel}</option>`;
+    if (w.end <= now) defaultIdx = i;
+  });
+  if (defaultIdx != null) {
+    sel.value = String(defaultIdx);
+    state.weekEndIdx = defaultIdx;
+  }
+}
+
+function populateLocationSelect() {
+  const sel = document.getElementById('locationSelect');
+  sel.innerHTML = '<option value="">All Locations</option>';
+  locations.forEach(l => {
+    sel.innerHTML += `<option value="${l.id}">${l.name}</option>`;
+  });
+}
+
+function bindControls() {
+  document.getElementById('weekEndingSelect').addEventListener('change', async (e) => {
+    state.weekEndIdx = e.target.value === 'ytd' ? null : parseInt(e.target.value);
+    await refresh();
+  });
+  document.getElementById('locationSelect').addEventListener('change', async (e) => {
+    state.locationId = e.target.value || null;
+    await refresh();
+  });
+  document.getElementById('yearSelect').addEventListener('change', async (e) => {
+    state.fyYear = parseInt(e.target.value);
+    periods = buildPeriods(state.fyYear);
+    buildAllWeeks();
+    state.weekEndIdx = null;
+    populateWeekEndingSelect();
+    await refresh();
+  });
+  document.getElementById('btnPdf').addEventListener('click', generatePdf);
+
+  // Smooth scroll for nav + rail links
+  document.querySelectorAll('.nav-links a[href^="#"], .icon-rail a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+}
+
+// ── Date range ─────────────────────────────────────────────────
+function getDateRange() {
+  const now = today();
+  if (state.weekEndIdx != null) {
+    const w = allWeeks[state.weekEndIdx];
+    return { start: w.start, end: w.end > now ? now : w.end };
+  }
+  return { start: fyStart(state.fyYear), end: now };
+}
+
+function getMtdRange() {
+  const now = today();
+  return { start: new Date(now.getFullYear(), now.getMonth(), 1), end: now };
+}
+
+// ── Refresh ────────────────────────────────────────────────────
+async function refresh() {
+  const range = getDateRange();
+  const mtd = getMtdRange();
+  const startStr = fmtDate(range.start);
+  const endStr = fmtDate(range.end);
+  const mtdStartStr = fmtDate(mtd.start);
+  const mtdEndStr = fmtDate(mtd.end);
+
+  const now = today();
+  const d30 = new Date(now); d30.setDate(d30.getDate() - 30);
+  const d60 = new Date(now); d60.setDate(d60.getDate() - 60);
+  const d90 = new Date(now); d90.setDate(d90.getDate() - 90);
+  const d365 = new Date(now); d365.setDate(d365.getDate() - 365);
+
+  let weekNpsStart, weekNpsEnd;
+  if (state.weekEndIdx != null) {
+    const w = allWeeks[state.weekEndIdx];
+    weekNpsStart = w.start; weekNpsEnd = w.end;
+  } else {
+    const d = new Date(now);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    weekNpsStart = new Date(d.setDate(diff));
+    weekNpsEnd = new Date(weekNpsStart);
+    weekNpsEnd.setDate(weekNpsStart.getDate() + 6);
+  }
+
+  try {
+    const [actuals, budgets, labor, forecasts, laborTargets, nps30, nps60, nps90, nps365, npsWeek] = await Promise.all([
+      sbFetch('daily_actuals', [['business_date', 'gte.' + startStr], ['business_date', 'lte.' + endStr], ['select', 'location_id,business_date,revenue,prior_year_revenue']], 5000),
+      sbFetch('daily_budget', [['business_date', 'gte.' + startStr], ['business_date', 'lte.' + endStr], ['select', 'location_id,business_date,budget_revenue,server_budget,bartender_budget,host_budget,barista_budget,support_budget,training_budget,line_cooks_budget,prep_cooks_budget,pastry_budget,dishwashers_budget']], 5000),
+      sbFetch('daily_labor', [['business_date', 'gte.' + startStr], ['business_date', 'lte.' + endStr], ['select', 'location_id,business_date,labor_dollars']], 5000),
+      sbFetch('daily_forecasts', [['business_date', 'gte.' + startStr], ['business_date', 'lte.' + endStr], ['select', 'location_id,business_date,manager_revenue,ai_suggested_revenue']], 5000),
+      sbFetch('daily_labor_targets', [['business_date', 'gte.' + startStr], ['business_date', 'lte.' + endStr], ['select', 'location_id,business_date,position,projected_labor_dollars']], 5000),
+      sbFetch('daily_nps', [['business_date', 'gte.' + fmtDate(d30)], ['business_date', 'lte.' + fmtDate(now)], ['select', 'location_id,business_date,promoters,passives,detractors']]),
+      sbFetch('daily_nps', [['business_date', 'gte.' + fmtDate(d60)], ['business_date', 'lte.' + fmtDate(now)], ['select', 'location_id,business_date,promoters,passives,detractors']]),
+      sbFetch('daily_nps', [['business_date', 'gte.' + fmtDate(d90)], ['business_date', 'lte.' + fmtDate(now)], ['select', 'location_id,business_date,promoters,passives,detractors']], 2000),
+      sbFetch('daily_nps', [['business_date', 'gte.' + fmtDate(d365)], ['business_date', 'lte.' + fmtDate(now)], ['select', 'location_id,business_date,promoters,passives,detractors']], 5000),
+      sbFetch('daily_nps', [['business_date', 'gte.' + fmtDate(weekNpsStart)], ['business_date', 'lte.' + fmtDate(weekNpsEnd)], ['select', 'location_id,business_date,promoters,passives,detractors']])
+    ]);
+
+    const [mtdActuals, mtdBudgets, mtdLabor] = await Promise.all([
+      sbFetch('daily_actuals', [['business_date', 'gte.' + mtdStartStr], ['business_date', 'lte.' + mtdEndStr], ['select', 'location_id,revenue,prior_year_revenue']]),
+      sbFetch('daily_budget', [['business_date', 'gte.' + mtdStartStr], ['business_date', 'lte.' + mtdEndStr], ['select', 'location_id,budget_revenue']]),
+      sbFetch('daily_labor', [['business_date', 'gte.' + mtdStartStr], ['business_date', 'lte.' + mtdEndStr], ['select', 'location_id,labor_dollars']])
+    ]);
+
+    // Aggregate by location
+    const locMap = {};
+    locations.forEach(l => {
+      locMap[l.id] = {
+        id: l.id, name: l.name, type: l.type, city: l.city,
+        labor_budget_pct: l.labor_budget_pct || 0,
+        revenue: 0, budget: 0, ly: 0, forecast: 0,
+        laborDollars: 0, laborBudgetDollars: 0, thresholdDollars: 0,
+        mtdRevenue: 0, mtdBudget: 0, mtdLy: 0, mtdLabor: 0
+      };
+    });
+
+    actuals.forEach(r => { if (locMap[r.location_id]) { locMap[r.location_id].revenue += (r.revenue || 0); locMap[r.location_id].ly += (r.prior_year_revenue || 0); }});
+    budgets.forEach(r => { if (locMap[r.location_id]) {
+      locMap[r.location_id].budget += (r.budget_revenue || 0);
+      locMap[r.location_id].laborBudgetDollars += (r.server_budget||0)+(r.bartender_budget||0)+(r.host_budget||0)+(r.barista_budget||0)+(r.support_budget||0)+(r.training_budget||0)+(r.line_cooks_budget||0)+(r.prep_cooks_budget||0)+(r.pastry_budget||0)+(r.dishwashers_budget||0);
+    }});
+    labor.forEach(r => { if (locMap[r.location_id]) { locMap[r.location_id].laborDollars += (r.labor_dollars || 0); }});
+    forecasts.forEach(r => { if (locMap[r.location_id]) { locMap[r.location_id].forecast += (r.manager_revenue != null ? r.manager_revenue : (r.ai_suggested_revenue || 0)); }});
+    // Aggregate labor targets: prefer "Total Labor Cost" rollup rows to avoid double-counting.
+    // Some locations (e.g. HIROKI-SAN Detroit) have only granular position rows (no rollups) — sum those directly.
+    // Locations with rollup rows (Total BOH, Total FOH, Total Hourly, Total Management, Total PT&B, Total Labor Cost)
+    // must use ONLY "Total Labor Cost" to avoid triple-counting.
+    const ROLLUP_POSITIONS = new Set(['Total BOH','Total FOH','Total Hourly','Total Labor Cost','Total Management','Total PT&B']);
+    const threshByLocDate = {}; // { locId: { date: { hasTLC: bool, tlcSum: 0, granularSum: 0 } } }
+    laborTargets.forEach(r => {
+      if (!locMap[r.location_id]) return;
+      const key = r.location_id;
+      if (!threshByLocDate[key]) threshByLocDate[key] = {};
+      if (!threshByLocDate[key][r.business_date]) threshByLocDate[key][r.business_date] = { hasTLC: false, tlcSum: 0, granularSum: 0 };
+      const day = threshByLocDate[key][r.business_date];
+      if (r.position === 'Total Labor Cost') {
+        day.hasTLC = true;
+        day.tlcSum += (r.projected_labor_dollars || 0);
+      } else if (!ROLLUP_POSITIONS.has(r.position)) {
+        day.granularSum += (r.projected_labor_dollars || 0);
+      }
+    });
+    Object.entries(threshByLocDate).forEach(([locId, dates]) => {
+      Object.values(dates).forEach(day => {
+        locMap[locId].thresholdDollars += day.hasTLC ? day.tlcSum : day.granularSum;
+      });
+    });
+
+    // Override: Little Wing and HIROKI Philadelphia have stale/flat threshold data in daily_labor_targets.
+    // Set threshold = actual labor (same % of revenue) so variance reads as $0 until source data is fixed.
+    const THRESHOLD_OVERRIDE_LOC_IDS = new Set([
+      '574118d5-8511-41ce-8ae8-14f921fb021a', // Little Wing
+      'c21aa6c1-411e-4ed1-9b84-e9d9d143abf9'  // HIROKI Philadelphia
+    ]);
+    Object.values(locMap).forEach(l => {
+      if (THRESHOLD_OVERRIDE_LOC_IDS.has(l.id)) l.thresholdDollars = l.laborDollars;
+    });
+    mtdActuals.forEach(r => { if (locMap[r.location_id]) { locMap[r.location_id].mtdRevenue += (r.revenue || 0); locMap[r.location_id].mtdLy += (r.prior_year_revenue || 0); }});
+    mtdBudgets.forEach(r => { if (locMap[r.location_id]) { locMap[r.location_id].mtdBudget += (r.budget_revenue || 0); }});
+    mtdLabor.forEach(r => { if (locMap[r.location_id]) { locMap[r.location_id].mtdLabor += (r.labor_dollars || 0); }});
+
+    function aggNps(rows, filterLocId) {
+      let p = 0, pa = 0, d = 0;
+      rows.forEach(r => { if (filterLocId && r.location_id !== filterLocId) return; p += (r.promoters || 0); pa += (r.passives || 0); d += (r.detractors || 0); });
+      const total = p + pa + d;
+      if (total === 0) return { score: null, responses: 0 };
+      return { score: Math.round((p - d) / total * 100), responses: total };
+    }
+
+    let locData = Object.values(locMap).filter(l => l.revenue > 0 || l.laborDollars > 0);
+    if (state.locationId) locData = locData.filter(l => l.id === state.locationId);
+    locData.sort((a, b) => b.revenue - a.revenue);
+
+    const totals = locData.reduce((t, l) => {
+      t.revenue += l.revenue; t.budget += l.budget; t.ly += l.ly; t.forecast += l.forecast;
+      t.laborDollars += l.laborDollars; t.thresholdDollars += l.thresholdDollars;
+      t.mtdRevenue += l.mtdRevenue; t.mtdBudget += l.mtdBudget; t.mtdLy += l.mtdLy; t.mtdLabor += l.mtdLabor;
+      return t;
+    }, { revenue: 0, budget: 0, ly: 0, forecast: 0, laborDollars: 0, thresholdDollars: 0, mtdRevenue: 0, mtdBudget: 0, mtdLy: 0, mtdLabor: 0 });
+
+    locData.forEach(l => { l.budgetLabor = l.laborBudgetDollars; });
+    const totalBudgetLabor = locData.reduce((s, l) => s + l.budgetLabor, 0);
+
+    // ── Subtitle ────────────────────────────────────────────────
+    let subtitle = '';
+    if (state.weekEndIdx != null) {
+      const w = allWeeks[state.weekEndIdx];
+      const endLabel = w.end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      subtitle = `Week Ending ${endLabel} \u00b7 P${w.period} \u00b7 FY ${state.fyYear}`;
+    } else {
+      subtitle = `YTD \u00b7 FY ${state.fyYear} \u00b7 ${fmtShort(fyStart(state.fyYear))} \u2013 ${fmtShort(today())}`;
+    }
+    const locLabel = state.locationId ? locations.find(l => l.id === state.locationId)?.name : null;
+    if (locLabel) subtitle += ` \u00b7 ${locLabel}`;
+    subtitle += ` \u00b7 Updated ${new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}`;
+    document.getElementById('headerSubtitle').textContent = subtitle;
+
+    // ── Section Badges ────────────────────────────────────────────
+    const weekLaborPct = totals.revenue ? (totals.laborDollars / totals.revenue * 100) : null;
+    const nps30All = aggNps(nps30);
+    document.getElementById('revBadge').textContent = fmtK(totals.revenue) + ' actual';
+    document.getElementById('labBadge').textContent = fmtPct(weekLaborPct) + ' portfolio';
+    document.getElementById('npsBadge').textContent = nps30All.score != null ? 'NPS ' + nps30All.score : '';
+
+    // ── Single Location: Build day-of-week breakdown ────────────
+    const singleLoc = state.locationId && locData.length === 1;
+    let dayRows = null;
+    if (singleLoc) {
+      const locId = state.locationId;
+      const byDate = {};
+      const ensureDay = (d) => { if (!byDate[d]) byDate[d] = { date: d, revenue: 0, ly: 0, budget: 0, forecast: 0, laborDollars: 0, laborBudget: 0, threshold: 0, tlcSum: 0, granularSum: 0, hasTLC: false }; return byDate[d]; };
+      actuals.forEach(r => { if (r.location_id !== locId) return; const x = ensureDay(r.business_date); x.revenue += (r.revenue || 0); x.ly += (r.prior_year_revenue || 0); });
+      budgets.forEach(r => { if (r.location_id !== locId) return; const x = ensureDay(r.business_date); x.budget += (r.budget_revenue || 0); x.laborBudget += (r.server_budget||0)+(r.bartender_budget||0)+(r.host_budget||0)+(r.barista_budget||0)+(r.support_budget||0)+(r.training_budget||0)+(r.line_cooks_budget||0)+(r.prep_cooks_budget||0)+(r.pastry_budget||0)+(r.dishwashers_budget||0); });
+      labor.forEach(r => { if (r.location_id !== locId) return; const x = ensureDay(r.business_date); x.laborDollars += (r.labor_dollars || 0); });
+      forecasts.forEach(r => { if (r.location_id !== locId) return; const x = ensureDay(r.business_date); x.forecast += (r.manager_revenue != null ? r.manager_revenue : (r.ai_suggested_revenue || 0)); });
+      laborTargets.forEach(r => {
+        if (r.location_id !== locId) return;
+        const x = ensureDay(r.business_date);
+        if (r.position === 'Total Labor Cost') { x.hasTLC = true; x.tlcSum += (r.projected_labor_dollars || 0); }
+        else if (!ROLLUP_POSITIONS.has(r.position)) { x.granularSum += (r.projected_labor_dollars || 0); }
+      });
+      Object.values(byDate).forEach(x => { x.threshold = x.hasTLC ? x.tlcSum : x.granularSum; });
+      dayRows = Object.values(byDate).sort((a, b) => a.date.localeCompare(b.date));
+    }
+
+    const dayOfWeek = (isoDate) => {
+      const dt = new Date(isoDate + 'T12:00:00');
+      const dow = dt.toLocaleDateString('en-US', { weekday: 'short' });
+      const md = dt.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+      return `${dow} ${md}`;
+    };
+
+    // ── Revenue Table ───────────────────────────────────────────
+    let revHtml = '';
+    if (singleLoc && dayRows) {
+      dayRows.forEach(d => {
+        const budVar = d.budget ? ((d.revenue - d.budget) / d.budget * 100) : null;
+        const fcstVar = d.forecast ? ((d.revenue - d.forecast) / d.forecast * 100) : null;
+        const lyVar = d.ly ? ((d.revenue - d.ly) / d.ly * 100) : null;
+        revHtml += `<tr>
+          <td class="loc">${dayOfWeek(d.date)}</td>
+          <td class="num actual">${fmt(d.revenue)}</td>
+          <td class="num muted">${fmt(d.budget)}</td>
+          <td class="num ${varClass(budVar)}">${fmtVar(budVar)}</td>
+          <td class="num muted">${fmt(d.forecast)}</td>
+          <td class="num ${varClass(fcstVar)}">${fmtVar(fcstVar)}</td>
+          <td class="num muted">${d.ly ? fmt(d.ly) : '\u2014'}</td>
+          <td class="num ${varClass(lyVar)}">${d.ly ? fmtVar(lyVar) : '\u2014'}</td>
+        </tr>`;
+      });
+    } else {
+      locData.forEach(l => {
+        const budVar = l.budget ? ((l.revenue - l.budget) / l.budget * 100) : null;
+        const fcstVar = l.forecast ? ((l.revenue - l.forecast) / l.forecast * 100) : null;
+        const lyVar = l.ly ? ((l.revenue - l.ly) / l.ly * 100) : null;
+        revHtml += `<tr>
+          <td class="loc">${l.name}</td>
+          <td class="num actual">${fmt(l.revenue)}</td>
+          <td class="num muted">${fmt(l.budget)}</td>
+          <td class="num ${varClass(budVar)}">${fmtVar(budVar)}</td>
+          <td class="num muted">${fmt(l.forecast)}</td>
+          <td class="num ${varClass(fcstVar)}">${fmtVar(fcstVar)}</td>
+          <td class="num muted">${l.ly ? fmt(l.ly) : '\u2014'}</td>
+          <td class="num ${varClass(lyVar)}">${l.ly ? fmtVar(lyVar) : '\u2014'}</td>
+        </tr>`;
+      });
+    }
+    const tBudVar = totals.budget ? ((totals.revenue - totals.budget) / totals.budget * 100) : null;
+    const tFcstVar = totals.forecast ? ((totals.revenue - totals.forecast) / totals.forecast * 100) : null;
+    const tLyVar = totals.ly ? ((totals.revenue - totals.ly) / totals.ly * 100) : null;
+    revHtml += `<tr class="total-row">
+      <td class="loc">TOTAL</td>
+      <td class="num">${fmt(totals.revenue)}</td>
+      <td class="num muted">${fmt(totals.budget)}</td>
+      <td class="num ${varClass(tBudVar)}">${fmtVar(tBudVar)}</td>
+      <td class="num muted">${fmt(totals.forecast)}</td>
+      <td class="num ${varClass(tFcstVar)}">${fmtVar(tFcstVar)}</td>
+      <td class="num muted">${totals.ly ? fmt(totals.ly) : '\u2014'}</td>
+      <td class="num ${varClass(tLyVar)}">${totals.ly ? fmtVar(tLyVar) : '\u2014'}</td>
+    </tr>`;
+    document.getElementById('revenueBody').innerHTML = revHtml;
+
+    // ── Labor Table ─────────────────────────────────────────────
+    let labHtml = '';
+    if (singleLoc && dayRows) {
+      dayRows.forEach(d => {
+        const laborPct = d.revenue ? (d.laborDollars / d.revenue * 100) : null;
+        const budgetPct = d.revenue ? (d.laborBudget / d.revenue * 100) : null;
+        const threshPct = d.revenue ? (d.threshold / d.revenue * 100) : null;
+        const vsBudDollar = d.laborDollars - d.laborBudget;
+        const vsBudClass = vsBudDollar <= 0 ? 'var-up' : 'var-down';
+        const vsThreshDollar = d.laborDollars - d.threshold;
+        const vsThreshClass = vsThreshDollar <= 0 ? 'var-up' : 'var-down';
+        labHtml += `<tr>
+          <td class="loc">${dayOfWeek(d.date)}</td>
+          <td class="num actual">${fmt(d.laborDollars)}</td>
+          <td class="num ${laborColorClass(laborPct, threshPct)}">${fmtPct(laborPct)}</td>
+          <td class="num muted">${fmt(d.laborBudget)}</td>
+          <td class="num muted">${fmtPct(budgetPct)}</td>
+          <td class="num ${vsBudClass}">${vsBudDollar >= 0 ? '+' : '-'}${fmt(Math.abs(vsBudDollar))}</td>
+          <td class="num muted">${fmt(d.threshold)}</td>
+          <td class="num muted">${fmtPct(threshPct)}</td>
+          <td class="num ${vsThreshClass}">${vsThreshDollar >= 0 ? '+' : '-'}${fmt(Math.abs(vsThreshDollar))}</td>
+        </tr>`;
+      });
+    } else {
+      locData.forEach(l => {
+        const laborPct = l.revenue ? (l.laborDollars / l.revenue * 100) : null;
+        const budgetPct = l.revenue ? (l.budgetLabor / l.revenue * 100) : null;
+        const threshPct = l.revenue ? (l.thresholdDollars / l.revenue * 100) : null;
+        const vsBudDollar = l.laborDollars - l.budgetLabor;
+        const vsBudClass = vsBudDollar <= 0 ? 'var-up' : 'var-down';
+        const vsThreshDollar = l.laborDollars - l.thresholdDollars;
+        const vsThreshClass = vsThreshDollar <= 0 ? 'var-up' : 'var-down';
+        labHtml += `<tr>
+          <td class="loc">${l.name}</td>
+          <td class="num actual">${fmt(l.laborDollars)}</td>
+          <td class="num ${laborColorClass(laborPct, threshPct)}">${fmtPct(laborPct)}</td>
+          <td class="num muted">${fmt(l.budgetLabor)}</td>
+          <td class="num muted">${fmtPct(budgetPct)}</td>
+          <td class="num ${vsBudClass}">${vsBudDollar >= 0 ? '+' : '-'}${fmt(Math.abs(vsBudDollar))}</td>
+          <td class="num muted">${fmt(l.thresholdDollars)}</td>
+          <td class="num muted">${fmtPct(threshPct)}</td>
+          <td class="num ${vsThreshClass}">${vsThreshDollar >= 0 ? '+' : '-'}${fmt(Math.abs(vsThreshDollar))}</td>
+        </tr>`;
+      });
+    }
+    const tLabPct = totals.revenue ? (totals.laborDollars / totals.revenue * 100) : null;
+    const tBudgetPct = totals.revenue ? (totalBudgetLabor / totals.revenue * 100) : null;
+    const tThreshPct = totals.revenue ? (totals.thresholdDollars / totals.revenue * 100) : null;
+    const tVsBudDollar = totals.laborDollars - totalBudgetLabor;
+    const tVsThreshDollar = totals.laborDollars - totals.thresholdDollars;
+    labHtml += `<tr class="total-row">
+      <td class="loc">TOTAL</td>
+      <td class="num">${fmt(totals.laborDollars)}</td>
+      <td class="num ${laborColorClass(tLabPct, tThreshPct)}">${fmtPct(tLabPct)}</td>
+      <td class="num muted">${fmt(totalBudgetLabor)}</td>
+      <td class="num muted">${fmtPct(tBudgetPct)}</td>
+      <td class="num ${tVsBudDollar <= 0 ? 'var-up' : 'var-down'}">${tVsBudDollar >= 0 ? '+' : '-'}${fmt(Math.abs(tVsBudDollar))}</td>
+      <td class="num muted">${fmt(totals.thresholdDollars)}</td>
+      <td class="num muted">${fmtPct(tThreshPct)}</td>
+      <td class="num ${tVsThreshDollar <= 0 ? 'var-up' : 'var-down'}">${tVsThreshDollar >= 0 ? '+' : '-'}${fmt(Math.abs(tVsThreshDollar))}</td>
+    </tr>`;
+    document.getElementById('laborBody').innerHTML = labHtml;
+
+    // ── NPS Table ───────────────────────────────────────────────
+    let npsHtml = '';
+    function npsCell(data) {
+      return `<span class="nps-score" style="color:${npsColor(data.score)}">${data.score != null ? data.score : '--'}</span> <span class="nps-resp">(${data.responses})</span>`;
+    }
+    locData.forEach(l => {
+      npsHtml += `<tr>
+        <td class="loc">${l.name}</td>
+        <td class="num">${npsCell(aggNps(npsWeek, l.id))}</td>
+        <td class="num">${npsCell(aggNps(nps30, l.id))}</td>
+        <td class="num">${npsCell(aggNps(nps60, l.id))}</td>
+        <td class="num">${npsCell(aggNps(nps90, l.id))}</td>
+        <td class="num">${npsCell(aggNps(nps365, l.id))}</td>
+      </tr>`;
+    });
+    npsHtml += `<tr class="total-row">
+      <td class="loc">PORTFOLIO</td>
+      <td class="num">${npsCell(aggNps(npsWeek))}</td>
+      <td class="num">${npsCell(aggNps(nps30))}</td>
+      <td class="num">${npsCell(aggNps(nps60))}</td>
+      <td class="num">${npsCell(aggNps(nps90))}</td>
+      <td class="num">${npsCell(aggNps(nps365))}</td>
+    </tr>`;
+    document.getElementById('npsBody').innerHTML = npsHtml;
+
+    // ── Charts (single location) ────────────────────────────────
+    const chartsEl = document.getElementById('chartsSection');
+    if (state.locationId && locData.length === 1) {
+      chartsEl.style.display = '';
+      renderCharts(actuals, budgets, labor, nps90, state.locationId, startStr, endStr);
+    } else {
+      chartsEl.style.display = 'none';
+    }
+
+  } catch (e) {
+    console.error('Refresh failed:', e);
+  }
+}
+
+// ── Chart instances ────────────────────────────────────────────
+let charts = {};
+function destroyCharts() {
+  Object.values(charts).forEach(c => c.destroy());
+  charts = {};
+}
+
+function renderCharts(actuals, budgets, labor, npsData, locId, startStr, endStr) {
+  destroyCharts();
+
+  // Build daily map for this location
+  const days = {};
+  actuals.forEach(r => {
+    if (r.location_id !== locId) return;
+    const d = r.business_date;
+    if (!days[d]) days[d] = {};
+    days[d].revenue = r.revenue || 0;
+    days[d].ly = r.prior_year_revenue || 0;
+  });
+  budgets.forEach(r => {
+    if (r.location_id !== locId) return;
+    const d = r.business_date;
+    if (!days[d]) days[d] = {};
+    days[d].budget = r.budget_revenue || 0;
+  });
+  labor.forEach(r => {
+    if (r.location_id !== locId) return;
+    const d = r.business_date;
+    if (!days[d]) days[d] = {};
+    days[d].labor = r.labor_dollars || 0;
+  });
+
+  const sortedDates = Object.keys(days).sort();
+  const labels = sortedDates.map(d => {
+    const dt = new Date(d + 'T12:00:00');
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  });
+
+  const revData = sortedDates.map(d => days[d].revenue || 0);
+  const budData = sortedDates.map(d => days[d].budget || 0);
+  const laborPctData = sortedDates.map(d => {
+    const rev = days[d].revenue || 0;
+    const lab = days[d].labor || 0;
+    return rev > 0 ? +(lab / rev * 100).toFixed(1) : null;
+  });
+
+  const chartFont = { family: "'Inter', system-ui, sans-serif" };
+  const gridColor = '#f1f5f9';
+  const defaultOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { ...chartFont, size: 11 }, boxWidth: 12, padding: 12 } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { ...chartFont, size: 10 }, color: '#94a3b8', maxRotation: 45 } },
+      y: { grid: { color: gridColor }, ticks: { font: { ...chartFont, size: 10 }, color: '#94a3b8' } }
+    }
+  };
+
+  // 1) Revenue vs Budget bar chart
+  charts.revenue = new Chart(document.getElementById('chartRevenue'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Actual', data: revData, backgroundColor: '#3b82f6', borderRadius: 3, barPercentage: 0.7 },
+        { label: 'Budget', data: budData, backgroundColor: '#e2e8f0', borderRadius: 3, barPercentage: 0.7 }
+      ]
+    },
+    options: { ...defaultOpts, scales: { ...defaultOpts.scales, y: { ...defaultOpts.scales.y, ticks: { ...defaultOpts.scales.y.ticks, callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+  });
+
+  // 2) Labor % line chart
+  charts.labor = new Chart(document.getElementById('chartLabor'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Labor %', data: laborPctData, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,.08)', fill: true, tension: 0.3, pointRadius: 2, pointHoverRadius: 5, borderWidth: 2 },
+        { label: 'Target 20%', data: sortedDates.map(() => 20), borderColor: '#dc2626', borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, fill: false }
+      ]
+    },
+    options: { ...defaultOpts, scales: { ...defaultOpts.scales, y: { ...defaultOpts.scales.y, ticks: { ...defaultOpts.scales.y.ticks, callback: v => v + '%' } } } }
+  });
+
+  // 3) Cumulative revenue line chart
+  let cumActual = 0, cumBudget = 0;
+  const cumActualData = revData.map(v => cumActual += v);
+  const cumBudgetData = budData.map(v => cumBudget += v);
+  charts.cumulative = new Chart(document.getElementById('chartCumulative'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Actual', data: cumActualData, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,.06)', fill: true, tension: 0.2, pointRadius: 1.5, borderWidth: 2 },
+        { label: 'Budget', data: cumBudgetData, borderColor: '#94a3b8', borderDash: [4, 4], fill: false, tension: 0.2, pointRadius: 0, borderWidth: 1.5 }
+      ]
+    },
+    options: { ...defaultOpts, scales: { ...defaultOpts.scales, y: { ...defaultOpts.scales.y, ticks: { ...defaultOpts.scales.y.ticks, callback: v => '$' + (v/1000).toFixed(0) + 'K' } } } }
+  });
+
+  // 4) NPS rolling trend
+  const npsDays = {};
+  npsData.forEach(r => {
+    if (r.location_id !== locId) return;
+    const d = r.business_date;
+    if (!npsDays[d]) npsDays[d] = { p: 0, pa: 0, dt: 0 };
+    npsDays[d].p += (r.promoters || 0);
+    npsDays[d].pa += (r.passives || 0);
+    npsDays[d].dt += (r.detractors || 0);
+  });
+  const npsSorted = Object.keys(npsDays).sort();
+  // Calculate 7-day rolling NPS
+  const npsLabels = [];
+  const npsScores = [];
+  for (let i = 0; i < npsSorted.length; i++) {
+    let p = 0, pa = 0, d = 0;
+    const windowStart = Math.max(0, i - 6);
+    for (let j = windowStart; j <= i; j++) {
+      const day = npsDays[npsSorted[j]];
+      p += day.p; pa += day.pa; d += day.dt;
+    }
+    const total = p + pa + d;
+    const dt = new Date(npsSorted[i] + 'T12:00:00');
+    npsLabels.push(dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+    npsScores.push(total > 0 ? Math.round((p - d) / total * 100) : null);
+  }
+  charts.nps = new Chart(document.getElementById('chartNps'), {
+    type: 'line',
+    data: {
+      labels: npsLabels,
+      datasets: [
+        { label: '7-Day Rolling NPS', data: npsScores, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,.06)', fill: true, tension: 0.3, pointRadius: 1.5, borderWidth: 2, spanGaps: true }
+      ]
+    },
+    options: { ...defaultOpts, scales: { ...defaultOpts.scales, y: { ...defaultOpts.scales.y, min: -100, max: 100 } } }
+  });
+}
+
+// ── PDF ─────────────────────────────────────────────────────────
+async function generatePdf() {
+  const btn = document.getElementById('btnPdf');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Generating...';
+  btn.disabled = true;
+  try {
+    const el = document.getElementById('content');
+    const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#f5f6f8' });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgW = 190;
+    const imgH = canvas.height * imgW / canvas.width;
+    pdf.setFillColor(245, 246, 248);
+    pdf.rect(0, 0, 210, 297, 'F');
+    pdf.setFontSize(14);
+    pdf.setTextColor(15, 23, 42);
+    pdf.text('Method Co Executive Dashboard', 105, 12, { align: 'center' });
+    pdf.setFontSize(9);
+    pdf.setTextColor(148, 163, 184);
+    pdf.text(document.getElementById('headerSubtitle').textContent, 105, 18, { align: 'center' });
+    const imgData = canvas.toDataURL('image/png');
+    pdf.addImage(imgData, 'PNG', 10, 22, imgW, Math.min(imgH, 265));
+    pdf.save('methodco-executive-dashboard.pdf');
+  } catch (e) {
+    console.error('PDF error:', e);
+    alert('PDF generation failed: ' + e.message);
+  } finally {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PDF';
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
