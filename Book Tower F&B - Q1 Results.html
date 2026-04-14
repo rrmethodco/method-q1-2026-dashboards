@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Book Tower F&amp;B · Q1 Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --ink: #0F172A;
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --border: #E4E4E7;
+  --border-strong: #D4D4D8;
+  --text: #18181B;
+  --text-muted: #71717A;
+  --text-subtle: #A1A1AA;
+  --accent: #2563EB;
+  --pos: #1E3A8A;
+  --pos-bg: #EFF4FB;
+  --neg: #64748B;
+  --neg-bg: #F1F5F9;
+  --head: #1F2937;
+  --head-text: #F9FAFB;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+.app { min-height: 100vh; }
+.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 20px 32px; display: flex; justify-content: space-between; align-items: flex-end; }
+.topbar h1 { font-size: 22px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
+.topbar .sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.topbar-controls { display: flex; gap: 10px; }
+.pill { background: var(--card); border: 1px solid var(--border-strong); padding: 7px 14px; border-radius: 6px; font-size: 12px; color: var(--text); display: inline-flex; align-items: center; gap: 8px; }
+.pill .caret { color: var(--text-subtle); font-size: 10px; }
+.pill.primary { background: var(--ink); color: white; border-color: var(--ink); }
+.tabs { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; gap: 0; overflow-x: auto; }
+.tab { padding: 14px 22px; background: transparent; border: none; border-bottom: 2px solid transparent; font: inherit; font-size: 13px; font-weight: 500; color: var(--text-muted); cursor: pointer; letter-spacing: 0.2px; white-space: nowrap; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+.tab small { display: block; font-weight: 400; font-size: 11px; color: var(--text-subtle); margin-top: 2px; }
+.content { padding: 24px 32px 40px; }
+.page { display: none; }
+.page.active { display: block; }
+.banner { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 24px; margin-bottom: 20px; }
+.banner-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+.banner-item { display: flex; flex-direction: column; gap: 4px; padding: 0 18px; border-right: 1px solid var(--border); }
+.banner-item:first-child { padding-left: 0; }
+.banner-item:last-child { border-right: none; }
+.banner-label { font-size: 10px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+.banner-value { font-size: 22px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+.banner-sub { font-size: 11px; color: var(--text-subtle); }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
+.card.audit { border-color: #FCD34D; background: #FFFBEB; }
+.card.audit .card-head { background: #FEF3C7; border-bottom-color: #FCD34D; }
+.card-head { padding: 12px 20px; border-bottom: 1px solid var(--border); background: #FAFAFA; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.card-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); }
+.card-note { font-size: 11px; color: var(--text-muted); font-style: italic; }
+.card-body { padding: 18px 20px; }
+.audit-body ul { list-style: disc; margin-left: 20px; font-size: 13px; color: var(--text); line-height: 1.7; }
+.audit-body strong { color: var(--ink); }
+
+.kpi-blocks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.kpi-block { padding: 18px 20px; border-right: 1px solid var(--border); }
+.kpi-block:last-child { border-right: none; }
+.kpi-block-title { font-size: 11px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.kpi-block-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+.kpi-cell { padding: 0 12px; border-right: 1px dotted var(--border-strong); }
+.kpi-cell:last-child { border-right: none; }
+.kpi-cell:first-child { padding-left: 0; }
+.kpi-cell-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-subtle); font-weight: 600; margin-bottom: 4px; }
+.kpi-cell-value { font-size: 18px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; margin-bottom: 6px; }
+.kpi-cell-sub { font-size: 11px; color: var(--text-muted); display: flex; gap: 6px; align-items: center; margin-top: 3px; font-variant-numeric: tabular-nums; }
+.chip { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.chip-pos { background: var(--pos-bg); color: var(--pos); }
+.chip-neg { background: var(--neg-bg); color: var(--neg); }
+
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { background: var(--head); color: var(--head-text); padding: 10px 10px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 1.1px; text-transform: uppercase; }
+.data-table th.group { text-align: center; border-left: 1px solid #374151; border-right: 1px solid #374151; }
+.data-table th.num { text-align: right; }
+.data-table th.muted { color: #D1D5DB; font-weight: 500; }
+.data-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+.data-table td.num { text-align: right; }
+.data-table td.muted { color: var(--text-subtle); }
+.data-table td.pos { color: var(--text); font-weight: 500; }
+.data-table td.neg { color: var(--text); font-weight: 500; }
+.data-table tr:hover td { background: #FAFAFA; }
+.data-table tr.subtotal td { background: #F4F4F5; font-weight: 600; }
+.pnl-wide { min-width: 1500px; }
+.pnl-label { font-weight: 500; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media(max-width:1100px) { .grid-2 { grid-template-columns: 1fr; } .kpi-blocks { grid-template-columns: 1fr; } .banner-row { grid-template-columns: repeat(2, 1fr); } .banner-item:nth-child(2) { border-right: none; } }
+.chart-wrap { padding: 16px 20px; height: 320px; position: relative; }
+</style></head>
+<body>
+<div class="app">
+<div class="topbar">
+<div>
+<h1>Book Tower Food &amp; Beverage - March &amp; Q1 Results 2026</h1>
+</div>
+</div>
+<div class="tabs">
+<button class="tab active" onclick="showPage('bt', this)">Book Tower</button>
+<button class="tab" onclick="showPage('lsd', this)">Le Supreme + Rotunda</button>
+<button class="tab" onclick="showPage('hs', this)">HIROKI-SAN</button>
+<button class="tab" onclick="showPage('kam', this)">Kamper's</button>
+<button class="tab" onclick="showPage('ant', this)">Anthology Events</button>
+</div>
+<div class="content">
+<div class="page" id="page-bt">
+<div class="banner">
+<div class="banner-row">
+<div class="banner-item"><span class="banner-label">March Revenue</span><span class="banner-value">$936,697</span><span class="banner-sub">Bud $1,142,101 · PY $1,045,464</span></div>
+<div class="banner-item"><span class="banner-label">Q1 Revenue</span><span class="banner-value">$2,985,798</span><span class="banner-sub">Bud $3,230,481 · PY $3,019,972</span></div>
+<div class="banner-item"><span class="banner-label">2026 Revenue (A/F/B)</span><span class="banner-value">$17,788,411</span><span class="banner-sub">PY $17,435,020 · Δ +$353,391</span></div>
+<div class="banner-item"><span class="banner-label">2026 NOI Outlook</span><span class="banner-value">$810,867</span><span class="banner-sub">PY $151,984 · Δ +$658,883</span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Key Metrics · Book Tower</div><div class="card-note">A/F/B = Actual (Jan–Mar) + Forecast (Apr–Jun) + Budget (Jul–Dec)</div></div>
+<div class="kpi-blocks">
+
+<div class="kpi-block">
+<div class="kpi-block-title">Revenue</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$936,697</div><div class="kpi-cell-sub">Bud $1,142,101 <span class="chip chip-neg">−$205,404</span></div><div class="kpi-cell-sub">PY $1,045,464 <span class="chip chip-neg">−$108,767</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$2,985,798</div><div class="kpi-cell-sub">Bud $3,230,481 <span class="chip chip-neg">−$244,683</span></div><div class="kpi-cell-sub">PY $3,019,972 <span class="chip chip-neg">−$34,175</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$17,788,411</div><div class="kpi-cell-sub">PY $17,435,020 <span class="chip chip-pos">+$353,391</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Operating Profit</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$173,502</div><div class="kpi-cell-sub">Bud $314,873 <span class="chip chip-neg">−$141,371</span></div><div class="kpi-cell-sub">PY $207,283 <span class="chip chip-neg">−$33,781</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$601,250</div><div class="kpi-cell-sub">Bud $844,578 <span class="chip chip-neg">−$243,329</span></div><div class="kpi-cell-sub">PY $596,553 <span class="chip chip-pos">+$4,697</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$6,603,991</div><div class="kpi-cell-sub">PY $6,186,975 <span class="chip chip-pos">+$417,016</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Net Cash Flow</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$(205,185)</div><div class="kpi-cell-sub">Bud $(134,402) <span class="chip chip-neg">−$70,782</span></div><div class="kpi-cell-sub">PY $(239,144) <span class="chip chip-pos">+$33,960</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$(645,544)</div><div class="kpi-cell-sub">Bud $(449,264) <span class="chip chip-neg">−$196,280</span></div><div class="kpi-cell-sub">PY $(770,960) <span class="chip chip-pos">+$125,416</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$498,168</div><div class="kpi-cell-sub">PY $(227,549) <span class="chip chip-pos">+$725,717</span></div></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="grid-2">
+<div class="card"><div class="card-head"><div class="card-title">Quarterly Revenue Profile · Book Tower</div><div class="card-note">Q1 Actual · Q2 Forecast · Q3–Q4 Budget</div></div><div class="chart-wrap"><canvas id="qrev-bt"></canvas></div></div>
+<div class="card"><div class="card-head"><div class="card-title">Monthly Revenue — 2026 Full Year</div><div class="card-note">Dark blue = Actual · Mid blue = Forecast · Light grey = Budget</div></div><div class="chart-wrap"><canvas id="mrev-bt"></canvas></div></div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Full P&amp;L · Book Tower</div><div class="card-note">Favorable variances shown as positive (expense under-run = +)</div></div>
+<div class="table-wrap">
+<table class="data-table pnl-wide">
+<thead>
+<tr class="group-head">
+<th rowspan="2">Line Item</th>
+<th colspan="5" class="group">March 2026</th>
+<th colspan="5" class="group">Q1 2026 YTD</th>
+<th colspan="6" class="group">2026 Full Year (Act/For/Bud)</th>
+</tr>
+<tr>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Act YTD</th><th class="num muted">Forecast</th><th class="num muted">Budget</th><th class="num">2026 Total</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+</tr>
+</thead>
+<tbody><tr class="subtotal"><td class="pnl-label">Total Revenue</td>
+<td class="num">$936,697</td><td class="num muted">$1,142,101</td><td class="num neg">−$205,404</td><td class="num muted">$1,045,464</td><td class="num neg">−$108,767</td>
+<td class="num">$2,985,798</td><td class="num muted">$3,230,481</td><td class="num neg">−$244,683</td><td class="num muted">$3,019,972</td><td class="num neg">−$34,175</td>
+<td class="num">$2,985,798</td><td class="num muted">$4,532,320</td><td class="num muted">$10,270,293</td><td class="num">$17,788,411</td><td class="num muted">$17,435,020</td><td class="num pos">+$353,391</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Cost of Goods Sold</td>
+<td class="num">$256,615</td><td class="num muted">$285,117</td><td class="num pos">+$28,502</td><td class="num muted">$264,745</td><td class="num pos">+$8,130</td>
+<td class="num">$804,604</td><td class="num muted">$808,390</td><td class="num pos">+$3,787</td><td class="num muted">$813,025</td><td class="num pos">+$8,421</td>
+<td class="num">$804,604</td><td class="num muted">$1,074,359</td><td class="num muted">$2,226,615</td><td class="num">$4,105,578</td><td class="num muted">$4,018,418</td><td class="num neg">−$87,161</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Gross Profit</td>
+<td class="num">$680,083</td><td class="num muted">$856,984</td><td class="num neg">−$176,901</td><td class="num muted">$780,719</td><td class="num neg">−$100,636</td>
+<td class="num">$2,181,194</td><td class="num muted">$2,422,091</td><td class="num neg">−$240,897</td><td class="num muted">$2,206,948</td><td class="num neg">−$25,753</td>
+<td class="num">$2,181,194</td><td class="num muted">$3,457,961</td><td class="num muted">$8,043,677</td><td class="num">$13,682,833</td><td class="num muted">$13,416,602</td><td class="num pos">+$266,230</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Management Salaries & Wages</td>
+<td class="num">$232,901</td><td class="num muted">$236,333</td><td class="num pos">+$3,432</td><td class="num muted">$226,542</td><td class="num neg">−$6,359</td>
+<td class="num">$635,425</td><td class="num muted">$686,128</td><td class="num pos">+$50,704</td><td class="num muted">$620,065</td><td class="num neg">−$15,359</td>
+<td class="num">$635,425</td><td class="num muted">$734,556</td><td class="num muted">$1,402,751</td><td class="num">$2,772,731</td><td class="num muted">$2,586,616</td><td class="num neg">−$186,116</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Back of House Hourly Labor</td>
+<td class="num">$112,913</td><td class="num muted">$130,533</td><td class="num pos">+$17,619</td><td class="num muted">$144,665</td><td class="num pos">+$31,752</td>
+<td class="num">$411,473</td><td class="num muted">$381,616</td><td class="num neg">−$29,856</td><td class="num muted">$411,669</td><td class="num pos">+$197</td>
+<td class="num">$411,473</td><td class="num muted">$348,716</td><td class="num muted">$943,504</td><td class="num">$1,703,693</td><td class="num muted">$1,882,300</td><td class="num pos">+$178,608</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Front of House Hourly Labor</td>
+<td class="num">$69,651</td><td class="num muted">$82,277</td><td class="num pos">+$12,625</td><td class="num muted">$84,869</td><td class="num pos">+$15,217</td>
+<td class="num">$230,999</td><td class="num muted">$240,047</td><td class="num pos">+$9,048</td><td class="num muted">$246,631</td><td class="num pos">+$15,632</td>
+<td class="num">$230,999</td><td class="num muted">$301,220</td><td class="num muted">$779,461</td><td class="num">$1,311,680</td><td class="num muted">$1,363,833</td><td class="num pos">+$52,153</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Payroll Taxes & Benefits</td>
+<td class="num">$86,282</td><td class="num muted">$84,018</td><td class="num neg">−$2,264</td><td class="num muted">$88,878</td><td class="num pos">+$2,596</td>
+<td class="num">$274,751</td><td class="num muted">$244,124</td><td class="num neg">−$30,628</td><td class="num muted">$272,265</td><td class="num neg">−$2,486</td>
+<td class="num">$274,751</td><td class="num muted">$280,454</td><td class="num muted">$571,070</td><td class="num">$1,126,276</td><td class="num muted">$1,166,473</td><td class="num pos">+$40,197</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Labor Cost</td>
+<td class="num">$506,581</td><td class="num muted">$542,112</td><td class="num pos">+$35,531</td><td class="num muted">$573,436</td><td class="num pos">+$66,856</td>
+<td class="num">$1,579,944</td><td class="num muted">$1,577,513</td><td class="num neg">−$2,432</td><td class="num muted">$1,610,395</td><td class="num pos">+$30,451</td>
+<td class="num">$1,579,944</td><td class="num muted">$1,683,378</td><td class="num muted">$3,815,520</td><td class="num">$7,078,842</td><td class="num muted">$7,229,628</td><td class="num pos">+$150,786</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Prime Cost</td>
+<td class="num">$763,195</td><td class="num muted">$827,228</td><td class="num pos">+$64,033</td><td class="num muted">$838,181</td><td class="num pos">+$74,986</td>
+<td class="num">$2,384,548</td><td class="num muted">$2,385,903</td><td class="num pos">+$1,355</td><td class="num muted">$2,423,420</td><td class="num pos">+$38,872</td>
+<td class="num">$2,384,548</td><td class="num muted">$2,757,737</td><td class="num muted">$6,042,135</td><td class="num">$11,184,420</td><td class="num muted">$11,248,045</td><td class="num pos">+$63,625</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Operating Profit</td>
+<td class="num">$173,502</td><td class="num muted">$314,873</td><td class="num neg">−$141,371</td><td class="num muted">$207,283</td><td class="num neg">−$33,781</td>
+<td class="num">$601,250</td><td class="num muted">$844,578</td><td class="num neg">−$243,329</td><td class="num muted">$596,553</td><td class="num pos">+$4,697</td>
+<td class="num">$601,250</td><td class="num muted">$1,774,583</td><td class="num muted">$4,228,158</td><td class="num">$6,603,991</td><td class="num muted">$6,186,975</td><td class="num pos">+$417,016</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Controllable Expenses</td>
+<td class="num">$183,802</td><td class="num muted">$222,293</td><td class="num pos">+$38,491</td><td class="num muted">$210,848</td><td class="num pos">+$27,045</td>
+<td class="num">$618,767</td><td class="num muted">$648,209</td><td class="num pos">+$29,441</td><td class="num muted">$638,315</td><td class="num pos">+$19,548</td>
+<td class="num">$618,767</td><td class="num muted">$645,139</td><td class="num muted">$1,421,907</td><td class="num">$2,685,813</td><td class="num muted">$2,902,132</td><td class="num pos">+$216,319</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Uncontrollable Expenses</td>
+<td class="num">$181,424</td><td class="num muted">$208,667</td><td class="num pos">+$27,244</td><td class="num muted">$215,258</td><td class="num pos">+$33,834</td>
+<td class="num">$563,099</td><td class="num muted">$593,891</td><td class="num pos">+$30,792</td><td class="num muted">$590,043</td><td class="num pos">+$26,943</td>
+<td class="num">$563,099</td><td class="num muted">$778,034</td><td class="num muted">$1,766,178</td><td class="num">$3,107,311</td><td class="num muted">$3,132,858</td><td class="num pos">+$25,547</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Operating Profit Before Debt Service</td>
+<td class="num">$(191,724)</td><td class="num muted">$(116,088)</td><td class="num neg">−$75,636</td><td class="num muted">$(218,823)</td><td class="num pos">+$27,098</td>
+<td class="num">$(580,617)</td><td class="num muted">$(397,522)</td><td class="num neg">−$183,095</td><td class="num muted">$(631,805)</td><td class="num pos">+$51,189</td>
+<td class="num">$(580,617)</td><td class="num muted">$351,410</td><td class="num muted">$1,040,073</td><td class="num">$810,867</td><td class="num muted">$151,984</td><td class="num pos">+$658,883</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Cash Flow</td>
+<td class="num">$(205,185)</td><td class="num muted">$(134,402)</td><td class="num neg">−$70,782</td><td class="num muted">$(239,144)</td><td class="num pos">+$33,960</td>
+<td class="num">$(645,544)</td><td class="num muted">$(449,264)</td><td class="num neg">−$196,280</td><td class="num muted">$(770,960)</td><td class="num pos">+$125,416</td>
+<td class="num">$(645,544)</td><td class="num muted">$273,163</td><td class="num muted">$870,548</td><td class="num">$498,168</td><td class="num muted">$(227,549)</td><td class="num pos">+$725,717</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="page" id="page-lsd">
+<div class="banner">
+<div class="banner-row">
+<div class="banner-item"><span class="banner-label">March Revenue</span><span class="banner-value">$455,694</span><span class="banner-sub">Bud $572,074 · PY $553,725</span></div>
+<div class="banner-item"><span class="banner-label">Q1 Revenue</span><span class="banner-value">$1,412,698</span><span class="banner-sub">Bud $1,648,280 · PY $1,588,063</span></div>
+<div class="banner-item"><span class="banner-label">2026 Revenue (A/F/B)</span><span class="banner-value">$6,848,130</span><span class="banner-sub">PY $7,179,655 · Δ −$331,526</span></div>
+<div class="banner-item"><span class="banner-label">2026 NOI Outlook</span><span class="banner-value">$194,010</span><span class="banner-sub">PY $217,570 · Δ −$23,560</span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Key Metrics · Le Supreme + Bar Rotunda</div><div class="card-note">A/F/B = Actual (Jan–Mar) + Forecast (Apr–Jun) + Budget (Jul–Dec)</div></div>
+<div class="kpi-blocks">
+
+<div class="kpi-block">
+<div class="kpi-block-title">Revenue</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$455,694</div><div class="kpi-cell-sub">Bud $572,074 <span class="chip chip-neg">−$116,380</span></div><div class="kpi-cell-sub">PY $553,725 <span class="chip chip-neg">−$98,031</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$1,412,698</div><div class="kpi-cell-sub">Bud $1,648,280 <span class="chip chip-neg">−$235,582</span></div><div class="kpi-cell-sub">PY $1,588,063 <span class="chip chip-neg">−$175,365</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$6,848,130</div><div class="kpi-cell-sub">PY $7,179,655 <span class="chip chip-neg">−$331,526</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Operating Profit</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$120,274</div><div class="kpi-cell-sub">Bud $187,078 <span class="chip chip-neg">−$66,804</span></div><div class="kpi-cell-sub">PY $159,531 <span class="chip chip-neg">−$39,257</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$335,137</div><div class="kpi-cell-sub">Bud $536,393 <span class="chip chip-neg">−$201,256</span></div><div class="kpi-cell-sub">PY $463,428 <span class="chip chip-neg">−$128,292</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$2,243,213</div><div class="kpi-cell-sub">PY $2,422,967 <span class="chip chip-neg">−$179,753</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Net Cash Flow</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$(35,648)</div><div class="kpi-cell-sub">Bud $5,256 <span class="chip chip-neg">−$40,904</span></div><div class="kpi-cell-sub">PY $(27,085) <span class="chip chip-neg">−$8,562</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$(154,412)</div><div class="kpi-cell-sub">Bud $10,974 <span class="chip chip-neg">−$165,386</span></div><div class="kpi-cell-sub">PY $(79,103) <span class="chip chip-neg">−$75,309</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$77,539</div><div class="kpi-cell-sub">PY $82,914 <span class="chip chip-neg">−$5,375</span></div></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="grid-2">
+<div class="card"><div class="card-head"><div class="card-title">Quarterly Revenue Profile · Le Supreme + Bar Rotunda</div><div class="card-note">Q1 Actual · Q2 Forecast · Q3–Q4 Budget</div></div><div class="chart-wrap"><canvas id="qrev-lsd"></canvas></div></div>
+<div class="card"><div class="card-head"><div class="card-title">Monthly Revenue — 2026 Full Year</div><div class="card-note">Dark blue = Actual · Mid blue = Forecast · Light grey = Budget</div></div><div class="chart-wrap"><canvas id="mrev-lsd"></canvas></div></div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Full P&amp;L · Le Supreme + Bar Rotunda</div><div class="card-note">Favorable variances shown as positive (expense under-run = +)</div></div>
+<div class="table-wrap">
+<table class="data-table pnl-wide">
+<thead>
+<tr class="group-head">
+<th rowspan="2">Line Item</th>
+<th colspan="5" class="group">March 2026</th>
+<th colspan="5" class="group">Q1 2026 YTD</th>
+<th colspan="6" class="group">2026 Full Year (Act/For/Bud)</th>
+</tr>
+<tr>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Act YTD</th><th class="num muted">Forecast</th><th class="num muted">Budget</th><th class="num">2026 Total</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+</tr>
+</thead>
+<tbody><tr class="subtotal"><td class="pnl-label">Total Revenue</td>
+<td class="num">$455,694</td><td class="num muted">$572,074</td><td class="num neg">−$116,380</td><td class="num muted">$553,725</td><td class="num neg">−$98,031</td>
+<td class="num">$1,412,698</td><td class="num muted">$1,648,280</td><td class="num neg">−$235,582</td><td class="num muted">$1,588,063</td><td class="num neg">−$175,365</td>
+<td class="num">$1,412,698</td><td class="num muted">$1,655,535</td><td class="num muted">$3,779,897</td><td class="num">$6,848,130</td><td class="num muted">$7,179,655</td><td class="num neg">−$331,526</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Cost of Goods Sold</td>
+<td class="num">$131,727</td><td class="num muted">$153,473</td><td class="num pos">+$21,746</td><td class="num muted">$154,441</td><td class="num pos">+$22,714</td>
+<td class="num">$421,445</td><td class="num muted">$442,705</td><td class="num pos">+$21,260</td><td class="num muted">$452,202</td><td class="num pos">+$30,757</td>
+<td class="num">$421,445</td><td class="num muted">$461,271</td><td class="num muted">$1,011,420</td><td class="num">$1,894,136</td><td class="num muted">$1,998,194</td><td class="num pos">+$104,058</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Gross Profit</td>
+<td class="num">$323,967</td><td class="num muted">$418,602</td><td class="num neg">−$94,634</td><td class="num muted">$399,285</td><td class="num neg">−$75,317</td>
+<td class="num">$991,253</td><td class="num muted">$1,205,575</td><td class="num neg">−$214,322</td><td class="num muted">$1,135,861</td><td class="num neg">−$144,608</td>
+<td class="num">$991,253</td><td class="num muted">$1,194,264</td><td class="num muted">$2,768,476</td><td class="num">$4,953,994</td><td class="num muted">$5,181,461</td><td class="num neg">−$227,467</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Management Salaries & Wages</td>
+<td class="num">$74,908</td><td class="num muted">$78,963</td><td class="num pos">+$4,055</td><td class="num muted">$80,470</td><td class="num pos">+$5,563</td>
+<td class="num">$216,967</td><td class="num muted">$229,247</td><td class="num pos">+$12,280</td><td class="num muted">$210,547</td><td class="num neg">−$6,420</td>
+<td class="num">$216,967</td><td class="num muted">$225,194</td><td class="num muted">$468,683</td><td class="num">$910,845</td><td class="num muted">$839,698</td><td class="num neg">−$71,147</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Back of House Hourly Labor</td>
+<td class="num">$61,754</td><td class="num muted">$73,605</td><td class="num pos">+$11,851</td><td class="num muted">$77,997</td><td class="num pos">+$16,242</td>
+<td class="num">$211,339</td><td class="num muted">$212,073</td><td class="num pos">+$734</td><td class="num muted">$226,593</td><td class="num pos">+$15,254</td>
+<td class="num">$211,339</td><td class="num muted">$193,050</td><td class="num muted">$455,668</td><td class="num">$860,057</td><td class="num muted">$935,218</td><td class="num pos">+$75,161</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Front of House Hourly Labor</td>
+<td class="num">$29,386</td><td class="num muted">$34,673</td><td class="num pos">+$5,287</td><td class="num muted">$34,038</td><td class="num pos">+$4,652</td>
+<td class="num">$94,239</td><td class="num muted">$99,902</td><td class="num pos">+$5,663</td><td class="num muted">$95,787</td><td class="num pos">+$1,548</td>
+<td class="num">$94,239</td><td class="num muted">$91,864</td><td class="num muted">$213,674</td><td class="num">$399,777</td><td class="num muted">$433,238</td><td class="num pos">+$33,461</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Payroll Taxes & Benefits</td>
+<td class="num">$37,646</td><td class="num muted">$40,163</td><td class="num pos">+$2,518</td><td class="num muted">$41,305</td><td class="num pos">+$3,660</td>
+<td class="num">$124,306</td><td class="num muted">$116,092</td><td class="num neg">−$8,214</td><td class="num muted">$125,621</td><td class="num pos">+$1,315</td>
+<td class="num">$124,306</td><td class="num muted">$127,652</td><td class="num muted">$244,106</td><td class="num">$496,064</td><td class="num muted">$497,993</td><td class="num pos">+$1,929</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Labor Cost</td>
+<td class="num">$203,694</td><td class="num muted">$231,523</td><td class="num pos">+$27,830</td><td class="num muted">$239,754</td><td class="num pos">+$36,060</td>
+<td class="num">$656,117</td><td class="num muted">$669,183</td><td class="num pos">+$13,066</td><td class="num muted">$672,433</td><td class="num pos">+$16,316</td>
+<td class="num">$656,117</td><td class="num muted">$645,317</td><td class="num muted">$1,409,347</td><td class="num">$2,710,780</td><td class="num muted">$2,758,495</td><td class="num pos">+$47,714</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Prime Cost</td>
+<td class="num">$335,421</td><td class="num muted">$384,996</td><td class="num pos">+$49,575</td><td class="num muted">$394,195</td><td class="num pos">+$58,774</td>
+<td class="num">$1,077,561</td><td class="num muted">$1,111,887</td><td class="num pos">+$34,326</td><td class="num muted">$1,124,635</td><td class="num pos">+$47,073</td>
+<td class="num">$1,077,561</td><td class="num muted">$1,106,588</td><td class="num muted">$2,420,767</td><td class="num">$4,604,916</td><td class="num muted">$4,756,689</td><td class="num pos">+$151,772</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Operating Profit</td>
+<td class="num">$120,274</td><td class="num muted">$187,078</td><td class="num neg">−$66,804</td><td class="num muted">$159,531</td><td class="num neg">−$39,257</td>
+<td class="num">$335,137</td><td class="num muted">$536,393</td><td class="num neg">−$201,256</td><td class="num muted">$463,428</td><td class="num neg">−$128,292</td>
+<td class="num">$335,137</td><td class="num muted">$548,947</td><td class="num muted">$1,359,129</td><td class="num">$2,243,213</td><td class="num muted">$2,422,967</td><td class="num neg">−$179,753</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Controllable Expenses</td>
+<td class="num">$65,622</td><td class="num muted">$74,761</td><td class="num pos">+$9,139</td><td class="num muted">$73,807</td><td class="num pos">+$8,185</td>
+<td class="num">$211,627</td><td class="num muted">$216,736</td><td class="num pos">+$5,109</td><td class="num muted">$213,683</td><td class="num pos">+$2,056</td>
+<td class="num">$211,627</td><td class="num muted">$205,263</td><td class="num muted">$452,090</td><td class="num">$868,980</td><td class="num muted">$948,572</td><td class="num pos">+$79,592</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Uncontrollable Expenses</td>
+<td class="num">$82,725</td><td class="num muted">$98,511</td><td class="num pos">+$15,786</td><td class="num muted">$103,626</td><td class="num pos">+$20,902</td>
+<td class="num">$248,973</td><td class="num muted">$284,112</td><td class="num pos">+$35,139</td><td class="num muted">$284,761</td><td class="num pos">+$35,789</td>
+<td class="num">$248,973</td><td class="num muted">$288,888</td><td class="num muted">$642,362</td><td class="num">$1,180,223</td><td class="num muted">$1,256,825</td><td class="num pos">+$76,602</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Operating Profit Before Debt Service</td>
+<td class="num">$(28,073)</td><td class="num muted">$13,806</td><td class="num neg">−$41,879</td><td class="num muted">$(17,903)</td><td class="num neg">−$10,171</td>
+<td class="num">$(125,463)</td><td class="num muted">$35,545</td><td class="num neg">−$161,009</td><td class="num muted">$(35,016)</td><td class="num neg">−$90,447</td>
+<td class="num">$(125,463)</td><td class="num muted">$54,796</td><td class="num muted">$264,677</td><td class="num">$194,010</td><td class="num muted">$217,570</td><td class="num neg">−$23,560</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Cash Flow</td>
+<td class="num">$(35,648)</td><td class="num muted">$5,256</td><td class="num neg">−$40,904</td><td class="num muted">$(27,085)</td><td class="num neg">−$8,562</td>
+<td class="num">$(154,412)</td><td class="num muted">$10,974</td><td class="num neg">−$165,386</td><td class="num muted">$(79,103)</td><td class="num neg">−$75,309</td>
+<td class="num">$(154,412)</td><td class="num muted">$25,709</td><td class="num muted">$206,242</td><td class="num">$77,539</td><td class="num muted">$82,914</td><td class="num neg">−$5,375</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="page" id="page-hs">
+<div class="banner">
+<div class="banner-row">
+<div class="banner-item"><span class="banner-label">March Revenue</span><span class="banner-value">$322,629</span><span class="banner-sub">Bud $375,660 · PY $305,318</span></div>
+<div class="banner-item"><span class="banner-label">Q1 Revenue</span><span class="banner-value">$984,515</span><span class="banner-sub">Bud $1,051,255 · PY $881,788</span></div>
+<div class="banner-item"><span class="banner-label">2026 Revenue (A/F/B)</span><span class="banner-value">$4,140,425</span><span class="banner-sub">PY $3,845,135 · Δ +$295,290</span></div>
+<div class="banner-item"><span class="banner-label">2026 NOI Outlook</span><span class="banner-value">$4,998</span><span class="banner-sub">PY $(279,118) · Δ +$284,116</span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Key Metrics · HIROKI-SAN</div><div class="card-note">A/F/B = Actual (Jan–Mar) + Forecast (Apr–Jun) + Budget (Jul–Dec)</div></div>
+<div class="kpi-blocks">
+
+<div class="kpi-block">
+<div class="kpi-block-title">Revenue</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$322,629</div><div class="kpi-cell-sub">Bud $375,660 <span class="chip chip-neg">−$53,031</span></div><div class="kpi-cell-sub">PY $305,318 <span class="chip chip-pos">+$17,311</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$984,515</div><div class="kpi-cell-sub">Bud $1,051,255 <span class="chip chip-neg">−$66,740</span></div><div class="kpi-cell-sub">PY $881,788 <span class="chip chip-pos">+$102,726</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$4,140,425</div><div class="kpi-cell-sub">PY $3,845,135 <span class="chip chip-pos">+$295,290</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Operating Profit</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$94,598</div><div class="kpi-cell-sub">Bud $135,333 <span class="chip chip-neg">−$40,735</span></div><div class="kpi-cell-sub">PY $92,343 <span class="chip chip-pos">+$2,255</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$302,830</div><div class="kpi-cell-sub">Bud $369,328 <span class="chip chip-neg">−$66,497</span></div><div class="kpi-cell-sub">PY $248,619 <span class="chip chip-pos">+$54,211</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$1,388,321</div><div class="kpi-cell-sub">PY $1,173,063 <span class="chip chip-pos">+$215,258</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Net Cash Flow</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$(16,941)</div><div class="kpi-cell-sub">Bud $7,819 <span class="chip chip-neg">−$24,760</span></div><div class="kpi-cell-sub">PY $(34,405) <span class="chip chip-pos">+$17,465</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$(64,460)</div><div class="kpi-cell-sub">Bud $7,342 <span class="chip chip-neg">−$71,802</span></div><div class="kpi-cell-sub">PY $(122,041) <span class="chip chip-pos">+$57,581</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$(69,144)</div><div class="kpi-cell-sub">PY $(356,744) <span class="chip chip-pos">+$287,600</span></div></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="grid-2">
+<div class="card"><div class="card-head"><div class="card-title">Quarterly Revenue Profile · HIROKI-SAN</div><div class="card-note">Q1 Actual · Q2 Forecast · Q3–Q4 Budget</div></div><div class="chart-wrap"><canvas id="qrev-hs"></canvas></div></div>
+<div class="card"><div class="card-head"><div class="card-title">Monthly Revenue — 2026 Full Year</div><div class="card-note">Dark blue = Actual · Mid blue = Forecast · Light grey = Budget</div></div><div class="chart-wrap"><canvas id="mrev-hs"></canvas></div></div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Full P&amp;L · HIROKI-SAN</div><div class="card-note">Favorable variances shown as positive (expense under-run = +)</div></div>
+<div class="table-wrap">
+<table class="data-table pnl-wide">
+<thead>
+<tr class="group-head">
+<th rowspan="2">Line Item</th>
+<th colspan="5" class="group">March 2026</th>
+<th colspan="5" class="group">Q1 2026 YTD</th>
+<th colspan="6" class="group">2026 Full Year (Act/For/Bud)</th>
+</tr>
+<tr>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Act YTD</th><th class="num muted">Forecast</th><th class="num muted">Budget</th><th class="num">2026 Total</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+</tr>
+</thead>
+<tbody><tr class="subtotal"><td class="pnl-label">Total Revenue</td>
+<td class="num">$322,629</td><td class="num muted">$375,660</td><td class="num neg">−$53,031</td><td class="num muted">$305,318</td><td class="num pos">+$17,311</td>
+<td class="num">$984,515</td><td class="num muted">$1,051,255</td><td class="num neg">−$66,740</td><td class="num muted">$881,788</td><td class="num pos">+$102,726</td>
+<td class="num">$984,515</td><td class="num muted">$982,425</td><td class="num muted">$2,173,486</td><td class="num">$4,140,425</td><td class="num muted">$3,845,135</td><td class="num pos">+$295,290</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Cost of Goods Sold</td>
+<td class="num">$98,189</td><td class="num muted">$102,286</td><td class="num pos">+$4,097</td><td class="num muted">$78,724</td><td class="num neg">−$19,465</td>
+<td class="num">$283,535</td><td class="num muted">$286,256</td><td class="num pos">+$2,721</td><td class="num muted">$247,854</td><td class="num neg">−$35,681</td>
+<td class="num">$283,535</td><td class="num muted">$301,337</td><td class="num muted">$590,935</td><td class="num">$1,175,807</td><td class="num muted">$1,065,272</td><td class="num neg">−$110,536</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Gross Profit</td>
+<td class="num">$224,441</td><td class="num muted">$273,374</td><td class="num neg">−$48,933</td><td class="num muted">$226,594</td><td class="num neg">−$2,154</td>
+<td class="num">$700,980</td><td class="num muted">$764,999</td><td class="num neg">−$64,020</td><td class="num muted">$633,934</td><td class="num pos">+$67,046</td>
+<td class="num">$700,980</td><td class="num muted">$681,087</td><td class="num muted">$1,582,551</td><td class="num">$2,964,618</td><td class="num muted">$2,779,863</td><td class="num pos">+$184,755</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Management Salaries & Wages</td>
+<td class="num">$48,880</td><td class="num muted">$52,965</td><td class="num pos">+$4,086</td><td class="num muted">$51,523</td><td class="num pos">+$2,643</td>
+<td class="num">$124,690</td><td class="num muted">$153,771</td><td class="num pos">+$29,080</td><td class="num muted">$145,768</td><td class="num pos">+$21,078</td>
+<td class="num">$124,690</td><td class="num muted">$139,781</td><td class="num muted">$314,375</td><td class="num">$578,847</td><td class="num muted">$565,101</td><td class="num neg">−$13,746</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Back of House Hourly Labor</td>
+<td class="num">$38,406</td><td class="num muted">$41,202</td><td class="num pos">+$2,796</td><td class="num muted">$40,929</td><td class="num pos">+$2,523</td>
+<td class="num">$141,498</td><td class="num muted">$116,880</td><td class="num neg">−$24,618</td><td class="num muted">$114,998</td><td class="num neg">−$26,500</td>
+<td class="num">$141,498</td><td class="num muted">$103,116</td><td class="num muted">$242,033</td><td class="num">$486,647</td><td class="num muted">$523,136</td><td class="num pos">+$36,490</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Front of House Hourly Labor</td>
+<td class="num">$18,973</td><td class="num muted">$21,176</td><td class="num pos">+$2,203</td><td class="num muted">$19,174</td><td class="num pos">+$202</td>
+<td class="num">$61,415</td><td class="num muted">$60,070</td><td class="num neg">−$1,345</td><td class="num muted">$58,457</td><td class="num neg">−$2,958</td>
+<td class="num">$61,415</td><td class="num muted">$51,414</td><td class="num muted">$123,335</td><td class="num">$236,164</td><td class="num muted">$233,393</td><td class="num neg">−$2,771</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Payroll Taxes & Benefits</td>
+<td class="num">$21,705</td><td class="num muted">$20,819</td><td class="num neg">−$886</td><td class="num muted">$19,725</td><td class="num neg">−$1,980</td>
+<td class="num">$65,289</td><td class="num muted">$59,695</td><td class="num neg">−$5,594</td><td class="num muted">$60,217</td><td class="num neg">−$5,072</td>
+<td class="num">$65,289</td><td class="num muted">$65,465</td><td class="num muted">$122,694</td><td class="num">$253,448</td><td class="num muted">$264,191</td><td class="num pos">+$10,744</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Labor Cost</td>
+<td class="num">$129,843</td><td class="num muted">$138,041</td><td class="num pos">+$8,198</td><td class="num muted">$134,252</td><td class="num pos">+$4,409</td>
+<td class="num">$398,149</td><td class="num muted">$395,672</td><td class="num neg">−$2,478</td><td class="num muted">$385,315</td><td class="num neg">−$12,834</td>
+<td class="num">$398,149</td><td class="num muted">$364,844</td><td class="num muted">$813,304</td><td class="num">$1,576,297</td><td class="num muted">$1,606,800</td><td class="num pos">+$30,503</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Prime Cost</td>
+<td class="num">$228,032</td><td class="num muted">$240,327</td><td class="num pos">+$12,295</td><td class="num muted">$212,976</td><td class="num neg">−$15,056</td>
+<td class="num">$681,684</td><td class="num muted">$681,927</td><td class="num pos">+$243</td><td class="num muted">$633,169</td><td class="num neg">−$48,515</td>
+<td class="num">$681,684</td><td class="num muted">$666,181</td><td class="num muted">$1,404,239</td><td class="num">$2,752,105</td><td class="num muted">$2,672,072</td><td class="num neg">−$80,033</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Operating Profit</td>
+<td class="num">$94,598</td><td class="num muted">$135,333</td><td class="num neg">−$40,735</td><td class="num muted">$92,343</td><td class="num pos">+$2,255</td>
+<td class="num">$302,830</td><td class="num muted">$369,328</td><td class="num neg">−$66,497</td><td class="num muted">$248,619</td><td class="num pos">+$54,211</td>
+<td class="num">$302,830</td><td class="num muted">$316,244</td><td class="num muted">$769,247</td><td class="num">$1,388,321</td><td class="num muted">$1,173,063</td><td class="num pos">+$215,258</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Controllable Expenses</td>
+<td class="num">$47,653</td><td class="num muted">$56,065</td><td class="num pos">+$8,412</td><td class="num muted">$57,319</td><td class="num pos">+$9,667</td>
+<td class="num">$169,162</td><td class="num muted">$161,127</td><td class="num neg">−$8,035</td><td class="num muted">$176,450</td><td class="num pos">+$7,288</td>
+<td class="num">$169,162</td><td class="num muted">$148,042</td><td class="num muted">$330,427</td><td class="num">$647,631</td><td class="num muted">$728,015</td><td class="num pos">+$80,384</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Uncontrollable Expenses</td>
+<td class="num">$58,973</td><td class="num muted">$64,875</td><td class="num pos">+$5,903</td><td class="num muted">$62,347</td><td class="num pos">+$3,375</td>
+<td class="num">$177,744</td><td class="num muted">$182,462</td><td class="num pos">+$4,718</td><td class="num muted">$165,933</td><td class="num neg">−$11,811</td>
+<td class="num">$177,744</td><td class="num muted">$181,289</td><td class="num muted">$376,659</td><td class="num">$735,692</td><td class="num muted">$724,166</td><td class="num neg">−$11,526</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Operating Profit Before Debt Service</td>
+<td class="num">$(12,028)</td><td class="num muted">$14,393</td><td class="num neg">−$26,421</td><td class="num muted">$(27,324)</td><td class="num pos">+$15,296</td>
+<td class="num">$(44,075)</td><td class="num muted">$25,739</td><td class="num neg">−$69,814</td><td class="num muted">$(93,764)</td><td class="num pos">+$49,689</td>
+<td class="num">$(44,075)</td><td class="num muted">$(13,087)</td><td class="num muted">$62,161</td><td class="num">$4,998</td><td class="num muted">$(279,118)</td><td class="num pos">+$284,116</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Cash Flow</td>
+<td class="num">$(16,941)</td><td class="num muted">$7,819</td><td class="num neg">−$24,760</td><td class="num muted">$(34,405)</td><td class="num pos">+$17,465</td>
+<td class="num">$(64,460)</td><td class="num muted">$7,342</td><td class="num neg">−$71,802</td><td class="num muted">$(122,041)</td><td class="num pos">+$57,581</td>
+<td class="num">$(64,460)</td><td class="num muted">$(28,808)</td><td class="num muted">$24,125</td><td class="num">$(69,144)</td><td class="num muted">$(356,744)</td><td class="num pos">+$287,600</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="page" id="page-kam">
+<div class="banner">
+<div class="banner-row">
+<div class="banner-item"><span class="banner-label">March Revenue</span><span class="banner-value">$72,570</span><span class="banner-sub">Bud $102,760 · PY $96,110</span></div>
+<div class="banner-item"><span class="banner-label">Q1 Revenue</span><span class="banner-value">$216,636</span><span class="banner-sub">Bud $260,983 · PY $259,833</span></div>
+<div class="banner-item"><span class="banner-label">2026 Revenue (A/F/B)</span><span class="banner-value">$2,453,754</span><span class="banner-sub">PY $2,438,946 · Δ +$14,807</span></div>
+<div class="banner-item"><span class="banner-label">2026 NOI Outlook</span><span class="banner-value">$270,535</span><span class="banner-sub">PY $228,638 · Δ +$41,897</span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Key Metrics · Kamper's</div><div class="card-note">A/F/B = Actual (Jan–Mar) + Forecast (Apr–Jun) + Budget (Jul–Dec)</div></div>
+<div class="kpi-blocks">
+
+<div class="kpi-block">
+<div class="kpi-block-title">Revenue</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$72,570</div><div class="kpi-cell-sub">Bud $102,760 <span class="chip chip-neg">−$30,190</span></div><div class="kpi-cell-sub">PY $96,110 <span class="chip chip-neg">−$23,540</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$216,636</div><div class="kpi-cell-sub">Bud $260,983 <span class="chip chip-neg">−$44,347</span></div><div class="kpi-cell-sub">PY $259,833 <span class="chip chip-neg">−$43,196</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$2,453,754</div><div class="kpi-cell-sub">PY $2,438,946 <span class="chip chip-pos">+$14,807</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Operating Profit</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$(5,323)</div><div class="kpi-cell-sub">Bud $24,615 <span class="chip chip-neg">−$29,938</span></div><div class="kpi-cell-sub">PY $10,481 <span class="chip chip-neg">−$15,803</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$(6,739)</div><div class="kpi-cell-sub">Bud $42,096 <span class="chip chip-neg">−$48,835</span></div><div class="kpi-cell-sub">PY $25,397 <span class="chip chip-neg">−$32,136</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$1,133,465</div><div class="kpi-cell-sub">PY $1,083,827 <span class="chip chip-pos">+$49,638</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Net Cash Flow</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$(55,374)</div><div class="kpi-cell-sub">Bud $(33,850) <span class="chip chip-neg">−$21,524</span></div><div class="kpi-cell-sub">PY $(44,285) <span class="chip chip-neg">−$11,089</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$(157,917)</div><div class="kpi-cell-sub">Bud $(120,918) <span class="chip chip-neg">−$36,999</span></div><div class="kpi-cell-sub">PY $(132,007) <span class="chip chip-neg">−$25,910</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$229,830</div><div class="kpi-cell-sub">PY $181,496 <span class="chip chip-pos">+$48,333</span></div></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="grid-2">
+<div class="card"><div class="card-head"><div class="card-title">Quarterly Revenue Profile · Kamper's</div><div class="card-note">Q1 Actual · Q2 Forecast · Q3–Q4 Budget</div></div><div class="chart-wrap"><canvas id="qrev-kam"></canvas></div></div>
+<div class="card"><div class="card-head"><div class="card-title">Monthly Revenue — 2026 Full Year</div><div class="card-note">Dark blue = Actual · Mid blue = Forecast · Light grey = Budget</div></div><div class="chart-wrap"><canvas id="mrev-kam"></canvas></div></div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Full P&amp;L · Kamper's</div><div class="card-note">Favorable variances shown as positive (expense under-run = +)</div></div>
+<div class="table-wrap">
+<table class="data-table pnl-wide">
+<thead>
+<tr class="group-head">
+<th rowspan="2">Line Item</th>
+<th colspan="5" class="group">March 2026</th>
+<th colspan="5" class="group">Q1 2026 YTD</th>
+<th colspan="6" class="group">2026 Full Year (Act/For/Bud)</th>
+</tr>
+<tr>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Act YTD</th><th class="num muted">Forecast</th><th class="num muted">Budget</th><th class="num">2026 Total</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+</tr>
+</thead>
+<tbody><tr class="subtotal"><td class="pnl-label">Total Revenue</td>
+<td class="num">$72,570</td><td class="num muted">$102,760</td><td class="num neg">−$30,190</td><td class="num muted">$96,110</td><td class="num neg">−$23,540</td>
+<td class="num">$216,636</td><td class="num muted">$260,983</td><td class="num neg">−$44,347</td><td class="num muted">$259,833</td><td class="num neg">−$43,196</td>
+<td class="num">$216,636</td><td class="num muted">$686,678</td><td class="num muted">$1,550,439</td><td class="num">$2,453,754</td><td class="num muted">$2,438,946</td><td class="num pos">+$14,807</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Cost of Goods Sold</td>
+<td class="num">$14,362</td><td class="num muted">$17,403</td><td class="num pos">+$3,042</td><td class="num muted">$19,353</td><td class="num pos">+$4,992</td>
+<td class="num">$40,301</td><td class="num muted">$44,200</td><td class="num pos">+$3,900</td><td class="num muted">$58,152</td><td class="num pos">+$17,852</td>
+<td class="num">$40,301</td><td class="num muted">$119,663</td><td class="num muted">$263,241</td><td class="num">$423,205</td><td class="num muted">$419,391</td><td class="num neg">−$3,814</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Gross Profit</td>
+<td class="num">$58,208</td><td class="num muted">$85,356</td><td class="num neg">−$27,148</td><td class="num muted">$76,756</td><td class="num neg">−$18,548</td>
+<td class="num">$176,336</td><td class="num muted">$216,783</td><td class="num neg">−$40,447</td><td class="num muted">$201,680</td><td class="num neg">−$25,345</td>
+<td class="num">$176,336</td><td class="num muted">$567,015</td><td class="num muted">$1,287,198</td><td class="num">$2,030,549</td><td class="num muted">$2,019,555</td><td class="num pos">+$10,993</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Management Salaries & Wages</td>
+<td class="num">$33,753</td><td class="num muted">$31,443</td><td class="num neg">−$2,310</td><td class="num muted">$26,462</td><td class="num neg">−$7,291</td>
+<td class="num">$88,754</td><td class="num muted">$91,285</td><td class="num pos">+$2,531</td><td class="num muted">$62,096</td><td class="num neg">−$26,658</td>
+<td class="num">$88,754</td><td class="num muted">$111,901</td><td class="num muted">$186,628</td><td class="num">$387,283</td><td class="num muted">$304,703</td><td class="num neg">−$82,580</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Back of House Hourly Labor</td>
+<td class="num">$7,171</td><td class="num muted">$6,606</td><td class="num neg">−$565</td><td class="num muted">$10,938</td><td class="num pos">+$3,767</td>
+<td class="num">$26,528</td><td class="num muted">$21,863</td><td class="num neg">−$4,665</td><td class="num muted">$33,822</td><td class="num pos">+$7,294</td>
+<td class="num">$26,528</td><td class="num muted">$22,830</td><td class="num muted">$73,084</td><td class="num">$122,441</td><td class="num muted">$158,037</td><td class="num pos">+$35,596</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Front of House Hourly Labor</td>
+<td class="num">$10,701</td><td class="num muted">$12,948</td><td class="num pos">+$2,247</td><td class="num muted">$18,940</td><td class="num pos">+$8,239</td>
+<td class="num">$32,853</td><td class="num muted">$33,675</td><td class="num pos">+$822</td><td class="num muted">$53,446</td><td class="num pos">+$20,593</td>
+<td class="num">$32,853</td><td class="num muted">$42,846</td><td class="num muted">$157,971</td><td class="num">$233,670</td><td class="num muted">$297,602</td><td class="num pos">+$63,932</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Payroll Taxes & Benefits</td>
+<td class="num">$11,340</td><td class="num muted">$9,179</td><td class="num neg">−$2,161</td><td class="num muted">$8,745</td><td class="num neg">−$2,595</td>
+<td class="num">$33,568</td><td class="num muted">$26,428</td><td class="num neg">−$7,140</td><td class="num muted">$24,797</td><td class="num neg">−$8,771</td>
+<td class="num">$33,568</td><td class="num muted">$33,342</td><td class="num muted">$75,183</td><td class="num">$142,093</td><td class="num muted">$161,561</td><td class="num pos">+$19,467</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Labor Cost</td>
+<td class="num">$63,531</td><td class="num muted">$60,741</td><td class="num neg">−$2,790</td><td class="num muted">$66,276</td><td class="num pos">+$2,745</td>
+<td class="num">$183,074</td><td class="num muted">$174,687</td><td class="num neg">−$8,388</td><td class="num muted">$176,283</td><td class="num neg">−$6,791</td>
+<td class="num">$183,074</td><td class="num muted">$212,617</td><td class="num muted">$501,392</td><td class="num">$897,084</td><td class="num muted">$935,728</td><td class="num pos">+$38,645</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Prime Cost</td>
+<td class="num">$77,893</td><td class="num muted">$78,144</td><td class="num pos">+$252</td><td class="num muted">$85,629</td><td class="num pos">+$7,737</td>
+<td class="num">$223,375</td><td class="num muted">$218,887</td><td class="num neg">−$4,488</td><td class="num muted">$234,436</td><td class="num pos">+$11,061</td>
+<td class="num">$223,375</td><td class="num muted">$332,280</td><td class="num muted">$764,633</td><td class="num">$1,320,288</td><td class="num muted">$1,355,119</td><td class="num pos">+$34,831</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Operating Profit</td>
+<td class="num">$(5,323)</td><td class="num muted">$24,615</td><td class="num neg">−$29,938</td><td class="num muted">$10,481</td><td class="num neg">−$15,803</td>
+<td class="num">$(6,739)</td><td class="num muted">$42,096</td><td class="num neg">−$48,835</td><td class="num muted">$25,397</td><td class="num neg">−$32,136</td>
+<td class="num">$(6,739)</td><td class="num muted">$354,398</td><td class="num muted">$785,806</td><td class="num">$1,133,465</td><td class="num muted">$1,083,827</td><td class="num pos">+$49,638</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Controllable Expenses</td>
+<td class="num">$30,433</td><td class="num muted">$34,319</td><td class="num pos">+$3,886</td><td class="num muted">$29,861</td><td class="num neg">−$572</td>
+<td class="num">$90,026</td><td class="num muted">$99,076</td><td class="num pos">+$9,050</td><td class="num muted">$86,271</td><td class="num neg">−$3,755</td>
+<td class="num">$90,026</td><td class="num muted">$97,997</td><td class="num muted">$217,808</td><td class="num">$405,830</td><td class="num muted">$405,337</td><td class="num neg">−$493</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Uncontrollable Expenses</td>
+<td class="num">$19,059</td><td class="num muted">$22,605</td><td class="num pos">+$3,546</td><td class="num muted">$22,733</td><td class="num pos">+$3,674</td>
+<td class="num">$54,851</td><td class="num muted">$60,024</td><td class="num pos">+$5,173</td><td class="num muted">$59,206</td><td class="num pos">+$4,356</td>
+<td class="num">$54,851</td><td class="num muted">$127,003</td><td class="num muted">$275,247</td><td class="num">$457,100</td><td class="num muted">$449,851</td><td class="num neg">−$7,249</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Operating Profit Before Debt Service</td>
+<td class="num">$(54,814)</td><td class="num muted">$(32,308)</td><td class="num neg">−$22,506</td><td class="num muted">$(42,113)</td><td class="num neg">−$12,701</td>
+<td class="num">$(151,615)</td><td class="num muted">$(117,004)</td><td class="num neg">−$34,611</td><td class="num muted">$(120,081)</td><td class="num neg">−$31,534</td>
+<td class="num">$(151,615)</td><td class="num muted">$129,398</td><td class="num muted">$292,752</td><td class="num">$270,535</td><td class="num muted">$228,638</td><td class="num pos">+$41,897</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Cash Flow</td>
+<td class="num">$(55,374)</td><td class="num muted">$(33,850)</td><td class="num neg">−$21,524</td><td class="num muted">$(44,285)</td><td class="num neg">−$11,089</td>
+<td class="num">$(157,917)</td><td class="num muted">$(120,918)</td><td class="num neg">−$36,999</td><td class="num muted">$(132,007)</td><td class="num neg">−$25,910</td>
+<td class="num">$(157,917)</td><td class="num muted">$118,252</td><td class="num muted">$269,495</td><td class="num">$229,830</td><td class="num muted">$181,496</td><td class="num pos">+$48,333</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="page" id="page-ant">
+<div class="banner">
+<div class="banner-row">
+<div class="banner-item"><span class="banner-label">March Revenue</span><span class="banner-value">$85,803</span><span class="banner-sub">Bud $91,607 · PY $90,311</span></div>
+<div class="banner-item"><span class="banner-label">Q1 Revenue</span><span class="banner-value">$371,949</span><span class="banner-sub">Bud $269,963 · PY $290,289</span></div>
+<div class="banner-item"><span class="banner-label">2026 Revenue (A/F/B)</span><span class="banner-value">$4,346,102</span><span class="banner-sub">PY $3,971,283 · Δ +$374,819</span></div>
+<div class="banner-item"><span class="banner-label">2026 NOI Outlook</span><span class="banner-value">$341,323</span><span class="banner-sub">PY $(15,106) · Δ +$356,430</span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Key Metrics · Anthology Events</div><div class="card-note">A/F/B = Actual (Jan–Mar) + Forecast (Apr–Jun) + Budget (Jul–Dec)</div></div>
+<div class="kpi-blocks">
+
+<div class="kpi-block">
+<div class="kpi-block-title">Revenue</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$85,803</div><div class="kpi-cell-sub">Bud $91,607 <span class="chip chip-neg">−$5,803</span></div><div class="kpi-cell-sub">PY $90,311 <span class="chip chip-neg">−$4,507</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$371,949</div><div class="kpi-cell-sub">Bud $269,963 <span class="chip chip-pos">+$101,986</span></div><div class="kpi-cell-sub">PY $290,289 <span class="chip chip-pos">+$81,660</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$4,346,102</div><div class="kpi-cell-sub">PY $3,971,283 <span class="chip chip-pos">+$374,819</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Operating Profit</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$(36,047)</div><div class="kpi-cell-sub">Bud $(32,154) <span class="chip chip-neg">−$3,893</span></div><div class="kpi-cell-sub">PY $(55,071) <span class="chip chip-pos">+$19,024</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$(29,978)</div><div class="kpi-cell-sub">Bud $(103,238) <span class="chip chip-pos">+$73,260</span></div><div class="kpi-cell-sub">PY $(140,892) <span class="chip chip-pos">+$110,914</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$1,838,992</div><div class="kpi-cell-sub">PY $1,507,118 <span class="chip chip-pos">+$331,874</span></div></div>
+</div>
+</div>
+
+
+<div class="kpi-block">
+<div class="kpi-block-title">Net Cash Flow</div>
+<div class="kpi-block-grid">
+<div class="kpi-cell"><div class="kpi-cell-label">March</div><div class="kpi-cell-value">$(97,222)</div><div class="kpi-cell-sub">Bud $(113,627) <span class="chip chip-pos">+$16,405</span></div><div class="kpi-cell-sub">PY $(133,369) <span class="chip chip-pos">+$36,147</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">Q1 YTD</div><div class="kpi-cell-value">$(268,754)</div><div class="kpi-cell-sub">Bud $(346,661) <span class="chip chip-pos">+$77,907</span></div><div class="kpi-cell-sub">PY $(437,809) <span class="chip chip-pos">+$169,055</span></div></div>
+<div class="kpi-cell"><div class="kpi-cell-label">2026 (A/F/B)</div><div class="kpi-cell-value">$259,943</div><div class="kpi-cell-sub">PY $(135,216) <span class="chip chip-pos">+$395,158</span></div></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="grid-2">
+<div class="card"><div class="card-head"><div class="card-title">Quarterly Revenue Profile · Anthology Events</div><div class="card-note">Q1 Actual · Q2 Forecast · Q3–Q4 Budget</div></div><div class="chart-wrap"><canvas id="qrev-ant"></canvas></div></div>
+<div class="card"><div class="card-head"><div class="card-title">Monthly Revenue — 2026 Full Year</div><div class="card-note">Dark blue = Actual · Mid blue = Forecast · Light grey = Budget</div></div><div class="chart-wrap"><canvas id="mrev-ant"></canvas></div></div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="card-title">Full P&amp;L · Anthology Events</div><div class="card-note">Favorable variances shown as positive (expense under-run = +)</div></div>
+<div class="table-wrap">
+<table class="data-table pnl-wide">
+<thead>
+<tr class="group-head">
+<th rowspan="2">Line Item</th>
+<th colspan="5" class="group">March 2026</th>
+<th colspan="5" class="group">Q1 2026 YTD</th>
+<th colspan="6" class="group">2026 Full Year (Act/For/Bud)</th>
+</tr>
+<tr>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Actual</th><th class="num muted">Budget</th><th class="num">Var to Bud</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+<th class="num">Act YTD</th><th class="num muted">Forecast</th><th class="num muted">Budget</th><th class="num">2026 Total</th><th class="num muted">Prior Yr</th><th class="num">Var to PY</th>
+</tr>
+</thead>
+<tbody><tr class="subtotal"><td class="pnl-label">Total Revenue</td>
+<td class="num">$85,803</td><td class="num muted">$91,607</td><td class="num neg">−$5,803</td><td class="num muted">$90,311</td><td class="num neg">−$4,507</td>
+<td class="num">$371,949</td><td class="num muted">$269,963</td><td class="num pos">+$101,986</td><td class="num muted">$290,289</td><td class="num pos">+$81,660</td>
+<td class="num">$371,949</td><td class="num muted">$1,207,682</td><td class="num muted">$2,766,471</td><td class="num">$4,346,102</td><td class="num muted">$3,971,283</td><td class="num pos">+$374,819</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Cost of Goods Sold</td>
+<td class="num">$12,337</td><td class="num muted">$11,954</td><td class="num neg">−$383</td><td class="num muted">$12,227</td><td class="num neg">−$110</td>
+<td class="num">$59,323</td><td class="num muted">$35,230</td><td class="num neg">−$24,094</td><td class="num muted">$54,816</td><td class="num neg">−$4,507</td>
+<td class="num">$59,323</td><td class="num muted">$192,088</td><td class="num muted">$361,019</td><td class="num">$612,430</td><td class="num muted">$535,561</td><td class="num neg">−$76,869</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Gross Profit</td>
+<td class="num">$73,466</td><td class="num muted">$79,652</td><td class="num neg">−$6,186</td><td class="num muted">$78,084</td><td class="num neg">−$4,618</td>
+<td class="num">$312,626</td><td class="num muted">$234,734</td><td class="num pos">+$77,892</td><td class="num muted">$235,472</td><td class="num pos">+$77,153</td>
+<td class="num">$312,626</td><td class="num muted">$1,015,594</td><td class="num muted">$2,405,452</td><td class="num">$3,733,672</td><td class="num muted">$3,435,722</td><td class="num pos">+$297,950</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Management Salaries & Wages</td>
+<td class="num">$75,360</td><td class="num muted">$72,962</td><td class="num neg">−$2,398</td><td class="num muted">$68,086</td><td class="num neg">−$7,274</td>
+<td class="num">$205,013</td><td class="num muted">$211,825</td><td class="num pos">+$6,812</td><td class="num muted">$201,655</td><td class="num neg">−$3,359</td>
+<td class="num">$205,013</td><td class="num muted">$257,679</td><td class="num muted">$433,064</td><td class="num">$895,757</td><td class="num muted">$877,113</td><td class="num neg">−$18,644</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Back of House Hourly Labor</td>
+<td class="num">$5,582</td><td class="num muted">$9,120</td><td class="num pos">+$3,538</td><td class="num muted">$14,801</td><td class="num pos">+$9,219</td>
+<td class="num">$32,107</td><td class="num muted">$30,800</td><td class="num neg">−$1,307</td><td class="num muted">$36,256</td><td class="num pos">+$4,149</td>
+<td class="num">$32,107</td><td class="num muted">$29,721</td><td class="num muted">$172,720</td><td class="num">$234,548</td><td class="num muted">$265,909</td><td class="num pos">+$31,361</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Front of House Hourly Labor</td>
+<td class="num">$10,592</td><td class="num muted">$13,480</td><td class="num pos">+$2,888</td><td class="num muted">$12,716</td><td class="num pos">+$2,125</td>
+<td class="num">$42,493</td><td class="num muted">$46,400</td><td class="num pos">+$3,907</td><td class="num muted">$38,941</td><td class="num neg">−$3,551</td>
+<td class="num">$42,493</td><td class="num muted">$115,097</td><td class="num muted">$284,480</td><td class="num">$442,070</td><td class="num muted">$399,600</td><td class="num neg">−$42,470</td>
+</tr>
+<tr class=""><td class="pnl-label">Total Payroll Taxes & Benefits</td>
+<td class="num">$15,591</td><td class="num muted">$13,856</td><td class="num neg">−$1,735</td><td class="num muted">$19,103</td><td class="num pos">+$3,512</td>
+<td class="num">$51,588</td><td class="num muted">$41,908</td><td class="num neg">−$9,679</td><td class="num muted">$61,629</td><td class="num pos">+$10,041</td>
+<td class="num">$51,588</td><td class="num muted">$53,995</td><td class="num muted">$129,088</td><td class="num">$234,671</td><td class="num muted">$242,729</td><td class="num pos">+$8,058</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Labor Cost</td>
+<td class="num">$109,514</td><td class="num muted">$111,807</td><td class="num pos">+$2,293</td><td class="num muted">$133,155</td><td class="num pos">+$23,642</td>
+<td class="num">$342,604</td><td class="num muted">$337,972</td><td class="num neg">−$4,633</td><td class="num muted">$376,364</td><td class="num pos">+$33,760</td>
+<td class="num">$342,604</td><td class="num muted">$460,600</td><td class="num muted">$1,091,476</td><td class="num">$1,894,680</td><td class="num muted">$1,928,604</td><td class="num pos">+$33,924</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Prime Cost</td>
+<td class="num">$121,851</td><td class="num muted">$123,761</td><td class="num pos">+$1,910</td><td class="num muted">$145,382</td><td class="num pos">+$23,531</td>
+<td class="num">$401,927</td><td class="num muted">$373,201</td><td class="num neg">−$28,726</td><td class="num muted">$431,180</td><td class="num pos">+$29,253</td>
+<td class="num">$401,927</td><td class="num muted">$652,688</td><td class="num muted">$1,452,496</td><td class="num">$2,507,110</td><td class="num muted">$2,464,165</td><td class="num neg">−$42,945</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Operating Profit</td>
+<td class="num">$(36,047)</td><td class="num muted">$(32,154)</td><td class="num neg">−$3,893</td><td class="num muted">$(55,071)</td><td class="num pos">+$19,024</td>
+<td class="num">$(29,978)</td><td class="num muted">$(103,238)</td><td class="num pos">+$73,260</td><td class="num muted">$(140,892)</td><td class="num pos">+$110,914</td>
+<td class="num">$(29,978)</td><td class="num muted">$554,995</td><td class="num muted">$1,313,975</td><td class="num">$1,838,992</td><td class="num muted">$1,507,118</td><td class="num pos">+$331,874</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Controllable Expenses</td>
+<td class="num">$40,094</td><td class="num muted">$57,147</td><td class="num pos">+$17,053</td><td class="num muted">$49,860</td><td class="num pos">+$9,766</td>
+<td class="num">$147,953</td><td class="num muted">$171,270</td><td class="num pos">+$23,317</td><td class="num muted">$161,910</td><td class="num pos">+$13,958</td>
+<td class="num">$147,953</td><td class="num muted">$193,837</td><td class="num muted">$421,582</td><td class="num">$763,372</td><td class="num muted">$820,209</td><td class="num pos">+$56,836</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Total Uncontrollable Expenses</td>
+<td class="num">$20,667</td><td class="num muted">$22,677</td><td class="num pos">+$2,009</td><td class="num muted">$26,551</td><td class="num pos">+$5,883</td>
+<td class="num">$81,532</td><td class="num muted">$67,294</td><td class="num neg">−$14,238</td><td class="num muted">$80,142</td><td class="num neg">−$1,390</td>
+<td class="num">$81,532</td><td class="num muted">$180,854</td><td class="num muted">$471,910</td><td class="num">$734,296</td><td class="num muted">$702,016</td><td class="num neg">−$32,280</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Operating Profit Before Debt Service</td>
+<td class="num">$(96,809)</td><td class="num muted">$(111,978)</td><td class="num pos">+$15,170</td><td class="num muted">$(131,482)</td><td class="num pos">+$34,674</td>
+<td class="num">$(259,463)</td><td class="num muted">$(341,802)</td><td class="num pos">+$82,339</td><td class="num muted">$(382,944)</td><td class="num pos">+$123,481</td>
+<td class="num">$(259,463)</td><td class="num muted">$180,303</td><td class="num muted">$420,483</td><td class="num">$341,323</td><td class="num muted">$(15,106)</td><td class="num pos">+$356,430</td>
+</tr>
+<tr class="subtotal"><td class="pnl-label">Net Cash Flow</td>
+<td class="num">$(97,222)</td><td class="num muted">$(113,627)</td><td class="num pos">+$16,405</td><td class="num muted">$(133,369)</td><td class="num pos">+$36,147</td>
+<td class="num">$(268,754)</td><td class="num muted">$(346,661)</td><td class="num pos">+$77,907</td><td class="num muted">$(437,809)</td><td class="num pos">+$169,055</td>
+<td class="num">$(268,754)</td><td class="num muted">$158,010</td><td class="num muted">$370,687</td><td class="num">$259,943</td><td class="num muted">$(135,216)</td><td class="num pos">+$395,158</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#52525B';
+const P = { ink:'#0F172A', accent:'#2563EB', gold:'#94A3B8', blue1:'#1E3A8A', blue2:'#3B82F6', blue3:'#93C5FD', slate1:'#475569', slate2:'#94A3B8', slate3:'#CBD5E1', grid:'#E4E4E7' };
+
+const qdata = {"bt": {"q1": 2985797.87, "q2": 4532320.2431875, "q3": 5449727.59, "q4": 4820565.18, "q1_op": 601249.9299999997, "q2_op": 1774583.2500736448, "q3_op": 2338213.6399999997, "q4_op": 1889943.98}, "lsd": {"q1": 1412697.95, "q2": 1655535.1945875, "q3": 1712686.98, "q4": 2067209.56, "q1_op": 335136.5899999998, "q2_op": 548947.2749435166, "q3_op": 560974.5899999999, "q4_op": 798154.8599999999}, "hs": {"q1": 984514.57, "q2": 982424.5904999999, "q3": 1019412.73, "q4": 1154073.5, "q1_op": 302830.36, "q2_op": 316243.52833488147, "q3_op": 343281.51, "q4_op": 425965.25}, "kam": {"q1": 216636.22, "q2": 686678.2335, "q3": 1045060.8499999999, "q4": 505378.26, "q1_op": -6738.740000000005, "q2_op": 354397.80858431663, "q3_op": 578051.5899999999, "q4_op": 207754.42999999996}, "ant": {"q1": 371949.13, "q2": 1207682.2246, "q3": 1672567.0299999998, "q4": 1093903.86, "q1_op": -29978.280000000013, "q2_op": 554994.6382109299, "q3_op": 855905.9499999997, "q4_op": 458069.44000000006}};
+const mdata = {"bt": [1070887.63, 978212.9600000001, 936697.28, 1213419.1972999999, 1652307.2775, 1666593.7683875, 1743587.91, 1828149.2999999998, 1877990.3800000001, 1841977.9900000002, 1427870.87, 1550716.3199999998], "lsd": [469058.63999999996, 487944.91, 455694.39999999997, 498592.4802, 571329.7355000001, 585612.9788875, 545619.28, 543062.3899999999, 624005.31, 632577.5800000001, 621933.5199999999, 812698.4599999998], "hs": [344126.00999999995, 317759.13, 322629.43000000005, 319850.57649999997, 331287.007, 331287.007, 330477.72000000003, 363324.18, 325610.83, 374990.62, 381282.53, 397800.35], "kam": [70220.95, 73845.27, 72570.0, 154312.776, 266181.105, 266184.3525, 332896.6699999999, 341206.67, 370957.51, 283863.98000000004, 98940.16999999997, 122574.11], "ant": [187482.03, 98663.65000000001, 85803.44999999998, 240663.3646, 483509.43, 483509.43, 534594.24, 580556.0599999999, 557416.73, 550545.81, 325714.65, 217643.4]};
+
+const built = {};
+function buildCharts(tab) {
+  if (built[tab]) return;
+  built[tab] = true;
+  const q = qdata[tab];
+  const m = mdata[tab];
+
+  new Chart(document.getElementById('qrev-'+tab), {
+    type: 'bar',
+    data: { labels: ['Q1 Actual','Q2 Forecast','Q3 Budget','Q4 Budget'],
+      datasets: [{ label: 'Revenue', data: [q.q1, q.q2, q.q3, q.q4],
+        backgroundColor: [P.ink, P.blue1, P.slate1, P.slate2], borderRadius: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: {display: false} },
+      scales: { y: { grid: {color: P.grid}, border: {display: false}, ticks: { callback: v => '$'+(v/1000).toFixed(0)+'K' } }, x: { grid: {display:false} } }
+    }
+  });
+
+  new Chart(document.getElementById('mrev-'+tab), {
+    type: 'bar',
+    data: { labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets: [{ label: 'Revenue', data: m,
+        backgroundColor: m.map((_,i) => i < 3 ? P.ink : (i < 6 ? P.blue1 : P.slate2)), borderRadius: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: {display: false} },
+      scales: { y: { grid: {color: P.grid}, border: {display: false}, ticks: { callback: v => '$'+(v/1000).toFixed(0)+'K' } }, x: { grid: {display:false} } }
+    }
+  });
+}
+
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  setTimeout(() => buildCharts(id), 40);
+}
+window.addEventListener('load', () => {
+  document.getElementById('page-bt').classList.add('active');
+  buildCharts('bt');
+});
+</script>
+</body></html>
