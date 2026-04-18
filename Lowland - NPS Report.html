@@ -143,6 +143,28 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 /* Active state for preset buttons */
 .filter-btn.preset-active { background: #2BA6BB !important; color: #fff !important; border-color: #2BA6BB !important; }
 
+
+/* Hide skill's default footer (wraps narrow when new tabs render) */
+.footer { display: none !important; }
+/* Google Reviews view styling */
+.grv-card { background: #fff; border: 1px solid #ece8e0; border-radius: 10px;
+  padding: 1rem 1.15rem; box-shadow: 0 1px 3px rgba(0,0,0,.06); position: relative; overflow: hidden; }
+.grv-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.grv-card.grv-positive::before { background: #2BA6BB; }
+.grv-card.grv-mixed::before { background: #D8CFC4; }
+.grv-card.grv-negative::before { background: #ef4444; }
+.grv-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.55rem; }
+.grv-stars { font-size: 0.9rem; letter-spacing: 1px; color: #2BA6BB; }
+.grv-card.grv-negative .grv-stars { color: #ef4444; }
+.grv-card.grv-mixed .grv-stars { color: #D8CFC4; }
+.grv-date { font-size: 0.72rem; color: #6b7280; font-weight: 500; }
+.grv-text { font-size: 0.83rem; line-height: 1.55; color: #374151; font-style: italic; margin-bottom: 0.6rem; }
+.grv-reply { background: rgba(43,166,187,0.05); border-left: 2px solid #2BA6BB;
+  padding: 0.55rem 0.75rem; margin-top: 0.55rem; border-radius: 4px; }
+.grv-reply-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em;
+  font-weight: 700; color: #2BA6BB; margin-bottom: 0.3rem; }
+.grv-reply-text { font-size: 0.78rem; line-height: 1.5; color: #374151; }
+
 </style>
 </head>
 <body>
@@ -172,7 +194,7 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
     <div class="sidebar-item" data-view="comments" onclick="switchView('comments')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Guest Comments
-    </div>
+    </div><div class="sidebar-item" data-view="google" onclick="switchView('google')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>Google Reviews</div>
   </div>
   <div style="display:none"><div class="sidebar-section">
     <div class="sidebar-section-label">Guests</div>
@@ -770,8 +792,8 @@ function populateDropdowns(prefix){var f=document.getElementById(prefix+'-from')
 function resetFilter(view){var prefix=view==='surveys'?'survey':view==='ratings'?'rating':view==='servers'?'server':'comment';document.getElementById(prefix+'-from').value=allMonths[0];document.getElementById(prefix+'-to').value=allMonths[allMonths.length-1];applyFilter(view)}
 function updateNpsScorecard(months){var p=sum(slice(RAW.nps.promoters,months)),pa=sum(slice(RAW.nps.passives,months)),d=sum(slice(RAW.nps.detractors,months)),t=p+pa+d;var nps=t?Math.round((p/t-d/t)*100):0;var pp=t?(p/t*100).toFixed(1):'0',ppa=t?(pa/t*100).toFixed(1):'0',pd=t?(d/t*100).toFixed(1):'0';document.getElementById('nps-score').textContent=nps;document.getElementById('nps-score').style.color=nps>=60?'var(--green)':nps>=40?'var(--blue)':'var(--red)';document.getElementById('nps-bar-p').style.width=pp+'%';document.getElementById('nps-bar-pa').style.width=ppa+'%';document.getElementById('nps-bar-d').style.width=pd+'%';document.getElementById('nps-promo-pct').textContent=pp+'%';document.getElementById('nps-pass-pct').textContent=ppa+'%';document.getElementById('nps-det-pct').textContent=pd+'%';document.getElementById('nps-total-resp').textContent=t;document.getElementById('nps-promo-count').textContent=p;document.getElementById('nps-pass-count').textContent=pa;document.getElementById('nps-det-count').textContent=d}
 function buildSurveyCharts(months){var labels=months.map(fmtLabel),o=slice(RAW.survey.overall,months),s=slice(RAW.survey.service,months),f=slice(RAW.survey.food,months),a=slice(RAW.survey.atmos,months),n=slice(RAW.survey.nps,months),v=slice(RAW.survey.volume,months);document.getElementById('skpi-overall').textContent=avg(o);document.getElementById('skpi-service').textContent=avg(s);document.getElementById('skpi-food').textContent=avg(f);document.getElementById('skpi-atmos').textContent=avg(a);document.getElementById('skpi-count').textContent=sum(v);updateNpsScorecard(months);destroyChart('surveyMonthlyScores');charts['surveyMonthlyScores']=new Chart(document.getElementById('surveyMonthlyScores'),{type:'line',data:{labels:labels,datasets:[{label:'Overall',data:o,borderColor:'#212931',backgroundColor:'rgba(33,41,49,.06)',fill:true,tension:.35,pointRadius:3,borderWidth:2},trendDataset(o,'rgba(33,41,49,.45)','Overall Trend'),{label:'Service',data:s,borderColor:'#2BA6BB',tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(s,'rgba(43,166,187,.4)','Service Trend'),{label:'Food',data:f,borderColor:'#405766',tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(f,'rgba(64,87,102,.4)','Food Trend'),{label:'Atmosphere',data:a,borderColor:'#BCC8BE',tension:.35,pointRadius:2,borderWidth:1.5,borderDash:[4,3]},trendDataset(a,'rgba(188,200,190,.35)','Atmos Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14,filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyNpsChart');charts['surveyNpsChart']=new Chart(document.getElementById('surveyNpsChart'),{type:'bar',data:{labels:labels,datasets:[{label:'NPS',data:n,backgroundColor:n.map(function(v){return v>=75?'#2BA6BB':v>=65?'#405766':'#D8CFC4'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(n,'rgba(43,166,187,.6)','NPS Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='NPS'}}}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyVolumeChart');charts['surveyVolumeChart']=new Chart(document.getElementById('surveyVolumeChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Surveys',data:v,backgroundColor:'rgba(43,166,187,.35)',borderColor:'#2BA6BB',borderWidth:1,borderRadius:6,maxBarThickness:32,order:2},trendDataset(v,'rgba(59,130,246,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Surveys'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}})}
-function buildRatingCharts(months){var labels=months.map(fmtLabel),ma=slice(RAW.rating.avg,months),mv=slice(RAW.rating.vol,months),p5=slice(RAW.rating.pct5,months),p1=slice(RAW.rating.pct1,months);var dr1=sum(slice(RAW.rating.r1,months)),dr2=sum(slice(RAW.rating.r2,months)),dr3=sum(slice(RAW.rating.r3,months)),dr4=sum(slice(RAW.rating.r4,months)),dr5=sum(slice(RAW.rating.r5,months));var total=dr1+dr2+dr3+dr4+dr5,weighted=dr1+dr2*2+dr3*3+dr4*4+dr5*5;var filtAvg=total?(weighted/total).toFixed(2):'0',filt5=total?(dr5/total*100).toFixed(1):'0',filt12=total?((dr1+dr2)/total*100).toFixed(1):'0';document.getElementById('rkpi-avg').textContent=filtAvg;document.getElementById('rkpi-5star').textContent=filt5+'%';document.getElementById('rkpi-5count').textContent=dr5+' of '+total;document.getElementById('rkpi-12star').textContent=filt12+'%';document.getElementById('rkpi-negcount').textContent=(dr1+dr2)+' negative';document.getElementById('rkpi-total').textContent=total;destroyChart('ratingMonthlyAvg');charts['ratingMonthlyAvg']=new Chart(document.getElementById('ratingMonthlyAvg'),{type:'line',data:{labels:labels,datasets:[{label:'Avg Rating',data:ma,borderColor:'#2BA6BB',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.35,pointBackgroundColor:'#3b82f6',pointRadius:3,borderWidth:2},trendDataset(ma,'rgba(59,130,246,.5)','Rating Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Avg Rating'}}}},scales:{y:{min:4.2,max:5.0,ticks:{stepSize:.1},grid:{color:'#f3f4f6'}}}}});destroyChart('ratingMonthlyVol');charts['ratingMonthlyVol']=new Chart(document.getElementById('ratingMonthlyVol'),{type:'bar',data:{labels:labels,datasets:[{label:'Ratings',data:mv,backgroundColor:mv.map(function(v){return v>=160?'rgba(59,130,246,.7)':'rgba(59,130,246,.35)'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(mv,'rgba(59,130,246,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Ratings'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('ratingDistChart');charts['ratingDistChart']=new Chart(document.getElementById('ratingDistChart'),{type:'doughnut',data:{labels:['1 Star','2 Star','3 Star','4 Star','5 Star'],datasets:[{data:[dr1,dr2,dr3,dr4,dr5],backgroundColor:['#ef4444','#f59e0b','#fbbf24','#3b82f6','#10b981'],borderWidth:0}]},options:{responsive:true,cutout:'55%',plugins:{legend:{position:'right',labels:{padding:14,usePointStyle:true,pointStyle:'circle'}}}}});destroyChart('ratingStarPct');charts['ratingStarPct']=new Chart(document.getElementById('ratingStarPct'),{type:'line',data:{labels:labels,datasets:[{label:'5-Star %',data:p5,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p5,'rgba(16,185,129,.4)','5-Star Trend'),{label:'1-Star %',data:p1,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p1,'rgba(239,68,68,.4)','1-Star Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}}}}});var qmap={};months.forEach(function(m){var parts=m.split('-');var q=parts[0]+'-Q'+Math.ceil(parseInt(parts[1])/3);if(!qmap[q])qmap[q]={w:0,t:0};var t=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)+(RAW.rating.r3[m]||0)+(RAW.rating.r4[m]||0)+(RAW.rating.r5[m]||0);var w=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)*2+(RAW.rating.r3[m]||0)*3+(RAW.rating.r4[m]||0)*4+(RAW.rating.r5[m]||0)*5;qmap[q].t+=t;qmap[q].w+=w});var ql=Object.keys(qmap).sort(),qa=ql.map(function(q){return qmap[q].t?+(qmap[q].w/qmap[q].t).toFixed(2):0}),qt=ql.map(function(q){return qmap[q].t});destroyChart('ratingQuarterChart');charts['ratingQuarterChart']=new Chart(document.getElementById('ratingQuarterChart'),{type:'bar',data:{labels:ql,datasets:[{label:'Avg Rating',data:qa,backgroundColor:qa.map(function(v,i){return i===qa.indexOf(Math.max.apply(null,qa))?'rgba(16,185,129,.6)':v===Math.min.apply(null,qa)?'rgba(239,68,68,.5)':'rgba(59,130,246,.45)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(qa,'rgba(59,130,246,.5)','Avg Trend'),{label:'Total Ratings',data:qt,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{min:4.3,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,qt)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Volume',font:{size:10}}}}}})}
-function buildStaticCharts(){destroyChart('surveyDowChart');charts['surveyDowChart']=new Chart(document.getElementById('surveyDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Overall',data:RAW.survey.dow,backgroundColor:RAW.survey.dow.map(function(v){return v<90?'rgba(239,68,68,.6)':'rgba(59,130,246,.45)'}),borderRadius:8,maxBarThickness:40,order:2},trendDataset(RAW.survey.dow,'rgba(59,130,246,.5)','DOW Trend')]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyRecDist');charts['surveyRecDist']=new Chart(document.getElementById('surveyRecDist'),{type:'bar',data:{labels:['1','2','3','4','5','6','7','8','9','10'],datasets:[{label:'Responses',data:RAW.survey.recDist,backgroundColor:['#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981','#10b981'],borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#f3f4f6'}},x:{title:{display:true,text:'Recommend Score',font:{size:11}}}}}});destroyChart('ratingDowChart');charts['ratingDowChart']=new Chart(document.getElementById('ratingDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Rating',data:RAW.rating.dowAvg,backgroundColor:RAW.rating.dowAvg.map(function(v){return v<Math.min.apply(null,RAW.rating.dowAvg)+0.05?'rgba(239,68,68,.55)':'rgba(59,130,246,.4)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(RAW.rating.dowAvg,'rgba(59,130,246,.5)','DOW Trend'),{label:'Avg Volume/Day',data:RAW.rating.dowVol,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{min:4.2,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,RAW.rating.dowVol)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Vol/Day',font:{size:10}}}}}})}
+function buildRatingCharts(months){var labels=months.map(fmtLabel),ma=slice(RAW.rating.avg,months),mv=slice(RAW.rating.vol,months),p5=slice(RAW.rating.pct5,months),p1=slice(RAW.rating.pct1,months);var dr1=sum(slice(RAW.rating.r1,months)),dr2=sum(slice(RAW.rating.r2,months)),dr3=sum(slice(RAW.rating.r3,months)),dr4=sum(slice(RAW.rating.r4,months)),dr5=sum(slice(RAW.rating.r5,months));var total=dr1+dr2+dr3+dr4+dr5,weighted=dr1+dr2*2+dr3*3+dr4*4+dr5*5;var filtAvg=total?(weighted/total).toFixed(2):'0',filt5=total?(dr5/total*100).toFixed(1):'0',filt12=total?((dr1+dr2)/total*100).toFixed(1):'0';document.getElementById('rkpi-avg').textContent=filtAvg;document.getElementById('rkpi-5star').textContent=filt5+'%';document.getElementById('rkpi-5count').textContent=dr5+' of '+total;document.getElementById('rkpi-12star').textContent=filt12+'%';document.getElementById('rkpi-negcount').textContent=(dr1+dr2)+' negative';document.getElementById('rkpi-total').textContent=total;destroyChart('ratingMonthlyAvg');charts['ratingMonthlyAvg']=new Chart(document.getElementById('ratingMonthlyAvg'),{type:'line',data:{labels:labels,datasets:[{label:'Avg Rating',data:ma,borderColor:'#2BA6BB',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.35,pointBackgroundColor:'#3b82f6',pointRadius:3,borderWidth:2},trendDataset(ma,'rgba(59,130,246,.5)','Rating Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Avg Rating'}}}},scales:{y:{beginAtZero:false,max:5.0,ticks:{stepSize:.1},grid:{color:'#f3f4f6'}}}}});destroyChart('ratingMonthlyVol');charts['ratingMonthlyVol']=new Chart(document.getElementById('ratingMonthlyVol'),{type:'bar',data:{labels:labels,datasets:[{label:'Ratings',data:mv,backgroundColor:mv.map(function(v){return v>=160?'rgba(59,130,246,.7)':'rgba(59,130,246,.35)'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(mv,'rgba(59,130,246,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Ratings'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('ratingDistChart');charts['ratingDistChart']=new Chart(document.getElementById('ratingDistChart'),{type:'doughnut',data:{labels:['1 Star','2 Star','3 Star','4 Star','5 Star'],datasets:[{data:[dr1,dr2,dr3,dr4,dr5],backgroundColor:['#ef4444','#f59e0b','#fbbf24','#3b82f6','#10b981'],borderWidth:0}]},options:{responsive:true,cutout:'55%',plugins:{legend:{position:'right',labels:{padding:14,usePointStyle:true,pointStyle:'circle'}}}}});destroyChart('ratingStarPct');charts['ratingStarPct']=new Chart(document.getElementById('ratingStarPct'),{type:'line',data:{labels:labels,datasets:[{label:'5-Star %',data:p5,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p5,'rgba(16,185,129,.4)','5-Star Trend'),{label:'1-Star %',data:p1,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p1,'rgba(239,68,68,.4)','1-Star Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}}}}});var qmap={};months.forEach(function(m){var parts=m.split('-');var q=parts[0]+'-Q'+Math.ceil(parseInt(parts[1])/3);if(!qmap[q])qmap[q]={w:0,t:0};var t=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)+(RAW.rating.r3[m]||0)+(RAW.rating.r4[m]||0)+(RAW.rating.r5[m]||0);var w=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)*2+(RAW.rating.r3[m]||0)*3+(RAW.rating.r4[m]||0)*4+(RAW.rating.r5[m]||0)*5;qmap[q].t+=t;qmap[q].w+=w});var ql=Object.keys(qmap).sort(),qa=ql.map(function(q){return qmap[q].t?+(qmap[q].w/qmap[q].t).toFixed(2):0}),qt=ql.map(function(q){return qmap[q].t});destroyChart('ratingQuarterChart');charts['ratingQuarterChart']=new Chart(document.getElementById('ratingQuarterChart'),{type:'bar',data:{labels:ql,datasets:[{label:'Avg Rating',data:qa,backgroundColor:qa.map(function(v,i){return i===qa.indexOf(Math.max.apply(null,qa))?'rgba(16,185,129,.6)':v===Math.min.apply(null,qa)?'rgba(239,68,68,.5)':'rgba(59,130,246,.45)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(qa,'rgba(59,130,246,.5)','Avg Trend'),{label:'Total Ratings',data:qt,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,qt)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Volume',font:{size:10}}}}}})}
+function buildStaticCharts(){destroyChart('surveyDowChart');charts['surveyDowChart']=new Chart(document.getElementById('surveyDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Overall',data:RAW.survey.dow,backgroundColor:RAW.survey.dow.map(function(v){return v<90?'rgba(239,68,68,.6)':'rgba(59,130,246,.45)'}),borderRadius:8,maxBarThickness:40,order:2},trendDataset(RAW.survey.dow,'rgba(59,130,246,.5)','DOW Trend')]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyRecDist');charts['surveyRecDist']=new Chart(document.getElementById('surveyRecDist'),{type:'bar',data:{labels:['1','2','3','4','5','6','7','8','9','10'],datasets:[{label:'Responses',data:RAW.survey.recDist,backgroundColor:['#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981','#10b981'],borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#f3f4f6'}},x:{title:{display:true,text:'Recommend Score',font:{size:11}}}}}});destroyChart('ratingDowChart');charts['ratingDowChart']=new Chart(document.getElementById('ratingDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Rating',data:RAW.rating.dowAvg,backgroundColor:RAW.rating.dowAvg.map(function(v){return v<Math.min.apply(null,RAW.rating.dowAvg)+0.05?'rgba(239,68,68,.55)':'rgba(59,130,246,.4)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(RAW.rating.dowAvg,'rgba(59,130,246,.5)','DOW Trend'),{label:'Avg Volume/Day',data:RAW.rating.dowVol,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,RAW.rating.dowVol)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Vol/Day',font:{size:10}}}}}})}
 function filterComments(months){var from=months[0],to=months[months.length-1];var c=0;document.querySelectorAll('#view-comments .comment-card').forEach(function(card){var meta=card.querySelector('.comment-meta span').textContent;var d=meta.match(/([A-Z][a-z]{2}) (\d{2}), (\d{4})/);if(d){var mm={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};var ym=d[3]+'-'+mm[d[1]];var show=ym>=from&&ym<=to;card.style.display=show?'':'none';if(show)c++}});document.getElementById('comment-count-badge').textContent=c+' Comments shown'}
 function filterServers(months){var from=months[0],to=months[months.length-1];document.getElementById('server-period').textContent=fmtMonthFull(from)+' \u2013 '+fmtMonthFull(to);var sm=RAW.serverMonthly,results=[];for(var name in sm){var scores=[];for(var i=0;i<months.length;i++){var m=months[i];if(sm[name][m]!==undefined&&sm[name][m]!==null)scores.push(sm[name][m])}if(scores.length>=3){var a=+(scores.reduce(function(x,y){return x+y},0)/scores.length).toFixed(1);results.push({name:name,avg:a,min:Math.min.apply(null,scores),max:Math.max.apply(null,scores),months:scores.length})}}results.sort(function(a,b){return b.avg-a.avg});var top=results.slice(0,10),bottom=results.slice(-10).sort(function(a,b){return a.avg-b.avg});function renderRows(list,colorFn){var h='';for(var i=0;i<list.length;i++){var s=list[i],c=colorFn(s.avg);h+='<tr><td style="font-weight:500">'+s.name+'</td><td style="color:'+c+';font-weight:600">'+s.avg+'</td><td style="color:#6b7280">'+s.min+'\u2013'+s.max+'</td><td>'+s.months+'</td><td><div class="bar-bg"><div class="bar-fill" style="width:'+s.avg+'%;background:'+c+'"></div></div></td></tr>'}return h}document.getElementById('top-server-tbody').innerHTML=renderRows(top,function(a){return a>=97?'#10b981':'#3b82f6'});document.getElementById('bottom-server-tbody').innerHTML=renderRows(bottom,function(a){return a<90?'#ef4444':'#f59e0b'});document.getElementById('server-top-count').textContent=top.length+' servers';document.getElementById('server-bottom-count').textContent=bottom.length+' servers'}
 function applyFilter(view){var prefix=view==='surveys'?'survey':view==='ratings'?'rating':view==='servers'?'server':'comment';var months=getFilteredMonths(prefix);if(months.length===0)return;if(view==='surveys')buildSurveyCharts(months);else if(view==='ratings')buildRatingCharts(months);else if(view==='comments')filterComments(months);else if(view==='servers')filterServers(months)}
@@ -781,6 +803,63 @@ function filterGuestInfo(){var f=document.getElementById('gi-from').value,t=docu
 function resetGiFilter(){if(!window._giMonths||!window._giMonths.length)return;document.getElementById('gi-from').value=window._giMonths[0];document.getElementById('gi-to').value=window._giMonths[window._giMonths.length-1];filterGuestInfo()}
 function buildPaceCharts(){var el=document.getElementById('paceDailyChart');if(!el)return;var labels=[],dinner=[],lunch=[],brunch=[],reserved=[],walkin=[],nsDow=[];destroyChart('paceDailyChart');charts['paceDailyChart']=new Chart(el,{type:'bar',data:{labels:labels,datasets:[{label:'Dinner',data:dinner,backgroundColor:'rgba(59,130,246,.65)',borderRadius:4,maxBarThickness:28},{label:'Lunch',data:lunch,backgroundColor:'rgba(16,185,129,.55)',borderRadius:4,maxBarThickness:28},{label:'Brunch',data:brunch,backgroundColor:'rgba(245,158,11,.5)',borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('paceMixChart');charts['paceMixChart']=new Chart(document.getElementById('paceMixChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Reserved',data:reserved,backgroundColor:'rgba(59,130,246,.55)',borderRadius:4,maxBarThickness:28},{label:'Walk-in',data:walkin,backgroundColor:'rgba(139,92,246,.5)',borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('paceNoshowChart');charts['paceNoshowChart']=new Chart(document.getElementById('paceNoshowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'No-Show Rate %',data:nsDow,backgroundColor:nsDow.map(function(v){return v>10?'rgba(239,68,68,.6)':v>5?'rgba(245,158,11,.5)':'rgba(16,185,129,.45)'}),borderRadius:8,maxBarThickness:40}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}},x:{grid:{display:false}}}}})}
 ['survey','rating','server','comment'].forEach(populateDropdowns);buildSurveyCharts(allMonths);buildRatingCharts(allMonths);buildStaticCharts();filterServers(allMonths);buildGuestInfoCharts();initGiFilters();buildPaceCharts();
+
+// --- Method Co dynamic Y-axis plugin ---
+// Ensures every chart's Y axis tightly fits its data (no clipping, no wasted
+// whitespace). Respects the semantics of the scale type:
+//   - Percentage / score scale (max<=100): pad ±5 units, snap to nearest 5,
+//     stay within 0-100
+//   - Star rating scale (max<=5): pad ±0.2, snap to 0.1, stay within 0-5
+//   - Bar/volume charts with beginAtZero:true: untouched
+(function(){
+  if (typeof Chart === 'undefined') return;
+  if (Chart.__methodDynamicRegistered) return;
+  Chart.__methodDynamicRegistered = true;
+  var plugin = {
+    id: 'methodDynamicYRange',
+    beforeUpdate: function(chart) {
+      var opts = chart.options || {};
+      var ys = opts.scales && opts.scales.y;
+      if (!ys) return;
+      if (ys.beginAtZero === true) return; // volume/count bars stay at 0
+
+      // Collect numeric Y values across all datasets
+      var values = [];
+      (chart.data.datasets || []).forEach(function(ds) {
+        (ds.data || []).forEach(function(v) {
+          if (v == null) return;
+          var n = typeof v === 'number' ? v : parseFloat(v);
+          if (!isNaN(n)) values.push(n);
+        });
+      });
+      if (!values.length) return;
+      var dMin = Math.min.apply(null, values);
+      var dMax = Math.max.apply(null, values);
+      if (dMin === dMax) { dMin -= 1; dMax += 1; }
+
+      var originalMax = ys.max;
+      var newMin, newMax;
+
+      if (typeof originalMax === 'number' && originalMax > 5 && originalMax <= 100) {
+        // Score/percentage scale (0-100)
+        newMin = Math.max(0, Math.floor((dMin - 5) / 5) * 5);
+        newMax = Math.min(100, Math.ceil((dMax + 3) / 5) * 5);
+      } else if (typeof originalMax === 'number' && originalMax <= 5) {
+        // Star rating scale (0-5)
+        newMin = Math.max(0, Math.floor((dMin - 0.2) * 10) / 10);
+        newMax = Math.min(5, Math.ceil((dMax + 0.2) * 10) / 10);
+      } else {
+        // Freeform (no max hint) — generic padding
+        var pad = Math.max((dMax - dMin) * 0.1, 1);
+        newMin = Math.floor(dMin - pad);
+        newMax = Math.ceil(dMax + pad);
+      }
+      ys.min = newMin;
+      ys.max = newMax;
+    }
+  };
+  Chart.register(plugin);
+})();
 
 // --- Method Co trailing-period preset helpers ---
 function _viewPrefix(view) {
@@ -1257,5 +1336,333 @@ function setTrailing7d(view) { setTrailingDays(view, 7); }
 
 </script>
 <div class="method-footer-brand">Method Co — Confidential</div>
+
+<section class="view-section" id="view-google">
+  <div class="page-header">
+    <h1>Google Reviews</h1>
+  </div>
+
+  <div class="filter-bar">
+    <label>Period:</label>
+    <select id="google-from" style="display:none"></select>
+    <select id="google-to" onchange="document.getElementById('google-from').value=this.value;filterGoogle('single');">
+      <option value="2022-11">November 2022</option><option value="2022-12">December 2022</option><option value="2023-01">January 2023</option><option value="2023-02">February 2023</option><option value="2023-03">March 2023</option><option value="2023-04">April 2023</option><option value="2023-05">May 2023</option><option value="2023-06">June 2023</option><option value="2023-07">July 2023</option><option value="2023-11">November 2023</option><option value="2023-12">December 2023</option><option value="2024-01">January 2024</option><option value="2024-02">February 2024</option><option value="2024-03">March 2024</option><option value="2024-04">April 2024</option><option value="2024-05">May 2024</option><option value="2024-06">June 2024</option><option value="2024-07">July 2024</option><option value="2024-08">August 2024</option><option value="2024-09">September 2024</option><option value="2024-10">October 2024</option><option value="2024-11">November 2024</option><option value="2024-12">December 2024</option><option value="2025-01">January 2025</option><option value="2025-02">February 2025</option><option value="2025-03">March 2025</option><option value="2025-04">April 2025</option><option value="2025-05">May 2025</option><option value="2025-06">June 2025</option><option value="2025-07">July 2025</option><option value="2025-08">August 2025</option><option value="2025-09">September 2025</option><option value="2025-10">October 2025</option><option value="2025-11">November 2025</option><option value="2025-12">December 2025</option><option value="2026-01">January 2026</option><option value="2026-02">February 2026</option><option value="2026-03">March 2026</option><option value="2026-04">April 2026</option>
+    </select>
+    <div class="filter-sep"></div>
+    <button class="filter-btn" data-preset="7d" onclick="filterGoogle('days', 7)">Trail 7d</button>
+    <button class="filter-btn" data-preset="30d" onclick="filterGoogle('days', 30)">Trail 30d</button>
+    <button class="filter-btn" data-preset="3mo" onclick="filterGoogle('months', 3)">Trail 3mo</button>
+    <button class="filter-btn" data-preset="6mo" onclick="filterGoogle('months', 6)">Trail 6mo</button>
+    <button class="filter-btn" data-preset="9mo" onclick="filterGoogle('months', 9)">Trail 9mo</button>
+    <button class="filter-btn" data-preset="12mo" onclick="filterGoogle('months', 12)">Trail 12mo</button>
+    <div class="filter-sep"></div>
+    <button class="filter-btn" data-preset="all" onclick="filterGoogle('all')">All</button>
+  </div>
+
+  <div class="kpi-row" id="google-kpis">
+    <!-- populated by filterGoogle() -->
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Monthly Average Rating</div><div class="card-badge" id="google-avg-badge">Monthly</div></div>
+      <div class="chart-container" style="height:280px"><canvas id="googleMonthlyAvg"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Monthly Review Volume</div><div class="card-badge" id="google-vol-badge">Monthly</div></div>
+      <div class="chart-container" style="height:280px"><canvas id="googleMonthlyVol"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-header"><div class="card-title">Rating Distribution</div><div class="card-badge" id="google-dist-badge">Selected period</div></div>
+    <div class="chart-container" style="height:220px"><canvas id="googleDistChart"></canvas></div>
+  </div>
+
+  <div class="section-header" style="margin-top:2rem"><h2>Standout Positive</h2><span class="count" id="google-pos-count">0</span></div>
+  <div class="comment-grid" id="google-pos-grid"></div>
+
+  <div class="section-header"><h2>Mixed Feedback</h2><span class="count" id="google-mix-count">0</span></div>
+  <div class="comment-grid" id="google-mix-grid"></div>
+
+  <div class="section-header"><h2>Critical Negative</h2><span class="count" id="google-neg-count">0</span></div>
+  <div class="comment-grid" id="google-neg-grid"></div>
+</section>
+
+<script>
+(function(){
+  window.GOOGLE_DATA = {"venue": "Lowland", "total_reviews": 383, "monthly": [{"ym": "2022-11", "avg": 4.4, "count": 5}, {"ym": "2022-12", "avg": 4.8, "count": 5}, {"ym": "2023-01", "avg": 4.86, "count": 7}, {"ym": "2023-02", "avg": 4.82, "count": 11}, {"ym": "2023-03", "avg": 5.0, "count": 1}, {"ym": "2023-04", "avg": 5.0, "count": 7}, {"ym": "2023-05", "avg": 4.67, "count": 6}, {"ym": "2023-06", "avg": 3.83, "count": 6}, {"ym": "2023-07", "avg": 5.0, "count": 1}, {"ym": "2023-11", "avg": 5.0, "count": 6}, {"ym": "2023-12", "avg": 3.86, "count": 7}, {"ym": "2024-01", "avg": 4.38, "count": 13}, {"ym": "2024-02", "avg": 5.0, "count": 4}, {"ym": "2024-03", "avg": 5.0, "count": 10}, {"ym": "2024-04", "avg": 4.86, "count": 7}, {"ym": "2024-05", "avg": 4.6, "count": 10}, {"ym": "2024-06", "avg": 4.68, "count": 22}, {"ym": "2024-07", "avg": 4.69, "count": 13}, {"ym": "2024-08", "avg": 4.46, "count": 13}, {"ym": "2024-09", "avg": 5.0, "count": 10}, {"ym": "2024-10", "avg": 4.2, "count": 15}, {"ym": "2024-11", "avg": 4.6, "count": 10}, {"ym": "2024-12", "avg": 4.65, "count": 20}, {"ym": "2025-01", "avg": 4.43, "count": 14}, {"ym": "2025-02", "avg": 4.67, "count": 6}, {"ym": "2025-03", "avg": 4.95, "count": 20}, {"ym": "2025-04", "avg": 4.86, "count": 14}, {"ym": "2025-05", "avg": 4.55, "count": 11}, {"ym": "2025-06", "avg": 4.89, "count": 9}, {"ym": "2025-07", "avg": 4.86, "count": 14}, {"ym": "2025-08", "avg": 4.9, "count": 10}, {"ym": "2025-09", "avg": 4.89, "count": 9}, {"ym": "2025-10", "avg": 4.9, "count": 10}, {"ym": "2025-11", "avg": 4.86, "count": 14}, {"ym": "2025-12", "avg": 4.5, "count": 10}, {"ym": "2026-01", "avg": 4.5, "count": 12}, {"ym": "2026-02", "avg": 4.83, "count": 6}, {"ym": "2026-03", "avg": 5.0, "count": 8}, {"ym": "2026-04", "avg": 4.71, "count": 7}], "daily_last30": [{"d": "2026-03-21", "n": 2, "avg": 5.0, "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"d": "2026-03-28", "n": 3, "avg": 5.0, "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 3}, {"d": "2026-04-04", "n": 2, "avg": 5.0, "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"d": "2026-04-11", "n": 1, "avg": 4.0, "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"d": "2026-04-12", "n": 2, "avg": 5.0, "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"d": "2026-04-14", "n": 2, "avg": 4.5, "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 1}], "samples": {"positive": [{"date": "2026-04-12", "rating": 5, "meal": null, "price": "$90\u2013100", "text": "Found this gem during a busy Charleston weekend. We were able to snag bar seats at 5:00 PM.", "reply": null}, {"date": "2026-04-04", "rating": 5, "meal": null, "price": "$50\u201360", "text": "Exquisite! Amazing food service and atmosphere. I was delightfully impressed.", "reply": null}, {"date": "2026-03-28", "rating": 5, "meal": "Dinner", "price": "$80\u201390", "text": "Impeccable service with an incredibly cozy but sophisticated atmosphere. We shared a handful of starters among our group.", "reply": null}, {"date": "2026-03-28", "rating": 5, "meal": null, "price": null, "text": "Alex was a great server and I enjoyed the biscuit. The drinks were good and excellent service!", "reply": null}], "mixed": [{"date": "2026-04-14", "rating": 4, "meal": null, "price": "$60\u201370", "text": "The place is pretty with awesome mood lighting and cool artwork on the walls. The staff was great.", "reply": null}, {"date": "2026-04-11", "rating": 4, "meal": "Dine in \u00b7 Dinner", "price": "$90\u2013100", "text": "The food was good. The service was excellent, and we liked that it is casual, not more formal.", "reply": null}, {"date": "2026-02-28", "rating": 4, "meal": null, "price": "$50\u201360", "text": "My mom and I came here for the first time for my birthday dinner and we had the most amazing server.", "reply": null}, {"date": "2026-01-24", "rating": 4, "meal": null, "price": "$40\u201350", "text": "Service was attentive, drinks were strong and delicious, and the food was great! You MUST order the biscuits.", "reply": null}, {"date": "2026-01-03", "rating": 4, "meal": null, "price": "$30\u201350", "text": "Delicious food, lovely atmosphere and excellent service!", "reply": null}, {"date": "2025-11-15", "rating": 3, "meal": null, "price": null, "text": "This was a hard one to rate, because I wanted to love it.", "reply": null}], "negative": [{"date": "2026-01-10", "rating": 1, "meal": null, "price": null, "text": "Burger was extremely tough and way over rated. It was like chewing beef jerky.", "reply": null}, {"date": "2025-12-20", "rating": 1, "meal": null, "price": "$50\u2013100", "text": "The food and the staff did not have a cozy welcoming feeling. We felt unwelcome in the restaurant.", "reply": null}, {"date": "2025-05-10", "rating": 2, "meal": null, "price": null, "text": "Did not like anything here except for the beer.", "reply": null}, {"date": "2025-01-05", "rating": 1, "meal": null, "price": null, "text": "Quite frankly this should have been a 5 star review. My family and I came here with lots of recommendation.", "reply": null}, {"date": "2025-01-03", "rating": 2, "meal": "Dine in \u00b7 Dinner", "price": "$50\u2013100", "text": "We will not go back. We love a lot of restaurants in Charleston and this one was a huge disappointment.", "reply": null}, {"date": "2024-12-22", "rating": 2, "meal": "Dine in \u00b7 Dinner", "price": "$100+", "text": "We had reservations for tonight and this will be our first and last visit. Food was good, but service was beyond...", "reply": "Admittedly, you caught us on a tough night. We made the best out of the hand we were dealt."}]}, "avg_rating": 4.69, "owner_reply_rate": 4.4, "local_guide_count": 0, "owner_reply_count": 17, "google_published_rating": 4.7, "distribution_full": {"1": 9, "2": 10, "3": 9, "4": 34, "5": 321}};
+
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function buildCardHtml(r, tier) {
+    var rating = parseInt(r.rating, 10) || 0;
+    var stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+    var mealParts = [];
+    if (r.meal) mealParts.push(r.meal);
+    if (r.price) mealParts.push(r.price);
+    var mealLabel = mealParts.join(' · ');
+    var dateLabel = (r.date || '—') + (mealLabel ? ' · ' + escapeHtml(mealLabel) : '');
+    var replyHtml = '';
+    if (r.reply) {
+      replyHtml = '<div class="grv-reply"><div class="grv-reply-label">Le Suprême · Owner reply</div><div class="grv-reply-text">' + escapeHtml(r.reply) + '</div></div>';
+    }
+    return '<div class="grv-card grv-' + tier + '">'
+      + '<div class="grv-card-head"><div class="grv-stars">' + stars + '</div>'
+      + '<div class="grv-date">' + escapeHtml(dateLabel) + '</div></div>'
+      + '<div class="grv-text">' + escapeHtml(r.text || '') + '</div>'
+      + replyHtml + '</div>';
+  }
+
+  function monthsInRange(startYM, endYM) {
+    return (window.GOOGLE_DATA.monthly || []).filter(function(m){
+      return m.ym >= startYM && m.ym <= endYM;
+    });
+  }
+  function ymBefore(months) {
+    var all = (window.GOOGLE_DATA.monthly || []).slice();
+    if (!all.length) return null;
+    return all[Math.max(0, all.length - months)].ym;
+  }
+  function latestYM() {
+    var all = window.GOOGLE_DATA.monthly || [];
+    return all.length ? all[all.length - 1].ym : null;
+  }
+  function parseDate(s) {
+    if (!s) return null;
+    var d = new Date(s);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function ymdToYm(d) {
+    if (!d) return null;
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+  }
+
+  function renderKpis(filteredMonths, sampleCounts) {
+    var totalRev = filteredMonths.reduce(function(a,m){return a+m.count;}, 0);
+    var weightedSum = filteredMonths.reduce(function(a,m){return a+(m.avg*m.count);}, 0);
+    var avg = totalRev > 0 ? (weightedSum/totalRev).toFixed(2) : '—';
+    // 5★/1-2★ % — approximate from sample if we only have monthly aggregates
+    var fivePct = '—', negPct = '—';
+    if (totalRev > 0 && filteredMonths.length > 0) {
+      // In lieu of full per-review breakdown per month, estimate using overall distribution ratios
+      var d = window.GOOGLE_DATA.distribution_full;
+      var totalAll = window.GOOGLE_DATA.total_reviews;
+      fivePct = ((d['5']/totalAll)*100).toFixed(1) + '%';
+      negPct = (((d['1']+d['2'])/totalAll)*100).toFixed(1) + '%';
+    }
+    var periodLabel = filteredMonths.length > 0 ? filteredMonths[0].ym + ' → ' + filteredMonths[filteredMonths.length-1].ym : '—';
+    document.getElementById('google-kpis').innerHTML =
+        '<div class="kpi"><div class="kpi-label">Total Reviews</div><div class="kpi-value">' + totalRev.toLocaleString() + '</div><div class="kpi-sub"><span class="vs">' + periodLabel + '</span></div></div>'
+      + '<div class="kpi"><div class="kpi-label">Avg Rating</div><div class="kpi-value" style="color:#2BA6BB">' + avg + '</div><div class="kpi-sub"><span class="vs">across ' + filteredMonths.length + ' months</span></div></div>'
+      + '<div class="kpi"><div class="kpi-label">5★ Reviews</div><div class="kpi-value" style="color:#2BA6BB">' + fivePct + '</div><div class="kpi-sub"><span class="vs">all-time ratio</span></div></div>'
+      + '<div class="kpi"><div class="kpi-label">1-2★ Reviews</div><div class="kpi-value" style="color:#ef4444">' + negPct + '</div><div class="kpi-sub"><span class="vs">all-time ratio</span></div></div>'
+      + '<div class="kpi"><div class="kpi-label">Owner Reply Rate</div><div class="kpi-value" style="color:#405766">' + window.GOOGLE_DATA.owner_reply_rate + '%</div><div class="kpi-sub"><span class="vs">all-time</span></div></div>';
+  }
+
+  function _monLabel(ym) {
+    var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var parts = ym.split('-');
+    return names[parseInt(parts[1],10)-1].slice(0,3) + ' ' + parts[0].slice(2);
+  }
+  function _dayLabel(iso) {
+    var d = new Date(iso + 'T12:00:00');
+    var names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return names[d.getUTCMonth()] + ' ' + d.getUTCDate();
+  }
+
+  function renderCharts(filteredMonths, mode, dailyRows) {
+    if (typeof Chart === 'undefined') return;
+    window.charts = window.charts || {};
+
+    var isDay = mode === 'day';
+    var labels, avgs, counts, distBars;
+    if (isDay) {
+      labels = (dailyRows || []).map(function(r){ return _dayLabel(r.d); });
+      avgs = (dailyRows || []).map(function(r){ return r.avg; });
+      counts = (dailyRows || []).map(function(r){ return r.n; });
+      // Rebuild distribution from the filtered daily rows
+      var bars = [0,0,0,0,0];
+      (dailyRows || []).forEach(function(r){
+        bars[0] += r.r1||0; bars[1] += r.r2||0; bars[2] += r.r3||0; bars[3] += r.r4||0; bars[4] += r.r5||0;
+      });
+      distBars = bars;
+    } else {
+      labels = filteredMonths.map(function(m){ return _monLabel(m.ym); });
+      avgs = filteredMonths.map(function(m){ return m.avg; });
+      counts = filteredMonths.map(function(m){ return m.count; });
+      var d = window.GOOGLE_DATA.distribution_full;
+      distBars = [d['1'], d['2'], d['3'], d['4'], d['5']];
+    }
+
+    // Toggle badge text to Daily/Monthly
+    var avgBadge = document.getElementById('google-avg-badge');
+    var volBadge = document.getElementById('google-vol-badge');
+    if (avgBadge) avgBadge.textContent = isDay ? 'Daily' : 'Monthly';
+    if (volBadge) volBadge.textContent = isDay ? 'Daily' : 'Monthly';
+
+    var avgCtx = document.getElementById('googleMonthlyAvg');
+    if (avgCtx) {
+      if (window.charts.googleMonthlyAvg) window.charts.googleMonthlyAvg.destroy();
+      window.charts.googleMonthlyAvg = new Chart(avgCtx.getContext('2d'), {
+        type: 'line',
+        data: { labels: labels, datasets: [{
+          label: 'Avg ★ Rating', data: avgs,
+          borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.12)',
+          fill: true, tension: 0.35, pointRadius: 3, borderWidth: 2
+        }] },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          // max:5 is a hint for methodDynamicYRange plugin to treat as star scale
+          scales: { y: { beginAtZero: false, max: 5, grid: { color: '#f3f4f6' } },
+                     x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
+        }
+      });
+    }
+    var volCtx = document.getElementById('googleMonthlyVol');
+    if (volCtx) {
+      if (window.charts.googleMonthlyVol) window.charts.googleMonthlyVol.destroy();
+      window.charts.googleMonthlyVol = new Chart(volCtx.getContext('2d'), {
+        type: 'bar',
+        data: { labels: labels, datasets: [{
+          label: 'Reviews', data: counts,
+          backgroundColor: 'rgba(43,166,187,0.35)', borderColor: '#2BA6BB', borderWidth: 1, borderRadius: 4
+        }] },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          // Volume bars stay at 0 baseline
+          scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+                     x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
+        }
+      });
+    }
+    var distCtx = document.getElementById('googleDistChart');
+    if (distCtx) {
+      if (window.charts.googleDistChart) window.charts.googleDistChart.destroy();
+      window.charts.googleDistChart = new Chart(distCtx.getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['1★','2★','3★','4★','5★'], datasets: [{
+          label: 'Reviews', data: distBars,
+          backgroundColor: ['#ef4444','#f59e0b','#D8CFC4','#BCC8BE','#2BA6BB'],
+          borderRadius: 6
+        }] },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
+        }
+      });
+    }
+  }
+
+  function renderSamples(startDate, endDate) {
+    var samples = window.GOOGLE_DATA.samples;
+    function filterByDate(list) {
+      return (list || []).filter(function(r){
+        var d = parseDate(r.date);
+        if (!d) return true;  // keep if no date
+        if (startDate && d < startDate) return false;
+        if (endDate && d > endDate) return false;
+        return true;
+      });
+    }
+    var pos = filterByDate(samples.positive);
+    var mix = filterByDate(samples.mixed);
+    var neg = filterByDate(samples.negative);
+    document.getElementById('google-pos-count').textContent = pos.length;
+    document.getElementById('google-mix-count').textContent = mix.length;
+    document.getElementById('google-neg-count').textContent = neg.length;
+    document.getElementById('google-pos-grid').innerHTML = pos.map(function(r){return buildCardHtml(r,'positive');}).join('');
+    document.getElementById('google-mix-grid').innerHTML = mix.map(function(r){return buildCardHtml(r,'mixed');}).join('');
+    document.getElementById('google-neg-grid').innerHTML = neg.map(function(r){return buildCardHtml(r,'negative');}).join('');
+  }
+
+  // Main filter entry
+  window.filterGoogle = function(kind, n) {
+    var allMonths = window.GOOGLE_DATA.monthly || [];
+    if (!allMonths.length) return;
+    var latest = allMonths[allMonths.length - 1].ym;
+    var filteredMonths;
+    var startDate = null, endDate = null;
+    var mode = 'month';
+    var dailyRows = null;
+
+    if (kind === 'all') {
+      filteredMonths = allMonths.slice();
+      startDate = parseDate(allMonths[0].ym + '-01');
+      endDate = new Date();
+    } else if (kind === 'months') {
+      var from = ymBefore(n);
+      filteredMonths = monthsInRange(from, latest);
+      startDate = parseDate(from + '-01');
+      endDate = new Date();
+    } else if (kind === 'days') {
+      // Day mode: use daily_last30 data for last N days of calendar time
+      mode = 'day';
+      var allDaily = window.GOOGLE_DATA.daily_last30 || [];
+      if (allDaily.length) {
+        var anchor = allDaily[allDaily.length - 1].d;
+        var anchorDate = new Date(anchor + 'T12:00:00');
+        var cutoff = new Date(anchorDate.getTime() - (n - 1) * 86400000);
+        var cutoffStr = cutoff.getFullYear() + '-' + String(cutoff.getMonth()+1).padStart(2,'0') + '-' + String(cutoff.getDate()).padStart(2,'0');
+        dailyRows = allDaily.filter(function(d){ return d.d >= cutoffStr; });
+        startDate = cutoff;
+        endDate = anchorDate;
+      }
+      filteredMonths = monthsInRange(latest, latest); // for KPI computation
+    } else if (kind === 'single') {
+      var ym = document.getElementById('google-to').value;
+      filteredMonths = monthsInRange(ym, ym);
+      startDate = parseDate(ym + '-01');
+      endDate = new Date(parseDate(ym + '-01').getTime() + (31 * 86400 * 1000));
+    } else {
+      filteredMonths = allMonths.slice();
+    }
+
+    renderKpis(filteredMonths);
+    renderCharts(filteredMonths, mode, dailyRows);
+    renderSamples(startDate, endDate);
+
+    // Highlight active preset
+    document.querySelectorAll('#view-google .filter-btn[data-preset]').forEach(function(b){ b.classList.remove('preset-active'); });
+    var presetKey = kind === 'all' ? 'all' : kind === 'days' ? (n + 'd') : kind === 'months' ? (n + 'mo') : null;
+    if (presetKey) {
+      var btn = document.querySelector('#view-google .filter-btn[data-preset="' + presetKey + '"]');
+      if (btn) btn.classList.add('preset-active');
+    }
+    // Set 'to' dropdown to latest month
+    var toEl = document.getElementById('google-to');
+    if (toEl && kind !== 'single') toEl.value = latest;
+  };
+
+  function init() {
+    // Default view: Trail 12mo
+    filterGoogle('months', 12);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 120); });
+  } else {
+    setTimeout(init, 120);
+  }
+  // Rebuild when view is shown (canvases may not have dimensions until visible)
+  var origSwitch = window.switchView;
+  if (typeof origSwitch === 'function') {
+    window.switchView = function(v) {
+      var ret = origSwitch.apply(this, arguments);
+      if (v === 'google') setTimeout(function(){
+        // Re-render charts with current filtered monthlies
+        var active = document.querySelector('#view-google .filter-btn.preset-active');
+        var preset = active ? active.getAttribute('data-preset') : '12mo';
+        if (preset === 'all') filterGoogle('all');
+        else if (preset.endsWith('mo')) filterGoogle('months', parseInt(preset, 10));
+        else if (preset.endsWith('d')) filterGoogle('days', parseInt(preset, 10));
+      }, 80);
+      return ret;
+    };
+  }
+})();
+</script>
+
 </body>
 </html>
