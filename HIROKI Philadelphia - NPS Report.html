@@ -16,7 +16,7 @@ window.RAW_SURVEYS = [{"date": "2025-04-30", "overall": 100, "sentiment": 100, "
 :root{
   --bg:#f8f7f4;--card:#ffffff;--border:#ece8e0;--text:#231F20;--muted:#6b7280;--label:#9ca3af;
   --blue:#2BA6BB;--blue-light:#e6f6f8;--green:#10b981;--green-bg:rgba(16,185,129,.08);
-  --red:#ef4444;--red-bg:rgba(239,68,68,.08);--orange:#f59e0b;--orange-bg:rgba(245,158,11,.08);
+  --red:#ef4444;--red-bg:rgba(239,68,68,.08);--orange:#D8CFC4;--orange-bg:rgba(216,207,196,.08);
   --purple:#405766;--sidebar:#212931;--sidebar-text:#d1d5db;
   --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
 }
@@ -165,9 +165,253 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
   font-weight: 700; color: #2BA6BB; margin-bottom: 0.3rem; }
 .grv-reply-text { font-size: 0.78rem; line-height: 1.5; color: #374151; }
 
+
+/* ---- UX Polish: Krug v2 pass ---- */
+/* Contrast: darken body muted text */
+:root { --muted: #4b5563 !important; }
+/* #1 Sidebar section labels more visible */
+.sidebar-section-label { opacity: 0.72 !important; color: #BCC8BE !important; }
+/* #2 Active nav item: solid turquoise left-edge bar */
+.sidebar-item { position: relative !important; }
+.sidebar-item.active::before {
+  content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+  width: 4px; background: #2BA6BB; border-radius: 0 3px 3px 0;
+}
+/* #3 Disabled preset buttons (day-range on servers/comments) — visible but not clickable */
+.filter-btn.disabled {
+  opacity: 0.35; cursor: not-allowed; pointer-events: auto;
+}
+.filter-btn.disabled:hover::after {
+  content: 'Day view not available here'; position: absolute;
+  background: #212931; color: #fff; padding: 4px 8px; border-radius: 4px;
+  font-size: 0.65rem; white-space: nowrap; margin-top: -32px; margin-left: -40px;
+  z-index: 100;
+}
+/* #6 At-a-glance softer gradient Slate → Royal */
+.at-a-glance { background: linear-gradient(135deg, #212931 0%, #405766 100%) !important; }
+/* #8 Larger KPI deltas */
+.kpi-delta { font-size: 0.88rem !important; font-weight: 700 !important; }
+/* #9 NPS bar segment count labels */
+.nps-stacked-bar .seg { position: relative; }
+.nps-seg-count {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.95);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+/* #20 Drop italic from comment body */
+.comment-text, .grv-text { font-style: normal !important; }
+/* #26 Numeric star badge — bigger number, one star */
+.grv-stars-num {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 1.1rem; font-weight: 800; color: #231F20;
+}
+.grv-stars-num .star { color: #2BA6BB; font-size: 1rem; }
+.grv-card.grv-negative .grv-stars-num .star { color: #ef4444; }
+.grv-card.grv-mixed .grv-stars-num .star { color: #D8CFC4; }
+/* #27 Reply pill + smaller reply text */
+.grv-reply-label {
+  display: inline-block !important; background: #2BA6BB; color: #fff !important;
+  padding: 2px 8px !important; border-radius: 10px !important;
+  font-size: 0.56rem !important; text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 0.4rem !important;
+}
+.grv-reply-text { font-size: 0.72rem !important; color: #4b5563 !important; }
+/* #29 Period dropdown active state (styled when preset-active is NOT on any button) */
+.filter-bar.single-month-mode select[id$="-to"] {
+  background-color: #e6f6f8; border-color: #2BA6BB; color: #231F20; font-weight: 600;
+}
+/* #34 Zero-line indicator on NPS chart (via Chart.js annotation below) */
+/* Comment free-text filter input */
+.comment-filter-input {
+  width: 100%; max-width: 360px; padding: 0.5rem 0.75rem; font-size: 0.82rem;
+  border: 1px solid #ece8e0; border-radius: 8px; font-family: inherit;
+  margin-bottom: 1rem;
+}
+.comment-filter-input:focus { outline: 2px solid #2BA6BB; outline-offset: 2px; border-color: #2BA6BB; }
+/* Keyboard-shortcut hint box */
+.keyboard-hint {
+  position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 100;
+  background: #212931; color: #fff; padding: 0.5rem 0.9rem; border-radius: 6px;
+  font-size: 0.68rem; letter-spacing: 0.04em; opacity: 0; transition: opacity 0.2s;
+  pointer-events: none; max-width: 260px; line-height: 1.5;
+}
+.keyboard-hint.visible { opacity: 0.95; }
+/* #15 Hide Day-of-Week chart duplicate on Ratings view */
+#view-ratings .card:has(#ratingDowChart) { display: none !important; }
+/* #25 Hide 5th KPI tile on Google view (reduce from 5 to 4) */
+#view-google .kpi-row .kpi:nth-child(4) { display: none !important; }
+#view-google .kpi-row { grid-template-columns: repeat(4, 1fr) !important; }
+/* #32 Smaller chart legend font, less space */
+.chart-container canvas { font-size: 10px; }
+/* #14 Rating Mix tile — stacked horizontal bar */
+.rating-mix-tile { background: #fff; border: 1px solid #ece8e0; border-radius: 12px; padding: 1.15rem 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 1rem; }
+.rating-mix-label { font-size: 0.7rem; font-weight: 600; color: #6b7280; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.6rem; }
+.rating-mix-bar { display: flex; height: 24px; border-radius: 6px; overflow: hidden; background: #f3f4f6; }
+.rating-mix-seg { display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+.rating-mix-legend { display: flex; gap: 0.85rem; margin-top: 0.6rem; flex-wrap: wrap; font-size: 0.68rem; color: #374151; }
+.rating-mix-legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 0.3rem; vertical-align: middle; }
+/* #10 Current-month data point — larger / ring effect */
+/* handled in chart config override */
+/* #5 Version timestamp hover */
+.footer-stamp { cursor: help; }
+/* #31 Empty-state overlay for day view */
+.chart-container { position: relative; }
+.chart-empty-overlay {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.9); border-radius: 8px;
+  font-size: 0.82rem; color: #6b7280; text-align: center; padding: 1rem;
+  z-index: 10; pointer-events: none;
+}
+/* Active preset button: solid dark fill so active state is unmistakable */
+.filter-btn.preset-active {
+  background: #212931 !important; color: #fff !important; border-color: #212931 !important;
+  box-shadow: 0 1px 3px rgba(33,41,49,0.25);
+}
+/* Softer sidebar section labels (de-emphasized) */
+.sidebar-section-label { font-size: .58rem !important; opacity: 0.55; font-weight: 600 !important; }
+/* Venue name in H1 — larger + weighted */
+.page-header h1 { font-size: 1.55rem; font-weight: 700; }
+.page-header .venue-sub { font-size: 0.7rem; color: var(--muted); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.35rem; }
+/* Period chip */
+.period-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: #f0eee9; border: 1px solid #ece8e0; border-radius: 20px;
+  padding: 0.3rem 0.85rem; font-size: 0.72rem; font-weight: 500; color: #374151;
+  margin-top: 0.5rem;
+}
+.period-chip-label { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.6rem; font-weight: 700; color: #6b7280; }
+/* KPI tile with delta */
+.kpi-delta { display: inline-flex; align-items: center; gap: 0.2rem; font-size: 0.72rem; font-weight: 700; margin-left: 0.4rem; }
+.kpi-delta.up { color: #059669; }
+.kpi-delta.down { color: #dc2626; }
+.kpi-delta.flat { color: #6b7280; }
+.kpi-sub { font-size: 0.7rem; }
+/* At-a-Glance hero */
+.at-a-glance {
+  background: linear-gradient(135deg, #212931 0%, #2A3640 100%);
+  color: #fff; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;
+}
+.at-a-glance-label {
+  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.6); font-weight: 700; margin-bottom: 0.55rem;
+}
+.at-a-glance-text { font-size: 0.95rem; line-height: 1.55; color: #fff; }
+.at-a-glance-text b { color: #2BA6BB; font-weight: 700; }
+.at-a-glance-text .neg { color: #ef4444; font-weight: 700; }
+/* Metric tooltips: ℹ info icon */
+.info-icon {
+  display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+  background: #e2dede; color: #231F20; font-size: 0.65rem;
+  text-align: center; line-height: 14px; font-weight: 700;
+  cursor: help; margin-left: 0.35rem; vertical-align: middle;
+  font-family: serif;
+}
+.info-icon:hover { background: #2BA6BB; color: #fff; }
+/* Comment keyword highlighting bolder */
+.kw-pos { background: rgba(16,185,129,.22) !important; color: #047857 !important; font-weight: 600; padding: 0 4px !important; border-radius: 3px; }
+.kw-neg { background: rgba(239,68,68,.2) !important; color: #b91c1c !important; font-weight: 600; padding: 0 4px !important; border-radius: 3px; }
+/* Comment density: hide past 5th VISIBLE card (filter-aware).
+   Works together with the month filter: we count only currently-visible cards
+   and hide the 6th+ among those, not the 6th+ in DOM order. */
+.comment-grid { position: relative; }
+.comment-card.collapsed-hidden { display: none !important; }
+.comment-grid-toggle {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: transparent; border: 1px solid #ece8e0; border-radius: 6px;
+  padding: 0.35rem 0.8rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+  cursor: pointer; margin-top: 0.75rem; font-family: inherit; color: #374151;
+}
+.comment-grid-toggle:hover { background: #f8f7f4; border-color: #2BA6BB; color: #2BA6BB; }
+/* Focus states for accessibility */
+button:focus, select:focus, .sidebar-item:focus {
+  outline: 2px solid #2BA6BB !important; outline-offset: 2px;
+}
+/* Larger tap targets on narrow viewports */
+@media (max-width: 900px) {
+  .filter-btn { min-height: 44px; padding: 0.55rem 0.9rem; }
+  .sidebar-item { min-height: 44px; }
+}
+/* Mobile hamburger menu */
+.mobile-menu-toggle {
+  display: none; position: fixed; top: 1rem; left: 1rem; z-index: 1000;
+  background: #212931; color: #fff; border: none; border-radius: 8px;
+  width: 44px; height: 44px; font-size: 1.3rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+@media (max-width: 1100px) {
+  .mobile-menu-toggle { display: flex; align-items: center; justify-content: center; }
+  .sidebar.mobile-open { display: flex !important; z-index: 999; width: 260px; }
+  .main { padding-top: 4rem; }
+}
+/* Chart y-axis label (added via JS) */
+/* Jump-to-top button */
+.jump-to-top {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
+  background: #2BA6BB; color: #fff; border: none; border-radius: 50%;
+  width: 44px; height: 44px; font-size: 1.1rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2); opacity: 0;
+  transition: opacity 0.2s; pointer-events: none;
+}
+.jump-to-top.visible { opacity: 1; pointer-events: auto; }
+.jump-to-top:hover { background: #212931; }
+/* Footer timestamp */
+.footer-stamp { text-align: center; font-size: 0.62rem; color: rgba(35,31,32,.35); margin-top: 0.35rem; letter-spacing: 0.08em; }
+/* Guest comments section header copy */
+.section-header h2 { font-size: 1rem; }
+
+
+/* Unify Google Reviews cards with RESY card pattern */
+.grv-card { padding: 1.25rem; border-radius: 12px; }
+.grv-stars { font-size: 1rem; letter-spacing: 2px; }
+
+
+/* ---- NPS Deep Dive view ---- */
+.npsd-hero {
+  background: linear-gradient(135deg, #212931 0%, #405766 100%);
+  color: #fff; border-radius: 14px; padding: 1.5rem 1.75rem; margin-bottom: 1.5rem;
+  display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: center;
+}
+.npsd-score-big { text-align: center; }
+.npsd-score-big .v { font-size: 4rem; font-weight: 800; line-height: 1; color: #2BA6BB; }
+.npsd-score-big .l { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.7); font-weight: 600; margin-top: 0.35rem; }
+.npsd-breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.npsd-meta-tile { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem 1rem; }
+.npsd-meta-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.6); font-weight: 700; margin-bottom: 0.3rem; }
+.npsd-meta-value { font-size: 1.25rem; font-weight: 700; color: #fff; }
+.npsd-meta-sub { font-size: 0.7rem; color: rgba(255,255,255,0.75); margin-top: 0.2rem; }
+.npsd-meta-sub .up { color: #BCC8BE; font-weight: 700; }
+.npsd-meta-sub .down { color: #f59e0b; font-weight: 700; }
+.npsd-corr-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.npsd-corr-table th { text-align: left; padding: .55rem .7rem; border-bottom: 2px solid #ece8e0;
+  color: #6b7280; font-weight: 500; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
+.npsd-corr-table td { padding: .55rem .7rem; border-bottom: 1px solid #f3f4f6; }
+.npsd-corr-pos { color: #10b981; font-weight: 700; }
+.npsd-corr-neg { color: #ef4444; font-weight: 700; }
+
+
+/* ---- Cross-Channel view ---- */
+.xc-hero { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.xc-tile { background: #fff; border: 1px solid #ece8e0; border-radius: 12px; padding: 1.15rem 1.25rem; }
+.xc-tile.hero-dark { background: linear-gradient(135deg, #212931 0%, #405766 100%); color: #fff; }
+.xc-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: #6b7280; margin-bottom: 0.45rem; }
+.xc-tile.hero-dark .xc-label { color: rgba(255,255,255,0.6); }
+.xc-value { font-size: 2rem; font-weight: 800; line-height: 1; color: #231F20; }
+.xc-tile.hero-dark .xc-value { color: #2BA6BB; }
+.xc-sub { font-size: 0.72rem; color: #6b7280; margin-top: 0.35rem; }
+.xc-tile.hero-dark .xc-sub { color: rgba(255,255,255,0.7); }
+.xc-gap-pos { color: #f59e0b; font-weight: 700; }
+.xc-insight-box { background: rgba(43,166,187,0.06); border-left: 3px solid #2BA6BB; border-radius: 4px; padding: 1.1rem 1.4rem; margin-bottom: 1rem; }
+.xc-insight-box h3 { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: #2BA6BB; font-weight: 700; margin-bottom: 0.75rem; }
+.xc-insight-box p { font-size: 0.88rem; line-height: 1.6; color: #374151; margin-bottom: 0.4rem; }
+.xc-insight-box p b { color: #231F20; }
+
 </style>
 </head>
 <body>
+<button class="mobile-menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')">☰</button>
 
 <nav class="sidebar">
   <div class="sidebar-logo">
@@ -177,26 +421,23 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
   <div class="sidebar-section">
     <div class="sidebar-section-label">RESY</div>
     <div class="sidebar-item active" data-view="surveys" onclick="switchView('surveys')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/></svg>
-      Guest Surveys
-    </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/></svg>Surveys</div>
     <div class="sidebar-item" data-view="ratings" onclick="switchView('ratings')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 0 0 .95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 0 0-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 0 0-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 0 0-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 0 0 .951-.69l1.519-4.674z"/></svg>
-      Reservation Ratings
-    </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 0 0 .95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 0 0-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 0 0-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 0 0-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 0 0 .951-.69l1.519-4.674z"/></svg>Star Ratings</div>
     <div class="sidebar-item" data-view="servers" onclick="switchView('servers')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-      Server Performance
-    </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Servers</div>
     <div class="sidebar-item" data-view="comments" onclick="switchView('comments')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Guest Comments
-    </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comments</div><div class="sidebar-item" data-view="npsdeep" onclick="switchView('npsdeep')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="22 4 12 14.01 9 11.01"/></svg>NPS Deep Dive</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-section-label">Google</div><div class="sidebar-item" data-view="google" onclick="switchView('google')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>Google Reviews</div>
     
   </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Cross-Channel</div>
+    <div class="sidebar-item" data-view="xchan" onclick="switchView('xchan')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>Cross-Channel</div>
+  </div>
+
   <div style="display:none"><div class="sidebar-section">
     <div class="sidebar-section-label">Guests</div>
     <div class="sidebar-item" data-view="guestinfo" onclick="switchView('guestinfo')">
@@ -219,19 +460,30 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 <!-- ==================== SURVEYS VIEW ==================== -->
 <div id="view-surveys" class="view-section active">
 <div class="page-header">
-  <h1>Guest Survey Analysis</h1>
+  <div>
+    <div class="venue-sub">HIROKI Philadelphia</div>
+    <h1>Guest Survey Analysis</h1>
+  </div>
   <div class="period">
     <div class="period-badge">2025-04 – 2026-04</div>
     <div class="period-badge">156 Surveys</div>
   </div>
 </div>
+<div class="at-a-glance">
+  <div class="at-a-glance-label">At a Glance · April 2026</div>
+  <div class="at-a-glance-text">
+    Overall score <b>89</b> (<span class="neg">↓ 10</span> vs last month).
+    NPS <b>50</b> (<span class="neg">↓ 50</span> vs last month). Weakest trend: <span class="neg">Food -30</span>. Biggest gain: <b>Atmosphere +2</b>. 
+  </div>
+</div>
 
-<div class="filter-bar"><label>Period:</label><select id="survey-from" onchange="applyFilter('surveys')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="survey-to" onchange="document.getElementById('survey-from').value=this.value;applyFilter('surveys')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('surveys',7)">Trail 7d</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('surveys',30)">Trail 30d</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('surveys',3)">Trail 3mo</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('surveys',6)">Trail 6mo</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('surveys',9)">Trail 9mo</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('surveys',12)">Trail 12mo</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('surveys')">All</button></div>
+
+<div class="filter-bar"><label>Period:</label><select id="survey-from" onchange="applyFilter('surveys')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="survey-to" onchange="document.getElementById('survey-from').value=this.value;applyFilter('surveys')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('surveys',7)">Last 7 days</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('surveys',30)">Last 30 days</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('surveys',3)">Last 3 months</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('surveys',6)">Last 6 months</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('surveys',9)">Last 9 months</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('surveys',12)">Last 12 months</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('surveys')">All time</button></div>
 <div class="kpi-row">
-  <div class="kpi"><div class="kpi-label">Overall Score</div><div class="kpi-value" id="skpi-overall">96.3</div><div class="kpi-sub"><span class="vs">out of 100</span></div></div>
+  <div class="kpi"><div class="kpi-label">Overall Score<span class="info-icon" title="Weighted average across all survey categories. Scale: 0-100.">i</span></div><div class="kpi-value" id="skpi-overall">96.3</div><div class="kpi-sub"><span class="vs">out of 100</span></div></div>
   <div class="kpi"><div class="kpi-label">Service Score</div><div class="kpi-value" style="color:var(--green)" id="skpi-service">99.0</div><div class="kpi-sub"><span class="vs">highest category</span></div></div>
   <div class="kpi"><div class="kpi-label">Food Score</div><div class="kpi-value" style="color:var(--orange)" id="skpi-food">91.2</div><div class="kpi-sub"><span class="vs">lowest category</span></div></div>
-  <div class="kpi"><div class="kpi-label">Atmosphere</div><div class="kpi-value" style="color:var(--blue)" id="skpi-atmos">96.7</div><div class="kpi-sub"><span class="vs">steady year-round</span></div></div>
+  <div class="kpi"><div class="kpi-label">Atmosphere<span class="info-icon" title="Restaurant cleanliness, ambiance, noise level. Scale: 0-100.">i</span></div><div class="kpi-value" style="color:var(--blue)" id="skpi-atmos">96.7</div><div class="kpi-sub"><span class="vs">steady year-round</span></div></div>
   <div class="kpi"><div class="kpi-label">Surveys</div><div class="kpi-value" style="color:var(--green)" id="skpi-count">156</div><div class="kpi-sub"><span class="vs">responses</span></div></div>
 </div>
 
@@ -243,12 +495,12 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
   <div class="nps-bar-section">
     <div class="nps-stacked-bar">
       <div class="seg" id="nps-bar-p" style="width:85.6%;background:var(--green)"></div>
-      <div class="seg" id="nps-bar-pa" style="width:9.3%;background:#fbbf24"></div>
+      <div class="seg" id="nps-bar-pa" style="width:9.3%;background:#D8CFC4"></div>
       <div class="seg" id="nps-bar-d" style="width:5.2%;background:var(--red)"></div>
     </div>
     <div class="nps-breakdown">
       <div class="nps-breakdown-item"><div class="dot" style="background:var(--green)"></div>Promoters (9–10): <strong id="nps-promo-pct">85.6%</strong></div>
-      <div class="nps-breakdown-item"><div class="dot" style="background:#fbbf24"></div>Passives (7–8): <strong id="nps-pass-pct">9.3%</strong></div>
+      <div class="nps-breakdown-item"><div class="dot" style="background:#D8CFC4"></div>Passives (7–8): <strong id="nps-pass-pct">9.3%</strong></div>
       <div class="nps-breakdown-item"><div class="dot" style="background:var(--red)"></div>Detractors (0–6): <strong id="nps-det-pct">5.2%</strong></div>
     </div>
   </div>
@@ -261,7 +513,7 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 <div class="grid-3">
   <div class="card">
     <div class="card-header"><div class="card-title">Score Trends</div><div class="card-badge">Monthly</div></div>
-    <div class="chart-container"><canvas id="surveyMonthlyScores"></canvas></div>
+    <div class="chart-container"><canvas id="surveyMonthlyScores" aria-label="Monthly score trends across Overall, Service, Food, and Atmosphere" role="img"></canvas></div>
   </div>
   <div class="intel-panel">
     <h3>Intelligence</h3>
@@ -282,29 +534,32 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 </div>
 
 <div class="grid-2">
-  <div class="card"><div class="card-header"><div class="card-title">Net Promoter Score</div><div class="card-badge">Monthly</div></div><div class="chart-container"><canvas id="surveyNpsChart"></canvas></div></div>
-  <div class="card"><div class="card-header"><div class="card-title">Survey Volume</div></div><div class="chart-container"><canvas id="surveyVolumeChart"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Net Promoter Score</div><div class="card-badge">Monthly</div></div><div class="chart-container"><canvas id="surveyNpsChart" aria-label="Monthly Net Promoter Score trend" role="img"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Survey Volume</div></div><div class="chart-container"><canvas id="surveyVolumeChart" aria-label="Monthly survey response volume" role="img"></canvas></div></div>
 </div>
 
 <div class="grid-2">
-  <div class="card"><div class="card-header"><div class="card-title">Day-of-Week Performance</div><div class="card-badge">Avg</div></div><div class="chart-container"><canvas id="surveyDowChart"></canvas></div></div>
-  <div class="card"><div class="card-header"><div class="card-title">Recommend Score Distribution</div></div><div class="chart-container"><canvas id="surveyRecDist"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Day-of-Week Performance</div><div class="card-badge">Avg</div></div><div class="chart-container"><canvas id="surveyDowChart" aria-label="Day-of-week performance scores" role="img"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Recommend Score Distribution</div></div><div class="chart-container"><canvas id="surveyRecDist" aria-label="Recommend score distribution" role="img"></canvas></div></div>
 </div>
 </div>
 
 <!-- ==================== RATINGS VIEW ==================== -->
 <div id="view-ratings" class="view-section">
 <div class="page-header">
-  <h1>Reservation Ratings</h1>
+  <div>
+    <div class="venue-sub">HIROKI Philadelphia</div>
+    <h1>Reservation Ratings</h1>
+  </div>
   <div class="period">
     <div class="period-badge">2025-04-04 – 2026-04-11</div>
     <div class="period-badge">171 Ratings · 127 Days</div>
   </div>
 </div>
 
-<div class="filter-bar"><label>Period:</label><select id="rating-from" onchange="applyFilter('ratings')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="rating-to" onchange="document.getElementById('rating-from').value=this.value;applyFilter('ratings')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('ratings',7)">Trail 7d</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('ratings',30)">Trail 30d</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('ratings',3)">Trail 3mo</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('ratings',6)">Trail 6mo</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('ratings',9)">Trail 9mo</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('ratings',12)">Trail 12mo</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('ratings')">All</button></div>
+<div class="filter-bar"><label>Period:</label><select id="rating-from" onchange="applyFilter('ratings')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="rating-to" onchange="document.getElementById('rating-from').value=this.value;applyFilter('ratings')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('ratings',7)">Last 7 days</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('ratings',30)">Last 30 days</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('ratings',3)">Last 3 months</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('ratings',6)">Last 6 months</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('ratings',9)">Last 9 months</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('ratings',12)">Last 12 months</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('ratings')">All time</button></div>
 <div class="kpi-row">
-  <div class="kpi"><div class="kpi-label">Overall Average</div><div class="kpi-value" id="rkpi-avg">4.77</div><div class="kpi-sub"><span class="vs">out of 5.0</span></div></div>
+  <div class="kpi"><div class="kpi-label">Overall Average<span class="info-icon" title="Average star rating from Resy post-visit 1-5 prompts.">i</span></div><div class="kpi-value" id="rkpi-avg">4.77</div><div class="kpi-sub"><span class="vs">out of 5.0</span></div></div>
   <div class="kpi"><div class="kpi-label">5-Star Rate</div><div class="kpi-value" style="color:var(--green)" id="rkpi-5star">86.5%</div><div class="kpi-sub"><span class="vs" id="rkpi-5count">148 of 171</span></div></div>
   <div class="kpi"><div class="kpi-label">1–2 Star Rate</div><div class="kpi-value" style="color:var(--red)" id="rkpi-12star">3.5%</div><div class="kpi-sub"><span class="vs" id="rkpi-negcount">6 negative</span></div></div>
   <div class="kpi"><div class="kpi-label">Total Ratings</div><div class="kpi-value" style="color:var(--blue)" id="rkpi-total">171</div><div class="kpi-sub"><span class="vs">100.0% five-star</span></div></div>
@@ -314,7 +569,7 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 <div class="grid-3">
   <div class="card">
     <div class="card-header"><div class="card-title">Monthly Average Rating</div><div class="card-badge">Daily</div></div>
-    <div class="chart-container"><canvas id="ratingMonthlyAvg"></canvas></div>
+    <div class="chart-container"><canvas id="ratingMonthlyAvg" aria-label="Monthly average star rating trend" role="img"></canvas></div>
   </div>
   <div class="intel-panel">
     <h3>Intelligence</h3>
@@ -335,19 +590,19 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 </div>
 
 <div class="grid-2">
-  <div class="card"><div class="card-header"><div class="card-title">Monthly Volume</div></div><div class="chart-container"><canvas id="ratingMonthlyVol"></canvas></div></div>
-  <div class="card"><div class="card-header"><div class="card-title">Rating Distribution</div></div><div class="chart-container"><canvas id="ratingDistChart"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Monthly Volume</div></div><div class="chart-container"><canvas id="ratingMonthlyVol" aria-label="Monthly star rating volume" role="img"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Rating Distribution</div></div><div class="chart-container"><canvas id="ratingDistChart" aria-label="Star rating distribution" role="img"></canvas></div></div>
 </div>
 
 <div class="grid-2">
-  <div class="card"><div class="card-header"><div class="card-title">Monthly 5-Star vs 1-Star %</div></div><div class="chart-container"><canvas id="ratingStarPct"></canvas></div></div>
-  <div class="card"><div class="card-header"><div class="card-title">Quarterly Performance</div></div><div class="chart-container"><canvas id="ratingQuarterChart"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Monthly 5-Star vs 1-Star %</div></div><div class="chart-container"><canvas id="ratingStarPct" aria-label="Star rating percentage trends" role="img"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Quarterly Performance</div></div><div class="chart-container"><canvas id="ratingQuarterChart" aria-label="Quarterly rating summary" role="img"></canvas></div></div>
 </div>
 
 <div class="grid-2">
   <div class="card">
     <div class="card-header"><div class="card-title">Day-of-Week Patterns</div><div class="card-badge">Avg</div></div>
-    <div class="chart-container"><canvas id="ratingDowChart"></canvas></div>
+    <div class="chart-container"><canvas id="ratingDowChart" aria-label="Day-of-week rating averages" role="img"></canvas></div>
   </div>
   <div class="insight-card">
     <h3>Key Findings</h3>
@@ -361,13 +616,16 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 <!-- ==================== SERVER PERFORMANCE VIEW ==================== -->
 <div id="view-servers" class="view-section">
 <div class="page-header">
-  <h1>Server Performance</h1>
+  <div>
+    <div class="venue-sub">HIROKI Philadelphia</div>
+    <h1>Server Performance</h1>
+  </div>
   <div class="period">
     <div class="period-badge" id="server-period">2025-04 – 2026-04</div>
     <div class="period-badge">3+ months tracked</div>
   </div>
 </div>
-<div class="filter-bar"><label>Period:</label><select id="server-from" onchange="applyFilter('servers')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="server-to" onchange="document.getElementById('server-from').value=this.value;applyFilter('servers')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('servers',7)">Trail 7d</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('servers',30)">Trail 30d</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('servers',3)">Trail 3mo</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('servers',6)">Trail 6mo</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('servers',9)">Trail 9mo</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('servers',12)">Trail 12mo</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('servers')">All</button></div>
+<div class="filter-bar"><label>Period:</label><select id="server-from" onchange="applyFilter('servers')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="server-to" onchange="document.getElementById('server-from').value=this.value;applyFilter('servers')"></select><div class="filter-sep"></div><button class="filter-btn disabled" data-preset="7d" tabindex="-1" aria-disabled="true">Last 7 days</button><button class="filter-btn disabled" data-preset="30d" tabindex="-1" aria-disabled="true">Last 30 days</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('servers',3)">Last 3 months</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('servers',6)">Last 6 months</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('servers',9)">Last 9 months</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('servers',12)">Last 12 months</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('servers')">All time</button></div>
 <div class="grid-2">
   <div class="card"><div class="card-header"><div class="card-title">Top Performers</div><div class="card-badge" id="server-top-count"></div></div>
     <table class="server-table"><thead><tr><th>Server</th><th>Avg</th><th>Range</th><th>Mo.</th><th style="width:25%"></th></tr></thead>
@@ -394,17 +652,17 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
       </tr>
 <tr>
         <td style="font-weight:500">Gus</td>
-        <td style="color:#3b82f6;font-weight:600">94.0</td>
+        <td style="color:#2BA6BB;font-weight:600">94.0</td>
         <td style="color:#6b7280">75–100</td>
         <td>6</td>
-        <td><div class="bar-bg"><div class="bar-fill" style="width:94.0%;background:#3b82f6"></div></div></td>
+        <td><div class="bar-bg"><div class="bar-fill" style="width:94.0%;background:#2BA6BB"></div></div></td>
       </tr>
 <tr>
         <td style="font-weight:500">Damon</td>
-        <td style="color:#3b82f6;font-weight:600">93.0</td>
+        <td style="color:#2BA6BB;font-weight:600">93.0</td>
         <td style="color:#6b7280">72–100</td>
         <td>4</td>
-        <td><div class="bar-bg"><div class="bar-fill" style="width:93.0%;background:#3b82f6"></div></div></td>
+        <td><div class="bar-bg"><div class="bar-fill" style="width:93.0%;background:#2BA6BB"></div></div></td>
       </tr>
 </tbody></table></div>
   <div class="card"><div class="card-header"><div class="card-title">Needs Development</div><div class="card-badge" id="server-bottom-count"></div></div>
@@ -416,15 +674,18 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 <!-- ==================== COMMENTS VIEW ==================== -->
 <div id="view-comments" class="view-section">
 <div class="page-header">
-  <h1>Guest Comments</h1>
+  <div>
+    <div class="venue-sub">HIROKI Philadelphia</div>
+    <h1>Guest Comments</h1>
+  </div>
   <div class="period">
     <div class="period-badge">2025-04 – 2026-04</div>
     <div class="period-badge" id="comment-count-badge">114 Comments</div>
   </div>
 </div>
-<div class="filter-bar"><label>Period:</label><select id="comment-from" onchange="applyFilter('comments')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="comment-to" onchange="document.getElementById('comment-from').value=this.value;applyFilter('comments')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('comments',7)">Trail 7d</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('comments',30)">Trail 30d</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('comments',3)">Trail 3mo</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('comments',6)">Trail 6mo</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('comments',9)">Trail 9mo</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('comments',12)">Trail 12mo</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('comments')">All</button></div>
+<div class="filter-bar"><label>Period:</label><select id="comment-from" onchange="applyFilter('comments')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="comment-to" onchange="document.getElementById('comment-from').value=this.value;applyFilter('comments')"></select><div class="filter-sep"></div><button class="filter-btn disabled" data-preset="7d" tabindex="-1" aria-disabled="true">Last 7 days</button><button class="filter-btn disabled" data-preset="30d" tabindex="-1" aria-disabled="true">Last 30 days</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('comments',3)">Last 3 months</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('comments',6)">Last 6 months</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('comments',9)">Last 9 months</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('comments',12)">Last 12 months</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('comments')">All time</button></div>
 
-<div class="section-header"><h2>Standout Positive</h2><span class="count" style="background:var(--green-bg);color:var(--green)">9–10 / 10</span></div>
+<div class="section-header"><h2>Top praise</h2><span class="count" style="background:var(--green-bg);color:var(--green)">9–10 / 10</span></div>
 <div class="comment-grid"><div class="comment-card positive">
     <div class="comment-meta"><span>Apr 28, 2025</span><span class="score high">10/10</span></div>
     <div class="comment-text">This was genuinely one of the <span class="kw-pos">best</span> dining experiences I have ever had. The environment was absolutely lovely, with a peace and a curated dimness that allowed me to take in all of the sights of my meal (of which there...</div>
@@ -459,7 +720,7 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
   </div>
 </div>
 
-<div class="section-header"><h2>Mixed Feedback</h2><span class="count" style="background:var(--orange-bg);color:var(--orange)">7–8 / 10</span></div>
+<div class="section-header"><h2>Mixed</h2><span class="count" style="background:var(--orange-bg);color:var(--orange)">7–8 / 10</span></div>
 <div class="comment-grid"><div class="comment-card mixed">
     <div class="comment-meta"><span>Mar 28, 2025 · Dustin</span><span class="score mid">7/10</span></div>
     <div class="comment-text"><span class="kw-pos">Loved</span> the experience, but a bit too <span class="kw-neg">expensive</span></div>
@@ -494,7 +755,7 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
   </div>
 </div>
 
-<div class="section-header"><h2>Critical Negative</h2><span class="count" style="background:var(--red-bg);color:var(--red)">1–6 / 10</span></div>
+<div class="section-header"><h2>Top concerns</h2><span class="count" style="background:var(--red-bg);color:var(--red)">1–6 / 10</span></div>
 <div class="comment-grid"><div class="comment-card negative">
     <div class="comment-meta"><span>Oct 25, 2025 · Damon</span><span class="score low">1/10</span></div>
     <div class="comment-text">I had high hopes for my dinner at Hiroki, especially with the omakase experience, but unfortunately, my visit was overshadowed by a few significant issues.  The biggest problem was the noise level. We were seated next...</div>
@@ -521,7 +782,10 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 <!-- ==================== GUEST INFO VIEW ==================== -->
 <div id="view-guestinfo" class="view-section">
 <div class="page-header">
-  <h1>Guest Info</h1>
+  <div>
+    <div class="venue-sub">HIROKI Philadelphia</div>
+    <h1>Guest Info</h1>
+  </div>
   <div class="period">
     <div class="period-badge">0 Total Covers</div>
     <div class="period-badge">0 Regulars</div>
@@ -590,7 +854,10 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 <!-- ==================== PACE REPORT VIEW ==================== -->
 <div id="view-pace" class="view-section">
 <div class="page-header">
-  <h1>Pace Report</h1>
+  <div>
+    <div class="venue-sub">HIROKI Philadelphia</div>
+    <h1>Pace Report</h1>
+  </div>
   <div class="period">
     <div class="period-badge">Snapshot: —</div>
     <div class="period-badge">0 Days of Actuals</div>
@@ -639,6 +906,519 @@ body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','M
 </div>
 </div>
 
+
+<section class="view-section" id="view-google">
+  <div class="page-header">
+  <div>
+    <div class="venue-sub">HIROKI Philadelphia</div>
+    <h1>Google Reviews</h1>
+  </div>
+  </div>
+
+  <div class="filter-bar">
+    <label>Period:</label>
+    <select id="google-from" style="display:none"></select>
+    <select id="google-to" onchange="document.getElementById('google-from').value=this.value;filterGoogle('single');">
+      <optgroup label="2026">
+<option value="2026-01">January 2026</option>
+<option value="2026-02">February 2026</option>
+<option value="2026-03">March 2026</option>
+<option value="2026-04">April 2026</option>
+</optgroup>
+<optgroup label="2025">
+<option value="2025-04">April 2025</option>
+<option value="2025-05">May 2025</option>
+<option value="2025-06">June 2025</option>
+<option value="2025-07">July 2025</option>
+<option value="2025-08">August 2025</option>
+<option value="2025-09">September 2025</option>
+<option value="2025-10">October 2025</option>
+<option value="2025-11">November 2025</option>
+<option value="2025-12">December 2025</option>
+</optgroup>
+</select>
+    <div class="filter-sep"></div>
+    <button class="filter-btn" data-preset="7d" onclick="filterGoogle('days', 7)">Trail 7d</button>
+    <button class="filter-btn" data-preset="30d" onclick="filterGoogle('days', 30)">Trail 30d</button>
+    <button class="filter-btn" data-preset="3mo" onclick="filterGoogle('months', 3)">Trail 3mo</button>
+    <button class="filter-btn" data-preset="6mo" onclick="filterGoogle('months', 6)">Trail 6mo</button>
+    <button class="filter-btn" data-preset="9mo" onclick="filterGoogle('months', 9)">Trail 9mo</button>
+    <button class="filter-btn" data-preset="12mo" onclick="filterGoogle('months', 12)">Trail 12mo</button>
+    <div class="filter-sep"></div>
+    <button class="filter-btn" data-preset="all" onclick="filterGoogle('all')">All</button>
+  </div>
+
+  <div class="kpi-row" id="google-kpis">
+    <!-- populated by filterGoogle() -->
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Monthly Average Rating</div><div class="card-badge" id="google-avg-badge">Monthly</div></div>
+      <div class="chart-container" style="height:280px"><canvas id="googleMonthlyAvg" aria-label="Monthly Google star rating trend" role="img"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Monthly Review Volume</div><div class="card-badge" id="google-vol-badge">Monthly</div></div>
+      <div class="chart-container" style="height:280px"><canvas id="googleMonthlyVol" aria-label="Monthly Google review volume" role="img"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-header"><div class="card-title">Rating Distribution</div><div class="card-badge" id="google-dist-badge">Selected period</div></div>
+    <div class="chart-container" style="height:220px"><canvas id="googleDistChart" aria-label="Google rating distribution" role="img"></canvas></div>
+  </div>
+
+  <div class="section-header" style="margin-top:2rem"><h2>Top praise</h2><span class="count" id="google-pos-count">0</span></div>
+  <div class="comment-grid" id="google-pos-grid"></div>
+
+  <div class="section-header"><h2>Mixed</h2><span class="count" id="google-mix-count">0</span></div>
+  <div class="comment-grid" id="google-mix-grid"></div>
+
+  <div class="section-header"><h2>Top concerns</h2><span class="count" id="google-neg-count">0</span></div>
+  <div class="comment-grid" id="google-neg-grid"></div>
+</section>
+
+<script>
+(function(){
+  window.GOOGLE_DATA = {"venue": "HIROKI Philadelphia", "total_reviews": 307, "monthly": [{"ym": "2025-04", "avg": 3.97, "count": 76}, {"ym": "2025-05", "avg": 4.0, "count": 4}, {"ym": "2025-06", "avg": 4.0, "count": 2}, {"ym": "2025-07", "avg": 5.0, "count": 6}, {"ym": "2025-08", "avg": 4.0, "count": 4}, {"ym": "2025-09", "avg": 1.33, "count": 6}, {"ym": "2025-10", "avg": 5.0, "count": 2}, {"ym": "2025-11", "avg": 2.75, "count": 8}, {"ym": "2025-12", "avg": 2.6, "count": 10}, {"ym": "2026-01", "avg": 5.0, "count": 2}, {"ym": "2026-02", "avg": 2.0, "count": 4}, {"ym": "2026-03", "avg": 5.0, "count": 8}, {"ym": "2026-04", "avg": 5.0, "count": 2}], "daily_last30": [{"d": "2026-03-19", "n": 8, "avg": 5.0, "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 8}, {"d": "2026-04-17", "n": 2, "avg": 5.0, "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}], "samples": {"positive": [{"date": "2026-04-17", "rating": 5, "meal": null, "price": null, "text": "Great omakase experience. Well-curated courses and attentive service.", "reply": null}, {"date": "2026-03-19", "rating": 5, "meal": null, "price": null, "text": "Fantastic sushi and atmosphere in a beautiful space.", "reply": null}], "mixed": [{"date": "2025-12-01", "rating": 3, "meal": null, "price": null, "text": "Food was very good but service was slow for the price point.", "reply": null}, {"date": "2025-11-15", "rating": 4, "meal": null, "price": null, "text": "Quality ingredients and creative menu. Some dishes hit, others missed.", "reply": null}], "negative": [{"date": "2025-12-15", "rating": 1, "meal": null, "price": null, "text": "Disappointing experience. The food did not match the price, and service was inattentive.", "reply": null}, {"date": "2025-09-10", "rating": 1, "meal": null, "price": null, "text": "Overpriced for what you get. Will not return.", "reply": null}]}, "avg_rating": 4.3, "owner_reply_rate": 0, "local_guide_count": 0, "owner_reply_count": 0, "google_published_rating": 4.3, "distribution_full": {"1": 60, "2": 28, "3": 28, "4": 48, "5": 450}};
+
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function buildCardHtml(r, tier) {
+    var rating = parseInt(r.rating, 10) || 0;
+    var stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+    var mealParts = [];
+    if (r.meal) mealParts.push(r.meal);
+    if (r.price) mealParts.push(r.price);
+    var mealLabel = mealParts.join(' · ');
+    var dateLabel = (r.date || '—') + (mealLabel ? ' · ' + escapeHtml(mealLabel) : '');
+    var replyHtml = '';
+    if (r.reply) {
+      replyHtml = '<div class="grv-reply"><div class="grv-reply-label">Le Suprême · Owner reply</div><div class="grv-reply-text">' + escapeHtml(r.reply) + '</div></div>';
+    }
+    return '<div class="grv-card grv-' + tier + '">'
+      + '<div class="grv-card-head"><div class="grv-stars">' + stars + '</div>'
+      + '<div class="grv-date">' + escapeHtml(dateLabel) + '</div></div>'
+      + '<div class="grv-text">' + escapeHtml(r.text || '') + '</div>'
+      + replyHtml + '</div>';
+  }
+
+  function monthsInRange(startYM, endYM) {
+    return (window.GOOGLE_DATA.monthly || []).filter(function(m){
+      return m.ym >= startYM && m.ym <= endYM;
+    });
+  }
+  function ymBefore(months) {
+    var all = (window.GOOGLE_DATA.monthly || []).slice();
+    if (!all.length) return null;
+    return all[Math.max(0, all.length - months)].ym;
+  }
+  function latestYM() {
+    var all = window.GOOGLE_DATA.monthly || [];
+    return all.length ? all[all.length - 1].ym : null;
+  }
+  function parseDate(s) {
+    if (!s) return null;
+    var d = new Date(s);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function ymdToYm(d) {
+    if (!d) return null;
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+  }
+
+  function renderKpis(filteredMonths, sampleCounts) {
+    var totalRev = filteredMonths.reduce(function(a,m){return a+m.count;}, 0);
+    var weightedSum = filteredMonths.reduce(function(a,m){return a+(m.avg*m.count);}, 0);
+    var avg = totalRev > 0 ? (weightedSum/totalRev).toFixed(2) : '—';
+    // 5★/1-2★ % — approximate from sample if we only have monthly aggregates
+    var fivePct = '—', negPct = '—';
+    if (totalRev > 0 && filteredMonths.length > 0) {
+      // In lieu of full per-review breakdown per month, estimate using overall distribution ratios
+      var d = window.GOOGLE_DATA.distribution_full;
+      var totalAll = window.GOOGLE_DATA.total_reviews;
+      fivePct = ((d['5']/totalAll)*100).toFixed(1) + '%';
+      negPct = (((d['1']+d['2'])/totalAll)*100).toFixed(1) + '%';
+    }
+    var periodLabel = filteredMonths.length > 0 ? filteredMonths[0].ym + ' → ' + filteredMonths[filteredMonths.length-1].ym : '—';
+    document.getElementById('google-kpis').innerHTML =
+        '<div class="kpi"><div class="kpi-label">Total Reviews</div><div class="kpi-value">' + totalRev.toLocaleString() + '</div><div class="kpi-sub"><span class="vs">' + periodLabel + '</span></div></div>'
+      + '<div class="kpi"><div class="kpi-label">Avg Rating</div><div class="kpi-value" style="color:#2BA6BB">' + avg + '</div><div class="kpi-sub"><span class="vs">across ' + filteredMonths.length + ' months</span></div></div>'
+      + '<div class="kpi"><div class="kpi-label">5★ Reviews<span class="info-icon" title="Percent of reviews at the maximum rating.">i</span></div><div class="kpi-value" style="color:#2BA6BB">' + fivePct + '</div><div class="kpi-sub"><span class="vs">all-time ratio</span></div></div>'
+      + '<div class="kpi"><div class="kpi-label">1-2★ Reviews</div><div class="kpi-value" style="color:#ef4444">' + negPct + '</div><div class="kpi-sub"><span class="vs">all-time ratio</span></div></div>'
+      + '<div class="kpi"><div class="kpi-label">Owner Reply Rate<span class="info-icon" title="Percent of Google reviews the venue has responded to.">i</span></div><div class="kpi-value" style="color:#405766">' + window.GOOGLE_DATA.owner_reply_rate + '%</div><div class="kpi-sub"><span class="vs">all-time</span></div></div>';
+  }
+
+  function _monLabel(ym) {
+    var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var parts = ym.split('-');
+    return names[parseInt(parts[1],10)-1].slice(0,3) + ' ' + parts[0].slice(2);
+  }
+  function _dayLabel(iso) {
+    var d = new Date(iso + 'T12:00:00');
+    var names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return names[d.getUTCMonth()] + ' ' + d.getUTCDate();
+  }
+
+  function renderCharts(filteredMonths, mode, dailyRows) {
+    if (typeof Chart === 'undefined') return;
+    window.charts = window.charts || {};
+
+    var isDay = mode === 'day';
+    var labels, avgs, counts, distBars;
+    if (isDay) {
+      labels = (dailyRows || []).map(function(r){ return _dayLabel(r.d); });
+      avgs = (dailyRows || []).map(function(r){ return r.avg; });
+      counts = (dailyRows || []).map(function(r){ return r.n; });
+      // Rebuild distribution from the filtered daily rows
+      var bars = [0,0,0,0,0];
+      (dailyRows || []).forEach(function(r){
+        bars[0] += r.r1||0; bars[1] += r.r2||0; bars[2] += r.r3||0; bars[3] += r.r4||0; bars[4] += r.r5||0;
+      });
+      distBars = bars;
+    } else {
+      labels = filteredMonths.map(function(m){ return _monLabel(m.ym); });
+      avgs = filteredMonths.map(function(m){ return m.avg; });
+      counts = filteredMonths.map(function(m){ return m.count; });
+      var d = window.GOOGLE_DATA.distribution_full;
+      distBars = [d['1'], d['2'], d['3'], d['4'], d['5']];
+    }
+
+    // Toggle badge text to Daily/Monthly
+    var avgBadge = document.getElementById('google-avg-badge');
+    var volBadge = document.getElementById('google-vol-badge');
+    if (avgBadge) avgBadge.textContent = isDay ? 'Daily' : 'Monthly';
+    if (volBadge) volBadge.textContent = isDay ? 'Daily' : 'Monthly';
+
+    var avgCtx = document.getElementById('googleMonthlyAvg');
+    if (avgCtx) {
+      if (window.charts.googleMonthlyAvg) window.charts.googleMonthlyAvg.destroy();
+      window.charts.googleMonthlyAvg = new Chart(avgCtx.getContext('2d'), {
+        type: 'line',
+        data: { labels: labels, datasets: [{
+          label: 'Avg ★ Rating', data: avgs,
+          borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.12)',
+          fill: true, tension: 0.35, pointRadius: 3, borderWidth: 2
+        }] },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          // max:5 is a hint for methodDynamicYRange plugin to treat as star scale
+          scales: { y: { beginAtZero: false, max: 5, grid: { color: '#f3f4f6' } },
+                     x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
+        }
+      });
+    }
+    var volCtx = document.getElementById('googleMonthlyVol');
+    if (volCtx) {
+      if (window.charts.googleMonthlyVol) window.charts.googleMonthlyVol.destroy();
+      window.charts.googleMonthlyVol = new Chart(volCtx.getContext('2d'), {
+        type: 'bar',
+        data: { labels: labels, datasets: [{
+          label: 'Reviews', data: counts,
+          backgroundColor: 'rgba(43,166,187,0.35)', borderColor: '#2BA6BB', borderWidth: 1, borderRadius: 4
+        }] },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          // Volume bars stay at 0 baseline
+          scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+                     x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
+        }
+      });
+    }
+    var distCtx = document.getElementById('googleDistChart');
+    if (distCtx) {
+      if (window.charts.googleDistChart) window.charts.googleDistChart.destroy();
+      window.charts.googleDistChart = new Chart(distCtx.getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['1★','2★','3★','4★','5★'], datasets: [{
+          label: 'Reviews', data: distBars,
+          backgroundColor: ['#ef4444','#DC2626','#D8CFC4','#BCC8BE','#2BA6BB'],
+          borderRadius: 6
+        }] },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
+        }
+      });
+    }
+  }
+
+  function renderSamples(startDate, endDate) {
+    var samples = window.GOOGLE_DATA.samples;
+    function filterByDate(list) {
+      return (list || []).filter(function(r){
+        var d = parseDate(r.date);
+        if (!d) return true;  // keep if no date
+        if (startDate && d < startDate) return false;
+        if (endDate && d > endDate) return false;
+        return true;
+      });
+    }
+    var pos = filterByDate(samples.positive);
+    var mix = filterByDate(samples.mixed);
+    var neg = filterByDate(samples.negative);
+    document.getElementById('google-pos-count').textContent = pos.length;
+    document.getElementById('google-mix-count').textContent = mix.length;
+    document.getElementById('google-neg-count').textContent = neg.length;
+    document.getElementById('google-pos-grid').innerHTML = pos.map(function(r){return buildCardHtml(r,'positive');}).join('');
+    document.getElementById('google-mix-grid').innerHTML = mix.map(function(r){return buildCardHtml(r,'mixed');}).join('');
+    document.getElementById('google-neg-grid').innerHTML = neg.map(function(r){return buildCardHtml(r,'negative');}).join('');
+  }
+
+  // Main filter entry
+  window.filterGoogle = function(kind, n) {
+    var allMonths = window.GOOGLE_DATA.monthly || [];
+    if (!allMonths.length) return;
+    var latest = allMonths[allMonths.length - 1].ym;
+    var filteredMonths;
+    var startDate = null, endDate = null;
+    var mode = 'month';
+    var dailyRows = null;
+
+    if (kind === 'all') {
+      filteredMonths = allMonths.slice();
+      startDate = parseDate(allMonths[0].ym + '-01');
+      endDate = new Date();
+    } else if (kind === 'months') {
+      var from = ymBefore(n);
+      filteredMonths = monthsInRange(from, latest);
+      startDate = parseDate(from + '-01');
+      endDate = new Date();
+    } else if (kind === 'days') {
+      // Day mode: use daily_last30 data for last N days of calendar time
+      mode = 'day';
+      var allDaily = window.GOOGLE_DATA.daily_last30 || [];
+      if (allDaily.length) {
+        var anchor = allDaily[allDaily.length - 1].d;
+        var anchorDate = new Date(anchor + 'T12:00:00');
+        var cutoff = new Date(anchorDate.getTime() - (n - 1) * 86400000);
+        var cutoffStr = cutoff.getFullYear() + '-' + String(cutoff.getMonth()+1).padStart(2,'0') + '-' + String(cutoff.getDate()).padStart(2,'0');
+        dailyRows = allDaily.filter(function(d){ return d.d >= cutoffStr; });
+        startDate = cutoff;
+        endDate = anchorDate;
+      }
+      filteredMonths = monthsInRange(latest, latest); // for KPI computation
+    } else if (kind === 'single') {
+      var ym = document.getElementById('google-to').value;
+      filteredMonths = monthsInRange(ym, ym);
+      startDate = parseDate(ym + '-01');
+      endDate = new Date(parseDate(ym + '-01').getTime() + (31 * 86400 * 1000));
+    } else {
+      filteredMonths = allMonths.slice();
+    }
+
+    renderKpis(filteredMonths);
+    renderCharts(filteredMonths, mode, dailyRows);
+    renderSamples(startDate, endDate);
+
+    // Highlight active preset
+    document.querySelectorAll('#view-google .filter-btn[data-preset]').forEach(function(b){ b.classList.remove('preset-active'); });
+    var presetKey = kind === 'all' ? 'all' : kind === 'days' ? (n + 'd') : kind === 'months' ? (n + 'mo') : null;
+    if (presetKey) {
+      var btn = document.querySelector('#view-google .filter-btn[data-preset="' + presetKey + '"]');
+      if (btn) btn.classList.add('preset-active');
+    }
+    // Set 'to' dropdown to latest month
+    var toEl = document.getElementById('google-to');
+    if (toEl && kind !== 'single') toEl.value = latest;
+  };
+
+  function init() {
+    // Default view: Trail 12mo
+    filterGoogle('months', 12);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 120); });
+  } else {
+    setTimeout(init, 120);
+  }
+  // Rebuild when view is shown (canvases may not have dimensions until visible)
+  var origSwitch = window.switchView;
+  if (typeof origSwitch === 'function') {
+    window.switchView = function(v) {
+      var ret = origSwitch.apply(this, arguments);
+      if (v === 'google') setTimeout(function(){
+        // Re-render charts with current filtered monthlies
+        var active = document.querySelector('#view-google .filter-btn.preset-active');
+        var preset = active ? active.getAttribute('data-preset') : '12mo';
+        if (preset === 'all') filterGoogle('all');
+        else if (preset.endsWith('mo')) filterGoogle('months', parseInt(preset, 10));
+        else if (preset.endsWith('d')) filterGoogle('days', parseInt(preset, 10));
+      }, 80);
+      return ret;
+    };
+  }
+})();
+</script>
+
+
+<div class="view-section" id="view-npsdeep">
+  <div class="page-header">
+    <div>
+      <div class="venue-sub">HIROKI Philadelphia</div>
+      <h1>NPS Deep Dive</h1>
+    </div>
+  </div>
+
+  <div class="npsd-hero">
+    <div class="npsd-score-big">
+      <div class="v" id="npsd-score">—</div>
+      <div class="l">Current NPS · <span id="npsd-period-label">—</span></div>
+    </div>
+    <div class="npsd-breakdown">
+      <div class="npsd-meta-tile">
+        <div class="npsd-meta-label">vs Last Month</div>
+        <div class="npsd-meta-value" id="npsd-vs-month">—</div>
+        <div class="npsd-meta-sub" id="npsd-vs-month-sub"></div>
+      </div>
+      <div class="npsd-meta-tile">
+        <div class="npsd-meta-label">vs Prior Quarter</div>
+        <div class="npsd-meta-value" id="npsd-vs-quarter">—</div>
+        <div class="npsd-meta-sub" id="npsd-vs-quarter-sub"></div>
+      </div>
+      <div class="npsd-meta-tile">
+        <div class="npsd-meta-label">12-Month Avg</div>
+        <div class="npsd-meta-value" id="npsd-vs-year">—</div>
+        <div class="npsd-meta-sub" id="npsd-vs-year-sub"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-header"><div class="card-title">NPS Composition Over Time</div><div class="card-badge">% of responses</div></div>
+      <div class="chart-container" style="height:280px"><canvas id="npsdCompositionChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">NPS Trend with Benchmarks</div><div class="card-badge">Monthly</div></div>
+      <div class="chart-container" style="height:280px"><canvas id="npsdTrendChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Recommend Score Distribution</div><div class="card-badge">0–10 scale</div></div>
+      <div class="chart-container" style="height:240px"><canvas id="npsdRecDistChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Best & Worst Months</div><div class="card-badge">in view</div></div>
+      <table class="npsd-corr-table" id="npsd-bestworst-table">
+        <thead><tr><th>Month</th><th style="text-align:right">NPS</th><th style="text-align:right">Surveys</th><th>Note</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <div class="card-header"><div class="card-title">What Moves NPS — Summary</div><div class="card-badge">Strongest drivers</div></div>
+    <div id="npsd-drivers-summary" style="padding:0.5rem 0;font-size:0.88rem;line-height:1.6;color:#231F20"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <div class="card-header"><div class="card-title">NPS by Category Score Band</div><div class="card-badge">Monthly · avg NPS in each bucket</div></div>
+    <table class="npsd-corr-table" id="npsd-band-table">
+      <thead><tr>
+        <th>Category</th>
+        <th style="text-align:right">Correlation</th>
+        <th style="text-align:right">≥ 95</th>
+        <th style="text-align:right">90–94</th>
+        <th style="text-align:right">85–89</th>
+        <th style="text-align:right">&lt; 85</th>
+        <th style="text-align:right">Lift</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+    <div style="font-size:0.7rem;color:#6b7280;margin-top:0.75rem">
+      <b>Correlation</b>: Pearson r between the category's monthly score and that month's NPS
+      (−1 to +1; above +0.5 = strong). <b>Lift</b>: avg NPS in top band minus avg in bottom band.
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Response-Level Scatter</div><div class="card-badge">Each point = one guest</div></div>
+      <div class="chart-container" style="height:280px"><canvas id="npsdScatterChart"></canvas></div>
+      <div style="font-size:0.72rem;color:#6b7280;margin-top:0.5rem">
+        Hover for details. Each dot is one survey response: category score (x) vs recommend score (y).
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Projected NPS Impact</div><div class="card-badge">If each category improved by +5 points</div></div>
+      <table class="npsd-corr-table" id="npsd-impact-table">
+        <thead><tr><th>Category</th><th style="text-align:right">Current avg</th><th style="text-align:right">→ +5</th><th style="text-align:right">Est. NPS Δ</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div style="font-size:0.7rem;color:#6b7280;margin-top:0.75rem">
+        Estimate uses the linear relationship observed in your own data. Holds other categories constant.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="view-section" id="view-xchan">
+  <div class="page-header">
+    <div>
+      <div class="venue-sub">HIROKI Philadelphia</div>
+      <h1>Cross-Channel</h1>
+    </div>
+  </div>
+
+  <div class="xc-insight-box" id="xc-insight">
+    <h3>The short story</h3>
+    <p id="xc-insight-text">Computing cross-channel analysis…</p>
+  </div>
+
+  <div class="xc-hero">
+    <div class="xc-tile hero-dark">
+      <div class="xc-label">Resy NPS (12 mo)</div>
+      <div class="xc-value" id="xc-nps">—</div>
+      <div class="xc-sub" id="xc-nps-sub">—</div>
+    </div>
+    <div class="xc-tile hero-dark">
+      <div class="xc-label">Google ★ (12 mo)</div>
+      <div class="xc-value" id="xc-google">—</div>
+      <div class="xc-sub" id="xc-google-sub">—</div>
+    </div>
+    <div class="xc-tile">
+      <div class="xc-label">Channel Gap</div>
+      <div class="xc-value" id="xc-gap">—</div>
+      <div class="xc-sub" id="xc-gap-sub">Resy − Google (1-5 equiv)</div>
+    </div>
+    <div class="xc-tile">
+      <div class="xc-label">Alignment</div>
+      <div class="xc-value" id="xc-align">—</div>
+      <div class="xc-sub" id="xc-align-sub">—</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1rem">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Resy NPS & Google ★ · Side by Side</div><div class="card-badge">Monthly</div></div>
+      <div class="chart-container" style="height:300px"><canvas id="xcDualAxisChart" aria-label="Resy NPS and Google rating over time on dual axes" role="img"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Monthly Gap (Resy Overall 1-5 vs Google ★)</div><div class="card-badge">Δ points</div></div>
+      <div class="chart-container" style="height:300px"><canvas id="xcGapChart" aria-label="Monthly channel gap trend" role="img"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">How Channels Agree or Diverge</div><div class="card-badge">Interpretation</div></div>
+    <table class="npsd-corr-table">
+      <thead><tr><th>Pattern</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td><b>Both channels up</b></td><td>Real improvement. Guests tell you at the table <i>and</i> tell the world.</td></tr>
+        <tr><td><b>Resy up, Google flat/down</b></td><td>The at-table experience is better, but memory-of-experience or public perception isn't catching up yet. Often an operational improvement that hasn't yet shifted the public signal.</td></tr>
+        <tr><td><b>Resy flat, Google down</b></td><td>Early warning. Something's surfacing in public reviews that post-visit surveys are missing — wait times, reservation friction, price-value, or issues guests don't raise in person.</td></tr>
+        <tr><td><b>Gap widening over time</b></td><td>Survey bias growing. Your Resy prompt may be filtering out unhappy guests. Worth a gut-check: <i>does every guest get the same prompt?</i></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <div class="footer">HIROKI Philadelphia · NPS Report · Method Co F&B · Generated April 2026</div>
 </div>
 
@@ -659,17 +1439,17 @@ function trendDataset(data,color,label){return{type:'line',label:label||'Trend',
 function populateDropdowns(prefix){var f=document.getElementById(prefix+'-from'),t=document.getElementById(prefix+'-to');f.innerHTML='';t.innerHTML='';allMonths.forEach(function(m){var l=fmtMonthFull(m);f.innerHTML+='<option value="'+m+'">'+l+'</option>';t.innerHTML+='<option value="'+m+'">'+l+'</option>'});f.value=allMonths[0];t.value=allMonths[allMonths.length-1]}
 function resetFilter(view){var prefix=view==='surveys'?'survey':view==='ratings'?'rating':view==='servers'?'server':'comment';document.getElementById(prefix+'-from').value=allMonths[0];document.getElementById(prefix+'-to').value=allMonths[allMonths.length-1];applyFilter(view)}
 function updateNpsScorecard(months){var p=sum(slice(RAW.nps.promoters,months)),pa=sum(slice(RAW.nps.passives,months)),d=sum(slice(RAW.nps.detractors,months)),t=p+pa+d;var nps=t?Math.round((p/t-d/t)*100):0;var pp=t?(p/t*100).toFixed(1):'0',ppa=t?(pa/t*100).toFixed(1):'0',pd=t?(d/t*100).toFixed(1):'0';document.getElementById('nps-score').textContent=nps;document.getElementById('nps-score').style.color=nps>=60?'var(--green)':nps>=40?'var(--blue)':'var(--red)';document.getElementById('nps-bar-p').style.width=pp+'%';document.getElementById('nps-bar-pa').style.width=ppa+'%';document.getElementById('nps-bar-d').style.width=pd+'%';document.getElementById('nps-promo-pct').textContent=pp+'%';document.getElementById('nps-pass-pct').textContent=ppa+'%';document.getElementById('nps-det-pct').textContent=pd+'%';document.getElementById('nps-total-resp').textContent=t;document.getElementById('nps-promo-count').textContent=p;document.getElementById('nps-pass-count').textContent=pa;document.getElementById('nps-det-count').textContent=d}
-function buildSurveyCharts(months){var labels=months.map(fmtLabel),o=slice(RAW.survey.overall,months),s=slice(RAW.survey.service,months),f=slice(RAW.survey.food,months),a=slice(RAW.survey.atmos,months),n=slice(RAW.survey.nps,months),v=slice(RAW.survey.volume,months);document.getElementById('skpi-overall').textContent=avg(o);document.getElementById('skpi-service').textContent=avg(s);document.getElementById('skpi-food').textContent=avg(f);document.getElementById('skpi-atmos').textContent=avg(a);document.getElementById('skpi-count').textContent=sum(v);updateNpsScorecard(months);destroyChart('surveyMonthlyScores');charts['surveyMonthlyScores']=new Chart(document.getElementById('surveyMonthlyScores'),{type:'line',data:{labels:labels,datasets:[{label:'Overall',data:o,borderColor:'#212931',backgroundColor:'rgba(33,41,49,.06)',fill:true,tension:.35,pointRadius:3,borderWidth:2},trendDataset(o,'rgba(33,41,49,.45)','Overall Trend'),{label:'Service',data:s,borderColor:'#2BA6BB',tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(s,'rgba(43,166,187,.4)','Service Trend'),{label:'Food',data:f,borderColor:'#405766',tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(f,'rgba(64,87,102,.4)','Food Trend'),{label:'Atmosphere',data:a,borderColor:'#BCC8BE',tension:.35,pointRadius:2,borderWidth:1.5,borderDash:[4,3]},trendDataset(a,'rgba(188,200,190,.35)','Atmos Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14,filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyNpsChart');charts['surveyNpsChart']=new Chart(document.getElementById('surveyNpsChart'),{type:'bar',data:{labels:labels,datasets:[{label:'NPS',data:n,backgroundColor:n.map(function(v){return v>=75?'#2BA6BB':v>=65?'#405766':'#D8CFC4'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(n,'rgba(43,166,187,.6)','NPS Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='NPS'}}}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyVolumeChart');charts['surveyVolumeChart']=new Chart(document.getElementById('surveyVolumeChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Surveys',data:v,backgroundColor:'rgba(43,166,187,.35)',borderColor:'#2BA6BB',borderWidth:1,borderRadius:6,maxBarThickness:32,order:2},trendDataset(v,'rgba(59,130,246,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Surveys'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}})}
-function buildRatingCharts(months){var labels=months.map(fmtLabel),ma=slice(RAW.rating.avg,months),mv=slice(RAW.rating.vol,months),p5=slice(RAW.rating.pct5,months),p1=slice(RAW.rating.pct1,months);var dr1=sum(slice(RAW.rating.r1,months)),dr2=sum(slice(RAW.rating.r2,months)),dr3=sum(slice(RAW.rating.r3,months)),dr4=sum(slice(RAW.rating.r4,months)),dr5=sum(slice(RAW.rating.r5,months));var total=dr1+dr2+dr3+dr4+dr5,weighted=dr1+dr2*2+dr3*3+dr4*4+dr5*5;var filtAvg=total?(weighted/total).toFixed(2):'0',filt5=total?(dr5/total*100).toFixed(1):'0',filt12=total?((dr1+dr2)/total*100).toFixed(1):'0';document.getElementById('rkpi-avg').textContent=filtAvg;document.getElementById('rkpi-5star').textContent=filt5+'%';document.getElementById('rkpi-5count').textContent=dr5+' of '+total;document.getElementById('rkpi-12star').textContent=filt12+'%';document.getElementById('rkpi-negcount').textContent=(dr1+dr2)+' negative';document.getElementById('rkpi-total').textContent=total;destroyChart('ratingMonthlyAvg');charts['ratingMonthlyAvg']=new Chart(document.getElementById('ratingMonthlyAvg'),{type:'line',data:{labels:labels,datasets:[{label:'Avg Rating',data:ma,borderColor:'#2BA6BB',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.35,pointBackgroundColor:'#3b82f6',pointRadius:3,borderWidth:2},trendDataset(ma,'rgba(59,130,246,.5)','Rating Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Avg Rating'}}}},scales:{y:{beginAtZero:false,max:5.0,ticks:{stepSize:.1},grid:{color:'#f3f4f6'}}}}});destroyChart('ratingMonthlyVol');charts['ratingMonthlyVol']=new Chart(document.getElementById('ratingMonthlyVol'),{type:'bar',data:{labels:labels,datasets:[{label:'Ratings',data:mv,backgroundColor:mv.map(function(v){return v>=160?'rgba(59,130,246,.7)':'rgba(59,130,246,.35)'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(mv,'rgba(59,130,246,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Ratings'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('ratingDistChart');charts['ratingDistChart']=new Chart(document.getElementById('ratingDistChart'),{type:'doughnut',data:{labels:['1 Star','2 Star','3 Star','4 Star','5 Star'],datasets:[{data:[dr1,dr2,dr3,dr4,dr5],backgroundColor:['#ef4444','#f59e0b','#fbbf24','#3b82f6','#10b981'],borderWidth:0}]},options:{responsive:true,cutout:'55%',plugins:{legend:{position:'right',labels:{padding:14,usePointStyle:true,pointStyle:'circle'}}}}});destroyChart('ratingStarPct');charts['ratingStarPct']=new Chart(document.getElementById('ratingStarPct'),{type:'line',data:{labels:labels,datasets:[{label:'5-Star %',data:p5,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p5,'rgba(16,185,129,.4)','5-Star Trend'),{label:'1-Star %',data:p1,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p1,'rgba(239,68,68,.4)','1-Star Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}}}}});var qmap={};months.forEach(function(m){var parts=m.split('-');var q=parts[0]+'-Q'+Math.ceil(parseInt(parts[1])/3);if(!qmap[q])qmap[q]={w:0,t:0};var t=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)+(RAW.rating.r3[m]||0)+(RAW.rating.r4[m]||0)+(RAW.rating.r5[m]||0);var w=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)*2+(RAW.rating.r3[m]||0)*3+(RAW.rating.r4[m]||0)*4+(RAW.rating.r5[m]||0)*5;qmap[q].t+=t;qmap[q].w+=w});var ql=Object.keys(qmap).sort(),qa=ql.map(function(q){return qmap[q].t?+(qmap[q].w/qmap[q].t).toFixed(2):0}),qt=ql.map(function(q){return qmap[q].t});destroyChart('ratingQuarterChart');charts['ratingQuarterChart']=new Chart(document.getElementById('ratingQuarterChart'),{type:'bar',data:{labels:ql,datasets:[{label:'Avg Rating',data:qa,backgroundColor:qa.map(function(v,i){return i===qa.indexOf(Math.max.apply(null,qa))?'rgba(16,185,129,.6)':v===Math.min.apply(null,qa)?'rgba(239,68,68,.5)':'rgba(59,130,246,.45)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(qa,'rgba(59,130,246,.5)','Avg Trend'),{label:'Total Ratings',data:qt,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,qt)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Volume',font:{size:10}}}}}})}
-function buildStaticCharts(){destroyChart('surveyDowChart');charts['surveyDowChart']=new Chart(document.getElementById('surveyDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Overall',data:RAW.survey.dow,backgroundColor:RAW.survey.dow.map(function(v){return v<90?'rgba(239,68,68,.6)':'rgba(59,130,246,.45)'}),borderRadius:8,maxBarThickness:40,order:2},trendDataset(RAW.survey.dow,'rgba(59,130,246,.5)','DOW Trend')]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyRecDist');charts['surveyRecDist']=new Chart(document.getElementById('surveyRecDist'),{type:'bar',data:{labels:['1','2','3','4','5','6','7','8','9','10'],datasets:[{label:'Responses',data:RAW.survey.recDist,backgroundColor:['#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981','#10b981'],borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#f3f4f6'}},x:{title:{display:true,text:'Recommend Score',font:{size:11}}}}}});destroyChart('ratingDowChart');charts['ratingDowChart']=new Chart(document.getElementById('ratingDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Rating',data:RAW.rating.dowAvg,backgroundColor:RAW.rating.dowAvg.map(function(v){return v<Math.min.apply(null,RAW.rating.dowAvg)+0.05?'rgba(239,68,68,.55)':'rgba(59,130,246,.4)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(RAW.rating.dowAvg,'rgba(59,130,246,.5)','DOW Trend'),{label:'Avg Volume/Day',data:RAW.rating.dowVol,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,RAW.rating.dowVol)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Vol/Day',font:{size:10}}}}}})}
+function buildSurveyCharts(months){var labels=months.map(fmtLabel),o=slice(RAW.survey.overall,months),s=slice(RAW.survey.service,months),f=slice(RAW.survey.food,months),a=slice(RAW.survey.atmos,months),n=slice(RAW.survey.nps,months),v=slice(RAW.survey.volume,months);document.getElementById('skpi-overall').textContent=avg(o);document.getElementById('skpi-service').textContent=avg(s);document.getElementById('skpi-food').textContent=avg(f);document.getElementById('skpi-atmos').textContent=avg(a);document.getElementById('skpi-count').textContent=sum(v);updateNpsScorecard(months);destroyChart('surveyMonthlyScores');charts['surveyMonthlyScores']=new Chart(document.getElementById('surveyMonthlyScores'),{type:'line',data:{labels:labels,datasets:[{label:'Overall',data:o,borderColor:'#212931',backgroundColor:'rgba(33,41,49,.06)',fill:true,tension:.35,pointRadius:3,borderWidth:2},trendDataset(o,'rgba(33,41,49,.45)','Overall Trend'),{label:'Service',data:s,borderColor:'#2BA6BB',tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(s,'rgba(43,166,187,.4)','Service Trend'),{label:'Food',data:f,borderColor:'#405766',tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(f,'rgba(64,87,102,.4)','Food Trend'),{label:'Atmosphere',data:a,borderColor:'#BCC8BE',tension:.35,pointRadius:2,borderWidth:1.5,borderDash:[4,3]},trendDataset(a,'rgba(188,200,190,.35)','Atmos Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14,filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyNpsChart');charts['surveyNpsChart']=new Chart(document.getElementById('surveyNpsChart'),{type:'bar',data:{labels:labels,datasets:[{label:'NPS',data:n,backgroundColor:n.map(function(v){return v>=75?'#2BA6BB':v>=65?'#405766':'#D8CFC4'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(n,'rgba(43,166,187,.6)','NPS Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='NPS'}}}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyVolumeChart');charts['surveyVolumeChart']=new Chart(document.getElementById('surveyVolumeChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Surveys',data:v,backgroundColor:'rgba(43,166,187,.35)',borderColor:'#2BA6BB',borderWidth:1,borderRadius:6,maxBarThickness:32,order:2},trendDataset(v,'rgba(43,166,187,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Surveys'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}})}
+function buildRatingCharts(months){var labels=months.map(fmtLabel),ma=slice(RAW.rating.avg,months),mv=slice(RAW.rating.vol,months),p5=slice(RAW.rating.pct5,months),p1=slice(RAW.rating.pct1,months);var dr1=sum(slice(RAW.rating.r1,months)),dr2=sum(slice(RAW.rating.r2,months)),dr3=sum(slice(RAW.rating.r3,months)),dr4=sum(slice(RAW.rating.r4,months)),dr5=sum(slice(RAW.rating.r5,months));var total=dr1+dr2+dr3+dr4+dr5,weighted=dr1+dr2*2+dr3*3+dr4*4+dr5*5;var filtAvg=total?(weighted/total).toFixed(2):'0',filt5=total?(dr5/total*100).toFixed(1):'0',filt12=total?((dr1+dr2)/total*100).toFixed(1):'0';document.getElementById('rkpi-avg').textContent=filtAvg;document.getElementById('rkpi-5star').textContent=filt5+'%';document.getElementById('rkpi-5count').textContent=dr5+' of '+total;document.getElementById('rkpi-12star').textContent=filt12+'%';document.getElementById('rkpi-negcount').textContent=(dr1+dr2)+' negative';document.getElementById('rkpi-total').textContent=total;destroyChart('ratingMonthlyAvg');charts['ratingMonthlyAvg']=new Chart(document.getElementById('ratingMonthlyAvg'),{type:'line',data:{labels:labels,datasets:[{label:'Avg Rating',data:ma,borderColor:'#2BA6BB',backgroundColor:'rgba(43,166,187,.06)',fill:true,tension:.35,pointBackgroundColor:'#2BA6BB',pointRadius:3,borderWidth:2},trendDataset(ma,'rgba(43,166,187,.5)','Rating Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Avg Rating'}}}},scales:{y:{beginAtZero:false,max:5.0,ticks:{stepSize:.1},grid:{color:'#f3f4f6'}}}}});destroyChart('ratingMonthlyVol');charts['ratingMonthlyVol']=new Chart(document.getElementById('ratingMonthlyVol'),{type:'bar',data:{labels:labels,datasets:[{label:'Ratings',data:mv,backgroundColor:mv.map(function(v){return v>=160?'rgba(43,166,187,.7)':'rgba(43,166,187,.35)'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(mv,'rgba(43,166,187,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Ratings'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('ratingDistChart');charts['ratingDistChart']=new Chart(document.getElementById('ratingDistChart'),{type:'doughnut',data:{labels:['1 Star','2 Star','3 Star','4 Star','5 Star'],datasets:[{data:[dr1,dr2,dr3,dr4,dr5],backgroundColor:['#ef4444','#D8CFC4','#D8CFC4','#2BA6BB','#10b981'],borderWidth:0}]},options:{responsive:true,cutout:'55%',plugins:{legend:{position:'right',labels:{padding:14,usePointStyle:true,pointStyle:'circle'}}}}});destroyChart('ratingStarPct');charts['ratingStarPct']=new Chart(document.getElementById('ratingStarPct'),{type:'line',data:{labels:labels,datasets:[{label:'5-Star %',data:p5,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p5,'rgba(16,185,129,.4)','5-Star Trend'),{label:'1-Star %',data:p1,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p1,'rgba(239,68,68,.4)','1-Star Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}}}}});var qmap={};months.forEach(function(m){var parts=m.split('-');var q=parts[0]+'-Q'+Math.ceil(parseInt(parts[1])/3);if(!qmap[q])qmap[q]={w:0,t:0};var t=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)+(RAW.rating.r3[m]||0)+(RAW.rating.r4[m]||0)+(RAW.rating.r5[m]||0);var w=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)*2+(RAW.rating.r3[m]||0)*3+(RAW.rating.r4[m]||0)*4+(RAW.rating.r5[m]||0)*5;qmap[q].t+=t;qmap[q].w+=w});var ql=Object.keys(qmap).sort(),qa=ql.map(function(q){return qmap[q].t?+(qmap[q].w/qmap[q].t).toFixed(2):0}),qt=ql.map(function(q){return qmap[q].t});destroyChart('ratingQuarterChart');charts['ratingQuarterChart']=new Chart(document.getElementById('ratingQuarterChart'),{type:'bar',data:{labels:ql,datasets:[{label:'Avg Rating',data:qa,backgroundColor:qa.map(function(v,i){return i===qa.indexOf(Math.max.apply(null,qa))?'rgba(16,185,129,.6)':v===Math.min.apply(null,qa)?'rgba(239,68,68,.5)':'rgba(43,166,187,.45)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(qa,'rgba(43,166,187,.5)','Avg Trend'),{label:'Total Ratings',data:qt,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,qt)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Volume',font:{size:10}}}}}})}
+function buildStaticCharts(){destroyChart('surveyDowChart');charts['surveyDowChart']=new Chart(document.getElementById('surveyDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Overall',data:RAW.survey.dow,backgroundColor:RAW.survey.dow.map(function(v){return v<90?'rgba(239,68,68,.6)':'rgba(43,166,187,.45)'}),borderRadius:8,maxBarThickness:40,order:2},trendDataset(RAW.survey.dow,'rgba(43,166,187,.5)','DOW Trend')]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyRecDist');charts['surveyRecDist']=new Chart(document.getElementById('surveyRecDist'),{type:'bar',data:{labels:['1','2','3','4','5','6','7','8','9','10'],datasets:[{label:'Responses',data:RAW.survey.recDist,backgroundColor:['#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#D8CFC4','#D8CFC4','#10b981','#10b981'],borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#f3f4f6'}},x:{title:{display:true,text:'Recommend Score',font:{size:11}}}}}});destroyChart('ratingDowChart');charts['ratingDowChart']=new Chart(document.getElementById('ratingDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Rating',data:RAW.rating.dowAvg,backgroundColor:RAW.rating.dowAvg.map(function(v){return v<Math.min.apply(null,RAW.rating.dowAvg)+0.05?'rgba(239,68,68,.55)':'rgba(43,166,187,.4)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(RAW.rating.dowAvg,'rgba(43,166,187,.5)','DOW Trend'),{label:'Avg Volume/Day',data:RAW.rating.dowVol,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,RAW.rating.dowVol)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Vol/Day',font:{size:10}}}}}})}
 function filterComments(months){var from=months[0],to=months[months.length-1];var c=0;document.querySelectorAll('#view-comments .comment-card').forEach(function(card){var meta=card.querySelector('.comment-meta span').textContent;var d=meta.match(/([A-Z][a-z]{2}) (\d{2}), (\d{4})/);if(d){var mm={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};var ym=d[3]+'-'+mm[d[1]];var show=ym>=from&&ym<=to;card.style.display=show?'':'none';if(show)c++}});document.getElementById('comment-count-badge').textContent=c+' Comments shown'}
-function filterServers(months){var from=months[0],to=months[months.length-1];document.getElementById('server-period').textContent=fmtMonthFull(from)+' \u2013 '+fmtMonthFull(to);var sm=RAW.serverMonthly,results=[];for(var name in sm){var scores=[];for(var i=0;i<months.length;i++){var m=months[i];if(sm[name][m]!==undefined&&sm[name][m]!==null)scores.push(sm[name][m])}if(scores.length>=3){var a=+(scores.reduce(function(x,y){return x+y},0)/scores.length).toFixed(1);results.push({name:name,avg:a,min:Math.min.apply(null,scores),max:Math.max.apply(null,scores),months:scores.length})}}results.sort(function(a,b){return b.avg-a.avg});var top=results.slice(0,10),bottom=results.slice(-10).sort(function(a,b){return a.avg-b.avg});function renderRows(list,colorFn){var h='';for(var i=0;i<list.length;i++){var s=list[i],c=colorFn(s.avg);h+='<tr><td style="font-weight:500">'+s.name+'</td><td style="color:'+c+';font-weight:600">'+s.avg+'</td><td style="color:#6b7280">'+s.min+'\u2013'+s.max+'</td><td>'+s.months+'</td><td><div class="bar-bg"><div class="bar-fill" style="width:'+s.avg+'%;background:'+c+'"></div></div></td></tr>'}return h}document.getElementById('top-server-tbody').innerHTML=renderRows(top,function(a){return a>=97?'#10b981':'#3b82f6'});document.getElementById('bottom-server-tbody').innerHTML=renderRows(bottom,function(a){return a<90?'#ef4444':'#f59e0b'});document.getElementById('server-top-count').textContent=top.length+' servers';document.getElementById('server-bottom-count').textContent=bottom.length+' servers'}
+function filterServers(months){var from=months[0],to=months[months.length-1];document.getElementById('server-period').textContent=fmtMonthFull(from)+' \u2013 '+fmtMonthFull(to);var sm=RAW.serverMonthly,results=[];for(var name in sm){var scores=[];for(var i=0;i<months.length;i++){var m=months[i];if(sm[name][m]!==undefined&&sm[name][m]!==null)scores.push(sm[name][m])}if(scores.length>=3){var a=+(scores.reduce(function(x,y){return x+y},0)/scores.length).toFixed(1);results.push({name:name,avg:a,min:Math.min.apply(null,scores),max:Math.max.apply(null,scores),months:scores.length})}}results.sort(function(a,b){return b.avg-a.avg});var top=results.slice(0,10),bottom=results.slice(-10).sort(function(a,b){return a.avg-b.avg});function renderRows(list,colorFn){var h='';for(var i=0;i<list.length;i++){var s=list[i],c=colorFn(s.avg);h+='<tr><td style="font-weight:500">'+s.name+'</td><td style="color:'+c+';font-weight:600">'+s.avg+'</td><td style="color:#6b7280">'+s.min+'\u2013'+s.max+'</td><td>'+s.months+'</td><td><div class="bar-bg"><div class="bar-fill" style="width:'+s.avg+'%;background:'+c+'"></div></div></td></tr>'}return h}document.getElementById('top-server-tbody').innerHTML=renderRows(top,function(a){return a>=97?'#10b981':'#2BA6BB'});document.getElementById('bottom-server-tbody').innerHTML=renderRows(bottom,function(a){return a<90?'#ef4444':'#D8CFC4'});document.getElementById('server-top-count').textContent=top.length+' servers';document.getElementById('server-bottom-count').textContent=bottom.length+' servers'}
 function applyFilter(view){var prefix=view==='surveys'?'survey':view==='ratings'?'rating':view==='servers'?'server':'comment';var months=getFilteredMonths(prefix);if(months.length===0)return;if(view==='surveys')buildSurveyCharts(months);else if(view==='ratings')buildRatingCharts(months);else if(view==='comments')filterComments(months);else if(view==='servers')filterServers(months)}
-function buildGuestInfoCharts(){var csEl=document.getElementById('giCoverSource');if(!csEl)return;var csLabels=[],csValues=[];var csColors=['#3b82f6','#10b981','#405766','#f59e0b','#ef4444','#06b6d4','#ec4899','#84cc16','#f97316'];destroyChart('giCoverSource');charts['giCoverSource']=new Chart(csEl,{type:'bar',data:{labels:csLabels,datasets:[{label:'Covers',data:csValues,backgroundColor:csValues.map(function(_,i){return csColors[i%csColors.length]}),borderRadius:6,maxBarThickness:36}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#f3f4f6'}},y:{grid:{display:false}}}}});var orLabels=[],orValues=[];var orColors=['#3b82f6','#10b981','#405766','#f59e0b','#ef4444','#06b6d4','#ec4899','#84cc16','#f97316','#6366f1'];destroyChart('giOriginChart');charts['giOriginChart']=new Chart(document.getElementById('giOriginChart'),{type:'doughnut',data:{labels:orLabels,datasets:[{data:orValues,backgroundColor:orColors,borderWidth:0}]},options:{responsive:true,cutout:'50%',plugins:{legend:{position:'right',labels:{padding:10,usePointStyle:true,pointStyle:'circle',font:{size:11}}}}}})}
+function buildGuestInfoCharts(){var csEl=document.getElementById('giCoverSource');if(!csEl)return;var csLabels=[],csValues=[];var csColors=['#2BA6BB','#10b981','#405766','#D8CFC4','#ef4444','#2BA6BB','#405766','#BCC8BE','#D8CFC4'];destroyChart('giCoverSource');charts['giCoverSource']=new Chart(csEl,{type:'bar',data:{labels:csLabels,datasets:[{label:'Covers',data:csValues,backgroundColor:csValues.map(function(_,i){return csColors[i%csColors.length]}),borderRadius:6,maxBarThickness:36}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#f3f4f6'}},y:{grid:{display:false}}}}});var orLabels=[],orValues=[];var orColors=['#2BA6BB','#10b981','#405766','#D8CFC4','#ef4444','#2BA6BB','#405766','#BCC8BE','#D8CFC4','#405766'];destroyChart('giOriginChart');charts['giOriginChart']=new Chart(document.getElementById('giOriginChart'),{type:'doughnut',data:{labels:orLabels,datasets:[{data:orValues,backgroundColor:orColors,borderWidth:0}]},options:{responsive:true,cutout:'50%',plugins:{legend:{position:'right',labels:{padding:10,usePointStyle:true,pointStyle:'circle',font:{size:11}}}}}})}
 function initGiFilters(){var dates=[];RAW.giVips.forEach(function(v){if(v.date)dates.push(v.date)});RAW.giNeg.forEach(function(n){if(n.date)dates.push(n.date)});dates.sort();if(dates.length===0)return;var months={};dates.forEach(function(d){var ym=d.substring(0,7);months[ym]=1});var giMonths=Object.keys(months).sort();var f=document.getElementById('gi-from'),t=document.getElementById('gi-to');if(!f||!t)return;var mn=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];f.innerHTML='';t.innerHTML='';giMonths.forEach(function(ym){var p=ym.split('-');var label=mn[parseInt(p[1])]+' '+p[0];f.innerHTML+='<option value="'+ym+'">'+label+'</option>';t.innerHTML+='<option value="'+ym+'">'+label+'</option>'});f.value=giMonths[0];t.value=giMonths[giMonths.length-1];window._giMonths=giMonths}
-function filterGuestInfo(){var f=document.getElementById('gi-from').value,t=document.getElementById('gi-to').value;var vipTbody=document.getElementById('gi-vip-tbody'),negTbody=document.getElementById('gi-neg-tbody');if(!vipTbody||!negTbody)return;var fmtDate=function(d){var mn=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var p=d.split('-');return mn[parseInt(p[1])]+' '+parseInt(p[2])+', '+p[0]};var vipFiltered=RAW.giVips.filter(function(v){var ym=v.date?v.date.substring(0,7):'';return ym>=f&&ym<=t});var negFiltered=RAW.giNeg.filter(function(n){var ym=n.date?n.date.substring(0,7):'';return ym>=f&&ym<=t});var vipHtml='';vipFiltered.slice(0,20).forEach(function(v){vipHtml+='<tr><td style="font-weight:500">'+v.name+'</td><td style="color:var(--muted)">'+fmtDate(v.date)+'</td></tr>'});vipTbody.innerHTML=vipHtml;document.getElementById('gi-vip-badge').textContent=vipFiltered.length+' VIPs';document.getElementById('gikpi-vip').textContent=vipFiltered.length;document.getElementById('gikpi-vip-sub').textContent='of '+RAW.giVips.length+' total';var negHtml='';negFiltered.slice(0,20).forEach(function(n){var sc=n.rating===1?'#ef4444':'#f59e0b';var stars='';for(var i=0;i<5;i++)stars+=i<n.rating?'\u2605':'\u2606';negHtml+='<tr><td style="font-weight:500">'+n.name+'</td><td style="color:var(--muted)">'+fmtDate(n.date)+'</td><td style="color:'+sc+';font-weight:700">'+stars+'</td></tr>'});negTbody.innerHTML=negHtml;document.getElementById('gi-neg-badge').textContent=negFiltered.length+' Flagged';document.getElementById('gikpi-neg').textContent=negFiltered.length;document.getElementById('gikpi-neg-sub').textContent='of '+RAW.giNeg.length+' total'}
+function filterGuestInfo(){var f=document.getElementById('gi-from').value,t=document.getElementById('gi-to').value;var vipTbody=document.getElementById('gi-vip-tbody'),negTbody=document.getElementById('gi-neg-tbody');if(!vipTbody||!negTbody)return;var fmtDate=function(d){var mn=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var p=d.split('-');return mn[parseInt(p[1])]+' '+parseInt(p[2])+', '+p[0]};var vipFiltered=RAW.giVips.filter(function(v){var ym=v.date?v.date.substring(0,7):'';return ym>=f&&ym<=t});var negFiltered=RAW.giNeg.filter(function(n){var ym=n.date?n.date.substring(0,7):'';return ym>=f&&ym<=t});var vipHtml='';vipFiltered.slice(0,20).forEach(function(v){vipHtml+='<tr><td style="font-weight:500">'+v.name+'</td><td style="color:var(--muted)">'+fmtDate(v.date)+'</td></tr>'});vipTbody.innerHTML=vipHtml;document.getElementById('gi-vip-badge').textContent=vipFiltered.length+' VIPs';document.getElementById('gikpi-vip').textContent=vipFiltered.length;document.getElementById('gikpi-vip-sub').textContent='of '+RAW.giVips.length+' total';var negHtml='';negFiltered.slice(0,20).forEach(function(n){var sc=n.rating===1?'#ef4444':'#D8CFC4';var stars='';for(var i=0;i<5;i++)stars+=i<n.rating?'\u2605':'\u2606';negHtml+='<tr><td style="font-weight:500">'+n.name+'</td><td style="color:var(--muted)">'+fmtDate(n.date)+'</td><td style="color:'+sc+';font-weight:700">'+stars+'</td></tr>'});negTbody.innerHTML=negHtml;document.getElementById('gi-neg-badge').textContent=negFiltered.length+' Flagged';document.getElementById('gikpi-neg').textContent=negFiltered.length;document.getElementById('gikpi-neg-sub').textContent='of '+RAW.giNeg.length+' total'}
 function resetGiFilter(){if(!window._giMonths||!window._giMonths.length)return;document.getElementById('gi-from').value=window._giMonths[0];document.getElementById('gi-to').value=window._giMonths[window._giMonths.length-1];filterGuestInfo()}
-function buildPaceCharts(){var el=document.getElementById('paceDailyChart');if(!el)return;var labels=[],dinner=[],lunch=[],brunch=[],reserved=[],walkin=[],nsDow=[];destroyChart('paceDailyChart');charts['paceDailyChart']=new Chart(el,{type:'bar',data:{labels:labels,datasets:[{label:'Dinner',data:dinner,backgroundColor:'rgba(59,130,246,.65)',borderRadius:4,maxBarThickness:28},{label:'Lunch',data:lunch,backgroundColor:'rgba(16,185,129,.55)',borderRadius:4,maxBarThickness:28},{label:'Brunch',data:brunch,backgroundColor:'rgba(245,158,11,.5)',borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('paceMixChart');charts['paceMixChart']=new Chart(document.getElementById('paceMixChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Reserved',data:reserved,backgroundColor:'rgba(59,130,246,.55)',borderRadius:4,maxBarThickness:28},{label:'Walk-in',data:walkin,backgroundColor:'rgba(139,92,246,.5)',borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('paceNoshowChart');charts['paceNoshowChart']=new Chart(document.getElementById('paceNoshowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'No-Show Rate %',data:nsDow,backgroundColor:nsDow.map(function(v){return v>10?'rgba(239,68,68,.6)':v>5?'rgba(245,158,11,.5)':'rgba(16,185,129,.45)'}),borderRadius:8,maxBarThickness:40}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}},x:{grid:{display:false}}}}})}
+function buildPaceCharts(){var el=document.getElementById('paceDailyChart');if(!el)return;var labels=[],dinner=[],lunch=[],brunch=[],reserved=[],walkin=[],nsDow=[];destroyChart('paceDailyChart');charts['paceDailyChart']=new Chart(el,{type:'bar',data:{labels:labels,datasets:[{label:'Dinner',data:dinner,backgroundColor:'rgba(43,166,187,.65)',borderRadius:4,maxBarThickness:28},{label:'Lunch',data:lunch,backgroundColor:'rgba(16,185,129,.55)',borderRadius:4,maxBarThickness:28},{label:'Brunch',data:brunch,backgroundColor:'rgba(216,207,196,.5)',borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('paceMixChart');charts['paceMixChart']=new Chart(document.getElementById('paceMixChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Reserved',data:reserved,backgroundColor:'rgba(43,166,187,.55)',borderRadius:4,maxBarThickness:28},{label:'Walk-in',data:walkin,backgroundColor:'rgba(64,87,102,.5)',borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('paceNoshowChart');charts['paceNoshowChart']=new Chart(document.getElementById('paceNoshowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'No-Show Rate %',data:nsDow,backgroundColor:nsDow.map(function(v){return v>10?'rgba(239,68,68,.6)':v>5?'rgba(216,207,196,.5)':'rgba(16,185,129,.45)'}),borderRadius:8,maxBarThickness:40}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}},x:{grid:{display:false}}}}})}
 ['survey','rating','server','comment'].forEach(populateDropdowns);buildSurveyCharts(allMonths);buildRatingCharts(allMonths);buildStaticCharts();filterServers(allMonths);buildGuestInfoCharts();initGiFilters();buildPaceCharts();
 
 // --- Method Co dynamic Y-axis plugin ---
@@ -846,21 +1626,29 @@ function setTrailing(view, nMonths) {
     destroyByCanvas('surveyMonthlyScores');
     destroyByCanvas('surveyVolumeChart');
 
-    // NPS Trend (daily line)
+    // NPS chart — bar chart matching the monthly view exactly (same type, colors,
+    // borderRadius, maxBarThickness, and default responsive aspect ratio so height
+    // matches the 3-/6-/9-/12-month view).
+    var npsData = dayRows.map(function(r){ return r.nps; });
     var npsCtx = document.getElementById('surveyNpsChart');
     if (npsCtx && window.Chart) {
       window.charts = window.charts || {};
       window.charts['surveyNpsChart'] = new Chart(npsCtx.getContext('2d'), {
-        type: 'line',
+        type: 'bar',
         data: { labels: labels, datasets: [{
-          label: 'Daily NPS', data: dayRows.map(function(r){ return r.nps; }),
-          borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.15)',
-          tension: 0.25, pointRadius: 3, borderWidth: 2, fill: true, spanGaps: true
+          label: 'NPS',
+          data: npsData,
+          backgroundColor: npsData.map(function(v){
+            if (v == null) return '#D8CFC4';
+            return v >= 75 ? '#2BA6BB' : v >= 65 ? '#405766' : '#D8CFC4';
+          }),
+          borderRadius: 6,
+          maxBarThickness: 32
         }] },
-        options: { responsive:true, maintainAspectRatio:false,
-          plugins:{ legend:{ display:false } },
-          scales:{ y:{ beginAtZero:false, max:100, ticks:{ font:{size:10} } },
-                   x:{ ticks:{ font:{size:10} }, grid:{ display:false } } } }
+        options: { responsive: true,
+          plugins: { legend: { labels: { filter: function(item){ return item.text === 'NPS'; } } } },
+          scales: { y: { beginAtZero: false, max: 100, grid: { color: '#f3f4f6' } } }
+        }
       });
     }
 
@@ -890,19 +1678,25 @@ function setTrailing(view, nMonths) {
       });
     }
 
-    // Survey volume bars (daily)
+    // Survey volume bars — match monthly config (same type, color, borderRadius,
+    // maxBarThickness, default responsive aspect ratio so height matches)
     var volCtx = document.getElementById('surveyVolumeChart');
     if (volCtx && window.Chart) {
       window.charts['surveyVolumeChart'] = new Chart(volCtx.getContext('2d'), {
         type: 'bar',
         data: { labels: labels, datasets: [{
-          label: 'Surveys', data: dayRows.map(function(r){ return r.n; }),
-          backgroundColor: '#2BA6BB', borderRadius: 4
+          label: 'Surveys',
+          data: dayRows.map(function(r){ return r.n; }),
+          backgroundColor: 'rgba(43,166,187,.35)',
+          borderColor: '#2BA6BB',
+          borderWidth: 1,
+          borderRadius: 6,
+          maxBarThickness: 32
         }] },
-        options: { responsive:true, maintainAspectRatio:false,
-          plugins:{ legend:{ display:false } },
-          scales:{ y:{ beginAtZero:true, ticks:{ font:{size:10}, stepSize:1 } },
-                   x:{ ticks:{ font:{size:10} }, grid:{ display:false } } } }
+        options: { responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f3f4f6' } } }
+        }
       });
     }
 
@@ -983,7 +1777,7 @@ function setTrailing(view, nMonths) {
         type: 'bar',
         data: { labels: labels, datasets: [
           { label: '1★', data: rows.map(function(r){ return r.r1; }), backgroundColor: '#ef4444', stack: 's' },
-          { label: '2★', data: rows.map(function(r){ return r.r2; }), backgroundColor: '#f59e0b', stack: 's' },
+          { label: '2★', data: rows.map(function(r){ return r.r2; }), backgroundColor: '#D8CFC4', stack: 's' },
           { label: '3★', data: rows.map(function(r){ return r.r3; }), backgroundColor: '#D8CFC4', stack: 's' },
           { label: '4★', data: rows.map(function(r){ return r.r4; }), backgroundColor: '#BCC8BE', stack: 's' },
           { label: '5★', data: rows.map(function(r){ return r.r5; }), backgroundColor: '#2BA6BB', stack: 's' }
@@ -1060,7 +1854,7 @@ function setTrailing(view, nMonths) {
 
     function renderRows(list) {
       return list.map(function(s){
-        var color = s.avg >= 90 ? '#10b981' : s.avg >= 75 ? '#f59e0b' : '#ef4444';
+        var color = s.avg >= 90 ? '#10b981' : s.avg >= 75 ? '#D8CFC4' : '#ef4444';
         return '<tr>' +
           '<td style="font-weight:500">' + s.name + '</td>' +
           '<td style="color:' + color + ';font-weight:600">' + s.avg.toFixed(1) + '</td>' +
@@ -1203,334 +1997,1211 @@ function setTrailing7d(view) { setTrailingDays(view, 7); }
 })();
 
 </script>
-<div class="method-footer-brand">Method Co — Confidential</div>
-
-<section class="view-section" id="view-google">
-  <div class="page-header">
-    <h1>Google Reviews</h1>
-  </div>
-
-  <div class="filter-bar">
-    <label>Period:</label>
-    <select id="google-from" style="display:none"></select>
-    <select id="google-to" onchange="document.getElementById('google-from').value=this.value;filterGoogle('single');">
-      <option value="2025-04">April 2025</option><option value="2025-05">May 2025</option><option value="2025-06">June 2025</option><option value="2025-07">July 2025</option><option value="2025-08">August 2025</option><option value="2025-09">September 2025</option><option value="2025-10">October 2025</option><option value="2025-11">November 2025</option><option value="2025-12">December 2025</option><option value="2026-01">January 2026</option><option value="2026-02">February 2026</option><option value="2026-03">March 2026</option><option value="2026-04">April 2026</option>
-    </select>
-    <div class="filter-sep"></div>
-    <button class="filter-btn" data-preset="7d" onclick="filterGoogle('days', 7)">Trail 7d</button>
-    <button class="filter-btn" data-preset="30d" onclick="filterGoogle('days', 30)">Trail 30d</button>
-    <button class="filter-btn" data-preset="3mo" onclick="filterGoogle('months', 3)">Trail 3mo</button>
-    <button class="filter-btn" data-preset="6mo" onclick="filterGoogle('months', 6)">Trail 6mo</button>
-    <button class="filter-btn" data-preset="9mo" onclick="filterGoogle('months', 9)">Trail 9mo</button>
-    <button class="filter-btn" data-preset="12mo" onclick="filterGoogle('months', 12)">Trail 12mo</button>
-    <div class="filter-sep"></div>
-    <button class="filter-btn" data-preset="all" onclick="filterGoogle('all')">All</button>
-  </div>
-
-  <div class="kpi-row" id="google-kpis">
-    <!-- populated by filterGoogle() -->
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header"><div class="card-title">Monthly Average Rating</div><div class="card-badge" id="google-avg-badge">Monthly</div></div>
-      <div class="chart-container" style="height:280px"><canvas id="googleMonthlyAvg"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Monthly Review Volume</div><div class="card-badge" id="google-vol-badge">Monthly</div></div>
-      <div class="chart-container" style="height:280px"><canvas id="googleMonthlyVol"></canvas></div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:1rem">
-    <div class="card-header"><div class="card-title">Rating Distribution</div><div class="card-badge" id="google-dist-badge">Selected period</div></div>
-    <div class="chart-container" style="height:220px"><canvas id="googleDistChart"></canvas></div>
-  </div>
-
-  <div class="section-header" style="margin-top:2rem"><h2>Standout Positive</h2><span class="count" id="google-pos-count">0</span></div>
-  <div class="comment-grid" id="google-pos-grid"></div>
-
-  <div class="section-header"><h2>Mixed Feedback</h2><span class="count" id="google-mix-count">0</span></div>
-  <div class="comment-grid" id="google-mix-grid"></div>
-
-  <div class="section-header"><h2>Critical Negative</h2><span class="count" id="google-neg-count">0</span></div>
-  <div class="comment-grid" id="google-neg-grid"></div>
-</section>
+<div class="footer-stamp">Generated Apr 18, 2026 · v1.0</div>
 
 <script>
 (function(){
-  window.GOOGLE_DATA = {"venue": "HIROKI Philadelphia", "total_reviews": 307, "monthly": [{"ym": "2025-04", "avg": 3.97, "count": 76}, {"ym": "2025-05", "avg": 4.0, "count": 4}, {"ym": "2025-06", "avg": 4.0, "count": 2}, {"ym": "2025-07", "avg": 5.0, "count": 6}, {"ym": "2025-08", "avg": 4.0, "count": 4}, {"ym": "2025-09", "avg": 1.33, "count": 6}, {"ym": "2025-10", "avg": 5.0, "count": 2}, {"ym": "2025-11", "avg": 2.75, "count": 8}, {"ym": "2025-12", "avg": 2.6, "count": 10}, {"ym": "2026-01", "avg": 5.0, "count": 2}, {"ym": "2026-02", "avg": 2.0, "count": 4}, {"ym": "2026-03", "avg": 5.0, "count": 8}, {"ym": "2026-04", "avg": 5.0, "count": 2}], "daily_last30": [{"d": "2026-03-19", "n": 8, "avg": 5.0, "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 8}, {"d": "2026-04-17", "n": 2, "avg": 5.0, "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}], "samples": {"positive": [{"date": "2026-04-17", "rating": 5, "meal": null, "price": null, "text": "Great omakase experience. Well-curated courses and attentive service.", "reply": null}, {"date": "2026-03-19", "rating": 5, "meal": null, "price": null, "text": "Fantastic sushi and atmosphere in a beautiful space.", "reply": null}], "mixed": [{"date": "2025-12-01", "rating": 3, "meal": null, "price": null, "text": "Food was very good but service was slow for the price point.", "reply": null}, {"date": "2025-11-15", "rating": 4, "meal": null, "price": null, "text": "Quality ingredients and creative menu. Some dishes hit, others missed.", "reply": null}], "negative": [{"date": "2025-12-15", "rating": 1, "meal": null, "price": null, "text": "Disappointing experience. The food did not match the price, and service was inattentive.", "reply": null}, {"date": "2025-09-10", "rating": 1, "meal": null, "price": null, "text": "Overpriced for what you get. Will not return.", "reply": null}]}, "avg_rating": 4.3, "owner_reply_rate": 0, "local_guide_count": 0, "owner_reply_count": 0, "google_published_rating": 4.3, "distribution_full": {"1": 60, "2": 28, "3": 28, "4": 48, "5": 450}};
-
-  function escapeHtml(s) {
-    if (s == null) return '';
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-  }
-  function buildCardHtml(r, tier) {
-    var rating = parseInt(r.rating, 10) || 0;
-    var stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-    var mealParts = [];
-    if (r.meal) mealParts.push(r.meal);
-    if (r.price) mealParts.push(r.price);
-    var mealLabel = mealParts.join(' · ');
-    var dateLabel = (r.date || '—') + (mealLabel ? ' · ' + escapeHtml(mealLabel) : '');
-    var replyHtml = '';
-    if (r.reply) {
-      replyHtml = '<div class="grv-reply"><div class="grv-reply-label">Le Suprême · Owner reply</div><div class="grv-reply-text">' + escapeHtml(r.reply) + '</div></div>';
+  // Wait for RAW to be available
+  function addDeltas() {
+    if (!window.RAW || !window.allMonths || !window.allMonths.length) {
+      return setTimeout(addDeltas, 200);
     }
-    return '<div class="grv-card grv-' + tier + '">'
-      + '<div class="grv-card-head"><div class="grv-stars">' + stars + '</div>'
-      + '<div class="grv-date">' + escapeHtml(dateLabel) + '</div></div>'
-      + '<div class="grv-text">' + escapeHtml(r.text || '') + '</div>'
-      + replyHtml + '</div>';
+    var months = window.allMonths;
+    var latest = months[months.length - 1];
+    var prior = months.length > 1 ? months[months.length - 2] : null;
+    if (!prior) return;
+    function delta(curr, prev) {
+      if (curr == null || prev == null) return null;
+      return +(curr - prev).toFixed(1);
+    }
+    function fmtDelta(d, suffix) {
+      if (d == null) return '';
+      var cls = d > 0 ? 'up' : d < 0 ? 'down' : 'flat';
+      var arrow = d > 0 ? '↑' : d < 0 ? '↓' : '→';
+      return '<span class="kpi-delta ' + cls + '">' + arrow + ' ' + Math.abs(d) + (suffix || '') + '</span>';
+    }
+    // Map KPI element IDs to the RAW keys that hold monthly values
+    var map = [
+      { id: 'skpi-overall', series: RAW.survey.overall },
+      { id: 'skpi-service', series: RAW.survey.service },
+      { id: 'skpi-food',    series: RAW.survey.food },
+      { id: 'skpi-atmos',   series: RAW.survey.atmos },
+      { id: 'skpi-count',   series: RAW.survey.volume },
+      { id: 'rkpi-avg',     series: RAW.rating.avg },
+      { id: 'rkpi-total',   series: RAW.rating.vol }
+    ];
+    map.forEach(function(m){
+      var el = document.getElementById(m.id);
+      if (!el || !m.series) return;
+      var curr = m.series[latest];
+      var prev = m.series[prior];
+      var d = delta(curr, prev);
+      if (d === null) return;
+      // Find the sub element right after the value
+      var sub = el.nextElementSibling;
+      if (sub && sub.classList.contains('kpi-sub')) {
+        sub.insertAdjacentHTML('afterbegin', fmtDelta(d));
+      } else {
+        el.insertAdjacentHTML('afterend', '<div class="kpi-sub">' + fmtDelta(d) + ' vs last month</div>');
+      }
+    });
+    // NPS score delta (needs computation from promoters/passives/detractors)
+    if (RAW.nps && RAW.nps.promoters) {
+      var n_l = RAW.nps.promoters[latest] + (RAW.nps.passives[latest]||0) + RAW.nps.detractors[latest];
+      var n_p = RAW.nps.promoters[prior]  + (RAW.nps.passives[prior]||0)  + RAW.nps.detractors[prior];
+      if (n_l && n_p) {
+        var nps_l = Math.round(((RAW.nps.promoters[latest] - RAW.nps.detractors[latest]) / n_l) * 100);
+        var nps_p = Math.round(((RAW.nps.promoters[prior]  - RAW.nps.detractors[prior])  / n_p) * 100);
+        var dn = delta(nps_l, nps_p);
+        var npsEl = document.getElementById('nps-score');
+        if (npsEl && dn !== null) {
+          npsEl.insertAdjacentHTML('afterend', '<div style="font-size:0.72rem;margin-top:0.25rem">' + fmtDelta(dn) + ' vs last month</div>');
+        }
+      }
+    }
   }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addDeltas);
+  else addDeltas();
+})();
+</script>
 
-  function monthsInRange(startYM, endYM) {
-    return (window.GOOGLE_DATA.monthly || []).filter(function(m){
-      return m.ym >= startYM && m.ym <= endYM;
+<script>
+(function(){
+  function isFilterHidden(el) {
+    // A card is "filter-hidden" when inline style display=none (set by filterComments)
+    return el.style.display === 'none';
+  }
+  function recomputeCollapse(grid) {
+    var allCards = Array.from(grid.querySelectorAll('.comment-card'));
+    // Clear prior collapse state
+    allCards.forEach(function(c){ c.classList.remove('collapsed-hidden'); });
+    var visible = allCards.filter(function(c){ return !isFilterHidden(c); });
+    var expanded = grid.classList.contains('expanded');
+    if (visible.length <= 5 || expanded) return visible.length;
+    // Hide visible cards from index 5 onwards (collapsed state)
+    visible.slice(5).forEach(function(c){ c.classList.add('collapsed-hidden'); });
+    return visible.length;
+  }
+  function ensureToggleButton(grid) {
+    var existing = grid.nextElementSibling;
+    if (existing && existing.classList && existing.classList.contains('comment-grid-toggle')) return existing;
+    var btn = document.createElement('button');
+    btn.className = 'comment-grid-toggle';
+    btn.addEventListener('click', function(){
+      grid.classList.toggle('expanded');
+      var total = recomputeCollapse(grid);
+      updateToggleLabel(btn, grid, total);
+    });
+    grid.parentNode.insertBefore(btn, grid.nextSibling);
+    return btn;
+  }
+  function updateToggleLabel(btn, grid, visibleCount) {
+    if (visibleCount <= 5) { btn.style.display = 'none'; return; }
+    btn.style.display = '';
+    if (grid.classList.contains('expanded')) {
+      btn.textContent = 'Show top 5';
+    } else {
+      btn.textContent = 'Show ' + (visibleCount - 5) + ' more (' + visibleCount + ' total)';
+    }
+  }
+  function refreshAll() {
+    document.querySelectorAll('.comment-grid').forEach(function(grid){
+      var btn = ensureToggleButton(grid);
+      var visibleCount = recomputeCollapse(grid);
+      updateToggleLabel(btn, grid, visibleCount);
     });
   }
-  function ymBefore(months) {
-    var all = (window.GOOGLE_DATA.monthly || []).slice();
-    if (!all.length) return null;
-    return all[Math.max(0, all.length - months)].ym;
+  // Run on load
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', refreshAll);
+  else refreshAll();
+  // Re-run when filter changes — observe display changes on .comment-card
+  var observer = new MutationObserver(function(mutations){
+    var needsRefresh = mutations.some(function(m){
+      return m.type === 'attributes' && m.attributeName === 'style';
+    });
+    if (needsRefresh) refreshAll();
+  });
+  setTimeout(function(){
+    document.querySelectorAll('.comment-card').forEach(function(c){
+      observer.observe(c, { attributes: true, attributeFilter: ['style'] });
+    });
+  }, 500);
+  // Also re-run after any applyFilter call (hook into it)
+  var origApply = window.applyFilter;
+  if (typeof origApply === 'function') {
+    window.applyFilter = function(view) {
+      var ret = origApply.apply(this, arguments);
+      if (view === 'comments') setTimeout(refreshAll, 100);
+      return ret;
+    };
   }
-  function latestYM() {
-    var all = window.GOOGLE_DATA.monthly || [];
-    return all.length ? all[all.length - 1].ym : null;
-  }
-  function parseDate(s) {
-    if (!s) return null;
-    var d = new Date(s);
-    return isNaN(d.getTime()) ? null : d;
-  }
-  function ymdToYm(d) {
-    if (!d) return null;
-    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
-  }
-
-  function renderKpis(filteredMonths, sampleCounts) {
-    var totalRev = filteredMonths.reduce(function(a,m){return a+m.count;}, 0);
-    var weightedSum = filteredMonths.reduce(function(a,m){return a+(m.avg*m.count);}, 0);
-    var avg = totalRev > 0 ? (weightedSum/totalRev).toFixed(2) : '—';
-    // 5★/1-2★ % — approximate from sample if we only have monthly aggregates
-    var fivePct = '—', negPct = '—';
-    if (totalRev > 0 && filteredMonths.length > 0) {
-      // In lieu of full per-review breakdown per month, estimate using overall distribution ratios
-      var d = window.GOOGLE_DATA.distribution_full;
-      var totalAll = window.GOOGLE_DATA.total_reviews;
-      fivePct = ((d['5']/totalAll)*100).toFixed(1) + '%';
-      negPct = (((d['1']+d['2'])/totalAll)*100).toFixed(1) + '%';
-    }
-    var periodLabel = filteredMonths.length > 0 ? filteredMonths[0].ym + ' → ' + filteredMonths[filteredMonths.length-1].ym : '—';
-    document.getElementById('google-kpis').innerHTML =
-        '<div class="kpi"><div class="kpi-label">Total Reviews</div><div class="kpi-value">' + totalRev.toLocaleString() + '</div><div class="kpi-sub"><span class="vs">' + periodLabel + '</span></div></div>'
-      + '<div class="kpi"><div class="kpi-label">Avg Rating</div><div class="kpi-value" style="color:#2BA6BB">' + avg + '</div><div class="kpi-sub"><span class="vs">across ' + filteredMonths.length + ' months</span></div></div>'
-      + '<div class="kpi"><div class="kpi-label">5★ Reviews</div><div class="kpi-value" style="color:#2BA6BB">' + fivePct + '</div><div class="kpi-sub"><span class="vs">all-time ratio</span></div></div>'
-      + '<div class="kpi"><div class="kpi-label">1-2★ Reviews</div><div class="kpi-value" style="color:#ef4444">' + negPct + '</div><div class="kpi-sub"><span class="vs">all-time ratio</span></div></div>'
-      + '<div class="kpi"><div class="kpi-label">Owner Reply Rate</div><div class="kpi-value" style="color:#405766">' + window.GOOGLE_DATA.owner_reply_rate + '%</div><div class="kpi-sub"><span class="vs">all-time</span></div></div>';
-  }
-
-  function _monLabel(ym) {
-    var names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    var parts = ym.split('-');
-    return names[parseInt(parts[1],10)-1].slice(0,3) + ' ' + parts[0].slice(2);
-  }
-  function _dayLabel(iso) {
-    var d = new Date(iso + 'T12:00:00');
-    var names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return names[d.getUTCMonth()] + ' ' + d.getUTCDate();
-  }
-
-  function renderCharts(filteredMonths, mode, dailyRows) {
-    if (typeof Chart === 'undefined') return;
-    window.charts = window.charts || {};
-
-    var isDay = mode === 'day';
-    var labels, avgs, counts, distBars;
-    if (isDay) {
-      labels = (dailyRows || []).map(function(r){ return _dayLabel(r.d); });
-      avgs = (dailyRows || []).map(function(r){ return r.avg; });
-      counts = (dailyRows || []).map(function(r){ return r.n; });
-      // Rebuild distribution from the filtered daily rows
-      var bars = [0,0,0,0,0];
-      (dailyRows || []).forEach(function(r){
-        bars[0] += r.r1||0; bars[1] += r.r2||0; bars[2] += r.r3||0; bars[3] += r.r4||0; bars[4] += r.r5||0;
-      });
-      distBars = bars;
-    } else {
-      labels = filteredMonths.map(function(m){ return _monLabel(m.ym); });
-      avgs = filteredMonths.map(function(m){ return m.avg; });
-      counts = filteredMonths.map(function(m){ return m.count; });
-      var d = window.GOOGLE_DATA.distribution_full;
-      distBars = [d['1'], d['2'], d['3'], d['4'], d['5']];
-    }
-
-    // Toggle badge text to Daily/Monthly
-    var avgBadge = document.getElementById('google-avg-badge');
-    var volBadge = document.getElementById('google-vol-badge');
-    if (avgBadge) avgBadge.textContent = isDay ? 'Daily' : 'Monthly';
-    if (volBadge) volBadge.textContent = isDay ? 'Daily' : 'Monthly';
-
-    var avgCtx = document.getElementById('googleMonthlyAvg');
-    if (avgCtx) {
-      if (window.charts.googleMonthlyAvg) window.charts.googleMonthlyAvg.destroy();
-      window.charts.googleMonthlyAvg = new Chart(avgCtx.getContext('2d'), {
-        type: 'line',
-        data: { labels: labels, datasets: [{
-          label: 'Avg ★ Rating', data: avgs,
-          borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.12)',
-          fill: true, tension: 0.35, pointRadius: 3, borderWidth: 2
-        }] },
-        options: { responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          // max:5 is a hint for methodDynamicYRange plugin to treat as star scale
-          scales: { y: { beginAtZero: false, max: 5, grid: { color: '#f3f4f6' } },
-                     x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
-        }
-      });
-    }
-    var volCtx = document.getElementById('googleMonthlyVol');
-    if (volCtx) {
-      if (window.charts.googleMonthlyVol) window.charts.googleMonthlyVol.destroy();
-      window.charts.googleMonthlyVol = new Chart(volCtx.getContext('2d'), {
-        type: 'bar',
-        data: { labels: labels, datasets: [{
-          label: 'Reviews', data: counts,
-          backgroundColor: 'rgba(43,166,187,0.35)', borderColor: '#2BA6BB', borderWidth: 1, borderRadius: 4
-        }] },
-        options: { responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          // Volume bars stay at 0 baseline
-          scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
-                     x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
-        }
-      });
-    }
-    var distCtx = document.getElementById('googleDistChart');
-    if (distCtx) {
-      if (window.charts.googleDistChart) window.charts.googleDistChart.destroy();
-      window.charts.googleDistChart = new Chart(distCtx.getContext('2d'), {
-        type: 'bar',
-        data: { labels: ['1★','2★','3★','4★','5★'], datasets: [{
-          label: 'Reviews', data: distBars,
-          backgroundColor: ['#ef4444','#f59e0b','#D8CFC4','#BCC8BE','#2BA6BB'],
-          borderRadius: 6
-        }] },
-        options: { responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
-        }
-      });
-    }
-  }
-
-  function renderSamples(startDate, endDate) {
-    var samples = window.GOOGLE_DATA.samples;
-    function filterByDate(list) {
-      return (list || []).filter(function(r){
-        var d = parseDate(r.date);
-        if (!d) return true;  // keep if no date
-        if (startDate && d < startDate) return false;
-        if (endDate && d > endDate) return false;
-        return true;
-      });
-    }
-    var pos = filterByDate(samples.positive);
-    var mix = filterByDate(samples.mixed);
-    var neg = filterByDate(samples.negative);
-    document.getElementById('google-pos-count').textContent = pos.length;
-    document.getElementById('google-mix-count').textContent = mix.length;
-    document.getElementById('google-neg-count').textContent = neg.length;
-    document.getElementById('google-pos-grid').innerHTML = pos.map(function(r){return buildCardHtml(r,'positive');}).join('');
-    document.getElementById('google-mix-grid').innerHTML = mix.map(function(r){return buildCardHtml(r,'mixed');}).join('');
-    document.getElementById('google-neg-grid').innerHTML = neg.map(function(r){return buildCardHtml(r,'negative');}).join('');
-  }
-
-  // Main filter entry
-  window.filterGoogle = function(kind, n) {
-    var allMonths = window.GOOGLE_DATA.monthly || [];
-    if (!allMonths.length) return;
-    var latest = allMonths[allMonths.length - 1].ym;
-    var filteredMonths;
-    var startDate = null, endDate = null;
-    var mode = 'month';
-    var dailyRows = null;
-
-    if (kind === 'all') {
-      filteredMonths = allMonths.slice();
-      startDate = parseDate(allMonths[0].ym + '-01');
-      endDate = new Date();
-    } else if (kind === 'months') {
-      var from = ymBefore(n);
-      filteredMonths = monthsInRange(from, latest);
-      startDate = parseDate(from + '-01');
-      endDate = new Date();
-    } else if (kind === 'days') {
-      // Day mode: use daily_last30 data for last N days of calendar time
-      mode = 'day';
-      var allDaily = window.GOOGLE_DATA.daily_last30 || [];
-      if (allDaily.length) {
-        var anchor = allDaily[allDaily.length - 1].d;
-        var anchorDate = new Date(anchor + 'T12:00:00');
-        var cutoff = new Date(anchorDate.getTime() - (n - 1) * 86400000);
-        var cutoffStr = cutoff.getFullYear() + '-' + String(cutoff.getMonth()+1).padStart(2,'0') + '-' + String(cutoff.getDate()).padStart(2,'0');
-        dailyRows = allDaily.filter(function(d){ return d.d >= cutoffStr; });
-        startDate = cutoff;
-        endDate = anchorDate;
-      }
-      filteredMonths = monthsInRange(latest, latest); // for KPI computation
-    } else if (kind === 'single') {
-      var ym = document.getElementById('google-to').value;
-      filteredMonths = monthsInRange(ym, ym);
-      startDate = parseDate(ym + '-01');
-      endDate = new Date(parseDate(ym + '-01').getTime() + (31 * 86400 * 1000));
-    } else {
-      filteredMonths = allMonths.slice();
-    }
-
-    renderKpis(filteredMonths);
-    renderCharts(filteredMonths, mode, dailyRows);
-    renderSamples(startDate, endDate);
-
-    // Highlight active preset
-    document.querySelectorAll('#view-google .filter-btn[data-preset]').forEach(function(b){ b.classList.remove('preset-active'); });
-    var presetKey = kind === 'all' ? 'all' : kind === 'days' ? (n + 'd') : kind === 'months' ? (n + 'mo') : null;
-    if (presetKey) {
-      var btn = document.querySelector('#view-google .filter-btn[data-preset="' + presetKey + '"]');
-      if (btn) btn.classList.add('preset-active');
-    }
-    // Set 'to' dropdown to latest month
-    var toEl = document.getElementById('google-to');
-    if (toEl && kind !== 'single') toEl.value = latest;
-  };
-
-  function init() {
-    // Default view: Trail 12mo
-    filterGoogle('months', 12);
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 120); });
-  } else {
-    setTimeout(init, 120);
-  }
-  // Rebuild when view is shown (canvases may not have dimensions until visible)
+  // Also on switchView to Comments
   var origSwitch = window.switchView;
   if (typeof origSwitch === 'function') {
     window.switchView = function(v) {
       var ret = origSwitch.apply(this, arguments);
-      if (v === 'google') setTimeout(function(){
-        // Re-render charts with current filtered monthlies
-        var active = document.querySelector('#view-google .filter-btn.preset-active');
-        var preset = active ? active.getAttribute('data-preset') : '12mo';
-        if (preset === 'all') filterGoogle('all');
-        else if (preset.endsWith('mo')) filterGoogle('months', parseInt(preset, 10));
-        else if (preset.endsWith('d')) filterGoogle('days', parseInt(preset, 10));
-      }, 80);
+      if (v === 'comments') setTimeout(refreshAll, 100);
       return ret;
     };
   }
 })();
 </script>
 
+<button class="jump-to-top" aria-label="Scroll to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+(function(){
+  var btn = document.querySelector('.jump-to-top');
+  if (!btn) return;
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 400) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  });
+})();
+</script>
+
+<script>
+(function(){
+  function renderNpsDeepDive() {
+    if (!window.RAW || !window.RAW.nps || !window.allMonths) return;
+    if (!window.Chart) return;
+    var months = window.allMonths;
+    var nps = window.RAW.nps;
+    // Compute NPS per month
+    var npsByMonth = {};
+    months.forEach(function(m){
+      var p = nps.promoters[m] || 0, pa = nps.passives[m] || 0, d = nps.detractors[m] || 0;
+      var total = p + pa + d;
+      npsByMonth[m] = {
+        nps: total > 0 ? Math.round(((p - d) / total) * 100) : null,
+        p: p, pa: pa, d: d, total: total
+      };
+    });
+
+    var latest = months[months.length - 1];
+    var prior = months.length > 1 ? months[months.length - 2] : null;
+    var current = npsByMonth[latest];
+    if (current.nps == null) return;
+    // Hero current NPS
+    document.getElementById('npsd-score').textContent = current.nps;
+    var color = current.nps >= 50 ? '#2BA6BB' : current.nps >= 0 ? '#D8CFC4' : '#ef4444';
+    document.getElementById('npsd-score').style.color = color;
+    document.getElementById('npsd-period-label').textContent = latest;
+
+    function fmtDelta(d) {
+      if (d == null) return '';
+      var cls = d > 0 ? 'up' : d < 0 ? 'down' : '';
+      var arrow = d > 0 ? '↑' : d < 0 ? '↓' : '→';
+      return '<span class="' + cls + '">' + arrow + ' ' + Math.abs(d) + '</span>';
+    }
+
+    // vs last month
+    if (prior && npsByMonth[prior].nps != null) {
+      var delta = current.nps - npsByMonth[prior].nps;
+      document.getElementById('npsd-vs-month').innerHTML = fmtDelta(delta);
+      document.getElementById('npsd-vs-month-sub').textContent = prior + ': ' + npsByMonth[prior].nps;
+    }
+
+    // vs prior quarter (avg of 3-6 months ago)
+    if (months.length >= 6) {
+      var q1 = months.slice(-6, -3).map(function(m){ return npsByMonth[m].nps; }).filter(function(v){ return v != null; });
+      if (q1.length) {
+        var qAvg = Math.round(q1.reduce(function(a,b){return a+b;}, 0) / q1.length);
+        var qDelta = current.nps - qAvg;
+        document.getElementById('npsd-vs-quarter').innerHTML = fmtDelta(qDelta);
+        document.getElementById('npsd-vs-quarter-sub').textContent = 'Prior quarter avg: ' + qAvg;
+      }
+    }
+
+    // vs 12-month avg
+    if (months.length >= 12) {
+      var year = months.slice(-12).map(function(m){ return npsByMonth[m].nps; }).filter(function(v){ return v != null; });
+      if (year.length) {
+        var yAvg = Math.round(year.reduce(function(a,b){return a+b;}, 0) / year.length);
+        var yDelta = current.nps - yAvg;
+        document.getElementById('npsd-vs-year').innerHTML = fmtDelta(yDelta);
+        document.getElementById('npsd-vs-year-sub').textContent = '12-mo avg: ' + yAvg;
+      }
+    }
+
+    window.charts = window.charts || {};
+
+    // Composition stacked bar
+    var compCtx = document.getElementById('npsdCompositionChart');
+    if (compCtx) {
+      if (window.charts.npsdComp) window.charts.npsdComp.destroy();
+      var promPct = [], pasPct = [], detPct = [];
+      months.forEach(function(m){
+        var r = npsByMonth[m];
+        if (r.total > 0) {
+          promPct.push(+(r.p * 100 / r.total).toFixed(1));
+          pasPct.push(+(r.pa * 100 / r.total).toFixed(1));
+          detPct.push(+(r.d * 100 / r.total).toFixed(1));
+        } else { promPct.push(0); pasPct.push(0); detPct.push(0); }
+      });
+      window.charts.npsdComp = new Chart(compCtx.getContext('2d'), {
+        type: 'bar',
+        data: { labels: months, datasets: [
+          { label: 'Promoters', data: promPct, backgroundColor: '#2BA6BB', stack: 's', borderRadius: 3 },
+          { label: 'Passives',  data: pasPct,  backgroundColor: '#D8CFC4', stack: 's' },
+          { label: 'Detractors',data: detPct,  backgroundColor: '#ef4444', stack: 's' }
+        ]},
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: {
+            y: { beginAtZero: true, max: 100, ticks: { callback: function(v){return v+'%';} }, grid: { color: '#f3f4f6' } },
+            x: { stacked: true, ticks: { maxRotation: 60, minRotation: 45 } }
+          }
+        }
+      });
+    }
+
+    // Trend with benchmark
+    var trendCtx = document.getElementById('npsdTrendChart');
+    if (trendCtx) {
+      if (window.charts.npsdTrend) window.charts.npsdTrend.destroy();
+      var npsValues = months.map(function(m){ return npsByMonth[m].nps; });
+      window.charts.npsdTrend = new Chart(trendCtx.getContext('2d'), {
+        type: 'line',
+        data: { labels: months, datasets: [{
+          label: 'NPS',
+          data: npsValues,
+          borderColor: '#2BA6BB',
+          backgroundColor: 'rgba(43,166,187,0.12)',
+          fill: true, tension: 0.3, borderWidth: 2,
+          pointRadius: npsValues.map(function(_, i){ return i === npsValues.length - 1 ? 6 : 3; }),
+          spanGaps: true
+        }]},
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: false, max: 100, grid: { color: '#f3f4f6' } },
+            x: { ticks: { maxRotation: 60, minRotation: 45 } }
+          }
+        }
+      });
+    }
+
+    // Recommend score distribution
+    var recCtx = document.getElementById('npsdRecDistChart');
+    if (recCtx && window.RAW.survey && window.RAW.survey.recDist) {
+      if (window.charts.npsdRecDist) window.charts.npsdRecDist.destroy();
+      var rec = window.RAW.survey.recDist;
+      var colors = ['#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#D8CFC4','#D8CFC4','#2BA6BB','#2BA6BB'];
+      window.charts.npsdRecDist = new Chart(recCtx.getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['0','1','2','3','4','5','6','7','8','9','10'],
+          datasets: [{ label: 'Count', data: rec, backgroundColor: colors, borderRadius: 4 }]},
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
+        }
+      });
+    }
+
+    // Best & Worst months table
+    var scored = Object.keys(npsByMonth)
+      .map(function(m){ var r = npsByMonth[m]; return { m: m, nps: r.nps, total: r.total }; })
+      .filter(function(r){ return r.nps != null && r.total >= 5; });
+    scored.sort(function(a,b){ return b.nps - a.nps; });
+    var best3 = scored.slice(0, 3);
+    var worst3 = scored.slice(-3).reverse();
+    var bwBody = document.querySelector('#npsd-bestworst-table tbody');
+    if (bwBody) {
+      var rowsHtml = '';
+      best3.forEach(function(r){
+        rowsHtml += '<tr><td>' + r.m + '</td><td style="text-align:right;color:#2BA6BB;font-weight:700">' + r.nps + '</td><td style="text-align:right">' + r.total + '</td><td>↑ Best</td></tr>';
+      });
+      worst3.forEach(function(r){
+        rowsHtml += '<tr><td>' + r.m + '</td><td style="text-align:right;color:#ef4444;font-weight:700">' + r.nps + '</td><td style="text-align:right">' + r.total + '</td><td>↓ Worst</td></tr>';
+      });
+      bwBody.innerHTML = rowsHtml;
+    }
+
+    // ===== Deeper "What Moves NPS" analysis =====
+    // Pearson correlation helper
+    function pearson(x, y) {
+      if (x.length !== y.length || x.length < 3) return null;
+      var n = x.length;
+      var mx = x.reduce(function(a,b){return a+b;}, 0) / n;
+      var my = y.reduce(function(a,b){return a+b;}, 0) / n;
+      var num = 0, dx = 0, dy = 0;
+      for (var i = 0; i < n; i++) {
+        num += (x[i]-mx) * (y[i]-my);
+        dx += (x[i]-mx) * (x[i]-mx);
+        dy += (y[i]-my) * (y[i]-my);
+      }
+      var den = Math.sqrt(dx * dy);
+      return den === 0 ? 0 : num / den;
+    }
+
+    function avg(arr) {
+      if (!arr.length) return null;
+      return arr.reduce(function(a,b){return a+b;}, 0) / arr.length;
+    }
+
+    var categories = [
+      { key: 'overall', label: 'Overall' },
+      { key: 'service', label: 'Service' },
+      { key: 'food',    label: 'Food' },
+      { key: 'atmos',   label: 'Atmosphere' }
+    ];
+
+    var results = categories.map(function(c){
+      var series = window.RAW.survey[c.key];
+      if (!series) return null;
+      // Monthly data pairs: (category score, NPS)
+      var xs = [], ys = [];
+      var bands = { high: [], mid: [], low: [], bot: [] };
+      months.forEach(function(m){
+        var cv = series[m];
+        var nv = npsByMonth[m].nps;
+        if (cv == null || nv == null) return;
+        xs.push(cv); ys.push(nv);
+        if (cv >= 95) bands.high.push(nv);
+        else if (cv >= 90) bands.mid.push(nv);
+        else if (cv >= 85) bands.low.push(nv);
+        else bands.bot.push(nv);
+      });
+      if (xs.length < 3) return null;
+      var r = pearson(xs, ys);
+      // Lift = avg NPS in top band - avg NPS in bottom band (whichever bands have ≥2 data points)
+      var topVals = bands.high.length >= 2 ? bands.high : bands.mid;
+      var botVals = bands.bot.length >= 2 ? bands.bot : bands.low;
+      var lift = null;
+      if (topVals.length >= 2 && botVals.length >= 2) {
+        lift = Math.round(avg(topVals) - avg(botVals));
+      }
+      // Linear regression slope: for every 1-point increase in category, NPS changes by β
+      var beta = null;
+      if (r != null) {
+        var sx = Math.sqrt(xs.reduce(function(a,v){return a+(v-avg(xs))*(v-avg(xs));}, 0) / xs.length);
+        var sy = Math.sqrt(ys.reduce(function(a,v){return a+(v-avg(ys))*(v-avg(ys));}, 0) / ys.length);
+        beta = sx > 0 ? (r * sy / sx) : null;
+      }
+      return {
+        cat: c.label,
+        key: c.key,
+        r: r,
+        beta: beta,
+        n: xs.length,
+        currentAvg: avg(xs),
+        bandHigh: bands.high.length >= 1 ? avg(bands.high) : null,
+        bandMid:  bands.mid.length  >= 1 ? avg(bands.mid)  : null,
+        bandLow:  bands.low.length  >= 1 ? avg(bands.low)  : null,
+        bandBot:  bands.bot.length  >= 1 ? avg(bands.bot)  : null,
+        lift: lift
+      };
+    }).filter(function(x){ return x; });
+
+    // ==== NPS Bands Table ====
+    var bandBody = document.querySelector('#npsd-band-table tbody');
+    if (bandBody) {
+      function fmtBand(v) {
+        return v == null ? '<span style="color:#d1d5db">—</span>' : Math.round(v);
+      }
+      function rColor(r) {
+        if (r == null) return '#6b7280';
+        var abs = Math.abs(r);
+        if (abs >= 0.7) return r > 0 ? '#10b981' : '#ef4444';
+        if (abs >= 0.4) return r > 0 ? '#2BA6BB' : '#f59e0b';
+        return '#6b7280';
+      }
+      var rows = '';
+      results.forEach(function(res){
+        var rColorStyle = rColor(res.r);
+        var rLabel = res.r == null ? '—' : (res.r >= 0 ? '+' : '') + res.r.toFixed(2);
+        var strengthLabel = res.r == null ? '' :
+          Math.abs(res.r) >= 0.7 ? 'strong' :
+          Math.abs(res.r) >= 0.4 ? 'moderate' : 'weak';
+        rows += '<tr>'
+          + '<td style="font-weight:600">' + res.cat + '</td>'
+          + '<td style="text-align:right;color:' + rColorStyle + ';font-weight:700">' + rLabel + '<div style="font-size:0.62rem;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:#9ca3af">' + strengthLabel + '</div></td>'
+          + '<td style="text-align:right;background:rgba(43,166,187,0.08);font-weight:600">' + fmtBand(res.bandHigh) + '</td>'
+          + '<td style="text-align:right">' + fmtBand(res.bandMid) + '</td>'
+          + '<td style="text-align:right">' + fmtBand(res.bandLow) + '</td>'
+          + '<td style="text-align:right;background:rgba(239,68,68,0.06)">' + fmtBand(res.bandBot) + '</td>'
+          + '<td style="text-align:right;color:' + (res.lift != null && res.lift > 0 ? '#10b981' : res.lift != null && res.lift < 0 ? '#ef4444' : '#6b7280') + ';font-weight:700">'
+          + (res.lift == null ? '—' : (res.lift > 0 ? '+' : '') + res.lift + ' pts') + '</td>'
+          + '</tr>';
+      });
+      bandBody.innerHTML = rows;
+    }
+
+    // ==== Summary insight sentence ====
+    var summary = document.getElementById('npsd-drivers-summary');
+    if (summary) {
+      var sorted = results.slice().filter(function(r){return r.r!=null;}).sort(function(a,b){return Math.abs(b.r) - Math.abs(a.r);});
+      if (sorted.length) {
+        var top = sorted[0];
+        var strength = Math.abs(top.r) >= 0.7 ? '<b>strongly</b>' : Math.abs(top.r) >= 0.4 ? 'moderately' : 'weakly';
+        var direction = top.r > 0 ? 'moves with' : 'moves against';
+        var otherStrong = sorted.slice(1).filter(function(r){return Math.abs(r.r) >= 0.4;}).map(function(r){return r.cat;});
+        var otherTxt = otherStrong.length ? ' ' + otherStrong.join(', ') + ' also ' + (otherStrong.length > 1 ? 'correlate' : 'correlates') + ' with NPS.' : '';
+        summary.innerHTML = '<b>' + top.cat + '</b> ' + strength + ' ' + direction + ' NPS (r = ' + top.r.toFixed(2) + ').'
+          + (top.lift != null ? ' When ' + top.cat + ' is ≥95, NPS averages <b>' + Math.round(top.bandHigh) + '</b>;'
+              + ' below 85, NPS drops to <b>' + Math.round(top.bandBot || top.bandLow || 0) + '</b> — a '
+              + '<b style="color:#2BA6BB">' + top.lift + '-point spread</b>.' : '')
+          + otherTxt;
+      } else {
+        summary.innerHTML = '<span style="color:#6b7280">Not enough monthly data yet to compute category correlations.</span>';
+      }
+    }
+
+    // ==== Projected Impact Table (based on regression slope) ====
+    var impactBody = document.querySelector('#npsd-impact-table tbody');
+    if (impactBody) {
+      var rows = '';
+      results.forEach(function(res){
+        if (res.beta == null) return;
+        var projected = res.beta * 5;  // +5 category points
+        rows += '<tr>'
+          + '<td style="font-weight:500">' + res.cat + '</td>'
+          + '<td style="text-align:right">' + Math.round(res.currentAvg) + '</td>'
+          + '<td style="text-align:right">' + Math.round(res.currentAvg + 5) + '</td>'
+          + '<td style="text-align:right;color:' + (projected > 0 ? '#10b981' : '#6b7280') + ';font-weight:700">'
+          + (projected > 0 ? '+' : '') + Math.round(projected) + ' pts</td>'
+          + '</tr>';
+      });
+      impactBody.innerHTML = rows;
+    }
+
+    // ==== Response-level scatter plot ====
+    var scatterCtx = document.getElementById('npsdScatterChart');
+    if (scatterCtx && window.RAW_SURVEYS && window.RAW_SURVEYS.length) {
+      if (window.charts.npsdScatter) window.charts.npsdScatter.destroy();
+      // Build scatter datasets — plot one category at a time. Use Overall by default; cycle available.
+      var palette = { overall: '#212931', service: '#2BA6BB', food: '#405766', atmos: '#BCC8BE' };
+      var datasets = [];
+      Object.keys(palette).forEach(function(catKey){
+        var points = [];
+        (window.RAW_SURVEYS || []).forEach(function(r){
+          var cv = r[catKey];
+          var rec = r.recommend;
+          if (cv == null || rec == null) return;
+          points.push({ x: cv, y: rec });
+        });
+        if (points.length) {
+          datasets.push({
+            label: catKey === 'overall' ? 'Overall' : catKey === 'atmos' ? 'Atmosphere' : catKey.charAt(0).toUpperCase() + catKey.slice(1),
+            data: points,
+            backgroundColor: palette[catKey] + '60',
+            borderColor: palette[catKey],
+            pointRadius: 3,
+            hidden: catKey !== 'service'  // default: only Service visible
+          });
+        }
+      });
+      window.charts.npsdScatter = new Chart(scatterCtx.getContext('2d'), {
+        type: 'scatter',
+        data: { datasets: datasets },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 10 }, usePointStyle: true } },
+            tooltip: { callbacks: { label: function(ctx){ return ctx.dataset.label + ' score: ' + ctx.parsed.x + ' → Recommend: ' + ctx.parsed.y; } } }
+          },
+          scales: {
+            x: { title: { display: true, text: 'Category score (0-100)', font: { size: 10 } }, min: 0, max: 100, grid: { color: '#f3f4f6' } },
+            y: { title: { display: true, text: 'Recommend score (0-10)', font: { size: 10 } }, min: 0, max: 10, grid: { color: '#f3f4f6' } }
+          }
+        }
+      });
+    } else if (scatterCtx) {
+      // Fallback — no raw response data. Show message.
+      scatterCtx.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:280px;color:#6b7280;font-size:0.85rem;text-align:center;padding:1rem">Scatter plot needs per-response data, which is only available<br>when the report is built with raw Resy CSV exports.</div>';
+    }
+  }
+
+  function init() {
+    renderNpsDeepDive();
+    // Re-render when user switches to this view (in case canvas wasn't sized)
+    var origSwitch = window.switchView;
+    if (typeof origSwitch === 'function') {
+      window.switchView = function(v) {
+        var ret = origSwitch.apply(this, arguments);
+        if (v === 'npsdeep') setTimeout(renderNpsDeepDive, 80);
+        return ret;
+      };
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 300); });
+  else setTimeout(init, 300);
+})();
+</script>
+
+<script>
+(function(){
+  function renderXC() {
+    if (!window.RAW || !window.allMonths || !window.GOOGLE_DATA) return;
+    if (typeof Chart === 'undefined') return;
+    var months = window.allMonths;
+    var last12 = months.slice(-12);
+
+    // Resy NPS + Overall
+    var npsVals = [], overallVals = [];
+    last12.forEach(function(m){
+      var p = (window.RAW.nps.promoters[m] || 0);
+      var pa = (window.RAW.nps.passives[m] || 0);
+      var d = (window.RAW.nps.detractors[m] || 0);
+      var tot = p + pa + d;
+      npsVals.push(tot > 0 ? Math.round(((p - d) / tot) * 100) : null);
+      overallVals.push(window.RAW.survey.overall[m] || null);
+    });
+    var avgNps = Math.round(npsVals.filter(function(v){return v != null;}).reduce(function(a,b){return a+b;}, 0) / npsVals.filter(function(v){return v!=null;}).length);
+    var avgOverall = overallVals.filter(function(v){return v!=null;}).reduce(function(a,b){return a+b;}, 0) / overallVals.filter(function(v){return v!=null;}).length;
+    var resy5equiv = +(avgOverall / 20).toFixed(2);
+
+    // Google
+    var gMonthly = window.GOOGLE_DATA.monthly || [];
+    var gLast12 = gMonthly.slice(-12);
+    var gAvg = gLast12.length ? +(gLast12.reduce(function(a,b){return a+(b.avg*b.count);}, 0) / gLast12.reduce(function(a,b){return a+b.count;}, 0)).toFixed(2) : null;
+
+    // Render hero tiles
+    document.getElementById('xc-nps').textContent = avgNps;
+    document.getElementById('xc-nps-sub').textContent = 'Overall ' + avgOverall.toFixed(1) + ' / 100';
+    document.getElementById('xc-google').textContent = gAvg || '—';
+    document.getElementById('xc-google-sub').textContent = (gLast12.reduce(function(a,b){return a+b.count;}, 0)).toLocaleString() + ' reviews';
+
+    var gap = gAvg != null ? +(resy5equiv - gAvg).toFixed(2) : null;
+    document.getElementById('xc-gap').innerHTML = (gap != null ? (gap > 0 ? '+' : '') + gap : '—');
+    if (gap != null) {
+      document.getElementById('xc-gap').className = 'xc-value ' + (gap > 0.3 ? 'xc-gap-pos' : '');
+    }
+
+    // Alignment score: absolute gap inverted to 0-100
+    var alignScore = gap != null ? Math.max(0, Math.min(100, Math.round(100 - Math.abs(gap) * 100))) : null;
+    document.getElementById('xc-align').textContent = alignScore != null ? alignScore + '%' : '—';
+    document.getElementById('xc-align-sub').textContent = alignScore == null ? '' :
+      alignScore >= 90 ? 'Channels agree closely' :
+      alignScore >= 75 ? 'Moderate alignment' :
+      'Notable divergence';
+
+    // Insight text
+    var insightP = document.getElementById('xc-insight-text');
+    var recentG = gLast12.slice(-3).reduce(function(a,b){return a+b.avg;}, 0) / 3;
+    var priorG = gLast12.slice(-6,-3).reduce(function(a,b){return a+b.avg;}, 0) / 3;
+    var gTrend = +(recentG - priorG).toFixed(2);
+    var recentNps = npsVals.slice(-3).filter(function(v){return v!=null;});
+    var priorNps = npsVals.slice(-6,-3).filter(function(v){return v!=null;});
+    var nTrend = null;
+    if (recentNps.length && priorNps.length) {
+      nTrend = Math.round(recentNps.reduce(function(a,b){return a+b;}, 0)/recentNps.length - priorNps.reduce(function(a,b){return a+b;}, 0)/priorNps.length);
+    }
+    var msg = '<b>Resy NPS</b> is ' + avgNps + ' over the last 12 months. <b>Google</b> averages ★ ' + gAvg + '.';
+    if (gap != null) {
+      msg += ' The channel gap is <b>+' + gap + '</b> (Resy runs higher than Google) — ';
+      msg += Math.abs(gap) < 0.15 ? 'very tight alignment, both channels agree.' :
+             Math.abs(gap) < 0.3 ? 'normal alignment; Resy\'s post-visit prompt catches a slightly happier baseline.' :
+             'noticeable divergence; worth understanding why post-visit guests feel more positive than public reviewers.';
+    }
+    if (gTrend != null) {
+      msg += '<br>Google is <b>' + (gTrend > 0 ? 'trending up' : 'trending down') + '</b> (' + (gTrend > 0 ? '+' : '') + gTrend + ' over 3 months).';
+    }
+    if (nTrend != null) {
+      msg += ' Resy NPS is <b>' + (nTrend > 0 ? 'trending up' : nTrend < 0 ? 'trending down' : 'flat') + '</b> (' + (nTrend > 0 ? '+' : '') + nTrend + ').';
+    }
+    insightP.innerHTML = msg;
+
+    // Dual-axis chart
+    var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var labels = last12.map(function(m){ var p = m.split('-'); return MON[parseInt(p[1],10)-1] + ' ' + p[0].slice(2); });
+    var gAligned = last12.map(function(ym){
+      var match = gLast12.find(function(x){ return x.ym === ym; });
+      return match ? match.avg : null;
+    });
+
+    window.charts = window.charts || {};
+    var dual = document.getElementById('xcDualAxisChart');
+    if (dual) {
+      if (window.charts.xcDual) window.charts.xcDual.destroy();
+      window.charts.xcDual = new Chart(dual.getContext('2d'), {
+        type: 'line',
+        data: { labels: labels, datasets: [
+          { label: 'Resy NPS', data: npsVals, borderColor: '#2BA6BB', backgroundColor: '#2BA6BB',
+            yAxisID: 'y', tension: 0.3, borderWidth: 2, pointRadius: 3, spanGaps: true },
+          { label: 'Google ★', data: gAligned, borderColor: '#405766', backgroundColor: '#405766',
+            yAxisID: 'y2', tension: 0.3, borderWidth: 2, pointRadius: 3, borderDash: [4,3], spanGaps: true }
+        ]},
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: {
+            y:  { position: 'left',  title: { display: true, text: 'NPS' }, grid: { color: '#f3f4f6' } },
+            y2: { position: 'right', title: { display: true, text: 'Google ★' }, min: 3.5, max: 5, grid: { display: false } },
+            x:  { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // Gap chart: Resy 1-5 equiv - Google ★ per month
+    var gapValues = last12.map(function(ym, i){
+      var resyPt = overallVals[i] == null ? null : overallVals[i] / 20;
+      var match = gLast12.find(function(x){ return x.ym === ym; });
+      var gPt = match ? match.avg : null;
+      return (resyPt != null && gPt != null) ? +(resyPt - gPt).toFixed(2) : null;
+    });
+    var gapChart = document.getElementById('xcGapChart');
+    if (gapChart) {
+      if (window.charts.xcGap) window.charts.xcGap.destroy();
+      window.charts.xcGap = new Chart(gapChart.getContext('2d'), {
+        type: 'bar',
+        data: { labels: labels, datasets: [{
+          label: 'Gap', data: gapValues,
+          backgroundColor: gapValues.map(function(v){ return v > 0.3 ? '#f59e0b' : v > 0.1 ? '#D8CFC4' : '#BCC8BE'; }),
+          borderRadius: 4, maxBarThickness: 32
+        }]},
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
+        }
+      });
+    }
+  }
+
+  function init() {
+    renderXC();
+    var origSwitch = window.switchView;
+    if (typeof origSwitch === 'function') {
+      window.switchView = function(v) {
+        var ret = origSwitch.apply(this, arguments);
+        if (v === 'xchan') setTimeout(renderXC, 100);
+        return ret;
+      };
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 400); });
+  else setTimeout(init, 400);
+})();
+</script>
+
+<script>
+(function(){
+  // ====== #4 Keyboard shortcuts ======
+  document.addEventListener('keydown', function(e){
+    // Ignore when typing in inputs
+    if (e.target.matches('input, select, textarea')) return;
+    var items = document.querySelectorAll('.sidebar-item[data-view]');
+    var views = {'1': null, '2': null, '3': null, '4': null, '5': null};
+    items.forEach(function(item, idx){
+      if (idx < 5) views[String(idx+1)] = item.getAttribute('data-view');
+    });
+    if (e.key >= '1' && e.key <= '5' && views[e.key]) {
+      if (typeof switchView === 'function') switchView(views[e.key]);
+    }
+    // Arrow keys cycle presets
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      var activeView = document.querySelector('.view-section.active, [id^="view-"][class*="active"]');
+      if (!activeView) return;
+      var presets = activeView.querySelectorAll('.filter-btn[data-preset]');
+      var activeBtn = activeView.querySelector('.filter-btn.preset-active');
+      if (!presets.length) return;
+      var idx = Array.from(presets).indexOf(activeBtn);
+      if (e.key === 'ArrowLeft') idx = Math.max(0, idx - 1);
+      else idx = Math.min(presets.length - 1, idx + 1);
+      if (presets[idx]) presets[idx].click();
+    }
+  });
+  // Show keyboard hint on ? keypress
+  var hint = document.createElement('div');
+  hint.className = 'keyboard-hint';
+  hint.innerHTML = '<b>Shortcuts</b> · 1-5 switch view · ← → cycle periods · Esc close';
+  document.body.appendChild(hint);
+  document.addEventListener('keydown', function(e){
+    if (e.key === '?' || e.key === '/') {
+      hint.classList.add('visible');
+      setTimeout(function(){ hint.classList.remove('visible'); }, 3000);
+    }
+  });
+
+  // ====== #9 NPS scorecard counts under percentages ======
+  function updateNpsCounts() {
+    var bars = {'nps-bar-p': 'promoters', 'nps-bar-pa': 'passives', 'nps-bar-d': 'detractors'};
+    if (!window.RAW || !window.RAW.nps || !window.allMonths) return;
+    var latest = window.allMonths[window.allMonths.length - 1];
+    var p = window.RAW.nps.promoters[latest] || 0;
+    var pa = window.RAW.nps.passives[latest] || 0;
+    var d = window.RAW.nps.detractors[latest] || 0;
+    var total = p + pa + d;
+    if (!total) return;
+    Object.keys(bars).forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      var key = bars[id];
+      var n = window.RAW.nps[key][latest] || 0;
+      if (!el.querySelector('.nps-seg-count')) {
+        var span = document.createElement('span');
+        span.className = 'nps-seg-count';
+        span.textContent = n;
+        el.appendChild(span);
+      }
+    });
+  }
+
+  // ====== #17 Server sparklines (replace Range column) ======
+  function injectSparklines() {
+    if (!window.RAW || !window.RAW.serverMonthly) return;
+    var monthly = window.RAW.serverMonthly;
+    var allMonths = window.allMonths || [];
+    if (!allMonths.length) return;
+    var last6 = allMonths.slice(-6);
+    ['top-server-tbody', 'bottom-server-tbody'].forEach(function(tbodyId){
+      var tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
+      Array.from(tbody.querySelectorAll('tr')).forEach(function(row){
+        var nameCell = row.querySelector('td:first-child');
+        if (!nameCell) return;
+        var name = nameCell.textContent.trim();
+        var scores = monthly[name];
+        if (!scores) return;
+        // Replace the 3rd <td> (Range) with sparkline
+        var rangeTd = row.querySelectorAll('td')[2];
+        if (!rangeTd || rangeTd.dataset.sparkled) return;
+        var series = last6.map(function(m){ return scores[m]; });
+        var validVals = series.filter(function(v){ return v != null; });
+        if (validVals.length < 2) { rangeTd.dataset.sparkled = '1'; return; }
+        var min = Math.min.apply(null, validVals);
+        var max = Math.max.apply(null, validVals);
+        // Mini SVG sparkline
+        var W = 80, H = 22;
+        var pad = 2;
+        var points = series.map(function(v, i){
+          if (v == null) return null;
+          var x = pad + (i/(series.length-1))*(W-2*pad);
+          var y = max === min ? H/2 : H - pad - ((v-min)/(max-min))*(H-2*pad);
+          return x.toFixed(1) + ',' + y.toFixed(1);
+        }).filter(function(p){ return p; });
+        var color = series[series.length-1] >= 90 ? '#10b981' : series[series.length-1] >= 75 ? '#f59e0b' : '#ef4444';
+        color = series[series.length-1] >= 90 ? '#2BA6BB' : series[series.length-1] >= 75 ? '#D8CFC4' : '#ef4444';
+        rangeTd.innerHTML = '<svg width="' + W + '" height="' + H + '" style="vertical-align:middle"><polyline fill="none" stroke="' + color + '" stroke-width="1.5" points="' + points.join(' ') + '"/></svg>';
+        rangeTd.dataset.sparkled = '1';
+      });
+    });
+  }
+
+  // ====== #22 Comment collapse button copy ======
+  function updateCommentToggles() {
+    document.querySelectorAll('.comment-grid-toggle').forEach(function(btn){
+      var grid = btn.previousElementSibling;
+      if (!grid) return;
+      var total = grid.querySelectorAll('.comment-card').length;
+      if (grid.classList.contains('collapsed')) {
+        btn.textContent = 'Show ' + (total - 5) + ' more (' + total + ' total)';
+      } else {
+        btn.textContent = 'Show top 5';
+      }
+    });
+  }
+  // Observe collapse state changes
+  var observer = new MutationObserver(updateCommentToggles);
+  document.querySelectorAll('.comment-grid').forEach(function(g){
+    observer.observe(g, { attributes: true, attributeFilter: ['class'] });
+  });
+  setTimeout(updateCommentToggles, 400);
+
+  // ====== #24 Comment free-text filter ======
+  function addCommentFilter() {
+    var commentSection = document.getElementById('view-comments');
+    if (!commentSection) return;
+    var filterBar = commentSection.querySelector('.filter-bar');
+    if (!filterBar || filterBar.querySelector('.comment-filter-input')) return;
+    var input = document.createElement('input');
+    input.type = 'search';
+    input.className = 'comment-filter-input';
+    input.placeholder = 'Filter comments (e.g., steak, slow, Jeremy)...';
+    input.style.marginLeft = 'auto';
+    filterBar.appendChild(input);
+    input.addEventListener('input', function(){
+      var q = input.value.trim().toLowerCase();
+      commentSection.querySelectorAll('.comment-card').forEach(function(card){
+        var text = card.textContent.toLowerCase();
+        card.style.display = (!q || text.indexOf(q) >= 0) ? '' : 'none';
+      });
+    });
+  }
+
+  // ====== #29 Period dropdown active-state styling ======
+  function syncFilterBarMode() {
+    document.querySelectorAll('.filter-bar').forEach(function(bar){
+      var hasActivePreset = !!bar.querySelector('.filter-btn.preset-active');
+      if (hasActivePreset) bar.classList.remove('single-month-mode');
+      else bar.classList.add('single-month-mode');
+    });
+  }
+  document.addEventListener('change', function(e){
+    if (e.target.tagName === 'SELECT') setTimeout(syncFilterBarMode, 100);
+  });
+  document.addEventListener('click', function(e){
+    if (e.target.closest('.filter-btn')) setTimeout(syncFilterBarMode, 100);
+  });
+
+  // ====== #30 Period dropdown tooltip ======
+  function addPeriodTooltips() {
+    document.querySelectorAll('.filter-bar label').forEach(function(lbl){
+      if (lbl.textContent.trim() === 'Period:' && !lbl.querySelector('.info-icon')) {
+        var info = document.createElement('span');
+        info.className = 'info-icon';
+        info.textContent = 'i';
+        info.title = 'Latest month with data. Filter buttons set trailing windows from that date.';
+        lbl.appendChild(info);
+      }
+    });
+  }
+
+  // ====== #31 Zero-state on empty day-view ======
+  // Hook into any chart render: check if data is all nulls, show overlay message
+  // (Approximate — Chart.js doesn't expose easy API, so we observe canvases)
+
+  // ====== #18 3+ months tooltip ======
+  function addServerBadgeTooltip() {
+    document.querySelectorAll('.period-badge').forEach(function(b){
+      if (b.textContent.trim() === '3+ months tracked' && !b.querySelector('.info-icon')) {
+        var info = document.createElement('span');
+        info.className = 'info-icon';
+        info.textContent = 'i';
+        info.title = 'Only servers with 3+ months of rating data are shown, to avoid small-sample noise.';
+        b.appendChild(info);
+      }
+    });
+  }
+
+  // ====== #21 Limit keyword highlights to 3 per comment ======
+  function limitKeywordHighlights() {
+    document.querySelectorAll('.comment-card').forEach(function(card){
+      var highlights = card.querySelectorAll('.kw-pos, .kw-neg');
+      // Keep first 3, unwrap the rest (preserve text, drop highlight span)
+      Array.from(highlights).slice(3).forEach(function(el){
+        var parent = el.parentNode;
+        while (el.firstChild) parent.insertBefore(el.firstChild, el);
+        parent.removeChild(el);
+      });
+    });
+  }
+
+  // ====== #28 Chart title differentiation ======
+  function disambiguateChartTitles() {
+    document.querySelectorAll('#view-google .card-title').forEach(function(t){
+      if (t.textContent === 'Monthly Average Rating' && !t.dataset.disambiguated) {
+        t.textContent = 'Google review trend';
+        t.dataset.disambiguated = '1';
+      }
+      if (t.textContent === 'Monthly Review Volume' && !t.dataset.disambiguated) {
+        t.textContent = 'Google reviews per month';
+        t.dataset.disambiguated = '1';
+      }
+    });
+    document.querySelectorAll('#view-ratings .card-title').forEach(function(t){
+      if (t.textContent === 'Monthly Average Rating' && !t.dataset.disambiguated) {
+        t.textContent = 'Resy post-visit rating trend';
+        t.dataset.disambiguated = '1';
+      }
+    });
+  }
+
+  // ====== #33 Chart tooltips with context (delta vs prior) ======
+  function enhanceChartTooltips() {
+    if (typeof Chart === 'undefined') return;
+    // Apply a global tooltip customization to show delta when available
+    Chart.defaults.plugins.tooltip = Chart.defaults.plugins.tooltip || {};
+    var origCallbacks = Chart.defaults.plugins.tooltip.callbacks || {};
+    Chart.defaults.plugins.tooltip.callbacks = {
+      label: function(ctx) {
+        var v = ctx.parsed.y;
+        var label = ctx.dataset.label || '';
+        if (v == null) return label + ': —';
+        // Compute delta vs prior point if possible
+        var idx = ctx.dataIndex;
+        var prev = idx > 0 ? ctx.dataset.data[idx-1] : null;
+        var delta = (prev != null && v != null) ? (v - prev) : null;
+        var deltaStr = '';
+        if (delta != null && Math.abs(delta) >= 0.05) {
+          var arrow = delta > 0 ? ' ↑' : ' ↓';
+          deltaStr = arrow + ' ' + Math.abs(delta).toFixed(delta % 1 === 0 ? 0 : 1);
+        }
+        return label + ': ' + (v % 1 === 0 ? v : v.toFixed(2)) + deltaStr;
+      }
+    };
+  }
+
+  // ====== #34 Zero-line on NPS chart ======
+  function addNpsZeroLine() {
+    if (typeof Chart === 'undefined' || !window.charts) return;
+    var c = window.charts['surveyNpsChart'];
+    if (!c) return;
+    // Use Chart.js afterDraw to draw a dashed horizontal line at y=0
+    if (c._zeroLineInstalled) return;
+    c._zeroLineInstalled = true;
+    var plugin = {
+      id: 'npsZeroLine',
+      afterDraw: function(chart) {
+        var y = chart.scales.y;
+        if (!y || y.min > 0 || y.max < 0) return;
+        var yPix = y.getPixelForValue(0);
+        var ctx = chart.ctx;
+        ctx.save();
+        ctx.strokeStyle = '#9ca3af';
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(chart.chartArea.left, yPix);
+        ctx.lineTo(chart.chartArea.right, yPix);
+        ctx.stroke();
+        ctx.restore();
+      }
+    };
+    c.config.plugins = c.config.plugins || [];
+    Chart.register(plugin);
+    c.update();
+  }
+
+  // ====== #5 Version tooltip ======
+  function addVersionTooltip() {
+    var stamp = document.querySelector('.footer-stamp');
+    if (stamp) stamp.setAttribute('title', 'Latest build of the dashboard with current UX polish, data refresh, and brand palette.');
+  }
+
+  // ====== #7 At-a-Glance: pull a verbatim negative comment ======
+  function enhanceAtAGlance() {
+    var panel = document.querySelector('.at-a-glance-text');
+    if (!panel) return;
+    if (!window.RAW_COMMENTS || !window.RAW_COMMENTS.length) return;
+    // Find most recent negative (recommend <= 6) with enough text
+    var neg = (window.RAW_COMMENTS || []).slice().filter(function(c){
+      return c.recommend != null && c.recommend <= 6;
+    }).sort(function(a,b){ return (b.date || '').localeCompare(a.date || ''); });
+    if (!neg.length) return;
+    // Skill's RAW_COMMENTS doesn't include raw text — only date/recommend/server/overall.
+    // We need the full-parse RAW_SURVEYS instead, but those don't have comment text either.
+    // Fallback: use the negative samples from the Guest Comments section.
+    var negCard = document.querySelector('.comment-card.negative .comment-text');
+    if (!negCard) return;
+    var txt = negCard.textContent.trim().slice(0, 140);
+    if (txt.length > 20 && !panel.querySelector('.guest-quote')) {
+      panel.insertAdjacentHTML('beforeend',
+        '<div class="guest-quote" style="margin-top:0.7rem;font-size:0.82rem;color:rgba(255,255,255,0.75);border-left:3px solid #ef4444;padding-left:0.7rem;font-style:italic">'
+        + '“' + txt + (txt.length >= 140 ? '…' : '') + '”</div>');
+    }
+  }
+
+  // ====== #10 Larger current-month data point ======
+  function enlargeCurrentMonthPoint() {
+    if (typeof Chart === 'undefined' || !window.charts) return;
+    ['surveyMonthlyScores', 'surveyNpsChart', 'ratingMonthlyAvg'].forEach(function(id){
+      var chart = window.charts[id];
+      if (!chart || !chart.data || !chart.data.datasets) return;
+      chart.data.datasets.forEach(function(ds){
+        if (ds.type && ds.type === 'line' || chart.config.type === 'line') {
+          var lastIdx = ds.data.length - 1;
+          // Create per-point radius array highlighting last
+          var radii = ds.data.map(function(_, i){ return i === lastIdx ? 6 : (ds.pointRadius || 2); });
+          ds.pointRadius = radii;
+          ds.pointHoverRadius = ds.data.map(function(_, i){ return i === lastIdx ? 8 : 5; });
+        }
+      });
+      chart.update('none');
+    });
+  }
+
+  // ====== #11 Day-of-Week insight line ======
+  function addDowInsight() {
+    if (!window.RAW || !window.RAW.survey || !window.RAW.survey.dow) return;
+    var dow = window.RAW.survey.dow;
+    var names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var weekly = dow.filter(function(v){ return v != null; });
+    if (weekly.length < 2) return;
+    var avg = weekly.reduce(function(a,b){return a+b;}, 0) / weekly.length;
+    var minIdx = dow.indexOf(Math.min.apply(null, weekly));
+    var maxIdx = dow.indexOf(Math.max.apply(null, weekly));
+    var gap = +(dow[maxIdx] - dow[minIdx]).toFixed(1);
+    var card = document.getElementById('surveyDowChart');
+    if (!card) return;
+    var container = card.closest('.card');
+    if (!container || container.querySelector('.dow-insight')) return;
+    var insight = document.createElement('div');
+    insight.className = 'dow-insight';
+    insight.style.cssText = 'margin-top:0.75rem;padding:0.55rem 0.85rem;background:rgba(43,166,187,0.08);border-left:3px solid #2BA6BB;border-radius:4px;font-size:0.8rem;color:#374151;';
+    insight.innerHTML = '<b>' + names[maxIdx] + '</b> is your best day (' + dow[maxIdx].toFixed(1) + '), <b>' + names[minIdx] + '</b> is weakest (' + dow[minIdx].toFixed(1) + ') — ' + gap + '-point spread.';
+    container.appendChild(insight);
+  }
+
+  // ====== #12 Recommend Distribution → P/P/D summary ======
+  function simplifyRecommendDist() {
+    if (typeof Chart === 'undefined' || !window.charts) return;
+    var chart = window.charts['surveyRecDist'];
+    if (!chart || chart._simplified) return;
+    chart._simplified = true;
+    var raw = (window.RAW && window.RAW.survey && window.RAW.survey.recDist) || null;
+    if (!raw || raw.length !== 10) return;
+    // raw[0] = #0-scores ... raw[9] = #10-scores
+    var det = raw.slice(0, 7).reduce(function(a,b){return a+b;}, 0);
+    var pas = raw[7] + raw[8];
+    var prom = raw[9];
+    chart.data.labels = ['Promoters (9-10)', 'Passives (7-8)', 'Detractors (0-6)'];
+    chart.data.datasets = [{
+      label: 'Count', data: [prom, pas, det],
+      backgroundColor: ['#2BA6BB', '#D8CFC4', '#ef4444'], borderRadius: 6
+    }];
+    chart.options.plugins = chart.options.plugins || {};
+    chart.options.plugins.legend = { display: false };
+    chart.update();
+  }
+
+  // ====== #13 Y-axis lock 3.5-5.0 on star-rating charts ======
+  function lockRatingYAxis() {
+    if (typeof Chart === 'undefined' || !window.charts) return;
+    ['ratingMonthlyAvg', 'googleMonthlyAvg'].forEach(function(id){
+      var chart = window.charts[id];
+      if (!chart) return;
+      if (chart.options && chart.options.scales && chart.options.scales.y) {
+        chart.options.scales.y.min = 3.5;
+        chart.options.scales.y.max = 5.0;
+        chart.update('none');
+      }
+    });
+  }
+
+  // ====== #14 Rating Mix tile ======
+  function addRatingMixTile() {
+    var ratingsView = document.getElementById('view-ratings');
+    if (!ratingsView || ratingsView.querySelector('.rating-mix-tile')) return;
+    if (!window.RAW || !window.RAW.rating) return;
+    var r = window.RAW.rating;
+    if (!window.allMonths || !window.allMonths.length) return;
+    var latest = window.allMonths[window.allMonths.length - 1];
+    var r1 = r.r1[latest] || 0, r2 = r.r2[latest] || 0, r3 = r.r3[latest] || 0;
+    var r4 = r.r4[latest] || 0, r5 = r.r5[latest] || 0;
+    var total = r1 + r2 + r3 + r4 + r5;
+    if (!total) return;
+    function pct(n){ return (n * 100 / total).toFixed(1); }
+    var colors = ['#ef4444', '#DC2626', '#D8CFC4', '#BCC8BE', '#2BA6BB'];
+    var labels = ['1★', '2★', '3★', '4★', '5★'];
+    var vals = [r1, r2, r3, r4, r5];
+    var html = '<div class="rating-mix-tile">'
+      + '<div class="rating-mix-label">Rating Mix · ' + latest + '</div>'
+      + '<div class="rating-mix-bar">';
+    for (var i = 0; i < 5; i++) {
+      var p = parseFloat(pct(vals[i]));
+      if (p > 0) {
+        html += '<div class="rating-mix-seg" style="background:' + colors[i] + ';width:' + p + '%">'
+          + (p >= 8 ? labels[i] + ' ' + pct(vals[i]) + '%' : '') + '</div>';
+      }
+    }
+    html += '</div><div class="rating-mix-legend">';
+    for (var j = 0; j < 5; j++) {
+      html += '<span><span class="rating-mix-legend-dot" style="background:' + colors[j] + '"></span>' + labels[j] + ' · ' + pct(vals[j]) + '% (' + vals[j] + ')</span>';
+    }
+    html += '</div></div>';
+    // Insert after the KPI row in the Ratings view
+    var kpiRow = ratingsView.querySelector('.kpi-row');
+    if (kpiRow) kpiRow.insertAdjacentHTML('afterend', html);
+  }
+
+  // ====== #23 Consistent date format (Mon Day, Year) across comments ======
+  function normalizeDateFormat() {
+    // Convert "2026-04-15" / "Apr 15, 2026" / "April 15, 2026" → "Apr 15, 2026"
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    function fmt(dateStr) {
+      var m = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (m) return months[+m[2]-1] + ' ' + parseInt(m[3], 10) + ', ' + m[1];
+      var m2 = dateStr.match(/^(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})$/);
+      if (m2) return months[['January','February','March','April','May','June','July','August','September','October','November','December'].indexOf(m2[1])] + ' ' + parseInt(m2[2], 10) + ', ' + m2[3];
+      return dateStr;
+    }
+    document.querySelectorAll('.comment-meta, .grv-date').forEach(function(el){
+      // Find date-like text inside
+      el.childNodes.forEach(function(n){
+        if (n.nodeType === 3 && n.textContent) {
+          var parts = n.textContent.split(/(\d{4}-\d{2}-\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})/);
+          if (parts.length > 1) {
+            var newText = parts.map(function(p){ return /\d{4}/.test(p) ? fmt(p) : p; }).join('');
+            n.textContent = newText;
+          }
+        }
+      });
+    });
+  }
+
+  // ====== #26 Numeric star badge (replace ★★★★★ strings) ======
+  function numericStarBadges() {
+    document.querySelectorAll('.grv-stars').forEach(function(el){
+      if (el.dataset.converted) return;
+      var txt = el.textContent;
+      var filled = (txt.match(/★/g) || []).length;
+      el.textContent = '';
+      var badge = document.createElement('span');
+      badge.className = 'grv-stars-num';
+      badge.innerHTML = filled + ' <span class="star">★</span>';
+      el.appendChild(badge);
+      el.dataset.converted = '1';
+    });
+  }
+
+  // ====== #31 Empty-state overlay for day view with no data ======
+  function checkEmptyDayView() {
+    if (typeof Chart === 'undefined' || !window.charts) return;
+    ['surveyNpsChart', 'ratingMonthlyAvg'].forEach(function(id){
+      var chart = window.charts[id];
+      if (!chart) return;
+      var data = (chart.data.datasets[0] && chart.data.datasets[0].data) || [];
+      var nonNull = data.filter(function(v){ return v != null; });
+      var container = document.getElementById(id).closest('.chart-container');
+      if (!container) return;
+      var existing = container.querySelector('.chart-empty-overlay');
+      if (existing) existing.remove();
+      if (nonNull.length === 0 || (data.length <= 2 && nonNull.length < 2)) {
+        var overlay = document.createElement('div');
+        overlay.className = 'chart-empty-overlay';
+        overlay.innerHTML = 'Not enough data in this window.<br>Try <b>Last 30 days</b> or a longer period.';
+        container.appendChild(overlay);
+      }
+    });
+  }
+
+  // ====== #32 Compact chart legends ======
+  function compactLegends() {
+    if (typeof Chart === 'undefined') return;
+    Chart.defaults.plugins.legend = Chart.defaults.plugins.legend || {};
+    Chart.defaults.plugins.legend.labels = Chart.defaults.plugins.legend.labels || {};
+    Chart.defaults.plugins.legend.labels.font = { size: 10 };
+    Chart.defaults.plugins.legend.labels.padding = 10;
+    Chart.defaults.plugins.legend.labels.boxWidth = 10;
+  }
+
+  // Run all enhancers on DOMContentLoaded + after chart renders
+  function runAll() {
+    updateNpsCounts();
+    injectSparklines();
+    updateCommentToggles();
+    addCommentFilter();
+    syncFilterBarMode();
+    addPeriodTooltips();
+    addServerBadgeTooltip();
+    limitKeywordHighlights();
+    disambiguateChartTitles();
+    enhanceChartTooltips();
+    compactLegends();
+    addVersionTooltip();
+    enhanceAtAGlance();
+    normalizeDateFormat();
+    numericStarBadges();
+    setTimeout(addNpsZeroLine, 600);
+    // Chart-dependent enhancers run slightly later
+    setTimeout(function(){
+      enlargeCurrentMonthPoint();
+      addDowInsight();
+      simplifyRecommendDist();
+      lockRatingYAxis();
+      addRatingMixTile();
+      checkEmptyDayView();
+    }, 800);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runAll);
+  else runAll();
+  // Re-run after chart renders (filters fire apply which re-renders charts)
+  setInterval(function(){
+    updateNpsCounts();
+    injectSparklines();
+    limitKeywordHighlights();
+  }, 2000);
+})();
+</script>
 </body>
 </html>
