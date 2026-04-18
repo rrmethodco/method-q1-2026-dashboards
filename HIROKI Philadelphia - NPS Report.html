@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIROKI Philadelphia — NPS Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+window.RAW_COMMENTS = [{"date": "2025-04-30", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-04-28", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-04-18", "recommend": 10, "server": "Mayumi", "overall": 100}, {"date": "2025-04-16", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-04-12", "recommend": 10, "server": "Mayumi", "overall": 100}, {"date": "2025-04-12", "recommend": 10, "server": "Mayumi", "overall": 100}, {"date": "2025-04-12", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2025-04-11", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-04-07", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-04-06", "recommend": 10, "server": "Gus", "overall": 100}, {"date": "2025-04-05", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-04-05", "recommend": 3, "server": "Jocelyn", "overall": 60}, {"date": "2025-04-05", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2025-04-04", "recommend": 6, "server": "Dustin", "overall": 60}, {"date": "2025-03-28", "recommend": 7, "server": "Dustin", "overall": 80}, {"date": "2025-03-28", "recommend": 7, "server": "Dustin", "overall": 80}, {"date": "2025-03-28", "recommend": 7, "server": "Dustin", "overall": 80}, {"date": "2026-04-11", "recommend": 3, "server": "", "overall": 35}, {"date": "2026-04-11", "recommend": 9, "server": "", "overall": 95}, {"date": "2026-04-06", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2026-04-06", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2025-08-27", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-08-21", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-08-18", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-08-14", "recommend": 10, "server": "Damon", "overall": 100}, {"date": "2025-08-09", "recommend": 8, "server": "Gus", "overall": 90}, {"date": "2025-08-09", "recommend": 8, "server": "Gus", "overall": 90}, {"date": "2025-08-09", "recommend": 8, "server": "Gus", "overall": 90}, {"date": "2025-12-31", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-12-28", "recommend": 8, "server": "", "overall": 93}, {"date": "2025-12-20", "recommend": 10, "server": "Mayumi", "overall": 100}, {"date": "2025-12-18", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-12-12", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-02-27", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-02-26", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-02-21", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2026-02-20", "recommend": 9, "server": "", "overall": 95}, {"date": "2026-02-15", "recommend": 10, "server": "", "overall": 95}, {"date": "2026-02-15", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-02-15", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-02-15", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-02-15", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-02-13", "recommend": 4, "server": "", "overall": 73}, {"date": "2026-02-12", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-02-09", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2026-02-05", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2026-02-05", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-01-30", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-01-22", "recommend": 9, "server": "", "overall": 98}, {"date": "2026-01-17", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-01-16", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-01-12", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2026-01-08", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-12-31", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-07-30", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-07-27", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-07-24", "recommend": 10, "server": "", "overall": 97}, {"date": "2025-07-21", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-07-20", "recommend": 10, "server": "Gus", "overall": 100}, {"date": "2025-07-18", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-07-18", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-07-17", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-07-17", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-07-12", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-07-03", "recommend": 8, "server": "", "overall": 93}, {"date": "2025-07-02", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-07-02", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-06-15", "recommend": 10, "server": "Mayumi", "overall": 100}, {"date": "2025-06-13", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-06-08", "recommend": 10, "server": "Gus", "overall": 100}, {"date": "2025-06-07", "recommend": 0, "server": "Gus", "overall": 25}, {"date": "2025-06-05", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-06-04", "recommend": 9, "server": "", "overall": 93}, {"date": "2025-05-31", "recommend": 8, "server": "Gus", "overall": 93}, {"date": "2026-03-21", "recommend": 10, "server": "", "overall": 95}, {"date": "2026-03-19", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-03-14", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-03-13", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2026-03-07", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-03-07", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-03-07", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-03-07", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-03-02", "recommend": 10, "server": "", "overall": 100}, {"date": "2026-03-02", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-05-31", "recommend": 8, "server": "Gus", "overall": 93}, {"date": "2025-05-29", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-05-29", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-05-26", "recommend": 8, "server": "", "overall": 93}, {"date": "2025-05-23", "recommend": 10, "server": "Gus", "overall": 100}, {"date": "2025-05-18", "recommend": 10, "server": "Gus", "overall": 100}, {"date": "2025-05-10", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-05-10", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2025-05-09", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-05-03", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2025-05-03", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2025-05-03", "recommend": 10, "server": "Dustin", "overall": 100}, {"date": "2025-04-30", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-11-22", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-11-09", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-10-26", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-10-25", "recommend": 1, "server": "Damon", "overall": 15}, {"date": "2025-10-25", "recommend": 1, "server": "Damon", "overall": 15}, {"date": "2025-10-25", "recommend": 1, "server": "Damon", "overall": 15}, {"date": "2025-10-25", "recommend": 10, "server": "Mayumi", "overall": 100}, {"date": "2025-10-25", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-10-16", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-10-11", "recommend": 7, "server": "Gus", "overall": 90}, {"date": "2025-10-04", "recommend": 10, "server": "Jocelyn", "overall": 100}, {"date": "2025-09-29", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-09-29", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-09-29", "recommend": 10, "server": "", "overall": 100}, {"date": "2025-09-25", "recommend": 7, "server": "Dustin", "overall": 90}, {"date": "2025-09-20", "recommend": 10, "server": "Mayumi", "overall": 100}, {"date": "2025-09-07", "recommend": 10, "server": "Mayumi", "overall": 100}];
+window.RAW_RATINGS = [{"date": "2025-04-04", "r1": 0, "r2": 0, "r3": 1, "r4": 0, "r5": 0}, {"date": "2025-04-05", "r1": 0, "r2": 1, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-04-06", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-04-07", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-04-11", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-04-12", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 4}, {"date": "2025-04-16", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-04-18", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-04-20", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-04-24", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-04-28", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 1}, {"date": "2025-04-30", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-01", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-03", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-09", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-05-10", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 4}, {"date": "2025-05-15", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-05-16", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-17", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-05-18", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-19", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-05-21", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-22", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-23", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-24", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-25", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-26", "r1": 1, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-05-29", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-05-31", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-06-04", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-06-05", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-06-07", "r1": 1, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-06-08", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-06-12", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-06-13", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-06-15", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-06-21", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-06-22", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-06-27", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-07-02", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-07-03", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-07-12", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-07-16", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-07-17", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-07-18", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-07-20", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-07-21", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-07-24", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-07-27", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-07-28", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-07-30", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-07-31", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-01", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-04", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-07", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-09", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-08-11", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-14", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-16", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-18", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-21", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-23", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-27", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-08-30", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-09-03", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-09-06", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-09-07", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-09-08", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-09-11", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-09-19", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-09-20", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-09-24", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-09-25", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-09-27", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-09-29", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-10-04", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 1}, {"date": "2025-10-06", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-10-11", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 2}, {"date": "2025-10-16", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-10-18", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-10-25", "r1": 1, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-10-26", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-10-30", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-10-31", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-11-08", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-11-09", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-11-10", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-11-20", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-11-22", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-12-12", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-12-18", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-12-19", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-12-20", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2025-12-28", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 0}, {"date": "2025-12-29", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2025-12-31", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 4}, {"date": "2026-01-08", "r1": 0, "r2": 0, "r3": 0, "r4": 1, "r5": 1}, {"date": "2026-01-10", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-01-12", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2026-01-16", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2026-01-17", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-01-22", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-01-23", "r1": 0, "r2": 0, "r3": 1, "r4": 0, "r5": 0}, {"date": "2026-01-24", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-01-30", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-02-05", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 4}, {"date": "2026-02-09", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-02-12", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-02-13", "r1": 0, "r2": 1, "r3": 0, "r4": 0, "r5": 0}, {"date": "2026-02-14", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2026-02-15", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 4}, {"date": "2026-02-19", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-02-20", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-02-21", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-02-26", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-02-27", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-02-28", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-03-02", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-03-07", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 3}, {"date": "2026-03-13", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-03-14", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-03-19", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-03-21", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-03-27", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-03-28", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 1}, {"date": "2026-04-06", "r1": 0, "r2": 0, "r3": 0, "r4": 0, "r5": 2}, {"date": "2026-04-11", "r1": 0, "r2": 1, "r3": 0, "r4": 0, "r5": 1}];
+window.RAW_SURVEYS = [{"date": "2025-04-30", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-04-28", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-04-28", "overall": 93, "sentiment": 80, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 8}, {"date": "2025-04-20", "overall": 93, "sentiment": 90, "service": null, "food": null, "atmos": 95, "server": "Mayumi", "recommend": 9}, {"date": "2025-04-18", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Mayumi", "recommend": 10}, {"date": "2025-04-18", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2025-04-16", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-04-16", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2025-04-12", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Mayumi", "recommend": 10}, {"date": "2025-04-12", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2025-04-12", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-04-11", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-04-07", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-04-06", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Gus", "recommend": 10}, {"date": "2025-04-05", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2025-04-05", "overall": 60, "sentiment": 30, "service": null, "food": null, "atmos": 70, "server": "Jocelyn", "recommend": 3}, {"date": "2025-04-05", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2025-04-04", "overall": 60, "sentiment": 60, "service": null, "food": 60, "atmos": null, "server": "Dustin", "recommend": 6}, {"date": "2025-03-28", "overall": 80, "sentiment": 70, "service": null, "food": 90, "atmos": null, "server": "Dustin", "recommend": 7}, {"date": "2026-04-11", "overall": 35, "sentiment": 30, "service": null, "food": 40, "atmos": null, "server": "-", "recommend": 3}, {"date": "2026-04-11", "overall": 95, "sentiment": 90, "service": null, "food": null, "atmos": 97, "server": "-", "recommend": 9}, {"date": "2026-04-06", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2026-04-06", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2025-08-30", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-08-27", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-08-23", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Damon", "recommend": 10}, {"date": "2025-08-21", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-08-18", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-08-16", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Gus", "recommend": 10}, {"date": "2025-08-14", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Damon", "recommend": 10}, {"date": "2025-08-11", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-08-09", "overall": 90, "sentiment": 80, "service": null, "food": 100, "atmos": null, "server": "Gus", "recommend": 8}, {"date": "2025-08-07", "overall": 95, "sentiment": 90, "service": null, "food": null, "atmos": 97, "server": "-", "recommend": 9}, {"date": "2025-08-04", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-08-01", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Damon", "recommend": 10}, {"date": "2025-07-31", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-12-31", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-12-31", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-12-31", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Dustin", "recommend": 10}, {"date": "2025-12-31", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-12-29", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-12-28", "overall": 93, "sentiment": 80, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 8}, {"date": "2025-12-20", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Mayumi", "recommend": 10}, {"date": "2025-12-19", "overall": 97, "sentiment": 90, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 9}, {"date": "2025-12-18", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-12-12", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-11-15", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2026-02-28", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-02-27", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-02-26", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2026-02-21", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2026-02-20", "overall": 95, "sentiment": 90, "service": null, "food": null, "atmos": 97, "server": "-", "recommend": 9}, {"date": "2026-02-15", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2026-02-15", "overall": 95, "sentiment": 100, "service": 90, "food": 100, "atmos": 90, "server": "-", "recommend": 10}, {"date": "2026-02-15", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-02-15", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-02-14", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2026-02-14", "overall": 95, "sentiment": 90, "service": 100, "food": 90, "atmos": 100, "server": "-", "recommend": 9}, {"date": "2026-02-13", "overall": 73, "sentiment": 40, "service": null, "food": null, "atmos": 83, "server": "-", "recommend": 4}, {"date": "2026-02-12", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-02-09", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2026-02-05", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Dustin", "recommend": 10}, {"date": "2026-02-05", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Dustin", "recommend": 10}, {"date": "2026-02-05", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Dustin", "recommend": 10}, {"date": "2026-02-05", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2026-01-30", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-01-24", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Damon", "recommend": 10}, {"date": "2026-01-23", "overall": 65, "sentiment": 60, "service": null, "food": 70, "atmos": null, "server": "-", "recommend": 6}, {"date": "2026-01-22", "overall": 98, "sentiment": 90, "service": 100, "food": 100, "atmos": 100, "server": "-", "recommend": 9}, {"date": "2026-01-17", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2026-01-16", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-01-12", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2026-01-12", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2026-01-10", "overall": 95, "sentiment": 90, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 9}, {"date": "2026-01-08", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2026-01-08", "overall": 75, "sentiment": 80, "service": null, "food": 70, "atmos": null, "server": "-", "recommend": 8}, {"date": "2025-12-31", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-12-31", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-12-31", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Dustin", "recommend": 10}, {"date": "2025-07-31", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-07-30", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-07-28", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2025-07-27", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-07-24", "overall": 97, "sentiment": 100, "service": null, "food": null, "atmos": 95, "server": "-", "recommend": 10}, {"date": "2025-07-21", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-07-21", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-07-20", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Gus", "recommend": 10}, {"date": "2025-07-18", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2025-07-18", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2025-07-17", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-07-16", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Dustin", "recommend": 10}, {"date": "2025-07-16", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-07-12", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-07-03", "overall": 93, "sentiment": 80, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 8}, {"date": "2025-07-02", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-07-02", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-06-27", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": null, "server": "Damon", "recommend": 10}, {"date": "2025-06-27", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": null, "server": "Damon", "recommend": 10}, {"date": "2025-06-21", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Gus", "recommend": 10}, {"date": "2025-06-15", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Mayumi", "recommend": 10}, {"date": "2025-06-13", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2025-06-12", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-06-08", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Gus", "recommend": 10}, {"date": "2025-06-07", "overall": 25, "sentiment": 0, "service": 50, "food": 0, "atmos": 50, "server": "Gus", "recommend": 0}, {"date": "2025-06-07", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Gus", "recommend": 10}, {"date": "2025-06-05", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-06-04", "overall": 93, "sentiment": 90, "service": null, "food": null, "atmos": 93, "server": "-", "recommend": 9}, {"date": "2025-05-31", "overall": 93, "sentiment": 80, "service": 100, "food": 90, "atmos": 100, "server": "Gus", "recommend": 8}, {"date": "2026-03-28", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2026-03-27", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2026-03-21", "overall": 95, "sentiment": 100, "service": 100, "food": 100, "atmos": 80, "server": "-", "recommend": 10}, {"date": "2026-03-19", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-03-14", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-03-13", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2026-03-07", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2026-03-07", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-03-07", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-03-02", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2026-02-28", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-05-31", "overall": 93, "sentiment": 80, "service": 100, "food": 90, "atmos": 100, "server": "Gus", "recommend": 8}, {"date": "2025-05-29", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-05-26", "overall": 93, "sentiment": 80, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 8}, {"date": "2025-05-24", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Mayumi", "recommend": 10}, {"date": "2025-05-23", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Gus", "recommend": 10}, {"date": "2025-05-22", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-05-18", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Gus", "recommend": 10}, {"date": "2025-05-16", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Mayumi", "recommend": 10}, {"date": "2025-05-10", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-05-10", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2025-05-10", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Dustin", "recommend": 10}, {"date": "2025-05-09", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-05-03", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Dustin", "recommend": 10}, {"date": "2025-05-01", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-04-30", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-11-22", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-11-20", "overall": 95, "sentiment": 90, "service": 100, "food": 90, "atmos": 100, "server": "-", "recommend": 9}, {"date": "2025-11-15", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-11-10", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-11-09", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-11-08", "overall": 98, "sentiment": 90, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 9}, {"date": "2025-10-31", "overall": 98, "sentiment": 100, "service": null, "food": null, "atmos": 97, "server": "-", "recommend": 10}, {"date": "2025-10-30", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-10-31", "overall": 98, "sentiment": 100, "service": null, "food": null, "atmos": 97, "server": "-", "recommend": 10}, {"date": "2025-10-30", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-10-26", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-10-25", "overall": 15, "sentiment": 10, "service": null, "food": 20, "atmos": null, "server": "Damon", "recommend": 1}, {"date": "2025-10-25", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Mayumi", "recommend": 10}, {"date": "2025-10-25", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Jocelyn", "recommend": 10}, {"date": "2025-10-18", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-10-16", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-10-11", "overall": 90, "sentiment": 70, "service": 100, "food": null, "atmos": null, "server": "Gus", "recommend": 7}, {"date": "2025-10-11", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Damon", "recommend": 10}, {"date": "2025-10-11", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "Gus", "recommend": 10}, {"date": "2025-10-06", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-10-04", "overall": 93, "sentiment": 80, "service": 100, "food": null, "atmos": null, "server": "Gus", "recommend": 8}, {"date": "2025-10-04", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2025-09-29", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-09-29", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-09-29", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-09-27", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "Jocelyn", "recommend": 10}, {"date": "2025-09-25", "overall": 90, "sentiment": 70, "service": 100, "food": null, "atmos": null, "server": "Dustin", "recommend": 7}, {"date": "2025-09-24", "overall": 90, "sentiment": 80, "service": null, "food": null, "atmos": 95, "server": "-", "recommend": 8}, {"date": "2025-09-20", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Mayumi", "recommend": 10}, {"date": "2025-09-19", "overall": 100, "sentiment": 100, "service": 100, "food": 100, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-09-11", "overall": 100, "sentiment": 100, "service": 100, "food": null, "atmos": null, "server": "-", "recommend": 10}, {"date": "2025-09-08", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "-", "recommend": 10}, {"date": "2025-09-07", "overall": 100, "sentiment": 100, "service": null, "food": null, "atmos": 100, "server": "Mayumi", "recommend": 10}, {"date": "2025-09-06", "overall": 85, "sentiment": 70, "service": 100, "food": 70, "atmos": 100, "server": "-", "recommend": 7}, {"date": "2025-09-03", "overall": 100, "sentiment": 100, "service": null, "food": 100, "atmos": null, "server": "Jocelyn", "recommend": 10}];
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+:root{
+  --bg:#f8f7f4;--card:#ffffff;--border:#ece8e0;--text:#231F20;--muted:#6b7280;--label:#9ca3af;
+  --blue:#2BA6BB;--blue-light:#e6f6f8;--green:#10b981;--green-bg:rgba(16,185,129,.08);
+  --red:#ef4444;--red-bg:rgba(239,68,68,.08);--orange:#f59e0b;--orange-bg:rgba(245,158,11,.08);
+  --purple:#405766;--sidebar:#212931;--sidebar-text:#d1d5db;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','Montserrat','Helvetica Neue','Segoe UI',Arial,sans-serif;display:flex;min-height:100vh}
+.sidebar{width:220px;background:var(--sidebar);padding:1.5rem 0;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-logo{padding:0 1.25rem 1.5rem;display:flex;align-items:center;gap:.6rem;font-size:1.1rem;font-weight:700;color:#fff;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:1rem}
+.sidebar-logo svg{width:22px;height:22px}
+.sidebar-section{padding:0 .75rem;margin-bottom:.75rem}
+.sidebar-section-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);padding:0 .5rem;margin-bottom:.4rem;font-weight:600}
+.sidebar-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .75rem;border-radius:8px;font-size:.82rem;color:var(--sidebar-text);cursor:pointer;transition:all .15s;user-select:none}
+.sidebar-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.sidebar-item.active{background:rgba(43,166,187,.15);color:var(--blue);font-weight:600}
+.sidebar-item svg{width:16px;height:16px;opacity:.6}
+.main{margin-left:220px;flex:1;padding:1.75rem 2rem;max-width:1200px}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem}
+.page-header h1{font-size:1.4rem;font-weight:700;color:var(--text)}
+.period-badge{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.4rem .85rem;font-size:.8rem;color:var(--muted);font-weight:500;display:inline-flex;align-items:center;gap:.35rem}
+.page-header .period{display:flex;gap:.5rem;flex-wrap:wrap}
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.5rem}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.25rem;box-shadow:var(--shadow)}
+.kpi-label{font-size:.7rem;font-weight:500;color:var(--muted);margin-bottom:.55rem}
+.kpi-value{font-size:1.65rem;font-weight:700;color:var(--text);line-height:1.1}
+.kpi-sub{display:flex;align-items:center;gap:.4rem;margin-top:.45rem;font-size:.75rem}
+.kpi-sub .vs{color:var(--label)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:1rem;margin-bottom:1rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.card-title{font-size:.88rem;font-weight:600;color:var(--text)}
+.card-badge{font-size:.68rem;background:var(--blue-light);color:var(--blue);padding:.2rem .55rem;border-radius:6px;font-weight:500}
+.chart-container{position:relative;width:100%}
+.section-header{display:flex;align-items:center;gap:.6rem;margin:2rem 0 1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border)}
+.section-header h2{font-size:1.05rem;font-weight:700;color:var(--text)}
+.section-header .count{background:var(--blue-light);color:var(--blue);font-size:.7rem;padding:.15rem .5rem;border-radius:10px;font-weight:600}
+.intel-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;box-shadow:var(--shadow)}
+.intel-panel h3{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:.85rem}
+.intel-item{background:#f9fafb;border:1px solid #f3f4f6;border-radius:8px;padding:.85rem;margin-bottom:.65rem;font-size:.8rem;line-height:1.5;color:#374151}
+.intel-item:last-child{margin-bottom:0}
+.intel-label{display:inline-block;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:.12rem .4rem;border-radius:4px;margin-bottom:.4rem}
+.intel-label.insight{background:var(--blue-light);color:var(--blue)}
+.intel-label.action{background:var(--orange-bg);color:var(--orange)}
+.intel-label.alert{background:var(--red-bg);color:var(--red)}
+.comment-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:1.25rem}
+.comment-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.15rem;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.comment-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.comment-card.positive::before{background:var(--green)}
+.comment-card.mixed::before{background:var(--orange)}
+.comment-card.negative::before{background:var(--red)}
+.kw-pos{background:rgba(16,185,129,.12);color:#059669;padding:0 3px;border-radius:3px;font-weight:500}
+.kw-neg{background:rgba(239,68,68,.1);color:#dc2626;padding:0 3px;border-radius:3px;font-weight:500}
+.score.mid{color:var(--orange);font-weight:600}
+.comment-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.55rem;font-size:.72rem;color:var(--muted)}
+.comment-meta .score{font-weight:700;font-size:.78rem;padding:.15rem .45rem;border-radius:5px}
+.comment-meta .score.high{color:var(--green);background:var(--green-bg)}
+.comment-meta .score.low{color:var(--red);background:var(--red-bg)}
+.comment-text{font-size:.83rem;line-height:1.6;color:#374151;font-style:italic}
+.server-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.server-table th{text-align:left;padding:.55rem .7rem;border-bottom:2px solid var(--border);color:var(--muted);font-weight:500;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em}
+.server-table td{padding:.5rem .7rem;border-bottom:1px solid #f3f4f6}
+.server-table tr:hover td{background:#f9fafb}
+.bar-bg{height:5px;background:#f3f4f6;border-radius:3px;overflow:hidden;width:100%}
+.bar-fill{height:100%;border-radius:3px}
+.insight-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.35rem;box-shadow:var(--shadow)}
+.insight-card h3{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:.75rem}
+.insight-item{display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.6rem;font-size:.84rem;line-height:1.55;color:#374151}
+.insight-item:last-child{margin-bottom:0}
+.tag{display:inline-flex;align-items:center;padding:.15rem .5rem;border-radius:5px;font-size:.68rem;font-weight:600;white-space:nowrap;flex-shrink:0;margin-top:.15rem}
+.tag-green{background:var(--green-bg);color:var(--green)}
+.tag-red{background:var(--red-bg);color:var(--red)}
+.tag-blue{background:var(--blue-light);color:var(--blue)}
+.tag-orange{background:var(--orange-bg);color:var(--orange)}
+.insight-item strong{color:var(--text)}
+.footer{text-align:center;color:var(--muted);font-size:.72rem;margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--border)}
+.method-badge{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 1.25rem;margin-top:auto;padding-top:2rem}
+.view-section{display:none}
+.view-section.active{display:block}
+.filter-bar{display:flex;align-items:center;gap:.65rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.filter-bar label{font-size:.75rem;font-weight:500;color:var(--muted)}
+.filter-bar select{appearance:none;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right .6rem center;border:1px solid var(--border);border-radius:8px;padding:.4rem 2rem .4rem .7rem;font-size:.78rem;font-family:inherit;color:var(--text);cursor:pointer;transition:border-color .15s}
+.filter-bar select:hover{border-color:var(--blue)}
+.filter-bar select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(43,166,187,.1)}
+.filter-btn{background:var(--blue-light);color:var(--blue);border:1px solid transparent;border-radius:8px;padding:.4rem .85rem;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+.filter-btn:hover{background:var(--blue);color:#fff}
+.filter-btn.active{background:var(--blue);color:#fff}
+.filter-sep{width:1px;height:20px;background:var(--border)}
+@media(max-width:1100px){.sidebar{display:none}.main{margin-left:0}}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3,.comment-grid{grid-template-columns:1fr}}
+.nps-scorecard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1.75rem;box-shadow:var(--shadow);margin-bottom:1.25rem;display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:center}
+.nps-big{text-align:center}
+.nps-big .nps-number{font-size:3.2rem;font-weight:800;line-height:1}
+.nps-big .nps-label{font-size:.72rem;color:var(--muted);font-weight:500;margin-top:.35rem;text-transform:uppercase;letter-spacing:.06em}
+.nps-bar-section{display:flex;flex-direction:column;gap:.6rem}
+.nps-stacked-bar{display:flex;height:18px;border-radius:9px;overflow:hidden;width:100%}
+.nps-stacked-bar .seg{transition:width .3s}
+.nps-breakdown{display:flex;gap:1.5rem}
+.nps-breakdown-item{display:flex;align-items:center;gap:.45rem;font-size:.78rem;color:#374151}
+.nps-breakdown-item .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.nps-breakdown-item strong{font-weight:700}
+.nps-meta{text-align:right;font-size:.78rem;color:var(--muted);line-height:1.7}
+.nps-meta strong{color:var(--text);font-weight:600}
+@media(max-width:900px){.nps-scorecard{grid-template-columns:1fr;text-align:center}.nps-meta{text-align:center}}
+
+/* ---- Method Co brand additions ---- */
+.sidebar-logo { letter-spacing: 0.02em; font-weight: 700; text-transform: uppercase; font-size: 0.95rem; }
+.sidebar-logo svg { display: none; }
+.sidebar-section-label { letter-spacing: 0.14em; }
+.page-header h1 { letter-spacing: -0.01em; }
+.kpi-label, .card-title, .section-header h2 { letter-spacing: 0.02em; }
+.filter-bar label { text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.68rem; font-weight: 600; color: #231F20; }
+.filter-btn { text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.68rem; }
+.comment-card.positive::before { background: #2BA6BB; }
+.comment-card.mixed::before { background: #D8CFC4; }
+.method-footer-brand {
+  text-align: center; font-size: 0.6rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(35,31,32,.45);
+  font-weight: 600; margin-top: 0.5rem; padding-bottom: 1.5rem;
+}
+/* Collapse Period filter: hide the 'from' select and the 'to' label span */
+.filter-bar select[id$="-from"] { display: none; }
+.filter-bar select[id$="-from"] + span { display: none; }
+/* Hide the redundant period badges next to each view's H1 */
+.page-header .period { display: none; }
+/* Active state for preset buttons */
+.filter-btn.preset-active { background: #2BA6BB !important; color: #fff !important; border-color: #2BA6BB !important; }
+
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    HIROKI Philadelphia
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Performance</div>
+    <div class="sidebar-item active" data-view="surveys" onclick="switchView('surveys')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/></svg>
+      Guest Surveys
+    </div>
+    <div class="sidebar-item" data-view="ratings" onclick="switchView('ratings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 0 0 .95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 0 0-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 0 0-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 0 0-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 0 0 .951-.69l1.519-4.674z"/></svg>
+      Reservation Ratings
+    </div>
+    <div class="sidebar-item" data-view="servers" onclick="switchView('servers')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Server Performance
+    </div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Feedback</div>
+    <div class="sidebar-item" data-view="comments" onclick="switchView('comments')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Guest Comments
+    </div>
+  </div>
+  <div style="display:none"><div class="sidebar-section">
+    <div class="sidebar-section-label">Guests</div>
+    <div class="sidebar-item" data-view="guestinfo" onclick="switchView('guestinfo')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Guest Info
+    </div>
+  </div></div>
+  <div style="display:none"><div class="sidebar-section">
+    <div class="sidebar-section-label">Operations</div>
+    <div class="sidebar-item" data-view="pace" onclick="switchView('pace')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+      Pace Report
+    </div>
+  </div></div>
+  <div class="method-badge">Method Co F&B</div>
+</nav>
+
+<div class="main">
+
+<!-- ==================== SURVEYS VIEW ==================== -->
+<div id="view-surveys" class="view-section active">
+<div class="page-header">
+  <h1>Guest Survey Analysis</h1>
+  <div class="period">
+    <div class="period-badge">2025-04 – 2026-04</div>
+    <div class="period-badge">156 Surveys</div>
+  </div>
+</div>
+
+<div class="filter-bar"><label>Period:</label><select id="survey-from" onchange="applyFilter('surveys')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="survey-to" onchange="document.getElementById('survey-from').value=this.value;applyFilter('surveys')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('surveys',7)">Trail 7d</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('surveys',30)">Trail 30d</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('surveys',3)">Trail 3mo</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('surveys',6)">Trail 6mo</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('surveys',9)">Trail 9mo</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('surveys',12)">Trail 12mo</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('surveys')">All</button></div>
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-label">Overall Score</div><div class="kpi-value" id="skpi-overall">96.3</div><div class="kpi-sub"><span class="vs">out of 100</span></div></div>
+  <div class="kpi"><div class="kpi-label">Service Score</div><div class="kpi-value" style="color:var(--green)" id="skpi-service">99.0</div><div class="kpi-sub"><span class="vs">highest category</span></div></div>
+  <div class="kpi"><div class="kpi-label">Food Score</div><div class="kpi-value" style="color:var(--orange)" id="skpi-food">91.2</div><div class="kpi-sub"><span class="vs">lowest category</span></div></div>
+  <div class="kpi"><div class="kpi-label">Atmosphere</div><div class="kpi-value" style="color:var(--blue)" id="skpi-atmos">96.7</div><div class="kpi-sub"><span class="vs">steady year-round</span></div></div>
+  <div class="kpi"><div class="kpi-label">Surveys</div><div class="kpi-value" style="color:var(--green)" id="skpi-count">156</div><div class="kpi-sub"><span class="vs">responses</span></div></div>
+</div>
+
+<div class="nps-scorecard" id="nps-scorecard">
+  <div class="nps-big">
+    <div class="nps-number" id="nps-score" style="color:var(--green)">80</div>
+    <div class="nps-label">Net Promoter Score</div>
+  </div>
+  <div class="nps-bar-section">
+    <div class="nps-stacked-bar">
+      <div class="seg" id="nps-bar-p" style="width:85.6%;background:var(--green)"></div>
+      <div class="seg" id="nps-bar-pa" style="width:9.3%;background:#fbbf24"></div>
+      <div class="seg" id="nps-bar-d" style="width:5.2%;background:var(--red)"></div>
+    </div>
+    <div class="nps-breakdown">
+      <div class="nps-breakdown-item"><div class="dot" style="background:var(--green)"></div>Promoters (9–10): <strong id="nps-promo-pct">85.6%</strong></div>
+      <div class="nps-breakdown-item"><div class="dot" style="background:#fbbf24"></div>Passives (7–8): <strong id="nps-pass-pct">9.3%</strong></div>
+      <div class="nps-breakdown-item"><div class="dot" style="background:var(--red)"></div>Detractors (0–6): <strong id="nps-det-pct">5.2%</strong></div>
+    </div>
+  </div>
+  <div class="nps-meta">
+    <div>Total responses: <strong id="nps-total-resp">97</strong></div>
+    <div><span id="nps-promo-count">83</span> promoters · <span id="nps-pass-count">9</span> passives · <span id="nps-det-count">5</span> detractors</div>
+  </div>
+</div>
+
+<div class="grid-3">
+  <div class="card">
+    <div class="card-header"><div class="card-title">Score Trends</div><div class="card-badge">Monthly</div></div>
+    <div class="chart-container"><canvas id="surveyMonthlyScores"></canvas></div>
+  </div>
+  <div class="intel-panel">
+    <h3>Intelligence</h3>
+    <div class="intel-item">
+      <div class="intel-label insight">Insight</div>
+      Overall score ranged from <strong>99</strong> (2025-05) to <strong>89</strong> (2025-06). Food is the weakest category at 91.2 avg — consistently lagging service by 3–5 points.
+    </div>
+<div class="intel-item">
+      <div class="intel-label action">Action</div>
+      Most recent month (2026-04): overall <strong>89</strong>, service 100, food 70. Trend is declining vs prior month (99).
+    </div>
+<div class="intel-item">
+      <div class="intel-label alert">Alert</div>
+      2025-04 had the lowest NPS at <strong>62</strong> with 2 detractors out of 13 responses — roughly 1 in 6 guests wouldn't recommend.
+    </div>
+
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card"><div class="card-header"><div class="card-title">Net Promoter Score</div><div class="card-badge">Monthly</div></div><div class="chart-container"><canvas id="surveyNpsChart"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Survey Volume</div></div><div class="chart-container"><canvas id="surveyVolumeChart"></canvas></div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card"><div class="card-header"><div class="card-title">Day-of-Week Performance</div><div class="card-badge">Avg</div></div><div class="chart-container"><canvas id="surveyDowChart"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Recommend Score Distribution</div></div><div class="chart-container"><canvas id="surveyRecDist"></canvas></div></div>
+</div>
+</div>
+
+<!-- ==================== RATINGS VIEW ==================== -->
+<div id="view-ratings" class="view-section">
+<div class="page-header">
+  <h1>Reservation Ratings</h1>
+  <div class="period">
+    <div class="period-badge">2025-04-04 – 2026-04-11</div>
+    <div class="period-badge">171 Ratings · 127 Days</div>
+  </div>
+</div>
+
+<div class="filter-bar"><label>Period:</label><select id="rating-from" onchange="applyFilter('ratings')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="rating-to" onchange="document.getElementById('rating-from').value=this.value;applyFilter('ratings')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('ratings',7)">Trail 7d</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('ratings',30)">Trail 30d</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('ratings',3)">Trail 3mo</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('ratings',6)">Trail 6mo</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('ratings',9)">Trail 9mo</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('ratings',12)">Trail 12mo</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('ratings')">All</button></div>
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-label">Overall Average</div><div class="kpi-value" id="rkpi-avg">4.77</div><div class="kpi-sub"><span class="vs">out of 5.0</span></div></div>
+  <div class="kpi"><div class="kpi-label">5-Star Rate</div><div class="kpi-value" style="color:var(--green)" id="rkpi-5star">86.5%</div><div class="kpi-sub"><span class="vs" id="rkpi-5count">148 of 171</span></div></div>
+  <div class="kpi"><div class="kpi-label">1–2 Star Rate</div><div class="kpi-value" style="color:var(--red)" id="rkpi-12star">3.5%</div><div class="kpi-sub"><span class="vs" id="rkpi-negcount">6 negative</span></div></div>
+  <div class="kpi"><div class="kpi-label">Total Ratings</div><div class="kpi-value" style="color:var(--blue)" id="rkpi-total">171</div><div class="kpi-sub"><span class="vs">100.0% five-star</span></div></div>
+  <div class="kpi"><div class="kpi-label">Busiest Day</div><div class="kpi-value" style="color:var(--purple)">Wed</div><div class="kpi-sub"><span class="vs">~1.6 ratings/day</span></div></div>
+</div>
+
+<div class="grid-3">
+  <div class="card">
+    <div class="card-header"><div class="card-title">Monthly Average Rating</div><div class="card-badge">Daily</div></div>
+    <div class="chart-container"><canvas id="ratingMonthlyAvg"></canvas></div>
+  </div>
+  <div class="intel-panel">
+    <h3>Intelligence</h3>
+    <div class="intel-item">
+      <div class="intel-label insight">Insight</div>
+      Ratings ranged from <strong>5.0</strong> (2025-11) to <strong>4.25</strong> (2026-04). The 1-star rate varied from 0.0% to 8.3%.
+    </div>
+<div class="intel-item">
+      <div class="intel-label action">Action</div>
+      Most recent month (2026-04): <strong>4.25</strong> avg with 75.0% five-star. Trend is declining vs prior (5.0).
+    </div>
+<div class="intel-item">
+      <div class="intel-label alert">Alert</div>
+      2025-05-26 had the lowest rating at <strong>2.5</strong> across 2 ratings (distribution: [1, 0, 0, 1, 0]). 4 days total fell below 4.0 average.
+    </div>
+
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card"><div class="card-header"><div class="card-title">Monthly Volume</div></div><div class="chart-container"><canvas id="ratingMonthlyVol"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Rating Distribution</div></div><div class="chart-container"><canvas id="ratingDistChart"></canvas></div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card"><div class="card-header"><div class="card-title">Monthly 5-Star vs 1-Star %</div></div><div class="chart-container"><canvas id="ratingStarPct"></canvas></div></div>
+  <div class="card"><div class="card-header"><div class="card-title">Quarterly Performance</div></div><div class="chart-container"><canvas id="ratingQuarterChart"></canvas></div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><div class="card-title">Day-of-Week Patterns</div><div class="card-badge">Avg</div></div>
+    <div class="chart-container"><canvas id="ratingDowChart"></canvas></div>
+  </div>
+  <div class="insight-card">
+    <h3>Key Findings</h3>
+    <div class="insight-item"><span class="tag tag-green">STRONG</span><div><strong>Overwhelmingly positive:</strong> 86.5% five-star ratings with only 3.5% at 1–2 stars.</div></div>
+    <div class="insight-item"><span class="tag tag-blue">PATTERN</span><div><strong>Tue is the weak spot:</strong> 0 avg — suggesting midweek staffing or execution inconsistency.</div></div>
+    <div class="insight-item"><span class="tag tag-orange">VOLUME</span><div><strong>Wed drives volume</strong> (~1.6 ratings/day) while maintaining strong quality scores.</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SERVER PERFORMANCE VIEW ==================== -->
+<div id="view-servers" class="view-section">
+<div class="page-header">
+  <h1>Server Performance</h1>
+  <div class="period">
+    <div class="period-badge" id="server-period">2025-04 – 2026-04</div>
+    <div class="period-badge">3+ months tracked</div>
+  </div>
+</div>
+<div class="filter-bar"><label>Period:</label><select id="server-from" onchange="applyFilter('servers')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="server-to" onchange="document.getElementById('server-from').value=this.value;applyFilter('servers')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('servers',7)">Trail 7d</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('servers',30)">Trail 30d</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('servers',3)">Trail 3mo</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('servers',6)">Trail 6mo</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('servers',9)">Trail 9mo</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('servers',12)">Trail 12mo</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('servers')">All</button></div>
+<div class="grid-2">
+  <div class="card"><div class="card-header"><div class="card-title">Top Performers</div><div class="card-badge" id="server-top-count"></div></div>
+    <table class="server-table"><thead><tr><th>Server</th><th>Avg</th><th>Range</th><th>Mo.</th><th style="width:25%"></th></tr></thead>
+    <tbody id="top-server-tbody"><tr>
+        <td style="font-weight:500">Mayumi</td>
+        <td style="color:#10b981;font-weight:600">99.5</td>
+        <td style="color:#6b7280">97–100</td>
+        <td>6</td>
+        <td><div class="bar-bg"><div class="bar-fill" style="width:99.5%;background:#10b981"></div></div></td>
+      </tr>
+<tr>
+        <td style="font-weight:500">Jocelyn</td>
+        <td style="color:#10b981;font-weight:600">99.3</td>
+        <td style="color:#6b7280">92–100</td>
+        <td>11</td>
+        <td><div class="bar-bg"><div class="bar-fill" style="width:99.3%;background:#10b981"></div></div></td>
+      </tr>
+<tr>
+        <td style="font-weight:500">Dustin</td>
+        <td style="color:#10b981;font-weight:600">97.7</td>
+        <td style="color:#6b7280">90–100</td>
+        <td>7</td>
+        <td><div class="bar-bg"><div class="bar-fill" style="width:97.7%;background:#10b981"></div></div></td>
+      </tr>
+<tr>
+        <td style="font-weight:500">Gus</td>
+        <td style="color:#3b82f6;font-weight:600">94.0</td>
+        <td style="color:#6b7280">75–100</td>
+        <td>6</td>
+        <td><div class="bar-bg"><div class="bar-fill" style="width:94.0%;background:#3b82f6"></div></div></td>
+      </tr>
+<tr>
+        <td style="font-weight:500">Damon</td>
+        <td style="color:#3b82f6;font-weight:600">93.0</td>
+        <td style="color:#6b7280">72–100</td>
+        <td>4</td>
+        <td><div class="bar-bg"><div class="bar-fill" style="width:93.0%;background:#3b82f6"></div></div></td>
+      </tr>
+</tbody></table></div>
+  <div class="card"><div class="card-header"><div class="card-title">Needs Development</div><div class="card-badge" id="server-bottom-count"></div></div>
+    <table class="server-table"><thead><tr><th>Server</th><th>Avg</th><th>Range</th><th>Mo.</th><th style="width:25%"></th></tr></thead>
+    <tbody id="bottom-server-tbody"></tbody></table></div>
+</div>
+</div>
+
+<!-- ==================== COMMENTS VIEW ==================== -->
+<div id="view-comments" class="view-section">
+<div class="page-header">
+  <h1>Guest Comments</h1>
+  <div class="period">
+    <div class="period-badge">2025-04 – 2026-04</div>
+    <div class="period-badge" id="comment-count-badge">114 Comments</div>
+  </div>
+</div>
+<div class="filter-bar"><label>Period:</label><select id="comment-from" onchange="applyFilter('comments')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="comment-to" onchange="document.getElementById('comment-from').value=this.value;applyFilter('comments')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('comments',7)">Trail 7d</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('comments',30)">Trail 30d</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('comments',3)">Trail 3mo</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('comments',6)">Trail 6mo</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('comments',9)">Trail 9mo</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('comments',12)">Trail 12mo</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('comments')">All</button></div>
+
+<div class="section-header"><h2>Standout Positive</h2><span class="count" style="background:var(--green-bg);color:var(--green)">9–10 / 10</span></div>
+<div class="comment-grid"><div class="comment-card positive">
+    <div class="comment-meta"><span>Apr 28, 2025</span><span class="score high">10/10</span></div>
+    <div class="comment-text">This was genuinely one of the <span class="kw-pos">best</span> dining experiences I have ever had. The environment was absolutely lovely, with a peace and a curated dimness that allowed me to take in all of the sights of my meal (of which there...</div>
+  </div>
+<div class="comment-card positive">
+    <div class="comment-meta"><span>Feb 26, 2026</span><span class="score high">10/10</span></div>
+    <div class="comment-text">We came in to celebrate a special occasion. My wife just gave birth and this was her first sushi in nine months, so we were really excited. The food was <span class="kw-pos">amazing</span> as always and the staff was professional, same as our last...</div>
+  </div>
+<div class="comment-card positive">
+    <div class="comment-meta"><span>Feb 09, 2026 · Jocelyn</span><span class="score high">10/10</span></div>
+    <div class="comment-text">An <span class="kw-pos">incredible</span> omakase experience. I was hesitant at first based off some of the recent reviews of Hiroki, but the omakase was absolutely worth the experience. The complaints about the lack of engagement by the itamae is...</div>
+  </div>
+<div class="comment-card positive">
+    <div class="comment-meta"><span>Apr 12, 2025 · Dustin</span><span class="score high">10/10</span></div>
+    <div class="comment-text">This was among the <span class="kw-pos">best</span> dining experiences I’ve had. Everything from the black cod to the firefly squid was <span class="kw-pos">phenomenal</span>. The progression of the omakase was second to none. And the sake was <span class="kw-pos">great</span> too. My significant other...</div>
+  </div>
+<div class="comment-card positive">
+    <div class="comment-meta"><span>Nov 22, 2025</span><span class="score high">10/10</span></div>
+    <div class="comment-text">Chef Hiroki-san served my son and me for his Chef Omakase dinner last night.  It was sublime!  The sushi courses were truly spectacular -- each fish was sliced expertly with the right amount of rice and a subtle brush...</div>
+  </div>
+<div class="comment-card positive">
+    <div class="comment-meta"><span>Apr 06, 2026 · Dustin</span><span class="score high">10/10</span></div>
+    <div class="comment-text">On the axes of reservable, affordable, and <span class="kw-pos">incredible</span> Hiroki is the <span class="kw-pos">best</span> omakase in Philly. The recent revision to the menu highlights each course as a composition and the mouth feel and textural elements, as well as...</div>
+  </div>
+<div class="comment-card positive">
+    <div class="comment-meta"><span>Feb 15, 2026</span><span class="score high">10/10</span></div>
+    <div class="comment-text">Always <span class="kw-pos">love</span> Hiroki. Little issue with a mushroom sticking to the donabe lid, but honestly not a big deal for me. Food happens!  Entire culinary experience, ingredients, annd preparations always transport my partner and...</div>
+  </div>
+<div class="comment-card positive">
+    <div class="comment-meta"><span>Jul 27, 2025</span><span class="score high">10/10</span></div>
+    <div class="comment-text">Maybe the finest dining experience of my life. I'm 55 years old and I've eaten in Italy, France, Germany and all over the United States and I can't think of a match for our dinner tonight. We were celebrating my son's...</div>
+  </div>
+</div>
+
+<div class="section-header"><h2>Mixed Feedback</h2><span class="count" style="background:var(--orange-bg);color:var(--orange)">7–8 / 10</span></div>
+<div class="comment-grid"><div class="comment-card mixed">
+    <div class="comment-meta"><span>Mar 28, 2025 · Dustin</span><span class="score mid">7/10</span></div>
+    <div class="comment-text"><span class="kw-pos">Loved</span> the experience, but a bit too <span class="kw-neg">expensive</span></div>
+  </div>
+<div class="comment-card mixed">
+    <div class="comment-meta"><span>May 26, 2025</span><span class="score mid">8/10</span></div>
+    <div class="comment-text"><span class="kw-pos">Excellent</span> food, waiter was over the top and got in the way of the experience.</div>
+  </div>
+<div class="comment-card mixed">
+    <div class="comment-meta"><span>Sep 25, 2025 · Dustin</span><span class="score mid">7/10</span></div>
+    <div class="comment-text">We had a <span class="kw-pos">great</span> experience except for one issue. The venue and ambiance were <span class="kw-pos">great</span>. The space was intimate and well appointed. The staff were all very knowledgeable and helpful. We arrived early for our Omakase reservation and they seated us right away. The food was <span class="kw-pos">delicious</span> and...</div>
+  </div>
+<div class="comment-card mixed">
+    <div class="comment-meta"><span>Jul 03, 2025</span><span class="score mid">8/10</span></div>
+    <div class="comment-text">Food was <span class="kw-pos">great</span>, but the wagyu dish was not the most tender wagyu beef I've had in the past. Sushi omakase was <span class="kw-pos">excellent</span>, and the omelet along with the sushi chef sharing how it's made was <span class="kw-pos">perfect</span>. Thank you for a <span class="kw-pos">wonderful</span> experience.</div>
+  </div>
+<div class="comment-card mixed">
+    <div class="comment-meta"><span>Aug 09, 2025 · Gus</span><span class="score mid">8/10</span></div>
+    <div class="comment-text">Hiroki is always <span class="kw-pos">amazing</span>, and the service is truly the <span class="kw-pos">best</span> in the city. However this is my second year going for my birthday, and the menu didn’t change much if any. Would <span class="kw-pos">love</span> to see some updates!</div>
+  </div>
+<div class="comment-card mixed">
+    <div class="comment-meta"><span>May 31, 2025 · Gus</span><span class="score mid">8/10</span></div>
+    <div class="comment-text">It was a lovely evening and a fun experience, the only thing I wish had been different was the desert.  Mocha pudding didn't really fit the vibe of the rest of the meal</div>
+  </div>
+<div class="comment-card mixed">
+    <div class="comment-meta"><span>Dec 28, 2025</span><span class="score mid">8/10</span></div>
+    <div class="comment-text">Very good food but a bit more <span class="kw-neg">expensive</span> than I planned</div>
+  </div>
+<div class="comment-card mixed">
+    <div class="comment-meta"><span>Oct 11, 2025 · Gus</span><span class="score mid">7/10</span></div>
+    <div class="comment-text">The food was quite good, but would have preferred more sushi pieces. There were a few items that were definitely underwhelming.</div>
+  </div>
+</div>
+
+<div class="section-header"><h2>Critical Negative</h2><span class="count" style="background:var(--red-bg);color:var(--red)">1–6 / 10</span></div>
+<div class="comment-grid"><div class="comment-card negative">
+    <div class="comment-meta"><span>Oct 25, 2025 · Damon</span><span class="score low">1/10</span></div>
+    <div class="comment-text">I had high hopes for my dinner at Hiroki, especially with the omakase experience, but unfortunately, my visit was overshadowed by a few significant issues.  The biggest problem was the noise level. We were seated next...</div>
+  </div>
+<div class="comment-card negative">
+    <div class="comment-meta"><span>Apr 05, 2025 · Jocelyn</span><span class="score low">3/10</span></div>
+    <div class="comment-text">The food was <span class="kw-pos">great</span> and the service from our waitress was professional. However, the overall experience was <span class="kw-neg">disappointing</span>. The tables were unstable and kept moving — we asked for it to be fixed, but nothing was done. The...</div>
+  </div>
+<div class="comment-card negative">
+    <div class="comment-meta"><span>Apr 11, 2026</span><span class="score low">3/10</span></div>
+    <div class="comment-text">I had a recent visit that felt really awkward and off for a restaurant of this caliber. It left me with concerns about the place’s current stability and reliability. I wouldn’t be surprised if they’re facing tougher...</div>
+  </div>
+<div class="comment-card negative">
+    <div class="comment-meta"><span>Feb 13, 2026</span><span class="score low">4/10</span></div>
+    <div class="comment-text">There were two big bones in two pieces of salmon. The atmosphere didn’t match what we expected from a high quality omakase. Something was different from the last time we went. The food started late it felt like. The...</div>
+  </div>
+<div class="comment-card negative">
+    <div class="comment-meta"><span>Apr 04, 2025 · Dustin</span><span class="score low">6/10</span></div>
+    <div class="comment-text">Too fast. Food was good but not <span class="kw-pos">great</span>. <span class="kw-neg">Not worth</span> the price.</div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== GUEST INFO VIEW ==================== -->
+<div id="view-guestinfo" class="view-section">
+<div class="page-header">
+  <h1>Guest Info</h1>
+  <div class="period">
+    <div class="period-badge">0 Total Covers</div>
+    <div class="period-badge">0 Regulars</div>
+  </div>
+</div>
+
+<div class="filter-bar"><label>Date Range:</label><select id="gi-from" onchange="filterGuestInfo()"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="gi-to" onchange="filterGuestInfo()"></select><div class="filter-sep"></div><button class="filter-btn" onclick="resetGiFilter()">All Dates</button></div>
+<div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+  <div class="kpi"><div class="kpi-label">Total Covers</div><div class="kpi-value" style="color:var(--blue)">0</div><div class="kpi-sub"><span class="vs">all sources · all time</span></div></div>
+  <div class="kpi"><div class="kpi-label">New Regulars</div><div class="kpi-value" style="color:var(--green)">0</div><div class="kpi-sub"><span class="vs">3+ visits · all time</span></div></div>
+  <div class="kpi"><div class="kpi-label">VIP Visits</div><div class="kpi-value" style="color:var(--purple)" id="gikpi-vip">0</div><div class="kpi-sub"><span class="vs" id="gikpi-vip-sub">of 0 total</span></div></div>
+  <div class="kpi"><div class="kpi-label">1–2 Star Ratings</div><div class="kpi-value" style="color:var(--red)" id="gikpi-neg">0</div><div class="kpi-sub"><span class="vs" id="gikpi-neg-sub">of 0 total</span></div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><div class="card-title">Cover Source Breakdown</div><div class="card-badge">All Time</div></div>
+    <div class="chart-container"><canvas id="giCoverSource"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Guests by Origin City</div><div class="card-badge">Top 10</div></div>
+    <div class="chart-container"><canvas id="giOriginChart"></canvas></div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><div class="card-title">Top Visitors</div><div class="card-badge">By Completed Visits</div></div>
+    <table class="server-table"><thead><tr><th>Guest</th><th>Completed</th><th>Total Res.</th><th>Cancelled</th><th>Cancel %</th></tr></thead>
+    <tbody></tbody></table>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Recent VIPs</div><div class="card-badge" id="gi-vip-badge">Last 20</div></div>
+    <table class="server-table"><thead><tr><th>Guest</th><th>Service Date</th></tr></thead>
+    <tbody id="gi-vip-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><div class="card-title">No-Show Repeat Offenders</div><div class="card-badge">0 Flagged</div></div>
+    <table class="server-table"><thead><tr><th>Guest</th><th>Reservations</th><th>No-Shows</th><th>Rate</th></tr></thead>
+    <tbody></tbody></table>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Recent 1–2 Star Ratings</div><div class="card-badge" id="gi-neg-badge">Last 20</div></div>
+    <table class="server-table"><thead><tr><th>Guest</th><th>Date</th><th>Rating</th></tr></thead>
+    <tbody id="gi-neg-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><div class="card-title">Shortest Turn Times</div><div class="card-badge">Top 10</div></div>
+    <table class="server-table"><thead><tr><th>Guest</th><th>Avg Turn</th></tr></thead>
+    <tbody></tbody></table>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Longest Turn Times</div><div class="card-badge">Top 10</div></div>
+    <table class="server-table"><thead><tr><th>Guest</th><th>Avg Turn</th></tr></thead>
+    <tbody></tbody></table>
+  </div>
+</div>
+</div>
+
+<!-- ==================== PACE REPORT VIEW ==================== -->
+<div id="view-pace" class="view-section">
+<div class="page-header">
+  <h1>Pace Report</h1>
+  <div class="period">
+    <div class="period-badge">Snapshot: —</div>
+    <div class="period-badge">0 Days of Actuals</div>
+  </div>
+</div>
+
+<div class="kpi-row" style="grid-template-columns:repeat(5,1fr)">
+  <div class="kpi"><div class="kpi-label">Upcoming Covers</div><div class="kpi-value" style="color:var(--blue)">0</div><div class="kpi-sub"><span class="vs">on the books</span></div></div>
+  <div class="kpi"><div class="kpi-label">Avg Daily (Actual)</div><div class="kpi-value" style="color:var(--green)">0</div><div class="kpi-sub"><span class="vs">covers · this month</span></div></div>
+  <div class="kpi"><div class="kpi-label">Walk-in Rate</div><div class="kpi-value" style="color:var(--purple)">0%</div><div class="kpi-sub"><span class="vs">of total covers</span></div></div>
+  <div class="kpi"><div class="kpi-label">No-Show Rate</div><div class="kpi-value" style="color:var(--red)">0%</div><div class="kpi-sub"><span class="vs">of reservations</span></div></div>
+  <div class="kpi"><div class="kpi-label">Busiest Day</div><div class="kpi-value" style="color:var(--blue);font-size:1.1rem">—</div><div class="kpi-sub"><span class="vs">0 covers</span></div></div>
+</div>
+
+<div class="section-header"><h2>Upcoming Covers (On the Books)</h2><span class="count">Next 10 Days</span></div>
+<div class="card">
+  <table class="server-table">
+    <thead><tr><th>Service Date</th><th>Day</th><th>Lunch</th><th>Dinner</th><th>Total</th><th>vs. Prior Week Actual</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="section-header"><h2>Actuals Reconciliation</h2><span class="count">March 2026</span></div>
+<div class="card">
+  <div class="card-header"><div class="card-title">Daily Breakdown: Reserved → Actual</div><div class="card-badge">Walk-in Uplift + No-Show Impact</div></div>
+  <table class="server-table">
+    <thead><tr><th>Date</th><th>Day</th><th>Service</th><th>Reserved</th><th>Walk-in</th><th>Total</th><th>Walk-in %</th><th>No-Show</th><th>No-Show %</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><div class="card-title">Daily Covers by Service Type</div><div class="card-badge">March 2026</div></div>
+    <div class="chart-container"><canvas id="paceDailyChart"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Walk-in vs Reserved Mix</div><div class="card-badge">March 2026</div></div>
+    <div class="chart-container"><canvas id="paceMixChart"></canvas></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:1rem">
+  <div class="card-header"><div class="card-title">No-Show Rate by Day of Week</div><div class="card-badge">March 2026</div></div>
+  <div class="chart-container"><canvas id="paceNoshowChart"></canvas></div>
+</div>
+</div>
+
+<div class="footer">HIROKI Philadelphia · NPS Report · Method Co F&B · Generated April 2026</div>
+</div>
+
+<script>
+function switchView(v){document.querySelectorAll('.view-section').forEach(function(s){s.classList.remove('active')});document.querySelectorAll('.sidebar-item').forEach(function(s){s.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');document.querySelector('[data-view="'+v+'"]').classList.add('active');setTimeout(function(){window.dispatchEvent(new Event('resize'))},50)}
+Chart.defaults.color='#6b7280';Chart.defaults.borderColor='#e5e7eb';Chart.defaults.font.family="'Inter',system-ui,sans-serif";Chart.defaults.font.size=11;
+var allMonths=["2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04"];
+var RAW={survey:{overall:{"2025-04": 95, "2025-05": 99, "2025-06": 89, "2025-07": 99, "2025-08": 99, "2025-09": 97, "2025-10": 95, "2025-11": 99, "2025-12": 99, "2026-01": 96, "2026-02": 97, "2026-03": 99, "2026-04": 89},service:{"2025-04": 100, "2025-05": 100, "2025-06": 88, "2025-07": 100, "2025-08": 100, "2025-09": 100, "2025-10": 100, "2025-11": 100, "2025-12": 100, "2026-01": 100, "2026-02": 99, "2026-03": 100, "2026-04": 100},food:{"2025-04": 95, "2025-05": 98, "2025-06": 75, "2025-07": 100, "2025-08": 100, "2025-09": 94, "2025-10": 73, "2025-11": 90, "2025-12": 100, "2026-01": 91, "2026-02": 99, "2026-03": 100, "2026-04": 70},atmos:{"2025-04": 90, "2025-05": 100, "2025-06": 88, "2025-07": 99, "2025-08": 98, "2025-09": 99, "2025-10": 98, "2025-11": 100, "2025-12": 100, "2026-01": 100, "2026-02": 93, "2026-03": 95, "2026-04": 97},nps:{"2025-04": 62, "2025-05": 80, "2025-06": 83, "2025-07": 92, "2025-08": 80, "2025-09": 80, "2025-10": 62, "2025-11": 100, "2025-12": 80, "2026-01": 100, "2026-02": 83, "2026-03": 100, "2026-04": 50},volume:{"2025-04": 18, "2025-05": 14, "2025-06": 10, "2025-07": 17, "2025-08": 12, "2025-09": 12, "2025-10": 14, "2025-11": 6, "2025-12": 10, "2026-01": 11, "2026-02": 18, "2026-03": 10, "2026-04": 4},dow:[99.2, 0, 97.8, 98.1, 96.9, 93.5, 98.6],recDist:[3, 0, 2, 1, 0, 1, 5, 8, 4, 89]},rating:{avg:{"2025-04": 4.71, "2025-05": 4.59, "2025-06": 4.67, "2025-07": 4.94, "2025-08": 4.92, "2025-09": 4.75, "2025-10": 4.57, "2025-11": 5.0, "2025-12": 4.91, "2026-01": 4.75, "2026-02": 4.84, "2026-03": 5.0, "2026-04": 4.25},vol:{"2025-04": 21, "2025-05": 22, "2025-06": 12, "2025-07": 17, "2025-08": 12, "2025-09": 12, "2025-10": 14, "2025-11": 5, "2025-12": 11, "2026-01": 12, "2026-02": 19, "2026-03": 10, "2026-04": 4},pct5:{"2025-04": 85.7, "2025-05": 72.7, "2025-06": 91.7, "2025-07": 94.1, "2025-08": 91.7, "2025-09": 75.0, "2025-10": 78.6, "2025-11": 100.0, "2025-12": 90.9, "2026-01": 83.3, "2026-02": 94.7, "2026-03": 100.0, "2026-04": 75.0},pct1:{"2025-04": 0.0, "2025-05": 4.5, "2025-06": 8.3, "2025-07": 0.0, "2025-08": 0.0, "2025-09": 0.0, "2025-10": 7.1, "2025-11": 0.0, "2025-12": 0.0, "2026-01": 0.0, "2026-02": 0.0, "2026-03": 0.0, "2026-04": 0.0},r1:{"2025-04": 0, "2025-05": 1, "2025-06": 1, "2025-07": 0, "2025-08": 0, "2025-09": 0, "2025-10": 1, "2025-11": 0, "2025-12": 0, "2026-01": 0, "2026-02": 0, "2026-03": 0, "2026-04": 0},r2:{"2025-04": 1, "2025-05": 0, "2025-06": 0, "2025-07": 0, "2025-08": 0, "2025-09": 0, "2025-10": 0, "2025-11": 0, "2025-12": 0, "2026-01": 0, "2026-02": 1, "2026-03": 0, "2026-04": 1},r3:{"2025-04": 1, "2025-05": 0, "2025-06": 0, "2025-07": 0, "2025-08": 0, "2025-09": 0, "2025-10": 0, "2025-11": 0, "2025-12": 0, "2026-01": 1, "2026-02": 0, "2026-03": 0, "2026-04": 0},r4:{"2025-04": 1, "2025-05": 5, "2025-06": 0, "2025-07": 1, "2025-08": 1, "2025-09": 3, "2025-10": 2, "2025-11": 0, "2025-12": 1, "2026-01": 1, "2026-02": 0, "2026-03": 0, "2026-04": 0},r5:{"2025-04": 18, "2025-05": 16, "2025-06": 11, "2025-07": 16, "2025-08": 11, "2025-09": 9, "2025-10": 11, "2025-11": 5, "2025-12": 10, "2026-01": 10, "2026-02": 18, "2026-03": 10, "2026-04": 3},dowAvg:[4.72, 0, 4.94, 4.87, 4.74, 4.62, 4.94],dowVol:[1.4, 0, 1.6, 1.1, 1.2, 1.5, 1.2]},nps:{promoters:{"2025-04": 10, "2025-05": 8, "2025-06": 5, "2025-07": 11, "2025-08": 4, "2025-09": 4, "2025-10": 6, "2025-11": 2, "2025-12": 4, "2026-01": 7, "2026-02": 11, "2026-03": 8, "2026-04": 3},passives:{"2025-04": 1, "2025-05": 2, "2025-06": 1, "2025-07": 1, "2025-08": 1, "2025-09": 1, "2025-10": 1, "2025-11": 0, "2025-12": 1, "2026-01": 0, "2026-02": 0, "2026-03": 0, "2026-04": 0},detractors:{"2025-04": 2, "2025-05": 0, "2025-06": 0, "2025-07": 0, "2025-08": 0, "2025-09": 0, "2025-10": 1, "2025-11": 0, "2025-12": 0, "2026-01": 0, "2026-02": 1, "2026-03": 0, "2026-04": 1}},serverMonthly:{"Gus": {"2025-04": 100, "2025-08": 97, "2025-07": 100, "2025-06": 75, "2025-05": 98, "2025-10": 94}, "Mayumi": {"2025-04": 97, "2025-12": 100, "2025-06": 100, "2025-05": 100, "2025-10": 100, "2025-09": 100}, "Dustin": {"2025-04": 94, "2026-04": 100, "2025-12": 100, "2026-02": 100, "2025-07": 100, "2025-05": 100, "2025-09": 90}, "Jocelyn": {"2025-04": 92, "2025-08": 100, "2025-12": 100, "2026-02": 100, "2026-01": 100, "2025-07": 100, "2025-06": 100, "2026-03": 100, "2025-05": 100, "2025-10": 100, "2025-09": 100}, "Damon": {"2025-08": 100, "2026-01": 100, "2025-06": 100, "2025-10": 72}},giVips:[],giNeg:[]};
+var charts={};function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id]}}
+function fmtLabel(ym,idx){var mn=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var p=ym.split('-');var l=mn[parseInt(p[1])];if(parseInt(p[1])===1||idx===0)l+=" '"+p[0].slice(2);return l}
+function fmtMonthFull(ym){var mn=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var p=ym.split('-');return mn[parseInt(p[1])]+' '+p[0]}
+function getFilteredMonths(prefix){var from=document.getElementById(prefix+'-from').value;var to=document.getElementById(prefix+'-to').value;return allMonths.filter(function(m){return m>=from&&m<=to})}
+function slice(obj,months){return months.map(function(m){return obj[m]})}
+function avg(arr){return arr.length?+(arr.reduce(function(a,b){return a+b},0)/arr.length).toFixed(1):0}
+function sum(arr){return arr.reduce(function(a,b){return a+b},0)}
+function trendLine(data){var n=data.length;if(n<2)return data.slice();var sx=0,sy=0,sxy=0,sxx=0;for(var i=0;i<n;i++){sx+=i;sy+=data[i];sxy+=i*data[i];sxx+=i*i}var slope=(n*sxy-sx*sy)/(n*sxx-sx*sx);var intercept=(sy-slope*sx)/n;return data.map(function(_,i){return+(intercept+slope*i).toFixed(2)})}
+function trendDataset(data,color,label){return{type:'line',label:label||'Trend',data:trendLine(data),borderColor:color,borderWidth:1.5,borderDash:[6,4],pointRadius:0,pointHoverRadius:0,tension:0,fill:false,order:10}}
+function populateDropdowns(prefix){var f=document.getElementById(prefix+'-from'),t=document.getElementById(prefix+'-to');f.innerHTML='';t.innerHTML='';allMonths.forEach(function(m){var l=fmtMonthFull(m);f.innerHTML+='<option value="'+m+'">'+l+'</option>';t.innerHTML+='<option value="'+m+'">'+l+'</option>'});f.value=allMonths[0];t.value=allMonths[allMonths.length-1]}
+function resetFilter(view){var prefix=view==='surveys'?'survey':view==='ratings'?'rating':view==='servers'?'server':'comment';document.getElementById(prefix+'-from').value=allMonths[0];document.getElementById(prefix+'-to').value=allMonths[allMonths.length-1];applyFilter(view)}
+function updateNpsScorecard(months){var p=sum(slice(RAW.nps.promoters,months)),pa=sum(slice(RAW.nps.passives,months)),d=sum(slice(RAW.nps.detractors,months)),t=p+pa+d;var nps=t?Math.round((p/t-d/t)*100):0;var pp=t?(p/t*100).toFixed(1):'0',ppa=t?(pa/t*100).toFixed(1):'0',pd=t?(d/t*100).toFixed(1):'0';document.getElementById('nps-score').textContent=nps;document.getElementById('nps-score').style.color=nps>=60?'var(--green)':nps>=40?'var(--blue)':'var(--red)';document.getElementById('nps-bar-p').style.width=pp+'%';document.getElementById('nps-bar-pa').style.width=ppa+'%';document.getElementById('nps-bar-d').style.width=pd+'%';document.getElementById('nps-promo-pct').textContent=pp+'%';document.getElementById('nps-pass-pct').textContent=ppa+'%';document.getElementById('nps-det-pct').textContent=pd+'%';document.getElementById('nps-total-resp').textContent=t;document.getElementById('nps-promo-count').textContent=p;document.getElementById('nps-pass-count').textContent=pa;document.getElementById('nps-det-count').textContent=d}
+function buildSurveyCharts(months){var labels=months.map(fmtLabel),o=slice(RAW.survey.overall,months),s=slice(RAW.survey.service,months),f=slice(RAW.survey.food,months),a=slice(RAW.survey.atmos,months),n=slice(RAW.survey.nps,months),v=slice(RAW.survey.volume,months);document.getElementById('skpi-overall').textContent=avg(o);document.getElementById('skpi-service').textContent=avg(s);document.getElementById('skpi-food').textContent=avg(f);document.getElementById('skpi-atmos').textContent=avg(a);document.getElementById('skpi-count').textContent=sum(v);updateNpsScorecard(months);destroyChart('surveyMonthlyScores');charts['surveyMonthlyScores']=new Chart(document.getElementById('surveyMonthlyScores'),{type:'line',data:{labels:labels,datasets:[{label:'Overall',data:o,borderColor:'#212931',backgroundColor:'rgba(33,41,49,.06)',fill:true,tension:.35,pointRadius:3,borderWidth:2},trendDataset(o,'rgba(33,41,49,.45)','Overall Trend'),{label:'Service',data:s,borderColor:'#2BA6BB',tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(s,'rgba(43,166,187,.4)','Service Trend'),{label:'Food',data:f,borderColor:'#405766',tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(f,'rgba(64,87,102,.4)','Food Trend'),{label:'Atmosphere',data:a,borderColor:'#BCC8BE',tension:.35,pointRadius:2,borderWidth:1.5,borderDash:[4,3]},trendDataset(a,'rgba(188,200,190,.35)','Atmos Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14,filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyNpsChart');charts['surveyNpsChart']=new Chart(document.getElementById('surveyNpsChart'),{type:'bar',data:{labels:labels,datasets:[{label:'NPS',data:n,backgroundColor:n.map(function(v){return v>=75?'#2BA6BB':v>=65?'#405766':'#D8CFC4'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(n,'rgba(43,166,187,.6)','NPS Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='NPS'}}}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyVolumeChart');charts['surveyVolumeChart']=new Chart(document.getElementById('surveyVolumeChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Surveys',data:v,backgroundColor:'rgba(43,166,187,.35)',borderColor:'#2BA6BB',borderWidth:1,borderRadius:6,maxBarThickness:32,order:2},trendDataset(v,'rgba(59,130,246,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Surveys'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}})}
+function buildRatingCharts(months){var labels=months.map(fmtLabel),ma=slice(RAW.rating.avg,months),mv=slice(RAW.rating.vol,months),p5=slice(RAW.rating.pct5,months),p1=slice(RAW.rating.pct1,months);var dr1=sum(slice(RAW.rating.r1,months)),dr2=sum(slice(RAW.rating.r2,months)),dr3=sum(slice(RAW.rating.r3,months)),dr4=sum(slice(RAW.rating.r4,months)),dr5=sum(slice(RAW.rating.r5,months));var total=dr1+dr2+dr3+dr4+dr5,weighted=dr1+dr2*2+dr3*3+dr4*4+dr5*5;var filtAvg=total?(weighted/total).toFixed(2):'0',filt5=total?(dr5/total*100).toFixed(1):'0',filt12=total?((dr1+dr2)/total*100).toFixed(1):'0';document.getElementById('rkpi-avg').textContent=filtAvg;document.getElementById('rkpi-5star').textContent=filt5+'%';document.getElementById('rkpi-5count').textContent=dr5+' of '+total;document.getElementById('rkpi-12star').textContent=filt12+'%';document.getElementById('rkpi-negcount').textContent=(dr1+dr2)+' negative';document.getElementById('rkpi-total').textContent=total;destroyChart('ratingMonthlyAvg');charts['ratingMonthlyAvg']=new Chart(document.getElementById('ratingMonthlyAvg'),{type:'line',data:{labels:labels,datasets:[{label:'Avg Rating',data:ma,borderColor:'#2BA6BB',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.35,pointBackgroundColor:'#3b82f6',pointRadius:3,borderWidth:2},trendDataset(ma,'rgba(59,130,246,.5)','Rating Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Avg Rating'}}}},scales:{y:{min:4.2,max:5.0,ticks:{stepSize:.1},grid:{color:'#f3f4f6'}}}}});destroyChart('ratingMonthlyVol');charts['ratingMonthlyVol']=new Chart(document.getElementById('ratingMonthlyVol'),{type:'bar',data:{labels:labels,datasets:[{label:'Ratings',data:mv,backgroundColor:mv.map(function(v){return v>=160?'rgba(59,130,246,.7)':'rgba(59,130,246,.35)'}),borderRadius:6,maxBarThickness:32,order:2},trendDataset(mv,'rgba(59,130,246,.6)','Volume Trend')]},options:{responsive:true,plugins:{legend:{labels:{filter:function(item){return item.text==='Ratings'}}}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('ratingDistChart');charts['ratingDistChart']=new Chart(document.getElementById('ratingDistChart'),{type:'doughnut',data:{labels:['1 Star','2 Star','3 Star','4 Star','5 Star'],datasets:[{data:[dr1,dr2,dr3,dr4,dr5],backgroundColor:['#ef4444','#f59e0b','#fbbf24','#3b82f6','#10b981'],borderWidth:0}]},options:{responsive:true,cutout:'55%',plugins:{legend:{position:'right',labels:{padding:14,usePointStyle:true,pointStyle:'circle'}}}}});destroyChart('ratingStarPct');charts['ratingStarPct']=new Chart(document.getElementById('ratingStarPct'),{type:'line',data:{labels:labels,datasets:[{label:'5-Star %',data:p5,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p5,'rgba(16,185,129,.4)','5-Star Trend'),{label:'1-Star %',data:p1,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.05)',fill:true,tension:.35,pointRadius:2,borderWidth:1.5},trendDataset(p1,'rgba(239,68,68,.4)','1-Star Trend')]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{beginAtZero:false,max:100,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}}}}});var qmap={};months.forEach(function(m){var parts=m.split('-');var q=parts[0]+'-Q'+Math.ceil(parseInt(parts[1])/3);if(!qmap[q])qmap[q]={w:0,t:0};var t=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)+(RAW.rating.r3[m]||0)+(RAW.rating.r4[m]||0)+(RAW.rating.r5[m]||0);var w=(RAW.rating.r1[m]||0)+(RAW.rating.r2[m]||0)*2+(RAW.rating.r3[m]||0)*3+(RAW.rating.r4[m]||0)*4+(RAW.rating.r5[m]||0)*5;qmap[q].t+=t;qmap[q].w+=w});var ql=Object.keys(qmap).sort(),qa=ql.map(function(q){return qmap[q].t?+(qmap[q].w/qmap[q].t).toFixed(2):0}),qt=ql.map(function(q){return qmap[q].t});destroyChart('ratingQuarterChart');charts['ratingQuarterChart']=new Chart(document.getElementById('ratingQuarterChart'),{type:'bar',data:{labels:ql,datasets:[{label:'Avg Rating',data:qa,backgroundColor:qa.map(function(v,i){return i===qa.indexOf(Math.max.apply(null,qa))?'rgba(16,185,129,.6)':v===Math.min.apply(null,qa)?'rgba(239,68,68,.5)':'rgba(59,130,246,.45)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(qa,'rgba(59,130,246,.5)','Avg Trend'),{label:'Total Ratings',data:qt,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{min:4.3,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,qt)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Volume',font:{size:10}}}}}})}
+function buildStaticCharts(){destroyChart('surveyDowChart');charts['surveyDowChart']=new Chart(document.getElementById('surveyDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Overall',data:RAW.survey.dow,backgroundColor:RAW.survey.dow.map(function(v){return v<90?'rgba(239,68,68,.6)':'rgba(59,130,246,.45)'}),borderRadius:8,maxBarThickness:40,order:2},trendDataset(RAW.survey.dow,'rgba(59,130,246,.5)','DOW Trend')]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,max:100,grid:{color:'#f3f4f6'}}}}});destroyChart('surveyRecDist');charts['surveyRecDist']=new Chart(document.getElementById('surveyRecDist'),{type:'bar',data:{labels:['1','2','3','4','5','6','7','8','9','10'],datasets:[{label:'Responses',data:RAW.survey.recDist,backgroundColor:['#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#f59e0b','#f59e0b','#10b981','#10b981'],borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#f3f4f6'}},x:{title:{display:true,text:'Recommend Score',font:{size:11}}}}}});destroyChart('ratingDowChart');charts['ratingDowChart']=new Chart(document.getElementById('ratingDowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Avg Rating',data:RAW.rating.dowAvg,backgroundColor:RAW.rating.dowAvg.map(function(v){return v<Math.min.apply(null,RAW.rating.dowAvg)+0.05?'rgba(239,68,68,.55)':'rgba(59,130,246,.4)'}),borderRadius:8,yAxisID:'y',maxBarThickness:40,order:2},trendDataset(RAW.rating.dowAvg,'rgba(59,130,246,.5)','DOW Trend'),{label:'Avg Volume/Day',data:RAW.rating.dowVol,type:'line',borderColor:'#405766',pointBackgroundColor:'#405766',pointRadius:4,borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',filter:function(item){return item.text.indexOf('Trend')===-1}}}},scales:{y:{min:4.2,max:4.9,position:'left',title:{display:true,text:'Avg',font:{size:10}},grid:{color:'#f3f4f6'}},y1:{min:0,max:Math.max.apply(null,RAW.rating.dowVol)*1.3,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Vol/Day',font:{size:10}}}}}})}
+function filterComments(months){var from=months[0],to=months[months.length-1];var c=0;document.querySelectorAll('#view-comments .comment-card').forEach(function(card){var meta=card.querySelector('.comment-meta span').textContent;var d=meta.match(/([A-Z][a-z]{2}) (\d{2}), (\d{4})/);if(d){var mm={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};var ym=d[3]+'-'+mm[d[1]];var show=ym>=from&&ym<=to;card.style.display=show?'':'none';if(show)c++}});document.getElementById('comment-count-badge').textContent=c+' Comments shown'}
+function filterServers(months){var from=months[0],to=months[months.length-1];document.getElementById('server-period').textContent=fmtMonthFull(from)+' \u2013 '+fmtMonthFull(to);var sm=RAW.serverMonthly,results=[];for(var name in sm){var scores=[];for(var i=0;i<months.length;i++){var m=months[i];if(sm[name][m]!==undefined&&sm[name][m]!==null)scores.push(sm[name][m])}if(scores.length>=3){var a=+(scores.reduce(function(x,y){return x+y},0)/scores.length).toFixed(1);results.push({name:name,avg:a,min:Math.min.apply(null,scores),max:Math.max.apply(null,scores),months:scores.length})}}results.sort(function(a,b){return b.avg-a.avg});var top=results.slice(0,10),bottom=results.slice(-10).sort(function(a,b){return a.avg-b.avg});function renderRows(list,colorFn){var h='';for(var i=0;i<list.length;i++){var s=list[i],c=colorFn(s.avg);h+='<tr><td style="font-weight:500">'+s.name+'</td><td style="color:'+c+';font-weight:600">'+s.avg+'</td><td style="color:#6b7280">'+s.min+'\u2013'+s.max+'</td><td>'+s.months+'</td><td><div class="bar-bg"><div class="bar-fill" style="width:'+s.avg+'%;background:'+c+'"></div></div></td></tr>'}return h}document.getElementById('top-server-tbody').innerHTML=renderRows(top,function(a){return a>=97?'#10b981':'#3b82f6'});document.getElementById('bottom-server-tbody').innerHTML=renderRows(bottom,function(a){return a<90?'#ef4444':'#f59e0b'});document.getElementById('server-top-count').textContent=top.length+' servers';document.getElementById('server-bottom-count').textContent=bottom.length+' servers'}
+function applyFilter(view){var prefix=view==='surveys'?'survey':view==='ratings'?'rating':view==='servers'?'server':'comment';var months=getFilteredMonths(prefix);if(months.length===0)return;if(view==='surveys')buildSurveyCharts(months);else if(view==='ratings')buildRatingCharts(months);else if(view==='comments')filterComments(months);else if(view==='servers')filterServers(months)}
+function buildGuestInfoCharts(){var csEl=document.getElementById('giCoverSource');if(!csEl)return;var csLabels=[],csValues=[];var csColors=['#3b82f6','#10b981','#405766','#f59e0b','#ef4444','#06b6d4','#ec4899','#84cc16','#f97316'];destroyChart('giCoverSource');charts['giCoverSource']=new Chart(csEl,{type:'bar',data:{labels:csLabels,datasets:[{label:'Covers',data:csValues,backgroundColor:csValues.map(function(_,i){return csColors[i%csColors.length]}),borderRadius:6,maxBarThickness:36}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#f3f4f6'}},y:{grid:{display:false}}}}});var orLabels=[],orValues=[];var orColors=['#3b82f6','#10b981','#405766','#f59e0b','#ef4444','#06b6d4','#ec4899','#84cc16','#f97316','#6366f1'];destroyChart('giOriginChart');charts['giOriginChart']=new Chart(document.getElementById('giOriginChart'),{type:'doughnut',data:{labels:orLabels,datasets:[{data:orValues,backgroundColor:orColors,borderWidth:0}]},options:{responsive:true,cutout:'50%',plugins:{legend:{position:'right',labels:{padding:10,usePointStyle:true,pointStyle:'circle',font:{size:11}}}}}})}
+function initGiFilters(){var dates=[];RAW.giVips.forEach(function(v){if(v.date)dates.push(v.date)});RAW.giNeg.forEach(function(n){if(n.date)dates.push(n.date)});dates.sort();if(dates.length===0)return;var months={};dates.forEach(function(d){var ym=d.substring(0,7);months[ym]=1});var giMonths=Object.keys(months).sort();var f=document.getElementById('gi-from'),t=document.getElementById('gi-to');if(!f||!t)return;var mn=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];f.innerHTML='';t.innerHTML='';giMonths.forEach(function(ym){var p=ym.split('-');var label=mn[parseInt(p[1])]+' '+p[0];f.innerHTML+='<option value="'+ym+'">'+label+'</option>';t.innerHTML+='<option value="'+ym+'">'+label+'</option>'});f.value=giMonths[0];t.value=giMonths[giMonths.length-1];window._giMonths=giMonths}
+function filterGuestInfo(){var f=document.getElementById('gi-from').value,t=document.getElementById('gi-to').value;var vipTbody=document.getElementById('gi-vip-tbody'),negTbody=document.getElementById('gi-neg-tbody');if(!vipTbody||!negTbody)return;var fmtDate=function(d){var mn=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];var p=d.split('-');return mn[parseInt(p[1])]+' '+parseInt(p[2])+', '+p[0]};var vipFiltered=RAW.giVips.filter(function(v){var ym=v.date?v.date.substring(0,7):'';return ym>=f&&ym<=t});var negFiltered=RAW.giNeg.filter(function(n){var ym=n.date?n.date.substring(0,7):'';return ym>=f&&ym<=t});var vipHtml='';vipFiltered.slice(0,20).forEach(function(v){vipHtml+='<tr><td style="font-weight:500">'+v.name+'</td><td style="color:var(--muted)">'+fmtDate(v.date)+'</td></tr>'});vipTbody.innerHTML=vipHtml;document.getElementById('gi-vip-badge').textContent=vipFiltered.length+' VIPs';document.getElementById('gikpi-vip').textContent=vipFiltered.length;document.getElementById('gikpi-vip-sub').textContent='of '+RAW.giVips.length+' total';var negHtml='';negFiltered.slice(0,20).forEach(function(n){var sc=n.rating===1?'#ef4444':'#f59e0b';var stars='';for(var i=0;i<5;i++)stars+=i<n.rating?'\u2605':'\u2606';negHtml+='<tr><td style="font-weight:500">'+n.name+'</td><td style="color:var(--muted)">'+fmtDate(n.date)+'</td><td style="color:'+sc+';font-weight:700">'+stars+'</td></tr>'});negTbody.innerHTML=negHtml;document.getElementById('gi-neg-badge').textContent=negFiltered.length+' Flagged';document.getElementById('gikpi-neg').textContent=negFiltered.length;document.getElementById('gikpi-neg-sub').textContent='of '+RAW.giNeg.length+' total'}
+function resetGiFilter(){if(!window._giMonths||!window._giMonths.length)return;document.getElementById('gi-from').value=window._giMonths[0];document.getElementById('gi-to').value=window._giMonths[window._giMonths.length-1];filterGuestInfo()}
+function buildPaceCharts(){var el=document.getElementById('paceDailyChart');if(!el)return;var labels=[],dinner=[],lunch=[],brunch=[],reserved=[],walkin=[],nsDow=[];destroyChart('paceDailyChart');charts['paceDailyChart']=new Chart(el,{type:'bar',data:{labels:labels,datasets:[{label:'Dinner',data:dinner,backgroundColor:'rgba(59,130,246,.65)',borderRadius:4,maxBarThickness:28},{label:'Lunch',data:lunch,backgroundColor:'rgba(16,185,129,.55)',borderRadius:4,maxBarThickness:28},{label:'Brunch',data:brunch,backgroundColor:'rgba(245,158,11,.5)',borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('paceMixChart');charts['paceMixChart']=new Chart(document.getElementById('paceMixChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Reserved',data:reserved,backgroundColor:'rgba(59,130,246,.55)',borderRadius:4,maxBarThickness:28},{label:'Walk-in',data:walkin,backgroundColor:'rgba(139,92,246,.5)',borderRadius:4,maxBarThickness:28}]},options:{responsive:true,plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:14}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:'#f3f4f6'}}}}});destroyChart('paceNoshowChart');charts['paceNoshowChart']=new Chart(document.getElementById('paceNoshowChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'No-Show Rate %',data:nsDow,backgroundColor:nsDow.map(function(v){return v>10?'rgba(239,68,68,.6)':v>5?'rgba(245,158,11,.5)':'rgba(16,185,129,.45)'}),borderRadius:8,maxBarThickness:40}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}},grid:{color:'#f3f4f6'}},x:{grid:{display:false}}}}})}
+['survey','rating','server','comment'].forEach(populateDropdowns);buildSurveyCharts(allMonths);buildRatingCharts(allMonths);buildStaticCharts();filterServers(allMonths);buildGuestInfoCharts();initGiFilters();buildPaceCharts();
+
+// --- Method Co trailing-period preset helpers ---
+function _viewPrefix(view) {
+  return view === 'surveys' ? 'survey'
+       : view === 'ratings' ? 'rating'
+       : view === 'servers' ? 'server'
+       : view === 'comments' ? 'comment'
+       : null;
+}
+function setTrailing(view, nMonths) {
+  var prefix = _viewPrefix(view);
+  if (!prefix) return;
+  if (!window.allMonths || !window.allMonths.length) return;
+  var to = window.allMonths[window.allMonths.length - 1];
+  var idxTo = window.allMonths.length - 1;
+  var idxFrom = Math.max(0, idxTo - (nMonths - 1));
+  var from = window.allMonths[idxFrom];
+  document.getElementById(prefix + '-from').value = from;
+  document.getElementById(prefix + '-to').value = to;
+  applyFilter(view);
+}
+
+// -------- Trail 7d: switch Surveys / Ratings charts to DAY resolution --------
+// Uses raw per-day data (window.RAW_COMMENTS, window.RAW_RATINGS).
+// Other presets (Trail 3mo, etc.) call applyFilter which rebuilds the monthly
+// charts from RAW.*, effectively exiting day mode.
+(function(){
+  function addDays(isoDate, delta) {
+    var d = new Date(isoDate + 'T12:00:00');
+    d.setUTCDate(d.getUTCDate() + delta);
+    var y = d.getUTCFullYear();
+    var m = String(d.getUTCMonth() + 1).padStart(2, '0');
+    var day = String(d.getUTCDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+  function fmtDayLabel(isoDate) {
+    var d = new Date(isoDate + 'T12:00:00');
+    var mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()];
+    var dow = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getUTCDay()];
+    return dow + ' ' + mo + ' ' + d.getUTCDate();
+  }
+  function latestRatingDate() {
+    var arr = window.RAW_RATINGS || [];
+    if (!arr.length) return null;
+    var max = arr[0].date;
+    for (var i = 1; i < arr.length; i++) if (arr[i].date > max) max = arr[i].date;
+    return max;
+  }
+  function latestCommentDate() {
+    var arr = window.RAW_COMMENTS || [];
+    if (!arr.length) return null;
+    var max = arr[0].date;
+    for (var i = 1; i < arr.length; i++) if (arr[i].date > max) max = arr[i].date;
+    return max;
+  }
+  function dayBuckets(nDays, anchor) {
+    // Returns ordered list of last nDays date strings ending at anchor.
+    var out = [];
+    for (var i = nDays - 1; i >= 0; i--) out.push(addDays(anchor, -i));
+    return out;
+  }
+  function destroyByCanvas(id) {
+    if (window.charts && window.charts[id]) {
+      window.charts[id].destroy();
+      delete window.charts[id];
+    }
+  }
+
+  function renderSurveyDayView(nDays) {
+    var raw = window.RAW_SURVEYS && window.RAW_SURVEYS.length ? window.RAW_SURVEYS : null;
+    // Anchor: prefer latest rating date (data lags both streams similarly)
+    var anchor = latestRatingDate() || latestCommentDate();
+    if (raw) {
+      var maxD = raw[0].date;
+      for (var i = 1; i < raw.length; i++) if (raw[i].date > maxD) maxD = raw[i].date;
+      if (maxD && (!anchor || maxD > anchor)) anchor = maxD;
+    }
+    if (!anchor) return;
+    var days = dayBuckets(nDays, anchor);
+    // Aggregate per-day from full raw responses (all fields)
+    var byDay = {};
+    days.forEach(function(d){
+      byDay[d] = { n:0, p:0, pas:0, det:0,
+        sumOv:0, cOv:0, sumSe:0, cSe:0, sumFo:0, cFo:0, sumAt:0, cAt:0 };
+    });
+    (raw || []).forEach(function(r){
+      if (!r.date || !byDay[r.date]) return;
+      var b = byDay[r.date];
+      b.n++;
+      var rec = parseInt(r.recommend, 10);
+      if (!isNaN(rec)) {
+        if (rec >= 9) b.p++;
+        else if (rec >= 7) b.pas++;
+        else b.det++;
+      }
+      if (r.overall != null) { b.sumOv += r.overall; b.cOv++; }
+      if (r.service != null) { b.sumSe += r.service; b.cSe++; }
+      if (r.food    != null) { b.sumFo += r.food;    b.cFo++; }
+      if (r.atmos   != null) { b.sumAt += r.atmos;   b.cAt++; }
+    });
+    var dayRows = days.map(function(d){
+      var b = byDay[d];
+      var nps = b.n > 0 ? Math.round(((b.p - b.det) / b.n) * 100) : null;
+      return {
+        date: d, label: fmtDayLabel(d),
+        nps: nps, n: b.n, p: b.p, pas: b.pas, det: b.det,
+        overall:    b.cOv > 0 ? +(b.sumOv / b.cOv).toFixed(1) : null,
+        service:    b.cSe > 0 ? +(b.sumSe / b.cSe).toFixed(1) : null,
+        food:       b.cFo > 0 ? +(b.sumFo / b.cFo).toFixed(1) : null,
+        atmos:      b.cAt > 0 ? +(b.sumAt / b.cAt).toFixed(1) : null,
+      };
+    });
+
+    var labels = dayRows.map(function(r){ return r.label; });
+    destroyByCanvas('surveyNpsChart');
+    destroyByCanvas('surveyMonthlyScores');
+    destroyByCanvas('surveyVolumeChart');
+
+    // NPS Trend (daily line)
+    var npsCtx = document.getElementById('surveyNpsChart');
+    if (npsCtx && window.Chart) {
+      window.charts = window.charts || {};
+      window.charts['surveyNpsChart'] = new Chart(npsCtx.getContext('2d'), {
+        type: 'line',
+        data: { labels: labels, datasets: [{
+          label: 'Daily NPS', data: dayRows.map(function(r){ return r.nps; }),
+          borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.15)',
+          tension: 0.25, pointRadius: 3, borderWidth: 2, fill: true, spanGaps: true
+        }] },
+        options: { responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{ display:false } },
+          scales:{ y:{ beginAtZero:false, max:100, ticks:{ font:{size:10} } },
+                   x:{ ticks:{ font:{size:10} }, grid:{ display:false } } } }
+      });
+    }
+
+    // Score Trends — exact layout match to monthly chart (same colors, fill on
+    // Overall, tension, legend position, responsive with default aspect ratio)
+    var scCtx = document.getElementById('surveyMonthlyScores');
+    if (scCtx && window.Chart) {
+      window.charts['surveyMonthlyScores'] = new Chart(scCtx.getContext('2d'), {
+        type: 'line',
+        data: { labels: labels, datasets: [
+          { label: 'Overall', data: dayRows.map(function(r){ return r.overall; }),
+            borderColor: '#212931', backgroundColor: 'rgba(33,41,49,.06)',
+            fill: true, tension: 0.35, pointRadius: 3, borderWidth: 2, spanGaps: true },
+          { label: 'Service', data: dayRows.map(function(r){ return r.service; }),
+            borderColor: '#2BA6BB', tension: 0.35,
+            pointRadius: 2, borderWidth: 1.5, spanGaps: true },
+          { label: 'Food', data: dayRows.map(function(r){ return r.food; }),
+            borderColor: '#405766', tension: 0.35,
+            pointRadius: 2, borderWidth: 1.5, spanGaps: true },
+          { label: 'Atmosphere', data: dayRows.map(function(r){ return r.atmos; }),
+            borderColor: '#BCC8BE', tension: 0.35, borderDash: [4,3],
+            pointRadius: 2, borderWidth: 1.5, spanGaps: true }
+        ] },
+        options: { responsive: true,
+          plugins: { legend: { labels: { usePointStyle: true, pointStyle: 'circle', padding: 14 } } },
+          scales: { y: { beginAtZero: false, max: 100, grid: { color: '#f3f4f6' } } } }
+      });
+    }
+
+    // Survey volume bars (daily)
+    var volCtx = document.getElementById('surveyVolumeChart');
+    if (volCtx && window.Chart) {
+      window.charts['surveyVolumeChart'] = new Chart(volCtx.getContext('2d'), {
+        type: 'bar',
+        data: { labels: labels, datasets: [{
+          label: 'Surveys', data: dayRows.map(function(r){ return r.n; }),
+          backgroundColor: '#2BA6BB', borderRadius: 4
+        }] },
+        options: { responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{ display:false } },
+          scales:{ y:{ beginAtZero:true, ticks:{ font:{size:10}, stepSize:1 } },
+                   x:{ ticks:{ font:{size:10} }, grid:{ display:false } } } }
+      });
+    }
+
+    // KPI tiles — weighted averages across the window
+    function wavg(rows, key) {
+      var sum = 0, n = 0;
+      rows.forEach(function(r){ if (r[key] != null) { sum += r[key] * r.n; n += r.n; } });
+      return n > 0 ? (sum / n).toFixed(1) : '—';
+    }
+    var totalN = dayRows.reduce(function(a,r){ return a + r.n; }, 0);
+    var totalP = dayRows.reduce(function(a,r){ return a + r.p; }, 0);
+    var totalPa = dayRows.reduce(function(a,r){ return a + r.pas; }, 0);
+    var totalD = dayRows.reduce(function(a,r){ return a + r.det; }, 0);
+    var nps = totalN > 0 ? Math.round(((totalP - totalD) / totalN) * 100) : null;
+
+    var setText = function(id, val) { var e = document.getElementById(id); if (e) e.textContent = val; };
+    setText('skpi-overall', wavg(dayRows, 'overall'));
+    setText('skpi-service', wavg(dayRows, 'service'));
+    setText('skpi-food',    wavg(dayRows, 'food'));
+    setText('skpi-atmos',   wavg(dayRows, 'atmos'));
+    setText('skpi-count',   totalN);
+    setText('nps-score',    nps != null ? nps : '—');
+    var pPct = totalN > 0 ? (totalP * 100 / totalN) : 0;
+    var paPct = totalN > 0 ? (totalPa * 100 / totalN) : 0;
+    var dPct = totalN > 0 ? (totalD * 100 / totalN) : 0;
+    var bp  = document.getElementById('nps-bar-p');  if (bp)  bp.style.width  = pPct.toFixed(1) + '%';
+    var bpa = document.getElementById('nps-bar-pa'); if (bpa) bpa.style.width = paPct.toFixed(1) + '%';
+    var bd  = document.getElementById('nps-bar-d');  if (bd)  bd.style.width  = dPct.toFixed(1) + '%';
+
+    // Flip Monthly → Daily badges in this view
+    var section = document.getElementById('view-surveys');
+    if (section) {
+      section.querySelectorAll('.card-badge').forEach(function(b) {
+        if (b.textContent.trim() === 'Monthly') b.textContent = 'Daily';
+      });
+    }
+  }
+
+  function renderRatingDayView(nDays) {
+    if (!window.RAW_RATINGS || !window.RAW_RATINGS.length) return;
+    var anchor = latestRatingDate();
+    if (!anchor) return;
+    var days = dayBuckets(nDays, anchor);
+    var byDay = {};
+    (window.RAW_RATINGS || []).forEach(function(r){ byDay[r.date] = r; });
+    var rows = days.map(function(d){
+      var r = byDay[d] || { date:d, r1:0, r2:0, r3:0, r4:0, r5:0 };
+      var total = (r.r1||0) + (r.r2||0) + (r.r3||0) + (r.r4||0) + (r.r5||0);
+      var sum = 1*(r.r1||0) + 2*(r.r2||0) + 3*(r.r3||0) + 4*(r.r4||0) + 5*(r.r5||0);
+      var avg = total > 0 ? +(sum/total).toFixed(2) : null;
+      return { date:d, label:fmtDayLabel(d), total:total, avg:avg,
+               r1:r.r1||0, r2:r.r2||0, r3:r.r3||0, r4:r.r4||0, r5:r.r5||0 };
+    });
+    var labels = rows.map(function(r){ return r.label; });
+
+    destroyByCanvas('ratingMonthlyAvg');
+    destroyByCanvas('ratingMonthlyVol');
+
+    var avgCtx = document.getElementById('ratingMonthlyAvg');
+    if (avgCtx && window.Chart) {
+      window.charts = window.charts || {};
+      window.charts['ratingMonthlyAvg'] = new Chart(avgCtx.getContext('2d'), {
+        type: 'line',
+        data: { labels: labels, datasets: [{
+          label: 'Avg ★ Rating', data: rows.map(function(r){ return r.avg; }),
+          borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.18)',
+          tension: 0.25, pointRadius: 3, borderWidth: 2, fill: true, spanGaps: true
+        }] },
+        options: { responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{ display:false } },
+          scales:{ y:{ min:0, max:5, ticks:{ font:{size:10}, stepSize:1 } },
+                   x:{ ticks:{ font:{size:10} }, grid:{ display:false } } } }
+      });
+    }
+    var volCtx = document.getElementById('ratingMonthlyVol');
+    if (volCtx && window.Chart) {
+      window.charts['ratingMonthlyVol'] = new Chart(volCtx.getContext('2d'), {
+        type: 'bar',
+        data: { labels: labels, datasets: [
+          { label: '1★', data: rows.map(function(r){ return r.r1; }), backgroundColor: '#ef4444', stack: 's' },
+          { label: '2★', data: rows.map(function(r){ return r.r2; }), backgroundColor: '#f59e0b', stack: 's' },
+          { label: '3★', data: rows.map(function(r){ return r.r3; }), backgroundColor: '#D8CFC4', stack: 's' },
+          { label: '4★', data: rows.map(function(r){ return r.r4; }), backgroundColor: '#BCC8BE', stack: 's' },
+          { label: '5★', data: rows.map(function(r){ return r.r5; }), backgroundColor: '#2BA6BB', stack: 's' }
+        ] },
+        options: { responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{ position:'bottom', labels:{ font:{ size:10 } } } },
+          scales:{ y:{ beginAtZero:true, ticks:{ font:{size:10}, stepSize:1 } },
+                   x:{ ticks:{ font:{size:10} }, grid:{ display:false } } } }
+      });
+    }
+
+    // KPI tiles
+    var totalN = rows.reduce(function(a,r){ return a + r.total; }, 0);
+    var sum = rows.reduce(function(a,r){ return a + (1*r.r1 + 2*r.r2 + 3*r.r3 + 4*r.r4 + 5*r.r5); }, 0);
+    var avg = totalN > 0 ? (sum/totalN).toFixed(2) : '—';
+    var r5 = rows.reduce(function(a,r){ return a + r.r5; }, 0);
+    var r1 = rows.reduce(function(a,r){ return a + r.r1; }, 0);
+    var r12 = rows.reduce(function(a,r){ return a + r.r1 + r.r2; }, 0);
+    var pct5 = totalN > 0 ? ((r5/totalN)*100).toFixed(1) + '%' : '—';
+    var pct12 = totalN > 0 ? ((r12/totalN)*100).toFixed(1) + '%' : '—';
+
+    var setText = function(id, val) { var e = document.getElementById(id); if (e) e.textContent = val; };
+    setText('rkpi-avg', avg);
+    setText('rkpi-5star', pct5);
+    setText('rkpi-5count', r5);
+    setText('rkpi-12star', pct12);
+    setText('rkpi-negcount', r12);
+    setText('rkpi-total', totalN);
+
+    // Flip Monthly → Daily badges in this view
+    var section = document.getElementById('view-ratings');
+    if (section) {
+      section.querySelectorAll('.card-badge').forEach(function(b) {
+        if (b.textContent.trim() === 'Monthly') b.textContent = 'Daily';
+      });
+    }
+  }
+
+  function renderServerDayView(nDays) {
+    var raw = window.RAW_SURVEYS && window.RAW_SURVEYS.length ? window.RAW_SURVEYS : null;
+    if (!raw) return;
+    var anchor = latestRatingDate() || latestCommentDate();
+    var maxD = raw[0].date;
+    for (var i = 1; i < raw.length; i++) if (raw[i].date > maxD) maxD = raw[i].date;
+    if (maxD && (!anchor || maxD > anchor)) anchor = maxD;
+    var start = addDays(anchor, -(nDays - 1));
+
+    // Group by server within window, using Overall score as the performance metric
+    var byServer = {};
+    raw.forEach(function(r){
+      if (!r.server || r.server === '-' || r.server === '') return;
+      if (r.date < start || r.date > anchor) return;
+      var ov = r.overall;
+      if (ov == null) return;
+      if (!byServer[r.server]) byServer[r.server] = { scores: [] };
+      byServer[r.server].scores.push(ov);
+    });
+
+    var results = Object.keys(byServer).map(function(name){
+      var s = byServer[name].scores;
+      var avg = s.reduce(function(a,b){return a+b;}, 0) / s.length;
+      return {
+        name: name, avg: +avg.toFixed(1),
+        min: Math.min.apply(null, s), max: Math.max.apply(null, s),
+        n: s.length
+      };
+    });
+    // For short windows, require at least 2 responses to show (avoids 1-off noise)
+    var threshold = nDays <= 7 ? 1 : 2;
+    results = results.filter(function(r){ return r.n >= threshold; });
+    results.sort(function(a,b){ return b.avg - a.avg; });
+    var top = results.slice(0, 10);
+    var bottom = results.slice(-10).sort(function(a,b){ return a.avg - b.avg; });
+
+    function renderRows(list) {
+      return list.map(function(s){
+        var color = s.avg >= 90 ? '#10b981' : s.avg >= 75 ? '#f59e0b' : '#ef4444';
+        return '<tr>' +
+          '<td style="font-weight:500">' + s.name + '</td>' +
+          '<td style="color:' + color + ';font-weight:600">' + s.avg.toFixed(1) + '</td>' +
+          '<td style="color:#6b7280">' + s.min + '–' + s.max + '</td>' +
+          '<td>' + s.n + ' resp</td>' +
+          '<td><div class="bar-bg"><div class="bar-fill" style="width:' + s.avg + '%;background:' + color + '"></div></div></td>' +
+          '</tr>';
+      }).join('');
+    }
+    var topBody = document.getElementById('top-server-tbody');
+    var botBody = document.getElementById('bottom-server-tbody');
+    if (topBody) topBody.innerHTML = renderRows(top);
+    if (botBody) botBody.innerHTML = renderRows(bottom);
+
+    // Update count badges and the "Mo." column header label to "Responses"
+    var topCount = document.getElementById('server-top-count');
+    var botCount = document.getElementById('server-bottom-count');
+    if (topCount) topCount.textContent = top.length + ' servers';
+    if (botCount) botCount.textContent = bottom.length + ' servers';
+
+    // Flip Monthly → Daily badges in this view
+    var section = document.getElementById('view-servers');
+    if (section) {
+      section.querySelectorAll('.card-badge').forEach(function(b) {
+        if (b.textContent.trim() === 'Monthly') b.textContent = 'Daily';
+      });
+    }
+  }
+
+  window._methodDay = {
+    renderSurveyDayView: renderSurveyDayView,
+    renderRatingDayView: renderRatingDayView,
+    renderServerDayView: renderServerDayView
+  };
+})();
+
+// Trail 7d / 30d: switches Surveys/Ratings views to DAY resolution.
+// For Servers/Comments views (no day-level re-render available), narrows to latest month.
+function setTrailingDays(view, nDays) {
+  if (view === 'ratings') {
+    if (window._methodDay) window._methodDay.renderRatingDayView(nDays);
+    return;
+  }
+  if (view === 'surveys') {
+    if (window._methodDay) window._methodDay.renderSurveyDayView(nDays);
+    return;
+  }
+  if (view === 'servers') {
+    if (window._methodDay) window._methodDay.renderServerDayView(nDays);
+    return;
+  }
+  // Fallback for other views (comments): set From=To=latest month
+  var prefix = _viewPrefix(view);
+  if (!prefix) return;
+  if (!window.allMonths || !window.allMonths.length) return;
+  var to = window.allMonths[window.allMonths.length - 1];
+  document.getElementById(prefix + '-from').value = to;
+  document.getElementById(prefix + '-to').value = to;
+  applyFilter(view);
+}
+// Backward-compat alias
+function setTrailing7d(view) { setTrailingDays(view, 7); }
+
+// Wrap applyFilter so that switching BACK to monthly mode flips any "Daily"
+// chart badges back to "Monthly". Preserves other badges (Avg, Top 10, etc.)
+(function(){
+  if (window._wrappedApplyFilter) return;
+  window._wrappedApplyFilter = true;
+  var orig = window.applyFilter;
+  if (typeof orig !== 'function') return;
+  window.applyFilter = function(view) {
+    var sectionId = 'view-' + view;
+    var section = document.getElementById(sectionId);
+    if (section) {
+      section.querySelectorAll('.card-badge').forEach(function(b) {
+        if (b.textContent.trim() === 'Daily') b.textContent = 'Monthly';
+      });
+    }
+    return orig.apply(this, arguments);
+  };
+})();
+
+// --- Default active preset: Trail 12mo on page load ---
+(function(){
+  function applyDefault(){
+    if (!window.allMonths || !window.allMonths.length) return;
+    var latest = window.allMonths[window.allMonths.length - 1];
+    // Feedback (comments) defaults to Trail 7d / current month; everything
+    // else defaults to Trail 12mo
+    var viewDefaults = {
+      'surveys':  { preset: '12mo', apply: function(){ setTrailing('surveys', 12); } },
+      'ratings':  { preset: '12mo', apply: function(){ setTrailing('ratings', 12); } },
+      'servers':  { preset: '12mo', apply: function(){ setTrailing('servers', 12); } },
+      'comments': { preset: '7d',   apply: function(){ setTrailingDays('comments', 7); } }
+    };
+    Object.keys(viewDefaults).forEach(function(v){
+      var prefix = _viewPrefix(v);
+      if (!prefix) return;
+      var fromEl = document.getElementById(prefix + '-from');
+      var toEl = document.getElementById(prefix + '-to');
+      if (!fromEl || !toEl) return;
+      // Period dropdown (the 'to' select, which is now the only visible one) → latest month
+      toEl.value = latest;
+      viewDefaults[v].apply();
+      // Highlight the active preset button for this view only
+      var section = document.getElementById('view-' + v);
+      if (section) {
+        section.querySelectorAll('.filter-btn[data-preset]').forEach(function(b){ b.classList.remove('preset-active'); });
+        var btn = section.querySelector('.filter-btn[data-preset="' + viewDefaults[v].preset + '"]');
+        if (btn) btn.classList.add('preset-active');
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyDefault, 80); });
+  } else {
+    setTimeout(applyDefault, 80);
+  }
+})();
+
+// Track which preset is active (visual highlight). When any preset button is
+// clicked, mark it active and clear others within the same filter bar.
+(function(){
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest && e.target.closest('.filter-btn[data-preset]');
+    if (!btn) return;
+    var bar = btn.closest('.filter-bar');
+    if (!bar) return;
+    bar.querySelectorAll('.filter-btn[data-preset]').forEach(function(b){ b.classList.remove('preset-active'); });
+    btn.classList.add('preset-active');
+  });
+  // When user changes the single-month dropdown, clear preset highlights in that bar
+  document.addEventListener('change', function(e){
+    var sel = e.target;
+    if (!sel || sel.tagName !== 'SELECT' || !sel.id || !sel.id.endsWith('-to')) return;
+    var bar = sel.closest('.filter-bar');
+    if (!bar) return;
+    bar.querySelectorAll('.filter-btn[data-preset]').forEach(function(b){ b.classList.remove('preset-active'); });
+  });
+})();
+
+</script>
+<div class="method-footer-brand">Method Co — Confidential</div>
+</body>
+</html>
