@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Method Co · Portfolio NPS Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+:root {
+  --bg:#f8f7f4; --card:#fff; --border:#ece8e0; --text:#231F20; --muted:#4b5563;
+  --brand:#2BA6BB; --slate:#212931; --royal:#405766; --seafoam:#BCC8BE; --tan:#D8CFC4;
+  --pos:#10b981; --neg:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg);color:var(--text);font-family:'Gotham','Gotham HTF','Montserrat','Helvetica Neue',Arial,sans-serif;min-height:100vh}
+
+/* ---- Top bar ---- */
+.topbar {
+  background: var(--slate);
+  color: #fff;
+  padding: 0.9rem 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border-bottom: 3px solid var(--brand);
+  position: sticky; top: 0; z-index: 100;
+  flex-wrap: wrap;
+}
+.topbar .brand {
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700;
+  color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 0.55rem;
+}
+.topbar .brand-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brand); }
+.topbar .title { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.005em; }
+.topbar .spacer { flex: 1; }
+.vp-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: rgba(255,255,255,0.5); margin-right: 0.35rem; }
+/* Styled dropdown — single picker for all viewports */
+.vp-select-wrap { position: relative; min-width: 260px; }
+.vp-select-wrap::after {
+  content: ''; position: absolute; right: 0.9rem; top: 50%;
+  width: 0.45rem; height: 0.45rem; border-right: 2px solid rgba(255,255,255,0.55);
+  border-bottom: 2px solid rgba(255,255,255,0.55);
+  transform: translateY(-70%) rotate(45deg); pointer-events: none;
+}
+.vp-select {
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  width: 100%;
+  padding: 0.5rem 2.2rem 0.5rem 0.9rem;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 8px;
+  font-size: 0.82rem; font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+  letter-spacing: 0.01em;
+}
+.vp-select:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+.vp-select:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(43,166,187,0.18); }
+.vp-select option { background: var(--slate); color: #fff; font-weight: 500; }
+.vp-select option:disabled { color: rgba(255,255,255,0.35); }
+@media (max-width: 640px) {
+  .vp-select-wrap { min-width: 100%; }
+  .topbar { gap: 0.6rem; }
+}
+
+/* ---- Content ---- */
+.content-wrap { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+/* Consolidated view */
+#view-consolidated h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 0.3rem; }
+.mp-sub { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600; margin-bottom: 0.25rem; }
+.mp-date-chip { display: inline-flex; align-items: center; gap: 0.4rem; background: #f0eee9; border: 1px solid var(--border); border-radius: 20px; padding: 0.3rem 0.85rem; font-size: 0.72rem; color: var(--muted); margin-top: 0.6rem; }
+.mp-hero {
+  background: linear-gradient(135deg, var(--slate) 0%, var(--royal) 100%);
+  color: #fff; border-radius: 14px; padding: 1.75rem 2rem; margin: 1.5rem 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
+}
+.mp-hero-tile { text-align: center; }
+.mp-hero-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.6); font-weight: 700; margin-bottom: 0.4rem; }
+.mp-hero-value { font-size: 2.4rem; font-weight: 800; line-height: 1; color: var(--brand); }
+.mp-hero-sub { font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 0.35rem; }
+.section-title { font-size: 1.1rem; font-weight: 700; margin: 2rem 0 0.85rem; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 1rem; }
+.card-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 1rem; }
+.mp-ranking { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.mp-ranking th { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+.mp-ranking td { padding: 0.6rem 0.75rem; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+.mp-ranking tr:hover td { background: rgba(43,166,187,0.06); }
+.mp-trend-up { color: var(--pos); font-weight: 700; }
+.mp-trend-down { color: var(--neg); font-weight: 700; }
+.mp-trend-flat { color: var(--muted); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.chart-container { position: relative; height: 320px; }
+.mp-narrative { background: rgba(43,166,187,0.05); border-left: 3px solid var(--brand); border-radius: 4px; padding: 1.15rem 1.4rem; margin: 1rem 0; }
+.mp-narrative h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--brand); font-weight: 700; margin-bottom: 0.75rem; }
+.mp-narrative ol { padding-left: 1.2rem; }
+.mp-narrative li { font-size: 0.88rem; color: #374151; margin-bottom: 0.55rem; line-height: 1.55; }
+.mp-narrative b { color: var(--text); }
+.mp-market-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+.mp-market-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+.mp-market-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.85rem; padding-bottom: 0.5rem; border-bottom: 1px solid #f3f4f6; }
+.mp-market-name { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+.mp-market-meta { font-size: 0.7rem; color: var(--muted); }
+.mp-market-list { list-style: none; padding: 0; }
+.mp-market-list li { font-size: 0.82rem; padding: 0.4rem 0.5rem; border-bottom: 1px dashed #f3f4f6; color: #374151; border-radius: 4px; transition: background 0.12s; }
+.mp-market-list li:hover { background: rgba(43,166,187,0.06); }
+.mp-market-list li:last-child { border-bottom: none; }
+.mp-footer { text-align: center; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(35,31,32,0.35); margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-weight: 600; }
+
+/* Iframe venue view */
+.venue-frame-wrap { background: #fff; border-radius: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden; }
+.venue-frame {
+  width: 100%;
+  border: 0;
+  /* Fill viewport below the topbar. topbar ≈ 58-78px depending on wrap. */
+  height: calc(100vh - 70px);
+  display: block;
+}
+.venue-frame-wrap.fullbleed { margin: 0; padding: 0; }
+
+/* When viewing an individual venue, content-wrap shouldn't cap width */
+body.venue-mode .content-wrap { max-width: none; padding: 0; }
+body.venue-mode #view-consolidated { display: none; }
+body:not(.venue-mode) #view-venue { display: none; }
+
+.hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="brand-dot"></span>METHOD CO</div>
+  <div class="title">Portfolio NPS Report</div>
+  <div class="spacer"></div>
+  <span class="vp-label">Viewing</span>
+  <div class="vp-select-wrap">
+    <select class="vp-select" id="vp-select" aria-label="Select venue"><option value="__all__">Consolidated — All Venues</option><option disabled>──────────</option><optgroup label="Individual Venues"><option value="HIROKI Philadelphia">HIROKI Philadelphia</option><option value="HIROKI-SAN Detroit">HIROKI-SAN Detroit</option><option value="Kamper&#x27;s">Kamper&#x27;s</option><option value="Le Suprême">Le Suprême</option><option value="Lowland">Lowland</option><option value="Wm. Mulherin&#x27;s Sons">Wm. Mulherin&#x27;s Sons</option></optgroup></select>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+<!-- ===== Consolidated (All Venues) ===== -->
+<div id="view-consolidated">
+  <div class="mp-sub">Method Co</div>
+  <h1>Portfolio NPS Report</h1>
+  <div class="mp-date-chip">Generated April 18, 2026 · 12-month view · 6 venues</div>
+
+  <div class="mp-hero">
+    <div class="mp-hero-tile">
+      <div class="mp-hero-label">Portfolio NPS</div>
+      <div class="mp-hero-value">69</div>
+      <div class="mp-hero-sub">across 6 venues</div>
+    </div>
+    <div class="mp-hero-tile">
+      <div class="mp-hero-label">Portfolio Google ★</div>
+      <div class="mp-hero-value">4.47</div>
+      <div class="mp-hero-sub">7,951 reviews combined</div>
+    </div>
+    <div class="mp-hero-tile">
+      <div class="mp-hero-label">Surveys (12 mo)</div>
+      <div class="mp-hero-value">4,909</div>
+      <div class="mp-hero-sub">Resy responses</div>
+    </div>
+    <div class="mp-hero-tile">
+      <div class="mp-hero-label">Best Venue</div>
+      <div class="mp-hero-value" style="font-size:1.4rem;line-height:1.2;margin-top:0.5rem">HIROKI Philadelphia</div>
+      <div class="mp-hero-sub">NPS 82 · ★ 4.3</div>
+    </div>
+  </div>
+
+  <div class="mp-narrative">
+    <h3>Key Takeaways</h3>
+    <ol><li>Portfolio NPS across 12 months is <b>69</b> with an average Google rating of <b>★ 4.47</b> — drawn from <b>4,909</b> Resy surveys and <b>7,951</b> Google reviews.</li><li>NPS spread across the portfolio is <b>22 points</b>: <b>HIROKI Philadelphia</b> leads at 82, <b>Kamper's</b> trails at 60.</li><li>Biggest NPS gain in the last 3 months: <b>Wm. Mulherin's Sons</b> <span style='color:#10b981;font-weight:700'>↑ 16</span>.</li><li>Biggest NPS decline in the last 3 months: <b>HIROKI Philadelphia</b> <span style='color:#ef4444;font-weight:700'>↓ -16</span> — worth attention.</li><li>Every venue scores higher on Resy than on Google (average gap <b>+0.21</b> on the 5-point scale). Resy's post-visit prompt captures a happier baseline; Google captures polarized public sentiment. Divergence <i>patterns</i> matter more than the gap itself.</li><li><b>HIROKI Philadelphia</b> has the widest channel gap (+0.52). Post-visit Resy guests are notably happier than public Google reviewers — worth understanding why.</li><li>Google ratings trending down at <b>Wm. Mulherin's Sons, Le Suprême, HIROKI-SAN Detroit, Kamper's</b>. Monitor for systemic vs. seasonal.</li><li>Reply rate variance: <b>Le Suprême</b> responds to 94.2% of reviews; <b>Wm. Mulherin's Sons</b> responds to just 1.9%. Reply rate is a reputation lever, not a guest-experience lever.</li></ol>
+  </div>
+
+  <div class="section-title">Venue Ranking — Trailing 12 Months</div>
+  <div class="card">
+    <table class="mp-ranking">
+      <thead><tr>
+        <th>Rank</th><th>Venue</th>
+        <th style="text-align:right">NPS</th><th style="text-align:right">3-mo Δ</th>
+        <th style="text-align:right">Overall</th>
+        <th style="text-align:right">Google ★</th><th style="text-align:right">3-mo Δ</th>
+        <th style="text-align:right">Reviews</th><th style="text-align:right">Reply %</th>
+        <th style="text-align:right">Gap (Resy−Google)</th>
+      </tr></thead>
+      <tbody>
+<tr class="pick-venue" data-venue="HIROKI Philadelphia" style="cursor:pointer">
+  <td style="font-weight:700;color:#6b7280">#1</td>
+  <td><b>HIROKI Philadelphia</b><div style="font-size:0.7rem;color:#6b7280;margin-top:2px">Philadelphia</div></td>
+  <td style="text-align:right;font-size:1.1rem;font-weight:700;color:#2BA6BB">82</td>
+  <td style="text-align:right" class="mp-trend-down">↓ -16</td>
+  <td style="text-align:right">96.4</td>
+  <td style="text-align:right;font-weight:600">4.3</td>
+  <td style="text-align:right" class="mp-trend-up">↑ +0.55</td>
+  <td style="text-align:right">307</td>
+  <td style="text-align:right">0%</td>
+  <td style="text-align:right;font-weight:600">+0.52</td>
+</tr>
+
+<tr class="pick-venue" data-venue="Lowland" style="cursor:pointer">
+  <td style="font-weight:700;color:#6b7280">#2</td>
+  <td><b>Lowland</b><div style="font-size:0.7rem;color:#6b7280;margin-top:2px">Charleston</div></td>
+  <td style="text-align:right;font-size:1.1rem;font-weight:700;color:#2BA6BB">81</td>
+  <td style="text-align:right" class="mp-trend-up">↑ +2</td>
+  <td style="text-align:right">96.4</td>
+  <td style="text-align:right;font-weight:600">4.69</td>
+  <td style="text-align:right" class="mp-trend-up">↑ +0.23</td>
+  <td style="text-align:right">383</td>
+  <td style="text-align:right">4.4%</td>
+  <td style="text-align:right;font-weight:600">+0.13</td>
+</tr>
+
+<tr class="pick-venue" data-venue="Le Suprême" style="cursor:pointer">
+  <td style="font-weight:700;color:#6b7280">#3</td>
+  <td><b>Le Suprême</b><div style="font-size:0.7rem;color:#6b7280;margin-top:2px">Detroit</div></td>
+  <td style="text-align:right;font-size:1.1rem;font-weight:700;color:#405766">65</td>
+  <td style="text-align:right" class="mp-trend-up">↑ +5</td>
+  <td style="text-align:right">93.2</td>
+  <td style="text-align:right;font-weight:600">4.45</td>
+  <td style="text-align:right" class="mp-trend-down">↓ -0.5</td>
+  <td style="text-align:right">906</td>
+  <td style="text-align:right">94.2%</td>
+  <td style="text-align:right;font-weight:600">+0.21</td>
+</tr>
+
+<tr class="pick-venue" data-venue="Wm. Mulherin&#x27;s Sons" style="cursor:pointer">
+  <td style="font-weight:700;color:#6b7280">#4</td>
+  <td><b>Wm. Mulherin&#x27;s Sons</b><div style="font-size:0.7rem;color:#6b7280;margin-top:2px">Philadelphia</div></td>
+  <td style="text-align:right;font-size:1.1rem;font-weight:700;color:#405766">63</td>
+  <td style="text-align:right" class="mp-trend-up">↑ +16</td>
+  <td style="text-align:right">93.4</td>
+  <td style="text-align:right;font-weight:600">4.56</td>
+  <td style="text-align:right" class="mp-trend-down">↓ -0.29</td>
+  <td style="text-align:right">1,672</td>
+  <td style="text-align:right">1.9%</td>
+  <td style="text-align:right;font-weight:600">+0.11</td>
+</tr>
+
+<tr class="pick-venue" data-venue="HIROKI-SAN Detroit" style="cursor:pointer">
+  <td style="font-weight:700;color:#6b7280">#5</td>
+  <td><b>HIROKI-SAN Detroit</b><div style="font-size:0.7rem;color:#6b7280;margin-top:2px">Detroit</div></td>
+  <td style="text-align:right;font-size:1.1rem;font-weight:700;color:#405766">61</td>
+  <td style="text-align:right" class="mp-trend-up">↑ +3</td>
+  <td style="text-align:right">92.5</td>
+  <td style="text-align:right;font-weight:600">4.44</td>
+  <td style="text-align:right" class="mp-trend-down">↓ -0.18</td>
+  <td style="text-align:right">4,324</td>
+  <td style="text-align:right">0%</td>
+  <td style="text-align:right;font-weight:600">+0.18</td>
+</tr>
+
+<tr class="pick-venue" data-venue="Kamper&#x27;s" style="cursor:pointer">
+  <td style="font-weight:700;color:#6b7280">#6</td>
+  <td><b>Kamper&#x27;s</b><div style="font-size:0.7rem;color:#6b7280;margin-top:2px">Detroit</div></td>
+  <td style="text-align:right;font-size:1.1rem;font-weight:700;color:#405766">60</td>
+  <td style="text-align:right" class="mp-trend-up">↑ +1</td>
+  <td style="text-align:right">90</td>
+  <td style="text-align:right;font-weight:600">4.36</td>
+  <td style="text-align:right" class="mp-trend-down">↓ -0.21</td>
+  <td style="text-align:right">359</td>
+  <td style="text-align:right">0%</td>
+  <td style="text-align:right;font-weight:600">+0.14</td>
+</tr>
+</tbody>
+    </table>
+    <p class="hint">Tip: click any row to open that venue's full report.</p>
+  </div>
+
+  <div class="section-title">Portfolio Trends</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Portfolio NPS by Month</div>
+      <div class="chart-container"><canvas id="portfolio-nps-chart" aria-label="Portfolio NPS trend line" role="img"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Portfolio Google ★ by Month</div>
+      <div class="chart-container"><canvas id="portfolio-google-chart" aria-label="Portfolio Google rating trend line" role="img"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Cross-Channel Alignment — Resy vs Google</div>
+      <div class="chart-container"><canvas id="cross-channel-scatter" aria-label="Resy vs Google rating scatter across venues" role="img"></canvas></div>
+      <div style="font-size:0.72rem;color:#6b7280;margin-top:0.5rem">Each dot = one venue. Diagonal line = perfect alignment. Distance above the line = Resy optimism gap.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Per-Venue NPS Trajectory</div>
+      <div class="chart-container"><canvas id="venue-nps-chart" aria-label="NPS timeline across all venues" role="img"></canvas></div>
+    </div>
+  </div>
+
+  <div class="section-title">By Market</div>
+  <div class="mp-market-grid">
+<div class="mp-market-card">
+  <div class="mp-market-head">
+    <div class="mp-market-name">Charleston</div>
+    <div class="mp-market-meta">1 venue · avg NPS 81 · avg ★ 4.69</div>
+  </div>
+  <ul class="mp-market-list"><li class="pick-venue" data-venue="Lowland" style="cursor:pointer"><b>Lowland</b> · NPS <span style="color:#2BA6BB;font-weight:700">81</span> · ★ 4.69</li></ul>
+</div>
+
+<div class="mp-market-card">
+  <div class="mp-market-head">
+    <div class="mp-market-name">Detroit</div>
+    <div class="mp-market-meta">3 venues · avg NPS 62 · avg ★ 4.42</div>
+  </div>
+  <ul class="mp-market-list"><li class="pick-venue" data-venue="Le Suprême" style="cursor:pointer"><b>Le Suprême</b> · NPS <span style="color:#405766;font-weight:700">65</span> · ★ 4.45</li><li class="pick-venue" data-venue="HIROKI-SAN Detroit" style="cursor:pointer"><b>HIROKI-SAN Detroit</b> · NPS <span style="color:#405766;font-weight:700">61</span> · ★ 4.44</li><li class="pick-venue" data-venue="Kamper&#x27;s" style="cursor:pointer"><b>Kamper&#x27;s</b> · NPS <span style="color:#405766;font-weight:700">60</span> · ★ 4.36</li></ul>
+</div>
+
+<div class="mp-market-card">
+  <div class="mp-market-head">
+    <div class="mp-market-name">Philadelphia</div>
+    <div class="mp-market-meta">2 venues · avg NPS 72 · avg ★ 4.43</div>
+  </div>
+  <ul class="mp-market-list"><li class="pick-venue" data-venue="HIROKI Philadelphia" style="cursor:pointer"><b>HIROKI Philadelphia</b> · NPS <span style="color:#2BA6BB;font-weight:700">82</span> · ★ 4.3</li><li class="pick-venue" data-venue="Wm. Mulherin&#x27;s Sons" style="cursor:pointer"><b>Wm. Mulherin&#x27;s Sons</b> · NPS <span style="color:#405766;font-weight:700">63</span> · ★ 4.56</li></ul>
+</div>
+</div>
+
+  <div class="mp-footer">Method Co · Portfolio NPS Report · v2.0</div>
+</div>
+
+<!-- ===== Single-venue view (iframe) ===== -->
+<div id="view-venue">
+  <div class="venue-frame-wrap fullbleed">
+    <iframe id="venue-iframe" class="venue-frame" src="" title="Venue NPS Report" loading="lazy"></iframe>
+  </div>
+</div>
+
+</div><!-- /.content-wrap -->
+
+<script>
+var CHART = {"labels": ["May 25", "Jun 25", "Jul 25", "Aug 25", "Sep 25", "Oct 25", "Nov 25", "Dec 25", "Jan 26", "Feb 26", "Mar 26", "Apr 26"], "raw_labels": ["2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04"], "portfolio_nps": [63, 72, 70, 70, 69, 63, 70, 67, 68, 74, 71, 66], "portfolio_google": [4.03, 4.34, 4.57, 4.51, 3.9, 4.64, 4.3, 4.13, 4.79, 4.06, 4.46, 4.51], "venues": [{"name": "Wm. Mulherin's Sons", "nps_timeline": [51, 86, 77, 61, 75, 59, 39, 48, 63, 81, 53, 64], "google_timeline": [4.36, 4.2, 4.36, 4.4, 4.46, 4.38, 4.5, 5.0, 4.67, 4.5, 5.0, 3.8], "resy_5_equiv": 4.67, "google_avg": 4.56, "gap": 0.11, "google_count": 1672, "market": "Philadelphia"}, {"name": "HIROKI Philadelphia", "nps_timeline": [80, 83, 92, 80, 80, 62, 100, 80, 100, 83, 100, 50], "google_timeline": [4.0, 4.0, 5.0, 4.0, 1.33, 5.0, 2.75, 2.6, 5.0, 2.0, 5.0, 5.0], "resy_5_equiv": 4.82, "google_avg": 4.3, "gap": 0.52, "google_count": 307, "market": "Philadelphia"}, {"name": "Lowland", "nps_timeline": [81, 85, 85, 77, 81, 85, 77, 87, 70, 81, 70, 88], "google_timeline": [4.55, 4.89, 4.86, 4.9, 4.89, 4.9, 4.86, 4.5, 4.5, 4.83, 5.0, 4.71], "resy_5_equiv": 4.82, "google_avg": 4.69, "gap": 0.13, "google_count": 383, "market": "Charleston"}, {"name": "Le Supr\u00eame", "nps_timeline": [78, 60, 68, 66, 71, 64, 60, 55, 66, 63, 67, 65], "google_timeline": [4.71, 3.84, 4.57, 4.64, 4.3, 4.81, 4.46, 4.15, 4.64, 3.8, 3.65, 4.31], "resy_5_equiv": 4.66, "google_avg": 4.45, "gap": 0.21, "google_count": 906, "market": "Detroit"}, {"name": "HIROKI-SAN Detroit", "nps_timeline": [73, 60, 48, 74, 46, 48, 68, 66, 54, 73, 59, 64], "google_timeline": [4.0, 4.56, 4.6, 4.8, 3.75, 4.36, 4.64, 3.89, 4.93, 4.33, 4.08, 4.5], "resy_5_equiv": 4.62, "google_avg": 4.44, "gap": 0.18, "google_count": 4324, "market": "Detroit"}, {"name": "Kamper's", "nps_timeline": [16, 57, 52, 64, 62, 59, 79, 68, 56, 64, 76, 67], "google_timeline": [2.54, 4.53, 4.0, 4.32, 4.64, 4.38, 4.59, 4.67, 5.0, 4.88, 4.0, 4.75], "resy_5_equiv": 4.5, "google_avg": 4.36, "gap": 0.14, "google_count": 359, "market": "Detroit"}], "venue_reports": {"Wm. Mulherin's Sons": "Wm Mulherin's Sons - NPS Report.html", "HIROKI Philadelphia": "HIROKI Philadelphia - NPS Report.html", "Lowland": "Lowland - NPS Report.html", "Le Supr\u00eame": "Le Supr\u00eame - NPS Report.html", "HIROKI-SAN Detroit": "HIROKI-SAN Detroit - NPS Report.html", "Kamper's": "Kampers - NPS Report.html"}};
+var VENUE_REPORTS = CHART.venue_reports;
+
+function colorFor(i) {
+  var palette = ['#2BA6BB','#405766','#BCC8BE','#D8CFC4','#212931','#ef4444','#10b981','#f59e0b'];
+  return palette[i % palette.length];
+}
+
+// ---- Venue switcher ----
+function selectVenue(name) {
+  // Sync the dropdown to the chosen venue (e.g., when a ranking row is clicked)
+  var sel = document.getElementById('vp-select'); if (sel) sel.value = name;
+
+  if (name === '__all__') {
+    document.body.classList.remove('venue-mode');
+    // Unload iframe to save memory when returning to consolidated
+    var ifr = document.getElementById('venue-iframe');
+    if (ifr && ifr.src) ifr.src = 'about:blank';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Re-render charts in case they didn't size correctly earlier
+    setTimeout(function(){ try { renderConsolidatedCharts(); } catch(e) {} }, 50);
+  } else {
+    document.body.classList.add('venue-mode');
+    var url = VENUE_REPORTS[name];
+    if (url) {
+      var ifr = document.getElementById('venue-iframe');
+      // Encode filename for URL-safety (spaces, accents)
+      ifr.src = encodeURI(url);
+      ifr.title = name + ' — NPS Report';
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  // Persist selection in URL hash for shareable link
+  if (name === '__all__') {
+    history.replaceState(null, '', location.pathname + location.search);
+  } else {
+    history.replaceState(null, '', location.pathname + location.search + '#v=' + encodeURIComponent(name));
+  }
+}
+
+// ---- Charts (consolidated view) ----
+var _chartsRendered = false;
+function renderConsolidatedCharts() {
+  if (_chartsRendered) return;
+  if (typeof Chart === 'undefined') return;
+
+  new Chart(document.getElementById('portfolio-nps-chart'), {
+    type: 'line',
+    data: {
+      labels: CHART.labels,
+      datasets: [{
+        label: 'Portfolio NPS', data: CHART.portfolio_nps,
+        borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.12)',
+        tension: 0.35, fill: true, pointRadius: 3, borderWidth: 2, spanGaps: true
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: false, grid: { color: '#f3f4f6' } }, x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
+    }
+  });
+
+  new Chart(document.getElementById('portfolio-google-chart'), {
+    type: 'line',
+    data: {
+      labels: CHART.labels,
+      datasets: [{
+        label: 'Portfolio ★', data: CHART.portfolio_google,
+        borderColor: '#405766', backgroundColor: 'rgba(64,87,102,0.12)',
+        tension: 0.35, fill: true, pointRadius: 3, borderWidth: 2, spanGaps: true
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: false, min: 3.5, max: 5, grid: { color: '#f3f4f6' } }, x: { ticks: { font: { size: 10 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
+    }
+  });
+
+  new Chart(document.getElementById('cross-channel-scatter'), {
+    type: 'scatter',
+    data: {
+      datasets: [
+        {
+          label: 'Venues',
+          data: CHART.venues.filter(function(v){ return v.resy_5_equiv != null && v.google_avg != null; })
+            .map(function(v){ return { x: v.resy_5_equiv, y: v.google_avg, venue: v.name }; }),
+          backgroundColor: '#2BA6BB',
+          borderColor: '#212931',
+          pointRadius: 10,
+          pointHoverRadius: 14
+        },
+        {
+          label: 'Perfect alignment',
+          data: [{x: 3.5, y: 3.5}, {x: 5, y: 5}],
+          borderColor: '#D8CFC4',
+          borderDash: [5,5],
+          showLine: true,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx){ var d = ctx.raw; if (!d.venue) return ''; return d.venue + ' · Resy ' + d.x + ' → Google ' + d.y; } } }
+      },
+      scales: {
+        x: { title: { display: true, text: 'Resy (1-5 equiv)' }, min: 4.0, max: 5.0, grid: { color: '#f3f4f6' } },
+        y: { title: { display: true, text: 'Google average' }, min: 4.0, max: 5.0, grid: { color: '#f3f4f6' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('venue-nps-chart'), {
+    type: 'line',
+    data: {
+      labels: CHART.labels,
+      datasets: CHART.venues.map(function(v, i){
+        return {
+          label: v.name,
+          data: v.nps_timeline,
+          borderColor: colorFor(i),
+          backgroundColor: colorFor(i) + '30',
+          borderWidth: 1.5, pointRadius: 2, tension: 0.25, spanGaps: true, fill: false
+        };
+      })
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } },
+      scales: { y: { grid: { color: '#f3f4f6' } }, x: { ticks: { font: { size: 9 }, maxRotation: 60, minRotation: 45 }, grid: { display: false } } }
+    }
+  });
+
+  _chartsRendered = true;
+}
+
+// ---- Init ----
+function init() {
+  renderConsolidatedCharts();
+
+  // Delegated click handler for every .pick-venue element
+  // (buttons, table rows, market-card list items). Uses data-venue, so it
+  // handles names with apostrophes like "Wm Mulherin's Sons" and "Kamper's"
+  // correctly — inline onclick attributes would break on the apostrophe.
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('.pick-venue');
+    if (!el) return;
+    var name = el.dataset.venue;
+    if (!name) return;
+    selectVenue(name);
+  });
+
+  // Mobile select handler
+  var sel = document.getElementById('vp-select');
+  if (sel) sel.addEventListener('change', function(){ selectVenue(sel.value); });
+
+  // Honor hash in URL for deep link: #v=Le Suprême
+  var m = location.hash.match(/#v=(.+)/);
+  if (m) {
+    var name = decodeURIComponent(m[1]);
+    if (VENUE_REPORTS[name]) {
+      selectVenue(name);
+      return;
+    }
+  }
+  // Default: consolidated
+  selectVenue('__all__');
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+</script>
+</body>
+</html>
