@@ -470,7 +470,6 @@ button:focus, select:focus, .sidebar-item:focus {
   </div>
 </div>
 <div class="at-a-glance">
-  <div class="at-a-glance-label">At a Glance · April 2026</div>
   <div class="at-a-glance-text">
     Overall score <b>94</b> (<b>↑ 4</b> vs last month).
     NPS <b>64</b> (<b>↑ 11</b> vs last month). Weakest trend: <span class="neg">Food -3</span>. Biggest gain: <b>Service +4</b>. 
@@ -479,7 +478,7 @@ button:focus, select:focus, .sidebar-item:focus {
 
 
 <div class="filter-bar"><label>Period:</label><select id="survey-from" onchange="applyFilter('surveys')"></select><span style="font-size:.75rem;color:var(--muted)">to</span><select id="survey-to" onchange="document.getElementById('survey-from').value=this.value;applyFilter('surveys')"></select><div class="filter-sep"></div><button class="filter-btn" data-preset="7d" onclick="setTrailingDays('surveys',7)">Last 7 days</button><button class="filter-btn" data-preset="30d" onclick="setTrailingDays('surveys',30)">Last 30 days</button><button class="filter-btn" data-preset="3mo" onclick="setTrailing('surveys',3)">Last 3 months</button><button class="filter-btn" data-preset="6mo" onclick="setTrailing('surveys',6)">Last 6 months</button><button class="filter-btn" data-preset="9mo" onclick="setTrailing('surveys',9)">Last 9 months</button><button class="filter-btn" data-preset="12mo" onclick="setTrailing('surveys',12)">Last 12 months</button><div class="filter-sep"></div><button class="filter-btn" data-preset="all" onclick="resetFilter('surveys')">All time</button></div>
-<div class="kpi-row">
+<div class="kpi-row" style="grid-template-columns:repeat(6,1fr)"><div class="kpi"><div class="kpi-label">NPS<span class="info-icon" title="Net Promoter Score. Promoters (rec 9-10) minus Detractors (rec 0-6), scale -100 to +100.">i</span></div><div class="kpi-value" style="color:#2BA6BB" id="skpi-nps">—</div><div class="kpi-sub"><span class="vs" id="skpi-nps-sub">promoters − detractors</span></div></div>
   <div class="kpi"><div class="kpi-label">Overall Score<span class="info-icon" title="Weighted average across all survey categories. Scale: 0-100.">i</span></div><div class="kpi-value" id="skpi-overall">93.2</div><div class="kpi-sub"><span class="vs">out of 100</span></div></div>
   <div class="kpi"><div class="kpi-label">Service Score</div><div class="kpi-value" style="color:var(--green)" id="skpi-service">95.3</div><div class="kpi-sub"><span class="vs">highest category</span></div></div>
   <div class="kpi"><div class="kpi-label">Food Score</div><div class="kpi-value" style="color:var(--orange)" id="skpi-food">92.2</div><div class="kpi-sub"><span class="vs">lowest category</span></div></div>
@@ -868,48 +867,6 @@ button:focus, select:focus, .sidebar-item:focus {
   </div>
 </div>
 
-<div class="section-header"><h2>Top concerns</h2><span class="count" style="background:var(--red-bg);color:var(--red)">1–6 / 10</span></div>
-<div class="comment-grid"><div class="comment-card negative">
-    <div class="comment-meta"><span>May 04, 2025</span><span class="score low">1/10</span></div>
-    <div class="comment-text">Hi- we’ve been long time patrons of WM Mulherins- in fact, for years it was on our list of <span class="kw-pos">favorite</span> spots in the city. (I also used to own an AirBnB and refer all my guests here). However, we haven’t been in a few...</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>May 18, 2025 · Michaela Litwin</span><span class="score low">1/10</span></div>
-    <div class="comment-text">Took a while for staff to seat us for no apparent reason (they also seemed very blasé about their jobs). The food was average (pizza was good and ricotta pancakes very good) but omelettes were so salty, making them...</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>Mar 15, 2026 · William Maldonado</span><span class="score low">1/10</span></div>
-    <div class="comment-text">We went for brunch to find out that they discontinued their brunch menu that week. Very upsetting. They were very flippant about it and did not have good customer service at all. Food wasn’t good.</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>Dec 15, 2025</span><span class="score low">2/10</span></div>
-    <div class="comment-text">Food had taken a big down turn. The food was all very rough. Pizza we had the burrata. The sauce was artificial tasting tasted like plastic or fake couldn’t taste the <span class="kw-pos">great</span> crust. Both pastas were either bad or...</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>Aug 03, 2025 · Michaela Litwin</span><span class="score low">2/10</span></div>
-    <div class="comment-text">I was seated outside with my group of 4 for brunch. After our waitress took our order, she never came back to our table. Someone else brought the food and ketchup I requested. And salt and pepper that I requested. I...</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>Mar 15, 2026 · Joey</span><span class="score low">2/10</span></div>
-    <div class="comment-text">Generally <span class="kw-neg">overpriced</span>, e.g., $19 for a Cosmopolitan $5 for a <span class="kw-neg">mediocre</span> cup of decaf.  Food came to the table <span class="kw-neg">lukewarm</span>, including the pizza.  Sorry to say, this restaurant has seen better days.</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>Dec 27, 2025 · Grace</span><span class="score low">2/10</span></div>
-    <div class="comment-text">3 of the 5 meals were sent out quickly, 2 took very long. One was a child. It was a very challenging experience and the meals could have been coursed out appropriately.</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>Dec 06, 2025 · James</span><span class="score low">2/10</span></div>
-    <div class="comment-text">We fealt <span class="kw-neg">rushed</span>. Entrees came out with appetizers. They were <span class="kw-neg">cold</span> by the time we ate them. They comped two desserts which we didnt want. Disappointed with experience.</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>Oct 27, 2025 · James</span><span class="score low">2/10</span></div>
-    <div class="comment-text"><span class="kw-neg">Poor</span> food quality and <span class="kw-neg">poor</span> service</div>
-  </div>
-<div class="comment-card negative">
-    <div class="comment-meta"><span>May 11, 2025 · Dillon Snyder</span><span class="score low">3/10</span></div>
-    <div class="comment-text">The food was <span class="kw-pos">delicious</span> and our server was very nice.  However, we were sat directly under the airconditioner.  We asked for it to be turned down but they informed us that it cools the entire restaurant so they couldn’t...</div>
-  </div>
-</div>
 </div>
 
 <!-- ==================== GUEST INFO VIEW ==================== -->
@@ -2157,7 +2114,7 @@ function setTrailing7d(view) { setTrailingDays(view, 7); }
 })();
 
 </script>
-<div class="footer-stamp">Generated Apr 18, 2026 · v1.0</div>
+<div class="footer-stamp">Generated Apr 20, 2026 · v1.0</div>
 
 <script>
 (function(){
@@ -2222,6 +2179,220 @@ function setTrailing7d(view) { setTrailingDays(view, 7); }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addDeltas);
   else addDeltas();
+})();
+</script>
+
+<script>
+(function(){
+  function computeNpsForRange(from, to) {
+    if (!window.RAW || !window.RAW.nps || !window.allMonths) return null;
+    var from_i = window.allMonths.indexOf(from);
+    var to_i   = window.allMonths.indexOf(to);
+    if (from_i < 0 || to_i < 0) return null;
+    var p = 0, pa = 0, d = 0;
+    for (var i = from_i; i <= to_i; i++) {
+      var m = window.allMonths[i];
+      p  += (window.RAW.nps.promoters[m]  || 0);
+      pa += (window.RAW.nps.passives[m]   || 0);
+      d  += (window.RAW.nps.detractors[m] || 0);
+    }
+    var tot = p + pa + d;
+    if (tot === 0) return null;
+    return { nps: Math.round(((p - d) / tot) * 100), promoters: p, passives: pa, detractors: d, total: tot };
+  }
+  function paintNps() {
+    var from = (document.getElementById('survey-from') || {}).value;
+    var to   = (document.getElementById('survey-to')   || {}).value;
+    if (!from || !to) return;
+    var r = computeNpsForRange(from, to);
+    var el = document.getElementById('skpi-nps');
+    var sub = document.getElementById('skpi-nps-sub');
+    if (!el) return;
+    if (!r) { el.textContent = '—'; if (sub) sub.textContent = 'no data'; return; }
+    // Plain integer — Ross asked to drop the leading "+".
+    el.textContent = r.nps;
+    // Traffic-light coloring mirroring the promoter-to-detractor spectrum.
+    el.style.color = r.nps >= 50 ? '#10b981'  /* green — promoter-heavy */
+                    : r.nps >= 0  ? '#f59e0b' /* yellow — mixed */
+                    :               '#ef4444' /* red — detractor-heavy */;
+    if (sub) sub.textContent = r.promoters.toLocaleString() + ' prom · ' + r.detractors.toLocaleString() + ' det · ' + r.total.toLocaleString() + ' total';
+  }
+  function init() {
+    paintNps();
+    // Hook into the existing filter plumbing: applyFilter('surveys') fires on
+    // period change and trailing-preset clicks. Wrap it to re-paint NPS.
+    var orig = window.applyFilter;
+    if (typeof orig === 'function') {
+      window.applyFilter = function(section) {
+        var ret = orig.apply(this, arguments);
+        if (section === 'surveys') setTimeout(paintNps, 0);
+        return ret;
+      };
+    }
+    var origSwitch = window.switchView;
+    if (typeof origSwitch === 'function') {
+      window.switchView = function(v) {
+        var ret = origSwitch.apply(this, arguments);
+        if (v === 'surveys') setTimeout(paintNps, 0);
+        return ret;
+      };
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 300); });
+  else setTimeout(init, 300);
+})();
+</script>
+
+<script>
+(function(){
+  // --- Standard NPS math from a 0-10 recommend score ---
+  // Promoter: 9-10 · Passive: 7-8 · Detractor: 0-6
+  function bucket(rec) {
+    if (rec == null || isNaN(rec)) return null;
+    rec = +rec;
+    if (rec >= 9) return 'p';
+    if (rec >= 7) return 'pa';
+    if (rec >= 0) return 'd';
+    return null;
+  }
+  function npsColor(nps) {
+    if (nps >= 70) return '#10b981';
+    if (nps >= 50) return '#2BA6BB';
+    if (nps >= 30) return '#405766';
+    if (nps >= 0)  return '#D8CFC4';
+    return '#ef4444';
+  }
+  // Map NPS (-100 → +100) to 0-100 bar width so the fill visualizes correctly
+  // even when NPS is negative.
+  function npsBarWidth(nps) {
+    var w = (nps + 100) / 2;
+    if (w < 2) w = 2;
+    if (w > 100) w = 100;
+    return w;
+  }
+
+  function collectServerNps(fromYM, toYM) {
+    if (!window.RAW_SURVEYS) return [];
+    // Parse yyyy-mm range into a date filter
+    function ymKey(dateStr) {
+      if (!dateStr || dateStr.length < 7) return null;
+      return dateStr.slice(0, 7);
+    }
+    var byServer = {};
+    (window.RAW_SURVEYS || []).forEach(function(r){
+      var ym = ymKey(r.date);
+      if (!ym) return;
+      if (ym < fromYM || ym > toYM) return;
+      if (!r.server || r.server === '-' || r.server === '') return;
+      if (r.recommend == null || r.recommend === '') return;
+      var b = bucket(r.recommend);
+      if (!b) return;
+      if (!byServer[r.server]) byServer[r.server] = { p: 0, pa: 0, d: 0, total: 0, months: {} };
+      byServer[r.server][b] += 1;
+      byServer[r.server].total += 1;
+      byServer[r.server].months[ym] = true;
+    });
+    var results = [];
+    for (var name in byServer) {
+      var s = byServer[name];
+      if (s.total < 10) continue;  // need at least 10 responses to be meaningful
+      var nps = Math.round(((s.p - s.d) / s.total) * 100);
+      results.push({ name: name, nps: nps, promoters: s.p, passives: s.pa, detractors: s.d,
+                     total: s.total, months: Object.keys(s.months).length });
+    }
+    return results;
+  }
+
+  function renderRows(list) {
+    var h = '';
+    for (var i = 0; i < list.length; i++) {
+      var s = list[i];
+      var c = npsColor(s.nps);
+      var barW = npsBarWidth(s.nps);
+      var npsDisplay = (s.nps > 0 ? '+' : '') + s.nps;
+      h += '<tr>' +
+        '<td style="font-weight:500">' + s.name + '</td>' +
+        '<td style="color:' + c + ';font-weight:600">' + npsDisplay + '</td>' +
+        '<td style="color:#6b7280">' + s.promoters + 'P · ' + s.detractors + 'D</td>' +
+        '<td>' + s.total + '</td>' +
+        '<td><div class="bar-bg"><div class="bar-fill" style="width:' + barW + '%;background:' + c + '"></div></div></td>' +
+        '</tr>';
+    }
+    return h;
+  }
+
+  function updateTableHeaders() {
+    // Change "Avg" / "Range" / "Mo." column headers to NPS semantics
+    document.querySelectorAll('#view-servers .server-table thead tr').forEach(function(tr){
+      var ths = tr.querySelectorAll('th');
+      if (ths.length >= 4) {
+        if (ths[1] && ths[1].textContent.trim() === 'Avg') ths[1].textContent = 'NPS';
+        if (ths[2] && ths[2].textContent.trim() === 'Range') {
+          ths[2].textContent = 'Prom · Det';
+          ths[2].title = 'Number of promoters (rec 9-10) and detractors (rec 0-6) for this server in the period.';
+        }
+        if (ths[3] && ths[3].textContent.trim() === 'Mo.') {
+          ths[3].textContent = 'Responses';
+          ths[3].title = 'Total survey responses attributed to this server in the period.';
+        }
+      }
+    });
+  }
+
+  function renderServersNps(monthsArr) {
+    if (!monthsArr || !monthsArr.length) return;
+    var from = monthsArr[0], to = monthsArr[monthsArr.length - 1];
+    var periodEl = document.getElementById('server-period');
+    if (periodEl && typeof fmtMonthFull === 'function') {
+      periodEl.textContent = fmtMonthFull(from) + ' – ' + fmtMonthFull(to);
+    }
+
+    // If RAW_SURVEYS is unavailable (data pipeline hasn't emitted it), fall
+    // through to the existing score-based renderer rather than break the page.
+    if (!window.RAW_SURVEYS || !window.RAW_SURVEYS.length) {
+      if (window._origFilterServers) {
+        window._origFilterServers(monthsArr);
+      }
+      return;
+    }
+
+    var results = collectServerNps(from, to);
+    results.sort(function(a, b){ return b.nps - a.nps; });
+    var top = results.slice(0, 10);
+    var bottom = results.slice(-10).sort(function(a, b){ return a.nps - b.nps; });
+
+    var topTbody = document.getElementById('top-server-tbody');
+    var bottomTbody = document.getElementById('bottom-server-tbody');
+    if (topTbody) topTbody.innerHTML = renderRows(top);
+    if (bottomTbody) bottomTbody.innerHTML = renderRows(bottom);
+
+    var topCount = document.getElementById('server-top-count');
+    var bottomCount = document.getElementById('server-bottom-count');
+    if (topCount) topCount.textContent = top.length + ' servers';
+    if (bottomCount) bottomCount.textContent = bottom.length + ' servers';
+  }
+
+  function init() {
+    updateTableHeaders();
+    // Preserve the original function and swap in our NPS-aware version.
+    if (typeof window.filterServers === 'function' && !window._origFilterServers) {
+      window._origFilterServers = window.filterServers;
+    }
+    window.filterServers = renderServersNps;
+
+    // Trigger an initial render using the current survey/servers month range.
+    // The base page calls filterServers() via applyFilter('servers'). Nudge it.
+    setTimeout(function(){
+      if (typeof window.applyFilter === 'function') {
+        window.applyFilter('servers');
+      } else if (window.allMonths && window.allMonths.length) {
+        renderServersNps(window.allMonths);
+      }
+    }, 50);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(init, 400); });
+  else setTimeout(init, 400);
 })();
 </script>
 
