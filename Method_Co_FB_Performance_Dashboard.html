@@ -156,6 +156,13 @@ section { margin-bottom: 40px; }
 .empty-chart .empty-title { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--royal); font-weight: 600; }
 .empty-chart .empty-sub { font-size: 11px; color: var(--muted); max-width: 320px; }
 
+/* ======= Section chips / tags (period vs all-time) ======= */
+.period-chip, .alltime-chip { display: inline-block; margin-left: 10px; padding: 2px 8px; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; border-radius: 2px; vertical-align: middle; }
+.period-chip { background: var(--royal); color: var(--white); }
+.alltime-chip { background: var(--tan); color: var(--slate); border: 1px solid var(--grey); }
+.alltime-tag { display: inline-block; margin-left: 8px; padding: 1px 6px; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--muted); background: var(--hover); border: 1px solid var(--rule); border-radius: 2px; vertical-align: middle; }
+.sect-meta.all-time { font-style: italic; color: var(--muted); font-size: 11px; max-width: 620px; }
+
 /* ======= Tables ======= */
 table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
 table th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--grey); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
@@ -646,73 +653,61 @@ function renderRevenueSection() {
   const o = DATA.outlets[STATE.outlet];
   const body = document.getElementById('outletBody');
 
+  const periodLabel = STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Latest Month';
+  const granLabel = STATE.gran === 'D' ? 'Daily' : (STATE.gran === 'W' ? 'Weekly' : 'Monthly');
+
   // ==== Build outlet body ====
   body.innerHTML = `
     <section>
+      <div class="sect-head">
+        <div class="sect-title">Revenue · ${periodLabel}</div>
+        <div class="sect-meta" id="trendMeta">—</div>
+      </div>
       <div class="kpis" id="kpiRow"></div>
     </section>
+
     <section>
       <div class="sect-head">
-        <div class="sect-title">Revenue Performance</div>
-        <div class="sect-meta" id="trendMeta">—</div>
+        <div class="sect-title">This Period <span class="period-chip">${periodLabel}</span></div>
+        <div class="sect-meta">Computed from daily data for the selected month · ${granLabel}</div>
       </div>
       <div class="grid grid-2">
         <div class="card"><h3>Net Sales Trend</h3>
-          <div class="desc">Sales Summary (Aug 2023 → Apr 2026). Prior-year overlay dashed Turquoise.</div>
+          <div class="desc">Daily net sales in ${periodLabel} · prior-year overlay dashed Turquoise</div>
           <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
         </div>
         <div class="card"><h3>Day of Week</h3>
-          <div class="desc">Net sales by weekday <span class="all-time">(all-time aggregate)</span></div>
+          <div class="desc">Net sales by weekday in ${periodLabel}</div>
           <div class="chart-wrap tall"><canvas id="dowChart"></canvas></div>
         </div>
       </div>
+      <div class="grid grid-2eq" style="margin-top:12px;">
+        <div class="card"><h3>Monthly Comparison</h3><div class="desc">Orders &amp; net amount by month (period-aware)</div><div class="chart-wrap tall"><canvas id="monthlyChart"></canvas></div></div>
+        <div class="card"><h3>Weekly Discount &amp; Comp Trend</h3><div class="desc">Discount $ (bar) + discount % of net (line), in ${periodLabel}</div><div class="chart-wrap tall"><canvas id="discTrendChart"></canvas></div></div>
+      </div>
     </section>
 
     <section>
       <div class="sect-head">
-        <div class="sect-title">Mix &amp; Pacing</div>
-        <div class="sect-meta all-time">All-Time Aggregates · Source: Sales Summary</div>
+        <div class="sect-title">All-Time Context <span class="alltime-chip">Aggregate</span></div>
+        <div class="sect-meta all-time">These charts are pre-aggregated by Toast and don't split by day — they ignore the Month filter. Fix: have the ETL emit per-day dimensional breakdowns.</div>
       </div>
       <div class="grid grid-3">
-        <div class="card"><h3>Sales by Category</h3><div class="desc">Net sales mix</div><div class="chart-wrap"><canvas id="catChart"></canvas></div></div>
-        <div class="card"><h3>Daypart</h3><div class="desc">Net sales by service period</div><div class="chart-wrap"><canvas id="daypartChart"></canvas></div></div>
-        <div class="card"><h3>Service Mode</h3><div class="desc">Table vs. Quick Service</div><div class="chart-wrap"><canvas id="modeChart"></canvas></div></div>
+        <div class="card"><h3>Sales by Category <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Net sales mix</div><div class="chart-wrap"><canvas id="catChart"></canvas></div></div>
+        <div class="card"><h3>Daypart <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Net sales by service period</div><div class="chart-wrap"><canvas id="daypartChart"></canvas></div></div>
+        <div class="card"><h3>Service Mode <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Table vs. Quick Service</div><div class="chart-wrap"><canvas id="modeChart"></canvas></div></div>
       </div>
-    </section>
-
-    <section>
-      <div class="grid grid-2eq">
-        <div class="card"><h3>Hour of Day</h3><div class="desc">Net sales curve · all-time</div><div class="chart-wrap tall"><canvas id="hourChart"></canvas></div></div>
-        <div class="card"><h3>Revenue Center Breakdown</h3><div class="desc">Net sales by RC · all-time</div><div class="chart-wrap tall"><canvas id="rcChart"></canvas></div></div>
+      <div class="grid grid-2eq" style="margin-top:12px;">
+        <div class="card"><h3>Hour of Day <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Net sales curve</div><div class="chart-wrap tall"><canvas id="hourChart"></canvas></div></div>
+        <div class="card"><h3>Revenue Center Breakdown <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Net sales by RC</div><div class="chart-wrap tall"><canvas id="rcChart"></canvas></div></div>
       </div>
-    </section>
-
-    <section>
-      <div class="sect-head">
-        <div class="sect-title">Hour × Day-of-Week Heatmap</div>
-        <div class="sect-meta">Order-level granularity · Jan 2025 – Mar 2026</div>
-      </div>
-      <div class="card"><h3>Net Sales Density</h3>
+      <div class="card" style="margin-top:12px;"><h3>Hour × Day-of-Week Heatmap <span class="alltime-tag">ALL-TIME</span></h3>
         <div class="desc">Real hourly detail from Order Details. Darker = higher sales concentration.</div>
         <div id="heatmapContainer"></div>
       </div>
-    </section>
-
-    <section>
-      <div class="sect-head">
-        <div class="sect-title">Order-Level Analytics</div>
-        <div class="sect-meta" id="orderMeta">Toast Order Details · Jan 2025 – Mar 2026</div>
-      </div>
-      <div class="grid grid-2eq">
-        <div class="card"><h3>Monthly Comparison</h3><div class="desc">Net amount (bar) + orders (line), by month</div><div class="chart-wrap tall"><canvas id="monthlyChart"></canvas></div></div>
-        <div class="card"><h3>Tip % Distribution</h3><div class="desc">Share of orders by tip-to-net ratio</div><div class="chart-wrap tall"><canvas id="tipHistChart"></canvas></div></div>
-      </div>
-    </section>
-
-    <section>
-      <div class="card"><h3>Weekly Discount &amp; Comp Trend</h3>
-        <div class="desc">Discount $ (bar) + discount % of net (line), weekly</div>
-        <div class="chart-wrap"><canvas id="discTrendChart"></canvas></div>
+      <div class="card" style="margin-top:12px;"><h3>Tip % Distribution <span class="alltime-tag">ALL-TIME</span></h3>
+        <div class="desc">Share of orders by tip-to-net ratio</div>
+        <div class="chart-wrap"><canvas id="tipHistChart"></canvas></div>
       </div>
     </section>
 
@@ -1604,7 +1599,10 @@ function rerenderSection() {
   const o = DATA.outlets[STATE.outlet];
   if (o && o.placeholder) return;  // nothing to re-render
   if (STATE.section === 'summary')  return renderSummarySection();
-  if (STATE.section === 'revenue')  return renderEverything();
+  // Rebuild Revenue HTML on every rerender so canvases are always fresh —
+  // some Chart.js 4.4 time-axis edge cases fail silently when a canvas had
+  // its `display` toggled off/on in the same tick by showEmpty/safeChart.
+  if (STATE.section === 'revenue')  return renderRevenueSection();
   if (STATE.section === 'labor')    return renderPlaceholderSection('Labor', 'Awaiting 7shifts payroll &amp; schedule export. Once connected, this section will show labor hours, labor % of net, SPMH, role mix, overtime, and scheduled-vs-actual variance.', ['labor']);
   if (STATE.section === 'events')   return renderPlaceholderSection('Private Events', 'Awaiting Tripleseat booking export. Once connected, this section will show events booked, gross & net F&amp;B, average per event, guest counts, lead time, and conversion by event type.', ['tripleseat']);
   if (STATE.section === 'guest')    return renderPlaceholderSection('Guest Experience', 'Awaiting Resy surveys &amp; ratings. Once connected, this section will show NPS, star rating distribution, response rate, server performance, guest comments and sentiment.', ['resy']);
