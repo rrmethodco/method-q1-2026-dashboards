@@ -788,20 +788,28 @@ function renderEverything() {
   const curODRows = bOD ? filter(odDaily, bOD) : odDaily;
   const pyODRows  = pyOD ? filter(odDaily, pyOD) : null;
 
-  // KPIs: prefer order-details when we have them (named servers, more granular)
-  renderKPIs(curSSRows, pySSRows, bSS, curODRows, pyODRows);
+  // Fire each render inside its own try/catch so one failure can't blank the rest.
+  const guard = (name, fn) => { try { fn(); } catch (e) { console.error('[revenue:'+name+']', e); } };
 
-  renderTrend(curSSRows, pySSRows);
-  renderDOW(curSSRows);
-  renderCategory(); renderDaypart(); renderMode();
-  renderHour(); renderRC();
-  renderHeatmap();
-  renderMonthly(curODRows);
-  renderTipHist();
-  renderDiscountTrend(curODRows);
-  renderServers(); renderTablesTable();
-  renderPayments(); renderDiningOptions();
-  renderProductMix();
+  // KPIs: prefer order-details when we have them (named servers, more granular)
+  guard('kpis', () => renderKPIs(curSSRows, pySSRows, bSS, curODRows, pyODRows));
+
+  guard('trend',   () => renderTrend(curSSRows, pySSRows));
+  guard('dow',     () => renderDOW(curSSRows));
+  guard('cat',     () => renderCategory());
+  guard('daypart', () => renderDaypart());
+  guard('mode',    () => renderMode());
+  guard('hour',    () => renderHour());
+  guard('rc',      () => renderRC());
+  guard('heatmap', () => renderHeatmap());
+  guard('monthly', () => renderMonthly(curODRows));
+  guard('tipHist', () => renderTipHist());
+  guard('discTrend', () => renderDiscountTrend(curODRows));
+  guard('servers', () => renderServers());
+  guard('tables',  () => renderTablesTable());
+  guard('payments', () => renderPayments());
+  guard('dining',  () => renderDiningOptions());
+  guard('productMix', () => renderProductMix());
 
   const lbl = bSS && bSS.start
     ? bSS.start + ' → ' + bSS.end + (pySS ? '  vs  ' + pySS.start + ' → ' + pySS.end : '')
@@ -1145,262 +1153,303 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
 
 function renderTrend(cur, py) {
   destroy('trend');
-  const curRoll = rollup(cur, STATE.gran, ['net_sales']);
-  const pyRoll = py ? rollup(py, STATE.gran, ['net_sales']) : null;
-  const ctx = document.getElementById('trendChart').getContext('2d');
-  const datasets = [{
-    label: 'Net Sales',
-    data: curRoll.map(r => ({ x:r.date, y:r.net_sales })),
-    borderColor: C.slate, backgroundColor: 'rgba(33,41,49,0.08)',
-    borderWidth: 2, fill: true, tension: 0.25,
-    pointRadius: STATE.gran==='D'?0:3, pointBackgroundColor: C.slate
-  }];
-  if (pyRoll && pyRoll.length) {
-    datasets.push({
-      label: 'Prior Year',
-      data: pyRoll.map(r => { const dt=new Date(r.date+'T12:00:00'); dt.setFullYear(dt.getFullYear()+1); return { x: dt.toISOString().slice(0,10), y:r.net_sales }; }),
-      borderColor: C.turquoise, backgroundColor: 'transparent',
-      borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
-    });
-  }
-  charts.trend = new Chart(ctx, {
-    type: 'line', data: { datasets },
-    options: {
-      responsive: true, maintainAspectRatio: false, interaction: { mode:'index', intersect: false },
-      scales: {
-        x: { type:'time', time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, grid: { display: false }, ticks: { maxTicksLimit: 10 } },
-        y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }
-      },
-      plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtMoneyFull(c.parsed.y) } } }
+  if (!cur || !cur.length) { showEmpty('trendChart', 'No sales in this period', 'Select a different month or revenue center.'); return; }
+  safeChart('trendChart', () => {
+    const curRoll = rollup(cur, STATE.gran, ['net_sales']);
+    const pyRoll = py ? rollup(py, STATE.gran, ['net_sales']) : null;
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    const datasets = [{
+      label: 'Net Sales',
+      data: curRoll.map(r => ({ x:r.date, y:r.net_sales })),
+      borderColor: C.slate, backgroundColor: 'rgba(33,41,49,0.08)',
+      borderWidth: 2, fill: true, tension: 0.25,
+      pointRadius: STATE.gran==='D'?0:3, pointBackgroundColor: C.slate
+    }];
+    if (pyRoll && pyRoll.length) {
+      datasets.push({
+        label: 'Prior Year',
+        data: pyRoll.map(r => { const dt=new Date(r.date+'T12:00:00'); dt.setFullYear(dt.getFullYear()+1); return { x: dt.toISOString().slice(0,10), y:r.net_sales }; }),
+        borderColor: C.turquoise, backgroundColor: 'transparent',
+        borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
+      });
     }
-  });
+    charts.trend = new Chart(ctx, {
+      type: 'line', data: { datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false, interaction: { mode:'index', intersect: false },
+        scales: {
+          x: { type:'time', time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, grid: { display: false }, ticks: { maxTicksLimit: 10 } },
+          y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }
+        },
+        plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtMoneyFull(c.parsed.y) } } }
+      }
+    });
+  }, 'Trend unavailable', 'Chart.js error — see console.');
 }
 
 function renderDOW(curRows) {
   destroy('dow');
-  const order = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const weekdayAbbr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const map = {}; order.forEach(d => map[d] = 0);
-  if (curRows && curRows.length) {
-    // Period-filtered daily data — compute DOW from actual dates
-    curRows.forEach(r => {
-      const d = new Date(r.date + 'T12:00:00');
-      const k = weekdayAbbr[d.getDay()];
-      if (map[k]!=null) map[k] += r.net_sales || 0;
-    });
-  } else {
-    // Fallback to pre-aggregated all-time data
-    const src = getSummarySource(); const mult = rcShareMult();
-    Object.values(src).forEach(s => (s.day_of_week||[]).forEach(r => { map[r.day] = (map[r.day]||0) + (r.net_sales||0) * mult; }));
-  }
-  const ctx = document.getElementById('dowChart').getContext('2d');
-  charts.dow = new Chart(ctx, {
-    type: 'bar',
-    data: { labels: order, datasets: [{ label: 'Net Sales', data: order.map(d => map[d]||0), backgroundColor: order.map((_,i) => i>=4 ? C.turquoise : C.slate), borderRadius: 2 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } },
-      scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } }
+  safeChart('dowChart', () => {
+    const order = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const weekdayAbbr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const map = {}; order.forEach(d => map[d] = 0);
+    if (curRows && curRows.length) {
+      // Period-filtered daily data — compute DOW from actual dates
+      curRows.forEach(r => {
+        const d = new Date(r.date + 'T12:00:00');
+        const k = weekdayAbbr[d.getDay()];
+        if (map[k]!=null) map[k] += r.net_sales || 0;
+      });
+    } else {
+      // Fallback to pre-aggregated all-time data
+      const src = getSummarySource(); const mult = rcShareMult();
+      Object.values(src).forEach(s => (s.day_of_week||[]).forEach(r => { map[r.day] = (map[r.day]||0) + (r.net_sales||0) * mult; }));
     }
-  });
+    const total = order.reduce((a,d) => a + (map[d]||0), 0);
+    if (!total) { showEmpty('dowChart', 'No sales by weekday', 'No data for current period / RC.'); return; }
+    const ctx = document.getElementById('dowChart').getContext('2d');
+    charts.dow = new Chart(ctx, {
+      type: 'bar',
+      data: { labels: order, datasets: [{ label: 'Net Sales', data: order.map(d => map[d]||0), backgroundColor: order.map((_,i) => i>=4 ? C.turquoise : C.slate), borderRadius: 2 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } },
+        scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } }
+      }
+    });
+  }, 'Day-of-week unavailable', 'Chart.js error — see console.');
 }
 
 function renderCategory() {
   destroy('cat');
-  const src = getSummarySource(); const mult = rcShareMult();
-  const map = {};
-  Object.values(src).forEach(s => (s.categories||[]).forEach(r => { map[r.category] = (map[r.category]||0) + (r.net_sales||0) * mult; }));
-  const rows = Object.entries(map).filter(([k,v])=>v>0).sort((a,b)=>b[1]-a[1]);
-  const ctx = document.getElementById('catChart').getContext('2d');
-  charts.cat = new Chart(ctx, {
-    type: 'doughnut',
-    data: { labels: rows.map(r=>r[0]), datasets: [{ data: rows.map(r=>r[1]), backgroundColor: palette, borderWidth: 1, borderColor: C.white }] },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '62%',
-      plugins: {
-        legend: { position: 'right', labels: { boxWidth: 10, padding: 8 } },
-        tooltip: { callbacks: { label: c => { const tot = c.dataset.data.reduce((a,b)=>a+b,0); return c.label + ': ' + fmtMoneyFull(c.parsed) + ' (' + (c.parsed/tot*100).toFixed(1) + '%)'; } } }
+  safeChart('catChart', () => {
+    const src = getSummarySource(); const mult = rcShareMult();
+    const map = {};
+    Object.values(src).forEach(s => (s.categories||[]).forEach(r => { map[r.category] = (map[r.category]||0) + (r.net_sales||0) * mult; }));
+    const rows = Object.entries(map).filter(([k,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+    if (!rows.length) { showEmpty('catChart', 'No category data', 'Category mix unavailable for this RC.'); return; }
+    const ctx = document.getElementById('catChart').getContext('2d');
+    charts.cat = new Chart(ctx, {
+      type: 'doughnut',
+      data: { labels: rows.map(r=>r[0]), datasets: [{ data: rows.map(r=>r[1]), backgroundColor: palette, borderWidth: 1, borderColor: C.white }] },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '62%',
+        plugins: {
+          legend: { position: 'right', labels: { boxWidth: 10, padding: 8 } },
+          tooltip: { callbacks: { label: c => { const tot = c.dataset.data.reduce((a,b)=>a+b,0); return c.label + ': ' + fmtMoneyFull(c.parsed) + ' (' + (c.parsed/tot*100).toFixed(1) + '%)'; } } }
+        }
       }
-    }
-  });
+    });
+  }, 'Category mix unavailable', 'Chart.js error — see console.');
 }
 
 function renderDaypart() {
   destroy('dp');
-  const src = getSummarySource(); const mult = rcShareMult();
-  const order = ['Breakfast','Brunch','Lunch','Dinner','Late Night','Overnight'];
-  const map = {};
-  Object.values(src).forEach(s => (s.dayparts||[]).forEach(r => { map[r.daypart] = (map[r.daypart]||0) + (r.net_sales||0) * mult; }));
-  const rows = order.filter(k => map[k]).map(k => ({k, v: map[k]}));
-  const ctx = document.getElementById('daypartChart').getContext('2d');
-  charts.dp = new Chart(ctx, {
-    type: 'bar', data: { labels: rows.map(r=>r.k), datasets: [{ label:'Net Sales', data: rows.map(r=>r.v), backgroundColor: [C.tan,C.seafoam,C.grey,C.slate,C.royal,C.turquoise], borderRadius: 2 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.x) } } }, scales: { x: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }, y: { grid: { display: false } } } }
-  });
+  safeChart('daypartChart', () => {
+    const src = getSummarySource(); const mult = rcShareMult();
+    const order = ['Breakfast','Brunch','Lunch','Dinner','Late Night','Overnight'];
+    const map = {};
+    Object.values(src).forEach(s => (s.dayparts||[]).forEach(r => { map[r.daypart] = (map[r.daypart]||0) + (r.net_sales||0) * mult; }));
+    const rows = order.filter(k => map[k]).map(k => ({k, v: map[k]}));
+    if (!rows.length) { showEmpty('daypartChart', 'No daypart data', 'Daypart mix unavailable for this RC.'); return; }
+    const ctx = document.getElementById('daypartChart').getContext('2d');
+    charts.dp = new Chart(ctx, {
+      type: 'bar', data: { labels: rows.map(r=>r.k), datasets: [{ label:'Net Sales', data: rows.map(r=>r.v), backgroundColor: [C.tan,C.seafoam,C.grey,C.slate,C.royal,C.turquoise], borderRadius: 2 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.x) } } }, scales: { x: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }, y: { grid: { display: false } } } }
+    });
+  }, 'Daypart unavailable', 'Chart.js error — see console.');
 }
 
 function renderMode() {
   destroy('mode');
-  const src = getSummarySource(); const mult = rcShareMult();
-  const map = {};
-  Object.values(src).forEach(s => (s.service_modes||[]).forEach(r => { map[r.mode] = (map[r.mode]||0) + (r.net_sales||0) * mult; }));
-  const rows = Object.entries(map).sort((a,b)=>b[1]-a[1]);
-  const ctx = document.getElementById('modeChart').getContext('2d');
-  charts.mode = new Chart(ctx, {
-    type: 'doughnut',
-    data: { labels: rows.map(r=>r[0]), datasets: [{ data: rows.map(r=>r[1]), backgroundColor: [C.slate,C.turquoise], borderWidth: 1, borderColor: C.white }] },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => c.label + ': ' + fmtMoneyFull(c.parsed) } } } }
-  });
+  safeChart('modeChart', () => {
+    const src = getSummarySource(); const mult = rcShareMult();
+    const map = {};
+    Object.values(src).forEach(s => (s.service_modes||[]).forEach(r => { map[r.mode] = (map[r.mode]||0) + (r.net_sales||0) * mult; }));
+    const rows = Object.entries(map).filter(([k,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+    if (!rows.length) { showEmpty('modeChart', 'No service-mode data', 'Service mode unavailable for this RC.'); return; }
+    const ctx = document.getElementById('modeChart').getContext('2d');
+    charts.mode = new Chart(ctx, {
+      type: 'doughnut',
+      data: { labels: rows.map(r=>r[0]), datasets: [{ data: rows.map(r=>r[1]), backgroundColor: [C.slate,C.turquoise], borderWidth: 1, borderColor: C.white }] },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => c.label + ': ' + fmtMoneyFull(c.parsed) } } } }
+    });
+  }, 'Service mode unavailable', 'Chart.js error — see console.');
 }
 
 function renderHour() {
   destroy('hour');
-  // Use order-details hour_dow when available for real accuracy; else sales-summary time_of_day
-  const o = DATA.outlets[STATE.outlet];
-  const map = {}; for (let h=0; h<24; h++) map[h] = 0;
-  const src = getOrderDetailsSource();
-  if (src) {
-    Object.values(src).forEach(od => (od.hour_dow||[]).forEach(r => { map[r.hour] = (map[r.hour]||0) + r.amount; }));
-  } else {
-    const mult = rcShareMult();
-    const ssrc = getSummarySource();
-    Object.values(ssrc).forEach(s => (s.time_of_day||[]).forEach(r => { map[r.hour] = (map[r.hour]||0) + (r.net_sales||0)*mult; }));
-  }
-  const hours = Array.from({length:24}, (_,i)=>i);
-  const lbl = h => (h===0?'12a':h<12?h+'a':h===12?'12p':(h-12)+'p');
-  const ctx = document.getElementById('hourChart').getContext('2d');
-  charts.hour = new Chart(ctx, {
-    type: 'bar',
-    data: { labels: hours.map(lbl), datasets: [{ label:'Net Sales', data: hours.map(h => map[h]||0), backgroundColor: C.royal, borderRadius: 1 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } } }
-  });
+  safeChart('hourChart', () => {
+    // Use order-details hour_dow when available for real accuracy; else sales-summary time_of_day
+    const map = {}; for (let h=0; h<24; h++) map[h] = 0;
+    const src = getOrderDetailsSource();
+    if (src) {
+      Object.values(src).forEach(od => (od.hour_dow||[]).forEach(r => { map[r.hour] = (map[r.hour]||0) + r.amount; }));
+    } else {
+      const mult = rcShareMult();
+      const ssrc = getSummarySource();
+      Object.values(ssrc).forEach(s => (s.time_of_day||[]).forEach(r => { map[r.hour] = (map[r.hour]||0) + (r.net_sales||0)*mult; }));
+    }
+    const hours = Array.from({length:24}, (_,i)=>i);
+    const total = hours.reduce((a,h) => a + (map[h]||0), 0);
+    if (!total) { showEmpty('hourChart', 'No hour-of-day data', 'Hourly curve unavailable for this RC.'); return; }
+    const lbl = h => (h===0?'12a':h<12?h+'a':h===12?'12p':(h-12)+'p');
+    const ctx = document.getElementById('hourChart').getContext('2d');
+    charts.hour = new Chart(ctx, {
+      type: 'bar',
+      data: { labels: hours.map(lbl), datasets: [{ label:'Net Sales', data: hours.map(h => map[h]||0), backgroundColor: C.royal, borderRadius: 1 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } } }
+    });
+  }, 'Hour-of-day unavailable', 'Chart.js error — see console.');
 }
 
 function renderRC() {
   destroy('rc');
-  const o = DATA.outlets[STATE.outlet];
-  const rows = [];
-  if (o.sales_summary) {
-    Object.values(o.sales_summary).forEach(s => (s.revenue_centers||[]).forEach(r => {
-      if (r.net_sales > 0) rows.push({ rc: r.rc, net_sales: r.net_sales });
-    }));
-  }
-  rows.sort((a,b)=>b.net_sales-a.net_sales);
-  const ctx = document.getElementById('rcChart').getContext('2d');
-  charts.rc = new Chart(ctx, {
-    type: 'bar', data: { labels: rows.map(r=>r.rc), datasets: [{ label:'Net Sales', data: rows.map(r=>r.net_sales), backgroundColor: rows.map((_,i)=>palette[i%palette.length]), borderRadius: 2 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.x) } } }, scales: { x: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }, y: { grid: { display: false } } } }
-  });
+  safeChart('rcChart', () => {
+    const o = DATA.outlets[STATE.outlet];
+    const rows = [];
+    if (o.sales_summary) {
+      Object.values(o.sales_summary).forEach(s => (s.revenue_centers||[]).forEach(r => {
+        if (r.net_sales > 0) rows.push({ rc: r.rc, net_sales: r.net_sales });
+      }));
+    }
+    rows.sort((a,b)=>b.net_sales-a.net_sales);
+    if (!rows.length) { showEmpty('rcChart', 'No revenue-center breakdown', 'RC split unavailable for this outlet.'); return; }
+    const ctx = document.getElementById('rcChart').getContext('2d');
+    charts.rc = new Chart(ctx, {
+      type: 'bar', data: { labels: rows.map(r=>r.rc), datasets: [{ label:'Net Sales', data: rows.map(r=>r.net_sales), backgroundColor: rows.map((_,i)=>palette[i%palette.length]), borderRadius: 2 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.x) } } }, scales: { x: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }, y: { grid: { display: false } } } }
+    });
+  }, 'Revenue center unavailable', 'Chart.js error — see console.');
 }
 
 function renderHeatmap() {
-  const src = getOrderDetailsSource();
   const cont = document.getElementById('heatmapContainer');
-  if (!src) { cont.innerHTML = '<div class="placeholder" style="padding:40px"><p>No order-detail data for this revenue center.</p></div>'; return; }
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const cells = {}; let max = 0;
-  Object.values(src).forEach(od => (od.hour_dow||[]).forEach(r => {
-    const k = r.hour + '|' + r.dow;
-    cells[k] = (cells[k]||0) + r.amount;
-    if (cells[k] > max) max = cells[k];
-  }));
-  // hours with >= 1% of max total to trim quiet hours
-  const hoursSet = new Set(); Object.keys(cells).forEach(k => hoursSet.add(+k.split('|')[0]));
-  const hours = Array.from(hoursSet).filter(h => {
-    const total = days.reduce((a,d) => a + (cells[h+'|'+d]||0), 0);
-    return total / max >= 0.01;
-  }).sort((a,b)=>a-b);
-  const lbl = h => (h===0?'12 AM':h<12?h+' AM':h===12?'12 PM':(h-12)+' PM');
-  let html = '<div class="heatmap"><div class="h-top"></div>' + days.map(d => `<div class="h-top">${d}</div>`).join('');
-  hours.forEach(h => {
-    html += `<div class="h-lbl">${lbl(h)}</div>`;
-    days.forEach(d => {
-      const v = cells[h+'|'+d] || 0;
-      const t = max ? v/max : 0;
-      const alpha = 0.06 + t*0.94;
-      html += `<div class="h-cell" style="background: rgba(33,41,49,${alpha.toFixed(2)}); color: ${t>0.45?'#fff':'#231F20'};">${v===0?'':fmtMoney(v)}</div>`;
+  if (!cont) return;
+  try {
+    const src = getOrderDetailsSource();
+    if (!src) { cont.innerHTML = '<div class="placeholder" style="padding:40px"><p>No order-detail data for this revenue center.</p></div>'; return; }
+    const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const cells = {}; let max = 0;
+    Object.values(src).forEach(od => (od.hour_dow||[]).forEach(r => {
+      const k = r.hour + '|' + r.dow;
+      cells[k] = (cells[k]||0) + r.amount;
+      if (cells[k] > max) max = cells[k];
+    }));
+    if (!max) { cont.innerHTML = '<div class="placeholder" style="padding:40px"><p>No hour-of-week activity recorded yet.</p></div>'; return; }
+    // hours with >= 1% of max total to trim quiet hours
+    const hoursSet = new Set(); Object.keys(cells).forEach(k => hoursSet.add(+k.split('|')[0]));
+    const hours = Array.from(hoursSet).filter(h => {
+      const total = days.reduce((a,d) => a + (cells[h+'|'+d]||0), 0);
+      return total / max >= 0.01;
+    }).sort((a,b)=>a-b);
+    const lbl = h => (h===0?'12 AM':h<12?h+' AM':h===12?'12 PM':(h-12)+' PM');
+    let html = '<div class="heatmap"><div class="h-top"></div>' + days.map(d => `<div class="h-top">${d}</div>`).join('');
+    hours.forEach(h => {
+      html += `<div class="h-lbl">${lbl(h)}</div>`;
+      days.forEach(d => {
+        const v = cells[h+'|'+d] || 0;
+        const t = max ? v/max : 0;
+        const alpha = 0.06 + t*0.94;
+        html += `<div class="h-cell" style="background: rgba(33,41,49,${alpha.toFixed(2)}); color: ${t>0.45?'#fff':'#231F20'};">${v===0?'':fmtMoney(v)}</div>`;
+      });
     });
-  });
-  html += '</div>';
-  cont.innerHTML = html;
+    html += '</div>';
+    cont.innerHTML = html;
+  } catch (e) {
+    console.error('[heatmap]', e);
+    cont.innerHTML = '<div class="placeholder" style="padding:40px"><p>Heatmap unavailable — see console.</p></div>';
+  }
 }
 
 function renderMonthly(curRows) {
   destroy('monthly');
-  let rows;
-  if (curRows && curRows.length) {
-    // Period-filtered daily orders — roll up to monthly to honor the active period
-    const map = {};
-    curRows.forEach(r => {
-      const m = r.date.slice(0,7);
-      if (!map[m]) map[m] = { month: m, orders: 0, amount: 0 };
-      map[m].orders += r.orders || 0; map[m].amount += r.amount || 0;
-    });
-    rows = Object.values(map).sort((a,b) => a.month < b.month ? -1 : 1);
-  } else {
-    const src = getOrderDetailsSource(); if (!src) return;
-    const mult = rcShareMult();
-    const map = {};
-    Object.values(src).forEach(od => (od.monthly||[]).forEach(r => {
-      if (!map[r.month]) map[r.month] = { month: r.month, orders: 0, amount: 0 };
-      map[r.month].orders += r.orders * mult; map[r.month].amount += r.amount * mult;
-    }));
-    rows = Object.values(map).sort((a,b) => a.month < b.month ? -1 : 1);
-  }
-  const ctx = document.getElementById('monthlyChart').getContext('2d');
-  charts.monthly = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: rows.map(r=>fmtMonth(r.month)),
-      datasets: [
-        { label: 'Net Amount', data: rows.map(r=>r.amount), backgroundColor: C.slate, borderRadius: 2, yAxisID: 'y' },
-        { label: 'Orders', data: rows.map(r=>r.orders), type: 'line', borderColor: C.turquoise, backgroundColor: 'transparent', borderWidth: 2, pointBackgroundColor: C.turquoise, pointRadius: 3, tension: 0.25, yAxisID: 'y1' }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + (c.dataset.label==='Net Amount' ? fmtMoneyFull(c.parsed.y) : fmtNum(c.parsed.y)) } } },
-      scales: {
-        x: { grid: { display: false } },
-        y: { position: 'left', grid: { color: '#F0EDEC' }, ticks: { callback: v => fmtMoney(v) } },
-        y1: { position: 'right', grid: { display: false }, ticks: { callback: v => fmtNum(v) } }
-      }
+  safeChart('monthlyChart', () => {
+    let rows;
+    if (curRows && curRows.length) {
+      // Period-filtered daily orders — roll up to monthly to honor the active period
+      const map = {};
+      curRows.forEach(r => {
+        const m = r.date.slice(0,7);
+        if (!map[m]) map[m] = { month: m, orders: 0, amount: 0 };
+        map[m].orders += r.orders || 0; map[m].amount += r.amount || 0;
+      });
+      rows = Object.values(map).sort((a,b) => a.month < b.month ? -1 : 1);
+    } else {
+      const src = getOrderDetailsSource();
+      if (!src) { showEmpty('monthlyChart', 'No order-level data', 'Monthly comparison requires Order Details.'); return; }
+      const mult = rcShareMult();
+      const map = {};
+      Object.values(src).forEach(od => (od.monthly||[]).forEach(r => {
+        if (!map[r.month]) map[r.month] = { month: r.month, orders: 0, amount: 0 };
+        map[r.month].orders += r.orders * mult; map[r.month].amount += r.amount * mult;
+      }));
+      rows = Object.values(map).sort((a,b) => a.month < b.month ? -1 : 1);
     }
-  });
+    if (!rows || !rows.length) { showEmpty('monthlyChart', 'No monthly data', 'Try a broader period or different RC.'); return; }
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    charts.monthly = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: rows.map(r=>fmtMonth(r.month)),
+        datasets: [
+          { label: 'Net Amount', data: rows.map(r=>r.amount), backgroundColor: C.slate, borderRadius: 2, yAxisID: 'y' },
+          { label: 'Orders', data: rows.map(r=>r.orders), type: 'line', borderColor: C.turquoise, backgroundColor: 'transparent', borderWidth: 2, pointBackgroundColor: C.turquoise, pointRadius: 3, tension: 0.25, yAxisID: 'y1' }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + (c.dataset.label==='Net Amount' ? fmtMoneyFull(c.parsed.y) : fmtNum(c.parsed.y)) } } },
+        scales: {
+          x: { grid: { display: false } },
+          y: { position: 'left', grid: { color: '#F0EDEC' }, ticks: { callback: v => fmtMoney(v) } },
+          y1: { position: 'right', grid: { display: false }, ticks: { callback: v => fmtNum(v) } }
+        }
+      }
+    });
+  }, 'Monthly comparison unavailable', 'Chart.js error — see console.');
 }
 
 function renderTipHist() {
   destroy('tipHist');
-  const src = getOrderDetailsSource(); if (!src) return;
-  // Sum tip_bins across sources (array add)
-  const bins = new Array(11).fill(0);
-  Object.values(src).forEach(od => { const t=(od.totals||{}).tip_bins||[]; t.forEach((v,i)=> bins[i]+=v); });
-  const total = bins.reduce((a,b)=>a+b,0);
-  const labels = ['0-10%','10-20%','20-30%','30-40%','40-50%','50-60%','60-70%','70-80%','80-90%','90-100%','100%+'];
-  const ctx = document.getElementById('tipHistChart').getContext('2d');
-  charts.tipHist = new Chart(ctx, {
-    type: 'bar',
-    data: { labels, datasets: [{ label: '% of orders', data: bins.map(b => total ? b/total*100 : 0), backgroundColor: C.slate, borderRadius: 1 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtPct(c.parsed.y) + ' (' + fmtNum(bins[c.dataIndex]) + ' orders)' } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v + '%' }, grid: { color: '#F0EDEC' } } } }
-  });
+  safeChart('tipHistChart', () => {
+    const src = getOrderDetailsSource();
+    if (!src) { showEmpty('tipHistChart', 'No order-level data', 'Tip histogram requires Order Details.'); return; }
+    // Sum tip_bins across sources (array add)
+    const bins = new Array(11).fill(0);
+    Object.values(src).forEach(od => { const t=(od.totals||{}).tip_bins||[]; t.forEach((v,i)=> bins[i]+=v); });
+    const total = bins.reduce((a,b)=>a+b,0);
+    if (!total) { showEmpty('tipHistChart', 'No tip data', 'Tip distribution unavailable for this RC.'); return; }
+    const labels = ['0-10%','10-20%','20-30%','30-40%','40-50%','50-60%','60-70%','70-80%','80-90%','90-100%','100%+'];
+    const ctx = document.getElementById('tipHistChart').getContext('2d');
+    charts.tipHist = new Chart(ctx, {
+      type: 'bar',
+      data: { labels, datasets: [{ label: '% of orders', data: bins.map(b => total ? b/total*100 : 0), backgroundColor: C.slate, borderRadius: 1 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtPct(c.parsed.y) + ' (' + fmtNum(bins[c.dataIndex]) + ' orders)' } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v + '%' }, grid: { color: '#F0EDEC' } } } }
+    });
+  }, 'Tip % unavailable', 'Chart.js error — see console.');
 }
 
 function renderDiscountTrend(curOD) {
   destroy('discTrend');
-  if (!curOD || !curOD.length) return;
-  const weekly = rollup(curOD, 'W', ['amount','discount']);
-  const ctx = document.getElementById('discTrendChart').getContext('2d');
-  charts.discTrend = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: weekly.map(r=>r.date),
-      datasets: [
-        { label: 'Discount $', data: weekly.map(r=>r.discount), backgroundColor: C.tan, borderRadius: 1, yAxisID: 'y' },
-        { label: 'Discount %', data: weekly.map(r=>r.amount+r.discount ? r.discount/(r.amount+r.discount)*100 : 0), type: 'line', borderColor: C.turquoise, backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.25, yAxisID: 'y1' }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + (c.dataset.label==='Discount $' ? fmtMoneyFull(c.parsed.y) : fmtPct(c.parsed.y)) } } }, scales: { x: { type: 'time', time: { unit: 'week', displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, grid: { display: false }, ticks: { maxTicksLimit: 10 } }, y: { position: 'left', grid: { color: '#F0EDEC' }, ticks: { callback: v => fmtMoney(v) } }, y1: { position: 'right', grid: { display: false }, ticks: { callback: v => v.toFixed(1) + '%' } } } }
-  });
+  if (!curOD || !curOD.length) { showEmpty('discTrendChart', 'No discount data in period', 'Try a broader period or different RC.'); return; }
+  safeChart('discTrendChart', () => {
+    const weekly = rollup(curOD, 'W', ['amount','discount']);
+    const totDisc = weekly.reduce((a,r)=>a+(r.discount||0), 0);
+    if (!totDisc) { showEmpty('discTrendChart', 'No discounts recorded', 'No discount/comp activity in the selected period.'); return; }
+    const ctx = document.getElementById('discTrendChart').getContext('2d');
+    charts.discTrend = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: weekly.map(r=>r.date),
+        datasets: [
+          { label: 'Discount $', data: weekly.map(r=>r.discount), backgroundColor: C.tan, borderRadius: 1, yAxisID: 'y' },
+          { label: 'Discount %', data: weekly.map(r=>r.amount+r.discount ? r.discount/(r.amount+r.discount)*100 : 0), type: 'line', borderColor: C.turquoise, backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0, tension: 0.25, yAxisID: 'y1' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + (c.dataset.label==='Discount $' ? fmtMoneyFull(c.parsed.y) : fmtPct(c.parsed.y)) } } }, scales: { x: { type: 'time', time: { unit: 'week', displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, grid: { display: false }, ticks: { maxTicksLimit: 10 } }, y: { position: 'left', grid: { color: '#F0EDEC' }, ticks: { callback: v => fmtMoney(v) } }, y1: { position: 'right', grid: { display: false }, ticks: { callback: v => v.toFixed(1) + '%' } } } }
+    });
+  }, 'Discount trend unavailable', 'Chart.js error — see console.');
 }
 
 function renderServers() {
