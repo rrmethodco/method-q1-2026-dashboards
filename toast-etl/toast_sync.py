@@ -88,7 +88,7 @@ except ImportError:  # pragma: no cover
 
 # ---------- config ----------
 
-TOAST_BASE = os.environ.get("TOAST_BASE", "https://ws-api.toasttab.com").rstrip("/")
+TOAST_BASE = (os.environ.get("TOAST_BASE") or "https://ws-api.toasttab.com").rstrip("/")
 DAYS_BACK = int(os.environ.get("DAYS_BACK", "400"))
 REQUEST_TIMEOUT = 45
 PAGE_SIZE = 100
