@@ -1,0 +1,74 @@
+name: Toast Sync
+
+# Nightly pull of Toast orders for each configured outlet.
+# Commits refreshed data/<outlet>.json back to the repo so the dashboard
+# on GitHub Pages can fetch it statically.
+
+on:
+  schedule:
+    # 07:15 UTC = 03:15 ET. After US East close-of-business, before AM traffic.
+    - cron: '15 7 * * *'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Lookback window (days). 400 = ~13 months for YoY.'
+        required: false
+        default: '400'
+      outlet:
+        description: 'Optional single outlet id to sync (leave blank = all).'
+        required: false
+        default: ''
+
+permissions:
+  contents: write  # needed to commit regenerated JSON
+
+concurrency:
+  group: toast-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run Toast sync
+        env:
+          TOAST_CLIENT_ID: ${{ secrets.TOAST_CLIENT_ID }}
+          TOAST_CLIENT_SECRET: ${{ secrets.TOAST_CLIENT_SECRET }}
+          TOAST_OUTLETS: ${{ secrets.TOAST_OUTLETS }}
+          TOAST_BASE: ${{ secrets.TOAST_BASE }}
+          DAYS_BACK: ${{ github.event.inputs.days || '400' }}
+        run: |
+          cd toast-etl
+          if [ -n "${{ github.event.inputs.outlet }}" ]; then
+            python3 toast_sync.py --outlet "${{ github.event.inputs.outlet }}" --outdir ../data
+          else
+            python3 toast_sync.py --outdir ../data
+          fi
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name  "method-toast-sync[bot]"
+          git config user.email "method-toast-sync@users.noreply.github.com"
+          git add data/*.json data/_synced_at.txt
+          if git diff --cached --quiet; then
+            echo "no data changes"
+            exit 0
+          fi
+          git commit -m "chore(data): nightly Toast sync $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push

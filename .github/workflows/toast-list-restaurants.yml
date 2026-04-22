@@ -1,0 +1,44 @@
+name: Toast — List Restaurants
+
+# One-off enumeration: prints every restaurantGuid this partner client
+# can access, plus a ready-to-paste TOAST_OUTLETS template. Run this
+# once (or whenever Toast attaches a new location to the client) to
+# populate the TOAST_OUTLETS secret.
+#
+# Safe to run anytime — read-only, no data is committed, output goes
+# to the Action log only.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Enumerate restaurants
+        env:
+          TOAST_CLIENT_ID: ${{ secrets.TOAST_CLIENT_ID }}
+          TOAST_CLIENT_SECRET: ${{ secrets.TOAST_CLIENT_SECRET }}
+          TOAST_BASE: ${{ secrets.TOAST_BASE }}
+        run: |
+          cd toast-etl
+          python3 toast_sync.py --list-restaurants
