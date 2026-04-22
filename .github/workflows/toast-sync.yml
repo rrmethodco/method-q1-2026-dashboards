@@ -49,8 +49,8 @@ jobs:
 
       - name: Run Toast sync
         env:
-          TOAST_CLIENT_ID: ${{ secrets.TOAST_CLIENT_ID }}
-          TOAST_CLIENT_SECRET: ${{ secrets.TOAST_CLIENT_SECRET }}
+          TOAST_CLIENT_ID: ${{ secrets.TOAST_STANDARD_CLIENT_ID }}
+          TOAST_CLIENT_SECRET: ${{ secrets.TOAST_STANDARD_CLIENT_SECRET }}
           TOAST_OUTLETS: ${{ secrets.TOAST_OUTLETS }}
           TOAST_BASE: ${{ secrets.TOAST_BASE }}
           DAYS_BACK: ${{ github.event.inputs.days || '400' }}
