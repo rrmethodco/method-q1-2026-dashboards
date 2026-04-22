@@ -152,6 +152,9 @@ section { margin-bottom: 40px; }
 .card .desc { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
 .chart-wrap { position: relative; height: 270px; }
 .chart-wrap.tall { height: 320px; }
+.empty-chart { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; color: var(--muted); font-size: 12px; text-align: center; padding: 20px; background: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(191,185,182,0.18) 8px, rgba(191,185,182,0.18) 16px); border: 1px dashed var(--grey); }
+.empty-chart .empty-title { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--royal); font-weight: 600; }
+.empty-chart .empty-sub { font-size: 11px; color: var(--muted); max-width: 320px; }
 
 /* ======= Tables ======= */
 table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
@@ -350,7 +353,37 @@ function hoursPerDayFor(outletId, rcKey) {
   return rcs[rcKey].hours_per_day ?? null;
 }
 const PALETTE_MANY = ['#2BA6BB','#405766','#D8CFC4','#BCC8BE','#212931','#E2DEDE','#9FB4BE','#8B7E73','#6B7B8A','#CDE4E5'];
-function destroy(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+function destroy(id) { if (charts[id]) { try { charts[id].destroy(); } catch(e){} delete charts[id]; } }
+// Replace a canvas with a branded empty-state tile. Called when a chart has no data.
+function showEmpty(canvasId, title, sub) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const wrap = canvas.parentElement;
+  if (!wrap) return;
+  destroy(canvasId);
+  canvas.style.display = 'none';
+  // avoid stacking multiple empty tiles on re-render
+  const existing = wrap.querySelector('.empty-chart'); if (existing) existing.remove();
+  const el = document.createElement('div');
+  el.className = 'empty-chart';
+  el.innerHTML = `<div class="empty-title">${title || 'No data'}</div>${sub ? `<div class="empty-sub">${sub}</div>` : ''}`;
+  wrap.appendChild(el);
+}
+// Safely run a chart render; on any failure, fall back to empty state.
+function safeChart(canvasId, fn, emptyTitle, emptySub) {
+  try {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    // clear any previous empty tile before attempting re-render
+    const wrap = canvas.parentElement;
+    if (wrap) { const ex = wrap.querySelector('.empty-chart'); if (ex) ex.remove(); }
+    canvas.style.display = '';
+    fn();
+  } catch (e) {
+    console.error('[chart:' + canvasId + ']', e);
+    showEmpty(canvasId, emptyTitle || 'Chart error', emptySub || 'See console for details.');
+  }
+}
 function destroyAll() { Object.keys(charts).forEach(destroy); }
 
 // ================================================== Sidebar
@@ -877,27 +910,31 @@ function renderSummarySection() {
   // Net Sales Trend — filtered to selected period
   const trend = rollup(curRows, STATE.gran, ['net_sales','orders','guests']);
   destroy('summaryTrend');
-  try {
-    // For short periods (few points), use a category axis + bars-ish look so it's always visually obvious.
-    // For longer periods, use time axis with a continuous line.
-    const isShort = trend.length <= 14;
-    const pointR  = isShort ? 6 : (STATE.gran==='D' ? 0 : 3);
-    if (isShort) {
-      charts.summaryTrend = new Chart(document.getElementById('summaryTrend'), {
-        type: 'line',
-        data: { labels: trend.map(r => { const d = new Date(r.date.length===7 ? r.date+'-01' : r.date); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }),
-          datasets: [{ label:'Net Sales', data: trend.map(r => r.net_sales), borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.15)', fill: true, tension: 0.25, borderWidth: 2.5, pointRadius: pointR, pointBackgroundColor: '#2BA6BB', pointBorderColor: '#fff', pointBorderWidth: 2 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } } }
-      });
-    } else {
-      const toDate = s => { const v = String(s||''); return v.length === 7 ? new Date(v+'-01T12:00:00') : new Date(v+'T12:00:00'); };
-      charts.summaryTrend = new Chart(document.getElementById('summaryTrend'), {
-        type: 'line',
-        data: { datasets: [{ label:'Net Sales', data: trend.map(r=>({x: toDate(r.date), y: r.net_sales})), borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.08)', fill: true, tension: 0.25, borderWidth: 2, pointRadius: pointR }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoney(c.parsed.y) } } }, scales: { x: { type: 'time', time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, ticks: { maxRotation: 0 } }, y: { ticks: { callback: v => fmtMoney(v) } } } }
-      });
-    }
-  } catch(e) { console.error('summaryTrend chart failed:', e); }
+  if (!trend.length || trend.every(r => !r.net_sales)) {
+    showEmpty('summaryTrend', 'No trend data for this period', 'Try a different month, revenue center, or wait for the next Toast sync to land.');
+  } else {
+    safeChart('summaryTrend', () => {
+      // For short periods (few points), use a category axis + bars-ish look so it's always visually obvious.
+      // For longer periods, use time axis with a continuous line.
+      const isShort = trend.length <= 14;
+      const pointR  = isShort ? 6 : (STATE.gran==='D' ? 0 : 3);
+      if (isShort) {
+        charts.summaryTrend = new Chart(document.getElementById('summaryTrend'), {
+          type: 'line',
+          data: { labels: trend.map(r => { const d = new Date(r.date.length===7 ? r.date+'-01' : r.date); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }),
+            datasets: [{ label:'Net Sales', data: trend.map(r => r.net_sales), borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.15)', fill: true, tension: 0.25, borderWidth: 2.5, pointRadius: pointR, pointBackgroundColor: '#2BA6BB', pointBorderColor: '#fff', pointBorderWidth: 2 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } } }
+        });
+      } else {
+        const toDate = s => { const v = String(s||''); return v.length === 7 ? new Date(v+'-01T12:00:00') : new Date(v+'T12:00:00'); };
+        charts.summaryTrend = new Chart(document.getElementById('summaryTrend'), {
+          type: 'line',
+          data: { datasets: [{ label:'Net Sales', data: trend.map(r=>({x: toDate(r.date), y: r.net_sales})), borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.08)', fill: true, tension: 0.25, borderWidth: 2, pointRadius: pointR }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoney(c.parsed.y) } } }, scales: { x: { type: 'time', time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, ticks: { maxRotation: 0 } }, y: { ticks: { callback: v => fmtMoney(v) } } } }
+        });
+      }
+    }, 'Trend failed to render', 'Check console for Chart.js error.');
+  }
 
   // DOW — computed from FILTERED daily rows so it honors the selected period
   const weekdayAbbr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -909,25 +946,46 @@ function renderSummarySection() {
     dowAgg[k] += r.net_sales || 0;
   });
   destroy('summaryDOW');
-  charts.summaryDOW = new Chart(document.getElementById('summaryDOW'), {
-    type: 'bar',
-    data: { labels: dowOrder, datasets: [{ label:'Net', data: dowOrder.map(k => dowAgg[k]||0), backgroundColor: dowOrder.map((_,i)=> i>=4 ? '#2BA6BB' : '#405766'), borderRadius: 4 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoney(c.raw) } } }, scales: { y: { ticks: { callback: v => fmtMoney(v) } } } }
-  });
+  const dowTotal = dowOrder.reduce((a,k) => a + (dowAgg[k]||0), 0);
+  if (!curRows.length || !dowTotal) {
+    showEmpty('summaryDOW', 'No day-of-week data', 'No net sales for ' + periodLabel + '. Try a different month or revenue center.');
+  } else {
+    safeChart('summaryDOW', () => {
+      charts.summaryDOW = new Chart(document.getElementById('summaryDOW'), {
+        type: 'bar',
+        data: { labels: dowOrder, datasets: [{ label:'Net', data: dowOrder.map(k => dowAgg[k]||0), backgroundColor: dowOrder.map((_,i)=> i>=4 ? '#2BA6BB' : '#405766'), borderRadius: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoney(c.raw) } } }, scales: { y: { ticks: { callback: v => fmtMoney(v) } } } }
+      });
+    }, 'Day of week failed', 'Check console.');
+  }
 
-  // Category mix donut
+  // Category mix donut + Top 10 (only rendered when the pm block was emitted)
   if (pm) {
-    const cats = pm.categories.filter(c => c.net>0).slice(0,10);
+    const cats = (pm.categories || []).filter(c => c && c.net > 0).slice(0, 10);
     destroy('summaryCat');
-    charts.summaryCat = new Chart(document.getElementById('summaryCat'), {
-      type: 'doughnut',
-      data: { labels: cats.map(c=>c.category), datasets: [{ data: cats.map(c=>c.net), backgroundColor: PALETTE_MANY, borderWidth: 0 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position:'right' }, tooltip: { callbacks: { label: c => c.label + ': ' + fmtMoney(c.raw) } } } }
-    });
-    const top = pm.items_top.slice(0, 10);
-    document.querySelector('#summaryTopItems tbody').innerHTML = top.map((it, i) =>
-      `<tr><td>${i+1}</td><td>${it.item}</td><td class="num">${fmtNum(it.qty)}</td><td class="num">${fmtMoney(it.net)}</td></tr>`
-    ).join('');
+    if (!cats.length) {
+      showEmpty('summaryCat', 'No category mix data', 'Product Mix export is present but contains no categories with net > 0.');
+    } else {
+      safeChart('summaryCat', () => {
+        charts.summaryCat = new Chart(document.getElementById('summaryCat'), {
+          type: 'doughnut',
+          data: { labels: cats.map(c=>c.category), datasets: [{ data: cats.map(c=>c.net), backgroundColor: PALETTE_MANY, borderWidth: 0 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position:'right' }, tooltip: { callbacks: { label: c => c.label + ': ' + fmtMoney(c.raw) } } } }
+        });
+      }, 'Category mix failed', 'Check console.');
+    }
+
+    const top = (pm.items_top || []).slice(0, 10);
+    const tbody = document.querySelector('#summaryTopItems tbody');
+    if (tbody) {
+      if (!top.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:18px 10px;font-style:italic;">No items in Product Mix for this revenue center.</td></tr>';
+      } else {
+        tbody.innerHTML = top.map((it, i) =>
+          `<tr><td>${i+1}</td><td>${it.item}</td><td class="num">${fmtNum(it.qty)}</td><td class="num">${fmtMoney(it.net)}</td></tr>`
+        ).join('');
+      }
+    }
   }
 
 }
