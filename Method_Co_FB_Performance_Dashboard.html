@@ -587,6 +587,14 @@ function compareBounds(b) {
   const mode = STATE.compare || 'STLY';
   const iso = dt => dt.toISOString().slice(0,10);
   if (mode === 'STLY') {
+    // Week mode: shift by exactly 364 days (52 × 7) so Mon→Mon and Sun→Sun.
+    // Example: WE 1/4/2026 (Mon 12/29/25 – Sun 1/4/26) maps to
+    //          WE 1/5/2025 (Mon 12/30/24 – Sun 1/5/25). Apples-to-apples week.
+    if (b.kind === 'week') {
+      const shift364 = s => { const dt=new Date(s+'T12:00:00'); dt.setDate(dt.getDate()-364); return iso(dt); };
+      return { start: shift364(b.start), end: shift364(b.end), label: 'STLY (Wk)' };
+    }
+    // Month / default: same calendar dates, prior year
     const shift = s => { const dt=new Date(s+'T12:00:00'); dt.setFullYear(dt.getFullYear()-1); return iso(dt); };
     return { start: shift(b.start), end: shift(b.end), label: 'STLY' };
   }
@@ -609,10 +617,16 @@ function compareBounds(b) {
   }
   return null; // BUDGET or unknown
 }
-// Kept for legacy charts that overlay "prior year"
+// Kept for legacy charts that overlay "prior year" (e.g. the Net Sales Trend).
+// DOW-aligned when viewing a single week so the overlay lines up Mon-to-Mon.
 function priorYearBounds(b) {
   if (!b || !b.start) return null;
-  const shift = s => { const dt=new Date(s+'T12:00:00'); dt.setFullYear(dt.getFullYear()-1); return dt.toISOString().slice(0,10); };
+  const iso = dt => dt.toISOString().slice(0,10);
+  if (b.kind === 'week') {
+    const shift364 = s => { const dt=new Date(s+'T12:00:00'); dt.setDate(dt.getDate()-364); return iso(dt); };
+    return { start: shift364(b.start), end: shift364(b.end) };
+  }
+  const shift = s => { const dt=new Date(s+'T12:00:00'); dt.setFullYear(dt.getFullYear()-1); return iso(dt); };
   return { start: shift(b.start), end: shift(b.end) };
 }
 function filter(rows, b) { if (!b||!b.start) return rows; return rows.filter(r => r.date >= b.start && r.date <= b.end); }
