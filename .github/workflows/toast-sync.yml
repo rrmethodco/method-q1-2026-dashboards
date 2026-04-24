@@ -29,7 +29,10 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # Bumped from 45 → 180 because initial seed (DAYS_BACK=400, ~14 outlets)
+    # needs ~60–90 min against Toast ordersBulk rate limits. Nightly incremental
+    # runs finish in under 10 min, so the larger cap is harmless.
+    timeout-minutes: 180
 
     steps:
       - name: Checkout
@@ -62,11 +65,17 @@ jobs:
             python3 toast_sync.py --outdir ../data
           fi
 
-      - name: Commit refreshed data
+      - name: Regenerate dashboard HTML with fresh order_details
+        run: |
+          python3 toast-etl/regenerate_dashboard.py \
+            --data-dir data \
+            --html Method_Co_FB_Performance_Dashboard.html
+
+      - name: Commit refreshed data + dashboard
         run: |
           git config user.name  "method-toast-sync[bot]"
           git config user.email "method-toast-sync@users.noreply.github.com"
-          git add data/*.json data/_synced_at.txt
+          git add data/*.json data/_synced_at.txt Method_Co_FB_Performance_Dashboard.html
           if git diff --cached --quiet; then
             echo "no data changes"
             exit 0
