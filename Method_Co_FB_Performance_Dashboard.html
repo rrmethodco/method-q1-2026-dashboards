@@ -236,6 +236,10 @@ footer.foot b { color: var(--slate); }
     <select id="monthJump"></select>
   </div>
   <div class="ctrl-group">
+    <span class="ctrl-label">Week Ending</span>
+    <select id="weekEndFilter"></select>
+  </div>
+  <div class="ctrl-group">
     <span class="ctrl-label">Trend Granularity</span>
     <select id="granFilter">
       <option value="D" selected>Daily</option>
@@ -292,7 +296,10 @@ const fmtPct = v => v == null ? '—' : v.toFixed(1) + '%';
 const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
 
 // ================================================== State
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', compare: 'STLY' };
+// weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
+// filter to a single Mon..Sun 7-day window. When set, periodBounds returns
+// that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -441,7 +448,7 @@ function renderNav() {
   picker.innerHTML = html;
   picker.onchange = e => {
     STATE.outlet = e.target.value;
-    STATE.rc = 'combined'; STATE.gran = 'D'; STATE.monthJump = ''; STATE.compare = 'STLY';
+    STATE.rc = 'combined'; STATE.gran = 'D'; STATE.monthJump = ''; STATE.weekEnd = ''; STATE.compare = 'STLY';
     renderOutlet();
   };
 }
@@ -513,21 +520,65 @@ function combinedDailyOrders() {
   return Object.values(map).sort((a,b) => a.date < b.date ? -1 : 1);
 }
 
-// ================================================== Period (Month-first)
+// ================================================== Period (Month-first, Week-second)
 // Primary filter is Month — if set, bounds = that calendar month.
+// Secondary filter is Week Ending (WE-Sunday) — narrows to Mon..Sun of that week.
 // If no monthJump, default to the latest full month of data.
+function isoLocal(dt) {
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth()+1).padStart(2, '0');
+  const d = String(dt.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+// Given "YYYY-MM", return array of {we, start, end, label, sublabel} for each
+// week whose Sunday-ending date lands in that month. Week runs Mon..Sun.
+// Example for 2026-04: WE 4/5, 4/12, 4/19, 4/26.
+function weekEndsInMonth(ym) {
+  if (!ym) return [];
+  const y = +ym.slice(0,4), m = +ym.slice(5,7);
+  const monthEnd = new Date(y, m, 0); // last day of month
+  const firstDow = new Date(y, m-1, 1).getDay(); // 0=Sun
+  const firstSunDay = 1 + ((7 - firstDow) % 7); // day-of-month of first Sunday
+  const out = [];
+  for (let day = firstSunDay; day <= monthEnd.getDate(); day += 7) {
+    const endDt = new Date(y, m-1, day);
+    const startDt = new Date(y, m-1, day - 6);
+    const mo = (d) => d.getMonth()+1;
+    const label = `WE ${mo(endDt)}/${endDt.getDate()}`;
+    const sublabel = `${mo(startDt)}/${startDt.getDate()} – ${mo(endDt)}/${endDt.getDate()}`;
+    out.push({ we: isoLocal(endDt), start: isoLocal(startDt), end: isoLocal(endDt), label, sublabel });
+  }
+  return out;
+}
 function periodBounds(maxDate) {
+  // Week Ending wins if set and valid for the current month
+  if (STATE.monthJump && STATE.weekEnd) {
+    const weeks = weekEndsInMonth(STATE.monthJump);
+    const hit = weeks.find(w => w.we === STATE.weekEnd);
+    if (hit) return { start: hit.start, end: hit.end, kind: 'week', we: hit.we, label: hit.label, sublabel: hit.sublabel };
+  }
   if (STATE.monthJump) {
     const m = STATE.monthJump; const y=+m.slice(0,4), mm=+m.slice(5,7);
-    const last = new Date(y, mm, 0).toISOString().slice(0,10);
-    return { start: m + '-01', end: last };
+    const last = isoLocal(new Date(y, mm, 0));
+    return { start: m + '-01', end: last, kind: 'month' };
   }
   // Default to the most recent month present in data
   if (!maxDate) return null;
   const m = maxDate.slice(0,7);
   const y=+m.slice(0,4), mm=+m.slice(5,7);
-  const last = new Date(y, mm, 0).toISOString().slice(0,10);
-  return { start: m + '-01', end: last };
+  const last = isoLocal(new Date(y, mm, 0));
+  return { start: m + '-01', end: last, kind: 'month' };
+}
+// Canonical period label used in section heads, KPIs and chart subs.
+// Week-level: "Wk ending 4/5 · Mar 30 – Apr 5 2026"
+// Month-level: "Apr 2026"  (or "Latest Month" if no month selected)
+function currentPeriodLabel() {
+  if (STATE.monthJump && STATE.weekEnd) {
+    const weeks = weekEndsInMonth(STATE.monthJump);
+    const hit = weeks.find(w => w.we === STATE.weekEnd);
+    if (hit) return `${hit.label} · ${hit.sublabel}`;
+  }
+  return STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Latest Month';
 }
 // Comparison baseline — LM = last calendar month, STLY = same month prior year,
 // T90 = 90 days prior to current bounds.start, BUDGET = null (data not yet wired)
@@ -540,6 +591,11 @@ function compareBounds(b) {
     return { start: shift(b.start), end: shift(b.end), label: 'STLY' };
   }
   if (mode === 'LM') {
+    // If viewing a single week, "LM" shifts 28 days back (same DOW, ~4 weeks prior)
+    if (b.kind === 'week') {
+      const shift28 = s => { const dt=new Date(s+'T12:00:00'); dt.setDate(dt.getDate()-28); return iso(dt); };
+      return { start: shift28(b.start), end: shift28(b.end), label: 'Prior Wk (–28d)' };
+    }
     const startDt = new Date(b.start + 'T12:00:00');
     const prevEnd = new Date(startDt.getFullYear(), startDt.getMonth(), 0);
     const prevStart = new Date(prevEnd.getFullYear(), prevEnd.getMonth(), 1);
@@ -611,6 +667,18 @@ function renderOutlet() {
   if (!STATE.monthJump && months.length) STATE.monthJump = months[0];
   const mj = document.getElementById('monthJump');
   if (mj) mj.innerHTML = months.map(m => `<option value="${m}" ${STATE.monthJump===m?'selected':''}>${fmtMonth(m)}</option>`).join('');
+  // Week Ending dropdown — scoped to the currently-selected month
+  const we = document.getElementById('weekEndFilter');
+  if (we) {
+    const weeks = weekEndsInMonth(STATE.monthJump);
+    // Validate any existing weekEnd against this month's weeks; clear if stale
+    if (STATE.weekEnd && !weeks.find(w => w.we === STATE.weekEnd)) STATE.weekEnd = '';
+    const monthLbl = STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Month';
+    const opts = [`<option value="" ${STATE.weekEnd===''?'selected':''}>All weeks · ${monthLbl}</option>`]
+      .concat(weeks.map(w => `<option value="${w.we}" ${STATE.weekEnd===w.we?'selected':''}>${w.label} (${w.sublabel})</option>`));
+    we.innerHTML = opts.join('');
+    we.disabled = weeks.length === 0;
+  }
   const cf = document.getElementById('compareFilter');
   if (cf) cf.value = STATE.compare || 'STLY';
   const gf = document.getElementById('granFilter');
@@ -653,7 +721,7 @@ function renderRevenueSection() {
   const o = DATA.outlets[STATE.outlet];
   const body = document.getElementById('outletBody');
 
-  const periodLabel = STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Latest Month';
+  const periodLabel = currentPeriodLabel();
   const granLabel = STATE.gran === 'D' ? 'Daily' : (STATE.gran === 'W' ? 'Weekly' : 'Monthly');
 
   // ==== Build outlet body ====
@@ -797,7 +865,9 @@ function renderEverything() {
   guard('hour',    () => renderHour());
   guard('rc',      () => renderRC());
   guard('heatmap', () => renderHeatmap());
-  guard('monthly', () => renderMonthly(curODRows));
+  // Monthly Comparison is a multi-month trend; if we're filtered to a single
+  // week, fall back to the full monthly rollup so the chart remains useful.
+  guard('monthly', () => renderMonthly(bSS && bSS.kind === 'week' ? null : curODRows));
   guard('tipHist', () => renderTipHist());
   guard('discTrend', () => renderDiscountTrend(curODRows));
   guard('servers', () => renderServers());
@@ -847,7 +917,7 @@ function renderSummarySection() {
 
   const kpi = (label, val, sub, yoy) => `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub?`<div class="yoy neutral">${sub}</div>`:''}${yoy!=null?`<div class="yoy ${yoy>=0?'pos':'neg'}">${(yoy>=0?'+':'')+yoy.toFixed(1)}% YoY</div>`:''}</div>`;
 
-  const periodLabel = STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Latest Month';
+  const periodLabel = currentPeriodLabel();
   const rangeLabel  = bSel && bSel.start ? (bSel.start + ' → ' + bSel.end) : 'All available dates';
   const yoyLabel    = pySel ? ('vs. ' + pySel.start + ' → ' + pySel.end) : '';
 
@@ -1429,7 +1499,10 @@ function renderDiscountTrend(curOD) {
   destroy('discTrend');
   if (!curOD || !curOD.length) { showEmpty('discTrendChart', 'No discount data in period', 'Try a broader period or different RC.'); return; }
   safeChart('discTrendChart', () => {
-    const weekly = rollup(curOD, 'W', ['amount','discount']);
+    // For short periods (e.g. a single WE week) use daily granularity so we get
+    // per-day bars. Otherwise keep weekly — a month of weekly bars is cleaner.
+    const gran = curOD.length <= 10 ? 'D' : 'W';
+    const weekly = rollup(curOD, gran, ['amount','discount']);
     const totDisc = weekly.reduce((a,r)=>a+(r.discount||0), 0);
     if (!totDisc) { showEmpty('discTrendChart', 'No discounts recorded', 'No discount/comp activity in the selected period.'); return; }
     const ctx = document.getElementById('discTrendChart').getContext('2d');
@@ -1613,6 +1686,12 @@ document.getElementById('rcFilter').addEventListener('change', e => { STATE.rc =
 document.getElementById('granFilter').addEventListener('change', e => { STATE.gran = e.target.value; rerenderSection(); });
 document.getElementById('monthJump').addEventListener('change', e => {
   STATE.monthJump = e.target.value;
+  // Month changed → week selection no longer applies; always reset to "All weeks".
+  STATE.weekEnd = '';
+  rerenderSection();
+});
+document.getElementById('weekEndFilter').addEventListener('change', e => {
+  STATE.weekEnd = e.target.value || '';
   rerenderSection();
 });
 document.getElementById('compareFilter').addEventListener('change', e => {
