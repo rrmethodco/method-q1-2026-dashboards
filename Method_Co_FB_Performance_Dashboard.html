@@ -533,6 +533,15 @@ function isoLocal(dt) {
   const d = String(dt.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
 }
+// Parse a YYYY-MM-DD (or YYYY-MM) date string as LOCAL noon. Needed because
+// `new Date('2026-04-13')` is interpreted as UTC midnight — which in ET (UTC-4)
+// displays as "Apr 12" on Chart.js time axes, producing a one-day-back shift.
+// Using local noon avoids both the TZ-midnight flip and any DST edge.
+function toLocalNoon(s) {
+  const v = String(s || '');
+  const iso = v.length === 7 ? v + '-01T12:00:00' : v + 'T12:00:00';
+  return new Date(iso);
+}
 // Given "YYYY-MM", return array of {we, start, end, label, sublabel} for each
 // week whose Sunday-ending date lands in that month. Week runs Mon..Sun.
 // Example for 2026-04: WE 4/5, 4/12, 4/19, 4/26.
@@ -773,10 +782,7 @@ function renderRevenueSection() {
           <div class="chart-wrap tall"><canvas id="dowChart"></canvas></div>
         </div>
       </div>
-      <div class="grid grid-2eq" style="margin-top:12px;">
-        <div class="card"><h3>Monthly Comparison</h3><div class="desc">Orders &amp; net amount by month (period-aware)</div><div class="chart-wrap tall"><canvas id="monthlyChart"></canvas></div></div>
-        <div class="card"><h3>Weekly Discount &amp; Comp Trend</h3><div class="desc">Discount $ (bar) + discount % of net (line), in ${periodLabel}</div><div class="chart-wrap tall"><canvas id="discTrendChart"></canvas></div></div>
-      </div>
+      <!-- Hidden 2026-04-24: Monthly Comparison + Weekly Discount &amp; Comp Trend cards removed per operator request. Render functions kept in place. -->
     </section>
 
     <section>
@@ -797,13 +803,10 @@ function renderRevenueSection() {
         <div class="desc">Real hourly detail from Order Details. Darker = higher sales concentration.</div>
         <div id="heatmapContainer"></div>
       </div>
-      <div class="card" style="margin-top:12px;"><h3>Tip % Distribution <span class="alltime-tag">ALL-TIME</span></h3>
-        <div class="desc">Share of orders by tip-to-net ratio</div>
-        <div class="chart-wrap"><canvas id="tipHistChart"></canvas></div>
-      </div>
+      <!-- Hidden 2026-04-24: Tip % Distribution card removed per operator request. -->
     </section>
 
-    <section>
+    <section style="display:none;">
       <div class="sect-head">
         <div class="sect-title">Server &amp; Table Performance</div>
         <div class="sect-meta">All-Time · Ranked by Net Amount</div>
@@ -818,7 +821,7 @@ function renderRevenueSection() {
       </div>
     </section>
 
-    <section>
+    <section style="display:none;">
       <div class="sect-head">
         <div class="sect-title">Payments &amp; Dining Options</div>
         <div class="sect-meta all-time">All-Time · Source: Sales Summary</div>
@@ -1018,7 +1021,7 @@ function renderSummarySection() {
       if (isShort) {
         charts.summaryTrend = new Chart(document.getElementById('summaryTrend'), {
           type: 'line',
-          data: { labels: trend.map(r => { const d = new Date(r.date.length===7 ? r.date+'-01' : r.date); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }),
+          data: { labels: trend.map(r => toLocalNoon(r.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})),
             datasets: [{ label:'Net Sales', data: trend.map(r => r.net_sales), borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.15)', fill: true, tension: 0.25, borderWidth: 2.5, pointRadius: pointR, pointBackgroundColor: '#2BA6BB', pointBorderColor: '#fff', pointBorderWidth: 2 }] },
           options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } } }
         });
@@ -1249,7 +1252,10 @@ function renderTrend(cur, py) {
     const ctx = document.getElementById('trendChart').getContext('2d');
     const datasets = [{
       label: 'Net Sales',
-      data: curRoll.map(r => ({ x:r.date, y:r.net_sales })),
+      // Parse as local noon so the X-axis tick matches the date we mean —
+      // a raw 'YYYY-MM-DD' string is parsed by Chart.js's date-fns adapter
+      // as UTC midnight, which in ET shifts every point back one day.
+      data: curRoll.map(r => ({ x: toLocalNoon(r.date), y: r.net_sales })),
       borderColor: C.slate, backgroundColor: 'rgba(33,41,49,0.08)',
       borderWidth: 2, fill: true, tension: 0.25,
       pointRadius: STATE.gran==='D'?0:3, pointBackgroundColor: C.slate
@@ -1257,7 +1263,10 @@ function renderTrend(cur, py) {
     if (pyRoll && pyRoll.length) {
       datasets.push({
         label: 'Prior Year',
-        data: pyRoll.map(r => { const dt=new Date(r.date+'T12:00:00'); dt.setFullYear(dt.getFullYear()+1); return { x: dt.toISOString().slice(0,10), y:r.net_sales }; }),
+        // Shift each prior-year date forward 1 year so it overlays the current
+        // window on the same x-axis, keeping the result as a local-noon Date
+        // (not ISO string) so Chart.js doesn't re-parse it as UTC midnight.
+        data: pyRoll.map(r => { const dt = toLocalNoon(r.date); dt.setFullYear(dt.getFullYear()+1); return { x: dt, y: r.net_sales }; }),
         borderColor: C.turquoise, backgroundColor: 'transparent',
         borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
       });
