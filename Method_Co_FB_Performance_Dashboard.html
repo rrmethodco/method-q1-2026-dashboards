@@ -158,6 +158,12 @@ section { margin-bottom: 40px; }
 .empty-chart { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; color: var(--muted); font-size: 12px; text-align: center; padding: 20px; background: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(191,185,182,0.18) 8px, rgba(191,185,182,0.18) 16px); border: 1px dashed var(--grey); }
 .empty-chart .empty-title { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--royal); font-weight: 600; }
 .empty-chart .empty-sub { font-size: 11px; color: var(--muted); max-width: 320px; }
+/* Per-card header with a compare dropdown (Day of Week) */
+.card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+.card-head h3 { margin-bottom: 0; }
+.card-compare { display: flex; align-items: center; gap: 6px; }
+.card-compare .ctrl-label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.card-compare select { font-size: 11px; padding: 2px 6px; border: 1px solid var(--grey); background: var(--white); color: var(--slate); border-radius: 2px; font-family: inherit; }
 
 /* ======= Section chips / tags (period vs all-time) ======= */
 .period-chip, .alltime-chip { display: inline-block; margin-left: 10px; padding: 2px 8px; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; border-radius: 2px; vertical-align: middle; }
@@ -302,7 +308,7 @@ const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
 // weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
 // filter to a single Mon..Sun 7-day window. When set, periodBounds returns
 // that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY' };
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -777,7 +783,19 @@ function renderRevenueSection() {
           <div class="desc">Daily net sales in ${periodLabel} · prior-year overlay dashed Turquoise</div>
           <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
         </div>
-        <div class="card"><h3>Day of Week</h3>
+        <div class="card">
+          <div class="card-head">
+            <h3>Day of Week</h3>
+            <div class="card-compare">
+              <span class="ctrl-label">Compare</span>
+              <select id="dowCompareFilter">
+                <option value="none" ${STATE.dowCompare==='none'?'selected':''}>None</option>
+                <option value="STLY" ${STATE.dowCompare==='STLY'?'selected':''}>STLY</option>
+                <option value="T2W"  ${STATE.dowCompare==='T2W' ?'selected':''}>T2W Avg</option>
+                <option value="LW"   ${STATE.dowCompare==='LW'  ?'selected':''}>vs LW</option>
+              </select>
+            </div>
+          </div>
           <div class="desc">Net sales by weekday in ${periodLabel}</div>
           <div class="chart-wrap tall"><canvas id="dowChart"></canvas></div>
         </div>
@@ -785,25 +803,22 @@ function renderRevenueSection() {
       <!-- Hidden 2026-04-24: Monthly Comparison + Weekly Discount &amp; Comp Trend cards removed per operator request. Render functions kept in place. -->
     </section>
 
-    <section>
-      <div class="sect-head">
-        <div class="sect-title">All-Time Context <span class="alltime-chip">Aggregate</span></div>
-        <div class="sect-meta all-time">These charts are pre-aggregated by Toast and don't split by day — they ignore the Month filter. Fix: have the ETL emit per-day dimensional breakdowns.</div>
-      </div>
-      <div class="grid grid-3">
-        <div class="card"><h3>Sales by Category <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Net sales mix</div><div class="chart-wrap"><canvas id="catChart"></canvas></div></div>
-        <div class="card"><h3>Daypart <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Net sales by service period</div><div class="chart-wrap"><canvas id="daypartChart"></canvas></div></div>
-        <div class="card"><h3>Service Mode <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Table vs. Quick Service</div><div class="chart-wrap"><canvas id="modeChart"></canvas></div></div>
-      </div>
-      <div class="grid grid-2eq" style="margin-top:12px;">
-        <div class="card"><h3>Hour of Day <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Net sales curve</div><div class="chart-wrap tall"><canvas id="hourChart"></canvas></div></div>
-        <div class="card"><h3>Revenue Center Breakdown <span class="alltime-tag">ALL-TIME</span></h3><div class="desc">Net sales by RC</div><div class="chart-wrap tall"><canvas id="rcChart"></canvas></div></div>
-      </div>
-      <div class="card" style="margin-top:12px;"><h3>Hour × Day-of-Week Heatmap <span class="alltime-tag">ALL-TIME</span></h3>
-        <div class="desc">Real hourly detail from Order Details. Darker = higher sales concentration.</div>
-        <div id="heatmapContainer"></div>
-      </div>
-      <!-- Hidden 2026-04-24: Tip % Distribution card removed per operator request. -->
+    <!-- Hidden 2026-04-24: entire All-Time Context section. These charts
+         (Category, Daypart, Service Mode, Hour, RC Breakdown, Heatmap) have
+         no per-day Toast data to filter against — making them period-aware
+         requires ETL enrichment (emit per-day dimensional breakdowns from
+         ordersBulk selections). Canvases kept in a hidden section so the
+         guard()-ed render calls don't blow up looking for missing DOM nodes. -->
+    <section style="display:none;">
+      <canvas id="catChart"></canvas>
+      <canvas id="daypartChart"></canvas>
+      <canvas id="modeChart"></canvas>
+      <canvas id="hourChart"></canvas>
+      <canvas id="rcChart"></canvas>
+      <div id="heatmapContainer"></div>
+      <canvas id="tipHistChart"></canvas>
+      <canvas id="monthlyChart"></canvas>
+      <canvas id="discTrendChart"></canvas>
     </section>
 
     <section style="display:none;">
@@ -835,25 +850,17 @@ function renderRevenueSection() {
         </div>
       </div>
     </section>
-    <section>
-      <div class="sect-head">
-        <div class="sect-title">Product Mix</div>
-        <div class="sect-meta all-time">All-Time · Jun 2023 → Apr 2026 · Source: Toast Product Mix</div>
-      </div>
-      <div class="kpis kpis-pmix" id="pmixKPIs"></div>
-      <div class="grid grid-2eq" style="margin-top:12px;">
-        <div class="card"><h3>Sales by Sales Category</h3><div class="desc">Food / Liquor / Wine / Beer / NA · net sales</div><div class="chart-wrap"><canvas id="pmixCatChart"></canvas></div></div>
-        <div class="card"><h3>Menu Split</h3><div class="desc">Net sales by Toast menu</div><div class="chart-wrap"><canvas id="pmixMenuChart"></canvas></div></div>
-      </div>
-      <div class="card" style="margin-top:12px;"><h3>Top 20 Menu Groups</h3><div class="desc">Net sales by menu group, ranked</div><div class="chart-wrap tall"><canvas id="pmixGroupsChart"></canvas></div></div>
-      <div class="grid grid-2eq" style="margin-top:12px;">
-        <div class="card"><h3>Top 25 Items by Net Sales</h3><div class="desc">Leaderboard across full menu</div>
-          <table id="pmixItemsTable"><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th class="num">Qty</th><th class="num">Avg $</th><th class="num">Net</th><th class="num">% of Sales</th></tr></thead><tbody></tbody></table>
-        </div>
-        <div class="card"><h3>Top 25 Items by Quantity</h3><div class="desc">Volume leaders</div>
-          <table id="pmixItemsQtyTable"><thead><tr><th>Rank</th><th>Item</th><th>Category</th><th class="num">Qty</th><th class="num">Avg $</th><th class="num">Net</th></tr></thead><tbody></tbody></table>
-        </div>
-      </div>
+    <!-- Hidden 2026-04-24: Product Mix section is pulled from Toast Product
+         Mix which is all-time and doesn't split by day, so it can't honor the
+         Month/Week filters. Canvases + tables retained below in hidden shell
+         so renderProductMix() doesn't throw on missing DOM. -->
+    <section style="display:none;">
+      <div id="pmixKPIs"></div>
+      <canvas id="pmixCatChart"></canvas>
+      <canvas id="pmixMenuChart"></canvas>
+      <canvas id="pmixGroupsChart"></canvas>
+      <table id="pmixItemsTable"><tbody></tbody></table>
+      <table id="pmixItemsQtyTable"><tbody></tbody></table>
     </section>
   `;
   renderEverything();
@@ -975,18 +982,12 @@ function renderSummarySection() {
       </div>
     </section>
 
-    <section>
-      <div class="sect-head">
-        <div class="sect-title">Menu &amp; Mix Highlights</div>
-        <div class="sect-meta all-time">Source: Product Mix</div>
-      </div>
-      ${pm ? `
-      <div class="grid grid-2eq">
-        <div class="card"><h3>Category Mix</h3><div class="desc">Net sales by sales category</div><div class="chart-wrap"><canvas id="summaryCat"></canvas></div></div>
-        <div class="card"><h3>Top 10 Items</h3><div class="desc">Net sales leaders · all-time</div>
-          <table id="summaryTopItems"><thead><tr><th>Rank</th><th>Item</th><th class="num">Qty</th><th class="num">Net</th></tr></thead><tbody></tbody></table>
-        </div>
-      </div>` : '<div class="placeholder"><p>Product Mix data not connected yet.</p></div>'}
+    <!-- Hidden 2026-04-24: Menu & Mix Highlights pulls from Product Mix which
+         is all-time. Hidden until the ETL emits per-day mix data. Canvas/table
+         retained below so render functions don't null-throw. -->
+    <section style="display:none;">
+      <canvas id="summaryCat"></canvas>
+      <table id="summaryTopItems"><tbody></tbody></table>
     </section>
 
     <section>
@@ -1296,28 +1297,73 @@ function renderDOW(curRows) {
   safeChart('dowChart', () => {
     const order = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     const weekdayAbbr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const map = {}; order.forEach(d => map[d] = 0);
-    if (curRows && curRows.length) {
-      // Period-filtered daily data — compute DOW from actual dates
-      curRows.forEach(r => {
-        const d = new Date(r.date + 'T12:00:00');
-        const k = weekdayAbbr[d.getDay()];
-        if (map[k]!=null) map[k] += r.net_sales || 0;
+
+    // Accumulate sum and count of net_sales per weekday for a list of daily rows.
+    // Count lets the comparison series project an avg-per-weekday up to match
+    // the current period's weekday occurrence count (so a month view compared
+    // against "Last Week" scales LW's 1-per-weekday totals to ~4-per-weekday).
+    const accByDow = (rows) => {
+      const sums = {}; const counts = {};
+      order.forEach(d => { sums[d] = 0; counts[d] = 0; });
+      (rows || []).forEach(r => {
+        const k = weekdayAbbr[toLocalNoon(r.date).getDay()];
+        if (sums[k] != null) { sums[k] += r.net_sales || 0; counts[k] += 1; }
       });
-    } else {
-      // Fallback to pre-aggregated all-time data
-      const src = getSummarySource(); const mult = rcShareMult();
-      Object.values(src).forEach(s => (s.day_of_week||[]).forEach(r => { map[r.day] = (map[r.day]||0) + (r.net_sales||0) * mult; }));
-    }
+      return { sums, counts };
+    };
+
+    const curAgg = accByDow(curRows);
+    const map = curAgg.sums;
     const total = order.reduce((a,d) => a + (map[d]||0), 0);
     if (!total) { showEmpty('dowChart', 'No sales by weekday', 'No data for current period / RC.'); return; }
+
+    // ===== Comparison overlay (STLY / T2W Avg / LW) =====
+    const ssDaily = combinedDailySales();
+    const maxDateSS = ssDaily.length ? ssDaily[ssDaily.length-1].date : null;
+    const curB = maxDateSS ? periodBounds(maxDateSS) : null;
+    const cmpMode = STATE.dowCompare || 'none';
+    let cmpBounds = null;
+    let cmpLabel = null;
+    if (cmpMode === 'STLY' && curB) {
+      cmpBounds = priorYearBounds(curB);
+      cmpLabel = 'STLY';
+    } else if (cmpMode === 'LW' && curB) {
+      const startDt = toLocalNoon(curB.start);
+      const cmpEnd = new Date(startDt); cmpEnd.setDate(cmpEnd.getDate() - 1);
+      const cmpStart = new Date(cmpEnd); cmpStart.setDate(cmpStart.getDate() - 6);
+      cmpBounds = { start: isoLocal(cmpStart), end: isoLocal(cmpEnd), kind: 'window' };
+      cmpLabel = 'Last Wk';
+    } else if (cmpMode === 'T2W' && curB) {
+      const startDt = toLocalNoon(curB.start);
+      const cmpEnd = new Date(startDt); cmpEnd.setDate(cmpEnd.getDate() - 1);
+      const cmpStart = new Date(cmpEnd); cmpStart.setDate(cmpStart.getDate() - 13);
+      cmpBounds = { start: isoLocal(cmpStart), end: isoLocal(cmpEnd), kind: 'window' };
+      cmpLabel = 'T2W Avg';
+    }
+    let cmpData = null;
+    if (cmpBounds) {
+      const cmpRows = filter(ssDaily, cmpBounds);
+      const cmpAgg = accByDow(cmpRows);
+      // avg-per-weekday from comparison window × count-of-that-weekday in current
+      cmpData = order.map(d => {
+        const avg = cmpAgg.counts[d] ? cmpAgg.sums[d] / cmpAgg.counts[d] : 0;
+        return avg * (curAgg.counts[d] || 0);
+      });
+    }
+
+    const datasets = [
+      { label: 'This Period', data: order.map(d => map[d]||0), backgroundColor: order.map((_,i) => i>=4 ? C.turquoise : C.slate), borderRadius: 2 }
+    ];
+    if (cmpData) {
+      datasets.push({ label: cmpLabel, data: cmpData, backgroundColor: 'rgba(43,166,187,0.35)', borderColor: C.turquoise, borderWidth: 1, borderRadius: 2 });
+    }
     const ctx = document.getElementById('dowChart').getContext('2d');
     charts.dow = new Chart(ctx, {
       type: 'bar',
-      data: { labels: order, datasets: [{ label: 'Net Sales', data: order.map(d => map[d]||0), backgroundColor: order.map((_,i) => i>=4 ? C.turquoise : C.slate), borderRadius: 2 }] },
+      data: { labels: order, datasets },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } },
+        plugins: { legend: { display: cmpData ? true : false, position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtMoneyFull(c.parsed.y) } } },
         scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } }
       }
     });
@@ -1738,6 +1784,14 @@ document.getElementById('weekEndFilter').addEventListener('change', e => {
 document.getElementById('compareFilter').addEventListener('change', e => {
   STATE.compare = e.target.value;
   rerenderSection();
+});
+// DOW card's own compare dropdown — lives inside rendered HTML, so attach via
+// event delegation on the content body instead of a one-shot listener.
+document.addEventListener('change', e => {
+  if (e.target && e.target.id === 'dowCompareFilter') {
+    STATE.dowCompare = e.target.value || 'none';
+    rerenderSection();
+  }
 });
 
 // Init
