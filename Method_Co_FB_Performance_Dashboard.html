@@ -636,6 +636,22 @@ function rollup(rows, gran, fields) {
 }
 
 // ================================================== Main render
+// Rebuild the Week Ending dropdown options for the currently-selected month.
+// Called from renderOutlet() and whenever the Month dropdown changes, so the
+// WE options (and the "All weeks · Month" placeholder label) stay in sync.
+function populateWeekEndFilter() {
+  const we = document.getElementById('weekEndFilter');
+  if (!we) return;
+  const weeks = weekEndsInMonth(STATE.monthJump);
+  // If the previously-selected week no longer belongs to this month, clear it
+  if (STATE.weekEnd && !weeks.find(w => w.we === STATE.weekEnd)) STATE.weekEnd = '';
+  const monthLbl = STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Month';
+  const opts = [`<option value="" ${STATE.weekEnd===''?'selected':''}>All weeks · ${monthLbl}</option>`]
+    .concat(weeks.map(w => `<option value="${w.we}" ${STATE.weekEnd===w.we?'selected':''}>${w.label} (${w.sublabel})</option>`));
+  we.innerHTML = opts.join('');
+  we.disabled = weeks.length === 0;
+}
+
 function renderOutlet() {
   destroyAll();
   const o = DATA.outlets[STATE.outlet];
@@ -667,18 +683,9 @@ function renderOutlet() {
   if (!STATE.monthJump && months.length) STATE.monthJump = months[0];
   const mj = document.getElementById('monthJump');
   if (mj) mj.innerHTML = months.map(m => `<option value="${m}" ${STATE.monthJump===m?'selected':''}>${fmtMonth(m)}</option>`).join('');
-  // Week Ending dropdown — scoped to the currently-selected month
-  const we = document.getElementById('weekEndFilter');
-  if (we) {
-    const weeks = weekEndsInMonth(STATE.monthJump);
-    // Validate any existing weekEnd against this month's weeks; clear if stale
-    if (STATE.weekEnd && !weeks.find(w => w.we === STATE.weekEnd)) STATE.weekEnd = '';
-    const monthLbl = STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Month';
-    const opts = [`<option value="" ${STATE.weekEnd===''?'selected':''}>All weeks · ${monthLbl}</option>`]
-      .concat(weeks.map(w => `<option value="${w.we}" ${STATE.weekEnd===w.we?'selected':''}>${w.label} (${w.sublabel})</option>`));
-    we.innerHTML = opts.join('');
-    we.disabled = weeks.length === 0;
-  }
+  // Week Ending dropdown — scoped to the currently-selected month. Delegated
+  // to populateWeekEndFilter() so the Month change handler can refresh it too.
+  populateWeekEndFilter();
   const cf = document.getElementById('compareFilter');
   if (cf) cf.value = STATE.compare || 'STLY';
   const gf = document.getElementById('granFilter');
@@ -1686,8 +1693,10 @@ document.getElementById('rcFilter').addEventListener('change', e => { STATE.rc =
 document.getElementById('granFilter').addEventListener('change', e => { STATE.gran = e.target.value; rerenderSection(); });
 document.getElementById('monthJump').addEventListener('change', e => {
   STATE.monthJump = e.target.value;
-  // Month changed → week selection no longer applies; always reset to "All weeks".
+  // Month changed → week selection no longer applies; always reset to "All weeks"
+  // and refresh the WE dropdown with the new month's Sunday-ending dates.
   STATE.weekEnd = '';
+  populateWeekEndFilter();
   rerenderSection();
 });
 document.getElementById('weekEndFilter').addEventListener('change', e => {
