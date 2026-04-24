@@ -1271,12 +1271,18 @@ function renderTrend(cur, py) {
         borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
       });
     }
+    // Pin the x-axis to the actual current-period bounds so Chart.js doesn't
+    // pad a phantom extra tick past the last data point (e.g. showing "Apr 6"
+    // on a WE 4/5 week that ends 4/5). Use the current-year dataset only —
+    // prior-year points are shifted to the same window.
+    const xMin = curRoll.length ? toLocalNoon(curRoll[0].date) : null;
+    const xMax = curRoll.length ? toLocalNoon(curRoll[curRoll.length - 1].date) : null;
     charts.trend = new Chart(ctx, {
       type: 'line', data: { datasets },
       options: {
         responsive: true, maintainAspectRatio: false, interaction: { mode:'index', intersect: false },
         scales: {
-          x: { type:'time', time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, grid: { display: false }, ticks: { maxTicksLimit: 10 } },
+          x: { type:'time', min: xMin, max: xMax, time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, grid: { display: false }, ticks: { maxTicksLimit: 10, source: 'data' }, bounds: 'data' },
           y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }
         },
         plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtMoneyFull(c.parsed.y) } } }
