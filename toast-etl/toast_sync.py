@@ -320,8 +320,14 @@ TICKET_TIME_MAX_SEC = 8 * 60 * 60
 def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
     """Fold raw Toast orders into the dashboard shape for a single revenue center."""
     daily: dict[str, dict[str, float]] = {}
-    monthly: dict[str, dict[str, float]] = defaultdict(lambda: {"orders": 0, "amount": 0.0})
-    hour_dow_map: dict[tuple[int, str], float] = defaultdict(float)
+    monthly: dict[str, dict[str, float]] = defaultdict(
+        lambda: {"orders": 0, "guests": 0, "amount": 0.0, "tip": 0.0, "discount": 0.0}
+    )
+    # hour_dow cell tracks revenue + order + guest counts so the dashboard heatmap
+    # can toggle between $, order volume, and guest concentration views.
+    hour_dow_map: dict[tuple[int, str], dict[str, float]] = defaultdict(
+        lambda: {"amount": 0.0, "orders": 0, "guests": 0}
+    )
     servers: dict[str, dict[str, float]] = {}
     tables: dict[str, dict[str, float]] = {}
     tip_bins = [0] * 11
@@ -377,14 +383,21 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
                 d["ticket_time_sec_sum"] += ticket_sec
                 d["ticket_time_count"] += 1
 
-            # monthly
+            # monthly — full shape (orders/guests/amount/tip/discount) so the HTML's
+            # Monthly Comparison + Weekly Discount Trend can drive off this slice.
             m = monthly[month]
             m["month"] = month  # idempotent
             m["orders"] += 1
+            m["guests"] += guests
             m["amount"] += amount
+            m["tip"] += tip
+            m["discount"] += discount
 
-            # hour_dow -- revenue ($) per hour slot
-            hour_dow_map[(hour, dow)] += amount
+            # hour_dow — $ + order + guest counts per hour×dow cell.
+            cell = hour_dow_map[(hour, dow)]
+            cell["amount"] += amount
+            cell["orders"] += 1
+            cell["guests"] += guests
 
             # servers (by assigned employee on the check)
             server_ref = check.get("server") or {}
@@ -416,16 +429,42 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
             # tip bins (check-level)
             tip_bins[_tip_bin(amount, tip)] += 1
 
+    daily_rows = sorted(daily.values(), key=lambda r: r["date"])
+
+    # totals — derived from daily so the dashboard can show headline period aggregates
+    totals_orders = sum(int(r["orders"]) for r in daily_rows)
+    totals_guests = sum(int(r["guests"]) for r in daily_rows)
+    totals_amount = sum(float(r["amount"]) for r in daily_rows)
+    totals_tip = sum(float(r["tip"]) for r in daily_rows)
+    totals_discount = sum(float(r["discount"]) for r in daily_rows)
+    totals_min_date = daily_rows[0]["date"] if daily_rows else None
+    totals_max_date = daily_rows[-1]["date"] if daily_rows else None
+
     out = {
-        "daily": sorted(daily.values(), key=lambda r: r["date"]),
+        "daily": daily_rows,
         "monthly": sorted(monthly.values(), key=lambda r: r["month"]),
         "hour_dow": [
-            {"hour": h, "dow": d, "amount": round(v, 2)}
-            for (h, d), v in sorted(hour_dow_map.items(), key=lambda kv: (kv[0][0], DOW.index(kv[0][1])))
+            {
+                "hour": h,
+                "dow": d,
+                "amount": round(cell["amount"], 2),
+                "orders": int(cell["orders"]),
+                "guests": int(cell["guests"]),
+            }
+            for (h, d), cell in sorted(hour_dow_map.items(), key=lambda kv: (kv[0][0], DOW.index(kv[0][1])))
         ],
         "servers": sorted(servers.values(), key=lambda r: r["amount"], reverse=True),
         "tables": sorted(tables.values(), key=lambda r: r["amount"], reverse=True),
-        "totals": {"tip_bins": tip_bins},
+        "totals": {
+            "orders": totals_orders,
+            "guests": totals_guests,
+            "amount": round(totals_amount, 2),
+            "tip": round(totals_tip, 2),
+            "discount": round(totals_discount, 2),
+            "min_date": totals_min_date,
+            "max_date": totals_max_date,
+            "tip_bins": tip_bins,
+        },
     }
 
     # round money fields for cleaner JSON
@@ -434,7 +473,8 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
             row[k] = round(row[k], 2)
         row["ticket_time_sec_sum"] = round(row["ticket_time_sec_sum"], 1)
     for row in out["monthly"]:
-        row["amount"] = round(row["amount"], 2)
+        for k in ("amount", "tip", "discount"):
+            row[k] = round(row[k], 2)
     for row in out["servers"]:
         row["amount"] = round(row["amount"], 2)
         row["tip"] = round(row["tip"], 2)
