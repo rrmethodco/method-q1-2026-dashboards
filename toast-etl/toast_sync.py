@@ -328,6 +328,18 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
     hour_dow_map: dict[tuple[int, str], dict[str, float]] = defaultdict(
         lambda: {"amount": 0.0, "orders": 0, "guests": 0}
     )
+    # Per-day dimensional breakdowns. These let the dashboard filter Hour,
+    # Heatmap, Daypart, Category and Service Mode by the selected Month/WE
+    # period instead of always-on-all-time. Keyed by (date, dim).
+    hour_daily_map:  dict[tuple[str, int], dict[str, float]] = defaultdict(
+        lambda: {"amount": 0.0, "orders": 0, "guests": 0}
+    )
+    cat_daily_map:   dict[tuple[str, str], dict[str, float]] = defaultdict(
+        lambda: {"amount": 0.0, "orders": 0}
+    )
+    svcmode_daily_map: dict[tuple[str, str], dict[str, float]] = defaultdict(
+        lambda: {"amount": 0.0, "orders": 0, "guests": 0}
+    )
     servers: dict[str, dict[str, float]] = {}
     tables: dict[str, dict[str, float]] = {}
     tip_bins = [0] * 11
@@ -354,7 +366,9 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
             discount = float(
                 sum(float(ad.get("discountAmount") or 0.0) for ad in (check.get("appliedDiscounts") or []))
             )
-            guests = int(order.get("numberOfGuests") or check.get("customer", {}).get("guestCount") or 0)
+            # `check.get("customer", {})` returns None (not {}) when Toast sends
+            # `"customer": null` explicitly — use `or {}` fallback.
+            guests = int(order.get("numberOfGuests") or (check.get("customer") or {}).get("guestCount") or 0)
 
             # Ticket time: paidDate - openedDate on the check (fall back to order.openedDate).
             # Only count if both timestamps are present and duration is within the guardrail.
@@ -398,6 +412,35 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
             cell["amount"] += amount
             cell["orders"] += 1
             cell["guests"] += guests
+
+            # Per-day hour aggregation — powers period-aware Hour of Day +
+            # Heatmap charts in the dashboard (filterable by Month/WE).
+            hcell = hour_daily_map[(date_str, hour)]
+            hcell["amount"] += amount
+            hcell["orders"] += 1
+            hcell["guests"] += guests
+
+            # Per-day service-mode (dining option) aggregation.
+            mode_name = ((order.get("diningOption") or {}).get("name") or "Unspecified").strip() or "Unspecified"
+            scell = svcmode_daily_map[(date_str, mode_name)]
+            scell["amount"] += amount
+            scell["orders"] += 1
+            scell["guests"] += guests
+
+            # Per-day category aggregation — computed per-selection (a check
+            # often has items across several categories; each selection carries
+            # its own amount and salesCategory). Falls back to "Other" if
+            # salesCategory is missing/null.
+            for sel in (check.get("selections") or []):
+                if sel.get("voided") or sel.get("deleted"):
+                    continue
+                sel_amt = float(sel.get("price") or sel.get("preDiscountPrice") or 0.0)
+                if sel_amt == 0:
+                    continue
+                cat = ((sel.get("salesCategory") or {}).get("name") or "Other").strip() or "Other"
+                ccell = cat_daily_map[(date_str, cat)]
+                ccell["amount"] += sel_amt
+                ccell["orders"] += 1
 
             # servers (by assigned employee on the check)
             server_ref = check.get("server") or {}
@@ -452,6 +495,23 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
                 "guests": int(cell["guests"]),
             }
             for (h, d), cell in sorted(hour_dow_map.items(), key=lambda kv: (kv[0][0], DOW.index(kv[0][1])))
+        ],
+        # Per-day dimensional rollups — let the dashboard filter Hour of Day,
+        # Heatmap, Daypart, Category, and Service Mode by the selected period.
+        "hour_daily": [
+            {"date": d, "hour": h, "amount": round(cell["amount"], 2),
+             "orders": int(cell["orders"]), "guests": int(cell["guests"])}
+            for (d, h), cell in sorted(hour_daily_map.items(), key=lambda kv: (kv[0][0], kv[0][1]))
+        ],
+        "categories_daily": [
+            {"date": d, "category": cat, "amount": round(cell["amount"], 2),
+             "orders": int(cell["orders"])}
+            for (d, cat), cell in sorted(cat_daily_map.items(), key=lambda kv: (kv[0][0], kv[0][1]))
+        ],
+        "service_modes_daily": [
+            {"date": d, "mode": mode, "amount": round(cell["amount"], 2),
+             "orders": int(cell["orders"]), "guests": int(cell["guests"])}
+            for (d, mode), cell in sorted(svcmode_daily_map.items(), key=lambda kv: (kv[0][0], kv[0][1]))
         ],
         "servers": sorted(servers.values(), key=lambda r: r["amount"], reverse=True),
         "tables": sorted(tables.values(), key=lambda r: r["amount"], reverse=True),
