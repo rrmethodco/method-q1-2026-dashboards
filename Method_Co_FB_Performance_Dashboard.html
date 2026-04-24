@@ -375,6 +375,42 @@ function hoursPerDayFor(outletId, rcKey) {
   }
   return rcs[rcKey].hours_per_day ?? null;
 }
+// Industry benchmarks per Method Co concept. Used on the RevPASH and Avg
+// Ticket Time KPI cards. Ranges reflect full-service independent / lifestyle
+// hospitality norms (not QSR / chain casual). Keyed by outletId alone for the
+// simple cases and "outletId:rcKey" for outlets whose RCs have different
+// service models (e.g. LSBR = Le Suprême full-service dinner vs Bar Rotunda
+// bar-forward). revpash is $/seat-hour. ticketMin is Toast open→paid minutes.
+const BENCHMARKS = {
+  // LSBR — French bistro + attached cocktail bar
+  'lsbr':                  { concept: 'Upscale French Bistro',        revpash: [18, 28], ticketMin: [75, 120] },
+  'lsbr:le_supreme':       { concept: 'Upscale French Bistro',        revpash: [18, 28], ticketMin: [75, 120] },
+  'lsbr:bar_rotunda':      { concept: 'Hotel Cocktail Bar / Lounge',  revpash: [12, 22], ticketMin: [30, 60]  },
+  // Book Tower F&B — omakase
+  'hirokisan':             { concept: 'Upscale Japanese / Omakase',   revpash: [22, 32], ticketMin: [90, 150] },
+  // HIROKI Philly — similar concept to Detroit
+  'hiroki':                { concept: 'Upscale Japanese',              revpash: [22, 32], ticketMin: [90, 150] },
+  // Mulherin's — Italian neighborhood FSR
+  'mulherins':             { concept: 'Upscale Italian FSR',           revpash: [18, 28], ticketMin: [75, 120] },
+  // Kampers — casual all-day
+  'kampers':               { concept: 'Casual All-Day FSR',            revpash: [10, 18], ticketMin: [45, 75]  },
+  // Anthology — pure events, traditional RevPASH doesn't apply (use per sellable-hour)
+  'anthology':             { concept: 'Private Events',                revpash: null,     ticketMin: null      },
+  // Quoin — hotel rooftop / multiple outlets
+  'quoin':                 { concept: 'Hotel Rooftop Bar',             revpash: [12, 22], ticketMin: [30, 60]  },
+  // Lowland — FSR
+  'lowland':               { concept: 'Upscale FSR',                   revpash: [18, 28], ticketMin: [75, 120] },
+  // Rosemary Rose, Little Wing, Vessel — cocktail-forward concepts
+  'rosemaryrose':          { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60]  },
+  'littlewing':            { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60]  },
+  'vessel':                { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60]  },
+  // Fallback for anything unmapped
+  '_default':              { concept: 'Full-Service F&B',              revpash: [14, 22], ticketMin: [60, 90]  },
+};
+function getBenchmarks(outletId, rcKey) {
+  return BENCHMARKS[`${outletId}:${rcKey}`] || BENCHMARKS[outletId] || BENCHMARKS._default;
+}
+
 const PALETTE_MANY = ['#2BA6BB','#405766','#D8CFC4','#BCC8BE','#212931','#E2DEDE','#9FB4BE','#8B7E73','#6B7B8A','#CDE4E5'];
 function destroy(id) { if (charts[id]) { try { charts[id].destroy(); } catch(e){} delete charts[id]; } }
 // Replace a canvas with a branded empty-state tile. Called when a chart has no data.
@@ -491,15 +527,34 @@ function getSummarySource() {
   return { le_supreme: o.sales_summary.le_supreme };  // data isn't split further in summary
 }
 function rcShareMult() { return 1; }
+// Daily net-sales rows merged across RCs for the current RC filter.
+// Prefers order_details per-date because Toast Sales Summary has historical
+// per-RC gaps (e.g. Bar Rotunda summary is missing Jul 2025 → Apr 2026 even
+// though order-level data exists). Order_details is granular-by-RC, so
+// combined-mode actually sums all active RCs. Sales_summary is used only
+// for dates order_details doesn't cover (typically older history).
 function combinedDailySales() {
-  const src = getSummarySource();
+  const ss = getSummarySource();
+  const od = getOrderDetailsSource() || {};
   const map = {};
-  Object.values(src).forEach(s => (s.daily||[]).forEach(r => {
+  // 1. Seed from sales_summary (baseline — has the long historical tail)
+  Object.values(ss).forEach(s => (s.daily||[]).forEach(r => {
     if (!map[r.date]) map[r.date] = { date: r.date, net_sales: 0, orders: 0, guests: 0 };
     map[r.date].net_sales += r.net_sales || 0;
-    map[r.date].orders += r.orders || 0;
-    map[r.date].guests += r.guests || 0;
+    map[r.date].orders    += r.orders    || 0;
+    map[r.date].guests    += r.guests    || 0;
   }));
+  // 2. Order_details is authoritative on dates it covers — overwrite.
+  //    amount in order_details is pre-tax check subtotal, which is the same
+  //    shape as net_sales in sales_summary (close enough for KPIs/trends).
+  const odByDate = {};
+  Object.values(od).forEach(o => (o.daily||[]).forEach(r => {
+    if (!odByDate[r.date]) odByDate[r.date] = { date: r.date, net_sales: 0, orders: 0, guests: 0 };
+    odByDate[r.date].net_sales += r.amount || 0;
+    odByDate[r.date].orders    += r.orders || 0;
+    odByDate[r.date].guests    += r.guests || 0;
+  }));
+  Object.values(odByDate).forEach(r => { map[r.date] = r; });
   return Object.values(map).sort((a,b) => a.date < b.date ? -1 : 1);
 }
 
@@ -1110,9 +1165,14 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
   const openDays = (curSS||[]).filter(r => (r.net_sales||0) > 0).length;
   const revPASH = (shPerDay && openDays && cs.net_sales)
     ? cs.net_sales / (shPerDay * openDays) : null;
+  // Pull per-concept benchmarks for this outlet/RC combination.
+  const bench = getBenchmarks(STATE.outlet, STATE.rc);
+  const fmtRange = (r, prefix='$') => r ? `${prefix}${r[0]}–${prefix}${r[1]}` : null;
+  const revPashTargetSub = bench.revpash ? `Target ${fmtRange(bench.revpash)}/hr · ${bench.concept}` : null;
   let revPashSub;
   if (revPASH != null) {
-    revPashSub = `${seats} seats · ${hoursPerDay} hr/day · ${openDays} open days`;
+    const base = `${seats} seats · ${hoursPerDay} hr/day · ${openDays} open days`;
+    revPashSub = revPashTargetSub ? `${base}\n${revPashTargetSub}` : base;
   } else if (seats && !hoursPerDay) {
     revPashSub = `${seats} seats · need service hours`;
   } else if (!seats) {
@@ -1168,19 +1228,28 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
     { sec: 0, cnt: 0 }
   );
   const avgTicketMin = ticketAgg.cnt ? (ticketAgg.sec / ticketAgg.cnt / 60) : null;
-  let cmpTicketMin = null;
-  if (cmpMode !== 'BUDGET' && cmp) {
-    const fullOD2 = combinedDailyOrders();
-    const cmpODt = filter(fullOD2, cmp);
-    const cmpTAgg = cmpODt.reduce(
-      (a,r) => ({ sec: a.sec + (r.ticket_time_sec_sum||0), cnt: a.cnt + (r.ticket_time_count||0) }),
-      { sec: 0, cnt: 0 }
-    );
-    if (cmpTAgg.cnt) cmpTicketMin = cmpTAgg.sec / cmpTAgg.cnt / 60;
+  // Avg Ticket Time ALWAYS compares STLY regardless of the global Compare
+  // selector (per operator convention — this metric is most meaningful
+  // year-over-year). Compute an independent STLY bounds + aggregate.
+  let stlyTicketMin = null;
+  if (bSS) {
+    const savedMode = STATE.compare;
+    STATE.compare = 'STLY';
+    const stlyB = compareBounds(bSS);
+    STATE.compare = savedMode;
+    if (stlyB) {
+      const stlyTAgg = filter(combinedDailyOrders(), stlyB).reduce(
+        (a,r) => ({ sec: a.sec + (r.ticket_time_sec_sum||0), cnt: a.cnt + (r.ticket_time_count||0) }),
+        { sec: 0, cnt: 0 }
+      );
+      if (stlyTAgg.cnt) stlyTicketMin = stlyTAgg.sec / stlyTAgg.cnt / 60;
+    }
   }
-  const ticketSub = avgTicketMin != null
+  const ticketTargetSub = bench.ticketMin ? `Target ${bench.ticketMin[0]}–${bench.ticketMin[1]} min · ${bench.concept}` : null;
+  const ticketBase = avgTicketMin != null
     ? `${fmtNum(ticketAgg.cnt)} tickets · open→paid`
     : 'awaiting Toast order-details sync';
+  const ticketSub = ticketTargetSub ? `${ticketBase}\n${ticketTargetSub}` : ticketBase;
 
   // ===== Build six KPI cards =====
   const cards = [
@@ -1219,28 +1288,37 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
       label: 'Avg Ticket Time',
       val: avgTicketMin != null ? avgTicketMin.toFixed(1) + ' min' : '—',
       // Ticket-time delta: lower is better, so invert sign for visual cue (green if shorter).
-      delta: (avgTicketMin != null && cmpTicketMin != null) ? -(avgTicketMin - cmpTicketMin) : null,
+      delta: (avgTicketMin != null && stlyTicketMin != null) ? -(avgTicketMin - stlyTicketMin) : null,
       deltaUnit: 'min',
+      deltaLabel: 'vs STLY',
       sub: ticketSub
     }
   ];
   document.getElementById('kpiRow').innerHTML = cards.map(c => {
-    let deltaHtml = '&nbsp;';
+    let deltaHtml = '';
     if (c.delta != null) {
       const cls = c.delta >= 0 ? 'pos' : 'neg';
       let unit;
-      if (c.deltaUnit === 'pp') {
-        unit = (c.delta>=0?'+':'') + c.delta.toFixed(1) + 'pp';
+      if (c.deltaUnit === 'pp' || c.deltaUnit === '%') {
+        // Percentage-point deltas render as "+0.4%" per Ross's convention —
+        // we never show "pp" in the UI.
+        unit = (c.delta>=0?'+':'') + c.delta.toFixed(1) + '%';
       } else if (c.deltaUnit === 'min') {
         unit = (c.delta>=0?'+':'') + c.delta.toFixed(1) + ' min';
       } else {
         unit = fmtYoY(c.delta);
       }
-      deltaHtml = `<span class="yoy ${cls}">${cmpLabelShort} ${unit}</span>`;
-    } else if (c.sub) {
-      deltaHtml = `<span class="yoy neutral">${c.sub}</span>`;
+      const label = c.deltaLabel || cmpLabelShort;
+      deltaHtml = `<div><span class="yoy ${cls}">${label} ${unit}</span></div>`;
+    } else {
+      deltaHtml = '<div>&nbsp;</div>';
     }
-    return `<div class="kpi"><div class="label">${c.label}</div><div class="val">${c.val}</div><div>${deltaHtml}</div></div>`;
+    // Sub is always rendered when present — \n separates sub-lines (e.g.
+    // "275 seats · 10hr/day · 7 days" \n "Target $18-28/hr · Upscale ...").
+    const subHtml = c.sub
+      ? `<div class="yoy neutral">${String(c.sub).replace(/\n/g, '<br>')}</div>`
+      : '';
+    return `<div class="kpi"><div class="label">${c.label}</div><div class="val">${c.val}</div>${deltaHtml}${subHtml}</div>`;
   }).join('');
 }
 
