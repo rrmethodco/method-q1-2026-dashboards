@@ -1,27 +1,7966 @@
 {
   "outlet_id": "anthology",
-  "generated_at": "2026-04-26T09:14:55+00:00",
+  "generated_at": "2026-04-27T10:43:48+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
-      "daily": [],
-      "monthly": [],
-      "hour_dow": [],
-      "hour_daily": [],
-      "categories_daily": [],
-      "service_modes_daily": [],
+      "daily": [
+        {
+          "date": "2025-03-23",
+          "orders": 1,
+          "guests": 1,
+          "amount": 3456.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 192.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-03-25",
+          "orders": 1,
+          "guests": 1,
+          "amount": 8862.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 933.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-03-26",
+          "orders": 5,
+          "guests": 5,
+          "amount": 1489.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 30164.1,
+          "ticket_time_count": 5
+        },
+        {
+          "date": "2025-04-02",
+          "orders": 1,
+          "guests": 1,
+          "amount": 4750.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 46.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-04-06",
+          "orders": 1,
+          "guests": 1,
+          "amount": 40364.52,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3780.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-04-13",
+          "orders": 1,
+          "guests": 1,
+          "amount": 34897.68,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3117.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-04-15",
+          "orders": 1,
+          "guests": 1,
+          "amount": 1991.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 22914.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-04-17",
+          "orders": 5,
+          "guests": 5,
+          "amount": 1874.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2780.9,
+          "ticket_time_count": 5
+        },
+        {
+          "date": "2025-04-20",
+          "orders": 2,
+          "guests": 4,
+          "amount": 32174.7,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 12008.0,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-04-21",
+          "orders": 7,
+          "guests": 7,
+          "amount": 3028.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 41106.6,
+          "ticket_time_count": 7
+        },
+        {
+          "date": "2025-04-24",
+          "orders": 1,
+          "guests": 1,
+          "amount": 26337.6,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 10499.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-04-26",
+          "orders": 3,
+          "guests": 3,
+          "amount": 41314.4,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 37852.8,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-04-27",
+          "orders": 1,
+          "guests": 1,
+          "amount": 40982.88,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 25771.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-04-28",
+          "orders": 1,
+          "guests": 1,
+          "amount": 24946.2,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 15852.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-04-30",
+          "orders": 1,
+          "guests": 1,
+          "amount": 19840.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6330.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-01",
+          "orders": 1,
+          "guests": 1,
+          "amount": 32511.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 9977.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-03",
+          "orders": 4,
+          "guests": 4,
+          "amount": 29074.66,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 44375.6,
+          "ticket_time_count": 4
+        },
+        {
+          "date": "2025-05-04",
+          "orders": 1,
+          "guests": 2,
+          "amount": 42950.16,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 8258.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-06",
+          "orders": 2,
+          "guests": 2,
+          "amount": 4668.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 18920.5,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-05-07",
+          "orders": 8,
+          "guests": 8,
+          "amount": 9963.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 59515.4,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-05-09",
+          "orders": 1,
+          "guests": 1,
+          "amount": 27492.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4981.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-10",
+          "orders": 1,
+          "guests": 1,
+          "amount": 32543.8,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 11316.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-12",
+          "orders": 1,
+          "guests": 1,
+          "amount": 5000.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 11.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-13",
+          "orders": 5,
+          "guests": 6,
+          "amount": 57134.88,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7107.0,
+          "ticket_time_count": 4
+        },
+        {
+          "date": "2025-05-14",
+          "orders": 1,
+          "guests": 1,
+          "amount": 4540.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 46.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-15",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 35.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-16",
+          "orders": 1,
+          "guests": 1,
+          "amount": 12.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 44.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-17",
+          "orders": 1,
+          "guests": 1,
+          "amount": 33780.08,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-05-18",
+          "orders": 1,
+          "guests": 1,
+          "amount": 33009.2,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 14288.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-20",
+          "orders": 2,
+          "guests": 2,
+          "amount": 48774.56,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-05-21",
+          "orders": 1,
+          "guests": 1,
+          "amount": 997.72,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 427.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-22",
+          "orders": 1,
+          "guests": 1,
+          "amount": 3905.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 350.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-24",
+          "orders": 3,
+          "guests": 3,
+          "amount": 29999.61,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 8401.4,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-05-25",
+          "orders": 1,
+          "guests": 1,
+          "amount": 34335.1,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1212.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-26",
+          "orders": 1,
+          "guests": 1,
+          "amount": 22017.01,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-05-28",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 54.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-29",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4475.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-30",
+          "orders": 1,
+          "guests": 1,
+          "amount": 21605.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 21118.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-05-31",
+          "orders": 1,
+          "guests": 1,
+          "amount": 33070.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 28185.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-01",
+          "orders": 1,
+          "guests": 1,
+          "amount": 30937.62,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1986.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-02",
+          "orders": 2,
+          "guests": 2,
+          "amount": 25412.95,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2412.9,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-06-03",
+          "orders": 1,
+          "guests": 1,
+          "amount": 22194.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 28118.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-04",
+          "orders": 1,
+          "guests": 1,
+          "amount": 8650.52,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 13979.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-07",
+          "orders": 4,
+          "guests": 4,
+          "amount": 33380.74,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2101.8,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-06-08",
+          "orders": 1,
+          "guests": 1,
+          "amount": 36259.66,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 20071.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-09",
+          "orders": 2,
+          "guests": 2,
+          "amount": 35997.04,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 29392.7,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-06-10",
+          "orders": 8,
+          "guests": 8,
+          "amount": 2778.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 61263.2,
+          "ticket_time_count": 8
+        },
+        {
+          "date": "2025-06-11",
+          "orders": 1,
+          "guests": 1,
+          "amount": 16370.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 12288.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-12",
+          "orders": 1,
+          "guests": 1,
+          "amount": 4625.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1141.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-13",
+          "orders": 1,
+          "guests": 1,
+          "amount": 4343.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 146.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-14",
+          "orders": 2,
+          "guests": 2,
+          "amount": 38965.52,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 20931.5,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-06-15",
+          "orders": 1,
+          "guests": 2,
+          "amount": 39693.86,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6292.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-17",
+          "orders": 1,
+          "guests": 1,
+          "amount": 5100.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2893.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-19",
+          "orders": 3,
+          "guests": 3,
+          "amount": 16292.7,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 27359.6,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-06-21",
+          "orders": 1,
+          "guests": 1,
+          "amount": 25687.17,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 26002.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-22",
+          "orders": 1,
+          "guests": 1,
+          "amount": 36531.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-06-23",
+          "orders": 1,
+          "guests": 2,
+          "amount": 25198.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2662.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-25",
+          "orders": 2,
+          "guests": 2,
+          "amount": 42412.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1048.5,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-06-26",
+          "orders": 2,
+          "guests": 2,
+          "amount": 31072.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-29",
+          "orders": 1,
+          "guests": 1,
+          "amount": 2175.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-06-30",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-01",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-02",
+          "orders": 3,
+          "guests": 3,
+          "amount": 88211.21,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-07-09",
+          "orders": 2,
+          "guests": 2,
+          "amount": 65271.84,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-07-12",
+          "orders": 1,
+          "guests": 1,
+          "amount": 29054.78,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 5090.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-13",
+          "orders": 2,
+          "guests": 3,
+          "amount": 35753.73,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3259.6,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-07-14",
+          "orders": 1,
+          "guests": 1,
+          "amount": 20500.18,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2742.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-16",
+          "orders": 2,
+          "guests": 3,
+          "amount": 13978.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 9203.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-20",
+          "orders": 1,
+          "guests": 1,
+          "amount": 31696.72,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3265.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-22",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-24",
+          "orders": 2,
+          "guests": 2,
+          "amount": 1050.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 19.1,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-07-26",
+          "orders": 2,
+          "guests": 2,
+          "amount": 40947.08,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3914.4,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-07-27",
+          "orders": 1,
+          "guests": 1,
+          "amount": 34309.04,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6717.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-28",
+          "orders": 1,
+          "guests": 1,
+          "amount": 23270.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1657.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-30",
+          "orders": 1,
+          "guests": 1,
+          "amount": 592.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-07-31",
+          "orders": 1,
+          "guests": 1,
+          "amount": 500.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-01",
+          "orders": 2,
+          "guests": 2,
+          "amount": 2756.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2106.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-02",
+          "orders": 2,
+          "guests": 2,
+          "amount": 66057.23,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2407.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-03",
+          "orders": 1,
+          "guests": 1,
+          "amount": 37019.48,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4052.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-04",
+          "orders": 1,
+          "guests": 1,
+          "amount": 33798.44,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7465.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-05",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 17.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-07",
+          "orders": 3,
+          "guests": 3,
+          "amount": 7457.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 78.5,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-08-08",
+          "orders": 6,
+          "guests": 6,
+          "amount": 29069.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 347.6,
+          "ticket_time_count": 6
+        },
+        {
+          "date": "2025-08-09",
+          "orders": 2,
+          "guests": 2,
+          "amount": 26519.26,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2742.5,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-08-10",
+          "orders": 1,
+          "guests": 1,
+          "amount": 40814.34,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4891.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-11",
+          "orders": 1,
+          "guests": 1,
+          "amount": 23043.56,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3392.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-12",
+          "orders": 1,
+          "guests": 1,
+          "amount": 4687.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-13",
+          "orders": 2,
+          "guests": 2,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3986.5,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-08-15",
+          "orders": 2,
+          "guests": 3,
+          "amount": 20587.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 10.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-16",
+          "orders": 1,
+          "guests": 1,
+          "amount": 0.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 174.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-17",
+          "orders": 2,
+          "guests": 2,
+          "amount": 33382.42,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2723.3,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-08-18",
+          "orders": 1,
+          "guests": 2,
+          "amount": 24583.42,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 927.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-21",
+          "orders": 3,
+          "guests": 3,
+          "amount": 26030.14,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.6,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-08-23",
+          "orders": 1,
+          "guests": 1,
+          "amount": 24625.89,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1775.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-24",
+          "orders": 1,
+          "guests": 1,
+          "amount": 31333.22,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-08-25",
+          "orders": 1,
+          "guests": 1,
+          "amount": 30203.18,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4884.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-26",
+          "orders": 1,
+          "guests": 1,
+          "amount": 262.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-30",
+          "orders": 1,
+          "guests": 1,
+          "amount": 24041.86,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6628.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-08-31",
+          "orders": 2,
+          "guests": 2,
+          "amount": 43400.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2664.5,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-09-01",
+          "orders": 1,
+          "guests": 1,
+          "amount": 24255.54,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6200.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-02",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 5.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-05",
+          "orders": 1,
+          "guests": 1,
+          "amount": 1632.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 123.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-06",
+          "orders": 1,
+          "guests": 1,
+          "amount": 718.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-07",
+          "orders": 1,
+          "guests": 1,
+          "amount": 1500.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-08",
+          "orders": 2,
+          "guests": 2,
+          "amount": 66040.42,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-09-10",
+          "orders": 1,
+          "guests": 1,
+          "amount": 34168.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-09-12",
+          "orders": 1,
+          "guests": 1,
+          "amount": 26604.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2183.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-13",
+          "orders": 1,
+          "guests": 1,
+          "amount": 40892.66,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1122.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-14",
+          "orders": 1,
+          "guests": 1,
+          "amount": 36819.27,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 12984.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-15",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-17",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-19",
+          "orders": 3,
+          "guests": 3,
+          "amount": 57116.6,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-20",
+          "orders": 1,
+          "guests": 1,
+          "amount": 32530.9,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4641.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-21",
+          "orders": 1,
+          "guests": 1,
+          "amount": 33578.7,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1614.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-22",
+          "orders": 3,
+          "guests": 3,
+          "amount": 29874.28,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2280.2,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-09-24",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-26",
+          "orders": 2,
+          "guests": 2,
+          "amount": 19892.97,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3078.8,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-09-27",
+          "orders": 1,
+          "guests": 1,
+          "amount": 26957.62,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7692.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-28",
+          "orders": 1,
+          "guests": 1,
+          "amount": 2125.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-29",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-09-30",
+          "orders": 4,
+          "guests": 4,
+          "amount": 46807.22,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1425.6,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-10-04",
+          "orders": 1,
+          "guests": 1,
+          "amount": 27076.86,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 5991.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-10-05",
+          "orders": 1,
+          "guests": 1,
+          "amount": 2605.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-10-07",
+          "orders": 2,
+          "guests": 2,
+          "amount": 57527.07,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-10-09",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 10.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-10-10",
+          "orders": 4,
+          "guests": 4,
+          "amount": 35202.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 142.1,
+          "ticket_time_count": 4
+        },
+        {
+          "date": "2025-10-11",
+          "orders": 2,
+          "guests": 2,
+          "amount": 22054.38,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7561.6,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-10-12",
+          "orders": 2,
+          "guests": 2,
+          "amount": 38297.46,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6341.6,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-10-16",
+          "orders": 1,
+          "guests": 1,
+          "amount": 22288.65,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-10-18",
+          "orders": 1,
+          "guests": 1,
+          "amount": 1187.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-10-20",
+          "orders": 1,
+          "guests": 1,
+          "amount": 2161.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 19.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-10-21",
+          "orders": 1,
+          "guests": 1,
+          "amount": 2051.88,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-10-22",
+          "orders": 5,
+          "guests": 5,
+          "amount": 94158.77,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 20.0,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-10-24",
+          "orders": 3,
+          "guests": 3,
+          "amount": 20209.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 651.2,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-10-25",
+          "orders": 1,
+          "guests": 1,
+          "amount": 2125.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-10-26",
+          "orders": 1,
+          "guests": 1,
+          "amount": 1043.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-10-27",
+          "orders": 4,
+          "guests": 161,
+          "amount": 102609.96,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6498.6,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-10-28",
+          "orders": 2,
+          "guests": 121,
+          "amount": 6131.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 346.2,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-10-29",
+          "orders": 3,
+          "guests": 3,
+          "amount": 19980.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 19226.1,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-10-30",
+          "orders": 1,
+          "guests": 1,
+          "amount": 500.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-01",
+          "orders": 2,
+          "guests": 2,
+          "amount": 26110.84,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7500.8,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-11-02",
+          "orders": 2,
+          "guests": 2,
+          "amount": 37909.22,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 11452.0,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-11-03",
+          "orders": 1,
+          "guests": 1,
+          "amount": 262.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-04",
+          "orders": 1,
+          "guests": 1,
+          "amount": 9448.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 16136.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-05",
+          "orders": 1,
+          "guests": 1,
+          "amount": 262.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-08",
+          "orders": 1,
+          "guests": 1,
+          "amount": 35716.72,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 936.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-09",
+          "orders": 2,
+          "guests": 2,
+          "amount": 51604.44,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 919.1,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-11-13",
+          "orders": 2,
+          "guests": 2,
+          "amount": 13252.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-15",
+          "orders": 2,
+          "guests": 2,
+          "amount": 27374.16,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 988.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-16",
+          "orders": 1,
+          "guests": 1,
+          "amount": 41805.51,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1108.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-17",
+          "orders": 2,
+          "guests": 2,
+          "amount": 2025.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4.9,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-11-21",
+          "orders": 1,
+          "guests": 1,
+          "amount": 3880.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7059.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-22",
+          "orders": 1,
+          "guests": 1,
+          "amount": 27092.57,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 469.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-23",
+          "orders": 1,
+          "guests": 1,
+          "amount": 39524.76,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 748.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-11-24",
+          "orders": 2,
+          "guests": 2,
+          "amount": 1050.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7.1,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-11-26",
+          "orders": 21,
+          "guests": 21,
+          "amount": 4969.7,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 237.2,
+          "ticket_time_sec_sum": 3886.4,
+          "ticket_time_count": 21
+        },
+        {
+          "date": "2025-12-02",
+          "orders": 1,
+          "guests": 1,
+          "amount": 14633.6,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-12-03",
+          "orders": 3,
+          "guests": 3,
+          "amount": 9114.56,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2315.5,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-12-04",
+          "orders": 3,
+          "guests": 3,
+          "amount": 1037.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7.8,
+          "ticket_time_count": 3
+        },
+        {
+          "date": "2025-12-06",
+          "orders": 1,
+          "guests": 1,
+          "amount": 26302.55,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 442.9,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-12-07",
+          "orders": 1,
+          "guests": 1,
+          "amount": 30975.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 487.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-12-08",
+          "orders": 2,
+          "guests": 2,
+          "amount": 1562.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 7.0,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-12-10",
+          "orders": 2,
+          "guests": 2,
+          "amount": 4038.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.6,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2025-12-11",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-12-12",
+          "orders": 2,
+          "guests": 2,
+          "amount": 7620.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4.6,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-12-13",
+          "orders": 1,
+          "guests": 1,
+          "amount": 31083.04,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2702.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-12-14",
+          "orders": 1,
+          "guests": 1,
+          "amount": 787.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-12-15",
+          "orders": 2,
+          "guests": 2,
+          "amount": 86310.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-12-18",
+          "orders": 8,
+          "guests": 8,
+          "amount": 2175.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 15.3,
+          "ticket_time_count": 8
+        },
+        {
+          "date": "2025-12-19",
+          "orders": 1,
+          "guests": 1,
+          "amount": 12197.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 5477.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2025-12-21",
+          "orders": 12,
+          "guests": 12,
+          "amount": 1622.1,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 50.4,
+          "ticket_time_count": 12
+        },
+        {
+          "date": "2025-12-22",
+          "orders": 1,
+          "guests": 1,
+          "amount": 0.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2025-12-23",
+          "orders": 4,
+          "guests": 4,
+          "amount": 1326.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 45.0,
+          "ticket_time_sec_sum": 6.5,
+          "ticket_time_count": 4
+        },
+        {
+          "date": "2025-12-31",
+          "orders": 1,
+          "guests": 1,
+          "amount": 937.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-01-06",
+          "orders": 1,
+          "guests": 1,
+          "amount": 36596.69,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2026-01-07",
+          "orders": 11,
+          "guests": 11,
+          "amount": 2475.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 12.8,
+          "ticket_time_count": 11
+        },
+        {
+          "date": "2026-01-08",
+          "orders": 1,
+          "guests": 1,
+          "amount": 39680.26,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 0.0,
+          "ticket_time_count": 0
+        },
+        {
+          "date": "2026-01-14",
+          "orders": 2,
+          "guests": 2,
+          "amount": 101925.92,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1227.5,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-01-16",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-01-17",
+          "orders": 2,
+          "guests": 2,
+          "amount": 27465.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 15906.3,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-01-21",
+          "orders": 2,
+          "guests": 2,
+          "amount": 33693.11,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1412.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-01-23",
+          "orders": 13,
+          "guests": 13,
+          "amount": 3600.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 19.2,
+          "ticket_time_count": 13
+        },
+        {
+          "date": "2026-01-29",
+          "orders": 2,
+          "guests": 2,
+          "amount": 1050.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.0,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-01-31",
+          "orders": 1,
+          "guests": 1,
+          "amount": 4120.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 27.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-02-01",
+          "orders": 1,
+          "guests": 1,
+          "amount": 14275.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 15370.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-02-04",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-02-07",
+          "orders": 12,
+          "guests": 12,
+          "amount": 4376.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 500.0,
+          "ticket_time_sec_sum": 168.4,
+          "ticket_time_count": 12
+        },
+        {
+          "date": "2026-02-08",
+          "orders": 9,
+          "guests": 9,
+          "amount": 365.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 125.3,
+          "ticket_time_count": 9
+        },
+        {
+          "date": "2026-02-10",
+          "orders": 1,
+          "guests": 1,
+          "amount": 11457.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 37.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-02-11",
+          "orders": 1,
+          "guests": 1,
+          "amount": 11700.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-02-13",
+          "orders": 9,
+          "guests": 9,
+          "amount": 2175.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 13.0,
+          "ticket_time_count": 9
+        },
+        {
+          "date": "2026-02-17",
+          "orders": 2,
+          "guests": 2,
+          "amount": 1312.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.2,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-02-19",
+          "orders": 2,
+          "guests": 2,
+          "amount": 216.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1496.2,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-02-25",
+          "orders": 6,
+          "guests": 6,
+          "amount": 6633.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3794.9,
+          "ticket_time_count": 6
+        },
+        {
+          "date": "2026-02-26",
+          "orders": 4,
+          "guests": 4,
+          "amount": 33031.85,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-02-27",
+          "orders": 17,
+          "guests": 17,
+          "amount": 6941.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 15514.2,
+          "ticket_time_count": 17
+        },
+        {
+          "date": "2026-02-28",
+          "orders": 7,
+          "guests": 7,
+          "amount": 8757.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 142.6,
+          "ticket_time_count": 7
+        },
+        {
+          "date": "2026-03-01",
+          "orders": 2,
+          "guests": 2,
+          "amount": 11737.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1151.0,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-03-05",
+          "orders": 1,
+          "guests": 1,
+          "amount": 525.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1.7,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-03-06",
+          "orders": 15,
+          "guests": 15,
+          "amount": 29019.2,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4013.1,
+          "ticket_time_count": 13
+        },
+        {
+          "date": "2026-03-11",
+          "orders": 1,
+          "guests": 1,
+          "amount": 3408.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.8,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-03-14",
+          "orders": 1,
+          "guests": 2,
+          "amount": 8675.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 8623.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-03-22",
+          "orders": 1,
+          "guests": 2,
+          "amount": 16985.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2982.2,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-03-28",
+          "orders": 1,
+          "guests": 2,
+          "amount": 22842.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2257.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-04-02",
+          "orders": 15,
+          "guests": 15,
+          "amount": 4125.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 90.1,
+          "ticket_time_count": 15
+        },
+        {
+          "date": "2026-04-03",
+          "orders": 3,
+          "guests": 3,
+          "amount": 4913.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 4.5,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-04-11",
+          "orders": 2,
+          "guests": 4,
+          "amount": 34570.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-04-12",
+          "orders": 2,
+          "guests": 2,
+          "amount": 16849.99,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1595.5,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-04-13",
+          "orders": 2,
+          "guests": 2,
+          "amount": 3965.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 6.1,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-04-14",
+          "orders": 2,
+          "guests": 2,
+          "amount": 2097.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.0,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-04-16",
+          "orders": 3,
+          "guests": 5,
+          "amount": 67756.73,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 12091.9,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-04-18",
+          "orders": 1,
+          "guests": 2,
+          "amount": 27582.99,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 507.3,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-04-19",
+          "orders": 1,
+          "guests": 2,
+          "amount": 37080.77,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 1254.1,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-04-21",
+          "orders": 6,
+          "guests": 6,
+          "amount": 1875.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 18.7,
+          "ticket_time_count": 6
+        },
+        {
+          "date": "2026-04-23",
+          "orders": 1,
+          "guests": 1,
+          "amount": 8250.75,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 2.4,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-04-25",
+          "orders": 2,
+          "guests": 4,
+          "amount": 32304.25,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 11103.1,
+          "ticket_time_count": 2
+        },
+        {
+          "date": "2026-04-26",
+          "orders": 2,
+          "guests": 5,
+          "amount": 36333.59,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 13632.1,
+          "ticket_time_count": 2
+        }
+      ],
+      "monthly": [
+        {
+          "orders": 7,
+          "guests": 7,
+          "amount": 13807.75,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2025-03"
+        },
+        {
+          "orders": 25,
+          "guests": 27,
+          "amount": 272501.73,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2025-04"
+        },
+        {
+          "orders": 42,
+          "guests": 44,
+          "amount": 508960.03,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2025-05"
+        },
+        {
+          "orders": 39,
+          "guests": 41,
+          "amount": 484602.78,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2025-06"
+        },
+        {
+          "orders": 22,
+          "guests": 24,
+          "amount": 386185.33,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2025-07"
+        },
+        {
+          "orders": 39,
+          "guests": 41,
+          "amount": 530722.19,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2025-08"
+        },
+        {
+          "orders": 31,
+          "guests": 31,
+          "amount": 484140.18,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2025-09"
+        },
+        {
+          "orders": 37,
+          "guests": 313,
+          "amount": 457736.03,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2025-10"
+        },
+        {
+          "orders": 43,
+          "guests": 43,
+          "amount": 322288.92,
+          "tip": 0.0,
+          "discount": 237.2,
+          "month": "2025-11"
+        },
+        {
+          "orders": 47,
+          "guests": 47,
+          "amount": 232247.6,
+          "tip": 0.0,
+          "discount": 45.0,
+          "month": "2025-12"
+        },
+        {
+          "orders": 36,
+          "guests": 36,
+          "amount": 251130.98,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2026-01"
+        },
+        {
+          "orders": 72,
+          "guests": 72,
+          "amount": 101765.35,
+          "tip": 0.0,
+          "discount": 500.0,
+          "month": "2026-02"
+        },
+        {
+          "orders": 22,
+          "guests": 25,
+          "amount": 93192.7,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2026-03"
+        },
+        {
+          "orders": 42,
+          "guests": 53,
+          "amount": 277705.57,
+          "tip": 0.0,
+          "discount": 0.0,
+          "month": "2026-04"
+        }
+      ],
+      "hour_dow": [
+        {
+          "hour": 0,
+          "dow": "Mon",
+          "amount": 787.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 0,
+          "dow": "Wed",
+          "amount": 2122.72,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "hour": 0,
+          "dow": "Thu",
+          "amount": 13505.0,
+          "orders": 15,
+          "guests": 15
+        },
+        {
+          "hour": 0,
+          "dow": "Fri",
+          "amount": 5825.0,
+          "orders": 26,
+          "guests": 26
+        },
+        {
+          "hour": 0,
+          "dow": "Sat",
+          "amount": 131.0,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 0,
+          "dow": "Sun",
+          "amount": 7412.75,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "hour": 1,
+          "dow": "Tue",
+          "amount": 8862.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 1,
+          "dow": "Wed",
+          "amount": 75675.56,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 1,
+          "dow": "Thu",
+          "amount": 23230.95,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 1,
+          "dow": "Fri",
+          "amount": 87034.22,
+          "orders": 21,
+          "guests": 21
+        },
+        {
+          "hour": 1,
+          "dow": "Sat",
+          "amount": 58180.27,
+          "orders": 9,
+          "guests": 10
+        },
+        {
+          "hour": 1,
+          "dow": "Sun",
+          "amount": 4124.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 2,
+          "dow": "Mon",
+          "amount": 72353.9,
+          "orders": 3,
+          "guests": 4
+        },
+        {
+          "hour": 2,
+          "dow": "Wed",
+          "amount": 2837.0,
+          "orders": 13,
+          "guests": 13
+        },
+        {
+          "hour": 2,
+          "dow": "Thu",
+          "amount": 88028.6,
+          "orders": 4,
+          "guests": 5
+        },
+        {
+          "hour": 2,
+          "dow": "Fri",
+          "amount": 77492.25,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "hour": 2,
+          "dow": "Sat",
+          "amount": 120247.48,
+          "orders": 10,
+          "guests": 10
+        },
+        {
+          "hour": 2,
+          "dow": "Sun",
+          "amount": 66653.02,
+          "orders": 9,
+          "guests": 9
+        },
+        {
+          "hour": 3,
+          "dow": "Mon",
+          "amount": 97611.49,
+          "orders": 4,
+          "guests": 5
+        },
+        {
+          "hour": 3,
+          "dow": "Wed",
+          "amount": 80103.42,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 3,
+          "dow": "Fri",
+          "amount": 30915.75,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 3,
+          "dow": "Sat",
+          "amount": 260459.64,
+          "orders": 10,
+          "guests": 14
+        },
+        {
+          "hour": 3,
+          "dow": "Sun",
+          "amount": 76825.63,
+          "orders": 3,
+          "guests": 5
+        },
+        {
+          "hour": 4,
+          "dow": "Mon",
+          "amount": 160615.17,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "hour": 4,
+          "dow": "Sat",
+          "amount": 430963.83,
+          "orders": 17,
+          "guests": 17
+        },
+        {
+          "hour": 4,
+          "dow": "Sun",
+          "amount": 621007.85,
+          "orders": 25,
+          "guests": 32
+        },
+        {
+          "hour": 5,
+          "dow": "Mon",
+          "amount": 36522.04,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 5,
+          "dow": "Sat",
+          "amount": 54339.16,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 5,
+          "dow": "Sun",
+          "amount": 305444.58,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "hour": 13,
+          "dow": "Tue",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 13,
+          "dow": "Wed",
+          "amount": 11700.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 13,
+          "dow": "Fri",
+          "amount": 34611.4,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 13,
+          "dow": "Sat",
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 14,
+          "dow": "Tue",
+          "amount": 57527.07,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 14,
+          "dow": "Wed",
+          "amount": 8458.75,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "hour": 14,
+          "dow": "Sat",
+          "amount": 1575.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 15,
+          "dow": "Mon",
+          "amount": 86310.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 15,
+          "dow": "Tue",
+          "amount": 7151.88,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 15,
+          "dow": "Thu",
+          "amount": 5650.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 15,
+          "dow": "Fri",
+          "amount": 4913.75,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 15,
+          "dow": "Sat",
+          "amount": 1181.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 16,
+          "dow": "Wed",
+          "amount": 1550.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 16,
+          "dow": "Thu",
+          "amount": 40205.26,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 16,
+          "dow": "Fri",
+          "amount": 22505.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 16,
+          "dow": "Sat",
+          "amount": 8940.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 16,
+          "dow": "Sun",
+          "amount": 20.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 17,
+          "dow": "Tue",
+          "amount": 11957.5,
+          "orders": 2,
+          "guests": 7
+        },
+        {
+          "hour": 17,
+          "dow": "Wed",
+          "amount": 48987.5,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "hour": 17,
+          "dow": "Thu",
+          "amount": 13252.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 17,
+          "dow": "Fri",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 18,
+          "dow": "Mon",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 18,
+          "dow": "Tue",
+          "amount": 96360.19,
+          "orders": 7,
+          "guests": 122
+        },
+        {
+          "hour": 18,
+          "dow": "Wed",
+          "amount": 78724.86,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "hour": 18,
+          "dow": "Thu",
+          "amount": 2600.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 18,
+          "dow": "Fri",
+          "amount": 29222.5,
+          "orders": 4,
+          "guests": 5
+        },
+        {
+          "hour": 18,
+          "dow": "Sat",
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 18,
+          "dow": "Sun",
+          "amount": 1602.1,
+          "orders": 11,
+          "guests": 11
+        },
+        {
+          "hour": 19,
+          "dow": "Mon",
+          "amount": 7050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 19,
+          "dow": "Tue",
+          "amount": 3303.75,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 19,
+          "dow": "Wed",
+          "amount": 69990.15,
+          "orders": 28,
+          "guests": 28
+        },
+        {
+          "hour": 19,
+          "dow": "Thu",
+          "amount": 52073.15,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 19,
+          "dow": "Fri",
+          "amount": 19021.7,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 19,
+          "dow": "Sat",
+          "amount": 1575.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 19,
+          "dow": "Sun",
+          "amount": 16849.99,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 20,
+          "dow": "Mon",
+          "amount": 71819.66,
+          "orders": 4,
+          "guests": 161
+        },
+        {
+          "hour": 20,
+          "dow": "Tue",
+          "amount": 14379.75,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 20,
+          "dow": "Wed",
+          "amount": 108622.49,
+          "orders": 7,
+          "guests": 7
+        },
+        {
+          "hour": 20,
+          "dow": "Thu",
+          "amount": 26280.14,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 20,
+          "dow": "Fri",
+          "amount": 4343.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 20,
+          "dow": "Sat",
+          "amount": 32590.25,
+          "orders": 2,
+          "guests": 4
+        },
+        {
+          "hour": 20,
+          "dow": "Sun",
+          "amount": 48318.22,
+          "orders": 3,
+          "guests": 4
+        },
+        {
+          "hour": 21,
+          "dow": "Mon",
+          "amount": 76801.67,
+          "orders": 10,
+          "guests": 10
+        },
+        {
+          "hour": 21,
+          "dow": "Tue",
+          "amount": 62214.19,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "hour": 21,
+          "dow": "Wed",
+          "amount": 6355.75,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "hour": 21,
+          "dow": "Thu",
+          "amount": 42779.23,
+          "orders": 5,
+          "guests": 6
+        },
+        {
+          "hour": 21,
+          "dow": "Fri",
+          "amount": 890.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 21,
+          "dow": "Sat",
+          "amount": 1980.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 22,
+          "dow": "Mon",
+          "amount": 6052.5,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "hour": 22,
+          "dow": "Tue",
+          "amount": 2778.0,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "hour": 22,
+          "dow": "Wed",
+          "amount": 86816.86,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 22,
+          "dow": "Thu",
+          "amount": 35372.85,
+          "orders": 9,
+          "guests": 9
+        },
+        {
+          "hour": 22,
+          "dow": "Fri",
+          "amount": 12.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 22,
+          "dow": "Sat",
+          "amount": 4292.0,
+          "orders": 10,
+          "guests": 10
+        },
+        {
+          "hour": 22,
+          "dow": "Sun",
+          "amount": 1043.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 23,
+          "dow": "Mon",
+          "amount": 2241.0,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "hour": 23,
+          "dow": "Tue",
+          "amount": 84758.82,
+          "orders": 16,
+          "guests": 16
+        },
+        {
+          "hour": 23,
+          "dow": "Wed",
+          "amount": 25213.04,
+          "orders": 11,
+          "guests": 11
+        },
+        {
+          "hour": 23,
+          "dow": "Thu",
+          "amount": 4666.0,
+          "orders": 18,
+          "guests": 18
+        },
+        {
+          "hour": 23,
+          "dow": "Fri",
+          "amount": 20082.75,
+          "orders": 17,
+          "guests": 17
+        },
+        {
+          "hour": 23,
+          "dow": "Sat",
+          "amount": 30024.74,
+          "orders": 4,
+          "guests": 4
+        }
+      ],
+      "hour_daily": [
+        {
+          "date": "2025-03-23",
+          "hour": 0,
+          "amount": 3456.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-03-25",
+          "hour": 1,
+          "amount": 8862.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-03-26",
+          "hour": 23,
+          "amount": 1489.0,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2025-04-02",
+          "hour": 17,
+          "amount": 4750.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-06",
+          "hour": 2,
+          "amount": 40364.52,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-13",
+          "hour": 4,
+          "amount": 34897.68,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-15",
+          "hour": 19,
+          "amount": 1991.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-17",
+          "hour": 0,
+          "amount": 1874.0,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2025-04-20",
+          "hour": 4,
+          "amount": 32174.7,
+          "orders": 2,
+          "guests": 4
+        },
+        {
+          "date": "2025-04-21",
+          "hour": 0,
+          "amount": 787.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-21",
+          "hour": 23,
+          "amount": 2241.0,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "date": "2025-04-24",
+          "hour": 2,
+          "amount": 26337.6,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-26",
+          "hour": 1,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-26",
+          "hour": 2,
+          "amount": 41314.4,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-04-27",
+          "hour": 4,
+          "amount": 40982.88,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-28",
+          "hour": 2,
+          "amount": 24946.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-30",
+          "hour": 1,
+          "amount": 19840.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-01",
+          "hour": 2,
+          "amount": 32511.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-03",
+          "hour": 3,
+          "amount": 27499.66,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-05-03",
+          "hour": 18,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-03",
+          "hour": 19,
+          "amount": 1575.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-04",
+          "hour": 4,
+          "amount": 42950.16,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-05-06",
+          "hour": 20,
+          "amount": 4668.75,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-05-07",
+          "hour": 19,
+          "amount": 8468.25,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-05-07",
+          "hour": 23,
+          "amount": 1495.0,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2025-05-09",
+          "hour": 1,
+          "amount": 27492.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-10",
+          "hour": 4,
+          "amount": 32543.8,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-12",
+          "hour": 21,
+          "amount": 5000.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-13",
+          "hour": 18,
+          "amount": 40379.38,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-05-13",
+          "hour": 23,
+          "amount": 16755.5,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2025-05-14",
+          "hour": 18,
+          "amount": 4540.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-15",
+          "hour": 18,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-16",
+          "hour": 22,
+          "amount": 12.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-17",
+          "hour": 2,
+          "amount": 33780.08,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-18",
+          "hour": 5,
+          "amount": 33009.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-20",
+          "hour": 18,
+          "amount": 48774.56,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-05-21",
+          "hour": 0,
+          "amount": 997.72,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-22",
+          "hour": 21,
+          "amount": 3905.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-24",
+          "hour": 1,
+          "amount": 1995.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-24",
+          "hour": 3,
+          "amount": 26823.36,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-24",
+          "hour": 15,
+          "amount": 1181.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-25",
+          "hour": 5,
+          "amount": 34335.1,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-26",
+          "hour": 4,
+          "amount": 22017.01,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-28",
+          "hour": 20,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-29",
+          "hour": 21,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-30",
+          "hour": 1,
+          "amount": 21605.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-31",
+          "hour": 4,
+          "amount": 33070.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-01",
+          "hour": 4,
+          "amount": 30937.62,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-02",
+          "hour": 3,
+          "amount": 24887.95,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-02",
+          "hour": 22,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-03",
+          "hour": 21,
+          "amount": 22194.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-04",
+          "hour": 18,
+          "amount": 8650.52,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-07",
+          "hour": 2,
+          "amount": 745.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-07",
+          "hour": 16,
+          "amount": 8940.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-07",
+          "hour": 23,
+          "amount": 23695.24,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-08",
+          "hour": 4,
+          "amount": 36259.66,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-09",
+          "hour": 5,
+          "amount": 35997.04,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-10",
+          "hour": 22,
+          "amount": 2778.0,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "date": "2025-06-11",
+          "hour": 17,
+          "amount": 16370.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-12",
+          "hour": 15,
+          "amount": 4625.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-13",
+          "hour": 20,
+          "amount": 4343.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-14",
+          "hour": 1,
+          "amount": 37390.52,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-14",
+          "hour": 14,
+          "amount": 1575.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-15",
+          "hour": 3,
+          "amount": 39693.86,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-17",
+          "hour": 15,
+          "amount": 5100.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-19",
+          "hour": 1,
+          "amount": 14980.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-19",
+          "hour": 2,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-19",
+          "hour": 21,
+          "amount": 787.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-21",
+          "hour": 3,
+          "amount": 25687.17,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-22",
+          "hour": 4,
+          "amount": 36531.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-23",
+          "hour": 3,
+          "amount": 25198.0,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-25",
+          "hour": 1,
+          "amount": 41575.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-25",
+          "hour": 20,
+          "amount": 837.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-26",
+          "hour": 18,
+          "amount": 2075.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-26",
+          "hour": 19,
+          "amount": 28997.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-29",
+          "hour": 4,
+          "amount": 2175.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-30",
+          "hour": 5,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-01",
+          "hour": 23,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-02",
+          "hour": 19,
+          "amount": 26855.8,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-02",
+          "hour": 20,
+          "amount": 39126.37,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-02",
+          "hour": 23,
+          "amount": 22229.04,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-09",
+          "hour": 18,
+          "amount": 65271.84,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-07-12",
+          "hour": 4,
+          "amount": 29054.78,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-13",
+          "hour": 4,
+          "amount": 35753.73,
+          "orders": 2,
+          "guests": 3
+        },
+        {
+          "date": "2025-07-14",
+          "hour": 4,
+          "amount": 20500.18,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-16",
+          "hour": 14,
+          "amount": 8458.75,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-07-16",
+          "hour": 17,
+          "amount": 5520.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-20",
+          "hour": 4,
+          "amount": 31696.72,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-22",
+          "hour": 13,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-24",
+          "hour": 22,
+          "amount": 1050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-07-26",
+          "hour": 2,
+          "amount": 1187.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-26",
+          "hour": 4,
+          "amount": 39759.58,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-27",
+          "hour": 4,
+          "amount": 34309.04,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-28",
+          "hour": 3,
+          "amount": 23270.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-30",
+          "hour": 21,
+          "amount": 592.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-31",
+          "hour": 23,
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-01",
+          "hour": 1,
+          "amount": 2756.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-01",
+          "hour": 19,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-02",
+          "hour": 2,
+          "amount": 41532.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-02",
+          "hour": 4,
+          "amount": 24524.73,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-03",
+          "hour": 4,
+          "amount": 37019.48,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-04",
+          "hour": 4,
+          "amount": 33798.44,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-05",
+          "hour": 23,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-07",
+          "hour": 0,
+          "amount": 7416.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-07",
+          "hour": 23,
+          "amount": 41.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-08",
+          "hour": 0,
+          "amount": 50.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-08-08",
+          "hour": 1,
+          "amount": 20.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-08",
+          "hour": 2,
+          "amount": 28474.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-08",
+          "hour": 3,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-09",
+          "hour": 2,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-09",
+          "hour": 3,
+          "amount": 26519.26,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-10",
+          "hour": 5,
+          "amount": 40814.34,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-11",
+          "hour": 4,
+          "amount": 23043.56,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-12",
+          "hour": 23,
+          "amount": 4687.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-13",
+          "hour": 19,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-13",
+          "hour": 20,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-15",
+          "hour": 18,
+          "amount": 20587.5,
+          "orders": 2,
+          "guests": 3
+        },
+        {
+          "date": "2025-08-16",
+          "hour": 4,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-17",
+          "hour": 4,
+          "amount": 33382.42,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-18",
+          "hour": 2,
+          "amount": 24583.42,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-21",
+          "hour": 20,
+          "amount": 26030.14,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-08-23",
+          "hour": 4,
+          "amount": 24625.89,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-24",
+          "hour": 20,
+          "amount": 31333.22,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-25",
+          "hour": 4,
+          "amount": 30203.18,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-26",
+          "hour": 20,
+          "amount": 262.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-30",
+          "hour": 4,
+          "amount": 24041.86,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-31",
+          "hour": 4,
+          "amount": 43400.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-31",
+          "hour": 20,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-01",
+          "hour": 3,
+          "amount": 24255.54,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-02",
+          "hour": 18,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-05",
+          "hour": 1,
+          "amount": 1632.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-06",
+          "hour": 1,
+          "amount": 718.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-07",
+          "hour": 1,
+          "amount": 1500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-08",
+          "hour": 21,
+          "amount": 66040.42,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-09-10",
+          "hour": 22,
+          "amount": 34168.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-12",
+          "hour": 2,
+          "amount": 26604.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-13",
+          "hour": 3,
+          "amount": 40892.66,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-14",
+          "hour": 5,
+          "amount": 36819.27,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-15",
+          "hour": 21,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-17",
+          "hour": 16,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-19",
+          "hour": 13,
+          "amount": 34611.4,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-09-19",
+          "hour": 16,
+          "amount": 22505.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-20",
+          "hour": 4,
+          "amount": 32530.9,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-21",
+          "hour": 4,
+          "amount": 33578.7,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-22",
+          "hour": 2,
+          "amount": 22824.28,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-22",
+          "hour": 19,
+          "amount": 7050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-09-24",
+          "hour": 20,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-26",
+          "hour": 0,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-26",
+          "hour": 1,
+          "amount": 19892.97,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-27",
+          "hour": 4,
+          "amount": 26957.62,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-28",
+          "hour": 0,
+          "amount": 2125.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-29",
+          "hour": 18,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-30",
+          "hour": 18,
+          "amount": 1050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-09-30",
+          "hour": 23,
+          "amount": 45757.22,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-04",
+          "hour": 4,
+          "amount": 27076.86,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-05",
+          "hour": 1,
+          "amount": 2605.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-07",
+          "hour": 14,
+          "amount": 57527.07,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-09",
+          "hour": 15,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-10",
+          "hour": 1,
+          "amount": 4785.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-10",
+          "hour": 3,
+          "amount": 18193.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-10",
+          "hour": 23,
+          "amount": 12223.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-11",
+          "hour": 4,
+          "amount": 22054.38,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-12",
+          "hour": 4,
+          "amount": 38297.46,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-16",
+          "hour": 19,
+          "amount": 22288.65,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-18",
+          "hour": 2,
+          "amount": 1187.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-20",
+          "hour": 21,
+          "amount": 2161.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-21",
+          "hour": 15,
+          "amount": 2051.88,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-22",
+          "hour": 19,
+          "amount": 25762.65,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-22",
+          "hour": 20,
+          "amount": 67608.62,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-22",
+          "hour": 21,
+          "amount": 787.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-24",
+          "hour": 2,
+          "amount": 17822.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-24",
+          "hour": 19,
+          "amount": 2387.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-25",
+          "hour": 23,
+          "amount": 2125.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-26",
+          "hour": 22,
+          "amount": 1043.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-27",
+          "hour": 4,
+          "amount": 31052.8,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-27",
+          "hour": 20,
+          "amount": 71557.16,
+          "orders": 3,
+          "guests": 160
+        },
+        {
+          "date": "2025-10-28",
+          "hour": 17,
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 6
+        },
+        {
+          "date": "2025-10-28",
+          "hour": 18,
+          "amount": 5631.25,
+          "orders": 1,
+          "guests": 115
+        },
+        {
+          "date": "2025-10-29",
+          "hour": 16,
+          "amount": 1025.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-29",
+          "hour": 22,
+          "amount": 18955.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-30",
+          "hour": 15,
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-01",
+          "hour": 2,
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-01",
+          "hour": 4,
+          "amount": 25610.84,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-02",
+          "hour": 4,
+          "amount": 1587.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-02",
+          "hour": 5,
+          "amount": 36321.72,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-03",
+          "hour": 20,
+          "amount": 262.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-04",
+          "hour": 20,
+          "amount": 9448.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-05",
+          "hour": 18,
+          "amount": 262.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-08",
+          "hour": 4,
+          "amount": 35716.72,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-09",
+          "hour": 4,
+          "amount": 240.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-09",
+          "hour": 5,
+          "amount": 51364.44,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-13",
+          "hour": 17,
+          "amount": 13252.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-15",
+          "hour": 5,
+          "amount": 27374.16,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-16",
+          "hour": 5,
+          "amount": 41805.51,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-17",
+          "hour": 21,
+          "amount": 2025.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-21",
+          "hour": 2,
+          "amount": 3880.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-22",
+          "hour": 4,
+          "amount": 27092.57,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-23",
+          "hour": 4,
+          "amount": 39524.76,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-24",
+          "hour": 21,
+          "amount": 1050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-26",
+          "hour": 19,
+          "amount": 4969.7,
+          "orders": 21,
+          "guests": 21
+        },
+        {
+          "date": "2025-12-02",
+          "hour": 23,
+          "amount": 14633.6,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-03",
+          "hour": 1,
+          "amount": 8752.56,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-03",
+          "hour": 2,
+          "amount": 362.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-04",
+          "hour": 19,
+          "amount": 787.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-04",
+          "hour": 20,
+          "amount": 250.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-06",
+          "hour": 4,
+          "amount": 26302.55,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-07",
+          "hour": 5,
+          "amount": 30975.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-08",
+          "hour": 22,
+          "amount": 1562.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-10",
+          "hour": 21,
+          "amount": 4038.75,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-11",
+          "hour": 16,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-12",
+          "hour": 23,
+          "amount": 7620.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-13",
+          "hour": 3,
+          "amount": 31083.04,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-14",
+          "hour": 4,
+          "amount": 787.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-15",
+          "hour": 15,
+          "amount": 86310.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-18",
+          "hour": 0,
+          "amount": 2175.0,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "date": "2025-12-19",
+          "hour": 3,
+          "amount": 12197.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-21",
+          "hour": 16,
+          "amount": 20.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-21",
+          "hour": 18,
+          "amount": 1602.1,
+          "orders": 11,
+          "guests": 11
+        },
+        {
+          "date": "2025-12-22",
+          "hour": 21,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-23",
+          "hour": 21,
+          "amount": 1326.0,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2025-12-31",
+          "hour": 21,
+          "amount": 937.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-06",
+          "hour": 21,
+          "amount": 36596.69,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-07",
+          "hour": 2,
+          "amount": 2475.0,
+          "orders": 11,
+          "guests": 11
+        },
+        {
+          "date": "2026-01-08",
+          "hour": 16,
+          "amount": 39680.26,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-14",
+          "hour": 3,
+          "amount": 80103.42,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-14",
+          "hour": 17,
+          "amount": 21822.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-16",
+          "hour": 17,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-17",
+          "hour": 5,
+          "amount": 26965.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-17",
+          "hour": 13,
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-21",
+          "hour": 22,
+          "amount": 33693.11,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-01-23",
+          "hour": 0,
+          "amount": 3600.0,
+          "orders": 13,
+          "guests": 13
+        },
+        {
+          "date": "2026-01-29",
+          "hour": 22,
+          "amount": 1050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-01-31",
+          "hour": 22,
+          "amount": 4120.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-01",
+          "hour": 2,
+          "amount": 14275.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-04",
+          "hour": 17,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-07",
+          "hour": 20,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-07",
+          "hour": 22,
+          "amount": 172.0,
+          "orders": 9,
+          "guests": 9
+        },
+        {
+          "date": "2026-02-07",
+          "hour": 23,
+          "amount": 4204.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-02-08",
+          "hour": 0,
+          "amount": 19.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-02-08",
+          "hour": 1,
+          "amount": 19.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-08",
+          "hour": 2,
+          "amount": 276.0,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2026-02-08",
+          "hour": 3,
+          "amount": 51.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-10",
+          "hour": 17,
+          "amount": 11457.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-11",
+          "hour": 13,
+          "amount": 11700.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-13",
+          "hour": 0,
+          "amount": 2175.0,
+          "orders": 9,
+          "guests": 9
+        },
+        {
+          "date": "2026-02-17",
+          "hour": 19,
+          "amount": 1312.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-02-19",
+          "hour": 18,
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-19",
+          "hour": 22,
+          "amount": 216.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-25",
+          "hour": 0,
+          "amount": 1125.0,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2026-02-25",
+          "hour": 1,
+          "amount": 5508.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-26",
+          "hour": 21,
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-26",
+          "hour": 22,
+          "amount": 32531.85,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2026-02-27",
+          "hour": 1,
+          "amount": 5100.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-27",
+          "hour": 2,
+          "amount": 712.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-27",
+          "hour": 21,
+          "amount": 890.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-27",
+          "hour": 23,
+          "amount": 239.0,
+          "orders": 14,
+          "guests": 14
+        },
+        {
+          "date": "2026-02-28",
+          "hour": 0,
+          "amount": 131.0,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2026-02-28",
+          "hour": 1,
+          "amount": 8626.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2026-03-01",
+          "hour": 2,
+          "amount": 11737.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-03-05",
+          "hour": 22,
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-03-06",
+          "hour": 1,
+          "amount": 3750.0,
+          "orders": 12,
+          "guests": 12
+        },
+        {
+          "date": "2026-03-06",
+          "hour": 18,
+          "amount": 8635.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-03-06",
+          "hour": 19,
+          "amount": 16634.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-03-11",
+          "hour": 19,
+          "amount": 3408.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-03-14",
+          "hour": 1,
+          "amount": 8675.0,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-03-22",
+          "hour": 20,
+          "amount": 16985.0,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-03-28",
+          "hour": 3,
+          "amount": 22842.25,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-02",
+          "hour": 23,
+          "amount": 4125.0,
+          "orders": 15,
+          "guests": 15
+        },
+        {
+          "date": "2026-04-03",
+          "hour": 15,
+          "amount": 4913.75,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2026-04-11",
+          "hour": 20,
+          "amount": 32590.25,
+          "orders": 1,
+          "guests": 3
+        },
+        {
+          "date": "2026-04-11",
+          "hour": 21,
+          "amount": 1980.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-04-12",
+          "hour": 19,
+          "amount": 16849.99,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-13",
+          "hour": 22,
+          "amount": 3965.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-14",
+          "hour": 21,
+          "amount": 2097.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-16",
+          "hour": 0,
+          "amount": 2040.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-04-16",
+          "hour": 2,
+          "amount": 28655.0,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-16",
+          "hour": 21,
+          "amount": 37061.73,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-18",
+          "hour": 3,
+          "amount": 27582.99,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-19",
+          "hour": 3,
+          "amount": 37080.77,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-21",
+          "hour": 23,
+          "amount": 1875.0,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "date": "2026-04-23",
+          "hour": 1,
+          "amount": 8250.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-04-25",
+          "hour": 1,
+          "amount": 775.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-04-25",
+          "hour": 3,
+          "amount": 31529.25,
+          "orders": 1,
+          "guests": 3
+        },
+        {
+          "date": "2026-04-26",
+          "hour": 0,
+          "amount": 1812.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-04-26",
+          "hour": 4,
+          "amount": 34521.09,
+          "orders": 1,
+          "guests": 4
+        }
+      ],
+      "categories_daily": [
+        {
+          "date": "2025-03-23",
+          "category": "Other",
+          "amount": 2805.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-03-25",
+          "category": "Other",
+          "amount": 7225.0,
+          "orders": 29
+        },
+        {
+          "date": "2025-03-26",
+          "category": "Other",
+          "amount": 1489.0,
+          "orders": 21
+        },
+        {
+          "date": "2025-04-02",
+          "category": "Other",
+          "amount": 4750.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-06",
+          "category": "Other",
+          "amount": 33767.9,
+          "orders": 33
+        },
+        {
+          "date": "2025-04-13",
+          "category": "Other",
+          "amount": 29022.0,
+          "orders": 39
+        },
+        {
+          "date": "2025-04-15",
+          "category": "Other",
+          "amount": 1663.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-04-17",
+          "category": "Other",
+          "amount": 1874.0,
+          "orders": 19
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Other",
+          "amount": 28099.4,
+          "orders": 37
+        },
+        {
+          "date": "2025-04-21",
+          "category": "Other",
+          "amount": 2991.0,
+          "orders": 27
+        },
+        {
+          "date": "2025-04-24",
+          "category": "Other",
+          "amount": 21240.0,
+          "orders": 33
+        },
+        {
+          "date": "2025-04-26",
+          "category": "Other",
+          "amount": 33470.0,
+          "orders": 39
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Other",
+          "amount": 33372.0,
+          "orders": 40
+        },
+        {
+          "date": "2025-04-28",
+          "category": "Other",
+          "amount": 20715.0,
+          "orders": 32
+        },
+        {
+          "date": "2025-04-30",
+          "category": "Other",
+          "amount": 16125.0,
+          "orders": 24
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Other",
+          "amount": 27336.0,
+          "orders": 25
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Other",
+          "amount": 24184.4,
+          "orders": 39
+        },
+        {
+          "date": "2025-05-04",
+          "category": "Other",
+          "amount": 34415.2,
+          "orders": 38
+        },
+        {
+          "date": "2025-05-06",
+          "category": "Other",
+          "amount": 4005.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-07",
+          "category": "Other",
+          "amount": 8847.0,
+          "orders": 33
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Other",
+          "amount": 23130.0,
+          "orders": 30
+        },
+        {
+          "date": "2025-05-10",
+          "category": "Other",
+          "amount": 26245.0,
+          "orders": 34
+        },
+        {
+          "date": "2025-05-12",
+          "category": "Other",
+          "amount": 5000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-13",
+          "category": "Other",
+          "amount": 48080.4,
+          "orders": 60
+        },
+        {
+          "date": "2025-05-14",
+          "category": "Other",
+          "amount": 3850.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-15",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-16",
+          "category": "Other",
+          "amount": 12.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-17",
+          "category": "Other",
+          "amount": 30077.0,
+          "orders": 30
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Other",
+          "amount": 27832.0,
+          "orders": 40
+        },
+        {
+          "date": "2025-05-20",
+          "category": "Other",
+          "amount": 40880.0,
+          "orders": 67
+        },
+        {
+          "date": "2025-05-21",
+          "category": "Other",
+          "amount": 853.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-05-22",
+          "category": "Other",
+          "amount": 3280.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-24",
+          "category": "Other",
+          "amount": 24854.0,
+          "orders": 42
+        },
+        {
+          "date": "2025-05-25",
+          "category": "Other",
+          "amount": 28079.6,
+          "orders": 40
+        },
+        {
+          "date": "2025-05-26",
+          "category": "Other",
+          "amount": 17949.2,
+          "orders": 35
+        },
+        {
+          "date": "2025-05-28",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-29",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-30",
+          "category": "Other",
+          "amount": 18005.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Other",
+          "amount": 27076.4,
+          "orders": 37
+        },
+        {
+          "date": "2025-06-01",
+          "category": "Other",
+          "amount": 25492.6,
+          "orders": 34
+        },
+        {
+          "date": "2025-06-02",
+          "category": "Other",
+          "amount": 20958.2,
+          "orders": 37
+        },
+        {
+          "date": "2025-06-03",
+          "category": "Other",
+          "amount": 20754.0,
+          "orders": 23
+        },
+        {
+          "date": "2025-06-04",
+          "category": "Other",
+          "amount": 6983.0,
+          "orders": 13
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Other",
+          "amount": 28041.0,
+          "orders": 58
+        },
+        {
+          "date": "2025-06-08",
+          "category": "Other",
+          "amount": 29519.4,
+          "orders": 35
+        },
+        {
+          "date": "2025-06-09",
+          "category": "Other",
+          "amount": 29701.0,
+          "orders": 52
+        },
+        {
+          "date": "2025-06-10",
+          "category": "Other",
+          "amount": 2778.0,
+          "orders": 29
+        },
+        {
+          "date": "2025-06-11",
+          "category": "Other",
+          "amount": 15620.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-06-12",
+          "category": "Other",
+          "amount": 3800.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-13",
+          "category": "Other",
+          "amount": 3675.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Other",
+          "amount": 32729.0,
+          "orders": 36
+        },
+        {
+          "date": "2025-06-15",
+          "category": "Other",
+          "amount": 32688.6,
+          "orders": 36
+        },
+        {
+          "date": "2025-06-17",
+          "category": "Other",
+          "amount": 5100.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-19",
+          "category": "Other",
+          "amount": 13355.0,
+          "orders": 30
+        },
+        {
+          "date": "2025-06-21",
+          "category": "Other",
+          "amount": 21143.2,
+          "orders": 30
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Other",
+          "amount": 30099.8,
+          "orders": 42
+        },
+        {
+          "date": "2025-06-23",
+          "category": "Other",
+          "amount": 25198.0,
+          "orders": 27
+        },
+        {
+          "date": "2025-06-25",
+          "category": "Other",
+          "amount": 35325.0,
+          "orders": 32
+        },
+        {
+          "date": "2025-06-26",
+          "category": "Other",
+          "amount": 26987.0,
+          "orders": 21
+        },
+        {
+          "date": "2025-06-29",
+          "category": "Other",
+          "amount": 1750.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-30",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-01",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-02",
+          "category": "Other",
+          "amount": 72904.6,
+          "orders": 97
+        },
+        {
+          "date": "2025-07-09",
+          "category": "Other",
+          "amount": 53496.0,
+          "orders": 61
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Other",
+          "amount": 23673.4,
+          "orders": 34
+        },
+        {
+          "date": "2025-07-13",
+          "category": "Other",
+          "amount": 28827.6,
+          "orders": 36
+        },
+        {
+          "date": "2025-07-14",
+          "category": "Other",
+          "amount": 16766.4,
+          "orders": 26
+        },
+        {
+          "date": "2025-07-16",
+          "category": "Other",
+          "amount": 11653.0,
+          "orders": 32
+        },
+        {
+          "date": "2025-07-20",
+          "category": "Other",
+          "amount": 25785.4,
+          "orders": 38
+        },
+        {
+          "date": "2025-07-22",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-24",
+          "category": "Other",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-26",
+          "category": "Other",
+          "amount": 33024.8,
+          "orders": 43
+        },
+        {
+          "date": "2025-07-27",
+          "category": "Other",
+          "amount": 27871.8,
+          "orders": 41
+        },
+        {
+          "date": "2025-07-28",
+          "category": "Other",
+          "amount": 19139.4,
+          "orders": 34
+        },
+        {
+          "date": "2025-07-30",
+          "category": "Other",
+          "amount": 592.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-07-31",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-01",
+          "category": "Other",
+          "amount": 2205.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-02",
+          "category": "Other",
+          "amount": 53627.8,
+          "orders": 65
+        },
+        {
+          "date": "2025-08-03",
+          "category": "Other",
+          "amount": 30117.0,
+          "orders": 35
+        },
+        {
+          "date": "2025-08-04",
+          "category": "Other",
+          "amount": 27256.8,
+          "orders": 33
+        },
+        {
+          "date": "2025-08-05",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-07",
+          "category": "Other",
+          "amount": 7457.0,
+          "orders": 29
+        },
+        {
+          "date": "2025-08-08",
+          "category": "Other",
+          "amount": 23920.0,
+          "orders": 33
+        },
+        {
+          "date": "2025-08-09",
+          "category": "Other",
+          "amount": 21773.6,
+          "orders": 41
+        },
+        {
+          "date": "2025-08-10",
+          "category": "Other",
+          "amount": 33766.4,
+          "orders": 32
+        },
+        {
+          "date": "2025-08-11",
+          "category": "Other",
+          "amount": 19026.75,
+          "orders": 32
+        },
+        {
+          "date": "2025-08-12",
+          "category": "Other",
+          "amount": 3750.0,
+          "orders": 17
+        },
+        {
+          "date": "2025-08-13",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-15",
+          "category": "Other",
+          "amount": 16570.0,
+          "orders": 33
+        },
+        {
+          "date": "2025-08-17",
+          "category": "Other",
+          "amount": 27422.6,
+          "orders": 42
+        },
+        {
+          "date": "2025-08-18",
+          "category": "Other",
+          "amount": 20380.14,
+          "orders": 37
+        },
+        {
+          "date": "2025-08-21",
+          "category": "Other",
+          "amount": 21325.84,
+          "orders": 38
+        },
+        {
+          "date": "2025-08-23",
+          "category": "Other",
+          "amount": 20051.2,
+          "orders": 32
+        },
+        {
+          "date": "2025-08-24",
+          "category": "Other",
+          "amount": 25824.8,
+          "orders": 38
+        },
+        {
+          "date": "2025-08-25",
+          "category": "Other",
+          "amount": 24357.4,
+          "orders": 34
+        },
+        {
+          "date": "2025-08-26",
+          "category": "Other",
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Other",
+          "amount": 19877.6,
+          "orders": 34
+        },
+        {
+          "date": "2025-08-31",
+          "category": "Other",
+          "amount": 35000.0,
+          "orders": 37
+        },
+        {
+          "date": "2025-09-01",
+          "category": "Other",
+          "amount": 19561.0,
+          "orders": 44
+        },
+        {
+          "date": "2025-09-02",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-05",
+          "category": "Other",
+          "amount": 1376.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-09-06",
+          "category": "Other",
+          "amount": 625.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-07",
+          "category": "Other",
+          "amount": 1250.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-08",
+          "category": "Other",
+          "amount": 54120.6,
+          "orders": 77
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Other",
+          "amount": 28104.0,
+          "orders": 29
+        },
+        {
+          "date": "2025-09-12",
+          "category": "Other",
+          "amount": 22780.0,
+          "orders": 22
+        },
+        {
+          "date": "2025-09-13",
+          "category": "Other",
+          "amount": 34254.6,
+          "orders": 35
+        },
+        {
+          "date": "2025-09-14",
+          "category": "Other",
+          "amount": 30805.0,
+          "orders": 33
+        },
+        {
+          "date": "2025-09-15",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-17",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Other",
+          "amount": 48470.0,
+          "orders": 73
+        },
+        {
+          "date": "2025-09-20",
+          "category": "Other",
+          "amount": 26911.6,
+          "orders": 32
+        },
+        {
+          "date": "2025-09-21",
+          "category": "Other",
+          "amount": 27079.6,
+          "orders": 43
+        },
+        {
+          "date": "2025-09-22",
+          "category": "Other",
+          "amount": 23432.5,
+          "orders": 47
+        },
+        {
+          "date": "2025-09-24",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-26",
+          "category": "Other",
+          "amount": 16207.57,
+          "orders": 29
+        },
+        {
+          "date": "2025-09-27",
+          "category": "Other",
+          "amount": 21739.6,
+          "orders": 34
+        },
+        {
+          "date": "2025-09-28",
+          "category": "Other",
+          "amount": 1750.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-29",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-30",
+          "category": "Other",
+          "amount": 38361.4,
+          "orders": 68
+        },
+        {
+          "date": "2025-10-04",
+          "category": "Other",
+          "amount": 21811.8,
+          "orders": 39
+        },
+        {
+          "date": "2025-10-05",
+          "category": "Other",
+          "amount": 2134.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-07",
+          "category": "Other",
+          "amount": 47477.0,
+          "orders": 82
+        },
+        {
+          "date": "2025-10-09",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-10",
+          "category": "Other",
+          "amount": 29142.0,
+          "orders": 51
+        },
+        {
+          "date": "2025-10-11",
+          "category": "Other",
+          "amount": 17986.6,
+          "orders": 39
+        },
+        {
+          "date": "2025-10-12",
+          "category": "Other",
+          "amount": 31359.0,
+          "orders": 35
+        },
+        {
+          "date": "2025-10-16",
+          "category": "Other",
+          "amount": 18470.2,
+          "orders": 36
+        },
+        {
+          "date": "2025-10-18",
+          "category": "Other",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-20",
+          "category": "Other",
+          "amount": 1729.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-10-21",
+          "category": "Other",
+          "amount": 1641.5,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Other",
+          "amount": 77576.5,
+          "orders": 107
+        },
+        {
+          "date": "2025-10-24",
+          "category": "Other",
+          "amount": 16916.0,
+          "orders": 31
+        },
+        {
+          "date": "2025-10-25",
+          "category": "Other",
+          "amount": 1750.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-26",
+          "category": "Other",
+          "amount": 885.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-27",
+          "category": "Other",
+          "amount": 85281.1,
+          "orders": 120
+        },
+        {
+          "date": "2025-10-28",
+          "category": "Other",
+          "amount": 5355.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-10-29",
+          "category": "Other",
+          "amount": 17330.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-10-30",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-01",
+          "category": "Other",
+          "amount": 21541.0,
+          "orders": 43
+        },
+        {
+          "date": "2025-11-02",
+          "category": "Other",
+          "amount": 30804.6,
+          "orders": 40
+        },
+        {
+          "date": "2025-11-03",
+          "category": "Other",
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-04",
+          "category": "Other",
+          "amount": 8422.5,
+          "orders": 8
+        },
+        {
+          "date": "2025-11-05",
+          "category": "Other",
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-08",
+          "category": "Other",
+          "amount": 28786.0,
+          "orders": 11
+        },
+        {
+          "date": "2025-11-09",
+          "category": "Other",
+          "amount": 41078.8,
+          "orders": 39
+        },
+        {
+          "date": "2025-11-13",
+          "category": "Other",
+          "amount": 11034.0,
+          "orders": 30
+        },
+        {
+          "date": "2025-11-15",
+          "category": "Other",
+          "amount": 20754.3,
+          "orders": 31
+        },
+        {
+          "date": "2025-11-16",
+          "category": "Other",
+          "amount": 32697.51,
+          "orders": 38
+        },
+        {
+          "date": "2025-11-17",
+          "category": "Other",
+          "amount": 1700.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-21",
+          "category": "Other",
+          "amount": 3104.0,
+          "orders": 11
+        },
+        {
+          "date": "2025-11-22",
+          "category": "Other",
+          "amount": 21173.21,
+          "orders": 40
+        },
+        {
+          "date": "2025-11-23",
+          "category": "Other",
+          "amount": 30952.2,
+          "orders": 48
+        },
+        {
+          "date": "2025-11-24",
+          "category": "Other",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-26",
+          "category": "Other",
+          "amount": 4734.8,
+          "orders": 40
+        },
+        {
+          "date": "2025-12-02",
+          "category": "Other",
+          "amount": 12020.0,
+          "orders": 31
+        },
+        {
+          "date": "2025-12-03",
+          "category": "Other",
+          "amount": 7622.0,
+          "orders": 53
+        },
+        {
+          "date": "2025-12-04",
+          "category": "Other",
+          "amount": 1000.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-12-06",
+          "category": "Other",
+          "amount": 21542.0,
+          "orders": 37
+        },
+        {
+          "date": "2025-12-07",
+          "category": "Other",
+          "amount": 25330.0,
+          "orders": 23
+        },
+        {
+          "date": "2025-12-08",
+          "category": "Other",
+          "amount": 1500.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-12-10",
+          "category": "Other",
+          "amount": 3311.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-12-11",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-12",
+          "category": "Other",
+          "amount": 6436.0,
+          "orders": 23
+        },
+        {
+          "date": "2025-12-13",
+          "category": "Other",
+          "amount": 25216.0,
+          "orders": 42
+        },
+        {
+          "date": "2025-12-14",
+          "category": "Other",
+          "amount": 750.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-15",
+          "category": "Other",
+          "amount": 70602.0,
+          "orders": 77
+        },
+        {
+          "date": "2025-12-18",
+          "category": "Other",
+          "amount": 2175.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-12-19",
+          "category": "Other",
+          "amount": 10317.0,
+          "orders": 25
+        },
+        {
+          "date": "2025-12-21",
+          "category": "Other",
+          "amount": 1622.1,
+          "orders": 13
+        },
+        {
+          "date": "2025-12-23",
+          "category": "Other",
+          "amount": 1215.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-12-31",
+          "category": "Other",
+          "amount": 750.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-06",
+          "category": "Other",
+          "amount": 29847.31,
+          "orders": 44
+        },
+        {
+          "date": "2026-01-07",
+          "category": "Other",
+          "amount": 2475.0,
+          "orders": 11
+        },
+        {
+          "date": "2026-01-08",
+          "category": "Other",
+          "amount": 32775.49,
+          "orders": 33
+        },
+        {
+          "date": "2026-01-14",
+          "category": "Other",
+          "amount": 83408.33,
+          "orders": 71
+        },
+        {
+          "date": "2026-01-16",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-17",
+          "category": "Other",
+          "amount": 22710.0,
+          "orders": 36
+        },
+        {
+          "date": "2026-01-21",
+          "category": "Other",
+          "amount": 27457.6,
+          "orders": 41
+        },
+        {
+          "date": "2026-01-23",
+          "category": "Other",
+          "amount": 3600.0,
+          "orders": 13
+        },
+        {
+          "date": "2026-01-29",
+          "category": "Other",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-01-31",
+          "category": "Other",
+          "amount": 3495.0,
+          "orders": 9
+        },
+        {
+          "date": "2026-02-01",
+          "category": "Other",
+          "amount": 11623.0,
+          "orders": 29
+        },
+        {
+          "date": "2026-02-04",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-07",
+          "category": "Other",
+          "amount": 3644.0,
+          "orders": 23
+        },
+        {
+          "date": "2026-02-08",
+          "category": "Other",
+          "amount": 365.0,
+          "orders": 31
+        },
+        {
+          "date": "2026-02-10",
+          "category": "Other",
+          "amount": 10145.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-02-11",
+          "category": "Other",
+          "amount": 9560.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-02-13",
+          "category": "Other",
+          "amount": 2175.0,
+          "orders": 9
+        },
+        {
+          "date": "2026-02-17",
+          "category": "Other",
+          "amount": 1250.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-02-19",
+          "category": "Other",
+          "amount": 216.0,
+          "orders": 14
+        },
+        {
+          "date": "2026-02-25",
+          "category": "Other",
+          "amount": 5731.4,
+          "orders": 23
+        },
+        {
+          "date": "2026-02-26",
+          "category": "Other",
+          "amount": 27140.8,
+          "orders": 47
+        },
+        {
+          "date": "2026-02-27",
+          "category": "Other",
+          "amount": 5843.0,
+          "orders": 113
+        },
+        {
+          "date": "2026-02-28",
+          "category": "Other",
+          "amount": 7527.0,
+          "orders": 14
+        },
+        {
+          "date": "2026-03-01",
+          "category": "Other",
+          "amount": 9690.0,
+          "orders": 54
+        },
+        {
+          "date": "2026-03-05",
+          "category": "Other",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-06",
+          "category": "Other",
+          "amount": 25352.0,
+          "orders": 38
+        },
+        {
+          "date": "2026-03-11",
+          "category": "Other",
+          "amount": 2890.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-03-14",
+          "category": "Other",
+          "amount": 7436.0,
+          "orders": 43
+        },
+        {
+          "date": "2026-03-22",
+          "category": "Other",
+          "amount": 13988.0,
+          "orders": 148
+        },
+        {
+          "date": "2026-03-28",
+          "category": "Other",
+          "amount": 18773.8,
+          "orders": 205
+        },
+        {
+          "date": "2026-04-02",
+          "category": "Other",
+          "amount": 4125.0,
+          "orders": 15
+        },
+        {
+          "date": "2026-04-03",
+          "category": "Other",
+          "amount": 4161.0,
+          "orders": 7
+        },
+        {
+          "date": "2026-04-11",
+          "category": "Other",
+          "amount": 27679.8,
+          "orders": 321
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Other",
+          "amount": 14063.99,
+          "orders": 26
+        },
+        {
+          "date": "2026-04-13",
+          "category": "Other",
+          "amount": 3582.0,
+          "orders": 8
+        },
+        {
+          "date": "2026-04-14",
+          "category": "Other",
+          "amount": 1858.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-04-16",
+          "category": "Other",
+          "amount": 54836.0,
+          "orders": 401
+        },
+        {
+          "date": "2026-04-18",
+          "category": "Other",
+          "amount": 21332.99,
+          "orders": 224
+        },
+        {
+          "date": "2026-04-19",
+          "category": "Other",
+          "amount": 29860.3,
+          "orders": 311
+        },
+        {
+          "date": "2026-04-21",
+          "category": "Other",
+          "amount": 1875.0,
+          "orders": 6
+        },
+        {
+          "date": "2026-04-23",
+          "category": "Other",
+          "amount": 7557.0,
+          "orders": 9
+        },
+        {
+          "date": "2026-04-25",
+          "category": "Other",
+          "amount": 26400.4,
+          "orders": 118
+        },
+        {
+          "date": "2026-04-26",
+          "category": "Other",
+          "amount": 29471.2,
+          "orders": 183
+        }
+      ],
+      "service_modes_daily": [
+        {
+          "date": "2025-03-23",
+          "mode": "Unspecified",
+          "amount": 3456.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-03-25",
+          "mode": "Unspecified",
+          "amount": 8862.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-03-26",
+          "mode": "Unspecified",
+          "amount": 1489.0,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2025-04-02",
+          "mode": "Unspecified",
+          "amount": 4750.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-06",
+          "mode": "Unspecified",
+          "amount": 40364.52,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-13",
+          "mode": "Unspecified",
+          "amount": 34897.68,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-15",
+          "mode": "Unspecified",
+          "amount": 1991.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-17",
+          "mode": "Unspecified",
+          "amount": 1874.0,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2025-04-20",
+          "mode": "Unspecified",
+          "amount": 32174.7,
+          "orders": 2,
+          "guests": 4
+        },
+        {
+          "date": "2025-04-21",
+          "mode": "Unspecified",
+          "amount": 3028.5,
+          "orders": 7,
+          "guests": 7
+        },
+        {
+          "date": "2025-04-24",
+          "mode": "Unspecified",
+          "amount": 26337.6,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-26",
+          "mode": "Unspecified",
+          "amount": 41314.4,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-04-27",
+          "mode": "Unspecified",
+          "amount": 40982.88,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-28",
+          "mode": "Unspecified",
+          "amount": 24946.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-04-30",
+          "mode": "Unspecified",
+          "amount": 19840.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-01",
+          "mode": "Unspecified",
+          "amount": 32511.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-03",
+          "mode": "Unspecified",
+          "amount": 29074.66,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2025-05-04",
+          "mode": "Unspecified",
+          "amount": 42950.16,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-05-06",
+          "mode": "Unspecified",
+          "amount": 4668.75,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-05-07",
+          "mode": "Unspecified",
+          "amount": 9963.25,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "date": "2025-05-09",
+          "mode": "Unspecified",
+          "amount": 27492.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-10",
+          "mode": "Unspecified",
+          "amount": 32543.8,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-12",
+          "mode": "Unspecified",
+          "amount": 5000.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-13",
+          "mode": "Unspecified",
+          "amount": 57134.88,
+          "orders": 5,
+          "guests": 6
+        },
+        {
+          "date": "2025-05-14",
+          "mode": "Unspecified",
+          "amount": 4540.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-15",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-16",
+          "mode": "Unspecified",
+          "amount": 12.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-17",
+          "mode": "Unspecified",
+          "amount": 33780.08,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-18",
+          "mode": "Unspecified",
+          "amount": 33009.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-20",
+          "mode": "Unspecified",
+          "amount": 48774.56,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-05-21",
+          "mode": "Unspecified",
+          "amount": 997.72,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-22",
+          "mode": "Unspecified",
+          "amount": 3905.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-24",
+          "mode": "Unspecified",
+          "amount": 29999.61,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-05-25",
+          "mode": "Unspecified",
+          "amount": 34335.1,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-26",
+          "mode": "Unspecified",
+          "amount": 22017.01,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-28",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-29",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-30",
+          "mode": "Unspecified",
+          "amount": 21605.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-05-31",
+          "mode": "Unspecified",
+          "amount": 33070.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-01",
+          "mode": "Unspecified",
+          "amount": 30937.62,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-02",
+          "mode": "Unspecified",
+          "amount": 25412.95,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-03",
+          "mode": "Unspecified",
+          "amount": 22194.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-04",
+          "mode": "Unspecified",
+          "amount": 8650.52,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-07",
+          "mode": "Unspecified",
+          "amount": 33380.74,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2025-06-08",
+          "mode": "Unspecified",
+          "amount": 36259.66,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-09",
+          "mode": "Unspecified",
+          "amount": 35997.04,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-10",
+          "mode": "Unspecified",
+          "amount": 2778.0,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "date": "2025-06-11",
+          "mode": "Unspecified",
+          "amount": 16370.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-12",
+          "mode": "Unspecified",
+          "amount": 4625.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-13",
+          "mode": "Unspecified",
+          "amount": 4343.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-14",
+          "mode": "Unspecified",
+          "amount": 38965.52,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-15",
+          "mode": "Unspecified",
+          "amount": 39693.86,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-17",
+          "mode": "Unspecified",
+          "amount": 5100.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-19",
+          "mode": "Unspecified",
+          "amount": 16292.7,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-06-21",
+          "mode": "Unspecified",
+          "amount": 25687.17,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-22",
+          "mode": "Unspecified",
+          "amount": 36531.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-23",
+          "mode": "Unspecified",
+          "amount": 25198.0,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-25",
+          "mode": "Unspecified",
+          "amount": 42412.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-26",
+          "mode": "Unspecified",
+          "amount": 31072.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-06-29",
+          "mode": "Unspecified",
+          "amount": 2175.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-06-30",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-01",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-02",
+          "mode": "Unspecified",
+          "amount": 88211.21,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-07-09",
+          "mode": "Unspecified",
+          "amount": 65271.84,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-07-12",
+          "mode": "Unspecified",
+          "amount": 29054.78,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-13",
+          "mode": "Unspecified",
+          "amount": 35753.73,
+          "orders": 2,
+          "guests": 3
+        },
+        {
+          "date": "2025-07-14",
+          "mode": "Unspecified",
+          "amount": 20500.18,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-16",
+          "mode": "Unspecified",
+          "amount": 13978.75,
+          "orders": 2,
+          "guests": 3
+        },
+        {
+          "date": "2025-07-20",
+          "mode": "Unspecified",
+          "amount": 31696.72,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-22",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-24",
+          "mode": "Unspecified",
+          "amount": 1050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-07-26",
+          "mode": "Unspecified",
+          "amount": 40947.08,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-07-27",
+          "mode": "Unspecified",
+          "amount": 34309.04,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-28",
+          "mode": "Unspecified",
+          "amount": 23270.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-30",
+          "mode": "Unspecified",
+          "amount": 592.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-07-31",
+          "mode": "Unspecified",
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-01",
+          "mode": "Unspecified",
+          "amount": 2756.25,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-02",
+          "mode": "Unspecified",
+          "amount": 66057.23,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-03",
+          "mode": "Unspecified",
+          "amount": 37019.48,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-04",
+          "mode": "Unspecified",
+          "amount": 33798.44,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-05",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-07",
+          "mode": "Unspecified",
+          "amount": 7457.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-08-08",
+          "mode": "Unspecified",
+          "amount": 29069.0,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "date": "2025-08-09",
+          "mode": "Unspecified",
+          "amount": 26519.26,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-10",
+          "mode": "Unspecified",
+          "amount": 40814.34,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-11",
+          "mode": "Unspecified",
+          "amount": 23043.56,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-12",
+          "mode": "Unspecified",
+          "amount": 4687.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-13",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-15",
+          "mode": "Unspecified",
+          "amount": 20587.5,
+          "orders": 2,
+          "guests": 3
+        },
+        {
+          "date": "2025-08-16",
+          "mode": "Unspecified",
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-17",
+          "mode": "Unspecified",
+          "amount": 33382.42,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-18",
+          "mode": "Unspecified",
+          "amount": 24583.42,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2025-08-21",
+          "mode": "Unspecified",
+          "amount": 26030.14,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-08-23",
+          "mode": "Unspecified",
+          "amount": 24625.89,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-24",
+          "mode": "Unspecified",
+          "amount": 31333.22,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-25",
+          "mode": "Unspecified",
+          "amount": 30203.18,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-26",
+          "mode": "Unspecified",
+          "amount": 262.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-30",
+          "mode": "Unspecified",
+          "amount": 24041.86,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-08-31",
+          "mode": "Unspecified",
+          "amount": 43400.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-09-01",
+          "mode": "Unspecified",
+          "amount": 24255.54,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-02",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-05",
+          "mode": "Unspecified",
+          "amount": 1632.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-06",
+          "mode": "Unspecified",
+          "amount": 718.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-07",
+          "mode": "Unspecified",
+          "amount": 1500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-08",
+          "mode": "Unspecified",
+          "amount": 66040.42,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-09-10",
+          "mode": "Unspecified",
+          "amount": 34168.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-12",
+          "mode": "Unspecified",
+          "amount": 26604.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-13",
+          "mode": "Unspecified",
+          "amount": 40892.66,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-14",
+          "mode": "Unspecified",
+          "amount": 36819.27,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-15",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-17",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-19",
+          "mode": "Unspecified",
+          "amount": 57116.6,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-09-20",
+          "mode": "Unspecified",
+          "amount": 32530.9,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-21",
+          "mode": "Unspecified",
+          "amount": 33578.7,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-22",
+          "mode": "Unspecified",
+          "amount": 29874.28,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-09-24",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-26",
+          "mode": "Unspecified",
+          "amount": 19892.97,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-09-27",
+          "mode": "Unspecified",
+          "amount": 26957.62,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-28",
+          "mode": "Unspecified",
+          "amount": 2125.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-29",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-09-30",
+          "mode": "Unspecified",
+          "amount": 46807.22,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2025-10-04",
+          "mode": "Unspecified",
+          "amount": 27076.86,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-05",
+          "mode": "Unspecified",
+          "amount": 2605.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-07",
+          "mode": "Unspecified",
+          "amount": 57527.07,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-09",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-10",
+          "mode": "Unspecified",
+          "amount": 35202.5,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2025-10-11",
+          "mode": "Unspecified",
+          "amount": 22054.38,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-12",
+          "mode": "Unspecified",
+          "amount": 38297.46,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-10-16",
+          "mode": "Unspecified",
+          "amount": 22288.65,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-18",
+          "mode": "Unspecified",
+          "amount": 1187.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-20",
+          "mode": "Unspecified",
+          "amount": 2161.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-21",
+          "mode": "Unspecified",
+          "amount": 2051.88,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-22",
+          "mode": "Unspecified",
+          "amount": 94158.77,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2025-10-24",
+          "mode": "Unspecified",
+          "amount": 20209.75,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-10-25",
+          "mode": "Unspecified",
+          "amount": 2125.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-26",
+          "mode": "Unspecified",
+          "amount": 1043.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-10-27",
+          "mode": "Unspecified",
+          "amount": 102609.96,
+          "orders": 4,
+          "guests": 161
+        },
+        {
+          "date": "2025-10-28",
+          "mode": "Unspecified",
+          "amount": 6131.25,
+          "orders": 2,
+          "guests": 121
+        },
+        {
+          "date": "2025-10-29",
+          "mode": "Unspecified",
+          "amount": 19980.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-10-30",
+          "mode": "Unspecified",
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-01",
+          "mode": "Unspecified",
+          "amount": 26110.84,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-02",
+          "mode": "Unspecified",
+          "amount": 37909.22,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-03",
+          "mode": "Unspecified",
+          "amount": 262.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-04",
+          "mode": "Unspecified",
+          "amount": 9448.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-05",
+          "mode": "Unspecified",
+          "amount": 262.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-08",
+          "mode": "Unspecified",
+          "amount": 35716.72,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-09",
+          "mode": "Unspecified",
+          "amount": 51604.44,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-13",
+          "mode": "Unspecified",
+          "amount": 13252.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-15",
+          "mode": "Unspecified",
+          "amount": 27374.16,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-16",
+          "mode": "Unspecified",
+          "amount": 41805.51,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-17",
+          "mode": "Unspecified",
+          "amount": 2025.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-21",
+          "mode": "Unspecified",
+          "amount": 3880.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-22",
+          "mode": "Unspecified",
+          "amount": 27092.57,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-23",
+          "mode": "Unspecified",
+          "amount": 39524.76,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-11-24",
+          "mode": "Unspecified",
+          "amount": 1050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-11-26",
+          "mode": "Unspecified",
+          "amount": 4969.7,
+          "orders": 21,
+          "guests": 21
+        },
+        {
+          "date": "2025-12-02",
+          "mode": "Unspecified",
+          "amount": 14633.6,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-03",
+          "mode": "Unspecified",
+          "amount": 9114.56,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-12-04",
+          "mode": "Unspecified",
+          "amount": 1037.5,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2025-12-06",
+          "mode": "Unspecified",
+          "amount": 26302.55,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-07",
+          "mode": "Unspecified",
+          "amount": 30975.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-08",
+          "mode": "Unspecified",
+          "amount": 1562.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-10",
+          "mode": "Unspecified",
+          "amount": 4038.75,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-11",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-12",
+          "mode": "Unspecified",
+          "amount": 7620.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-13",
+          "mode": "Unspecified",
+          "amount": 31083.04,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-14",
+          "mode": "Unspecified",
+          "amount": 787.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-15",
+          "mode": "Unspecified",
+          "amount": 86310.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2025-12-18",
+          "mode": "Unspecified",
+          "amount": 2175.0,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "date": "2025-12-19",
+          "mode": "Unspecified",
+          "amount": 12197.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-21",
+          "mode": "Unspecified",
+          "amount": 1622.1,
+          "orders": 12,
+          "guests": 12
+        },
+        {
+          "date": "2025-12-22",
+          "mode": "Unspecified",
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2025-12-23",
+          "mode": "Unspecified",
+          "amount": 1326.0,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2025-12-31",
+          "mode": "Unspecified",
+          "amount": 937.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-06",
+          "mode": "Unspecified",
+          "amount": 36596.69,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-07",
+          "mode": "Unspecified",
+          "amount": 2475.0,
+          "orders": 11,
+          "guests": 11
+        },
+        {
+          "date": "2026-01-08",
+          "mode": "Unspecified",
+          "amount": 39680.26,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-14",
+          "mode": "Unspecified",
+          "amount": 101925.92,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-01-16",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-01-17",
+          "mode": "Unspecified",
+          "amount": 27465.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-01-21",
+          "mode": "Unspecified",
+          "amount": 33693.11,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-01-23",
+          "mode": "Unspecified",
+          "amount": 3600.0,
+          "orders": 13,
+          "guests": 13
+        },
+        {
+          "date": "2026-01-29",
+          "mode": "Unspecified",
+          "amount": 1050.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-01-31",
+          "mode": "Unspecified",
+          "amount": 4120.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-01",
+          "mode": "Unspecified",
+          "amount": 14275.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-04",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-07",
+          "mode": "Unspecified",
+          "amount": 4376.5,
+          "orders": 12,
+          "guests": 12
+        },
+        {
+          "date": "2026-02-08",
+          "mode": "Unspecified",
+          "amount": 365.0,
+          "orders": 9,
+          "guests": 9
+        },
+        {
+          "date": "2026-02-10",
+          "mode": "Unspecified",
+          "amount": 11457.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-11",
+          "mode": "Unspecified",
+          "amount": 11700.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-02-13",
+          "mode": "Unspecified",
+          "amount": 2175.0,
+          "orders": 9,
+          "guests": 9
+        },
+        {
+          "date": "2026-02-17",
+          "mode": "Unspecified",
+          "amount": 1312.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-02-19",
+          "mode": "Unspecified",
+          "amount": 216.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-02-25",
+          "mode": "Unspecified",
+          "amount": 6633.0,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "date": "2026-02-26",
+          "mode": "Unspecified",
+          "amount": 33031.85,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2026-02-27",
+          "mode": "Unspecified",
+          "amount": 6941.0,
+          "orders": 17,
+          "guests": 17
+        },
+        {
+          "date": "2026-02-28",
+          "mode": "Unspecified",
+          "amount": 8757.0,
+          "orders": 7,
+          "guests": 7
+        },
+        {
+          "date": "2026-03-01",
+          "mode": "Unspecified",
+          "amount": 11737.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-03-05",
+          "mode": "Unspecified",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-03-06",
+          "mode": "Unspecified",
+          "amount": 29019.2,
+          "orders": 15,
+          "guests": 15
+        },
+        {
+          "date": "2026-03-11",
+          "mode": "Unspecified",
+          "amount": 3408.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-03-14",
+          "mode": "Unspecified",
+          "amount": 8675.0,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-03-22",
+          "mode": "Unspecified",
+          "amount": 16985.0,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-03-28",
+          "mode": "Unspecified",
+          "amount": 22842.25,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-02",
+          "mode": "Unspecified",
+          "amount": 4125.0,
+          "orders": 15,
+          "guests": 15
+        },
+        {
+          "date": "2026-04-03",
+          "mode": "Unspecified",
+          "amount": 4913.75,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2026-04-11",
+          "mode": "Unspecified",
+          "amount": 34570.25,
+          "orders": 2,
+          "guests": 4
+        },
+        {
+          "date": "2026-04-12",
+          "mode": "Unspecified",
+          "amount": 16849.99,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-13",
+          "mode": "Unspecified",
+          "amount": 3965.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-14",
+          "mode": "Unspecified",
+          "amount": 2097.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-16",
+          "mode": "Unspecified",
+          "amount": 67756.73,
+          "orders": 3,
+          "guests": 5
+        },
+        {
+          "date": "2026-04-18",
+          "mode": "Unspecified",
+          "amount": 27582.99,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-19",
+          "mode": "Unspecified",
+          "amount": 37080.77,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-21",
+          "mode": "Unspecified",
+          "amount": 1875.0,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "date": "2026-04-23",
+          "mode": "Unspecified",
+          "amount": 8250.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-04-25",
+          "mode": "Unspecified",
+          "amount": 32304.25,
+          "orders": 2,
+          "guests": 4
+        },
+        {
+          "date": "2026-04-26",
+          "mode": "Unspecified",
+          "amount": 36333.59,
+          "orders": 2,
+          "guests": 5
+        }
+      ],
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 0,
-        "guests": 0,
-        "amount": 0,
-        "tip": 0,
-        "discount": 0,
-        "min_date": null,
-        "max_date": null,
+        "orders": 504,
+        "guests": 804,
+        "amount": 4416987.14,
+        "tip": 0.0,
+        "discount": 782.2,
+        "min_date": "2025-03-23",
+        "max_date": "2026-04-26",
         "tip_bins": [
-          0,
+          504,
           0,
           0,
           0,
