@@ -59,6 +59,18 @@ def load_html_data(html_path: Path) -> tuple[str, dict[str, Any], tuple[int, int
     return text, data, (m.start(1), m.end(1))
 
 
+# Map data/<file>.json basenames → DATA.outlets.<key> when they differ.
+# Toast sync writes JSON files keyed by `outlet_id` from TOAST_OUTLETS config,
+# but the dashboard's inline DATA uses different short keys for some outlets.
+# Add new aliases here when adding new outlets that have a name mismatch.
+_OUTLET_ALIAS = {
+    "hiroki_det":    "hirokisan",
+    "hiroki_phl":    "hiroki",
+    "rosemary_rose": "rosemaryrose",
+    "little_wing":   "littlewing",
+}
+
+
 def patch_order_details(
     data: dict[str, Any],
     data_dir: Path,
@@ -75,14 +87,16 @@ def patch_order_details(
     updated = 0
     skipped: list[str] = []
     for json_path in sorted(data_dir.glob("*.json")):
-        oid = json_path.stem
-        if oid.startswith("_"):
+        file_oid = json_path.stem
+        if file_oid.startswith("_"):
             # skip markers like _synced_at.json if ever added
             continue
+        # Translate file basename to dashboard's outlet key if aliased.
+        oid = _OUTLET_ALIAS.get(file_oid, file_oid)
         if oid not in outlets:
             if verbose:
-                print(f"  [skip] data/{oid}.json — no matching outlet in HTML", file=sys.stderr)
-            skipped.append(oid)
+                print(f"  [skip] data/{file_oid}.json — no matching outlet in HTML (tried '{oid}')", file=sys.stderr)
+            skipped.append(file_oid)
             continue
         try:
             payload = json.loads(json_path.read_text(encoding="utf-8"))
