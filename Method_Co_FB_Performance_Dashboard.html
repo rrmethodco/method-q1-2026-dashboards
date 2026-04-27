@@ -2061,9 +2061,67 @@ document.addEventListener('change', e => {
   }
 });
 
-// Init
-renderNav();
-renderOutlet();
+// ================================================== Runtime data loader
+// Fetches per-outlet payloads from data/<file>.json and merges them into the
+// inline DATA blob before first render. Replaces order_details (the slice the
+// nightly Toast sync owns) and, where the HTML hasn't curated revenue_centers,
+// derives them from the rc keys in the payload. Inline DATA stays as fallback
+// if a fetch fails (offline preview, missing file, network error).
+const __FILE_FOR_OUTLET = {
+  hirokisan:    'hiroki_det',
+  hiroki:       'hiroki_phl',
+  rosemaryrose: 'rosemary_rose',
+  littlewing:   'little_wing',
+};
+const __RC_LABEL_OVERRIDE = {
+  le_supreme:   'Le Suprême',
+  hiroki_san:   'HIROKI-SAN',
+  aladdin_sane: 'Aladdin Sane',
+  sakazuki:     'Sakazuki',
+  bar_rotunda:  'Bar Rotunda',
+  main:         'All',
+};
+function __humanizeRc(key) {
+  if (__RC_LABEL_OVERRIDE[key]) return __RC_LABEL_OVERRIDE[key];
+  return key.split('_').map(w => w ? w[0].toUpperCase() + w.slice(1) : '').join(' ');
+}
+async function __loadOutletData() {
+  const ids = Object.keys(DATA.outlets);
+  await Promise.all(ids.map(async id => {
+    const file = __FILE_FOR_OUTLET[id] || id;
+    try {
+      const r = await fetch(`data/${file}.json`, { cache: 'no-store' });
+      if (!r.ok) return;
+      const payload = await r.json();
+      const od = payload && payload.order_details;
+      if (!od || typeof od !== 'object') return;
+      const o = DATA.outlets[id];
+      o.order_details = od;
+      o.placeholder = false;  // we have real data now; clear the inline placeholder flag
+      o.sources = o.sources || {};
+      o.sources.order_details = true;
+      // Backfill revenue_centers from rc keys when the HTML hasn't curated them.
+      if (!Array.isArray(o.revenue_centers) || o.revenue_centers.length === 0) {
+        o.revenue_centers = Object.keys(od).map(k => ({ id: k, label: __humanizeRc(k) }));
+      }
+    } catch (_) { /* keep inline fallback */ }
+  }));
+  // Recompute portfolio rollup so nav reflects what actually has data.
+  const withData = Object.entries(DATA.outlets)
+    .filter(([, o]) => !o.placeholder && o.order_details && Object.keys(o.order_details).length > 0)
+    .map(([id]) => id)
+    .sort();
+  DATA.portfolio = DATA.portfolio || {};
+  DATA.portfolio.outlets_with_data = withData;
+  DATA.portfolio.outlets_total = Object.keys(DATA.outlets).length;
+}
+
+// Init — gate first render on the data loader so revenue_centers and
+// order_details from data/*.json are in place before renderNav/renderOutlet.
+__loadOutletData().finally(() => {
+  renderNav();
+  renderOutlet();
+});
 </script>
 </body>
 </html>
