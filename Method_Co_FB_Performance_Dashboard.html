@@ -1366,14 +1366,19 @@ function renderTrend(cur, py) {
     const curRoll = rollup(cur, STATE.gran, ['net_sales']);
     const ctx = document.getElementById('trendChart').getContext('2d');
     const datasets = [{
+      type: 'bar',
       label: 'Net Sales',
       // Parse as local noon so the X-axis tick matches the date we mean —
       // a raw 'YYYY-MM-DD' string is parsed by Chart.js's date-fns adapter
       // as UTC midnight, which in ET shifts every point back one day.
       data: curRoll.map(r => ({ x: toLocalNoon(r.date), y: r.net_sales })),
-      borderColor: C.slate, backgroundColor: 'rgba(33,41,49,0.08)',
-      borderWidth: 2, fill: true, tension: 0.25,
-      pointRadius: STATE.gran==='D'?0:3, pointBackgroundColor: C.slate
+      backgroundColor: C.slate,
+      borderColor: C.slate,
+      borderWidth: 0,
+      borderRadius: 2,
+      barPercentage: 0.8,
+      categoryPercentage: 0.9,
+      order: 2
     }];
     // ===== Comparison overlay driven by the per-card selector =====
     // STLY (default) — prior-year window shifted forward to align dates.
@@ -1399,6 +1404,7 @@ function renderTrend(cur, py) {
           const pyRoll = rollup(py2, STATE.gran, ['net_sales']);
           // Shift +364 days for week kind, +1 year for month — match priorYearBounds
           datasets.push({
+            type: 'line',
             label: 'STLY',
             data: pyRoll.map(r => {
               const dt = toLocalNoon(r.date);
@@ -1407,7 +1413,8 @@ function renderTrend(cur, py) {
               return { x: dt, y: r.net_sales };
             }),
             borderColor: C.turquoise, backgroundColor: 'transparent',
-            borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
+            borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0,
+            order: 1 // ensure line is drawn on top of the bars
           });
         }
       } else if (cmpMode === 'LW') {
@@ -1421,6 +1428,7 @@ function renderTrend(cur, py) {
         if (lwRows && lwRows.length) {
           const lwRoll = rollup(lwRows, STATE.gran, ['net_sales']);
           datasets.push({
+            type: 'line',
             label: 'Last Period',
             data: lwRoll.map(r => {
               const dt = toLocalNoon(r.date);
@@ -1428,7 +1436,8 @@ function renderTrend(cur, py) {
               return { x: dt, y: r.net_sales };
             }),
             borderColor: C.turquoise, backgroundColor: 'transparent',
-            borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
+            borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0,
+            order: 1
           });
         }
       } else if (cmpMode === 'T2W') {
@@ -1442,10 +1451,12 @@ function renderTrend(cur, py) {
           const totalNet = t2wRows.reduce((a,r) => a + (r.net_sales || 0), 0);
           const avgPerDay = totalNet / 14;
           datasets.push({
+            type: 'line',
             label: 'T2W Avg / day',
             data: curRoll.map(r => ({ x: toLocalNoon(r.date), y: avgPerDay })),
             borderColor: C.turquoise, backgroundColor: 'transparent',
-            borderWidth: 1.5, borderDash: [2,4], fill: false, tension: 0, pointRadius: 0
+            borderWidth: 1.5, borderDash: [2,4], fill: false, tension: 0, pointRadius: 0,
+            order: 1
           });
         }
       }
@@ -1457,12 +1468,23 @@ function renderTrend(cur, py) {
     const xMin = curRoll.length ? toLocalNoon(curRoll[0].date) : null;
     const xMax = curRoll.length ? toLocalNoon(curRoll[curRoll.length - 1].date) : null;
     charts.trend = new Chart(ctx, {
-      type: 'line', data: { datasets },
+      // Default chart type = bar (Net Sales). Comparison datasets self-declare
+      // type:'line' so the overlay stays as a thin dashed line on top of the
+      // bars (cleaner read than grouped bars on a time axis).
+      type: 'bar', data: { datasets },
       options: {
         responsive: true, maintainAspectRatio: false, interaction: { mode:'index', intersect: false },
         scales: {
-          x: { type:'time', min: xMin, max: xMax, time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } }, grid: { display: false }, ticks: { maxTicksLimit: 10, source: 'data' }, bounds: 'data' },
-          y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }
+          x: {
+            type: 'time',
+            min: xMin, max: xMax,
+            time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } },
+            offset: true, // give the first/last bar half-cell breathing room
+            grid: { display: false },
+            ticks: { maxTicksLimit: 10, source: 'data' },
+            bounds: 'data'
+          },
+          y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' }, beginAtZero: true }
         },
         plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtMoneyFull(c.parsed.y) } } }
       }
