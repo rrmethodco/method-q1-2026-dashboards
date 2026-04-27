@@ -308,7 +308,7 @@ const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
 // weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
 // filter to a single Mon..Sun 7-day window. When set, periodBounds returns
 // that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none' };
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -834,8 +834,20 @@ function renderRevenueSection() {
         <div class="sect-meta">Computed from daily data for the selected month · ${granLabel}</div>
       </div>
       <div class="grid grid-2">
-        <div class="card"><h3>Net Sales Trend</h3>
-          <div class="desc">Daily net sales in ${periodLabel} · prior-year overlay dashed Turquoise</div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Net Sales Trend</h3>
+            <div class="card-compare">
+              <span class="ctrl-label">Compare</span>
+              <select id="trendCompareFilter">
+                <option value="none" ${STATE.trendCompare==='none'?'selected':''}>None</option>
+                <option value="STLY" ${STATE.trendCompare==='STLY'?'selected':''}>STLY</option>
+                <option value="T2W"  ${STATE.trendCompare==='T2W' ?'selected':''}>T2W Avg</option>
+                <option value="LW"   ${STATE.trendCompare==='LW'  ?'selected':''}>vs LW</option>
+              </select>
+            </div>
+          </div>
+          <div class="desc">Daily net sales in ${periodLabel}${STATE.trendCompare !== 'none' ? ' · comparison overlay dashed Turquoise' : ''}</div>
           <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
         </div>
         <div class="card">
@@ -867,7 +879,20 @@ function renderRevenueSection() {
         <div class="sect-meta">Per-day hourly + RC totals filtered by the selected month/week.</div>
       </div>
       <div class="grid grid-2eq">
-        <div class="card"><h3>Hour of Day</h3><div class="desc">Net sales by hour · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="hourChart"></canvas></div></div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Hour of Day</h3>
+            <div class="card-compare">
+              <span class="ctrl-label">Metric</span>
+              <select id="hourMetricFilter">
+                <option value="$"      ${STATE.hourMetric==='$'?'selected':''}>$ Net Sales</option>
+                <option value="guests" ${STATE.hourMetric==='guests'?'selected':''}>Covers</option>
+              </select>
+            </div>
+          </div>
+          <div class="desc">${STATE.hourMetric==='$' ? 'Net sales' : 'Covers'} by hour · ${periodLabel}</div>
+          <div class="chart-wrap tall"><canvas id="hourChart"></canvas></div>
+        </div>
         <div class="card"><h3>Revenue Center Breakdown</h3><div class="desc">Net sales by RC · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="rcChart"></canvas></div></div>
       </div>
       <div class="card" style="margin-top:12px;"><h3>Hour × Day-of-Week Heatmap</h3>
@@ -1339,7 +1364,6 @@ function renderTrend(cur, py) {
   if (!cur || !cur.length) { showEmpty('trendChart', 'No sales in this period', 'Select a different month or revenue center.'); return; }
   safeChart('trendChart', () => {
     const curRoll = rollup(cur, STATE.gran, ['net_sales']);
-    const pyRoll = py ? rollup(py, STATE.gran, ['net_sales']) : null;
     const ctx = document.getElementById('trendChart').getContext('2d');
     const datasets = [{
       label: 'Net Sales',
@@ -1351,16 +1375,80 @@ function renderTrend(cur, py) {
       borderWidth: 2, fill: true, tension: 0.25,
       pointRadius: STATE.gran==='D'?0:3, pointBackgroundColor: C.slate
     }];
-    if (pyRoll && pyRoll.length) {
-      datasets.push({
-        label: 'Prior Year',
-        // Shift each prior-year date forward 1 year so it overlays the current
-        // window on the same x-axis, keeping the result as a local-noon Date
-        // (not ISO string) so Chart.js doesn't re-parse it as UTC midnight.
-        data: pyRoll.map(r => { const dt = toLocalNoon(r.date); dt.setFullYear(dt.getFullYear()+1); return { x: dt, y: r.net_sales }; }),
-        borderColor: C.turquoise, backgroundColor: 'transparent',
-        borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
-      });
+    // ===== Comparison overlay driven by the per-card selector =====
+    // STLY (default) — prior-year window shifted forward to align dates.
+    // LW            — prior-period of equal length, shifted forward to align.
+    // T2W Avg       — flat horizontal line at avg-daily-net-sales of the
+    //                 14 days preceding the current period.
+    // none          — no overlay.
+    const cmpMode = STATE.trendCompare || 'STLY';
+    const ssDailyAll = combinedDailySales();
+    const maxDateAll = ssDailyAll.length ? ssDailyAll[ssDailyAll.length-1].date : null;
+    const curB = maxDateAll ? periodBounds(maxDateAll) : null;
+    if (cmpMode !== 'none' && curB) {
+      const iso = isoLocal;
+      const startDt = toLocalNoon(curB.start);
+      const endDt   = toLocalNoon(curB.end);
+      const periodDays = Math.round((endDt - startDt) / 86400000) + 1;
+      let cmpRows = null, cmpLabel = null, shiftDays = 0;
+      if (cmpMode === 'STLY') {
+        // Use the existing priorYearBounds helper (week → -364, month → -1y)
+        // Shift the result back forward to the current window for overlay.
+        const py2 = py ? py : (curB ? filter(combinedDailySales(), priorYearBounds(curB)) : null);
+        if (py2 && py2.length) {
+          const pyRoll = rollup(py2, STATE.gran, ['net_sales']);
+          // Shift +364 days for week kind, +1 year for month — match priorYearBounds
+          datasets.push({
+            label: 'STLY',
+            data: pyRoll.map(r => {
+              const dt = toLocalNoon(r.date);
+              if (curB.kind === 'week') dt.setDate(dt.getDate() + 364);
+              else dt.setFullYear(dt.getFullYear() + 1);
+              return { x: dt, y: r.net_sales };
+            }),
+            borderColor: C.turquoise, backgroundColor: 'transparent',
+            borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
+          });
+        }
+      } else if (cmpMode === 'LW') {
+        // Equal-length prior period, shifted forward by periodDays so it
+        // overlays the current axis day-for-day. For a 7-day week this is
+        // exactly the prior week; for a 30-day month it's the prior 30 days.
+        const cmpEnd = new Date(startDt); cmpEnd.setDate(cmpEnd.getDate() - 1);
+        const cmpStart = new Date(cmpEnd); cmpStart.setDate(cmpStart.getDate() - (periodDays - 1));
+        const cmpB = { start: iso(cmpStart), end: iso(cmpEnd), kind: 'window' };
+        const lwRows = filter(combinedDailySales(), cmpB);
+        if (lwRows && lwRows.length) {
+          const lwRoll = rollup(lwRows, STATE.gran, ['net_sales']);
+          datasets.push({
+            label: 'Last Period',
+            data: lwRoll.map(r => {
+              const dt = toLocalNoon(r.date);
+              dt.setDate(dt.getDate() + periodDays);
+              return { x: dt, y: r.net_sales };
+            }),
+            borderColor: C.turquoise, backgroundColor: 'transparent',
+            borderWidth: 1.5, borderDash: [4,4], fill: false, tension: 0.25, pointRadius: 0
+          });
+        }
+      } else if (cmpMode === 'T2W') {
+        // 14 days preceding the current period — show as a flat horizontal
+        // line at average-daily-net-sales (operator benchmark line).
+        const cmpEnd = new Date(startDt); cmpEnd.setDate(cmpEnd.getDate() - 1);
+        const cmpStart = new Date(cmpEnd); cmpStart.setDate(cmpStart.getDate() - 13);
+        const cmpB = { start: iso(cmpStart), end: iso(cmpEnd), kind: 'window' };
+        const t2wRows = filter(combinedDailySales(), cmpB);
+        if (t2wRows && t2wRows.length) {
+          const totalNet = t2wRows.reduce((a,r) => a + (r.net_sales || 0), 0);
+          const avgPerDay = totalNet / 14;
+          datasets.push({
+            label: 'T2W Avg / day',
+            data: curRoll.map(r => ({ x: toLocalNoon(r.date), y: avgPerDay })),
+            borderColor: C.turquoise, backgroundColor: 'transparent',
+            borderWidth: 1.5, borderDash: [2,4], fill: false, tension: 0, pointRadius: 0
+          });
+        }
+      }
     }
     // Pin the x-axis to the actual current-period bounds so Chart.js doesn't
     // pad a phantom extra tick past the last data point (e.g. showing "Apr 6"
@@ -1521,27 +1609,35 @@ function renderHour() {
   destroy('hour');
   safeChart('hourChart', () => {
     // Period-aware: aggregate hour_daily rows whose date is in current bounds.
+    // Metric is $ (amount) by default, switchable to Covers (guests) via
+    // the per-card selector → STATE.hourMetric.
     const ssDaily = combinedDailySales();
     const maxDate = ssDaily.length ? ssDaily[ssDaily.length-1].date : null;
     const b = maxDate ? periodBounds(maxDate) : null;
     const src = getOrderDetailsSource();
+    const isDollars = (STATE.hourMetric || '$') === '$';
+    const field = isDollars ? 'amount' : 'guests';
     const map = {}; for (let h=0; h<24; h++) map[h] = 0;
     if (src) {
       Object.values(src).forEach(od => (od.hour_daily || od.hour_dow || []).forEach(r => {
-        // hour_daily has {date, hour, amount} → filter by date; legacy hour_dow has no date so include.
+        // hour_daily has {date, hour, amount, guests} → filter by date; legacy hour_dow has no date so include.
         if (r.date && b && (r.date < b.start || r.date > b.end)) return;
-        map[r.hour] = (map[r.hour]||0) + (r.amount||0);
+        map[r.hour] = (map[r.hour]||0) + (r[field]||0);
       }));
     }
     const hours = Array.from({length:24}, (_,i)=>i);
     const total = hours.reduce((a,h) => a + (map[h]||0), 0);
-    if (!total) { showEmpty('hourChart', 'No hour-of-day data', 'No orders recorded in this period.'); return; }
+    if (!total) { showEmpty('hourChart', isDollars ? 'No hour-of-day sales data' : 'No covers in this period', 'No orders recorded in this period.'); return; }
     const lbl = h => (h===0?'12a':h<12?h+'a':h===12?'12p':(h-12)+'p');
     const ctx = document.getElementById('hourChart').getContext('2d');
     charts.hour = new Chart(ctx, {
       type: 'bar',
-      data: { labels: hours.map(lbl), datasets: [{ label:'Net Sales', data: hours.map(h => map[h]||0), backgroundColor: C.royal, borderRadius: 1 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } } } }
+      data: { labels: hours.map(lbl), datasets: [{ label: isDollars ? 'Net Sales' : 'Covers', data: hours.map(h => map[h]||0), backgroundColor: C.royal, borderRadius: 1 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => isDollars ? fmtMoneyFull(c.parsed.y) : (fmtNum(c.parsed.y) + ' covers') } } },
+        scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => isDollars ? fmtMoney(v) : fmtNum(v) }, grid: { color: '#F0EDEC' } } }
+      }
     });
   }, 'Hour-of-day unavailable', 'Chart.js error — see console.');
 }
@@ -1915,8 +2011,15 @@ document.getElementById('compareFilter').addEventListener('change', e => {
 // DOW card's own compare dropdown — lives inside rendered HTML, so attach via
 // event delegation on the content body instead of a one-shot listener.
 document.addEventListener('change', e => {
-  if (e.target && e.target.id === 'dowCompareFilter') {
+  if (!e.target || !e.target.id) return;
+  if (e.target.id === 'dowCompareFilter') {
     STATE.dowCompare = e.target.value || 'none';
+    rerenderSection();
+  } else if (e.target.id === 'trendCompareFilter') {
+    STATE.trendCompare = e.target.value || 'none';
+    rerenderSection();
+  } else if (e.target.id === 'hourMetricFilter') {
+    STATE.hourMetric = e.target.value || '$';
     rerenderSection();
   }
 });
