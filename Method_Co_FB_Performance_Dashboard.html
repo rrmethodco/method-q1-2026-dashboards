@@ -794,7 +794,7 @@ function renderOutlet() {
   controls.style.display = (STATE.section === 'revenue' || STATE.section === 'summary') ? '' : 'none';
   if (STATE.section === 'summary')      return renderSummarySection();
   if (STATE.section === 'revenue')      return renderRevenueSection();
-  if (STATE.section === 'labor')        return renderPlaceholderSection('Labor', 'Awaiting 7shifts payroll &amp; schedule export. Once connected, this section will show labor hours, labor % of net, SPMH, role mix, overtime, and scheduled-vs-actual variance.', ['labor']);
+  if (STATE.section === 'labor')        return renderLaborSection();
   if (STATE.section === 'events')       return renderPlaceholderSection('Private Events', 'Awaiting Tripleseat booking export. Once connected, this section will show events booked, gross & net F&amp;B, average per event, guest counts, lead time, and conversion by event type.', ['tripleseat']);
   if (STATE.section === 'guest')        return renderPlaceholderSection('Guest Experience', 'Awaiting Resy surveys &amp; ratings. Once connected, this section will show NPS, star rating distribution, response rate, server performance, guest comments and sentiment.', ['resy']);
 }
@@ -820,6 +820,183 @@ function renderPlaceholderSection(title, body, requiredSources) {
       </div>
     </section>
   `;
+}
+
+// Renders the Labor section using Toast Labor API data (outlet-level only —
+// Toast's labor API has no RC dimension, so this view ignores STATE.rc and
+// shows the full outlet's hourly labor every time). Pulls timeEntries-derived
+// daily totals + by_job rollup written by toast-etl/toast_sync.py.
+function renderLaborSection() {
+  const o = DATA.outlets[STATE.outlet];
+  const body = document.getElementById('outletBody');
+  const lab = o && o.labor && Array.isArray(o.labor.daily) && o.labor.daily.length ? o.labor : null;
+  if (!lab) {
+    return renderPlaceholderSection(
+      'Labor',
+      'Awaiting Toast Labor API sync. Once connected, this section shows labor hours by day & job, labor % of net, OT %, and covers per labor hour.',
+      ['labor']
+    );
+  }
+
+  // Period filter — reuse Performance Summary's bSel logic by re-deriving from Sales Summary.
+  const ssDaily = combinedDailySales();
+  const maxDate = ssDaily.length ? ssDaily[ssDaily.length - 1].date : null;
+  const bSel = maxDate ? periodBounds(maxDate) : null;
+  const periodLabel = currentPeriodLabel();
+  const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
+
+  // Labor in period
+  const labRows = lab.daily.filter(r => inRange(r.date));
+  const labSum = labRows.reduce((a, r) => ({
+    regular_hours: a.regular_hours + (r.regular_hours || 0),
+    overtime_hours: a.overtime_hours + (r.overtime_hours || 0),
+    regular_cost: a.regular_cost + (r.regular_cost || 0),
+    overtime_cost: a.overtime_cost + (r.overtime_cost || 0),
+    total_cost: a.total_cost + (r.total_cost || 0),
+  }), { regular_hours: 0, overtime_hours: 0, regular_cost: 0, overtime_cost: 0, total_cost: 0 });
+  const totalHrs = labSum.regular_hours + labSum.overtime_hours;
+
+  // Sales in period (outlet-wide — no RC filter, to match labor's outlet scope)
+  const ssCur = bSel ? filter(ssDaily, bSel) : ssDaily;
+  const ssTot = sumDaily(ssCur, ['net_sales','orders','guests']);
+
+  // by_job filtered to selected period requires re-computing — but the ETL
+  // emits totals over the full sync window. For first cut we show as-pulled.
+  // TODO: emit by_job_daily so we can filter by period without re-fetching.
+  const byJob = (lab.by_job || []).slice().sort((a, b) => b.cost - a.cost);
+  const byJobTotalCost = byJob.reduce((s, r) => s + (r.cost || 0), 0);
+
+  const fmtPct = (n) => (n == null || !isFinite(n)) ? '—' : n.toFixed(1) + '%';
+  const fmtHrs = (n) => (n == null) ? '—' : (Math.round(n * 10) / 10).toLocaleString();
+  const laborPctOfNet = ssTot.net_sales > 0 ? (labSum.total_cost / ssTot.net_sales * 100) : null;
+  const otPctOfHours  = totalHrs > 0 ? (labSum.overtime_hours / totalHrs * 100) : null;
+  const cphl = totalHrs > 0 && ssTot.guests > 0 ? (ssTot.guests / totalHrs) : null;
+  const sphl = totalHrs > 0 && ssTot.net_sales > 0 ? (ssTot.net_sales / totalHrs) : null;
+  const blendedRate = totalHrs > 0 ? (labSum.total_cost / totalHrs) : null;
+
+  const kpi = (label, val, sub, yoy) => `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub?`<div class="yoy neutral">${sub}</div>`:''}${yoy!=null?`<div class="yoy ${yoy>=0?'pos':'neg'}">${(yoy>=0?'+':'')+yoy.toFixed(1)}% YoY</div>`:''}</div>`;
+
+  body.innerHTML = `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Labor · ${o.name}</div>
+        <div class="sect-meta">Toast Labor API · outlet-level (no RC split) · ${periodLabel}</div>
+      </div>
+      <div class="kpis">
+        ${kpi('Labor %', fmtPct(laborPctOfNet), 'Hourly labor ÷ Net Sales', null)}
+        ${kpi('Total Hours', fmtHrs(totalHrs), `${fmtHrs(labSum.regular_hours)} reg + ${fmtHrs(labSum.overtime_hours)} OT`, null)}
+        ${kpi('Total Labor $', fmtMoney(labSum.total_cost), `${fmtMoney(labSum.regular_cost)} reg + ${fmtMoney(labSum.overtime_cost)} OT`, null)}
+        ${kpi('OT % of Hours', fmtPct(otPctOfHours), 'Industry target ≤ 5%', null)}
+        ${kpi('SPMH', sphl != null ? '$'+sphl.toFixed(0) : '—', 'Sales ÷ Labor Hr', null)}
+        ${kpi('Covers / Labor Hr', cphl != null ? cphl.toFixed(1) : '—', 'Guests ÷ Labor Hr', null)}
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Daily Labor</div>
+        <div class="sect-meta">Hours &amp; cost by business day</div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card"><h3>Hours by Day</h3><div class="desc">Regular + Overtime · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="laborHoursDaily"></canvas></div></div>
+        <div class="card"><h3>Labor $ by Day</h3><div class="desc">Total cost · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="laborCostDaily"></canvas></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">By Position</div>
+        <div class="sect-meta">Hours &amp; cost by job (sync window — period filter does not yet apply)</div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card"><h3>Cost Mix by Position</h3><div class="desc">Top jobs by labor $</div><div class="chart-wrap tall"><canvas id="laborByJobBar"></canvas></div></div>
+        <div class="card"><h3>Position Detail</h3><div class="desc">Sorted by labor $</div>
+          <div style="overflow:auto; max-height: 360px;">
+            <table class="tbl">
+              <thead><tr><th style="text-align:left">Position</th><th style="text-align:right">Hours</th><th style="text-align:right">Cost</th><th style="text-align:right">% of Total</th><th style="text-align:right">Avg $/Hr</th></tr></thead>
+              <tbody>
+                ${byJob.map(r => {
+                  const pct = byJobTotalCost > 0 ? (r.cost / byJobTotalCost * 100) : null;
+                  const rate = r.hours > 0 ? (r.cost / r.hours) : null;
+                  return `<tr>
+                    <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}</td>
+                    <td style="text-align:right">${fmtHrs(r.hours)}</td>
+                    <td style="text-align:right">${fmtMoney(r.cost)}</td>
+                    <td style="text-align:right">${pct!=null?pct.toFixed(1)+'%':'—'}</td>
+                    <td style="text-align:right">${rate!=null?'$'+rate.toFixed(2):'—'}</td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p style="margin: 22px 28px; color: var(--muted); font-size: 11px;">
+      Labor figures cover hourly clock-ins via Toast Labor API. Salaried managers and tip-credit hours are excluded.
+      OT cost applies the FLSA 1.5× multiplier to overtime hours only.
+    </p>
+  `;
+
+  // Charts
+  const labels = labRows.map(r => r.date);
+  destroy('laborHoursDaily');
+  if (labels.length) {
+    new Chart(document.getElementById('laborHoursDaily'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Regular',  data: labRows.map(r => r.regular_hours),  backgroundColor: C.royal,    stack: 'h' },
+          { label: 'Overtime', data: labRows.map(r => r.overtime_hours), backgroundColor: C.turquoise, stack: 'h' },
+        ],
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } },
+        scales: {
+          x: { type: 'time', time: { unit: 'day', tooltipFormat: 'MMM d', displayFormats: { day: 'MMM d' } }, grid: { display: false } },
+          y: { stacked: true, beginAtZero: true, ticks: { callback: v => v.toLocaleString() + ' hr' } },
+        },
+      },
+    });
+  }
+  destroy('laborCostDaily');
+  if (labels.length) {
+    new Chart(document.getElementById('laborCostDaily'), {
+      type: 'bar',
+      data: { labels, datasets: [{ label: 'Total Labor $', data: labRows.map(r => r.total_cost), backgroundColor: C.slate }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { type: 'time', time: { unit: 'day', tooltipFormat: 'MMM d', displayFormats: { day: 'MMM d' } }, grid: { display: false } },
+          y: { beginAtZero: true, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' } },
+        },
+      },
+    });
+  }
+  destroy('laborByJobBar');
+  if (byJob.length) {
+    const top = byJob.slice(0, 12);
+    new Chart(document.getElementById('laborByJobBar'), {
+      type: 'bar',
+      data: {
+        labels: top.map(r => r.title || '(unnamed)'),
+        datasets: [{ label: 'Labor $', data: top.map(r => r.cost), backgroundColor: top.map((_, i) => palette[i % palette.length]) }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' } },
+          y: { ticks: { autoSkip: false } },
+        },
+      },
+    });
+  }
 }
 
 // Renders the full detailed revenue analytics body (replaces the former single outlet body)
@@ -1096,20 +1273,58 @@ function renderSummarySection() {
       <table id="summaryTopItems"><tbody></tbody></table>
     </section>
 
+    ${(() => {
+      // Labor block: when Toast Labor sync is wired we compute real Labor %,
+      // OT %, Covers/Labor Hr. Outlet-level only — Toast's labor API has no RC
+      // dimension, so we filter labor.daily by date but NOT by RC, even when
+      // the user has a single RC selected. Net sales used as denominator
+      // matches the period filter (curSum.net_sales / curSum.guests).
+      const lab = o.labor && Array.isArray(o.labor.daily) && o.labor.daily.length
+        ? o.labor : null;
+      let laborPctVal = '—', otPctVal = '—', cphlVal = '—';
+      let laborSub = 'Awaiting Toast labor sync';
+      let otSub    = '—';
+      let cphlSub  = 'Awaiting Toast labor sync';
+      if (lab) {
+        const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
+        const lr = lab.daily.filter(r => inRange(r.date));
+        const lc = lr.reduce((a, r) => ({
+          total_cost: a.total_cost + (r.total_cost || 0),
+          regular_hours: a.regular_hours + (r.regular_hours || 0),
+          overtime_hours: a.overtime_hours + (r.overtime_hours || 0),
+          regular_cost: a.regular_cost + (r.regular_cost || 0),
+          overtime_cost: a.overtime_cost + (r.overtime_cost || 0),
+        }), { total_cost: 0, regular_hours: 0, overtime_hours: 0, regular_cost: 0, overtime_cost: 0 });
+        const totalHrs = lc.regular_hours + lc.overtime_hours;
+        if (curSum.net_sales > 0) {
+          laborPctVal = (lc.total_cost / curSum.net_sales * 100).toFixed(1) + '%';
+          laborSub = 'Hourly labor ÷ Net Sales · ' + periodLabel;
+        }
+        if (totalHrs > 0) {
+          otPctVal = (lc.overtime_hours / totalHrs * 100).toFixed(1) + '%';
+          otSub    = 'OT hrs ÷ Total hrs';
+          if (curSum.guests > 0) {
+            cphlVal = (curSum.guests / totalHrs).toFixed(1);
+            cphlSub = 'Guests ÷ Labor hours';
+          }
+        }
+      }
+      return `
     <section>
       <div class="sect-head">
-        <div class="sect-title">Operational Ratios (Placeholder)</div>
-        <div class="sect-meta">Awaiting Sage P&amp;L + 7shifts</div>
+        <div class="sect-title">Operational Ratios${lab ? '' : ' (Placeholder)'}</div>
+        <div class="sect-meta">${lab ? 'Toast labor live · awaiting Sage P&amp;L for COGS / EBITDAR' : 'Awaiting Sage P&amp;L + Toast labor sync'}</div>
       </div>
       <div class="kpis">
-        ${kpi('Labor %', '—', 'Awaiting 7shifts', null)}
+        ${kpi('Labor %', laborPctVal, laborSub, null)}
+        ${kpi('OT % of Hours', otPctVal, otSub, null)}
+        ${kpi('Covers / Labor Hr', cphlVal, cphlSub, null)}
         ${kpi('COGS %', '—', 'Awaiting P&amp;L', null)}
         ${kpi('Prime Cost', '—', 'COGS + Labor', null)}
         ${kpi('EBITDAR', '—', 'Awaiting P&amp;L', null)}
-        ${kpi('Flow-through', '—', 'Incremental margin', null)}
-        ${kpi('Covers / Labor Hr', '—', 'Needs 7shifts', null)}
       </div>
-    </section>
+    </section>`;
+    })()}
 
   `;
 
@@ -2021,7 +2236,7 @@ function rerenderSection() {
   // some Chart.js 4.4 time-axis edge cases fail silently when a canvas had
   // its `display` toggled off/on in the same tick by showEmpty/safeChart.
   if (STATE.section === 'revenue')  return renderRevenueSection();
-  if (STATE.section === 'labor')    return renderPlaceholderSection('Labor', 'Awaiting 7shifts payroll &amp; schedule export. Once connected, this section will show labor hours, labor % of net, SPMH, role mix, overtime, and scheduled-vs-actual variance.', ['labor']);
+  if (STATE.section === 'labor')    return renderLaborSection();
   if (STATE.section === 'events')   return renderPlaceholderSection('Private Events', 'Awaiting Tripleseat booking export. Once connected, this section will show events booked, gross & net F&amp;B, average per event, guest counts, lead time, and conversion by event type.', ['tripleseat']);
   if (STATE.section === 'guest')    return renderPlaceholderSection('Guest Experience', 'Awaiting Resy surveys &amp; ratings. Once connected, this section will show NPS, star rating distribution, response rate, server performance, guest comments and sentiment.', ['resy']);
 }
@@ -2103,6 +2318,13 @@ async function __loadOutletData() {
       // Backfill revenue_centers from rc keys when the HTML hasn't curated them.
       if (!Array.isArray(o.revenue_centers) || o.revenue_centers.length === 0) {
         o.revenue_centers = Object.keys(od).map(k => ({ id: k, label: __humanizeRc(k) }));
+      }
+      // Labor (optional — outlet-level, no RC dimension because Toast's
+      // labor API doesn't expose RC). Present only when the ETL successfully
+      // pulled time entries from the Toast Labor API for this outlet.
+      if (payload.labor && Array.isArray(payload.labor.daily) && payload.labor.daily.length) {
+        o.labor = payload.labor;
+        o.sources.labor = true;
       }
     } catch (_) { /* keep inline fallback */ }
   }));
