@@ -81,4 +81,21 @@ jobs:
             exit 0
           fi
           git commit -m "chore(data): nightly Toast sync $(date -u +%Y-%m-%dT%H:%MZ)"
-          git push
+          # Rebase-and-retry guard against race with guest-sync (which pushes
+          # at 03:45 ET, 30 min after we start; if our 2hr+ run overruns
+          # into guest-sync's window the naked push gets rejected and the
+          # commit is lost). Three attempts with linear backoff.
+          for i in 1 2 3; do
+            if git push; then
+              echo "push succeeded on attempt $i"
+              exit 0
+            fi
+            echo "push rejected (attempt $i) — pulling and retrying"
+            git pull --rebase origin main || {
+              echo "rebase failed; aborting to avoid clobbering remote"
+              exit 1
+            }
+            sleep $((i * 5))
+          done
+          echo "push failed after 3 attempts"
+          exit 1
