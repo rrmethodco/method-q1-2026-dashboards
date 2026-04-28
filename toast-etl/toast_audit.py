@@ -130,41 +130,53 @@ def _request_report(
 
 
 def probe_era(token: str, restaurant_guid: str) -> dict[str, str]:
-    """Run a tiny request on each ERA topic and report status."""
-    yesterday = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
-    last_week  = (date.today() - timedelta(days=7)).strftime("%Y%m%d")
-    today_str  = date.today().strftime("%Y%m%d")
+    """Run a tiny request on each ERA topic and report status.
+
+    Bodies match what doc.toasttab.com/devguide/apiAnalytics* documents:
+    only `startBusinessDate` + `restaurantIds` are required. The previous
+    probe sent `endBusinessDate` which isn't in the spec; ERA replied 400.
+
+    For `metrics_day` we run two probes — minimal (no groupBy) and rich
+    (groupBy DINING_OPTION + REVENUE_CENTER) — so we know whether
+    rejection is on the body itself or just on a specific groupBy value.
+    """
+    last_week = (date.today() - timedelta(days=7)).strftime("%Y%m%d")
 
     probes: list[tuple[str, str, dict[str, Any]]] = [
         # name, post_path, post_body
-        ("metrics_day",
+        ("metrics_day_min",
          "/era/v1/metrics/day",
          {
              "startBusinessDate": last_week,
-             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
-             "groupBy":           ["DINING_OPTION", "REVENUE_CENTER", "BUSINESS_HOUR"],
+         }),
+        ("metrics_day_rich",
+         "/era/v1/metrics/day",
+         {
+             "startBusinessDate": last_week,
+             "restaurantIds":     [restaurant_guid],
+             "groupBy":           ["DINING_OPTION", "REVENUE_CENTER"],
          }),
         ("labor",
          "/era/v1/labor",
          {
              "startBusinessDate": last_week,
-             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
-             "groupBy":           ["JOB", "EMPLOYEE"],
          }),
         ("menu",
          "/era/v1/menu",
          {
              "startBusinessDate": last_week,
-             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
          }),
+        # Toast docs reference /era/v1/check but our first probe got 404
+        # for both clients, suggesting either the endpoint name differs or
+        # it requires a different access tier. Probe once at the documented
+        # path; if 404 again, leave a note in the next iteration.
         ("check",
          "/era/v1/check",
          {
              "startBusinessDate": last_week,
-             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
          }),
     ]
