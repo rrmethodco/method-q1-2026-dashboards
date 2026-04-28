@@ -63,11 +63,11 @@ _DEFAULT_LOOKUP_HINTS: dict[str, tuple[str, str]] = {
     "kampers":       ("Kamper's Rooftop",      "Detroit MI"),
     "lowland":       ("Lowland",                       "Charleston SC"),
     "mulherins":     ("Wm. Mulherin's Sons",           "Philadelphia PA"),
-    "anthology":     ("Anthology",                     "Detroit MI"),
+    "anthology":     ("Anthology Events",              "Detroit MI"),
     "little_wing":   ("Little Wing Coffee and Goods",  "Baltimore MD"),
-    "quoin":         ("The Quoin",             "Wilmington DE"),
-    "rosemary_rose": ("Rosemary & Rose",       "Philadelphia PA"),
-    "vessel":        ("Vessel",                "Detroit MI"),
+    "quoin":         ("The Quoin",                     "Wilmington DE"),
+    "rosemary_rose": ("Rosemary Rose",                 "Charleston SC"),
+    "vessel":        ("Vessel Baltimore",              "Baltimore MD"),
 }
 
 
