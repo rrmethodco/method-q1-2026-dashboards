@@ -51,8 +51,15 @@ except ImportError:  # pragma: no cover
 
 
 TOAST_BASE = (os.environ.get("TOAST_BASE") or "https://ws-api.toasttab.com").rstrip("/")
+
+# The Analytics API lives on a different host AND uses a different OAuth flow
+# than the Standard partner API. Both pinned to the values the helixo-2
+# integration uses in production.
+TOAST_ANALYTICS_BASE = (os.environ.get("TOAST_ANALYTICS_BASE") or "https://ws-analytics-api.toasttab.com").rstrip("/")
+TOAST_ANALYTICS_AUTH_URL = "https://login.toasttab.com/usermgmt/v1/oauth/token"
+
 REQUEST_TIMEOUT = 30
-POLL_TIMES = 8       # how many times we re-check a report request
+POLL_TIMES = 10      # helixo-2 uses 10 — analytics reports occasionally need 15-20s
 POLL_INTERVAL = 2.0  # seconds between polls
 
 
@@ -70,8 +77,8 @@ def decode_jwt_payload(token: str) -> dict[str, Any]:
         return {}
 
 
-def get_token(client_id: str, client_secret: str) -> str | None:
-    """Authenticate as a partner machine client. Returns the access token or None."""
+def get_token_standard(client_id: str, client_secret: str) -> str | None:
+    """Auth as a Standard partner machine client (orders/labor/config/menus)."""
     url = f"{TOAST_BASE}/authentication/v1/authentication/login"
     try:
         r = requests.post(
@@ -90,6 +97,33 @@ def get_token(client_id: str, client_secret: str) -> str | None:
         print(f"  AUTH FAILED: {r.status_code} {r.text[:240]}")
         return None
     return (r.json().get("token") or {}).get("accessToken")
+
+
+def get_token_analytics(client_id: str, client_secret: str) -> str | None:
+    """Auth as the Analytics customer client. Different surface entirely:
+    OAuth2 client_credentials at login.toasttab.com, form-urlencoded body,
+    `userScope=toast-restaurant-external`. Returns the bearer token or None.
+    """
+    body = (
+        f"grant_type=client_credentials"
+        f"&client_id={client_id}"
+        f"&client_secret={client_secret}"
+        f"&userScope=toast-restaurant-external"
+    )
+    try:
+        r = requests.post(
+            TOAST_ANALYTICS_AUTH_URL,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            data=body,
+            timeout=REQUEST_TIMEOUT,
+        )
+    except Exception as e:  # noqa: BLE001
+        print(f"  AUTH ERROR: {e}")
+        return None
+    if r.status_code != 200:
+        print(f"  AUTH FAILED: {r.status_code} {r.text[:240]}")
+        return None
+    return r.json().get("access_token")
 
 
 def list_restaurants(token: str) -> list[dict[str, Any]]:
@@ -114,13 +148,14 @@ def probe_jobs(token: str, guid: str) -> str:
     return f"{r.status_code} {r.text[:160]}"
 
 
-def _request_report(
+def _request(
     method: str,
+    base_url: str,
     path: str,
     token: str,
     body: dict[str, Any] | None = None,
-) -> tuple[int, dict[str, Any] | str]:
-    url = f"{TOAST_BASE}{path}"
+) -> tuple[int, dict[str, Any] | list[Any] | str]:
+    url = f"{base_url}{path}"
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
     r = requests.request(method, url, headers=headers, json=body, timeout=REQUEST_TIMEOUT)
     try:
@@ -130,17 +165,18 @@ def _request_report(
 
 
 def probe_era(token: str, restaurant_guid: str) -> dict[str, str]:
-    """Run a tiny request on each ERA topic and report status.
+    """Run a tiny request against each Analytics topic and report status.
 
-    Bodies match what doc.toasttab.com/devguide/apiAnalytics* documents:
-    only `startBusinessDate` + `restaurantIds` are required. The previous
-    probe sent `endBusinessDate` which isn't in the spec; ERA replied 400.
-
-    For `metrics_day` we run two probes — minimal (no groupBy) and rich
-    (groupBy DINING_OPTION + REVENUE_CENTER) — so we know whether
-    rejection is on the body itself or just on a specific groupBy value.
+    Endpoint surface (from helixo-2's working integration):
+      Host: ws-analytics-api.toasttab.com (NOT ws-api)
+      Auth: separate OAuth2 client_credentials at login.toasttab.com
+      POST /era/v1/<topic>/day  body: {startBusinessDate, endBusinessDate, restaurantIds}
+        -> response is a bare JSON-encoded string (the reportRequestGuid)
+      GET /era/v1/<topic>/{guid}
+        -> 202 while processing; 200 with array body when complete.
     """
     last_week = (date.today() - timedelta(days=7)).strftime("%Y%m%d")
+    today_str  = date.today().strftime("%Y%m%d")
 
     probes: list[tuple[str, str, dict[str, Any]]] = [
         # name, post_path, post_body
@@ -148,12 +184,14 @@ def probe_era(token: str, restaurant_guid: str) -> dict[str, str]:
          "/era/v1/metrics/day",
          {
              "startBusinessDate": last_week,
+             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
          }),
         ("metrics_day_rich",
          "/era/v1/metrics/day",
          {
              "startBusinessDate": last_week,
+             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
              "groupBy":           ["DINING_OPTION", "REVENUE_CENTER"],
          }),
@@ -161,62 +199,74 @@ def probe_era(token: str, restaurant_guid: str) -> dict[str, str]:
          "/era/v1/labor",
          {
              "startBusinessDate": last_week,
+             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
          }),
         ("menu",
          "/era/v1/menu",
          {
              "startBusinessDate": last_week,
+             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
          }),
-        # Toast docs reference /era/v1/check but our first probe got 404
-        # for both clients, suggesting either the endpoint name differs or
-        # it requires a different access tier. Probe once at the documented
-        # path; if 404 again, leave a note in the next iteration.
         ("check",
          "/era/v1/check",
          {
              "startBusinessDate": last_week,
+             "endBusinessDate":   today_str,
              "restaurantIds":     [restaurant_guid],
          }),
     ]
 
     results: dict[str, str] = {}
     for name, post_path, body in probes:
-        post_status, post_body = _request_report("POST", post_path, token, body)
+        post_status, post_body = _request("POST", TOAST_ANALYTICS_BASE, post_path, token, body)
         if post_status not in (200, 201, 202):
-            snippet = json.dumps(post_body)[:240] if isinstance(post_body, dict) else str(post_body)[:240]
+            snippet = json.dumps(post_body)[:240] if isinstance(post_body, (dict, list)) else str(post_body)[:240]
             results[name] = f"POST {post_status} {snippet}"
             continue
 
-        guid = (post_body or {}).get("reportRequestGuid") if isinstance(post_body, dict) else None
+        # POST returns either {"reportRequestGuid": "..."} or a bare JSON-encoded string
+        # depending on the endpoint variant. Accept both.
+        guid: str | None = None
+        if isinstance(post_body, dict):
+            guid = post_body.get("reportRequestGuid")
+        elif isinstance(post_body, str):
+            guid = post_body.replace('"', '').strip() or None
         if not guid:
-            results[name] = f"POST {post_status} OK but no reportRequestGuid in body: {str(post_body)[:160]}"
+            results[name] = f"POST {post_status} OK but no reportRequestGuid: {str(post_body)[:160]}"
             continue
 
         get_path = f"{post_path}/{guid}"
-        # Poll for COMPLETED
         for i in range(POLL_TIMES):
-            get_status, get_body = _request_report("GET", get_path, token)
-            if get_status != 200:
-                results[name] = f"POST 200 -> GET {get_status} {str(get_body)[:160]}"
-                break
-            status = (get_body or {}).get("status") if isinstance(get_body, dict) else None
-            if status == "COMPLETED":
-                # data may be array or {data: ...} depending on endpoint
-                data = get_body.get("data") if isinstance(get_body, dict) else get_body
-                row_count = (
-                    len(data) if isinstance(data, list)
-                    else (len(data.get("data") or []) if isinstance(data, dict) and isinstance(data.get("data"), list) else "n/a")
-                )
-                results[name] = f"OK COMPLETED in ~{(i+1)*POLL_INTERVAL:.0f}s (rows={row_count})"
-                break
-            if status in ("FAILED", "ERROR"):
-                results[name] = f"OK POST -> {status} {str(get_body)[:160]}"
-                break
             time.sleep(POLL_INTERVAL)
+            get_status, get_body = _request("GET", TOAST_ANALYTICS_BASE, get_path, token)
+            if get_status == 202:
+                continue  # still processing
+            if get_status != 200:
+                results[name] = f"POST OK guid={guid[:8]}... -> GET {get_status} {str(get_body)[:160]}"
+                break
+            # Some topics return a bare array, others wrap in {status, data}
+            if isinstance(get_body, list):
+                results[name] = f"OK COMPLETED in ~{(i+1)*POLL_INTERVAL:.0f}s (rows={len(get_body)})"
+                break
+            if isinstance(get_body, dict):
+                status = get_body.get("status")
+                if status == "COMPLETED":
+                    data = get_body.get("data")
+                    rc = len(data) if isinstance(data, list) else "?"
+                    results[name] = f"OK COMPLETED in ~{(i+1)*POLL_INTERVAL:.0f}s (rows={rc})"
+                    break
+                if status in ("FAILED", "ERROR"):
+                    results[name] = f"GET status={status} body={str(get_body)[:160]}"
+                    break
+                # Unknown shape — surface raw
+                results[name] = f"GET 200 dict shape: {json.dumps(get_body)[:160]}"
+                break
+            results[name] = f"GET 200 unexpected body type ({type(get_body).__name__}): {str(get_body)[:120]}"
+            break
         else:
-            results[name] = f"POST 200 -> never COMPLETED after {POLL_TIMES * POLL_INTERVAL:.0f}s; last status={status!r}"
+            results[name] = f"POST OK guid={guid[:8]}... -> never COMPLETED after {POLL_TIMES * POLL_INTERVAL:.0f}s"
     return results
 
 
@@ -262,7 +312,13 @@ def audit_client(
         return
 
     print(f"  client_id (first 8): {client_id[:8]}...   secret length: {len(client_secret)}")
-    token = get_token(client_id, client_secret)
+    # Standard partner client uses ws-api auth; Analytics customer client uses
+    # login.toasttab.com OAuth2 client_credentials. Two completely different
+    # auth surfaces — token from one will not work on the other's hosts.
+    if label == "ANALYTICS":
+        token = get_token_analytics(client_id, client_secret)
+    else:
+        token = get_token_standard(client_id, client_secret)
     if not token:
         return
 
