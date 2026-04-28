@@ -208,7 +208,42 @@ def probe_era(token: str, restaurant_guid: str) -> dict[str, str]:
     return results
 
 
-def audit_client(label: str, client_id: str | None, client_secret: str | None) -> None:
+def parse_outlets_guids() -> list[tuple[str, str]]:
+    """Pull (label, restaurantGuid) pairs out of TOAST_OUTLETS.
+
+    Reuses the same string format as toast_sync.py but only extracts the
+    restaurant GUID per rc_key (skipping @rc=/@rc_not= filter suffixes).
+    Returns deduped pairs preserving discovery order — useful when the
+    analytics client needs explicit GUIDs to query against.
+    """
+    raw = (os.environ.get("TOAST_OUTLETS") or "").strip()
+    if not raw:
+        return []
+    out: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    for chunk in raw.split(";"):
+        chunk = chunk.strip()
+        if not chunk or "=" not in chunk:
+            continue
+        outlet_id, rest = chunk.split("=", 1)
+        for rc in rest.split(","):
+            rc = rc.strip()
+            if ":" not in rc:
+                continue
+            rc_key, guid_with_filter = rc.split(":", 1)
+            guid = guid_with_filter.split("@", 1)[0].strip()
+            if guid and guid not in seen:
+                seen.add(guid)
+                out.append((f"{outlet_id.strip()}:{rc_key.strip()}", guid))
+    return out
+
+
+def audit_client(
+    label: str,
+    client_id: str | None,
+    client_secret: str | None,
+    outlet_guids: list[tuple[str, str]],
+) -> None:
     print(f"\n=========== client={label} ===========")
     if not client_id or not client_secret:
         print("  SKIP — env not set")
@@ -219,53 +254,91 @@ def audit_client(label: str, client_id: str | None, client_secret: str | None) -
     if not token:
         return
 
-    # JWT introspection — Toast tokens often carry the partner client name + scope list
+    # JWT introspection — Toast access tokens carry both the standard claims
+    # and Toast-namespaced ones (https://toasttab.com/partner_guid, etc).
     payload = decode_jwt_payload(token)
-    interesting = {k: payload[k] for k in (
-        "client_id", "clientId", "scope", "scopes", "aud", "iss", "sub", "azp", "exp"
-    ) if k in payload}
-    if interesting:
+    if payload:
         print("  jwt payload:")
-        for k, v in interesting.items():
+        # Surface the Toast-namespaced claims first (most informative)
+        toast_keys = [k for k in payload if k.startswith("https://toasttab.com/")]
+        for k in toast_keys:
+            print(f"    {k.split('/')[-1]}: {payload[k]}")
+        # Then standard JWT claims we care about
+        for k in ("client_id", "clientId", "scope", "scopes", "aud", "iss", "sub", "azp", "exp"):
+            if k not in payload: continue
+            v = payload[k]
             if k == "exp":
                 v = datetime.fromtimestamp(v, tz=timezone.utc).isoformat()
             print(f"    {k}: {v}")
     else:
         print("  jwt payload: (no introspectable fields)")
 
+    # Standard client owns /partners/v1/restaurants. Analytics client doesn't —
+    # for it we'll seed probes from TOAST_OUTLETS instead.
     rests = list_restaurants(token)
-    print(f"  /partners/v1/restaurants: {len(rests)} restaurant(s) associated")
     if rests:
-        for r in rests[:5]:
-            print(f"    - {r.get('restaurantName', r.get('name', '(unnamed)'))}  guid={r.get('restaurantGuid', r.get('guid', '?'))[:8]}...")
-        if len(rests) > 5:
-            print(f"    ... and {len(rests) - 5} more")
+        print(f"  /partners/v1/restaurants: {len(rests)} restaurant(s) associated")
+        for r in rests[:15]:
+            name = r.get('restaurantName') or r.get('name') or '(unnamed)'
+            gid = r.get('restaurantGuid') or r.get('guid') or '?'
+            print(f"    - {name}  guid={gid[:8]}...")
+        if len(rests) > 15:
+            print(f"    ... and {len(rests) - 15} more")
 
-    # Pick a guid to probe with — first one returned
-    probe_guid = None
-    if rests:
-        probe_guid = rests[0].get("restaurantGuid") or rests[0].get("guid")
+        # Surface the delta vs TOAST_OUTLETS — helpful to find restaurants
+        # the partner client can see but we're not syncing.
+        if outlet_guids:
+            outlet_guid_set = {g for _, g in outlet_guids}
+            associated_guids = {(r.get('restaurantGuid') or r.get('guid') or '') for r in rests}
+            extras = associated_guids - outlet_guid_set
+            missing = outlet_guid_set - associated_guids
+            if extras:
+                print(f"\n  Restaurants visible to client BUT NOT in TOAST_OUTLETS ({len(extras)}):")
+                for r in rests:
+                    gid = r.get('restaurantGuid') or r.get('guid') or ''
+                    if gid in extras:
+                        print(f"    - {r.get('restaurantName') or r.get('name') or '(unnamed)'}  guid={gid}")
+            if missing:
+                print(f"\n  Restaurants in TOAST_OUTLETS BUT NOT visible to client ({len(missing)}):")
+                for outlet, gid in outlet_guids:
+                    if gid in missing:
+                        print(f"    - {outlet}  guid={gid}")
+
+    # Pick a single GUID to probe ERA with. Prefer one that's actually in
+    # TOAST_OUTLETS so we know it's a real synced outlet, not a sandbox.
+    probe_guid: str | None = None
+    if outlet_guids:
+        probe_guid = outlet_guids[0][1]
+        probe_label = outlet_guids[0][0]
+    elif rests:
+        probe_guid = rests[0].get('restaurantGuid') or rests[0].get('guid')
+        probe_label = rests[0].get('restaurantName') or '(first associated)'
 
     if probe_guid:
-        print(f"\n  Standard /labor/v1/jobs probe (guid={probe_guid[:8]}...): {probe_jobs(token, probe_guid)}")
-        print("\n  Analytics /era/v1/* probes:")
+        print(f"\n  Standard /labor/v1/jobs probe ({probe_label}, guid={probe_guid[:8]}...): {probe_jobs(token, probe_guid)}")
+        print(f"\n  Analytics /era/v1/* probes (guid={probe_guid[:8]}...):")
         for name, status in probe_era(token, probe_guid).items():
             print(f"    {name:14s} {status}")
     else:
-        print("  no associated restaurants — cannot probe further")
+        print("  no GUIDs available — cannot probe further (set TOAST_OUTLETS or check restaurants assoc.)")
 
 
 def main() -> int:
     print(f"Toast capability audit — base={TOAST_BASE}  ts={datetime.now(timezone.utc).isoformat(timespec='seconds')}")
+    outlet_guids = parse_outlets_guids()
+    if outlet_guids:
+        print(f"TOAST_OUTLETS contains {len(outlet_guids)} unique restaurant GUID(s).")
     audit_client(
         "STANDARD",
         os.environ.get("TOAST_STANDARD_CLIENT_ID"),
         os.environ.get("TOAST_STANDARD_CLIENT_SECRET"),
+        outlet_guids,
     )
     audit_client(
         "ANALYTICS",
         os.environ.get("TOAST_ANALYTICS_CLIENT_ID") or os.environ.get("TOAST_CLIENT_ID"),
         os.environ.get("TOAST_ANALYTICS_CLIENT_SECRET"),
+        outlet_guids,
     )
     print("\nDone.")
     return 0
