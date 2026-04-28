@@ -327,11 +327,70 @@ def fetch_time_entries(
 OT_MULTIPLIER = 1.5
 
 
+def _spread_shift_across_hours(
+    in_iso: str | None,
+    out_iso: str | None,
+    total_hours: float,
+    total_cost: float,
+) -> list[tuple[str, int, float, float]]:
+    """Distribute a single shift's hours and cost across the wall-clock hours
+    it spans.
+
+    Returns a list of (date_iso, hour_int, hours_in_bucket, cost_in_bucket).
+    Each bucket gets a share proportional to how many seconds of the shift
+    fall in that hour, then we scale to match `total_hours` (so the sum
+    matches what Toast reported, even if breaks reduce paid time).
+
+    For overnight shifts (clock-out next calendar day), each hour is
+    assigned to the calendar date it actually starts on. That keeps the
+    by-day rollup matching Toast's businessDate semantics imperfectly but
+    consistently — Toast's businessDate may differ for late-night shifts.
+
+    Timezone caveat: ISO timestamps are parsed in their declared zone, then
+    we read the LOCAL hour. Mews/Toast both emit zoned ISO so this works
+    without an outlet-side IANA config. Naive (no-zone) inputs are read as
+    UTC — same caveat documented in the existing transform_orders.
+    """
+    if not in_iso or not out_iso or total_hours <= 0:
+        return []
+    in_dt = _parse_iso(in_iso)
+    out_dt = _parse_iso(out_iso)
+    if not in_dt or not out_dt or out_dt <= in_dt:
+        return []
+    span_seconds = (out_dt - in_dt).total_seconds()
+    if span_seconds <= 0:
+        return []
+    cost_per_hour = total_cost / total_hours if total_hours > 0 else 0.0
+
+    buckets: dict[tuple[str, int], float] = defaultdict(float)
+    cur = in_dt
+    while cur < out_dt:
+        # End of the current hour bucket
+        next_hour = cur.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+        seg_end = min(next_hour, out_dt)
+        seg_seconds = (seg_end - cur).total_seconds()
+        if seg_seconds > 0:
+            key = (cur.strftime("%Y-%m-%d"), cur.hour)
+            buckets[key] += seg_seconds
+        cur = seg_end
+
+    # Convert seconds → hours, scale so the sum equals total_hours (paid hours,
+    # which can be < span when breaks are unpaid).
+    total_seg_seconds = sum(buckets.values()) or 1.0
+    rows: list[tuple[str, int, float, float]] = []
+    for (d, h), seg in buckets.items():
+        share = seg / total_seg_seconds
+        hrs = round(total_hours * share, 4)
+        cost = round(cost_per_hour * total_hours * share, 4)
+        rows.append((d, h, hrs, cost))
+    return rows
+
+
 def transform_time_entries(
     entries: list[dict[str, Any]],
     jobs_lookup: dict[str, str],
 ) -> dict[str, Any]:
-    """Roll raw time entries up to per-day labor + by-job breakdown.
+    """Roll raw time entries up to per-day labor + by-job + by-hour rollups.
 
     Excludes deleted entries and entries with no businessDate (open shifts).
     Hourly cost = regularHours * hourlyWage; overtime cost applies the FLSA
@@ -344,9 +403,25 @@ def transform_time_entries(
     Salaried managers typically don't appear in timeEntries with hourlyWage > 0
     (Toast tracks them via payroll, not POS clock-ins). Outlet labor totals
     therefore reflect HOURLY labor only — the dashboard surfaces this as a note.
+
+    Hour-of-day distribution: each shift is sliced across the wall-clock hours
+    it spans, with hours and cost weighted by seconds-in-bucket. A 11:00–14:30
+    shift contributes 1.0h to hour 11, 1.0h to hour 12, 1.0h to hour 13, and
+    0.5h to hour 14. Cost is allocated as a flat rate (total_cost / total_hours)
+    regardless of OT — OT is determined weekly so we can't accurately allocate
+    it sub-day. The by_hour totals therefore match shift cost in aggregate.
     """
     daily: dict[str, dict[str, Any]] = {}
-    by_job: dict[str, dict[str, float]] = defaultdict(lambda: {"hours": 0.0, "cost": 0.0})
+    by_job_total: dict[str, dict[str, float]] = defaultdict(lambda: {"hours": 0.0, "cost": 0.0})
+    by_job_daily: dict[tuple[str, str], dict[str, float]] = defaultdict(
+        lambda: {"hours": 0.0, "cost": 0.0}
+    )
+    hour_dow: dict[tuple[int, str], dict[str, float]] = defaultdict(
+        lambda: {"hours": 0.0, "cost": 0.0}
+    )
+    hour_daily: dict[tuple[str, int], dict[str, float]] = defaultdict(
+        lambda: {"hours": 0.0, "cost": 0.0}
+    )
 
     for e in entries:
         if e.get("deleted"):
@@ -361,6 +436,8 @@ def transform_time_entries(
         wage = float(e.get("hourlyWage") or 0.0)
         rc = rh * wage
         oc = oh * wage * OT_MULTIPLIER
+        total_h = rh + oh
+        total_c = rc + oc
 
         d = daily.setdefault(date_iso, {
             "regular_hours": 0.0,
@@ -382,9 +459,27 @@ def transform_time_entries(
         job_ref = e.get("jobReference") or {}
         job_guid = job_ref.get("guid") if isinstance(job_ref, dict) else None
         if job_guid:
-            j = by_job[job_guid]
-            j["hours"] += rh + oh
-            j["cost"] += rc + oc
+            jt = by_job_total[job_guid]
+            jt["hours"] += total_h
+            jt["cost"] += total_c
+            jd = by_job_daily[(date_iso, job_guid)]
+            jd["hours"] += total_h
+            jd["cost"] += total_c
+
+        # Hour-of-day distribution from clock-in/out.
+        for d_seg, h_seg, hrs_seg, cost_seg in _spread_shift_across_hours(
+            e.get("inDate"), e.get("outDate"), total_h, total_c,
+        ):
+            try:
+                dow_label = DOW[datetime.strptime(d_seg, "%Y-%m-%d").weekday()]
+            except Exception:
+                dow_label = "Mon"
+            hd = hour_dow[(h_seg, dow_label)]
+            hd["hours"] += hrs_seg
+            hd["cost"] += cost_seg
+            ha = hour_daily[(d_seg, h_seg)]
+            ha["hours"] += hrs_seg
+            ha["cost"] += cost_seg
 
     daily_out = []
     for date in sorted(daily.keys()):
@@ -405,11 +500,48 @@ def transform_time_entries(
             "title": jobs_lookup.get(gid, "(unknown job)"),
             "hours": round(v["hours"], 2),
             "cost": round(v["cost"], 2),
-        } for gid, v in by_job.items()),
+        } for gid, v in by_job_total.items()),
         key=lambda r: -r["cost"],
     )
 
-    return {"daily": daily_out, "by_job": by_job_out}
+    by_job_daily_out = [
+        {
+            "date": d,
+            "job_guid": gid,
+            "title": jobs_lookup.get(gid, "(unknown job)"),
+            "hours": round(v["hours"], 2),
+            "cost": round(v["cost"], 2),
+        }
+        for (d, gid), v in sorted(by_job_daily.items(), key=lambda kv: (kv[0][0], -kv[1]["cost"]))
+    ]
+
+    hour_dow_out = [
+        {
+            "hour": h,
+            "dow": dow,
+            "hours": round(v["hours"], 2),
+            "cost": round(v["cost"], 2),
+        }
+        for (h, dow), v in sorted(hour_dow.items(), key=lambda kv: (kv[0][0], DOW.index(kv[0][1])))
+    ]
+
+    hour_daily_out = [
+        {
+            "date": d,
+            "hour": h,
+            "hours": round(v["hours"], 2),
+            "cost": round(v["cost"], 2),
+        }
+        for (d, h), v in sorted(hour_daily.items(), key=lambda kv: (kv[0][0], kv[0][1]))
+    ]
+
+    return {
+        "daily": daily_out,
+        "by_job": by_job_out,
+        "by_job_daily": by_job_daily_out,
+        "hour_dow": hour_dow_out,
+        "hour_daily": hour_daily_out,
+    }
 
 
 def filter_orders_by_rc(
@@ -840,6 +972,9 @@ def sync_outlet(
     # Multi-GUID outlets (Quoin) sum across their constituent restaurants.
     labor_daily_by_date: dict[str, dict[str, float]] = {}
     labor_by_job_total: dict[str, dict[str, Any]] = {}
+    labor_by_job_daily: dict[tuple[str, str], dict[str, Any]] = {}
+    labor_hour_dow: dict[tuple[int, str], dict[str, float]] = {}
+    labor_hour_daily: dict[tuple[str, int], dict[str, float]] = {}
     labor_pulled_any = False
     for rest_guid in unique_guids:
         sys.stdout.write(f"[{outlet_id}:labor] pulling time entries (guid={rest_guid[:8]}...)\n")
@@ -860,7 +995,8 @@ def sync_outlet(
         rolled = transform_time_entries(entries, jobs_lookup)
         sys.stdout.write(
             f"[{outlet_id}:labor] guid={rest_guid[:8]}... {len(entries)} entries -> "
-            f"{len(rolled['daily'])} day(s), {len(rolled['by_job'])} job(s)\n"
+            f"{len(rolled['daily'])} day(s), {len(rolled['by_job'])} job(s), "
+            f"{len(rolled['hour_daily'])} hour-day(s)\n"
         )
         # Merge daily across guids by date
         for row in rolled["daily"]:
@@ -882,6 +1018,26 @@ def sync_outlet(
             })
             existing["hours"] += r["hours"]
             existing["cost"] += r["cost"]
+        # Merge by_job_daily for period-aware position rollups in the dashboard
+        for r in rolled["by_job_daily"]:
+            key = (r["date"], r["job_guid"])
+            existing = labor_by_job_daily.setdefault(key, {
+                "date": r["date"], "job_guid": r["job_guid"],
+                "title": r["title"], "hours": 0.0, "cost": 0.0,
+            })
+            existing["hours"] += r["hours"]
+            existing["cost"] += r["cost"]
+        # Merge hour-of-day rollups (hour_dow is all-time, hour_daily is period-aware)
+        for r in rolled["hour_dow"]:
+            key = (r["hour"], r["dow"])
+            cell = labor_hour_dow.setdefault(key, {"hours": 0.0, "cost": 0.0})
+            cell["hours"] += r["hours"]
+            cell["cost"] += r["cost"]
+        for r in rolled["hour_daily"]:
+            key = (r["date"], r["hour"])
+            cell = labor_hour_daily.setdefault(key, {"hours": 0.0, "cost": 0.0})
+            cell["hours"] += r["hours"]
+            cell["cost"] += r["cost"]
 
     labor: dict[str, Any] | None = None
     if labor_pulled_any:
@@ -902,6 +1058,20 @@ def sync_outlet(
                  for r in labor_by_job_total.values()),
                 key=lambda r: -r["cost"],
             ),
+            "by_job_daily": [
+                {**v, "hours": round(v["hours"], 2), "cost": round(v["cost"], 2)}
+                for (_, _), v in sorted(labor_by_job_daily.items(), key=lambda kv: (kv[0][0], -kv[1]["cost"]))
+            ],
+            "hour_dow": [
+                {"hour": h, "dow": dow,
+                 "hours": round(v["hours"], 2), "cost": round(v["cost"], 2)}
+                for (h, dow), v in sorted(labor_hour_dow.items(), key=lambda kv: (kv[0][0], DOW.index(kv[0][1])))
+            ],
+            "hour_daily": [
+                {"date": d, "hour": h,
+                 "hours": round(v["hours"], 2), "cost": round(v["cost"], 2)}
+                for (d, h), v in sorted(labor_hour_daily.items(), key=lambda kv: (kv[0][0], kv[0][1]))
+            ],
         }
 
     payload: dict[str, Any] = {
@@ -1007,6 +1177,36 @@ def dry_run_fixture() -> dict[str, Any]:
                 {"job_guid": "fixture-server",    "title": "Server",    "hours": 96.0, "cost": 1440.0},
                 {"job_guid": "fixture-cook",      "title": "Line Cook", "hours": 80.0, "cost": 1600.0},
                 {"job_guid": "fixture-dish",      "title": "Dishwasher","hours": 28.0, "cost":  420.0},
+            ],
+            # Fixture: same 4 positions distributed across the 3 days, simple split
+            "by_job_daily": [
+                row
+                for d in days
+                for row in [
+                    {"date": d.isoformat(), "job_guid": "fixture-cook",      "title": "Line Cook", "hours": 26.7, "cost": 533.3},
+                    {"date": d.isoformat(), "job_guid": "fixture-server",    "title": "Server",    "hours": 32.0, "cost": 480.0},
+                    {"date": d.isoformat(), "job_guid": "fixture-bartender", "title": "Bartender", "hours": 21.3, "cost": 384.0},
+                    {"date": d.isoformat(), "job_guid": "fixture-dish",      "title": "Dishwasher","hours": 9.3,  "cost": 140.0},
+                ]
+            ],
+            # Fixture hour-of-day: typical lunch + dinner restaurant curve
+            "hour_daily": [
+                {"date": d.isoformat(), "hour": h, "hours": hrs, "cost": round(hrs * 18.0, 2)}
+                for d in days
+                for h, hrs in [
+                    (10, 4.5), (11, 9.0), (12, 14.0), (13, 12.0), (14, 7.0), (15, 5.5),
+                    (16, 8.0), (17, 14.0), (18, 22.0), (19, 26.0), (20, 24.0), (21, 18.0),
+                    (22, 11.0), (23, 5.0),
+                ]
+            ],
+            "hour_dow": [
+                {"hour": h, "dow": dow, "hours": hrs * 3, "cost": round(hrs * 18.0 * 3, 2)}
+                for dow in ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                for h, hrs in [
+                    (10, 4.5), (11, 9.0), (12, 14.0), (13, 12.0), (14, 7.0), (15, 5.5),
+                    (16, 8.0), (17, 14.0), (18, 22.0), (19, 26.0), (20, 24.0), (21, 18.0),
+                    (22, 11.0), (23, 5.0),
+                ]
             ],
         },
     }
