@@ -42,5 +42,6 @@ jobs:
           TOAST_ANALYTICS_CLIENT_ID:     ${{ secrets.TOAST_ANALYTICS_CLIENT_ID }}
           TOAST_ANALYTICS_CLIENT_SECRET: ${{ secrets.TOAST_ANALYTICS_CLIENT_SECRET }}
           TOAST_CLIENT_ID:               ${{ secrets.TOAST_CLIENT_ID }}
+          TOAST_OUTLETS:                 ${{ secrets.TOAST_OUTLETS }}
           TOAST_BASE:                    ${{ secrets.TOAST_BASE }}
         run: python3 toast-etl/toast_audit.py
