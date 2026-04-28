@@ -250,6 +250,168 @@ def fetch_revenue_centers(token: str, guid: str) -> list[dict[str, Any]]:
     return body if isinstance(body, list) else body.get("results", [])
 
 
+def fetch_jobs(token: str, guid: str) -> dict[str, str]:
+    """GET /labor/v1/jobs for a restaurant. Returns {jobGuid: title}.
+
+    Used to resolve human-readable job names for the labor by_job rollup.
+    Toast doesn't echo titles in /labor/v1/timeEntries — only jobReference.guid.
+    """
+    url = f"{TOAST_BASE}/labor/v1/jobs"
+    headers = {"Authorization": f"Bearer {token}", "Toast-Restaurant-External-ID": guid}
+    r = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
+    if r.status_code == 429:
+        time.sleep(2.0)
+        return fetch_jobs(token, guid)
+    if r.status_code in (403, 404):
+        # Tenant doesn't expose Labor API (or no jobs configured) — fall through.
+        return {}
+    r.raise_for_status()
+    body = r.json() or []
+    rows = body if isinstance(body, list) else body.get("results", [])
+    out: dict[str, str] = {}
+    for j in rows:
+        gid = j.get("guid")
+        title = (j.get("title") or j.get("name") or "").strip()
+        if gid:
+            out[gid] = title or "(unnamed job)"
+    return out
+
+
+def fetch_time_entries(
+    token: str,
+    guid: str,
+    start_day: datetime,
+    end_day: datetime,
+) -> list[dict[str, Any]]:
+    """GET /labor/v1/timeEntries for a restaurant guid in a date range.
+
+    Toast caps timeEntries windows at 30 days, so we chunk. Each entry is one
+    employee shift with regularHours, overtimeHours, hourlyWage, jobReference,
+    employeeReference, businessDate. Aggregation happens in transform_time_entries.
+
+    Tenants without labor API access return 403 -> we treat as "no labor data"
+    and the dashboard renders Labor % as `--`.
+    """
+    headers = {"Authorization": f"Bearer {token}", "Toast-Restaurant-External-ID": guid}
+    out: list[dict[str, Any]] = []
+    cursor = start_day.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=timezone.utc)
+    end_excl = (end_day.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=timezone.utc)
+                + timedelta(days=1))
+    while cursor < end_excl:
+        win_end = min(cursor + timedelta(days=30), end_excl)
+        url = f"{TOAST_BASE}/labor/v1/timeEntries"
+        params = {
+            "startDate": cursor.strftime("%Y-%m-%dT%H:%M:%S.000-0000"),
+            "endDate":   win_end.strftime("%Y-%m-%dT%H:%M:%S.000-0000"),
+        }
+        r = requests.get(url, headers=headers, params=params, timeout=REQUEST_TIMEOUT)
+        if r.status_code == 429:
+            time.sleep(2.0)
+            continue  # retry same window
+        if r.status_code == 403:
+            # Labor API not enabled for this tenant — bail out, no labor data.
+            sys.stderr.write(f"[labor:{guid[:8]}...] 403 — labor API not enabled for this restaurant\n")
+            return []
+        r.raise_for_status()
+        body = r.json() or []
+        rows = body if isinstance(body, list) else body.get("timeEntries", [])
+        out.extend(rows)
+        cursor = win_end
+        time.sleep(SLEEP_BETWEEN_PAGES)
+    return out
+
+
+# Standard FLSA overtime multiplier. PA, MI, OH, MD, DE, FL, SC are all
+# federal-default 1.5x for hours over 40/week. If Method ever runs in CA
+# (1.5x daily over 8h, 2x daily over 12h) this needs per-state config.
+OT_MULTIPLIER = 1.5
+
+
+def transform_time_entries(
+    entries: list[dict[str, Any]],
+    jobs_lookup: dict[str, str],
+) -> dict[str, Any]:
+    """Roll raw time entries up to per-day labor + by-job breakdown.
+
+    Excludes deleted entries and entries with no businessDate (open shifts).
+    Hourly cost = regularHours * hourlyWage; overtime cost applies the FLSA
+    1.5x premium ONLY to the overtime hours (not the underlying regularHours).
+
+    Tipped employees with sub-minimum-wage hourlyWage (e.g., $4.50 in PA) are
+    represented at their actual base wage — Method's labor % view should reflect
+    paid wages only; the tip credit is NOT a labor expense.
+
+    Salaried managers typically don't appear in timeEntries with hourlyWage > 0
+    (Toast tracks them via payroll, not POS clock-ins). Outlet labor totals
+    therefore reflect HOURLY labor only — the dashboard surfaces this as a note.
+    """
+    daily: dict[str, dict[str, Any]] = {}
+    by_job: dict[str, dict[str, float]] = defaultdict(lambda: {"hours": 0.0, "cost": 0.0})
+
+    for e in entries:
+        if e.get("deleted"):
+            continue
+        bd = str(e.get("businessDate") or "")
+        if len(bd) != 8 or not bd.isdigit():
+            continue  # missing or malformed business date
+        date_iso = f"{bd[:4]}-{bd[4:6]}-{bd[6:8]}"
+
+        rh = float(e.get("regularHours") or 0.0)
+        oh = float(e.get("overtimeHours") or 0.0)
+        wage = float(e.get("hourlyWage") or 0.0)
+        rc = rh * wage
+        oc = oh * wage * OT_MULTIPLIER
+
+        d = daily.setdefault(date_iso, {
+            "regular_hours": 0.0,
+            "overtime_hours": 0.0,
+            "regular_cost": 0.0,
+            "overtime_cost": 0.0,
+            "_employees": set(),
+        })
+        d["regular_hours"] += rh
+        d["overtime_hours"] += oh
+        d["regular_cost"] += rc
+        d["overtime_cost"] += oc
+
+        emp_ref = e.get("employeeReference") or {}
+        emp_guid = emp_ref.get("guid") if isinstance(emp_ref, dict) else None
+        if emp_guid:
+            d["_employees"].add(emp_guid)
+
+        job_ref = e.get("jobReference") or {}
+        job_guid = job_ref.get("guid") if isinstance(job_ref, dict) else None
+        if job_guid:
+            j = by_job[job_guid]
+            j["hours"] += rh + oh
+            j["cost"] += rc + oc
+
+    daily_out = []
+    for date in sorted(daily.keys()):
+        d = daily[date]
+        daily_out.append({
+            "date": date,
+            "regular_hours": round(d["regular_hours"], 2),
+            "overtime_hours": round(d["overtime_hours"], 2),
+            "regular_cost": round(d["regular_cost"], 2),
+            "overtime_cost": round(d["overtime_cost"], 2),
+            "total_cost": round(d["regular_cost"] + d["overtime_cost"], 2),
+            "head_count": len(d["_employees"]),
+        })
+
+    by_job_out = sorted(
+        ({
+            "job_guid": gid,
+            "title": jobs_lookup.get(gid, "(unknown job)"),
+            "hours": round(v["hours"], 2),
+            "cost": round(v["cost"], 2),
+        } for gid, v in by_job.items()),
+        key=lambda r: -r["cost"],
+    )
+
+    return {"daily": daily_out, "by_job": by_job_out}
+
+
 def filter_orders_by_rc(
     orders: list[dict[str, Any]],
     rc_guids: set[str],
@@ -672,12 +834,85 @@ def sync_outlet(
             sys.stdout.write(f"[{outlet_id}:{rc_key}] merged {len(sources)} sources -> {len(combined)} total orders\n")
         order_details[rc_key] = transform_orders(combined)
 
-    return {
+    # Labor: pull time entries per unique GUID, then aggregate at outlet level.
+    # Toast's labor API has no revenue-center dimension, so for shared-GUID outlets
+    # like LSBR (1 GUID = 2 RCs), labor is a single stream covering both concepts.
+    # Multi-GUID outlets (Quoin) sum across their constituent restaurants.
+    labor_daily_by_date: dict[str, dict[str, float]] = {}
+    labor_by_job_total: dict[str, dict[str, Any]] = {}
+    labor_pulled_any = False
+    for rest_guid in unique_guids:
+        sys.stdout.write(f"[{outlet_id}:labor] pulling time entries (guid={rest_guid[:8]}...)\n")
+        sys.stdout.flush()
+        try:
+            entries = fetch_time_entries(token, rest_guid, start, end)
+        except requests.HTTPError as e:
+            sys.stderr.write(f"[{outlet_id}:labor] guid={rest_guid[:8]}... fetch failed: {e}\n")
+            continue
+        if not entries:
+            continue
+        labor_pulled_any = True
+        try:
+            jobs_lookup = fetch_jobs(token, rest_guid)
+        except requests.HTTPError as e:
+            sys.stderr.write(f"[{outlet_id}:labor] guid={rest_guid[:8]}... jobs lookup failed: {e}\n")
+            jobs_lookup = {}
+        rolled = transform_time_entries(entries, jobs_lookup)
+        sys.stdout.write(
+            f"[{outlet_id}:labor] guid={rest_guid[:8]}... {len(entries)} entries -> "
+            f"{len(rolled['daily'])} day(s), {len(rolled['by_job'])} job(s)\n"
+        )
+        # Merge daily across guids by date
+        for row in rolled["daily"]:
+            d = labor_daily_by_date.setdefault(row["date"], {
+                "regular_hours": 0.0, "overtime_hours": 0.0,
+                "regular_cost": 0.0, "overtime_cost": 0.0,
+                "total_cost": 0.0, "head_count": 0,
+            })
+            d["regular_hours"] += row["regular_hours"]
+            d["overtime_hours"] += row["overtime_hours"]
+            d["regular_cost"] += row["regular_cost"]
+            d["overtime_cost"] += row["overtime_cost"]
+            d["total_cost"] += row["total_cost"]
+            d["head_count"] += row["head_count"]
+        # Merge by_job across guids (different guids may have distinct job_guids)
+        for r in rolled["by_job"]:
+            existing = labor_by_job_total.setdefault(r["job_guid"], {
+                "job_guid": r["job_guid"], "title": r["title"], "hours": 0.0, "cost": 0.0,
+            })
+            existing["hours"] += r["hours"]
+            existing["cost"] += r["cost"]
+
+    labor: dict[str, Any] | None = None
+    if labor_pulled_any:
+        labor = {
+            "scope": "outlet",  # outlet-level total; not split by RC
+            "ot_multiplier": OT_MULTIPLIER,
+            "daily": [
+                {**v, "date": k,
+                 "regular_hours": round(v["regular_hours"], 2),
+                 "overtime_hours": round(v["overtime_hours"], 2),
+                 "regular_cost": round(v["regular_cost"], 2),
+                 "overtime_cost": round(v["overtime_cost"], 2),
+                 "total_cost": round(v["total_cost"], 2)}
+                for k, v in sorted(labor_daily_by_date.items())
+            ],
+            "by_job": sorted(
+                ({**r, "hours": round(r["hours"], 2), "cost": round(r["cost"], 2)}
+                 for r in labor_by_job_total.values()),
+                key=lambda r: -r["cost"],
+            ),
+        }
+
+    payload: dict[str, Any] = {
         "outlet_id": outlet_id,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "source": "toast_api_v2",
         "order_details": order_details,
     }
+    if labor is not None:
+        payload["labor"] = labor
+    return payload
 
 
 def write_atomic(path: Path, payload: dict[str, Any]) -> None:
@@ -722,6 +957,28 @@ def dry_run_fixture() -> dict[str, Any]:
         for d in days
         for h in range(11, 23)
     ]
+    # Labor fixture: 3 days at ~28% labor % (typical full-service target).
+    labor_daily = []
+    for d in days:
+        sales_amt = 3200.0 + (d.day * 15)
+        target_labor_pct = 0.28
+        total_cost = round(sales_amt * target_labor_pct, 2)
+        ot_share = 0.05
+        oc = round(total_cost * ot_share, 2)
+        rc = round(total_cost - oc, 2)
+        # Implied hours at $18/hr blended rate
+        avg_rate = 18.0
+        rh = round(rc / avg_rate, 2)
+        oh = round(oc / (avg_rate * OT_MULTIPLIER), 2)
+        labor_daily.append({
+            "date": d.isoformat(),
+            "regular_hours": rh,
+            "overtime_hours": oh,
+            "regular_cost": rc,
+            "overtime_cost": oc,
+            "total_cost": total_cost,
+            "head_count": 12,
+        })
     return {
         "outlet_id": "lsbr",
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -740,6 +997,17 @@ def dry_run_fixture() -> dict[str, Any]:
                 ],
                 "totals": {"tip_bins": [0, 4, 38, 110, 70, 22, 6, 1, 0, 0, 0]},
             }
+        },
+        "labor": {
+            "scope": "outlet",
+            "ot_multiplier": OT_MULTIPLIER,
+            "daily": labor_daily,
+            "by_job": [
+                {"job_guid": "fixture-bartender", "title": "Bartender", "hours": 64.0, "cost": 1152.0},
+                {"job_guid": "fixture-server",    "title": "Server",    "hours": 96.0, "cost": 1440.0},
+                {"job_guid": "fixture-cook",      "title": "Line Cook", "hours": 80.0, "cost": 1600.0},
+                {"job_guid": "fixture-dish",      "title": "Dishwasher","hours": 28.0, "cost":  420.0},
+            ],
         },
     }
 
