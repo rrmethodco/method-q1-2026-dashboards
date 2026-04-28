@@ -1,21 +1,10 @@
 {
   "outlet_id": "anthology",
-  "generated_at": "2026-04-27T10:43:48+00:00",
+  "generated_at": "2026-04-28T10:46:52+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
       "daily": [
-        {
-          "date": "2025-03-23",
-          "orders": 1,
-          "guests": 1,
-          "amount": 3456.25,
-          "tip": 0.0,
-          "gratuity": 0.0,
-          "discount": 0.0,
-          "ticket_time_sec_sum": 192.6,
-          "ticket_time_count": 1
-        },
         {
           "date": "2025-03-25",
           "orders": 1,
@@ -2395,9 +2384,9 @@
       ],
       "monthly": [
         {
-          "orders": 7,
-          "guests": 7,
-          "amount": 13807.75,
+          "orders": 6,
+          "guests": 6,
+          "amount": 10351.5,
           "tip": 0.0,
           "discount": 0.0,
           "month": "2025-03"
@@ -2546,9 +2535,9 @@
         {
           "hour": 0,
           "dow": "Sun",
-          "amount": 7412.75,
-          "orders": 5,
-          "guests": 5
+          "amount": 3956.5,
+          "orders": 4,
+          "guests": 4
         },
         {
           "hour": 1,
@@ -3140,13 +3129,6 @@
         }
       ],
       "hour_daily": [
-        {
-          "date": "2025-03-23",
-          "hour": 0,
-          "amount": 3456.25,
-          "orders": 1,
-          "guests": 1
-        },
         {
           "date": "2025-03-25",
           "hour": 1,
@@ -5138,12 +5120,6 @@
       ],
       "categories_daily": [
         {
-          "date": "2025-03-23",
-          "category": "Other",
-          "amount": 2805.0,
-          "orders": 6
-        },
-        {
           "date": "2025-03-25",
           "category": "Other",
           "amount": 7225.0,
@@ -6429,13 +6405,6 @@
         }
       ],
       "service_modes_daily": [
-        {
-          "date": "2025-03-23",
-          "mode": "Unspecified",
-          "amount": 3456.25,
-          "orders": 1,
-          "guests": 1
-        },
         {
           "date": "2025-03-25",
           "mode": "Unspecified",
@@ -7952,15 +7921,15 @@
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 504,
-        "guests": 804,
-        "amount": 4416987.14,
+        "orders": 503,
+        "guests": 803,
+        "amount": 4413530.89,
         "tip": 0.0,
         "discount": 782.2,
-        "min_date": "2025-03-23",
+        "min_date": "2025-03-25",
         "max_date": "2026-04-26",
         "tip_bins": [
-          504,
+          503,
           0,
           0,
           0,

@@ -1,6 +1,6 @@
 {
   "outlet_id": "rosemary_rose",
-  "generated_at": "2026-04-27T11:40:24+00:00",
+  "generated_at": "2026-04-28T11:40:00+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -3131,14 +3131,25 @@
         },
         {
           "date": "2026-04-27",
-          "orders": 28,
-          "guests": 44,
-          "amount": 1486.7,
+          "orders": 66,
+          "guests": 130,
+          "amount": 3135.7,
           "tip": 0.0,
           "gratuity": 0.0,
           "discount": 2.8,
-          "ticket_time_sec_sum": 121205.2,
-          "ticket_time_count": 28
+          "ticket_time_sec_sum": 211013.0,
+          "ticket_time_count": 66
+        },
+        {
+          "date": "2026-04-28",
+          "orders": 14,
+          "guests": 24,
+          "amount": 897.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 34793.8,
+          "ticket_time_count": 14
         }
       ],
       "monthly": [
@@ -3215,9 +3226,9 @@
           "month": "2026-03"
         },
         {
-          "orders": 4463,
-          "guests": 8435,
-          "amount": 294680.71,
+          "orders": 4515,
+          "guests": 8545,
+          "amount": 297227.21,
           "tip": 0.0,
           "discount": 558.78,
           "month": "2026-04"
@@ -3234,9 +3245,9 @@
         {
           "hour": 0,
           "dow": "Tue",
-          "amount": 9879.76,
-          "orders": 188,
-          "guests": 450
+          "amount": 10242.76,
+          "orders": 194,
+          "guests": 461
         },
         {
           "hour": 0,
@@ -3283,9 +3294,9 @@
         {
           "hour": 1,
           "dow": "Tue",
-          "amount": 8035.34,
-          "orders": 159,
-          "guests": 323
+          "amount": 8541.84,
+          "orders": 166,
+          "guests": 335
         },
         {
           "hour": 1,
@@ -3332,9 +3343,9 @@
         {
           "hour": 2,
           "dow": "Tue",
-          "amount": 35419.63,
-          "orders": 116,
-          "guests": 266
+          "amount": 35447.63,
+          "orders": 117,
+          "guests": 267
         },
         {
           "hour": 2,
@@ -3682,9 +3693,9 @@
         {
           "hour": 20,
           "dow": "Mon",
-          "amount": 987.75,
-          "orders": 33,
-          "guests": 51
+          "amount": 1005.75,
+          "orders": 34,
+          "guests": 53
         },
         {
           "hour": 20,
@@ -3731,9 +3742,9 @@
         {
           "hour": 21,
           "dow": "Mon",
-          "amount": 5013.22,
-          "orders": 100,
-          "guests": 239
+          "amount": 5439.97,
+          "orders": 108,
+          "guests": 264
         },
         {
           "hour": 21,
@@ -3780,9 +3791,9 @@
         {
           "hour": 22,
           "dow": "Mon",
-          "amount": 8825.62,
-          "orders": 180,
-          "guests": 432
+          "amount": 9283.12,
+          "orders": 190,
+          "guests": 453
         },
         {
           "hour": 22,
@@ -3829,9 +3840,9 @@
         {
           "hour": 23,
           "dow": "Mon",
-          "amount": 13278.97,
-          "orders": 218,
-          "guests": 1364
+          "amount": 14025.72,
+          "orders": 237,
+          "guests": 1402
         },
         {
           "hour": 23,
@@ -19689,6 +19700,55 @@
           "amount": 31.0,
           "orders": 1,
           "guests": 1
+        },
+        {
+          "date": "2026-04-27",
+          "hour": 20,
+          "amount": 18.0,
+          "orders": 1,
+          "guests": 2
+        },
+        {
+          "date": "2026-04-27",
+          "hour": 21,
+          "amount": 426.75,
+          "orders": 8,
+          "guests": 25
+        },
+        {
+          "date": "2026-04-27",
+          "hour": 22,
+          "amount": 457.5,
+          "orders": 10,
+          "guests": 21
+        },
+        {
+          "date": "2026-04-27",
+          "hour": 23,
+          "amount": 746.75,
+          "orders": 19,
+          "guests": 38
+        },
+        {
+          "date": "2026-04-28",
+          "hour": 0,
+          "amount": 363.0,
+          "orders": 6,
+          "guests": 11
+        },
+        {
+          "date": "2026-04-28",
+          "hour": 1,
+          "amount": 506.5,
+          "orders": 7,
+          "guests": 12
+        },
+        {
+          "date": "2026-04-28",
+          "hour": 2,
+          "amount": 28.0,
+          "orders": 1,
+          "guests": 1
         }
       ],
       "categories_daily": [
@@ -21393,8 +21453,14 @@
         {
           "date": "2026-04-27",
           "category": "Other",
-          "amount": 1584.7,
-          "orders": 80
+          "amount": 3337.7,
+          "orders": 206
+        },
+        {
+          "date": "2026-04-28",
+          "category": "Other",
+          "amount": 906.5,
+          "orders": 38
         }
       ],
       "service_modes_daily": [
@@ -23389,23 +23455,30 @@
         {
           "date": "2026-04-27",
           "mode": "Unspecified",
-          "amount": 1486.7,
-          "orders": 28,
-          "guests": 44
+          "amount": 3135.7,
+          "orders": 66,
+          "guests": 130
+        },
+        {
+          "date": "2026-04-28",
+          "mode": "Unspecified",
+          "amount": 897.5,
+          "orders": 14,
+          "guests": 24
         }
       ],
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 27342,
-        "guests": 58884,
-        "amount": 1671025.97,
+        "orders": 27394,
+        "guests": 58994,
+        "amount": 1673572.47,
         "tip": 0.0,
         "discount": 3045.52,
         "min_date": "2025-07-17",
-        "max_date": "2026-04-27",
+        "max_date": "2026-04-28",
         "tip_bins": [
-          27342,
+          27394,
           0,
           0,
           0,

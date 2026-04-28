@@ -1,32 +1,10 @@
 {
   "outlet_id": "hiroki_phl",
-  "generated_at": "2026-04-27T10:12:31+00:00",
+  "generated_at": "2026-04-28T10:15:31+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
       "daily": [
-        {
-          "date": "2025-03-22",
-          "orders": 1,
-          "guests": 2,
-          "amount": 370.0,
-          "tip": 0.0,
-          "gratuity": 0.0,
-          "discount": 0.0,
-          "ticket_time_sec_sum": 5931.9,
-          "ticket_time_count": 1
-        },
-        {
-          "date": "2025-03-23",
-          "orders": 18,
-          "guests": 46,
-          "amount": 9649.0,
-          "tip": 0.0,
-          "gratuity": 0.0,
-          "discount": 0.0,
-          "ticket_time_sec_sum": 86713.3,
-          "ticket_time_count": 18
-        },
         {
           "date": "2025-03-24",
           "orders": 7,
@@ -3847,9 +3825,9 @@
       ],
       "monthly": [
         {
-          "orders": 68,
-          "guests": 166,
-          "amount": 35198.0,
+          "orders": 49,
+          "guests": 118,
+          "amount": 25179.0,
           "tip": 0.0,
           "discount": 0.0,
           "month": "2025-03"
@@ -4005,9 +3983,9 @@
         {
           "hour": 0,
           "dow": "Sun",
-          "amount": 93235.38,
-          "orders": 186,
-          "guests": 440
+          "amount": 91129.38,
+          "orders": 181,
+          "guests": 428
         },
         {
           "hour": 1,
@@ -4054,9 +4032,9 @@
         {
           "hour": 1,
           "dow": "Sun",
-          "amount": 118550.65,
-          "orders": 231,
-          "guests": 565
+          "amount": 115809.65,
+          "orders": 226,
+          "guests": 553
         },
         {
           "hour": 2,
@@ -4096,9 +4074,9 @@
         {
           "hour": 2,
           "dow": "Sun",
-          "amount": 53162.64,
-          "orders": 106,
-          "guests": 254
+          "amount": 50871.64,
+          "orders": 102,
+          "guests": 244
         },
         {
           "hour": 3,
@@ -4145,9 +4123,9 @@
         {
           "hour": 3,
           "dow": "Sun",
-          "amount": 48760.52,
-          "orders": 110,
-          "guests": 250
+          "amount": 47912.52,
+          "orders": 108,
+          "guests": 246
         },
         {
           "hour": 4,
@@ -4523,9 +4501,9 @@
         {
           "hour": 22,
           "dow": "Sat",
-          "amount": 25888.0,
-          "orders": 56,
-          "guests": 119
+          "amount": 25518.0,
+          "orders": 55,
+          "guests": 117
         },
         {
           "hour": 22,
@@ -4579,54 +4557,12 @@
         {
           "hour": 23,
           "dow": "Sun",
-          "amount": 34641.76,
-          "orders": 71,
-          "guests": 160
+          "amount": 32978.76,
+          "orders": 69,
+          "guests": 152
         }
       ],
       "hour_daily": [
-        {
-          "date": "2025-03-22",
-          "hour": 22,
-          "amount": 370.0,
-          "orders": 1,
-          "guests": 2
-        },
-        {
-          "date": "2025-03-23",
-          "hour": 0,
-          "amount": 2106.0,
-          "orders": 5,
-          "guests": 12
-        },
-        {
-          "date": "2025-03-23",
-          "hour": 1,
-          "amount": 2741.0,
-          "orders": 5,
-          "guests": 12
-        },
-        {
-          "date": "2025-03-23",
-          "hour": 2,
-          "amount": 2291.0,
-          "orders": 4,
-          "guests": 10
-        },
-        {
-          "date": "2025-03-23",
-          "hour": 3,
-          "amount": 848.0,
-          "orders": 2,
-          "guests": 4
-        },
-        {
-          "date": "2025-03-23",
-          "hour": 23,
-          "amount": 1663.0,
-          "orders": 2,
-          "guests": 8
-        },
         {
           "date": "2025-03-24",
           "hour": 0,
@@ -11812,18 +11748,6 @@
       ],
       "categories_daily": [
         {
-          "date": "2025-03-22",
-          "category": "Other",
-          "amount": 370.0,
-          "orders": 2
-        },
-        {
-          "date": "2025-03-23",
-          "category": "Other",
-          "amount": 9649.0,
-          "orders": 110
-        },
-        {
           "date": "2025-03-24",
           "category": "Other",
           "amount": 3230.0,
@@ -13895,20 +13819,6 @@
         }
       ],
       "service_modes_daily": [
-        {
-          "date": "2025-03-22",
-          "mode": "Unspecified",
-          "amount": 370.0,
-          "orders": 1,
-          "guests": 2
-        },
-        {
-          "date": "2025-03-23",
-          "mode": "Unspecified",
-          "amount": 9649.0,
-          "orders": 18,
-          "guests": 46
-        },
         {
           "date": "2025-03-24",
           "mode": "Unspecified",
@@ -16342,15 +16252,15 @@
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 2710,
-        "guests": 6222,
-        "amount": 1257646.23,
+        "orders": 2691,
+        "guests": 6174,
+        "amount": 1247627.23,
         "tip": 0.0,
         "discount": 10835.97,
-        "min_date": "2025-03-22",
+        "min_date": "2025-03-24",
         "max_date": "2026-04-26",
         "tip_bins": [
-          2710,
+          2691,
           0,
           0,
           0,
