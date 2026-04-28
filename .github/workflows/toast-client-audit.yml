@@ -1,0 +1,46 @@
+name: Toast Client Audit
+
+# Manually-triggered. Runs toast_audit.py against both the Standard and the
+# Analytics partner clients and prints the capabilities of each. Use the log
+# output to decide which ERA endpoints to wire into the analytics ETL next.
+#
+# No commits, no data writes — pure read + log.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: toast-etl/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r toast-etl/requirements.txt
+
+      - name: Audit
+        env:
+          TOAST_STANDARD_CLIENT_ID:      ${{ secrets.TOAST_STANDARD_CLIENT_ID }}
+          TOAST_STANDARD_CLIENT_SECRET:  ${{ secrets.TOAST_STANDARD_CLIENT_SECRET }}
+          # The Analytics client may live under either name depending on when
+          # the secret was added — toast_audit.py falls back from one to the
+          # other, so pass both regardless.
+          TOAST_ANALYTICS_CLIENT_ID:     ${{ secrets.TOAST_ANALYTICS_CLIENT_ID }}
+          TOAST_ANALYTICS_CLIENT_SECRET: ${{ secrets.TOAST_ANALYTICS_CLIENT_SECRET }}
+          TOAST_CLIENT_ID:               ${{ secrets.TOAST_CLIENT_ID }}
+          TOAST_BASE:                    ${{ secrets.TOAST_BASE }}
+        run: python3 toast-etl/toast_audit.py
