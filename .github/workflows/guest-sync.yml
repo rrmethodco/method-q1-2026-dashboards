@@ -1,0 +1,116 @@
+name: Guest Sync
+
+# Nightly pull of Resy guest-experience data + Google Reviews for each
+# configured outlet. Commits refreshed data/<outlet>.json back to the repo
+# so the dashboard on GitHub Pages picks them up on next page load.
+#
+# Mirrors toast-sync.yml. Both jobs commit to the same files but to
+# different keys (toast → order_details, guest → guest), so concurrent
+# nightly runs are safe; the `concurrency` group below serializes
+# guest-sync against itself.
+
+on:
+  schedule:
+    # 07:45 UTC = 03:45 ET. 30 minutes after toast-sync so we don't race
+    # for the same data/*.json files mid-commit.
+    - cron: '45 7 * * *'
+  workflow_dispatch:
+    inputs:
+      outlet:
+        description: 'Optional single outlet id to sync (leave blank = all).'
+        required: false
+        default: ''
+      probe:
+        description: 'Run resy_sync.py --probe (auth + endpoint discovery, no writes)'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write  # needed to commit regenerated JSON
+
+concurrency:
+  group: guest-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: toast-etl/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r toast-etl/requirements.txt
+
+      # ---- Resy ----
+      - name: Run Resy sync
+        if: ${{ github.event.inputs.probe != 'true' }}
+        env:
+          RESY_EMAIL:           ${{ secrets.RESY_EMAIL }}
+          RESY_PASSWORD:        ${{ secrets.RESY_PASSWORD }}
+          RESY_VENUES:          ${{ secrets.RESY_VENUES }}
+          RESY_API_KEY:         ${{ secrets.RESY_API_KEY }}
+          RESY_FEEDBACK_PATH:   ${{ secrets.RESY_FEEDBACK_PATH }}
+          RESY_RATINGS_PATH:    ${{ secrets.RESY_RATINGS_PATH }}
+          RESY_BASE:            ${{ secrets.RESY_BASE }}
+          DAYS_BACK:            '60'   # incremental nightly window; seed has the long tail
+        run: |
+          cd toast-etl
+          if [ -n "${{ github.event.inputs.outlet }}" ]; then
+            python3 resy_sync.py --outlet "${{ github.event.inputs.outlet }}" --data-dir ../data
+          else
+            python3 resy_sync.py --data-dir ../data
+          fi
+
+      - name: Run Resy probe (manual only)
+        if: ${{ github.event.inputs.probe == 'true' }}
+        env:
+          RESY_EMAIL:    ${{ secrets.RESY_EMAIL }}
+          RESY_PASSWORD: ${{ secrets.RESY_PASSWORD }}
+          RESY_VENUES:   ${{ secrets.RESY_VENUES }}
+          RESY_API_KEY:  ${{ secrets.RESY_API_KEY }}
+          RESY_BASE:     ${{ secrets.RESY_BASE }}
+        run: |
+          cd toast-etl
+          python3 resy_sync.py --probe --data-dir ../data
+
+      # ---- Google Reviews ----
+      - name: Run Google Reviews sync
+        if: ${{ github.event.inputs.probe != 'true' }}
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          GOOGLE_PLACES:         ${{ secrets.GOOGLE_PLACES }}
+        run: |
+          cd toast-etl
+          if [ -n "${{ github.event.inputs.outlet }}" ]; then
+            python3 google_reviews_sync.py --outlet "${{ github.event.inputs.outlet }}" --data-dir ../data
+          else
+            python3 google_reviews_sync.py --data-dir ../data
+          fi
+
+      # ---- Commit ----
+      - name: Commit refreshed data
+        if: ${{ github.event.inputs.probe != 'true' }}
+        run: |
+          git config user.name  "method-guest-sync[bot]"
+          git config user.email "method-guest-sync@users.noreply.github.com"
+          git add data/*.json
+          if git diff --cached --quiet; then
+            echo "no guest data changes"
+          else
+            STAMP="$(date -u +%Y-%m-%dT%H:%MZ)"
+            git commit -m "chore(data): nightly guest sync ${STAMP}"
+            git push
+          fi
