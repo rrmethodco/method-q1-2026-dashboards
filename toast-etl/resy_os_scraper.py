@@ -189,18 +189,43 @@ def transform_resy_survey_row(raw: dict) -> dict | None:
     except Exception:
         dow = None
 
-    # Walk responses and bucket by question text
+    # Walk responses and bucket by question text. Resy's `question` field
+    # can be either a string (older shape) or a nested dict like
+    #   {"id": ..., "text": "...", "category": ..., "weight": ...}.
+    # Coerce both shapes to a lowercase prompt string for keyword matching.
+    def _question_text(q_field) -> str:
+        if isinstance(q_field, dict):
+            for k in ("text", "title", "label", "question", "prompt", "name"):
+                v = q_field.get(k)
+                if isinstance(v, str) and v:
+                    return v.lower()
+            return ""
+        if isinstance(q_field, str):
+            return q_field.lower()
+        return ""
+
     food = service = atmos = sentiment = recommend = None
     for r in (raw.get("responses") or []):
-        q = (r.get("question") or "").lower()
+        if not isinstance(r, dict):
+            continue
+        q = _question_text(r.get("question"))
         ans = r.get("response")
         if ans is None:
             continue
-        # Coerce numeric
-        try:
+        # Coerce numeric — handle dict shape ({"score": 9}) too
+        score = None
+        if isinstance(ans, (int, float)):
             score = float(ans)
-        except (TypeError, ValueError):
-            score = None
+        elif isinstance(ans, dict):
+            for k in ("score", "value", "rating", "answer"):
+                v = ans.get(k)
+                if isinstance(v, (int, float)):
+                    score = float(v); break
+        else:
+            try:
+                score = float(ans)
+            except (TypeError, ValueError):
+                pass
         if score is None:
             continue
         if "food" in q or "menu" in q:
