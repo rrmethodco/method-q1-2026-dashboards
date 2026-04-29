@@ -102,10 +102,19 @@ except ImportError:
 
 BASE_URL = (os.environ.get("MARGINEDGE_BASE_URL") or "https://api.marginedge.com/public").rstrip("/")
 LOOKBACK_DAYS = int(os.environ.get("MARGINEDGE_LOOKBACK_DAYS") or 90)
-WITH_LINE_ITEMS = (os.environ.get("MARGINEDGE_WITH_LINE_ITEMS") or "0") in ("1", "true", "yes")
+# Default to line-item fetch ON. Adds ~1 API call per order (~10 min for
+# all 11 outlets vs. ~1 min without), in exchange for category-level
+# rollups (food / beer / wine / liquor / NA beverage spend by period).
+# Override with MARGINEDGE_WITH_LINE_ITEMS=0 for a fast catalog-only run.
+WITH_LINE_ITEMS = (os.environ.get("MARGINEDGE_WITH_LINE_ITEMS") or "1") in ("1", "true", "yes")
 REQUEST_TIMEOUT = 45
 USER_AGENT = "MethodCo-Dashboards/1.0 (marginedge_sync.py; +https://github.com/rrmethodco)"
-RATE_LIMIT_SLEEP = 0.10  # seconds between calls — ME limits aren't documented
+# ME's rate limits aren't published. Empirically, /orders/{id} starts
+# returning 429 after ~100 consecutive calls at 10/sec — bumping the
+# inter-call sleep to 0.30s (3.3 req/sec sustained) eliminates them.
+RATE_LIMIT_SLEEP = 0.30
+RATE_LIMIT_RETRIES = 6
+RATE_LIMIT_BACKOFF_BASE = 3.0  # 3, 6, 9, 12, 15, 18s before giving up
 
 
 # Outlet (data/<id>.json basename) → MarginEdge restaurantUnitId.
@@ -144,15 +153,19 @@ class MarginEdgeClient:
 
     def _get(self, path: str, params: dict | None = None) -> dict | list:
         url = f"{BASE_URL}{path}"
-        for attempt in range(3):
+        for attempt in range(RATE_LIMIT_RETRIES):
             r = self.session.get(url, params=params, timeout=REQUEST_TIMEOUT)
             if r.status_code == 429:
-                time.sleep(2.0 * (attempt + 1))
+                # Exponential-ish backoff. Server occasionally returns a
+                # Retry-After header; respect it when present.
+                wait = float(r.headers.get("Retry-After") or RATE_LIMIT_BACKOFF_BASE * (attempt + 1))
+                sys.stderr.write(f"    [429] {path} — sleeping {wait:.1f}s (attempt {attempt+1}/{RATE_LIMIT_RETRIES})\n")
+                time.sleep(wait)
                 continue
             r.raise_for_status()
             time.sleep(RATE_LIMIT_SLEEP)
             return r.json()
-        raise RuntimeError(f"rate-limited 3x on {path}")
+        raise RuntimeError(f"rate-limited {RATE_LIMIT_RETRIES}x on {path}")
 
     def list_units(self) -> list[dict]:
         body = self._get("/restaurantUnits")
@@ -194,20 +207,54 @@ class MarginEdgeClient:
 
 # ---------- transform ----------
 
-def transform_order(o: dict, line_items: list | None, category_lookup: dict) -> dict:
-    """Project an ME order into the dashboard's invoice schema."""
+# MarginEdge's categoryType taxonomy → buckets the dashboard cares about.
+# Verified across all 11 outlets (n=703 categories): FOOD, BEER, WINE,
+# LIQUOR, NA_BEVERAGES are the COGS-relevant types. LABOR rows are kept
+# out of COGS rollups (labor cost is sourced from Toast). OTHER captures
+# operating expenses (advertising, bank charges, cleaning, etc.) — also
+# excluded from COGS. Anything not matched (e.g. null on Sake) buckets
+# to "uncategorized" for visibility.
+COGS_TYPES = {
+    "FOOD":          "food",
+    "BEER":          "beer",
+    "WINE":          "wine",
+    "LIQUOR":        "liquor",
+    "NA_BEVERAGES":  "na_beverages",
+}
+
+
+def cogs_bucket(category_type: str | None) -> str:
+    """Map a MarginEdge categoryType → our cogs bucket name.
+    LABOR/OTHER/null all return None → excluded from COGS rollups."""
+    if not category_type:
+        return None
+    return COGS_TYPES.get(category_type.upper())
+
+
+def transform_order(o: dict, line_items: list | None,
+                    category_lookup: dict, category_type_lookup: dict) -> dict:
+    """Project an ME order into the dashboard's invoice schema.
+
+    `category_type_lookup` maps categoryId → categoryType (FOOD, BEER,
+    WINE, LIQUOR, NA_BEVERAGES, LABOR, OTHER). We attach categoryType
+    on each line item so the dashboard can group spend by hospitality
+    cost-of-goods buckets without a second lookup at render time.
+    """
     out_li = []
     for li in (line_items or []):
         cat_id = li.get("categoryId")
         cat_name = category_lookup.get(cat_id)
+        cat_type = category_type_lookup.get(cat_id)
         out_li.append({
-            "product_id":   li.get("companyConceptProductId") or li.get("vendorItemCode"),
-            "product_name": li.get("vendorItemName"),
-            "category":     cat_name,
-            "category_id":  cat_id,
-            "quantity":     li.get("quantity"),
-            "unit_price":   li.get("unitPrice"),
-            "extended":     li.get("linePrice"),
+            "product_id":    li.get("companyConceptProductId") or li.get("vendorItemCode"),
+            "product_name":  li.get("vendorItemName"),
+            "category":      cat_name,
+            "category_id":   cat_id,
+            "category_type": cat_type,           # FOOD / BEER / WINE / LIQUOR / NA_BEVERAGES / OTHER / LABOR
+            "cogs_bucket":   cogs_bucket(cat_type),  # food/beer/wine/liquor/na_beverages or None
+            "quantity":      li.get("quantity"),
+            "unit_price":    li.get("unitPrice"),
+            "extended":      li.get("linePrice"),
         })
     return {
         "invoice_id":     o.get("orderId"),
@@ -242,11 +289,21 @@ def build_rollups(invoices: list[dict], net_sales_by_week: dict, net_sales_by_mo
         if not key:
             return
         if key not in map_:
-            map_[key] = {"total_cogs": 0.0, "by_category": defaultdict(float),
-                         "by_vendor": defaultdict(float)}
+            map_[key] = {
+                "total_cogs": 0.0,
+                "cogs_only_total": 0.0,  # excludes OTHER/LABOR — true food+bev COGS
+                "by_category": defaultdict(float),
+                "by_vendor": defaultdict(float),
+                "by_cogs_type": defaultdict(float),  # food/beer/wine/liquor/na_beverages
+            }
         b = map_[key]
-        for li in inv["line_items"]:
-            b["by_category"][li.get("category") or "Uncategorized"] += float(li.get("extended") or 0)
+        for li in (inv.get("line_items") or []):
+            ext = float(li.get("extended") or 0)
+            b["by_category"][li.get("category") or "Uncategorized"] += ext
+            bucket = li.get("cogs_bucket")
+            if bucket:
+                b["by_cogs_type"][bucket] += ext
+                b["cogs_only_total"] += ext
         b["total_cogs"] += float(inv.get("total") or 0)
         b["by_vendor"][inv.get("vendor_name") or "Unknown vendor"] += float(inv.get("total") or 0)
 
@@ -263,11 +320,14 @@ def build_rollups(invoices: list[dict], net_sales_by_week: dict, net_sales_by_mo
             row = {
                 key_name: k,
                 "total_cogs": round(b["total_cogs"], 2),
+                "cogs_only_total": round(b["cogs_only_total"], 2),
                 "by_category": {cat: round(v, 2) for cat, v in b["by_category"].items()},
+                "by_cogs_type": {t: round(v, 2) for t, v in b["by_cogs_type"].items()},
                 "by_vendor_top5": [{"vendor": v, "total": round(t, 2)} for v, t in top5],
             }
             if ns and ns > 0:
                 row["cogs_pct_revenue"] = round(b["total_cogs"] / ns, 4)
+                row["cogs_only_pct_revenue"] = round(b["cogs_only_total"] / ns, 4)
             out.append(row)
         out.sort(key=lambda r: r[key_name])
         return out
@@ -385,19 +445,22 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
                   f"{len(orders)} orders")
 
             cat_lookup = {c.get("categoryId"): c.get("categoryName") for c in categories}
+            cat_type_lookup = {c.get("categoryId"): c.get("categoryType") for c in categories}
             vendor_lookup = {v.get("vendorId"): v.get("vendorName") for v in vendors}
 
-            # Optionally fetch line items — adds 1 call per order (slow)
+            # Line item fetch — adds ~1 API call per order (~10 min for
+            # all outlets) but unlocks per-category COGS rollup
+            # (food / beer / wine / liquor / NA beverages).
             invoices = []
             if with_line_items:
                 print(f"  fetching line items for {len(orders)} orders (~{len(orders) * RATE_LIMIT_SLEEP:.0f}s)...")
                 for i, o in enumerate(orders):
                     detail = client.get_order_detail(o.get("orderId"), unit_id)
-                    invoices.append(transform_order(o, detail.get("lineItems") or [], cat_lookup))
+                    invoices.append(transform_order(o, detail.get("lineItems") or [], cat_lookup, cat_type_lookup))
                     if (i + 1) % 50 == 0:
                         print(f"    ...{i+1}/{len(orders)}")
             else:
-                invoices = [transform_order(o, None, cat_lookup) for o in orders]
+                invoices = [transform_order(o, None, cat_lookup, cat_type_lookup) for o in orders]
 
             payload = load_outlet(data_dir, oid)
             existing_cogs = (payload.get("cogs") or {})

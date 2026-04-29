@@ -1547,13 +1547,35 @@ function snapshotSumLabor(o, start, end) {
   });
   return out.hours > 0 ? out : null;
 }
+// Sum MarginEdge invoice totals in a date window. Returns null when
+// no cogs block exists yet for this outlet (e.g. anthology pre-MarginEdge).
+function snapshotSumCogs(o, start, end) {
+  if (!o || !o.cogs || !Array.isArray(o.cogs.invoices)) return null;
+  let total = 0, n = 0;
+  // Per-bucket totals (food/beer/wine/liquor/na_beverages) when line
+  // items have been fetched. When line items are off, only `total` is
+  // populated; the buckets stay at 0 and the dashboard hides them.
+  const byType = { food: 0, beer: 0, wine: 0, liquor: 0, na_beverages: 0 };
+  o.cogs.invoices.forEach(inv => {
+    const d = inv.date || '';
+    if (d >= start && d <= end) {
+      total += inv.total || 0;
+      n++;
+      (inv.line_items || []).forEach(li => {
+        const b = li.cogs_bucket;
+        if (b && b in byType) byType[b] += li.extended || 0;
+      });
+    }
+  });
+  return n > 0 ? { total, n, byType } : null;
+}
 function snapshotComputeSurveys(rows) {
   if (!rows || !rows.length) return null;
   const overall = rows.map(s => s.overall).filter(v => v != null);
   const recommend = rows.map(s => s.recommend).filter(v => v != null);
   // NPS calc: recommend 9-10 = promoter, 7-8 = passive, 0-6 = detractor
-  let p = 0, d = 0;
-  recommend.forEach(r => { if (r >= 9) p++; else if (r <= 6) d++; });
+  let p = 0, pa = 0, d = 0;
+  recommend.forEach(r => { if (r >= 9) p++; else if (r >= 7) pa++; else d++; });
   const nps = recommend.length ? Math.round(((p - d) / recommend.length) * 100) : null;
   const food = rows.map(s => s.food).filter(v => v != null);
   const service = rows.map(s => s.service).filter(v => v != null);
@@ -1562,6 +1584,9 @@ function snapshotComputeSurveys(rows) {
   return {
     n: rows.length,
     nps,
+    promoters: p,
+    passives: pa,
+    detractors: d,
     avg_overall: avg(overall),
     avg_recommend: avg(recommend),
     avg_food: avg(food), avg_service: avg(service), avg_atmos: avg(atmos),
@@ -1631,9 +1656,27 @@ function snapshotBuildActionItems(snap) {
   // total at 8 so the report stays scannable. Order matters — most urgent
   // first. Each rule is intentionally narrow to make the language specific.
   const items = [];
-  const { rev, prior, yoy, labor, surveys, od, odPrior, outlet } = snap;
+  const { rev, prior, yoy, labor, surveys, od, odPrior,
+          cogsPct, cogsPctPrior, primePct, primePctPrior, cogs, outlet } = snap;
   const wow = snapshotPctDelta(rev.net_sales, prior.net_sales);
   const yoyD = snapshotPctDelta(rev.net_sales, yoy.net_sales);
+
+  // ---- Cost structure (the new headline financial trio) ----
+  if (cogsPct != null && cogsPct > 35) {
+    items.push({ kind: 'concern', urgent: cogsPct > 40,
+      text: `<b>COGS running hot:</b> ${cogsPct.toFixed(1)}% of net sales (industry target 28-32% for FSR). ${fmtMoney(cogs.total)} on ${fmtNum(cogs.n)} invoices. Audit recent vendor pricing + check for over-ordering.` });
+  }
+  if (cogsPct != null && cogsPctPrior != null && cogsPct - cogsPctPrior > 3) {
+    items.push({ kind: 'action',
+      text: `<b>COGS up ${(cogsPct - cogsPctPrior).toFixed(1)}pp WoW</b> (${cogsPctPrior.toFixed(1)}% → ${cogsPct.toFixed(1)}%). Flag any vendor price changes; review menu mix shift.` });
+  }
+  if (primePct != null && primePct > 65) {
+    items.push({ kind: 'concern', urgent: primePct > 70,
+      text: `<b>Prime Cost above target:</b> ${primePct.toFixed(1)}% (industry max 60-65% for FSR). Squeeze BOTH labor and COGS — single-lever fixes are usually insufficient at this level.` });
+  } else if (primePct != null && primePct < 50 && rev.net_sales > 0) {
+    items.push({ kind: 'win',
+      text: `Prime Cost lean at ${primePct.toFixed(1)}% — strong margin profile this week. Document what's working.` });
+  }
 
   // Revenue
   if (wow != null && wow <= -10) {
@@ -1758,6 +1801,21 @@ function renderSnapshotSection() {
   const od = snapshotSumOrderDetails(o, wb.start, wb.end);
   const odPrior = snapshotSumOrderDetails(o, wb.pwStart, wb.pwEnd);
 
+  // Cost of Goods (MarginEdge) for the snapshot week + Prime Cost.
+  // COGS % = invoice $ in window ÷ net sales in window (denominator
+  // is total revenue — per-bucket vs per-bucket-revenue isn't possible
+  // until Sales Categories are configured in Toast).
+  // Prime Cost = Labor + COGS, the headline hospitality margin metric;
+  // industry target ≤ 60-65% for full-service.
+  const cogs      = snapshotSumCogs(o, wb.start, wb.end);
+  const cogsPrior = snapshotSumCogs(o, wb.pwStart, wb.pwEnd);
+  const cogsPct      = (cogs      && rev.net_sales   > 0) ? (cogs.total      / rev.net_sales)   * 100 : null;
+  const cogsPctPrior = (cogsPrior && prior.net_sales > 0) ? (cogsPrior.total / prior.net_sales) * 100 : null;
+  const primeCost      = (labor && cogs)           ? labor.total_cost      + cogs.total      : null;
+  const primeCostPrior = (laborPrior && cogsPrior) ? laborPrior.total_cost + cogsPrior.total : null;
+  const primePct      = (primeCost      != null && rev.net_sales   > 0) ? (primeCost      / rev.net_sales)   * 100 : null;
+  const primePctPrior = (primeCostPrior != null && prior.net_sales > 0) ? (primeCostPrior / prior.net_sales) * 100 : null;
+
   // Avg Guest Spend = net_sales / guests (per-guest spend, not per-check).
   const avgGuestSpend      = rev.guests > 0   ? rev.net_sales   / rev.guests   : null;
   const avgGuestSpendPrior = prior.guests > 0 ? prior.net_sales / prior.guests : null;
@@ -1796,7 +1854,9 @@ function renderSnapshotSection() {
   if (dwellMin != null && dwellMin > 90) concerns.push(`Ticket time averaging ${dwellMin.toFixed(0)} min — kitchen flow worth a closer look.`);
 
   const actionItems = snapshotBuildActionItems({
-    rev, prior, yoy, labor, surveys, od, odPrior, outlet: o.name || STATE.outlet,
+    rev, prior, yoy, labor, surveys, od, odPrior,
+    cogsPct, cogsPctPrior, primePct, primePctPrior, cogs,
+    outlet: o.name || STATE.outlet,
   });
 
   const today = new Date();
@@ -1834,22 +1894,38 @@ function renderSnapshotSection() {
           'net sales ÷ guests')}
       </div>
 
-      <!-- KPI strip — labor + ops -->
+      <!-- KPI strip — cost structure (the financial trio + NPS) -->
       <div class="snap-row">
+        ${snapshotKpiCard('COGS %', cogsPct != null ? cogsPct.toFixed(1) + '%' : '—',
+          snapshotDeltaSpan(cogsPct, cogsPctPrior, 'prior wk', true),
+          cogs ? `${fmtMoney(cogs.total)} on ${fmtNum(cogs.n)} invoices` : 'awaiting MarginEdge')}
         ${snapshotKpiCard('Labor %', laborPct != null ? laborPct.toFixed(1) + '%' : '—',
           snapshotDeltaSpan(laborPct, laborPctPrior, 'prior wk', true),
           labor ? `${fmtMoney(labor.total_cost)} on ${fmtNum(labor.hours)} hrs` : 'no labor data')}
+        ${snapshotKpiCard('Prime Cost %', primePct != null ? primePct.toFixed(1) + '%' : '—',
+          snapshotDeltaSpan(primePct, primePctPrior, 'prior wk', true),
+          primeCost != null ? `${fmtMoney(primeCost)} (Labor + COGS) · target ≤ 60-65%` : 'needs both Labor + COGS')}
         ${snapshotKpiCard('NPS', surveys && surveys.nps != null ? (surveys.nps > 0 ? '+' : '') + surveys.nps : '—',
           surveys && surveysPrior && surveysPrior.nps != null ? snapshotDeltaSpan(surveys.nps, surveysPrior.nps, 'prior wk') : null,
           surveys && surveys.fallback
             ? `trailing ${surveys.fallback.days === 'lifetime' ? 'lifetime' : surveys.fallback.days+'d'} · ${surveys.n} surveys`
             : surveys ? `${surveys.n} surveys this week` : 'awaiting Resy sync')}
+      </div>
+
+      <!-- KPI strip — operations -->
+      <div class="snap-row">
         ${snapshotKpiCard('Comps + Disc.', discPct != null ? discPct.toFixed(1) + '%' : '—',
           snapshotDeltaSpan(discPct, discPctPrior, 'prior wk', true),
           od ? `${fmtMoney(od.discount)} off ${fmtMoney(od.net_sales_od)}` : 'no order details')}
         ${snapshotKpiCard('Dwell Time', dwellMin != null ? dwellMin.toFixed(0) + ' min' : '—',
           snapshotDeltaSpan(dwellMin, dwellMinPrior, 'prior wk', true),
           od ? `avg ticket time on ${fmtNum(od.orders)} orders` : null)}
+        ${snapshotKpiCard('Promoters', surveys ? fmtNum(surveys.promoters || 0) : '—',
+          null,
+          surveys && surveys.n ? `${((surveys.promoters || 0) / surveys.n * 100).toFixed(0)}% of ${fmtNum(surveys.n)} surveys` : 'no surveys')}
+        ${snapshotKpiCard('Detractors', surveys ? fmtNum(surveys.detractors || 0) : '—',
+          null,
+          surveys && surveys.n ? `${((surveys.detractors || 0) / surveys.n * 100).toFixed(0)}% of ${fmtNum(surveys.n)} surveys` : 'no surveys')}
       </div>
 
       <!-- Wins + Concerns -->
@@ -1901,6 +1977,10 @@ function renderSnapshotSection() {
             <tr><td>Labor %</td><td class="num">${laborPct != null ? laborPct.toFixed(1)+'%' : '—'}</td><td class="num">${laborPctPrior != null ? laborPctPrior.toFixed(1)+'%' : '—'}</td><td class="num">${laborPct != null && laborPctPrior != null ? (laborPct - laborPctPrior >= 0 ? '+' : '') + (laborPct - laborPctPrior).toFixed(1) + ' pp' : '—'}</td><td class="num">—</td><td class="num">—</td></tr>` : ''}
             ${od ? `
             <tr><td>Comps + Discounts %</td><td class="num">${discPct != null ? discPct.toFixed(1)+'%' : '—'}</td><td class="num">${discPctPrior != null ? discPctPrior.toFixed(1)+'%' : '—'}</td><td class="num">${discPct != null && discPctPrior != null ? (discPct - discPctPrior >= 0 ? '+' : '') + (discPct - discPctPrior).toFixed(1) + ' pp' : '—'}</td><td class="num">—</td><td class="num">—</td></tr>
+            ${cogs ? `
+            <tr><td>COGS $</td><td class="num">${fmtMoneyFull(cogs.total)}</td><td class="num">${cogsPrior ? fmtMoneyFull(cogsPrior.total) : '—'}</td><td class="num">${cogsPrior ? snapshotDeltaSpan(cogs.total, cogsPrior.total, '', true) : '—'}</td><td class="num">—</td><td class="num">—</td></tr>
+            <tr><td>COGS %</td><td class="num">${cogsPct != null ? cogsPct.toFixed(1)+'%' : '—'}</td><td class="num">${cogsPctPrior != null ? cogsPctPrior.toFixed(1)+'%' : '—'}</td><td class="num">${cogsPct != null && cogsPctPrior != null ? (cogsPct - cogsPctPrior >= 0 ? '+' : '') + (cogsPct - cogsPctPrior).toFixed(1) + ' pp' : '—'}</td><td class="num">—</td><td class="num">—</td></tr>
+            <tr><td>Prime Cost %</td><td class="num">${primePct != null ? primePct.toFixed(1)+'%' : '—'}</td><td class="num">${primePctPrior != null ? primePctPrior.toFixed(1)+'%' : '—'}</td><td class="num">${primePct != null && primePctPrior != null ? (primePct - primePctPrior >= 0 ? '+' : '') + (primePct - primePctPrior).toFixed(1) + ' pp' : '—'}</td><td class="num">—</td><td class="num">—</td></tr>` : ''}
             <tr><td>Dwell Time</td><td class="num">${dwellMin != null ? dwellMin.toFixed(0)+' min' : '—'}</td><td class="num">${dwellMinPrior != null ? dwellMinPrior.toFixed(0)+' min' : '—'}</td><td class="num">${snapshotDeltaSpan(dwellMin, dwellMinPrior, '', true)}</td><td class="num">—</td><td class="num">—</td></tr>` : ''}
             ${surveys && surveysPrior ? `
             <tr><td>NPS</td><td class="num">${surveys.nps != null ? (surveys.nps > 0 ? '+' : '') + surveys.nps : '—'}</td><td class="num">${surveysPrior.nps != null ? (surveysPrior.nps > 0 ? '+' : '') + surveysPrior.nps : '—'}</td><td class="num">${surveys.nps != null && surveysPrior.nps != null ? (surveys.nps - surveysPrior.nps >= 0 ? '+' : '') + (surveys.nps - surveysPrior.nps) + ' pts' : '—'}</td><td class="num">—</td><td class="num">—</td></tr>` : ''}
