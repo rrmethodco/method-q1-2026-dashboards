@@ -1101,6 +1101,182 @@ def write_atomic(path: Path, payload: dict[str, Any]) -> None:
     tmp.replace(path)
 
 
+# ---------------------------------------------------------------------------
+# Incremental merge — keep historical days that fell outside the pull window.
+# ---------------------------------------------------------------------------
+# Background: the workflow used to pull 400 days nightly and overwrite each
+# `data/<outlet>.json`. That worked but cost ~2 hrs/run and put us in the
+# guest-sync race window. After the merge_payloads() call below, the ETL can
+# pull a tight 48-hour window (DAYS_BACK=2), preserve everything older from
+# disk, and finish in ~10 min — Toast's 14-day edit window for time entries
+# is well-covered by the 2-day re-pull.
+#
+# The dataset boundaries:
+#   - DATE-KEYED rows (daily/hour_daily/by_job_daily): merge by date.
+#     Existing rows with date < pull_start are preserved verbatim;
+#     fresh rows (≥ pull_start) replace whatever was there.
+#   - MONTHLY rows: same idea but at month granularity. A month is treated
+#     as "in window" if any day of the pull window falls in it.
+#   - AGGREGATES (rev_centers_breakdown, totals, by_job, hour_dow):
+#     recomputed from the merged daily data so they stay accurate over the
+#     full historical window even when the pull was just 48 hours.
+#   - Untouched blocks (guest.surveys, guest.google, config): carried over.
+# ---------------------------------------------------------------------------
+DOW_ORDER = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+
+
+def _merge_by_date(existing_rows: list, fresh_rows: list, cutoff: str) -> list:
+    out = [r for r in (existing_rows or []) if (r.get("date") or "") < cutoff]
+    out.extend(fresh_rows or [])
+    out.sort(key=lambda r: (r.get("date", ""),
+                            r.get("hour", -1) if "hour" in r else 0,
+                            r.get("job_name", "")))
+    return out
+
+
+def _merge_by_month(existing_rows: list, fresh_rows: list, cutoff: str) -> list:
+    cutoff_month = cutoff[:7]
+    fresh_months = {r.get("month") for r in (fresh_rows or [])}
+    out = [r for r in (existing_rows or [])
+           if (r.get("month") or "") < cutoff_month and r.get("month") not in fresh_months]
+    out.extend(fresh_rows or [])
+    out.sort(key=lambda r: r.get("month", ""))
+    return out
+
+
+def _recompute_hour_dow(hour_daily: list) -> list:
+    from collections import defaultdict
+    bucket = defaultdict(lambda: {"hours": 0.0, "cost": 0.0})
+    for r in hour_daily or []:
+        date_s = r.get("date") or ""
+        try:
+            d = datetime.strptime(date_s, "%Y-%m-%d")
+        except (ValueError, TypeError):
+            continue
+        dow = d.strftime("%a").upper()[:3]
+        h = r.get("hour")
+        if h is None:
+            continue
+        b = bucket[(int(h), dow)]
+        b["hours"] += float(r.get("hours") or 0)
+        b["cost"] += float(r.get("cost") or 0)
+    out = []
+    for (h, dow), b in bucket.items():
+        out.append({"hour": h, "dow": dow,
+                    "hours": round(b["hours"], 2), "cost": round(b["cost"], 2)})
+    out.sort(key=lambda r: (r["hour"],
+                            DOW_ORDER.index(r["dow"]) if r["dow"] in DOW_ORDER else 7))
+    return out
+
+
+def _recompute_by_job(by_job_daily: list) -> list:
+    from collections import defaultdict
+    bucket = defaultdict(lambda: {"hours": 0.0, "regular_hours": 0.0,
+                                  "overtime_hours": 0.0, "regular_cost": 0.0,
+                                  "overtime_cost": 0.0, "total_cost": 0.0})
+    for r in by_job_daily or []:
+        job = r.get("job_name") or r.get("job") or ""
+        if not job:
+            continue
+        b = bucket[job]
+        for k in ("hours", "regular_hours", "overtime_hours",
+                  "regular_cost", "overtime_cost", "total_cost"):
+            b[k] += float(r.get(k) or 0)
+    out = []
+    for job, b in bucket.items():
+        out.append({"job_name": job,
+                    **{k: round(v, 2) for k, v in b.items()}})
+    out.sort(key=lambda r: -r["hours"])
+    return out
+
+
+def _recompute_rc_totals(daily: list) -> dict:
+    """Aggregate per-rc daily into a totals dict mirroring the legacy shape."""
+    keys = ("orders", "guests", "amount", "tip", "gratuity", "discount")
+    out = {k: 0.0 for k in keys}
+    out["ticket_time_sec_sum"] = 0.0
+    out["ticket_time_count"] = 0
+    for r in daily or []:
+        for k in keys:
+            out[k] += float(r.get(k) or 0)
+        out["ticket_time_sec_sum"] += float(r.get("ticket_time_sec_sum") or 0)
+        out["ticket_time_count"] += int(r.get("ticket_time_count") or 0)
+    out["avg_check"] = (out["amount"] / out["orders"]) if out["orders"] else None
+    out["avg_ticket_time_sec"] = (
+        out["ticket_time_sec_sum"] / out["ticket_time_count"]
+        if out["ticket_time_count"] else None
+    )
+    return out
+
+
+def _recompute_labor_totals(daily: list) -> dict:
+    keys = ("hours", "regular_hours", "overtime_hours",
+            "regular_cost", "overtime_cost", "total_cost")
+    out = {k: 0.0 for k in keys}
+    for r in daily or []:
+        for k in keys:
+            out[k] += float(r.get(k) or 0)
+    return {k: round(v, 2) for k, v in out.items()}
+
+
+def merge_payloads(existing: dict | None, fresh: dict, pull_start_iso: str) -> dict:
+    """Merge a fresh-window payload into an existing on-disk payload.
+
+    `pull_start_iso` is the inclusive lower bound of the fresh window
+    (YYYY-MM-DD). Rows in `existing` with date strictly less than this
+    cutoff are preserved; rows from `fresh` apply for everything else.
+    """
+    if not existing or existing.get("outlet_id") != fresh.get("outlet_id"):
+        return fresh
+    cutoff = pull_start_iso[:10]
+    merged = dict(existing)
+    # Top-level metadata always uses fresh
+    for k in ("outlet_id", "generated_at", "source"):
+        if k in fresh:
+            merged[k] = fresh[k]
+
+    # === order_details (per revenue center) ===
+    if "order_details" in fresh:
+        merged_od = dict(existing.get("order_details") or {})
+        for rc, fresh_rc in fresh["order_details"].items():
+            existing_rc = merged_od.get(rc) or {}
+            new_rc = dict(existing_rc)
+            new_rc["daily"] = _merge_by_date(
+                existing_rc.get("daily"), fresh_rc.get("daily"), cutoff)
+            new_rc["monthly"] = _merge_by_month(
+                existing_rc.get("monthly"), fresh_rc.get("monthly"), cutoff)
+            new_rc["totals"] = _recompute_rc_totals(new_rc["daily"])
+            for k in ("outlet", "revenue_summary", "rev_centers_breakdown"):
+                if k in fresh_rc:
+                    new_rc[k] = fresh_rc[k]
+            merged_od[rc] = new_rc
+        # Carry over rcs that were in existing but absent from fresh
+        for rc in (existing.get("order_details") or {}):
+            if rc not in merged_od:
+                merged_od[rc] = existing["order_details"][rc]
+        merged["order_details"] = merged_od
+
+    # === labor ===
+    if "labor" in fresh and fresh["labor"]:
+        existing_labor = existing.get("labor") or {}
+        fresh_labor = fresh["labor"]
+        new_labor = dict(existing_labor)
+        for k in ("daily", "hour_daily", "by_job_daily"):
+            new_labor[k] = _merge_by_date(
+                existing_labor.get(k), fresh_labor.get(k), cutoff)
+        new_labor["hour_dow"] = _recompute_hour_dow(new_labor.get("hour_daily") or [])
+        new_labor["by_job"] = _recompute_by_job(new_labor.get("by_job_daily") or [])
+        new_labor.update(_recompute_labor_totals(new_labor.get("daily") or []))
+        merged["labor"] = new_labor
+
+    # === passthrough blocks owned by other ETLs ===
+    for k in ("guest", "config"):
+        if k in existing and k not in fresh:
+            merged[k] = existing[k]
+
+    return merged
+
+
 def dry_run_fixture() -> dict[str, Any]:
     """Emit a believable fixture so we can validate the dashboard DATA shape
     without hitting Toast. Mirrors what transform_orders would produce for a
@@ -1272,11 +1448,28 @@ def main(argv: list[str] | None = None) -> int:
     start_day = end_day - timedelta(days=args.days)
 
     any_error = False
+    pull_start_iso = start_day.date().isoformat()
     for outlet_id, rc_map in outlets.items():
         try:
             payload = sync_outlet(outlet_id, rc_map, token, start_day, end_day)
-            write_atomic(outdir / f"{outlet_id}.json", payload)
-            sys.stdout.write(f"wrote {outdir / (outlet_id + '.json')}\n")
+            out_path = outdir / f"{outlet_id}.json"
+            existing = None
+            if out_path.exists():
+                try:
+                    existing = json.loads(out_path.read_text(encoding="utf-8"))
+                except Exception as e:  # noqa: BLE001
+                    sys.stderr.write(f"[{outlet_id}] existing JSON unreadable, "
+                                     f"falling back to overwrite: {e}\n")
+            merged = merge_payloads(existing, payload, pull_start_iso) if existing else payload
+            write_atomic(out_path, merged)
+            n_days = len(merged.get("labor", {}).get("daily", []) or [])
+            n_rc_daily = sum(len((rc.get("daily") or []))
+                             for rc in (merged.get("order_details") or {}).values())
+            sys.stdout.write(
+                f"wrote {out_path}  "
+                f"(merged: order_daily={n_rc_daily} labor_daily={n_days} "
+                f"window_start={pull_start_iso})\n"
+            )
         except Exception as e:  # noqa: BLE001
             any_error = True
             sys.stderr.write(f"[{outlet_id}] sync failed: {e}\n")
