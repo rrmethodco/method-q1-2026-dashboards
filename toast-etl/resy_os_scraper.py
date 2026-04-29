@@ -148,56 +148,134 @@ def is_candidate_url(url: str) -> bool:
     return any(p in u for p in CANDIDATE_URL_PATTERNS)
 
 
+def transform_resy_survey_row(raw: dict) -> dict | None:
+    """Map a Resy OS survey row → the dashboard's survey schema.
+
+    Resy's row shape (verified via discover, run 25115337275):
+      {
+        date_completed: ISO timestamp,
+        id: int,
+        overall_score: 0-100 int,
+        reservation: {
+          server, party_size, date_seated, service_type, ...
+        },
+        responses: [
+          {question, question_option, question_weight, response, ...},
+          ...
+        ],
+        user: {<PII — DROPPED, never stored>}
+      }
+
+    Question text → score-bucket mapping is substring-based (Resy lets
+    venues customize the question text). Buckets we map into:
+      food, service, atmos, sentiment, recommend.
+    """
+    rsv = raw.get("reservation") or {}
+    date_completed = (raw.get("date_completed") or "")[:10]
+    if not date_completed:
+        return None
+    # Derive dow + hour from reservation if available, else date_completed
+    seated = rsv.get("date_seated") or rsv.get("date_arrived") or raw.get("date_completed") or ""
+    hour = None
+    try:
+        if len(seated) >= 13 and seated[10] in ("T", " "):
+            hour = int(seated[11:13])
+    except ValueError:
+        pass
+    try:
+        from datetime import date as _d
+        y, m, d = (int(x) for x in date_completed.split("-"))
+        dow = _d(y, m, d).weekday()  # Mon=0
+    except Exception:
+        dow = None
+
+    # Walk responses and bucket by question text
+    food = service = atmos = sentiment = recommend = None
+    for r in (raw.get("responses") or []):
+        q = (r.get("question") or "").lower()
+        ans = r.get("response")
+        if ans is None:
+            continue
+        # Coerce numeric
+        try:
+            score = float(ans)
+        except (TypeError, ValueError):
+            score = None
+        if score is None:
+            continue
+        if "food" in q or "menu" in q:
+            food = score
+        elif "service" in q or "staff" in q:
+            service = score
+        elif "atmos" in q or "ambien" in q or "vibe" in q or "decor" in q:
+            atmos = score
+        elif "sentiment" in q or "experience" in q or "overall" in q:
+            sentiment = score
+        elif ("recomm" in q or "likel" in q or "promot" in q or "nps" in q):
+            recommend = score
+
+    return {
+        "date":      date_completed,
+        "overall":   raw.get("overall_score"),
+        "sentiment": sentiment,
+        "service":   service,
+        "food":      food,
+        "atmos":     atmos,
+        "recommend": recommend,
+        "server":    (rsv.get("server") or "").strip() or None,
+        "covers":    rsv.get("party_size"),
+        "dow":       dow,
+        "hour":      hour,
+    }
+
+
 def transform_to_guest_block(
     captured: list[dict], existing_guest: dict | None
 ) -> dict:
     """Take a list of {url, json} responses and emit a `guest` block in the
-    same shape renderGuestSection() consumes. The transform is generous —
-    we look for known field names (overall, sentiment, food, service,
-    atmos, recommend, server, covers, dow, hour) in every response and
-    keep what we find.
+    same shape renderGuestSection() consumes.
 
-    `existing_guest` is the seed block already in the file (from the
-    NPS-Report extractor). We APPEND-MERGE — the seed historical tail
-    always survives.
+    Recognized payload shapes (verified via Resy OS discovery):
+      - {data: {surveys: [<resy survey row>, ...]}}   ← survey.resy.com/api/1/venue/surveys
+      - {data: [<rating row>, ...]}                   ← *legacy seed shape*
+      - {config:..., data: [<rating row>, ...]}       ← api.resy.com/3/analytics/report/core/ratings
+
+    `existing_guest` is the seed block (NPS-Report extractor). We APPEND-
+    MERGE on a natural key — the seed historical tail always survives.
     """
     surveys = list((existing_guest or {}).get("surveys") or [])
     ratings = list((existing_guest or {}).get("ratings") or [])
     comments = list((existing_guest or {}).get("comments") or [])
     google = (existing_guest or {}).get("google")
 
-    # Dedup keys for survey rows — we use a tuple of natural-key fields
-    # so a re-scrape doesn't double-count.
+    # Dedup keys for survey rows — natural-key tuple so a re-scrape
+    # doesn't double-count.
     def survey_key(s: dict) -> tuple:
         return (s.get("date"), s.get("server"), s.get("overall"), s.get("covers"))
 
     seen_keys = {survey_key(s) for s in surveys}
-
-    survey_fields = {"overall", "sentiment", "service", "food", "atmos",
-                     "recommend", "server", "covers", "dow", "hour"}
     rating_fields = {"r1", "r2", "r3", "r4", "r5"}
 
-    # Resy's API wraps payloads under a `data` key; drill in transparently.
     def unwrap(node):
         if isinstance(node, dict) and "data" in node and len(node) <= 3:
             return node["data"]
         return node
 
-    def extract_rows(node) -> list[dict]:
-        """Walk arbitrary JSON and return every dict that looks like a
-        survey row (has at least 3 of the survey_fields)."""
-        node = unwrap(node)
+    def extract_resy_surveys(node) -> list[dict]:
+        """Find Resy-shaped survey rows (have 'overall_score' + 'responses')
+        and transform each into our schema. Walks the entire payload tree."""
         out: list[dict] = []
         if isinstance(node, dict):
-            keys = set(node.keys())
-            score = len(keys & survey_fields) + (1 if "date" in keys else 0)
-            if score >= 3:
-                out.append(node)
-            for v in node.values():
-                out.extend(extract_rows(v))
+            if "overall_score" in node and "responses" in node and "date_completed" in node:
+                row = transform_resy_survey_row(node)
+                if row:
+                    out.append(row)
+            else:
+                for v in node.values():
+                    out.extend(extract_resy_surveys(v))
         elif isinstance(node, list):
             for v in node:
-                out.extend(extract_rows(v))
+                out.extend(extract_resy_surveys(v))
         return out
 
     def extract_ratings(node) -> list[dict]:
@@ -215,12 +293,14 @@ def transform_to_guest_block(
 
     for cap in captured:
         body = cap.get("json")
-        for row in extract_rows(body):
+        # Resy surveys path — traverse + transform
+        for row in extract_resy_surveys(body):
             k = survey_key(row)
             if k in seen_keys:
                 continue
             surveys.append(row)
             seen_keys.add(k)
+        # Legacy path — seed-shaped rows (NPS-export extractor used these)
         for row in extract_ratings(body):
             ratings.append(row)
 
