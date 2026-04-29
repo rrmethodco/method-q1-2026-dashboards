@@ -6,8 +6,12 @@ name: Toast Sync
 
 on:
   schedule:
-    # 07:15 UTC = 03:15 ET. After US East close-of-business, before AM traffic.
-    - cron: '15 7 * * *'
+    # 12:00 UTC = 07:00 ET (EST) — first in the daily 4-ETL cadence:
+    #   12:00 UTC  Toast Sync           (this)
+    #   12:15 UTC  Guest Sync           (Resy + Google)
+    #   12:30 UTC  MarginEdge Sync      (COGS)
+    #   12:45 UTC  Tripleseat Sync      (Private Events)
+    - cron: '0 12 * * *'
   workflow_dispatch:
     inputs:
       days:

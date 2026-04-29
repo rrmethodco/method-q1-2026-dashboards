@@ -9,10 +9,9 @@ name: MarginEdge Sync
 
 on:
   schedule:
-    # 08:15 UTC = 04:15 ET. After Toast (03:15) and guest-sync (03:45) so
-    # Method's nightly pulls land in this order: orders+labor → guest →
-    # COGS. Each subsequent commit rebases over the prior cleanly.
-    - cron: '15 8 * * *'
+    # 12:30 UTC = 07:30 ET (EST). Third in the daily cadence — after
+    # Toast (12:00) and Guest (12:15), before Tripleseat (12:45).
+    - cron: '30 12 * * *'
   workflow_dispatch:
     inputs:
       outlet:

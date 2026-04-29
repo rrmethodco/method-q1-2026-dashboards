@@ -11,9 +11,9 @@ name: Guest Sync
 
 on:
   schedule:
-    # 07:45 UTC = 03:45 ET. 30 minutes after toast-sync so we don't race
-    # for the same data/*.json files mid-commit.
-    - cron: '45 7 * * *'
+    # 12:15 UTC = 07:15 ET (EST). 15 min after toast-sync to avoid race
+    # over data/*.json. Order: Toast → Guest → MarginEdge → Tripleseat.
+    - cron: '15 12 * * *'
   workflow_dispatch:
     inputs:
       outlet:

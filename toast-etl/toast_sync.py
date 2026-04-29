@@ -250,6 +250,56 @@ def fetch_revenue_centers(token: str, guid: str) -> list[dict[str, Any]]:
     return body if isinstance(body, list) else body.get("results", [])
 
 
+def _fetch_config_catalog(token: str, guid: str, path: str, log_label: str) -> list[dict[str, Any]]:
+    """Generic /config/v2/* GET helper. Returns [] on 403/404 (tenant
+    doesn't expose that catalog) so we degrade gracefully."""
+    url = f"{TOAST_BASE}{path}"
+    headers = {"Authorization": f"Bearer {token}", "Toast-Restaurant-External-ID": guid}
+    r = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
+    if r.status_code == 429:
+        time.sleep(2.0)
+        return _fetch_config_catalog(token, guid, path, log_label)
+    if r.status_code in (403, 404):
+        sys.stderr.write(f"[{log_label}:{guid[:8]}...] {r.status_code} — config endpoint not available\n")
+        return []
+    r.raise_for_status()
+    body = r.json() or []
+    return body if isinstance(body, list) else body.get("results", [])
+
+
+def fetch_sales_categories(token: str, guid: str) -> dict[str, str]:
+    """GET /config/v2/salesCategories → {guid: name}.
+
+    Resolves the GUID-only `salesCategory` references on selections in
+    /ordersBulk responses (which omit the name). Without this, every
+    selection's category bucketed to "Other" in the per-category daily
+    rollup. See API docs:
+    https://doc.toasttab.com/doc/devguide/apiOverview.html
+    """
+    rows = _fetch_config_catalog(token, guid, "/config/v2/salesCategories", "salesCategories")
+    return {r.get("guid"): (r.get("name") or "").strip() for r in rows if r.get("guid")}
+
+
+def fetch_dining_options(token: str, guid: str) -> dict[str, dict]:
+    """GET /config/v2/diningOptions → {guid: {name, behavior}}.
+
+    `behavior` is the high-level enum: DINE_IN / TAKE_OUT / DELIVERY /
+    CURBSIDE — useful for rolling up service-mode totals beyond the
+    venue's custom-named dining options.
+    """
+    rows = _fetch_config_catalog(token, guid, "/config/v2/diningOptions", "diningOptions")
+    return {r.get("guid"): {"name": (r.get("name") or "").strip(),
+                            "behavior": (r.get("behavior") or "").strip()}
+            for r in rows if r.get("guid")}
+
+
+def fetch_restaurant_services(token: str, guid: str) -> dict[str, str]:
+    """GET /config/v2/restaurantServices → {guid: name}.
+    Day-parts (e.g., Brunch, Lunch, Dinner). Optional but cheap."""
+    rows = _fetch_config_catalog(token, guid, "/config/v2/restaurantServices", "restaurantServices")
+    return {r.get("guid"): (r.get("name") or "").strip() for r in rows if r.get("guid")}
+
+
 def fetch_jobs(token: str, guid: str) -> dict[str, str]:
     """GET /labor/v1/jobs for a restaurant. Returns {jobGuid: title}.
 
@@ -611,8 +661,22 @@ def _parse_iso(iso: str | None) -> datetime | None:
 TICKET_TIME_MAX_SEC = 8 * 60 * 60
 
 
-def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
-    """Fold raw Toast orders into the dashboard shape for a single revenue center."""
+def transform_orders(
+    raw_orders: list[dict[str, Any]],
+    sales_cat_lookup: dict[str, str] | None = None,
+    dining_opt_lookup: dict[str, dict] | None = None,
+) -> dict[str, Any]:
+    """Fold raw Toast orders into the dashboard shape for a single revenue center.
+
+    `sales_cat_lookup` and `dining_opt_lookup` are GUID→name catalogs from
+    /config/v2/salesCategories and /config/v2/diningOptions respectively.
+    Toast's /ordersBulk returns entity-references (GUID-only) for these,
+    so without the catalogs every selection bucketed to "Other" /
+    "Unspecified" — defeating the per-category sales rollup the dashboard
+    Cost-of-Goods section needs to compute true food/beer/wine/liquor %.
+    """
+    sales_cat_lookup = sales_cat_lookup or {}
+    dining_opt_lookup = dining_opt_lookup or {}
     daily: dict[str, dict[str, float]] = {}
     monthly: dict[str, dict[str, float]] = defaultdict(
         lambda: {"orders": 0, "guests": 0, "amount": 0.0, "tip": 0.0, "discount": 0.0}
@@ -723,8 +787,13 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
             hcell["orders"] += 1
             hcell["guests"] += guests
 
-            # Per-day service-mode (dining option) aggregation.
-            mode_name = ((order.get("diningOption") or {}).get("name") or "Unspecified").strip() or "Unspecified"
+            # Per-day service-mode (dining option) aggregation. Toast's
+            # /ordersBulk returns diningOption as a GUID-only entity ref;
+            # name lives only in /config/v2/diningOptions which the caller
+            # pre-loaded into dining_opt_lookup.
+            do_guid = (order.get("diningOption") or {}).get("guid")
+            do_info = dining_opt_lookup.get(do_guid) or {}
+            mode_name = (do_info.get("name") or "").strip() or "Unspecified"
             scell = svcmode_daily_map[(date_str, mode_name)]
             scell["amount"] += amount
             scell["orders"] += 1
@@ -732,15 +801,17 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
 
             # Per-day category aggregation — computed per-selection (a check
             # often has items across several categories; each selection carries
-            # its own amount and salesCategory). Falls back to "Other" if
-            # salesCategory is missing/null.
+            # its own salesCategory.guid). Resolved via /config/v2/salesCategories
+            # (sales_cat_lookup). Falls back to "Other" if the GUID isn't in
+            # the catalog (deleted category, etc.).
             for sel in (check.get("selections") or []):
                 if sel.get("voided") or sel.get("deleted"):
                     continue
                 sel_amt = float(sel.get("price") or sel.get("preDiscountPrice") or 0.0)
                 if sel_amt == 0:
                     continue
-                cat = ((sel.get("salesCategory") or {}).get("name") or "Other").strip() or "Other"
+                sc_guid = (sel.get("salesCategory") or {}).get("guid")
+                cat = (sales_cat_lookup.get(sc_guid) or "").strip() or "Other"
                 ccell = cat_daily_map[(date_str, cat)]
                 ccell["amount"] += sel_amt
                 ccell["orders"] += 1
@@ -943,6 +1014,24 @@ def sync_outlet(
                 sys.stderr.write(f"[{outlet_id}] RC lookup failed for {rest_guid[:8]}...: {e}\n")
                 rc_cache[rest_guid] = {}
 
+    # Toast's /ordersBulk returns entity references (guid + entityType) for
+    # salesCategory, diningOption, restaurantService etc. — names live only
+    # in the corresponding /config/v2/* endpoints. Pre-load them per
+    # restaurant so the per-selection / per-check rollups can resolve.
+    sales_cat_cache: dict[str, dict[str, str]] = {}
+    dining_opt_cache: dict[str, dict[str, dict]] = {}
+    service_cache: dict[str, dict[str, str]] = {}
+    for rest_guid in unique_guids:
+        try:
+            sales_cat_cache[rest_guid]  = fetch_sales_categories(token, rest_guid)
+            dining_opt_cache[rest_guid] = fetch_dining_options(token, rest_guid)
+            service_cache[rest_guid]    = fetch_restaurant_services(token, rest_guid)
+        except Exception as e:  # noqa: BLE001
+            sys.stderr.write(f"[{outlet_id}] config catalog lookup failed for {rest_guid[:8]}...: {e}\n")
+            sales_cat_cache.setdefault(rest_guid, {})
+            dining_opt_cache.setdefault(rest_guid, {})
+            service_cache.setdefault(rest_guid, {})
+
     # Combine sources per rc_key, applying filters.
     order_details: dict[str, Any] = {}
     for rc_key, sources in rc_map.items():
@@ -973,7 +1062,17 @@ def sync_outlet(
                 sys.stdout.write(f"[{outlet_id}:{rc_key}] guid={rest_guid[:8]}... -> {len(orders)} orders\n")
         if len(sources) > 1:
             sys.stdout.write(f"[{outlet_id}:{rc_key}] merged {len(sources)} sources -> {len(combined)} total orders\n")
-        order_details[rc_key] = transform_orders(combined)
+        # Pass per-restaurant config catalogs so transform_orders can
+        # resolve GUID-only references (salesCategory, diningOption).
+        # When the rc_key spans multiple GUIDs (e.g. Quoin), use the
+        # first GUID's catalog — Toast's catalogs are restaurant-scoped
+        # and the rc-specific overlap is consistent enough for our needs.
+        first_guid = sources[0]["guid"] if sources else None
+        order_details[rc_key] = transform_orders(
+            combined,
+            sales_cat_lookup=sales_cat_cache.get(first_guid) or {},
+            dining_opt_lookup=dining_opt_cache.get(first_guid) or {},
+        )
 
     # Labor: pull time entries per unique GUID, then aggregate at outlet level.
     # Toast's labor API has no revenue-center dimension, so for shared-GUID outlets
