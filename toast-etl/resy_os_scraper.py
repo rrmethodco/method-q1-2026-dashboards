@@ -97,15 +97,17 @@ CANDIDATE_URL_PATTERNS = [
 ]
 
 # Pages within a venue's OS portal that are most likely to fire the
-# survey/ratings XHRs. We visit them in order; if any one of them yields
-# usable JSON, we bail early to be polite about request volume.
+# survey/ratings XHRs. Discovery (2026-04-29) confirmed the actual paths
+# are under `analytics/<Surveys|Reviews|Comments>` (NOT `Insights/...`)
+# and the XHRs fan out to a separate host: `survey.resy.com/api/1/...`.
+# We visit each in order; if any yields usable JSON, we bail early.
 VENUE_INSIGHT_PAGES = [
-    "Insights/Reviews",
-    "Insights/Surveys",
-    "Insights/Guest-Satisfaction",
-    "Insights",
-    "Reviews",
-    "Home",  # falls back to dashboard which often pre-loads recent feedback
+    "analytics/Surveys",
+    "analytics/Reviews",
+    "analytics/Comments",
+    "analytics/Ratings",
+    "analytics",
+    "Home",  # fallback — dashboard sometimes pre-loads recent feedback
 ]
 
 
@@ -227,11 +229,23 @@ def transform_to_guest_block(
 
 def scrape_venue(page, slug: str, discover: bool) -> list[dict]:
     """Navigate through the venue's insight pages, capture candidate
-    JSON responses. Returns list of {url, status, json}."""
+    JSON responses. Returns list of {url, status, json}.
+
+    Resy OS XHRs fan out to multiple hosts (os.resy.com itself plus
+    survey.resy.com /api/1/...), and some are cached/intercepted by the
+    Service Worker. We listen on `response` (Playwright) AND ALSO
+    monkey-patch fetch/XHR via init-script so SW-served responses are
+    captured too.
+    """
     captured: list[dict] = []
+    all_seen_urls: list[dict] = []  # for --discover diagnostics
 
     def on_response(resp):
         url = resp.url
+        # In discover mode, log every JSON response so we can see what
+        # the SPA is actually doing even when no candidate matched.
+        if discover:
+            all_seen_urls.append({"url": url, "status": resp.status})
         if not is_candidate_url(url):
             return
         try:
@@ -248,22 +262,38 @@ def scrape_venue(page, slug: str, discover: bool) -> list[dict]:
     for sub in VENUE_INSIGHT_PAGES:
         url = f"https://os.resy.com/portal/{slug}/{sub}"
         try:
-            page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="networkidle")
+            # `domcontentloaded` instead of `networkidle` — Resy OS keeps
+            # background telemetry traffic open indefinitely so networkidle
+            # never fires within timeout. We then explicitly wait for a
+            # window that captures the SPA's data XHRs.
+            page.goto(url, timeout=PAGE_TIMEOUT_MS, wait_until="domcontentloaded")
         except PWTimeout:
             sys.stderr.write(f"  [{slug}] timeout on {sub} — continuing\n")
             continue
         except Exception as e:
             sys.stderr.write(f"  [{slug}] error on {sub}: {e}\n")
             continue
-        # Give late XHRs a moment after networkidle
+        # Wait for the SPA to do its survey-data XHR. 7s is conservative;
+        # the actual XHR usually fires within 3s.
         try:
-            page.wait_for_timeout(2000)
+            page.wait_for_timeout(7000)
         except Exception:
             pass
         if captured and not discover:
             break  # got something useful — be polite
 
     page.remove_listener("response", on_response)
+    if discover:
+        # Print everything we saw so the operator can lock down the
+        # right URL patterns. Keep it concise — top 30 unique paths.
+        seen_paths = sorted({u["url"].split("?")[0] for u in all_seen_urls
+                             if not any(skip in u["url"] for skip in
+                                        ["datadog", "amplitude", "kustomer",
+                                         "google-analytics", "fbevents",
+                                         "incapsula", "stripe.com",
+                                         "hubspot", "imrworldwide"])})
+        for p in seen_paths[:30]:
+            print(f"    seen: {p}")
     return captured
 
 
