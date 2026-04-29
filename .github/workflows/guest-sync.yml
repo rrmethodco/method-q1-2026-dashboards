@@ -54,37 +54,43 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r toast-etl/requirements.txt
 
-      # ---- Resy ----
-      - name: Run Resy sync
+      # ---- Resy OS scraper (Playwright-based) ----
+      # Replaces resy_sync.py (consumer API path) which 419s against
+      # operator credentials. Activates only when RESY_OS_STORAGE_STATE_JSON
+      # is set — see docs/RESY_OS_SCRAPER.md for bootstrap.
+      - name: Install Playwright Chromium
+        if: ${{ github.event.inputs.probe != 'true' && env.HAS_RESY_STATE == 'true' }}
+        env:
+          HAS_RESY_STATE: ${{ secrets.RESY_OS_STORAGE_STATE_JSON != '' }}
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Run Resy OS scraper
         if: ${{ github.event.inputs.probe != 'true' }}
         env:
-          RESY_EMAIL:           ${{ secrets.RESY_EMAIL }}
-          RESY_PASSWORD:        ${{ secrets.RESY_PASSWORD }}
-          RESY_VENUES:          ${{ secrets.RESY_VENUES }}
-          RESY_API_KEY:         ${{ secrets.RESY_API_KEY }}
-          RESY_FEEDBACK_PATH:   ${{ secrets.RESY_FEEDBACK_PATH }}
-          RESY_RATINGS_PATH:    ${{ secrets.RESY_RATINGS_PATH }}
-          RESY_BASE:            ${{ secrets.RESY_BASE }}
-          DAYS_BACK:            '60'   # incremental nightly window; seed has the long tail
+          RESY_OS_STORAGE_STATE_JSON: ${{ secrets.RESY_OS_STORAGE_STATE_JSON }}
+          RESY_OS_VENUES:             ${{ secrets.RESY_OS_VENUES }}
         run: |
           cd toast-etl
+          if [ -z "$RESY_OS_STORAGE_STATE_JSON" ]; then
+            echo "RESY_OS_STORAGE_STATE_JSON not set — skipping Resy OS scrape"
+            exit 0
+          fi
           if [ -n "${{ github.event.inputs.outlet }}" ]; then
-            python3 resy_sync.py --outlet "${{ github.event.inputs.outlet }}" --data-dir ../data
+            python3 resy_os_scraper.py --outlet "${{ github.event.inputs.outlet }}" --data-dir ../data
           else
-            python3 resy_sync.py --data-dir ../data
+            python3 resy_os_scraper.py --data-dir ../data
           fi
 
-      - name: Run Resy probe (manual only)
+      - name: Run Resy OS discovery (manual only)
         if: ${{ github.event.inputs.probe == 'true' }}
         env:
-          RESY_EMAIL:    ${{ secrets.RESY_EMAIL }}
-          RESY_PASSWORD: ${{ secrets.RESY_PASSWORD }}
-          RESY_VENUES:   ${{ secrets.RESY_VENUES }}
-          RESY_API_KEY:  ${{ secrets.RESY_API_KEY }}
-          RESY_BASE:     ${{ secrets.RESY_BASE }}
+          RESY_OS_STORAGE_STATE_JSON: ${{ secrets.RESY_OS_STORAGE_STATE_JSON }}
+          RESY_OS_VENUES:             ${{ secrets.RESY_OS_VENUES }}
         run: |
           cd toast-etl
-          python3 resy_sync.py --probe --data-dir ../data
+          python3 resy_os_scraper.py --discover --data-dir ../data
 
       # ---- Google Reviews ----
       - name: Run Google Reviews sync
