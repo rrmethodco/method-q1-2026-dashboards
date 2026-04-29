@@ -657,9 +657,18 @@ def transform_orders(raw_orders: list[dict[str, Any]]) -> dict[str, Any]:
             gratuity = float(
                 sum(float(sc.get("amount") or 0.0) for sc in (check.get("appliedServiceCharges") or []))
             )
-            discount = float(
-                sum(float(ad.get("discountAmount") or 0.0) for ad in (check.get("appliedDiscounts") or []))
-            )
+            # Discount $ — sum BOTH check-level and item-level (selection)
+            # appliedDiscounts. Toast's reporting "Discounts" + "Comps" both
+            # flow through appliedDiscounts (tagged by discount name in the
+            # UI); summing all granularities captures the full "Discounts +
+            # Comps" total Toast shows in its sales summary.
+            check_disc = sum(float(ad.get("discountAmount") or 0.0)
+                             for ad in (check.get("appliedDiscounts") or []))
+            sel_disc = 0.0
+            for sel in (check.get("selections") or []):
+                for ad in (sel.get("appliedDiscounts") or []):
+                    sel_disc += float(ad.get("discountAmount") or 0.0)
+            discount = float(check_disc + sel_disc)
             # `check.get("customer", {})` returns None (not {}) when Toast sends
             # `"customer": null` explicitly — use `or {}` fallback.
             guests = int(order.get("numberOfGuests") or (check.get("customer") or {}).get("guestCount") or 0)
