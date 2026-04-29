@@ -520,6 +520,7 @@ function renderNav() {
     { id: 'summary',  label: 'Performance Summary' },
     { id: 'revenue',  label: 'Revenue' },
     { id: 'labor',    label: 'Labor' },
+    { id: 'cogs',     label: 'Cost of Goods' },
     { id: 'events',   label: 'Private Events' },
     { id: 'guest',    label: 'Guest Experience' },
     { id: 'snapshot', label: 'Weekly Snapshot' },
@@ -852,6 +853,7 @@ function renderOutlet() {
   if (STATE.section === 'summary')      return renderSummarySection();
   if (STATE.section === 'revenue')      return renderRevenueSection();
   if (STATE.section === 'labor')        return renderLaborSection();
+  if (STATE.section === 'cogs')         return renderCogsSection();
   if (STATE.section === 'events')       return renderPlaceholderSection('Private Events', 'Awaiting Tripleseat booking export. Once connected, this section will show events booked, gross & net F&amp;B, average per event, guest counts, lead time, and conversion by event type.', ['tripleseat']);
   if (STATE.section === 'guest')        return renderGuestSection();
   if (STATE.section === 'snapshot')     return renderSnapshotSection();
@@ -862,7 +864,7 @@ function renderPlaceholderSection(title, body, requiredSources) {
   const o = DATA.outlets[STATE.outlet];
   const sources = (requiredSources||[]).map(k => {
     const on = (o.sources||{})[k];
-    const label = { labor:'Labor (7shifts)', tripleseat:'Tripleseat', resy:'Resy', google:'Google Reviews', pnl:'Sage P&amp;L', marketing:'Marketing' }[k] || k;
+    const label = { labor:'Labor (7shifts)', tripleseat:'Tripleseat', resy:'Resy', google:'Google Reviews', pnl:'Sage P&amp;L', marketing:'Marketing', marginedge:'MarginEdge' }[k] || k;
     return `<span class="ds-chip ${on?'on':''}">${label}</span>`;
   }).join('');
   document.getElementById('outletBody').innerHTML = `
@@ -882,6 +884,213 @@ function renderPlaceholderSection(title, body, requiredSources) {
 
 // Renders the Labor section using Toast Labor API data (outlet-level only —
 // Toast's labor API has no RC dimension, so this view ignores STATE.rc and
+// =====================================================================
+// Cost of Goods — sourced from MarginEdge Public API via
+// toast-etl/marginedge_sync.py. Renders a placeholder until the
+// MARGINEDGE_KEYS secret is configured; once data flows, shows weekly
+// + monthly COGS, COGS % of net sales, top-vendor spend, and category
+// breakdown.
+// =====================================================================
+function renderCogsSection() {
+  const o = DATA.outlets[STATE.outlet];
+  const body = document.getElementById('outletBody');
+  const c = o && o.cogs ? o.cogs : null;
+  const hasCogs = c && Array.isArray(c.invoices) && c.invoices.length > 0;
+  if (!hasCogs) {
+    return renderPlaceholderSection(
+      'Cost of Goods',
+      'Awaiting MarginEdge sync. Once the per-outlet API keys are configured (see toast-etl/marginedge_sync.py), this section shows weekly + monthly COGS, COGS % of net sales, top-vendor spend, and category breakdown for the last 90 days.',
+      ['marginedge']
+    );
+  }
+
+  // Period filtering uses the same Month + Week Ending controls as Revenue
+  // and Guest. periodBounds() honors STATE.monthJump + STATE.weekEnd.
+  const ssDailyAll = combinedDailySales();
+  const maxDate = ssDailyAll.length ? ssDailyAll[ssDailyAll.length-1].date : null;
+  const bSel = periodBounds(maxDate);
+  const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
+  const periodLabel = bSel ? bSel.label : (STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Latest');
+
+  // Filter invoices to the period
+  const invCur = c.invoices.filter(inv => inRange(inv.date || ''));
+  const invTotal = invCur.reduce((sum, inv) => sum + (inv.total || 0), 0);
+
+  // Net sales for COGS % from combinedDailySales
+  const ssCur = bSel ? ssDailyAll.filter(r => inRange(r.date)) : ssDailyAll;
+  const netSalesPeriod = ssCur.reduce((s, r) => s + (r.net_sales || 0), 0);
+  const cogsPct = netSalesPeriod > 0 ? (invTotal / netSalesPeriod) * 100 : null;
+
+  // Aggregate by vendor + category from period invoices
+  const byVendor = {};
+  const byCategory = {};
+  invCur.forEach(inv => {
+    byVendor[inv.vendor_name || 'Unknown'] = (byVendor[inv.vendor_name || 'Unknown'] || 0) + (inv.total || 0);
+    (inv.line_items || []).forEach(li => {
+      const cat = li.category || 'Uncategorized';
+      byCategory[cat] = (byCategory[cat] || 0) + (li.extended || 0);
+    });
+  });
+  const topVendors = Object.entries(byVendor).sort((a,b) => b[1] - a[1]).slice(0, 10);
+  const topCats = Object.entries(byCategory).sort((a,b) => b[1] - a[1]).slice(0, 10);
+
+  // Pre-built rollups from the ETL (drives the trend charts)
+  const monthly = (c.monthly_rollup || []).slice().sort((a,b) => a.month.localeCompare(b.month));
+  const weekly  = (c.weekly_rollup  || []).slice().sort((a,b) => a.week_start.localeCompare(b.week_start));
+
+  const star = '★';
+  const fmtScore = (v) => v == null ? '—' : (typeof v === 'number' ? v.toFixed(1) : v);
+  const cogsTone = (pct) => pct == null ? 'neutral' : pct > 35 ? 'down' : pct < 28 ? 'up' : 'neutral';
+
+  body.innerHTML = `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Cost of Goods · ${o.name}</div>
+        <div class="sect-meta">${periodLabel} · sourced from MarginEdge · as of ${c.as_of || '—'}</div>
+      </div>
+      <div class="kpis">
+        ${kpi('COGS $',          fmtMoney(invTotal), `${fmtNum(invCur.length)} invoices in period`, 'neutral')}
+        ${kpi('Net Sales',       fmtMoney(netSalesPeriod), `Toast pre-tax`, 'neutral')}
+        ${kpi('COGS %',          cogsPct != null ? cogsPct.toFixed(1)+'%' : '—', 'industry target 28-35%', cogsTone(cogsPct))}
+        ${kpi('Vendors',         fmtNum(Object.keys(byVendor).length), `unique in period`, 'neutral')}
+        ${kpi('Categories',      fmtNum(Object.keys(byCategory).length), `unique in period`, 'neutral')}
+        ${kpi('Avg Invoice',     invCur.length ? fmtMoney(invTotal / invCur.length) : '—', 'mean per invoice', 'neutral')}
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Top Vendors · ${periodLabel}</div>
+        <div class="sect-meta">By total spend · top 10</div>
+      </div>
+      <div class="card">
+        <div style="overflow:auto; max-height: 480px;">
+          <table class="tbl">
+            <thead><tr>
+              <th style="text-align:left">Vendor</th>
+              <th style="text-align:right">Spend</th>
+              <th style="text-align:right">% of COGS</th>
+              <th style="text-align:right">Invoices</th>
+            </tr></thead>
+            <tbody>
+              ${topVendors.map(([v, total]) => `
+                <tr>
+                  <td>${v.replace(/</g,'&lt;')}</td>
+                  <td style="text-align:right">${fmtMoney(total)}</td>
+                  <td style="text-align:right">${invTotal>0 ? (total/invTotal*100).toFixed(1)+'%' : '—'}</td>
+                  <td style="text-align:right">${fmtNum(invCur.filter(inv => (inv.vendor_name||'Unknown') === v).length)}</td>
+                </tr>`).join('')}
+              ${topVendors.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:24px;">No invoices in this period.</td></tr>' : ''}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Spend by Category · ${periodLabel}</div>
+        <div class="sect-meta">Top 10 categories by line-item total</div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Category Breakdown</h3>
+          <div class="desc">${fmtNum(topCats.length)} categories · ${fmtMoney(topCats.reduce((s,[,v])=>s+v,0))} of ${fmtMoney(invTotal)} total</div>
+          <div class="chart-wrap tall"><canvas id="cogsCategoryBar"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Monthly COGS Trend</h3>
+          <div class="desc">Bars = COGS $ · Line = COGS % of revenue</div>
+          <div class="chart-wrap tall"><canvas id="cogsMonthlyTrend"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Recent Invoices</div>
+        <div class="sect-meta">Last 50 in period · sorted by date desc</div>
+      </div>
+      <div class="card">
+        <div style="overflow:auto; max-height: 520px;">
+          <table class="tbl">
+            <thead><tr>
+              <th style="text-align:left">Date</th>
+              <th style="text-align:left">Vendor</th>
+              <th style="text-align:left">Invoice #</th>
+              <th style="text-align:right">Total</th>
+              <th style="text-align:right">Line Items</th>
+            </tr></thead>
+            <tbody>
+              ${invCur.slice().sort((a,b) => (b.date||'').localeCompare(a.date||'')).slice(0, 50).map(inv => `
+                <tr>
+                  <td>${inv.date || '—'}</td>
+                  <td>${(inv.vendor_name || '—').replace(/</g,'&lt;')}</td>
+                  <td>${(inv.invoice_number || '—').toString().replace(/</g,'&lt;')}</td>
+                  <td style="text-align:right">${fmtMoney(inv.total || 0)}</td>
+                  <td style="text-align:right">${fmtNum((inv.line_items||[]).length)}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <p style="margin: 22px 28px; color: var(--muted); font-size: 11px;">
+      COGS data sourced from MarginEdge Public API (per-restaurant). Invoice totals are vendor-billed (gross), not actual food cost. For ideal-vs-actual food cost variance, see MarginEdge directly — that data isn't exposed via API.
+    </p>
+  `;
+
+  // ---- Charts ----
+  destroy('cogsCategoryBar');
+  if (topCats.length) {
+    new Chart(document.getElementById('cogsCategoryBar'), {
+      type: 'bar',
+      data: {
+        labels: topCats.map(([cat]) => cat),
+        datasets: [{
+          label: 'Spend',
+          data: topCats.map(([, total]) => total),
+          backgroundColor: C.tan,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { callback: v => '$' + (v >= 1000 ? (v/1000).toFixed(0)+'K' : v.toFixed(0)) }, grid: { display: false } },
+          y: { grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  destroy('cogsMonthlyTrend');
+  if (monthly.length) {
+    new Chart(document.getElementById('cogsMonthlyTrend'), {
+      type: 'bar',
+      data: {
+        labels: monthly.map(m => fmtMonthShort(m.month)),
+        datasets: [
+          { type: 'bar',  label: 'COGS $', data: monthly.map(m => m.total_cogs), backgroundColor: C.seafoam, yAxisID: 'y1' },
+          { type: 'line', label: 'COGS %', data: monthly.map(m => m.cogs_pct_revenue != null ? m.cogs_pct_revenue * 100 : null),
+                          borderColor: C.turquoise, backgroundColor: C.turquoise, tension: 0.25, pointRadius: 3, yAxisID: 'y' },
+        ],
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } },
+        scales: {
+          x: { grid: { display: false } },
+          y:  { position: 'left',  beginAtZero: true, suggestedMax: 50, ticks: { callback: v => v.toFixed(0)+'%' } },
+          y1: { position: 'right', beginAtZero: true, grid: { display: false }, ticks: { callback: v => '$' + (v >= 1000 ? (v/1000).toFixed(0)+'K' : v.toFixed(0)) } },
+        },
+      },
+    });
+  }
+}
+
 // shows the full outlet's hourly labor every time). Pulls timeEntries-derived
 // daily totals + by_job rollup written by toast-etl/toast_sync.py.
 function renderLaborSection() {
@@ -3436,6 +3645,7 @@ function rerenderSection() {
   // its `display` toggled off/on in the same tick by showEmpty/safeChart.
   if (STATE.section === 'revenue')  return renderRevenueSection();
   if (STATE.section === 'labor')    return renderLaborSection();
+  if (STATE.section === 'cogs')     return renderCogsSection();
   if (STATE.section === 'events')   return renderPlaceholderSection('Private Events', 'Awaiting Tripleseat booking export. Once connected, this section will show events booked, gross & net F&amp;B, average per event, guest counts, lead time, and conversion by event type.', ['tripleseat']);
   if (STATE.section === 'guest')    return renderGuestSection();
   if (STATE.section === 'snapshot') return renderSnapshotSection();
@@ -3539,6 +3749,13 @@ async function __loadOutletData() {
       // Used by the Snapshot's RevPASH KPI as the hours-per-day denominator.
       if (payload.config && typeof payload.config === 'object') {
         o.config = Object.assign({}, o.config || {}, payload.config);
+      }
+      // Cost of Goods — pulled nightly by marginedge_sync.py from
+      // MarginEdge's Public REST API (invoices, vendors, products,
+      // categories + pre-computed weekly + monthly rollups).
+      if (payload.cogs && typeof payload.cogs === 'object') {
+        o.cogs = payload.cogs;
+        o.sources.marginedge = true;
       }
     } catch (_) { /* keep inline fallback */ }
   }));
