@@ -59,12 +59,15 @@ jobs:
       # operator credentials. Activates only when RESY_OS_STORAGE_STATE_JSON
       # is set — see docs/RESY_OS_SCRAPER.md for bootstrap.
       #
-      # Install runs for BOTH the regular scrape and the --discover probe,
-      # gated only on the secret being present. Earlier version (#10) also
-      # gated on `inputs.probe != 'true'` which left discovery with no
-      # Playwright when probe=true was passed.
+      # Install Playwright unconditionally — the install is ~30s and the
+      # downstream Resy OS steps no-op cleanly when the secret is empty.
+      # GitHub Actions doesn't allow `secrets.*` in step `if:` conditions
+      # (rejected at YAML parse time), so a secret-presence gate isn't
+      # available here. Past variants:
+      #   PR #10 — gated on `inputs.probe != 'true'`; broke discovery mode.
+      #   PR #11 — gated on `secrets.RESY_OS_STORAGE_STATE_JSON != ''`;
+      #            failed YAML validation.
       - name: Install Playwright Chromium
-        if: ${{ secrets.RESY_OS_STORAGE_STATE_JSON != '' }}
         run: |
           pip install playwright
           python -m playwright install --with-deps chromium
