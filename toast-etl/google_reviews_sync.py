@@ -50,7 +50,9 @@ except ImportError:
 
 GOOGLE_BASE     = "https://maps.googleapis.com/maps/api/place"
 REQUEST_TIMEOUT = 30
-PLACE_FIELDS    = "name,rating,user_ratings_total,reviews,formatted_address,place_id,url"
+# `opening_hours` returns weekly_text + periods (open/close per weekday).
+# We use it to compute open_hours_per_week for the Snapshot's RevPASH KPI.
+PLACE_FIELDS    = "name,rating,user_ratings_total,reviews,formatted_address,place_id,url,opening_hours,utc_offset"
 
 
 # Default search hints used by --lookup. Keyed by outlet_id (the data/<id>.json
@@ -117,6 +119,63 @@ def place_details(api_key: str, place_id: str) -> dict | None:
         sys.stderr.write(f"place_details status={js.get('status')} for {place_id}: {js.get('error_message','')}\n")
         return None
     return js.get("result")
+
+
+def compute_weekly_open_hours(opening_hours: dict | None) -> dict | None:
+    """Sum each weekday's open-minutes from Google's `periods` array
+    and return a normalized weekly hours summary. Handles 24-hour
+    venues (no `close`), and venues that span midnight.
+    Returns None when opening_hours is missing or unparseable.
+    """
+    if not opening_hours:
+        return None
+    periods = opening_hours.get("periods") or []
+    if not periods:
+        return None
+    # Special case: a single period with no `close` and open day=0 time=0000
+    # means the place is open 24/7.
+    if len(periods) == 1 and "close" not in periods[0]:
+        op = periods[0].get("open") or {}
+        if op.get("day") == 0 and (op.get("time") or "") in ("0000", "00:00", ""):
+            return {"open_hours_per_day": 24.0, "open_hours_per_week": 168.0,
+                    "is_24_7": True, "weekly_text": opening_hours.get("weekday_text") or []}
+    minutes_by_dow = [0] * 7  # 0=Sunday in Google's enum
+    for p in periods:
+        op, cl = p.get("open"), p.get("close")
+        if not op or not cl:
+            continue
+        try:
+            od = int(op.get("day"))
+            ot = op.get("time") or "0000"
+            cd = int(cl.get("day"))
+            ct = cl.get("time") or "0000"
+            o_min = int(ot[:2]) * 60 + int(ot[2:])
+            c_min = int(ct[:2]) * 60 + int(ct[2:])
+        except (ValueError, TypeError):
+            continue
+        # Spans midnight if close-day differs OR close < open same-day.
+        if cd != od or c_min < o_min:
+            # First chunk: open → end of open-day
+            minutes_by_dow[od] += (24 * 60 - o_min)
+            # Middle chunks: any full days between
+            day = (od + 1) % 7
+            while day != cd:
+                minutes_by_dow[day] += 24 * 60
+                day = (day + 1) % 7
+            # Final chunk: start of close-day → close
+            minutes_by_dow[cd] += c_min
+        else:
+            minutes_by_dow[od] += (c_min - o_min)
+    total_min = sum(minutes_by_dow)
+    if total_min <= 0:
+        return None
+    return {
+        "open_hours_per_day": round(total_min / 7 / 60, 2),
+        "open_hours_per_week": round(total_min / 60, 2),
+        "minutes_by_dow_sun_first": minutes_by_dow,
+        "is_24_7": False,
+        "weekly_text": opening_hours.get("weekday_text") or [],
+    }
 
 
 def to_google_block(detail: dict, existing: dict | None) -> dict:
@@ -224,8 +283,28 @@ def cmd_sync(api_key: str, places: dict[str, str], data_dir: Path,
         if "as_of" not in existing_guest:
             existing_guest["as_of"] = date.today().isoformat()
         payload["guest"] = existing_guest
+        # Operating hours → outlet.config.open_hours_per_{day,week}.
+        # The dashboard's RevPASH KPI reads payload.config.open_hours_per_day
+        # as the seats×hours denominator. Auto-pulled from Google Places
+        # weekly each run so changes (e.g., new dinner-only schedule) flow
+        # through without manual config.
+        weekly = compute_weekly_open_hours(detail.get("opening_hours"))
+        if weekly:
+            cfg = payload.get("config") or {}
+            cfg.update({
+                "open_hours_per_day":  weekly["open_hours_per_day"],
+                "open_hours_per_week": weekly["open_hours_per_week"],
+                "is_24_7":             weekly.get("is_24_7"),
+                "hours_source":        "google_places_api",
+                "hours_as_of":         date.today().isoformat(),
+                "weekly_text":         weekly.get("weekly_text"),
+            })
+            payload["config"] = cfg
         write_outlet(data_dir, oid, payload)
-        print(f"  ✓ {oid:<14} {detail.get('rating'):.2f}★ · {detail.get('user_ratings_total')} reviews · {detail.get('name')}")
+        hours_str = ""
+        if weekly:
+            hours_str = f" · {weekly['open_hours_per_week']:.0f}h/wk"
+        print(f"  ✓ {oid:<14} {detail.get('rating'):.2f}★ · {detail.get('user_ratings_total')} reviews{hours_str} · {detail.get('name')}")
     return 1 if failures else 0
 
 
