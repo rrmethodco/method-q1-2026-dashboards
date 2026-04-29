@@ -177,9 +177,16 @@ def transform_to_guest_block(
                      "recommend", "server", "covers", "dow", "hour"}
     rating_fields = {"r1", "r2", "r3", "r4", "r5"}
 
+    # Resy's API wraps payloads under a `data` key; drill in transparently.
+    def unwrap(node):
+        if isinstance(node, dict) and "data" in node and len(node) <= 3:
+            return node["data"]
+        return node
+
     def extract_rows(node) -> list[dict]:
         """Walk arbitrary JSON and return every dict that looks like a
         survey row (has at least 3 of the survey_fields)."""
+        node = unwrap(node)
         out: list[dict] = []
         if isinstance(node, dict):
             keys = set(node.keys())
@@ -343,13 +350,28 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
             print(f"  captured {len(captured)} candidate response(s)")
             if discover:
                 for c in captured[:10]:
-                    body_keys = []
-                    if isinstance(c["json"], dict):
-                        body_keys = list(c["json"].keys())[:8]
-                    elif isinstance(c["json"], list) and c["json"]:
-                        body_keys = list((c["json"][0] or {}).keys())[:8] \
-                            if isinstance(c["json"][0], dict) else ["<list>"]
-                    print(f"    {c['status']} {c['url'][:100]} keys={body_keys}")
+                    body = c["json"]
+                    body_keys: list[str] = []
+                    if isinstance(body, dict):
+                        body_keys = list(body.keys())[:8]
+                    elif isinstance(body, list) and body:
+                        body_keys = list((body[0] or {}).keys())[:8] \
+                            if isinstance(body[0], dict) else ["<list>"]
+                    # Drill into Resy's `data` wrapper for a row-shape preview.
+                    inner = body
+                    if isinstance(body, dict) and "data" in body:
+                        inner = body["data"]
+                    row_shape: list[str] = []
+                    row_count = None
+                    if isinstance(inner, list) and inner:
+                        row_count = len(inner)
+                        if isinstance(inner[0], dict):
+                            row_shape = sorted(inner[0].keys())[:18]
+                    elif isinstance(inner, dict):
+                        row_shape = sorted(inner.keys())[:18]
+                    print(f"    {c['status']} {c['url'][:100]} top_keys={body_keys}")
+                    if row_shape:
+                        print(f"        row_count={row_count} row_keys={row_shape}")
                 continue
 
             # Transform + merge
