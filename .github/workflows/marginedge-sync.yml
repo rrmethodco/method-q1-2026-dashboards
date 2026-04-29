@@ -60,19 +60,13 @@ jobs:
       - name: Run MarginEdge sync
         if: ${{ github.event.inputs.probe != 'true' }}
         env:
-          MARGINEDGE_KEYS:           ${{ secrets.MARGINEDGE_KEYS }}
-          MARGINEDGE_BASE_URL:       ${{ secrets.MARGINEDGE_BASE_URL }}
-          MARGINEDGE_AUTH_HEADER:    ${{ secrets.MARGINEDGE_AUTH_HEADER }}
-          MARGINEDGE_AUTH_PREFIX:    ${{ secrets.MARGINEDGE_AUTH_PREFIX }}
-          MARGINEDGE_INVOICES_PATH:  ${{ secrets.MARGINEDGE_INVOICES_PATH }}
-          MARGINEDGE_VENDORS_PATH:   ${{ secrets.MARGINEDGE_VENDORS_PATH }}
-          MARGINEDGE_PRODUCTS_PATH:  ${{ secrets.MARGINEDGE_PRODUCTS_PATH }}
-          MARGINEDGE_CATEGORIES_PATH: ${{ secrets.MARGINEDGE_CATEGORIES_PATH }}
-          MARGINEDGE_LOOKBACK_DAYS:  ${{ github.event.inputs.lookback || '90' }}
+          MARGINEDGE_API_KEY:       ${{ secrets.MARGINEDGE_API_KEY }}
+          MARGINEDGE_BASE_URL:      ${{ secrets.MARGINEDGE_BASE_URL }}
+          MARGINEDGE_LOOKBACK_DAYS: ${{ github.event.inputs.lookback || '90' }}
         run: |
           cd toast-etl
-          if [ -z "$MARGINEDGE_KEYS" ]; then
-            echo "MARGINEDGE_KEYS not set — skipping MarginEdge sync"
+          if [ -z "$MARGINEDGE_API_KEY" ]; then
+            echo "MARGINEDGE_API_KEY not set — skipping MarginEdge sync"
             exit 0
           fi
           if [ -n "${{ github.event.inputs.outlet }}" ]; then
@@ -84,11 +78,8 @@ jobs:
       - name: Run MarginEdge probe (manual only)
         if: ${{ github.event.inputs.probe == 'true' }}
         env:
-          MARGINEDGE_KEYS:           ${{ secrets.MARGINEDGE_KEYS }}
-          MARGINEDGE_BASE_URL:       ${{ secrets.MARGINEDGE_BASE_URL }}
-          MARGINEDGE_AUTH_HEADER:    ${{ secrets.MARGINEDGE_AUTH_HEADER }}
-          MARGINEDGE_AUTH_PREFIX:    ${{ secrets.MARGINEDGE_AUTH_PREFIX }}
-          MARGINEDGE_VENDORS_PATH:   ${{ secrets.MARGINEDGE_VENDORS_PATH }}
+          MARGINEDGE_API_KEY:  ${{ secrets.MARGINEDGE_API_KEY }}
+          MARGINEDGE_BASE_URL: ${{ secrets.MARGINEDGE_BASE_URL }}
         run: |
           cd toast-etl
           python3 marginedge_sync.py --probe --data-dir ../data

@@ -2,76 +2,83 @@
 """
 Method Co — MarginEdge Cost of Goods sync.
 
-Pulls invoice + vendor + product + category data from MarginEdge's Public
-REST API and writes a `cogs` block into each `data/<outlet>.json` so the
-dashboard's Cost of Goods section can render weekly + monthly COGS%,
-top-vendor spend, and category trends.
-
-Sits alongside `toast_sync.py` (orders + labor) and
-`google_reviews_sync.py` (reviews + business hours) on the same nightly
-cron rhythm.
+Pulls order (invoice) totals + vendor catalog + category catalog from
+MarginEdge's Public REST API and writes a `cogs` block into each
+`data/<outlet>.json`. Sits alongside `toast_sync.py` (orders + labor)
+and `google_reviews_sync.py` (reviews + business hours) on the same
+nightly cron rhythm.
 
 ============================================================================
-SETUP — three values to lock in from MarginEdge (one-time, ~5 min)
+What we confirmed about the API (probed 2026-04-29)
 ============================================================================
-The MarginEdge developer portal is a JS SPA behind Cloudflare and the
-public help-center article 403s non-browser clients, so this scaffold
-codes the auth + endpoints behind a thin client where the three
-operator-supplied values plug in:
+  Auth:     X-Api-Key: <key>
+  Base URL: https://api.marginedge.com/public
+  Scoping:  Each request requires `restaurantUnitId` query param.
+            One MarginEdge API key can see ALL units in the parent
+            account — discovered via GET /restaurantUnits on probe.
 
-  1. **Per-outlet API keys.** In MarginEdge as an admin: click your name
-     (top right) → Settings → Security → "Create new API key". Mint one
-     per outlet. Save the key on display — it's revealed once.
+  Endpoints (verified):
+    GET /restaurantUnits                              → {restaurants:[{id,name},...]}
+    GET /categories?restaurantUnitId=X                → {categories:[...], nextPage}
+    GET /vendors?restaurantUnitId=X                   → {vendors:[...],    nextPage}
+    GET /products?restaurantUnitId=X                  → {products:[...],   nextPage}
+    GET /orders?restaurantUnitId=X&startDate=Y&endDate=Z → {orders:[{orderId,
+        invoiceDate, vendorId, vendorName, invoiceNumber, customerNumber,
+        paymentAccount, status, orderTotal, createdDate}, ...], nextPage}
+    GET /orders/{orderId}?restaurantUnitId=X          → {…top-level fields,
+        lineItems:[{categoryId, companyConceptProductId, linePrice,
+        packagingId, quantity, unitPrice, vendorItemCode, vendorItemName}]}
 
-     If the Security tab isn't visible for an outlet, the public API is
-     not yet enabled. Email Jeff Burger (jeff@marginedge.com) with the
-     restaurant names and ask him to flip it on.
+  Pagination: `nextPage` cursor (base64-encoded). Pass back as `cursor`
+              query param to fetch the next page. 100 rows/page.
 
-  2. **Auth header style** — confirm in the portal whether MarginEdge
-     wants `Authorization: Bearer <key>` or `X-API-Key: <key>`. Set
-     env vars accordingly:
-       MARGINEDGE_AUTH_HEADER=Authorization     (default)
-       MARGINEDGE_AUTH_PREFIX=Bearer            (or empty string)
-
-  3. **Endpoint paths** — the portal's Invoices/Vendors/Products/
-     Categories endpoint URLs and pagination convention. Default values
-     below are MarginEdge's accounting-export convention; override via
-     env if the portal differs:
-       MARGINEDGE_BASE_URL=https://api.marginedge.com/v1
-       MARGINEDGE_INVOICES_PATH=/invoices?startDate={start}&endDate={end}
-       MARGINEDGE_VENDORS_PATH=/vendors
-       MARGINEDGE_PRODUCTS_PATH=/products
-       MARGINEDGE_CATEGORIES_PATH=/categories
+  NOT EXPOSED:
+    - "controllableProfitAndLoss" / theoretical food cost / ideal-vs-actual
+      (these are MarginEdge UI features only)
+    - per-outlet POS daily sales (we already have that from Toast)
 
 ============================================================================
-GitHub Secrets
+Setup
 ============================================================================
-  MARGINEDGE_KEYS — outlet_id=key;outlet_id=key;...
-                    (e.g. lsbr=ABCD;lowland=EFGH;...)
+  1. In MarginEdge as an admin: name (top right) → Settings → Security
+     → Create new API key. Save on display. ONE key is sufficient — it
+     sees every restaurant on the account.
 
-  Optional overrides (only set if the portal differs from defaults):
-  MARGINEDGE_BASE_URL, MARGINEDGE_AUTH_HEADER, MARGINEDGE_AUTH_PREFIX,
-  MARGINEDGE_INVOICES_PATH, MARGINEDGE_VENDORS_PATH,
-  MARGINEDGE_PRODUCTS_PATH, MARGINEDGE_CATEGORIES_PATH,
-  MARGINEDGE_LOOKBACK_DAYS  (default 90)
+     If the Security tab isn't visible, email Jeff Burger
+     (jeff@marginedge.com) to enable the Public API.
+
+  2. GitHub Secret:
+       MARGINEDGE_API_KEY  = <the key>
+
+  3. Optionally override defaults:
+       MARGINEDGE_BASE_URL         = https://api.marginedge.com/public
+       MARGINEDGE_LOOKBACK_DAYS    = 90
+       MARGINEDGE_WITH_LINE_ITEMS  = 0   (1 enables per-order line items —
+                                          ~100x slower; only enable when
+                                          we need spend-by-category)
 
 ============================================================================
 Usage
 ============================================================================
-  python3 marginedge_sync.py                    # all configured outlets
-  python3 marginedge_sync.py --outlet lsbr      # one outlet
-  python3 marginedge_sync.py --probe            # auth-only probe; no writes
-                                                  (use this to confirm
-                                                   each outlet's API key
-                                                   reaches a known endpoint)
-  python3 marginedge_sync.py --dry-run          # write fixture, no network
+  python3 marginedge_sync.py                      # all configured outlets
+  python3 marginedge_sync.py --outlet lowland     # one outlet
+  python3 marginedge_sync.py --probe              # auth-only probe
+  python3 marginedge_sync.py --discover-units     # print all restaurantUnitIds
+  python3 marginedge_sync.py --dry-run            # write fixture, no network
+  python3 marginedge_sync.py --with-line-items    # fetch line item detail
+                                                    (slower; off by default)
 
 Behavior:
-  - Append-merges with existing `cogs` block on natural key (invoice_id)
-    so re-runs don't double-count and historical seed survives.
+  - Pulls catalog (vendors/categories) once per outlet — small.
+  - Pulls orders for a configurable trailing window (default 90d).
+  - Optionally fetches line items per order (off by default — adds 1
+    API call per order, ~100x slower).
+  - Builds weekly + monthly rollups: total_cogs, by_category (when line
+    items enabled), by_vendor_top5, cogs_pct_revenue.
+  - Append-merge by orderId so re-runs don't double-count.
   - Atomic write via .tmp.
-  - Exits 0 cleanly when MARGINEDGE_KEYS is missing — lets the workflow
-    schedule before secrets are populated.
+  - Exits 0 cleanly when MARGINEDGE_API_KEY missing — workflow can run
+    before secrets are populated.
 """
 from __future__ import annotations
 
@@ -79,10 +86,10 @@ import argparse
 import json
 import os
 import sys
+import time
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Any
 
 try:
     import requests
@@ -93,175 +100,131 @@ except ImportError:
 
 # ---------- config ----------
 
-BASE_URL = (os.environ.get("MARGINEDGE_BASE_URL") or "https://api.marginedge.com/v1").rstrip("/")
-AUTH_HEADER = os.environ.get("MARGINEDGE_AUTH_HEADER") or "Authorization"
-AUTH_PREFIX = os.environ.get("MARGINEDGE_AUTH_PREFIX")
-if AUTH_PREFIX is None:
-    AUTH_PREFIX = "Bearer"
-INVOICES_PATH = os.environ.get("MARGINEDGE_INVOICES_PATH") or "/invoices?startDate={start}&endDate={end}"
-VENDORS_PATH = os.environ.get("MARGINEDGE_VENDORS_PATH") or "/vendors"
-PRODUCTS_PATH = os.environ.get("MARGINEDGE_PRODUCTS_PATH") or "/products"
-CATEGORIES_PATH = os.environ.get("MARGINEDGE_CATEGORIES_PATH") or "/categories"
+BASE_URL = (os.environ.get("MARGINEDGE_BASE_URL") or "https://api.marginedge.com/public").rstrip("/")
 LOOKBACK_DAYS = int(os.environ.get("MARGINEDGE_LOOKBACK_DAYS") or 90)
-
+WITH_LINE_ITEMS = (os.environ.get("MARGINEDGE_WITH_LINE_ITEMS") or "0") in ("1", "true", "yes")
 REQUEST_TIMEOUT = 45
 USER_AGENT = "MethodCo-Dashboards/1.0 (marginedge_sync.py; +https://github.com/rrmethodco)"
-RATE_LIMIT_SLEEP = 0.25  # seconds between calls — ME's published limits aren't documented
+RATE_LIMIT_SLEEP = 0.10  # seconds between calls — ME limits aren't documented
 
 
-def parse_keys(raw: str) -> dict[str, str]:
-    """MARGINEDGE_KEYS: outlet_id=key;outlet_id=key;..."""
-    out: dict[str, str] = {}
-    for chunk in (raw or "").replace("\n", ";").split(";"):
-        chunk = chunk.strip()
-        if not chunk or "=" not in chunk:
-            continue
-        oid, key = chunk.split("=", 1)
-        oid = oid.strip(); key = key.strip()
-        if oid and key:
-            out[oid] = key
-    return out
+# Outlet (data/<id>.json basename) → MarginEdge restaurantUnitId.
+# Discovered 2026-04-29 from `/restaurantUnits` for Method's API key.
+# Re-discover with `--discover-units` if the account changes.
+OUTLET_TO_ME_UNIT = {
+    "lsbr":          625097257,  # Le Supreme + Bar Rotunda
+    "mulherins":     628612642,  # Wm. Mulherin's Sons
+    "hiroki_det":    625096509,  # HIROKI - SAN
+    "kampers":       625098218,  # Kamper's
+    "quoin":         628616377,  # The Quoin Restaurant
+    "lowland":       628614396,  # Lowland & The Quinte
+    "rosemary_rose": 865768244,  # Rosemary Rose
+    "hiroki_phl":    628614022,  # HIROKI (PHL)
+    "anthology":     625099044,  # Anthology
+    "little_wing":   650675034,  # Little Wing Goods (ROOST Baltimore building)
+    "vessel":        650675034,  # Same ME entity as little_wing — Vessel + Little
+                                 # Wing share procurement under one ROOST Baltimore
+                                 # MarginEdge restaurant unit. Both outlets'
+                                 # data/<id>.json get the same cogs block; the
+                                 # dashboard surfaces it identically. Don't sum
+                                 # COGS across these two when rolling up portfolio.
+}
 
 
 # ---------- thin client ----------
 
 class MarginEdgeClient:
-    """One client per outlet (per-restaurant API key)."""
-
     def __init__(self, api_key: str):
-        self.api_key = api_key
         self.session = requests.Session()
-        # Auth header: either `Authorization: Bearer xxx` or `X-API-Key: xxx`
-        # depending on what the portal documents. AUTH_PREFIX is empty for
-        # the X-API-Key case.
-        auth_value = f"{AUTH_PREFIX} {api_key}".strip() if AUTH_PREFIX else api_key
         self.session.headers.update({
-            AUTH_HEADER: auth_value,
+            "X-Api-Key": api_key,
             "Accept": "application/json",
             "User-Agent": USER_AGENT,
         })
 
-    def _get_paged(self, path: str) -> list[dict]:
-        """Fetch a possibly paginated endpoint, returning all rows.
-
-        Default assumption: response is either a bare list `[{...}]` OR a
-        wrapped dict `{"data": [...], "next": "<url>"}` / `{"items": [...]}`.
-        Pagination convention varies by API — adjust here once the portal's
-        actual envelope is confirmed.
-        """
+    def _get(self, path: str, params: dict | None = None) -> dict | list:
         url = f"{BASE_URL}{path}"
-        rows: list[dict] = []
-        seen = set()  # cycle guard — some pagination loops on bad cursors
-        while url and url not in seen:
-            seen.add(url)
-            r = self.session.get(url, timeout=REQUEST_TIMEOUT)
+        for attempt in range(3):
+            r = self.session.get(url, params=params, timeout=REQUEST_TIMEOUT)
             if r.status_code == 429:
-                # Backoff per ME's undocumented rate limits
-                import time
-                time.sleep(2.0)
+                time.sleep(2.0 * (attempt + 1))
                 continue
             r.raise_for_status()
-            try:
-                body = r.json()
-            except ValueError:
+            time.sleep(RATE_LIMIT_SLEEP)
+            return r.json()
+        raise RuntimeError(f"rate-limited 3x on {path}")
+
+    def list_units(self) -> list[dict]:
+        body = self._get("/restaurantUnits")
+        return body.get("restaurants") or []
+
+    def _get_paged(self, path: str, params: dict, list_key: str) -> list[dict]:
+        """Paginate via the `nextPage` cursor (verified 2026-04-29:
+        ME echoes the cursor as a `nextPage` query param on subsequent
+        calls; other names like `cursor` are silently ignored which
+        caused the script to loop on page 1 and hit rate limits)."""
+        out: list[dict] = []
+        cur_params = dict(params)
+        for _ in range(100):  # hard cap to avoid runaway pagination
+            body = self._get(path, cur_params)
+            out.extend(body.get(list_key) or [])
+            nxt = body.get("nextPage")
+            if not nxt:
                 break
-            if isinstance(body, list):
-                rows.extend(body)
-                break  # bare list = no pagination
-            elif isinstance(body, dict):
-                # Common envelope shapes
-                page = body.get("data") or body.get("items") or body.get("results") or []
-                if isinstance(page, list):
-                    rows.extend(page)
-                # Common pagination cursors
-                next_url = body.get("next") or body.get("nextUrl") or (body.get("links") or {}).get("next")
-                if next_url and isinstance(next_url, str):
-                    url = next_url if next_url.startswith("http") else f"{BASE_URL}{next_url}"
-                else:
-                    url = None
-            else:
-                break
-        return rows
+            cur_params["nextPage"] = nxt
+        return out
 
-    def get_invoices(self, start: str, end: str) -> list[dict]:
-        return self._get_paged(INVOICES_PATH.format(start=start, end=end))
+    def get_categories(self, unit_id: int) -> list[dict]:
+        return self._get_paged("/categories", {"restaurantUnitId": unit_id}, "categories")
 
-    def get_vendors(self) -> list[dict]:
-        return self._get_paged(VENDORS_PATH)
+    def get_vendors(self, unit_id: int) -> list[dict]:
+        return self._get_paged("/vendors", {"restaurantUnitId": unit_id}, "vendors")
 
-    def get_products(self) -> list[dict]:
-        return self._get_paged(PRODUCTS_PATH)
+    def get_products(self, unit_id: int) -> list[dict]:
+        return self._get_paged("/products", {"restaurantUnitId": unit_id}, "products")
 
-    def get_categories(self) -> list[dict]:
-        return self._get_paged(CATEGORIES_PATH)
+    def get_orders(self, unit_id: int, start: str, end: str) -> list[dict]:
+        return self._get_paged("/orders",
+                               {"restaurantUnitId": unit_id, "startDate": start, "endDate": end},
+                               "orders")
+
+    def get_order_detail(self, order_id: str, unit_id: int) -> dict:
+        return self._get(f"/orders/{order_id}", {"restaurantUnitId": unit_id})
 
 
 # ---------- transform ----------
 
-def _line_total(li: dict) -> float:
-    """Resolve a line item's $ amount across MarginEdge's possible shapes."""
-    for k in ("extended", "extendedTotal", "total", "lineTotal", "amount"):
-        v = li.get(k)
-        if isinstance(v, (int, float)):
-            return float(v)
-    qty = li.get("quantity") or li.get("qty") or 0
-    unit = li.get("unitPrice") or li.get("unit_cost") or li.get("price") or 0
-    try:
-        return float(qty) * float(unit)
-    except (TypeError, ValueError):
-        return 0.0
-
-
-def _invoice_date(inv: dict) -> str:
-    for k in ("date", "invoiceDate", "billDate", "transactionDate"):
-        v = inv.get(k)
-        if isinstance(v, str) and len(v) >= 10:
-            return v[:10]
-    return ""
-
-
-def _invoice_total(inv: dict) -> float:
-    for k in ("total", "invoiceTotal", "amount", "grandTotal"):
-        v = inv.get(k)
-        if isinstance(v, (int, float)):
-            return float(v)
-    # Fallback: sum line items
-    return sum(_line_total(li) for li in (inv.get("lineItems") or inv.get("items") or []))
-
-
-def transform_invoice(inv: dict, vendor_lookup: dict, category_lookup: dict) -> dict:
-    """Project one ME invoice into our schema, dropping fields we don't use."""
-    line_items = inv.get("lineItems") or inv.get("items") or []
+def transform_order(o: dict, line_items: list | None, category_lookup: dict) -> dict:
+    """Project an ME order into the dashboard's invoice schema."""
     out_li = []
-    for li in line_items:
-        cat_id = li.get("categoryId") or li.get("category_id")
-        cat_name = category_lookup.get(cat_id) if cat_id else (li.get("categoryName") or li.get("category"))
+    for li in (line_items or []):
+        cat_id = li.get("categoryId")
+        cat_name = category_lookup.get(cat_id)
         out_li.append({
-            "product_id": li.get("productId") or li.get("product_id") or li.get("id"),
-            "product_name": li.get("productName") or li.get("product_name") or li.get("name"),
-            "category": cat_name,
-            "quantity": li.get("quantity") or li.get("qty"),
-            "unit": li.get("unit") or li.get("uom"),
-            "unit_price": li.get("unitPrice") or li.get("unit_cost") or li.get("price"),
-            "extended": _line_total(li),
+            "product_id":   li.get("companyConceptProductId") or li.get("vendorItemCode"),
+            "product_name": li.get("vendorItemName"),
+            "category":     cat_name,
+            "category_id":  cat_id,
+            "quantity":     li.get("quantity"),
+            "unit_price":   li.get("unitPrice"),
+            "extended":     li.get("linePrice"),
         })
-    vendor_id = inv.get("vendorId") or inv.get("vendor_id") or (inv.get("vendor") or {}).get("id")
-    vendor_name = inv.get("vendorName") or inv.get("vendor_name") or vendor_lookup.get(vendor_id) \
-        or (inv.get("vendor") or {}).get("name")
     return {
-        "invoice_id": inv.get("id") or inv.get("invoiceId"),
-        "invoice_number": inv.get("invoiceNumber") or inv.get("number"),
-        "date": _invoice_date(inv),
-        "vendor_id": vendor_id,
-        "vendor_name": vendor_name,
-        "total": _invoice_total(inv),
-        "status": inv.get("status"),
-        "line_items": out_li,
+        "invoice_id":     o.get("orderId"),
+        "invoice_number": o.get("invoiceNumber"),
+        "date":           o.get("invoiceDate") or o.get("createdDate"),
+        "vendor_id":      o.get("vendorId"),
+        "vendor_name":    o.get("vendorName"),
+        "total":          o.get("orderTotal"),
+        "status":         o.get("status"),
+        "line_items":     out_li,
     }
 
 
-def build_rollups(invoices: list[dict]) -> dict:
-    """Compute weekly + monthly category & top-vendor rollups."""
+def build_rollups(invoices: list[dict], net_sales_by_week: dict, net_sales_by_month: dict) -> dict:
+    """Compute weekly + monthly category & top-vendor rollups.
+    `net_sales_by_*` are dicts keyed on week_start (YYYY-MM-DD Monday)
+    or month (YYYY-MM); used to compute cogs_pct_revenue."""
     by_week: dict[str, dict] = {}
     by_month: dict[str, dict] = {}
 
@@ -271,7 +234,7 @@ def build_rollups(invoices: list[dict]) -> dict:
     def _week_start(d: str) -> str:
         try:
             dt = datetime.strptime(d, "%Y-%m-%d").date()
-            return (dt - timedelta(days=dt.weekday())).isoformat()  # Monday
+            return (dt - timedelta(days=dt.weekday())).isoformat()
         except (ValueError, TypeError):
             return ""
 
@@ -292,22 +255,26 @@ def build_rollups(invoices: list[dict]) -> dict:
         _bucket(by_week, _week_start(d), inv)
         _bucket(by_month, _ym(d), inv)
 
-    def _finalize(map_, key_name):
+    def _finalize(map_, key_name, ns_map):
         out = []
         for k, b in map_.items():
             top5 = sorted(b["by_vendor"].items(), key=lambda kv: -kv[1])[:5]
-            out.append({
+            ns = ns_map.get(k)
+            row = {
                 key_name: k,
                 "total_cogs": round(b["total_cogs"], 2),
                 "by_category": {cat: round(v, 2) for cat, v in b["by_category"].items()},
                 "by_vendor_top5": [{"vendor": v, "total": round(t, 2)} for v, t in top5],
-            })
+            }
+            if ns and ns > 0:
+                row["cogs_pct_revenue"] = round(b["total_cogs"] / ns, 4)
+            out.append(row)
         out.sort(key=lambda r: r[key_name])
         return out
 
     return {
-        "weekly_rollup": _finalize(by_week, "week_start"),
-        "monthly_rollup": _finalize(by_month, "month"),
+        "weekly_rollup":  _finalize(by_week,  "week_start", net_sales_by_week),
+        "monthly_rollup": _finalize(by_month, "month",      net_sales_by_month),
     }
 
 
@@ -319,6 +286,25 @@ def merge_invoices(existing: list[dict], fresh: list[dict]) -> list[dict]:
         if iid:
             by_id[iid] = inv
     return sorted(by_id.values(), key=lambda r: r.get("date") or "")
+
+
+def net_sales_by_period(payload: dict) -> tuple[dict, dict]:
+    """Pull Toast net_sales from existing payload, bucketed by week+month."""
+    by_week: dict[str, float] = defaultdict(float)
+    by_month: dict[str, float] = defaultdict(float)
+    od = payload.get("order_details") or {}
+    for rc in od.values():
+        for r in (rc.get("daily") or []):
+            d = r.get("date") or ""
+            try:
+                dt = datetime.strptime(d, "%Y-%m-%d").date()
+                week = (dt - timedelta(days=dt.weekday())).isoformat()
+                month = d[:7]
+                by_week[week]  += float(r.get("amount") or r.get("net_sales") or 0)
+                by_month[month] += float(r.get("amount") or r.get("net_sales") or 0)
+            except (ValueError, TypeError):
+                continue
+    return by_week, by_month
 
 
 # ---------- I/O ----------
@@ -339,47 +325,39 @@ def write_outlet(data_dir: Path, outlet_id: str, payload: dict) -> None:
 
 # ---------- commands ----------
 
-def cmd_probe(keys: dict[str, str]) -> int:
-    """Auth-only check: hit /vendors for each outlet, report status."""
-    print(f"Probing {len(keys)} outlet(s) against {BASE_URL}{VENDORS_PATH}...\n")
-    print(f"{'outlet':<14} {'status':<10} {'vendors_returned':<18}")
-    print("-" * 50)
-    any_fail = False
-    for oid, key in keys.items():
-        try:
-            client = MarginEdgeClient(key)
-            r = client.session.get(f"{BASE_URL}{VENDORS_PATH}", timeout=REQUEST_TIMEOUT)
-            n = "—"
-            if r.status_code == 200:
-                try:
-                    body = r.json()
-                    rows = body if isinstance(body, list) else (body.get("data") or body.get("items") or [])
-                    n = str(len(rows))
-                except Exception:
-                    n = "non-JSON"
-            else:
-                any_fail = True
-            print(f"{oid:<14} HTTP {r.status_code:<6} {n}")
-        except Exception as e:
-            any_fail = True
-            print(f"{oid:<14} ERROR      {e}")
-    return 1 if any_fail else 0
+def cmd_probe(api_key: str) -> int:
+    print(f"Probing {BASE_URL} ...\n")
+    client = MarginEdgeClient(api_key)
+    units = client.list_units()
+    print(f"  ✓ /restaurantUnits  → {len(units)} restaurants")
+    for u in units:
+        print(f"      {u.get('id'):>11}  {u.get('name')}")
+    return 0
 
 
-def cmd_sync(keys: dict[str, str], data_dir: Path, only: str | None,
-             lookback_days: int, dry_run: bool) -> int:
+def cmd_discover_units(api_key: str) -> int:
+    print("Mapping outlet_id → MarginEdge restaurantUnitId.\n")
+    client = MarginEdgeClient(api_key)
+    units = client.list_units()
+    print(f"{'restaurantUnitId':<18} {'name':<40}")
+    print("-" * 60)
+    for u in units:
+        print(f"{u.get('id'):<18} {u.get('name')}")
+    print("\nUpdate OUTLET_TO_ME_UNIT in marginedge_sync.py if any names changed.")
+    return 0
+
+
+def cmd_sync(api_key: str, data_dir: Path, only: str | None,
+             lookback_days: int, with_line_items: bool, dry_run: bool) -> int:
     if dry_run:
-        print(f"[dry-run] no network; writing fixture to data/_marginedge_dry_run.json")
+        print(f"[dry-run] writing fixture to data/_marginedge_dry_run.json")
         fixture = {
             "as_of": date.today().isoformat(), "source": "marginedge_dry_run",
             "lookback_days": lookback_days,
             "invoices": [{"invoice_id": "TEST-1", "date": date.today().isoformat(),
                           "vendor_name": "Test Vendor", "total": 100.0,
-                          "line_items": [{"product_name": "Test Item", "category": "Test",
-                                          "extended": 100.0}]}],
+                          "line_items": []}],
             "weekly_rollup": [], "monthly_rollup": [],
-            "vendors": [{"id": "v1", "name": "Test Vendor"}],
-            "categories": [{"id": "c1", "name": "Test"}],
         }
         (data_dir / "_marginedge_dry_run.json").write_text(
             json.dumps(fixture, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -389,40 +367,54 @@ def cmd_sync(keys: dict[str, str], data_dir: Path, only: str | None,
     start = end - timedelta(days=lookback_days)
     start_iso, end_iso = start.isoformat(), end.isoformat()
 
-    targets = {oid: k for oid, k in keys.items() if not only or oid == only}
+    targets = {oid: uid for oid, uid in OUTLET_TO_ME_UNIT.items() if not only or oid == only}
     if not targets:
-        sys.stderr.write(f"no matching outlets (only={only!r})\n")
+        sys.stderr.write(f"no matching outlets (only={only!r}). known: {list(OUTLET_TO_ME_UNIT)}\n")
         return 1
 
+    client = MarginEdgeClient(api_key)
     failures: list[str] = []
-    for oid, key in targets.items():
-        print(f"\n[{oid}] window {start_iso} → {end_iso}")
-        try:
-            client = MarginEdgeClient(key)
-            vendors = client.get_vendors()
-            categories = client.get_categories()
-            invoices_raw = client.get_invoices(start_iso, end_iso)
-            print(f"  fetched: {len(vendors)} vendors, {len(categories)} categories, "
-                  f"{len(invoices_raw)} invoices")
 
-            vendor_lookup = {(v.get("id") or v.get("vendorId")): (v.get("name") or v.get("vendorName"))
-                             for v in vendors}
-            cat_lookup = {(c.get("id") or c.get("categoryId")): (c.get("name") or c.get("categoryName"))
-                          for c in categories}
-            invoices = [transform_invoice(i, vendor_lookup, cat_lookup) for i in invoices_raw]
+    for oid, unit_id in targets.items():
+        print(f"\n[{oid}] unit={unit_id} window {start_iso} → {end_iso}")
+        try:
+            categories = client.get_categories(unit_id)
+            vendors = client.get_vendors(unit_id)
+            orders = client.get_orders(unit_id, start_iso, end_iso)
+            print(f"  fetched: {len(vendors)} vendors, {len(categories)} categories, "
+                  f"{len(orders)} orders")
+
+            cat_lookup = {c.get("categoryId"): c.get("categoryName") for c in categories}
+            vendor_lookup = {v.get("vendorId"): v.get("vendorName") for v in vendors}
+
+            # Optionally fetch line items — adds 1 call per order (slow)
+            invoices = []
+            if with_line_items:
+                print(f"  fetching line items for {len(orders)} orders (~{len(orders) * RATE_LIMIT_SLEEP:.0f}s)...")
+                for i, o in enumerate(orders):
+                    detail = client.get_order_detail(o.get("orderId"), unit_id)
+                    invoices.append(transform_order(o, detail.get("lineItems") or [], cat_lookup))
+                    if (i + 1) % 50 == 0:
+                        print(f"    ...{i+1}/{len(orders)}")
+            else:
+                invoices = [transform_order(o, None, cat_lookup) for o in orders]
 
             payload = load_outlet(data_dir, oid)
             existing_cogs = (payload.get("cogs") or {})
             merged_invoices = merge_invoices(existing_cogs.get("invoices") or [], invoices)
-            rollups = build_rollups(merged_invoices)
+            ns_by_week, ns_by_month = net_sales_by_period(payload)
+            rollups = build_rollups(merged_invoices, ns_by_week, ns_by_month)
 
             payload["cogs"] = {
                 "as_of": date.today().isoformat(),
                 "source": "marginedge_api",
                 "lookback_days": lookback_days,
+                "with_line_items": with_line_items,
                 "invoices": merged_invoices,
-                "vendors": [{"id": vid, "name": name} for vid, name in vendor_lookup.items() if vid],
-                "categories": [{"id": cid, "name": name} for cid, name in cat_lookup.items() if cid],
+                "vendors": [{"id": vid, "name": vendor_lookup[vid]}
+                            for vid in vendor_lookup if vid],
+                "categories": [{"id": cid, "name": cat_lookup[cid]}
+                               for cid in cat_lookup if cid],
                 **rollups,
             }
             write_outlet(data_dir, oid, payload)
@@ -443,13 +435,17 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--outlet", help="single outlet id (default: all configured)")
     ap.add_argument("--probe", action="store_true",
-                    help="auth-only probe (hits /vendors); no writes")
+                    help="auth-only probe (lists restaurantUnits); no writes")
+    ap.add_argument("--discover-units", action="store_true",
+                    help="print all restaurantUnitIds the API key can see")
+    ap.add_argument("--with-line-items", action="store_true",
+                    help="fetch line items per order (slower)")
     ap.add_argument("--dry-run", action="store_true",
                     help="write fixture; no network")
     ap.add_argument("--data-dir", default="../data",
                     help="dir of <outlet>.json files (default: ../data)")
     ap.add_argument("--lookback", type=int, default=LOOKBACK_DAYS,
-                    help=f"days back to pull invoices (default: {LOOKBACK_DAYS})")
+                    help=f"days back to pull orders (default: {LOOKBACK_DAYS})")
     args = ap.parse_args(argv)
 
     data_dir = Path(args.data_dir).resolve()
@@ -457,20 +453,20 @@ def main(argv: list[str] | None = None) -> int:
         sys.stderr.write(f"data dir not found: {data_dir}\n")
         return 1
 
-    raw = (os.environ.get("MARGINEDGE_KEYS") or "").strip()
-    if not raw and not args.dry_run:
-        sys.stderr.write("MARGINEDGE_KEYS missing — exiting cleanly (no-op)\n")
+    api_key = os.environ.get("MARGINEDGE_API_KEY") or os.environ.get("MARGINEDGE_KEYS", "").split("=")[-1]
+    if not api_key and not args.dry_run:
+        sys.stderr.write("MARGINEDGE_API_KEY missing — exiting cleanly (no-op)\n")
         return 0
 
-    keys = parse_keys(raw)
     if args.dry_run:
-        return cmd_sync({"_dry": "_dry"}, data_dir, args.outlet, args.lookback, dry_run=True)
-    if not keys:
-        sys.stderr.write("MARGINEDGE_KEYS parsed empty\n")
-        return 0
+        return cmd_sync("DRY", data_dir, args.outlet, args.lookback,
+                        args.with_line_items, dry_run=True)
     if args.probe:
-        return cmd_probe(keys)
-    return cmd_sync(keys, data_dir, args.outlet, args.lookback, dry_run=False)
+        return cmd_probe(api_key)
+    if args.discover_units:
+        return cmd_discover_units(api_key)
+    return cmd_sync(api_key, data_dir, args.outlet, args.lookback,
+                    args.with_line_items or WITH_LINE_ITEMS, dry_run=False)
 
 
 if __name__ == "__main__":
