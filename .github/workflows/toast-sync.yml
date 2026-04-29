@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       days:
-        description: 'Lookback window (days). 400 = ~13 months for YoY.'
+        description: 'Lookback (days). 2 = nightly incremental. 400 = full re-seed.'
         required: false
-        default: '400'
+        default: '2'
       outlet:
         description: 'Optional single outlet id to sync (leave blank = all).'
         required: false
@@ -56,7 +56,14 @@ jobs:
           TOAST_CLIENT_SECRET: ${{ secrets.TOAST_STANDARD_CLIENT_SECRET }}
           TOAST_OUTLETS: ${{ secrets.TOAST_OUTLETS }}
           TOAST_BASE: ${{ secrets.TOAST_BASE }}
-          DAYS_BACK: ${{ github.event.inputs.days || '400' }}
+          # Nightly incremental — 48-hour rolling window. Toast lets venues
+          # edit time entries up to 14 days back, but per Method's policy
+          # 48h is the lock-in window: anything older than 48h is treated
+          # as historical truth and never re-pulled. Merge logic in
+          # toast_sync.py preserves all rows on disk that fall outside
+          # the pulled window. Manual dispatch can override (e.g. days=400
+          # for a full re-seed after an extractor change).
+          DAYS_BACK: ${{ github.event.inputs.days || '2' }}
         run: |
           cd toast-etl
           if [ -n "${{ github.event.inputs.outlet }}" ]; then
