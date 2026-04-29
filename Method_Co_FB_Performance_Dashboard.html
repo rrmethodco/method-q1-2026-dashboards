@@ -904,6 +904,11 @@ function renderCogsSection() {
     );
   }
 
+  // KPI helper — local to this renderer so we don't depend on
+  // function-scoped helpers in renderLaborSection/renderGuestSection/
+  // renderSummarySection. Same shape they use.
+  const kpi = (label, val, sub, tone) => `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub?`<div class="yoy ${tone||'neutral'}">${sub}</div>`:''}</div>`;
+
   // Period filtering uses the same Month + Week Ending controls as Revenue
   // and Guest. periodBounds() honors STATE.monthJump + STATE.weekEnd.
   const ssDailyAll = combinedDailySales();
