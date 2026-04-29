@@ -135,6 +135,13 @@ section { margin-bottom: 40px; }
 
 /* ======= KPI row ======= */
 .kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--grey); border: 1px solid var(--grey); }
+
+/* Labor section FOH/BOH/Total filter bar */
+.labor-filter-bar { display: flex; align-items: center; gap: 6px; padding: 8px 24px 12px; }
+.labor-filter-label { font-family: var(--font-stack); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--royal); margin-right: 4px; }
+.labor-filter-chip { background: #fff; color: var(--black); border: 1px solid var(--grey); padding: 6px 14px; font-family: var(--font-stack); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; font-weight: 600; cursor: pointer; border-radius: 2px; transition: background 0.1s; }
+.labor-filter-chip:hover { background: var(--seafoam); }
+.labor-filter-chip.active { background: var(--turquoise); color: #fff; border-color: var(--turquoise); }
 .kpi { background: var(--white); padding: 18px 18px; }
 .kpi .label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
 .kpi .val { font-size: 24px; font-weight: 300; letter-spacing: -0.01em; color: var(--black); margin-top: 8px; font-variant-numeric: tabular-nums; }
@@ -1098,6 +1105,49 @@ function renderCogsSection() {
 
 // shows the full outlet's hourly labor every time). Pulls timeEntries-derived
 // daily totals + by_job rollup written by toast-etl/toast_sync.py.
+// Module-level helpers used by renderLaborSection (and shared with anything
+// that needs to consolidate Toast position names across revenue centers).
+//
+// Position canonicalization: Toast jobs come prefixed with property
+// abbreviations or names — "LSD - Bartender" (Le Suprême Detroit) and
+// "BR - Bartender" (Bar Rotunda) are the same role. Strip the prefix so
+// they roll up together.
+const LABOR_PROPERTY_PREFIXES = [
+  // Method's properties + their internal abbreviations. Add new patterns
+  // here as outlets onboard. Order matters: longest first so we don't
+  // partial-match a shorter abbreviation inside a longer name.
+  "Wm. Mulherin's Sons", "Le Suprême + Bar Rotunda", "Le Suprême", "Le Supreme",
+  "Bar Rotunda", "HIROKI-SAN", "Rosemary & Rose", "Rosemary Rose",
+  "The Quoin", "Little Wing", "Simmer Down", "HIROKI", "Hiroki",
+  "Kamper's", "Kampers", "Lowland", "Quoin", "Anthology", "Vessel",
+  "Mulherin's", "Mulherins", "WMS", "LSD", "LS", "BR", "RR",
+];
+function canonicalJobTitle(title) {
+  if (!title) return title || 'Unknown';
+  let s = String(title).trim();
+  // Strip a property name + separator (- / :) at the front.
+  for (const p of LABOR_PROPERTY_PREFIXES) {
+    const escaped = p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp('^' + escaped + '\\s*[-:]\\s*', 'i');
+    if (re.test(s)) { s = s.replace(re, ''); break; }
+  }
+  // Strip a generic 2-5 letter ALL-CAPS abbreviation prefix followed by " - "
+  s = s.replace(/^[A-Z]{2,5}\s*-\s*/, '');
+  return s.trim() || title;
+}
+// Classify a (canonical) job title into FOH / BOH / OTHER.
+// Conservative keyword matching — anything ambiguous lands in "other".
+const FOH_PATTERNS = /\b(server|host(?:ess)?|bartender|bar back|barback|busser|food runner|runner|sommelier|maitre|waiter|waitress|cashier|barista|reservationist|expo)\b/i;
+const BOH_PATTERNS = /\b(cook|chef|saute|grill|fryer?|line|prep|expediter|dishwasher|dish\s*(?:tank|pit)?|porter|gardé?\s*manger|garde manger|pastry|baker|butcher|sushi|kitchen)\b/i;
+const MGR_PATTERNS = /\b(manager|gm|general manager|director|supervisor|captain|lead)\b/i;
+function classifyFohBoh(canonicalTitle) {
+  if (!canonicalTitle) return 'other';
+  if (BOH_PATTERNS.test(canonicalTitle)) return 'boh';
+  if (FOH_PATTERNS.test(canonicalTitle)) return 'foh';
+  if (MGR_PATTERNS.test(canonicalTitle)) return 'foh'; // managers default to FOH
+  return 'other';
+}
+
 function renderLaborSection() {
   const o = DATA.outlets[STATE.outlet];
   const body = document.getElementById('outletBody');
@@ -1109,6 +1159,11 @@ function renderLaborSection() {
       ['labor']
     );
   }
+  // FOH / BOH / Total filter — drives KPIs + by-position chart + table.
+  // Hour-of-day and Day-of-week charts span all positions because the
+  // ETL doesn't capture hour×job decomposition.
+  const laborFilter = (STATE.laborFilter || 'total').toLowerCase(); // 'total' | 'foh' | 'boh'
+  const filterPasses = (cls) => laborFilter === 'total' || laborFilter === cls;
 
   // Period filter — reuse Performance Summary's bSel logic by re-deriving from Sales Summary.
   const ssDaily = combinedDailySales();
@@ -1117,39 +1172,100 @@ function renderLaborSection() {
   const periodLabel = currentPeriodLabel();
   const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
 
-  // Labor in period
-  const labRows = lab.daily.filter(r => inRange(r.date));
-  const labSum = labRows.reduce((a, r) => ({
-    regular_hours: a.regular_hours + (r.regular_hours || 0),
-    overtime_hours: a.overtime_hours + (r.overtime_hours || 0),
-    regular_cost: a.regular_cost + (r.regular_cost || 0),
-    overtime_cost: a.overtime_cost + (r.overtime_cost || 0),
-    total_cost: a.total_cost + (r.total_cost || 0),
-  }), { regular_hours: 0, overtime_hours: 0, regular_cost: 0, overtime_cost: 0, total_cost: 0 });
-  const totalHrs = labSum.regular_hours + labSum.overtime_hours;
+  // Labor in period — gated by FOH/BOH/Total filter. When filter is
+  // 'total' we use the daily roll-up directly. When 'foh' or 'boh' we
+  // re-aggregate from by_job_daily (which IS classified) so the KPIs
+  // accurately reflect just that side of the house.
+  let labSum, totalHrs, labRows;
+  if (laborFilter === 'total' || !Array.isArray(lab.by_job_daily) || !lab.by_job_daily.length) {
+    labRows = lab.daily.filter(r => inRange(r.date));
+    labSum = labRows.reduce((a, r) => ({
+      regular_hours: a.regular_hours + (r.regular_hours || 0),
+      overtime_hours: a.overtime_hours + (r.overtime_hours || 0),
+      regular_cost: a.regular_cost + (r.regular_cost || 0),
+      overtime_cost: a.overtime_cost + (r.overtime_cost || 0),
+      total_cost: a.total_cost + (r.total_cost || 0),
+    }), { regular_hours: 0, overtime_hours: 0, regular_cost: 0, overtime_cost: 0, total_cost: 0 });
+  } else {
+    // Re-aggregate filtered by_job_daily into per-date totals so the
+    // daily charts also respect the filter.
+    const byDate = new Map();
+    for (const r of lab.by_job_daily) {
+      if (!inRange(r.date)) continue;
+      const cls = classifyFohBoh(canonicalJobTitle(r.title));
+      if (!filterPasses(cls)) continue;
+      const cur = byDate.get(r.date) || { date: r.date, regular_hours: 0, overtime_hours: 0,
+                                            regular_cost: 0, overtime_cost: 0, total_cost: 0 };
+      // by_job_daily only has hours+cost (not split reg/OT). Approximate
+      // regular = total - overtime; the OT split lives only on lab.daily.
+      cur.regular_hours += r.hours || 0;
+      cur.total_cost    += r.cost  || 0;
+      byDate.set(r.date, cur);
+    }
+    labRows = Array.from(byDate.values()).sort((a, b) => a.date.localeCompare(b.date));
+    labSum = labRows.reduce((a, r) => ({
+      regular_hours: a.regular_hours + (r.regular_hours || 0),
+      overtime_hours: a.overtime_hours + (r.overtime_hours || 0),
+      regular_cost:   a.regular_cost  + (r.regular_cost  || 0),
+      overtime_cost:  a.overtime_cost + (r.overtime_cost || 0),
+      total_cost:     a.total_cost    + (r.total_cost    || 0),
+    }), { regular_hours: 0, overtime_hours: 0, regular_cost: 0, overtime_cost: 0, total_cost: 0 });
+  }
+  totalHrs = labSum.regular_hours + labSum.overtime_hours;
 
   // Sales in period (outlet-wide — no RC filter, to match labor's outlet scope)
   const ssCur = bSel ? filter(ssDaily, bSel) : ssDaily;
   const ssTot = sumDaily(ssCur, ['net_sales','orders','guests']);
 
-  // by_job period-aware: aggregate by_job_daily rows in selected period.
-  // Falls back to the all-time by_job rollup when by_job_daily isn't present
-  // (older syncs) or when no period is selected.
+  // by_job period-aware: aggregate by_job_daily rows in selected period,
+  // KEYED ON CANONICAL TITLE so "LSD - Bartender" and "BR - Bartender"
+  // combine into one "Bartender" row. Each consolidated row gets a
+  // foh_boh classification; rows are filtered by STATE.laborFilter.
   let byJob;
   let byJobScope;
   if (Array.isArray(lab.by_job_daily) && lab.by_job_daily.length) {
     const acc = new Map();
     for (const r of lab.by_job_daily) {
       if (!inRange(r.date)) continue;
-      const cur = acc.get(r.job_guid) || { job_guid: r.job_guid, title: r.title, hours: 0, cost: 0 };
+      const canonical = canonicalJobTitle(r.title);
+      const cls = classifyFohBoh(canonical);
+      if (!filterPasses(cls)) continue;
+      const cur = acc.get(canonical) || {
+        title: canonical,
+        original_titles: new Set(),
+        foh_boh: cls,
+        hours: 0,
+        cost: 0,
+      };
       cur.hours += r.hours || 0;
       cur.cost  += r.cost  || 0;
-      acc.set(r.job_guid, cur);
+      cur.original_titles.add(r.title);
+      acc.set(canonical, cur);
     }
-    byJob = Array.from(acc.values()).sort((a, b) => b.cost - a.cost);
+    byJob = Array.from(acc.values())
+      .map(r => ({ ...r, original_titles: Array.from(r.original_titles) }))
+      .sort((a, b) => b.cost - a.cost);
     byJobScope = bSel ? `period (${periodLabel})` : 'all time';
   } else {
-    byJob = (lab.by_job || []).slice().sort((a, b) => b.cost - a.cost);
+    // Older syncs without by_job_daily — apply the same canonicalization
+    // + filter to the all-time by_job rollup.
+    const acc = new Map();
+    for (const r of (lab.by_job || [])) {
+      const canonical = canonicalJobTitle(r.title);
+      const cls = classifyFohBoh(canonical);
+      if (!filterPasses(cls)) continue;
+      const cur = acc.get(canonical) || {
+        title: canonical, foh_boh: cls, hours: 0, cost: 0,
+        original_titles: new Set(),
+      };
+      cur.hours += r.hours || 0;
+      cur.cost  += r.cost  || 0;
+      cur.original_titles.add(r.title);
+      acc.set(canonical, cur);
+    }
+    byJob = Array.from(acc.values())
+      .map(r => ({ ...r, original_titles: Array.from(r.original_titles) }))
+      .sort((a, b) => b.cost - a.cost);
     byJobScope = 'sync window (period filter awaiting next sync)';
   }
   const byJobTotalCost = byJob.reduce((s, r) => s + (r.cost || 0), 0);
@@ -1190,14 +1306,28 @@ function renderLaborSection() {
 
   const kpi = (label, val, sub, yoy) => `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub?`<div class="yoy neutral">${sub}</div>`:''}${yoy!=null?`<div class="yoy ${yoy>=0?'pos':'neg'}">${(yoy>=0?'+':'')+yoy.toFixed(1)}% YoY</div>`:''}</div>`;
 
+  // FOH/BOH/Total filter UI — applies to KPIs, daily charts, and the
+  // by-position table. Hour-of-day + DOW charts span all positions
+  // because the ETL doesn't capture hour×job decomposition; that's
+  // called out in those section headers below.
+  const filterChip = (id, label) => `<button type="button" class="labor-filter-chip ${laborFilter === id ? 'active' : ''}" data-labor-filter="${id}">${label}</button>`;
+  const filterBar = `
+    <div class="labor-filter-bar">
+      <span class="labor-filter-label">Filter:</span>
+      ${filterChip('total', 'Total')}
+      ${filterChip('foh',   'FOH')}
+      ${filterChip('boh',   'BOH')}
+    </div>`;
+
   body.innerHTML = `
     <section>
       <div class="sect-head">
         <div class="sect-title">Labor · ${o.name}</div>
         <div class="sect-meta">Toast Labor API · outlet-level (no RC split) · ${periodLabel}</div>
       </div>
+      ${filterBar}
       <div class="kpis">
-        ${kpi('Labor %', fmtPct(laborPctOfNet), 'Hourly labor ÷ Net Sales', null)}
+        ${kpi('Labor %', fmtPct(laborPctOfNet), 'Hourly labor ÷ Net Sales' + (laborFilter !== 'total' ? ` (${laborFilter.toUpperCase()})` : ''), null)}
         ${kpi('Total Hours', fmtHrs(totalHrs), `${fmtHrs(labSum.regular_hours)} reg + ${fmtHrs(labSum.overtime_hours)} OT`, null)}
         ${kpi('Total Labor $', fmtMoney(labSum.total_cost), `${fmtMoney(labSum.regular_cost)} reg + ${fmtMoney(labSum.overtime_cost)} OT`, null)}
         ${kpi('OT % of Hours', fmtPct(otPctOfHours), 'Industry target ≤ 5%', null)}
@@ -1220,7 +1350,7 @@ function renderLaborSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Hour of Day</div>
-        <div class="sect-meta">Distributed from clock-in/out · ${periodLabel}</div>
+        <div class="sect-meta">Distributed from clock-in/out · ${periodLabel}${laborFilter !== 'total' ? ' · across all positions (FOH/BOH split not available at hour granularity)' : ''}</div>
       </div>
       <div class="grid grid-2">
         <div class="card"><h3>Hours by Hour of Day</h3><div class="desc">Total labor hours per hour bucket · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="laborHoursByHour"></canvas></div></div>
@@ -1239,16 +1369,24 @@ function renderLaborSection() {
       </div>
       <div class="grid grid-2">
         <div class="card"><h3>Cost Mix by Position</h3><div class="desc">Top jobs by labor $</div><div class="chart-wrap tall"><canvas id="laborByJobBar"></canvas></div></div>
-        <div class="card"><h3>Position Detail</h3><div class="desc">Sorted by labor $</div>
+        <div class="card"><h3>Position Detail</h3><div class="desc">Consolidated across RCs · ${laborFilter === 'total' ? 'all positions' : laborFilter.toUpperCase() + ' only'}</div>
           <div style="overflow:auto; max-height: 360px;">
             <table class="tbl">
-              <thead><tr><th style="text-align:left">Position</th><th style="text-align:right">Hours</th><th style="text-align:right">Cost</th><th style="text-align:right">% of Total</th><th style="text-align:right">Avg $/Hr</th></tr></thead>
+              <thead><tr><th style="text-align:left">Position</th><th style="text-align:left">Type</th><th style="text-align:right">Hours</th><th style="text-align:right">Cost</th><th style="text-align:right">% of Total</th><th style="text-align:right">Avg $/Hr</th></tr></thead>
               <tbody>
                 ${byJob.map(r => {
                   const pct = byJobTotalCost > 0 ? (r.cost / byJobTotalCost * 100) : null;
                   const rate = r.hours > 0 ? (r.cost / r.hours) : null;
-                  return `<tr>
-                    <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}</td>
+                  const tooltip = (r.original_titles && r.original_titles.length > 1)
+                    ? ` title="combines: ${r.original_titles.join(' · ').replace(/"/g,'&quot;')}"`
+                    : '';
+                  const cls = (r.foh_boh || 'other').toUpperCase();
+                  const clsColor = r.foh_boh === 'foh' ? 'var(--turquoise)'
+                                 : r.foh_boh === 'boh' ? 'var(--royal)'
+                                 : 'var(--muted)';
+                  return `<tr${tooltip}>
+                    <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}${(r.original_titles && r.original_titles.length > 1) ? ` <span style="color:var(--muted); font-size:10px">(×${r.original_titles.length})</span>` : ''}</td>
+                    <td><span style="display:inline-block; padding:2px 8px; font-size:9px; letter-spacing:0.1em; background:${clsColor}; color:#fff; border-radius:2px;">${cls}</span></td>
                     <td style="text-align:right">${fmtHrs(r.hours)}</td>
                     <td style="text-align:right">${fmtMoney(r.cost)}</td>
                     <td style="text-align:right">${pct!=null?pct.toFixed(1)+'%':'—'}</td>
@@ -1394,6 +1532,15 @@ function renderLaborSection() {
       },
     });
   }
+
+  // Wire FOH/BOH/Total filter chips. Re-renders the section in place
+  // (rerenderSection() destroys all charts first to avoid leaks).
+  body.querySelectorAll('.labor-filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      STATE.laborFilter = chip.dataset.laborFilter || 'total';
+      rerenderSection();
+    });
+  });
 }
 
 // Renders the Guest Experience section using Resy survey + 1-5 ratings + Google
