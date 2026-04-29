@@ -371,7 +371,15 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
                         row_shape = sorted(inner.keys())[:18]
                     print(f"    {c['status']} {c['url'][:100]} top_keys={body_keys}")
                     if row_shape:
-                        print(f"        row_count={row_count} row_keys={row_shape}")
+                        print(f"        outer_count={row_count} outer_keys={row_shape}")
+                    # Surveys live two levels deep (data.surveys); dump the
+                    # first row's keys so we can lock down the field map.
+                    if isinstance(inner, dict):
+                        for promising_key in ("surveys", "comments", "ratings"):
+                            sub = inner.get(promising_key)
+                            if isinstance(sub, list) and sub and isinstance(sub[0], dict):
+                                sub_keys = sorted(sub[0].keys())[:25]
+                                print(f"        {promising_key}_count={len(sub)} {promising_key}_row_keys={sub_keys}")
                 continue
 
             # Transform + merge
