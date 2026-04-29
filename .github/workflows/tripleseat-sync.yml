@@ -1,0 +1,114 @@
+name: Tripleseat Sync
+
+# Nightly Tripleseat events pull. Tripleseat /events ignores date and
+# location filters, so each run paginates the entire account (~20k events
+# for Method's portfolio per helixo-2's audit). Sync takes 5-30 min.
+
+on:
+  schedule:
+    # 12:00 UTC = 07:00 ET (EST). Tripleseat is the last of the four
+    # nightly ETLs in Ross's 7am-ET cadence:
+    #   12:00 UTC  Toast Sync      (~10 min after #27 incremental fix)
+    #   12:15 UTC  Guest Sync      (Resy + Google)
+    #   12:30 UTC  MarginEdge Sync
+    #   12:45 UTC  Tripleseat Sync (this one — slowest, last)
+    - cron: '45 12 * * *'
+  workflow_dispatch:
+    inputs:
+      probe:
+        description: 'Run --probe (auth-only health check)'
+        type: boolean
+        required: false
+        default: false
+      discover:
+        description: 'Run --discover (list all sites + locations)'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tripleseat-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: toast-etl/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r toast-etl/requirements.txt
+
+      - name: Run Tripleseat sync
+        if: ${{ github.event.inputs.probe != 'true' && github.event.inputs.discover != 'true' }}
+        env:
+          TRIPLESEAT_CONSUMER_KEY:    ${{ secrets.TRIPLESEAT_CONSUMER_KEY }}
+          TRIPLESEAT_CONSUMER_SECRET: ${{ secrets.TRIPLESEAT_CONSUMER_SECRET }}
+          TRIPLESEAT_BASE_URL:        ${{ secrets.TRIPLESEAT_BASE_URL }}
+        run: |
+          cd toast-etl
+          if [ -z "$TRIPLESEAT_CONSUMER_KEY" ] || [ -z "$TRIPLESEAT_CONSUMER_SECRET" ]; then
+            echo "Tripleseat creds not configured — skipping"
+            exit 0
+          fi
+          python3 tripleseat_sync.py --data-dir ../data
+
+      - name: Run Tripleseat probe (manual only)
+        if: ${{ github.event.inputs.probe == 'true' }}
+        env:
+          TRIPLESEAT_CONSUMER_KEY:    ${{ secrets.TRIPLESEAT_CONSUMER_KEY }}
+          TRIPLESEAT_CONSUMER_SECRET: ${{ secrets.TRIPLESEAT_CONSUMER_SECRET }}
+        run: |
+          cd toast-etl
+          python3 tripleseat_sync.py --probe --data-dir ../data
+
+      - name: Run Tripleseat discover (manual only)
+        if: ${{ github.event.inputs.discover == 'true' }}
+        env:
+          TRIPLESEAT_CONSUMER_KEY:    ${{ secrets.TRIPLESEAT_CONSUMER_KEY }}
+          TRIPLESEAT_CONSUMER_SECRET: ${{ secrets.TRIPLESEAT_CONSUMER_SECRET }}
+        run: |
+          cd toast-etl
+          python3 tripleseat_sync.py --discover --data-dir ../data
+
+      - name: Commit refreshed events data
+        if: ${{ github.event.inputs.probe != 'true' && github.event.inputs.discover != 'true' }}
+        run: |
+          git config user.name  "method-tripleseat-sync[bot]"
+          git config user.email "method-tripleseat-sync@users.noreply.github.com"
+          git add data/*.json
+          if git diff --cached --quiet; then
+            echo "no events changes"
+            exit 0
+          fi
+          STAMP="$(date -u +%Y-%m-%dT%H:%MZ)"
+          git commit -m "chore(data): nightly Tripleseat sync ${STAMP}"
+          for i in 1 2 3; do
+            if git push; then
+              echo "push succeeded on attempt $i"
+              exit 0
+            fi
+            echo "push rejected (attempt $i) — pulling and retrying"
+            git pull --rebase origin main || {
+              echo "rebase failed; aborting"
+              exit 1
+            }
+            sleep $((i * 5))
+          done
+          echo "push failed after 3 attempts"
+          exit 1

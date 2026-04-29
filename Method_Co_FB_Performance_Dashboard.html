@@ -861,7 +861,7 @@ function renderOutlet() {
   if (STATE.section === 'revenue')      return renderRevenueSection();
   if (STATE.section === 'labor')        return renderLaborSection();
   if (STATE.section === 'cogs')         return renderCogsSection();
-  if (STATE.section === 'events')       return renderPlaceholderSection('Private Events', 'Awaiting Tripleseat booking export. Once connected, this section will show events booked, gross & net F&amp;B, average per event, guest counts, lead time, and conversion by event type.', ['tripleseat']);
+  if (STATE.section === 'events')       return renderEventsSection();
   if (STATE.section === 'guest')        return renderGuestSection();
   if (STATE.section === 'snapshot')     return renderSnapshotSection();
 }
@@ -891,6 +891,176 @@ function renderPlaceholderSection(title, body, requiredSources) {
 
 // Renders the Labor section using Toast Labor API data (outlet-level only —
 // Toast's labor API has no RC dimension, so this view ignores STATE.rc and
+// =====================================================================
+// Private Events — sourced from Tripleseat via toast-etl/tripleseat_sync.py.
+// Shows event count, booked revenue, F&B mix, segment breakdown
+// (Wedding/Corporate/Social/Other), monthly trend, lead-time, and the
+// 25 most recent events. Brand-split logic happens upstream in the ETL —
+// this view just consumes pre-allocated per-outlet totals.
+// =====================================================================
+function renderEventsSection() {
+  const o = DATA.outlets[STATE.outlet];
+  const body = document.getElementById('outletBody');
+  const e = o && o.events ? o.events : null;
+  const hasEvents = e && Array.isArray(e.events) && e.events.length > 0;
+  if (!hasEvents) {
+    return renderPlaceholderSection(
+      'Private Events',
+      'Awaiting Tripleseat sync. Once the API is enabled (creds saved; activation pending Tripleseat support per the integration email), this section will show events booked, F&amp;B revenue, booked revenue by segment, lead time, and the most recent events. Brand-split rules from helixo-2 are pre-applied in the ETL — Anthology / LSBR / Kampers / Hiroki-San / Rosemary Rose share the Book Tower Tripleseat location.',
+      ['tripleseat']
+    );
+  }
+  // Local kpi helper — same shape as other renderers'
+  const kpi = (label, val, sub, tone) => `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub?`<div class="yoy ${tone||'neutral'}">${sub}</div>`:''}</div>`;
+
+  // Period filter via existing periodBounds
+  const ssDailyAll = combinedDailySales();
+  const maxDate = ssDailyAll.length ? ssDailyAll[ssDailyAll.length-1].date : null;
+  const bSel = periodBounds(maxDate);
+  const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
+  const periodLabel = bSel ? bSel.label : (STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Latest');
+  const evCur = e.events.filter(ev => {
+    const d = (ev.event_start || '').slice(0, 10);
+    return inRange(d);
+  });
+  // Aggregate
+  const totalRev = evCur.reduce((s, ev) => s + (ev.booked_revenue || 0), 0);
+  const totalGuests = evCur.reduce((s, ev) => s + (ev.guest_count || 0), 0);
+  const fbRev = evCur.reduce((s, ev) => s + ((ev.financials?.food || 0) + (ev.financials?.beverage || 0)), 0);
+  const avgPerEvent = evCur.length > 0 ? totalRev / evCur.length : null;
+  const avgGuests = evCur.length > 0 ? totalGuests / evCur.length : null;
+  const leadTimes = evCur.map(ev => ev.lead_time_days).filter(v => v != null);
+  const avgLead = leadTimes.length > 0 ? leadTimes.reduce((a, b) => a + b, 0) / leadTimes.length : null;
+  // Segment breakdown
+  const bySegment = {};
+  evCur.forEach(ev => {
+    const seg = ev.segment || 'Other';
+    bySegment[seg] = bySegment[seg] || { events: 0, revenue: 0 };
+    bySegment[seg].events++;
+    bySegment[seg].revenue += ev.booked_revenue || 0;
+  });
+  const segRows = Object.entries(bySegment).sort((a, b) => b[1].revenue - a[1].revenue);
+  // Top rooms
+  const byRoom = {};
+  evCur.forEach(ev => {
+    (ev.rooms || []).forEach(r => {
+      byRoom[r] = byRoom[r] || { events: 0, revenue: 0 };
+      byRoom[r].events++;
+      byRoom[r].revenue += (ev.booked_revenue || 0) / Math.max(1, (ev.rooms || []).length);
+    });
+  });
+  const topRooms = Object.entries(byRoom).sort((a, b) => b[1].revenue - a[1].revenue).slice(0, 8);
+
+  body.innerHTML = `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Private Events · ${o.name}</div>
+        <div class="sect-meta">${periodLabel} · sourced from Tripleseat · as of ${e.as_of || '—'}</div>
+      </div>
+      <div class="kpis">
+        ${kpi('Events',         fmtNum(evCur.length), 'in period', 'neutral')}
+        ${kpi('Booked Revenue', fmtMoney(totalRev),   `${avgPerEvent != null ? fmtMoney(avgPerEvent)+' avg' : 'no events'}`, 'neutral')}
+        ${kpi('F&B Revenue',    fmtMoney(fbRev),      totalRev > 0 ? `${(fbRev / totalRev * 100).toFixed(0)}% of booked` : null, 'neutral')}
+        ${kpi('Guests',         fmtNum(totalGuests),  avgGuests != null ? `${avgGuests.toFixed(0)} avg/event` : null, 'neutral')}
+        ${kpi('Avg Lead Time',  avgLead != null ? Math.round(avgLead) + ' days' : '—', leadTimes.length+' events w/ data', 'neutral')}
+        ${kpi('Segments',       fmtNum(segRows.length), 'unique types booked', 'neutral')}
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">By Segment · ${periodLabel}</div>
+        <div class="sect-meta">Booked revenue + event count per market segment</div>
+      </div>
+      <div class="card">
+        <div style="overflow:auto; max-height: 320px;">
+          <table class="tbl">
+            <thead><tr>
+              <th style="text-align:left">Segment</th>
+              <th style="text-align:right">Events</th>
+              <th style="text-align:right">Booked Revenue</th>
+              <th style="text-align:right">% of Total</th>
+              <th style="text-align:right">Avg / Event</th>
+            </tr></thead>
+            <tbody>
+              ${segRows.map(([s, v]) => `<tr>
+                <td>${s.replace(/</g,'&lt;')}</td>
+                <td style="text-align:right">${fmtNum(v.events)}</td>
+                <td style="text-align:right">${fmtMoney(v.revenue)}</td>
+                <td style="text-align:right">${totalRev > 0 ? (v.revenue/totalRev*100).toFixed(1)+'%' : '—'}</td>
+                <td style="text-align:right">${v.events > 0 ? fmtMoney(v.revenue/v.events) : '—'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Top Rooms · ${periodLabel}</div>
+        <div class="sect-meta">Top 8 rooms by booked revenue (multi-room events split evenly)</div>
+      </div>
+      <div class="card">
+        <div style="overflow:auto; max-height: 300px;">
+          <table class="tbl">
+            <thead><tr>
+              <th style="text-align:left">Room</th>
+              <th style="text-align:right">Events</th>
+              <th style="text-align:right">Revenue (split)</th>
+            </tr></thead>
+            <tbody>
+              ${topRooms.map(([r, v]) => `<tr>
+                <td>${r.replace(/</g,'&lt;')}</td>
+                <td style="text-align:right">${fmtNum(v.events)}</td>
+                <td style="text-align:right">${fmtMoney(v.revenue)}</td>
+              </tr>`).join('')}
+              ${topRooms.length === 0 ? '<tr><td colspan="3" style="text-align:center; color:var(--muted); padding:24px;">No room data in this period.</td></tr>' : ''}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Recent Events</div>
+        <div class="sect-meta">Last 25 in period · sorted by event date desc</div>
+      </div>
+      <div class="card">
+        <div style="overflow:auto; max-height: 480px;">
+          <table class="tbl">
+            <thead><tr>
+              <th style="text-align:left">Date</th>
+              <th style="text-align:left">Event</th>
+              <th style="text-align:left">Segment</th>
+              <th style="text-align:right">Guests</th>
+              <th style="text-align:right">Booked $</th>
+              <th style="text-align:right">F&B $</th>
+              <th style="text-align:left">Status</th>
+            </tr></thead>
+            <tbody>
+              ${evCur.slice().sort((a,b) => (b.event_start||'').localeCompare(a.event_start||'')).slice(0, 25).map(ev => `<tr>
+                <td>${(ev.event_start || '—').slice(0,10)}</td>
+                <td>${(ev.name || '—').replace(/</g,'&lt;')}</td>
+                <td>${(ev.segment || '—').replace(/</g,'&lt;')}</td>
+                <td style="text-align:right">${fmtNum(ev.guest_count || 0)}</td>
+                <td style="text-align:right">${fmtMoney(ev.booked_revenue || 0)}</td>
+                <td style="text-align:right">${fmtMoney((ev.financials?.food || 0) + (ev.financials?.beverage || 0))}</td>
+                <td>${(ev.status || '—').replace(/</g,'&lt;')}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <p style="margin: 22px 28px; color: var(--muted); font-size: 11px;">
+      Booked Revenue = max(actual_amount, food_and_beverage_min) per event, then revenue-share applied for multi-brand bookings (Book Tower properties share one Tripleseat location). Tax + gratuity excluded from net; service charge retained per Method Co reporting convention.
+    </p>
+  `;
+}
+
 // =====================================================================
 // Cost of Goods — sourced from MarginEdge Public API via
 // toast-etl/marginedge_sync.py. Renders a placeholder until the
@@ -2925,6 +3095,7 @@ function renderSummarySection() {
       let laborSub = 'Awaiting Toast labor sync';
       let otSub    = '—';
       let cphlSub  = 'Awaiting Toast labor sync';
+      let laborTotalCost = 0;
       if (lab) {
         const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
         const lr = lab.daily.filter(r => inRange(r.date));
@@ -2936,6 +3107,7 @@ function renderSummarySection() {
           overtime_cost: a.overtime_cost + (r.overtime_cost || 0),
         }), { total_cost: 0, regular_hours: 0, overtime_hours: 0, regular_cost: 0, overtime_cost: 0 });
         const totalHrs = lc.regular_hours + lc.overtime_hours;
+        laborTotalCost = lc.total_cost;
         if (curSum.net_sales > 0) {
           laborPctVal = (lc.total_cost / curSum.net_sales * 100).toFixed(1) + '%';
           laborSub = 'Hourly labor ÷ Net Sales · ' + periodLabel;
@@ -2949,19 +3121,83 @@ function renderSummarySection() {
           }
         }
       }
+      // Cross-source fields for the operational-ratios row + the new
+      // cross-tab summary row below it. Pulls COGS from o.cogs (MarginEdge),
+      // Prime Cost = Labor + COGS, NPS from o.guest, Booked Events from
+      // o.events, Google ★ from o.guest.google.
+      let cogsTotal = 0, cogsPctVal = '—', cogsSub = 'Awaiting MarginEdge';
+      if (o.cogs && Array.isArray(o.cogs.invoices)) {
+        const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
+        cogsTotal = o.cogs.invoices.filter(i => inRange(i.date || ''))
+          .reduce((s, i) => s + (i.total || 0), 0);
+        if (curSum.net_sales > 0 && cogsTotal > 0) {
+          cogsPctVal = (cogsTotal / curSum.net_sales * 100).toFixed(1) + '%';
+          cogsSub = `${fmtMoney(cogsTotal)} on invoices`;
+        }
+      }
+      let primeVal = '—', primeSub = 'Needs Labor + COGS';
+      if (laborTotalCost > 0 && cogsTotal > 0 && curSum.net_sales > 0) {
+        const prime = laborTotalCost + cogsTotal;
+        primeVal = (prime / curSum.net_sales * 100).toFixed(1) + '%';
+        primeSub = `${fmtMoney(prime)} · target ≤ 60-65%`;
+      }
+      // Cross-tab summary cards: NPS, Google ★, Booked Events Revenue, Bookings
+      let npsVal = '—', npsSub = 'Awaiting Resy sync';
+      if (o.guest && Array.isArray(o.guest.surveys) && o.guest.surveys.length) {
+        const all = o.guest.surveys;
+        const recs = all.map(s => s.recommend).filter(v => v != null);
+        let p=0,d=0;
+        recs.forEach(r => { if (r >= 9) p++; else if (r <= 6) d++; });
+        const ns = recs.length ? Math.round(((p-d)/recs.length)*100) : null;
+        if (ns != null) {
+          npsVal = (ns > 0 ? '+' : '') + ns;
+          npsSub = `${fmtNum(all.length)} lifetime surveys`;
+        }
+      }
+      let starVal = '—', starSub = 'Awaiting Google';
+      if (o.guest && o.guest.google && o.guest.google.avg_rating != null) {
+        starVal = o.guest.google.avg_rating.toFixed(2) + ' ★';
+        starSub = `${fmtNum(o.guest.google.total_reviews || 0)} reviews · lifetime`;
+      }
+      let evRevVal = '—', evRevSub = 'Awaiting Tripleseat', evCountVal = '—';
+      if (o.events && Array.isArray(o.events.events)) {
+        const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
+        const evCur = o.events.events.filter(ev => inRange((ev.event_start||'').slice(0,10)));
+        const total = evCur.reduce((s, ev) => s + (ev.booked_revenue || 0), 0);
+        evCountVal = fmtNum(evCur.length);
+        if (total > 0) {
+          evRevVal = fmtMoney(total);
+          evRevSub = `${fmtNum(evCur.length)} events · period`;
+        }
+      }
       return `
     <section>
       <div class="sect-head">
         <div class="sect-title">Operational Ratios${lab ? '' : ' (Placeholder)'}</div>
-        <div class="sect-meta">${lab ? 'Toast labor live · awaiting Sage P&amp;L for COGS / EBITDAR' : 'Awaiting Sage P&amp;L + Toast labor sync'}</div>
+        <div class="sect-meta">${lab ? 'Toast + MarginEdge live' : 'Awaiting full data sync'}</div>
       </div>
       <div class="kpis">
         ${kpi('Labor %', laborPctVal, laborSub, null)}
         ${kpi('OT % of Hours', otPctVal, otSub, null)}
         ${kpi('Covers / Labor Hr', cphlVal, cphlSub, null)}
-        ${kpi('COGS %', '—', 'Awaiting P&amp;L', null)}
-        ${kpi('Prime Cost', '—', 'COGS + Labor', null)}
-        ${kpi('EBITDAR', '—', 'Awaiting P&amp;L', null)}
+        ${kpi('COGS %', cogsPctVal, cogsSub, null)}
+        ${kpi('Prime Cost %', primeVal, primeSub, null)}
+        ${kpi('EBITDAR', '—', 'Awaiting Sage P&amp;L', null)}
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Cross-Tab Summary</div>
+        <div class="sect-meta">Headline KPIs from every connected source · ${periodLabel}</div>
+      </div>
+      <div class="kpis">
+        ${kpi('NPS', npsVal, npsSub, null)}
+        ${kpi('Google ★', starVal, starSub, null)}
+        ${kpi('Events Booked',  evCountVal, evRevSub, null)}
+        ${kpi('Events Revenue', evRevVal,   'period · post-allocation', null)}
+        ${kpi('Total COGS',     fmtMoney(cogsTotal), cogsTotal > 0 ? 'period · MarginEdge' : 'awaiting sync', null)}
+        ${kpi('Total Labor',    laborTotalCost > 0 ? fmtMoney(laborTotalCost) : '—', laborTotalCost > 0 ? 'period · Toast' : 'awaiting sync', null)}
       </div>
     </section>`;
     })()}
@@ -3878,7 +4114,7 @@ function rerenderSection() {
   if (STATE.section === 'revenue')  return renderRevenueSection();
   if (STATE.section === 'labor')    return renderLaborSection();
   if (STATE.section === 'cogs')     return renderCogsSection();
-  if (STATE.section === 'events')   return renderPlaceholderSection('Private Events', 'Awaiting Tripleseat booking export. Once connected, this section will show events booked, gross & net F&amp;B, average per event, guest counts, lead time, and conversion by event type.', ['tripleseat']);
+  if (STATE.section === 'events')   return renderEventsSection();
   if (STATE.section === 'guest')    return renderGuestSection();
   if (STATE.section === 'snapshot') return renderSnapshotSection();
 }
@@ -3988,6 +4224,15 @@ async function __loadOutletData() {
       if (payload.cogs && typeof payload.cogs === 'object') {
         o.cogs = payload.cogs;
         o.sources.marginedge = true;
+      }
+      // Private Events — pulled nightly by tripleseat_sync.py from
+      // Tripleseat's OAuth 1.0a API. Includes per-event detail
+      // (rooms, segment, guests, financials) + monthly + segment
+      // rollups, with brand-split applied for shared Tripleseat
+      // locations like Anthology Events at Book Tower.
+      if (payload.events && typeof payload.events === 'object') {
+        o.events = payload.events;
+        o.sources.tripleseat = true;
       }
     } catch (_) { /* keep inline fallback */ }
   }));
