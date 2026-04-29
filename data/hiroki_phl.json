@@ -16276,8 +16276,8 @@
     }
   },
   "guest": {
-    "as_of": "2026-04-28",
-    "source_file": "HIROKI Philadelphia - NPS Report.html",
+    "as_of": "2026-04-29",
+    "source": "resy_os_scraper",
     "surveys": [
       {
         "date": "2025-04-30",
@@ -18475,6 +18475,97 @@
         "covers": 2,
         "dow": 2,
         "hour": 18
+      },
+      {
+        "date": "2026-04-27",
+        "overall": 100,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": null,
+        "covers": 2,
+        "dow": 0,
+        "hour": 0
+      },
+      {
+        "date": "2026-04-21",
+        "overall": 100,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": "Mayumi",
+        "covers": 2,
+        "dow": 1,
+        "hour": 0
+      },
+      {
+        "date": "2026-04-12",
+        "overall": 35,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": null,
+        "covers": 2,
+        "dow": 6,
+        "hour": 0
+      },
+      {
+        "date": "2026-04-13",
+        "overall": 95,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": null,
+        "covers": 2,
+        "dow": 0,
+        "hour": 22
+      },
+      {
+        "date": "2026-04-07",
+        "overall": 100,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": "Dustin",
+        "covers": 1,
+        "dow": 1,
+        "hour": 0
+      },
+      {
+        "date": "2026-04-27",
+        "overall": 100,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": "Dustin",
+        "covers": 4,
+        "dow": 0,
+        "hour": 0
+      },
+      {
+        "date": "2026-04-19",
+        "overall": 85,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": null,
+        "covers": 2,
+        "dow": 6,
+        "hour": null
       }
     ],
     "ratings": [
@@ -20333,5 +20424,22 @@
       "owner_reply_count": 0,
       "local_guide_count": 0
     }
+  },
+  "generated_at_resy": "2026-04-29T14:50:27.780557+00:00",
+  "config": {
+    "open_hours_per_day": 2.14,
+    "open_hours_per_week": 15.0,
+    "is_24_7": false,
+    "hours_source": "google_places_api",
+    "hours_as_of": "2026-04-29",
+    "weekly_text": [
+      "Monday: 6:00 – 9:00 PM",
+      "Tuesday: Closed",
+      "Wednesday: Closed",
+      "Thursday: 6:00 – 9:00 PM",
+      "Friday: 6:00 – 9:00 PM",
+      "Saturday: 6:00 – 9:00 PM",
+      "Sunday: 6:00 – 9:00 PM"
+    ]
   }
 }

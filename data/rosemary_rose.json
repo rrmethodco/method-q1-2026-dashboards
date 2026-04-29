@@ -23494,6 +23494,38 @@
     }
   },
   "guest": {
+    "as_of": "2026-04-29",
+    "source": "resy_os_scraper",
+    "surveys": [
+      {
+        "date": "2026-04-10",
+        "overall": 100,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": null,
+        "covers": 7,
+        "dow": 4,
+        "hour": 22
+      },
+      {
+        "date": "2026-04-11",
+        "overall": 100,
+        "sentiment": null,
+        "service": null,
+        "food": null,
+        "atmos": null,
+        "recommend": null,
+        "server": null,
+        "covers": 3,
+        "dow": 5,
+        "hour": 23
+      }
+    ],
+    "ratings": [],
+    "comments": [],
     "google": {
       "venue": "Rosemary Rose",
       "place_id": "ChIJxeDcjf57_ogRwupqvHRLkuA",
@@ -23546,7 +23578,23 @@
       ],
       "as_of": "2026-04-29",
       "source": "google_places_api"
-    },
-    "as_of": "2026-04-28"
+    }
+  },
+  "generated_at_resy": "2026-04-29T14:51:11.165951+00:00",
+  "config": {
+    "open_hours_per_day": 7.43,
+    "open_hours_per_week": 52.0,
+    "is_24_7": false,
+    "hours_source": "google_places_api",
+    "hours_as_of": "2026-04-29",
+    "weekly_text": [
+      "Monday: 4:00 – 10:00 PM",
+      "Tuesday: 4:00 – 10:00 PM",
+      "Wednesday: 4:00 – 10:00 PM",
+      "Thursday: 4:00 – 10:00 PM",
+      "Friday: 2:00 PM – 12:00 AM",
+      "Saturday: 2:00 PM – 12:00 AM",
+      "Sunday: 2:00 – 10:00 PM"
+    ]
   }
 }
