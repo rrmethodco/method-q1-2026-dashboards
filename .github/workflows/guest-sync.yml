@@ -58,10 +58,13 @@ jobs:
       # Replaces resy_sync.py (consumer API path) which 419s against
       # operator credentials. Activates only when RESY_OS_STORAGE_STATE_JSON
       # is set — see docs/RESY_OS_SCRAPER.md for bootstrap.
+      #
+      # Install runs for BOTH the regular scrape and the --discover probe,
+      # gated only on the secret being present. Earlier version (#10) also
+      # gated on `inputs.probe != 'true'` which left discovery with no
+      # Playwright when probe=true was passed.
       - name: Install Playwright Chromium
-        if: ${{ github.event.inputs.probe != 'true' && env.HAS_RESY_STATE == 'true' }}
-        env:
-          HAS_RESY_STATE: ${{ secrets.RESY_OS_STORAGE_STATE_JSON != '' }}
+        if: ${{ secrets.RESY_OS_STORAGE_STATE_JSON != '' }}
         run: |
           pip install playwright
           python -m playwright install --with-deps chromium
