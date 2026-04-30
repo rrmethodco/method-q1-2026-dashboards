@@ -1,287 +1,188 @@
 #!/usr/bin/env python3
 """
-Method Co — Forecast engine (port of helixo-2 forecast.service.ts).
+Method Co — Forecast sync (helixo-2 daily_forecasts → dashboard outlets).
 
-Generates a per-day {date, net_sales, guests, orders} forecast for each
-outlet and writes it under `forecast.daily` in data/<outlet>.json. The
-dashboard's tri-comparison KPI cards (vs Forecast / vs STLY / vs Budget)
-read this block — when the data is missing, the cards render
-"Forecast — not wired" muted text.
+Pulls helixo-2's proprietary AI forecast engine output from the
+`daily_forecasts` table and writes a `forecast.daily` block into each
+data/<outlet>.json. The dashboard's tri-comparison KPI cards
+(vs Forecast / vs STLY / vs Budget) read this block — when missing,
+the cards render "Forecast — not wired".
 
-Faithful to helixo-2's weighted-ensemble approach:
-  base = mean(similar past days)
-  forecasted_covers   = base × dayFactor × seasonFactor × weatherFactor
-  forecasted_revenue  = forecasted_covers × avg_check
+Ross's directive (2026-04-30): the forecast in this dashboard MUST be
+the helixo-2 proprietary AI engine output, not a recomputed port. We
+read `ai_suggested_revenue` (the AI-generated value, NOT the
+manager_revenue override field — that's human-edited and not what we
+want for "vs Forecast").
 
-We keep:
-  - Day-of-week multipliers (Mon 0.65 ... Sat 1.10)
-  - Seasonal month multipliers (Jan 0.85 ... Dec 1.20)
-  - Similar-day pattern matching (DOW + month proximity + recency)
+Source schema (helixo-2 supabase.ts DailyForecastRow):
+  location_id          UUID
+  business_date        DATE
+  ai_suggested_revenue NUMERIC | NULL   ← we read this
+  ai_suggested_covers  NUMERIC | NULL   ← we read this
+  ai_confidence        NUMERIC | NULL
+  ai_reasoning         TEXT
+  manager_revenue      NUMERIC | NULL   ← we DO NOT read this
+  manager_covers       NUMERIC | NULL   ← we DO NOT read this
+  is_override          BOOLEAN
+  ...
 
-We drop:
-  - Weather signal (no weather feed wired in dashboards repo yet)
-  - Resy reservation signal (helixo-2 disabled it 2026-04-07 due to
-    broken ingestion — same scraper feeds both repos)
-  - Hourly breakdown + staffing requirements (the dashboard surfaces
-    daily roll-ups; staffing belongs in helixo-2 not here)
+Dashboard rows that don't have a helixo-2 ai_suggested_revenue value
+are simply absent from forecast.daily — the KPI card falls through to
+"Forecast — not wired" for those dates rather than asserting a
+fabricated number from a local algorithm port.
 
-The forecast covers BOTH history and future:
-  - For each date in [first_history → today + LOOKAHEAD_DAYS], compute
-    the forecast value. Historical values give the dashboard meaningful
-    "vs Forecast" deltas in past periods (otherwise every prior week
-    would show "— not wired" instead of an actionable +/- %).
+Setup (already wired for tripleseat_sync + budget_sync):
+  GitHub Secrets:
+    SUPABASE_URL              https://mmwislzsgnjxjxssynwm.supabase.co
+    SUPABASE_SERVICE_ROLE_KEY (server key — bypasses RLS)
 
 Usage:
-  python3 forecast_engine.py                # all outlets (data/*.json)
+  python3 forecast_engine.py                # all outlets
   python3 forecast_engine.py --outlet lsbr  # single outlet
-  python3 forecast_engine.py --dry-run      # print summaries, no writes
-  python3 forecast_engine.py --lookahead 90 # forward window (default 120)
+  python3 forecast_engine.py --probe        # auth-only probe
+  python3 forecast_engine.py --print-config # location → outlet routing
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import re
 import sys
 from collections import defaultdict
-from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import date
 from pathlib import Path
-from statistics import mean
+from urllib.parse import urlencode
+
+try:
+    import requests
+except ImportError:
+    sys.stderr.write("missing dependency: pip install requests\n")
+    sys.exit(2)
 
 
-# ---------- helixo-2-aligned multipliers ----------
+# ---------- helixo-2 location UUID → Method outlet (mirror budget_sync.py) ----------
 
-# Day-of-week multipliers, indexed Sunday=0..Saturday=6.
-# Verbatim from helixo-2/forecast.service.ts dayOfWeekMultipliers:
-#   Sun 0.75 / Mon 0.65 / Tue 0.70 / Wed 0.75 / Thu 0.85 / Fri 1.15 / Sat 1.10
-DAY_OF_WEEK_MULTIPLIER = {
-    0: 0.75,  # Sunday
-    1: 0.65,  # Monday
-    2: 0.70,  # Tuesday
-    3: 0.75,  # Wednesday
-    4: 0.85,  # Thursday
-    5: 1.15,  # Friday
-    6: 1.10,  # Saturday
+SUPA_UUID_TO_OUTLET: dict[str, str] = {
+    "84f4ea7f-722d-4296-894b-6ecfe389b2d5": "anthology",
+    "b7d3e1a4-5f2c-4a8b-9e6d-1c3f5a7b9d2e": "kampers",
+    "ae99ee33-1b8e-4c8f-8451-e9f3d0fa28ce": "lsbr",
+    "b4035001-0928-4ada-a0f0-f2a272393147": "hiroki_det",
+    "580ae0a6-34b8-402e-a8a6-2e55310207e4": "rosemary_rose",
+    "f36fdb18-a97b-48af-8456-7374dea4b0f9": "lowland",
 }
 
-# Month multipliers, indexed Jan=0..Dec=11. Verbatim from helixo-2.
-SEASONAL_MULTIPLIER = {
-    0: 0.85, 1: 0.80, 2: 0.90,    # Jan-Mar (slow)
-    3: 1.00, 4: 1.05, 5: 1.15,    # Apr-Jun (picking up)
-    6: 1.10, 7: 1.05, 8: 1.00,    # Jul-Sep (summer)
-    9: 1.05, 10: 1.10, 11: 1.20,  # Oct-Dec (holiday season)
+KNOWN_OUTLETS = (
+    "anthology", "hiroki_det", "hiroki_phl", "kampers", "little_wing",
+    "lowland", "lsbr", "mulherins", "quoin", "rosemary_rose", "vessel",
+)
+
+NAME_TO_OUTLET_OVERRIDES: dict[str, str] = {
+    "wmmulherinssons": "mulherins", "wmmulherinssonshotel": "mulherins",
+    "lowlandcharleston": "lowland", "lowland": "lowland",
+    "thequoin": "quoin", "quoinrooftop": "quoin",
+    "lesupreme": "lsbr", "lesuprême": "lsbr", "barrotunda": "lsbr",
+    "lesupremebarrotunda": "lsbr",
+    "kampersbar": "kampers", "kampersrooftopbar": "kampers",
+    "hirokisandetroit": "hiroki_det", "hirokisanphiladelphia": "hiroki_phl",
+    "hirokiphiladelphia": "hiroki_phl", "hirokisan": "hiroki_phl",
+    "anthology": "anthology", "anthologyevents": "anthology",
+    "anthologyeventsatbooktower": "anthology",
+    "rosemaryrose": "rosemary_rose", "rosemaryandrose": "rosemary_rose",
+    "littlewing": "little_wing", "littlewingcoffeeandgoods": "little_wing",
+    "vessel": "vessel", "vesselroostbaltimore": "vessel",
+    "thenickelhotel": "rosemary_rose",
 }
 
 
-# ---------- daily-row plumbing ----------
-
-@dataclass
-class DailyRow:
-    """A historical revenue day — outlet-level (RC-summed)."""
-    date: date
-    net_sales: float
-    guests: int
-    orders: int
+def _normalize_name(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", (name or "").lower())
 
 
-def parse_iso_date(s: str) -> date | None:
-    if not s or len(s) < 10:
+def name_to_outlet(name: str | None) -> str | None:
+    if not name:
         return None
-    try:
-        return datetime.strptime(s[:10], "%Y-%m-%d").date()
-    except ValueError:
-        return None
+    norm = _normalize_name(name)
+    if norm in NAME_TO_OUTLET_OVERRIDES:
+        return NAME_TO_OUTLET_OVERRIDES[norm]
+    for outlet in KNOWN_OUTLETS:
+        if _normalize_name(outlet) == norm:
+            return outlet
+    for outlet in KNOWN_OUTLETS:
+        if _normalize_name(outlet) in norm or norm in _normalize_name(outlet):
+            return outlet
+    return None
 
 
-def collect_outlet_history(payload: dict) -> list[DailyRow]:
-    """Sum every revenue center's daily rows into outlet-level rows.
-
-    Mirrors the dashboard's combinedDailySales(): outlet-wide history
-    aggregated across rc keys. order_details is preferred (richer
-    fields); falls back to sales_summary if needed."""
-    by_date: dict[date, dict] = defaultdict(lambda: {"net_sales": 0.0, "guests": 0, "orders": 0})
-
-    od = payload.get("order_details") or {}
-    for rc_key, rc_body in od.items():
-        if not isinstance(rc_body, dict):
-            continue
-        for row in (rc_body.get("daily") or []):
-            d = parse_iso_date(row.get("date"))
-            if not d:
-                continue
-            cell = by_date[d]
-            cell["net_sales"] += row.get("amount") or row.get("net_sales") or 0
-            cell["guests"]    += int(row.get("guests") or 0)
-            cell["orders"]    += int(row.get("orders") or 0)
-
-    if not by_date:
-        # Fallback to sales_summary
-        ss = payload.get("sales_summary") or {}
-        for rc_key, rc_body in ss.items():
-            if not isinstance(rc_body, dict):
-                continue
-            for row in (rc_body.get("daily") or []):
-                d = parse_iso_date(row.get("date"))
-                if not d:
-                    continue
-                cell = by_date[d]
-                cell["net_sales"] += row.get("net_sales") or 0
-                cell["guests"]    += int(row.get("guests") or 0)
-                cell["orders"]    += int(row.get("orders") or 0)
-
-    return sorted(
-        (DailyRow(d, c["net_sales"], c["guests"], c["orders"]) for d, c in by_date.items()),
-        key=lambda r: r.date,
-    )
+def resolve_uuid_to_outlet(uuid: str, name_lookup: dict[str, str]) -> str | None:
+    if uuid in SUPA_UUID_TO_OUTLET:
+        return SUPA_UUID_TO_OUTLET[uuid]
+    return name_to_outlet(name_lookup.get(uuid))
 
 
-# ---------- similar-day pattern matching (helixo-2 findSimilarDays) ----------
+# ---------- Supabase REST client ----------
 
-def similarity_score(snap_date: date, target_dow: int, target_month: int, today: date) -> float:
-    """Helixo-2's similarity scoring:
-       - 0.5 for same DOW, 0.2 for adjacent DOW
-       - 0.3 × (1 − monthDiff/3) for seasonal proximity
-       - 0.2 × (1 − ageDays/365) for recency
-    """
-    sim = 0.0
-    snap_dow = (snap_date.weekday() + 1) % 7  # JS-style Sun=0..Sat=6
-    if snap_dow == target_dow:
-        sim += 0.5
-    elif abs(snap_dow - target_dow) == 1:
-        sim += 0.2
-
-    # Seasonal proximity (months close together, wrapping at year-end)
-    snap_month = snap_date.month - 1
-    month_diff = min(abs(snap_month - target_month), 12 - abs(snap_month - target_month))
-    sim += 0.3 * max(0, 1 - month_diff / 3)
-
-    # Recency bonus
-    age_days = (today - snap_date).days
-    sim += 0.2 * max(0, 1 - age_days / 365)
-
-    return sim
+REQUEST_TIMEOUT = 60
 
 
-def find_similar_days(
-    history: list[DailyRow],
-    target_date: date,
-    today: date,
-    min_similarity: float = 0.3,
-    top_n: int = 10,
-) -> list[DailyRow]:
-    """Score each historical day against the target and return the top N."""
-    target_dow = (target_date.weekday() + 1) % 7  # JS Sun=0 convention
-    target_month = target_date.month - 1
-
-    scored: list[tuple[float, DailyRow]] = []
-    for row in history:
-        # Don't use the target date itself as a "similar day" — that
-        # would make historical-period forecasts trivially equal to actuals.
-        if row.date == target_date:
-            continue
-        # Skip zero-revenue days (closed days, data gaps) — they pull
-        # the forecast toward zero.
-        if row.net_sales <= 0:
-            continue
-        sim = similarity_score(row.date, target_dow, target_month, today)
-        if sim > min_similarity:
-            scored.append((sim, row))
-
-    scored.sort(key=lambda kv: -kv[0])
-    return [row for _, row in scored[:top_n]]
-
-
-# ---------- forecast generation ----------
-
-def generate_daily_forecast(
-    target_date: date,
-    history: list[DailyRow],
-    today: date,
-) -> dict | None:
-    """Generate a single day's forecast row.
-
-    Returns {date, net_sales, guests, orders} or None if there isn't
-    enough history to produce a meaningful prediction.
-
-    Faithful to helixo-2's:
-       baseCovers = historicalAvgCovers × dayFactor × seasonFactor × weatherFactor
-       avgCheck   = historicalAvgRevenue / historicalAvgCovers (or $35 fallback)
-       forecastedRevenue = forecastedCovers × avgCheckSize
-    """
-    similar = find_similar_days(history, target_date, today)
-    if not similar:
-        return None
-
-    avg_covers  = mean(r.guests    for r in similar) if any(r.guests for r in similar) else 0
-    avg_revenue = mean(r.net_sales for r in similar)
-    # Helixo-2 uses an order count proxy; we have orders directly.
-    avg_orders = mean(r.orders for r in similar) if any(r.orders for r in similar) else 0
-
-    target_dow = (target_date.weekday() + 1) % 7
-    day_factor    = DAY_OF_WEEK_MULTIPLIER.get(target_dow, 1.0)
-    season_factor = SEASONAL_MULTIPLIER.get(target_date.month - 1, 1.0)
-    weather_factor = 1.0  # Weather feed not wired in dashboards repo
-
-    multiplier = day_factor * season_factor * weather_factor
-
-    # NOTE: helixo-2 multiplies the mean of similar days by these factors,
-    # which slightly double-counts DOW/seasonal patterns (the similar
-    # days were already filtered by DOW + month). We mirror that
-    # behavior verbatim — when helixo-2 retunes their weights, we follow.
-    forecasted_covers  = round(avg_covers  * multiplier) if avg_covers  else 0
-    forecasted_revenue = round(avg_revenue * multiplier, 2)
-    forecasted_orders  = round(avg_orders  * multiplier) if avg_orders  else 0
-
-    return {
-        "date":      target_date.isoformat(),
-        "net_sales": forecasted_revenue,
-        "guests":    forecasted_covers,
-        "orders":    forecasted_orders,
-        # Tracking-grade fields — not consumed by the dashboard yet, but
-        # stored here so the next iteration can surface confidence + the
-        # actual similar-day pool that drove this prediction.
-        "_meta": {
-            "similar_days": len(similar),
-            "day_factor":    round(day_factor, 3),
-            "season_factor": round(season_factor, 3),
-            "model":         "weighted_ensemble" if len(similar) >= 5 else "historical_avg",
-        },
-    }
-
-
-def forecast_outlet(payload: dict, lookahead_days: int = 120) -> dict:
-    """Generate the full {forecast: {as_of, source, daily: [...]}} block."""
-    today = date.today()
-    history = collect_outlet_history(payload)
-    if not history:
-        return {
-            "as_of":  today.isoformat(),
-            "source": "forecast_engine_v1",
-            "daily":  [],
-            "_note":  "no historical revenue data — cannot forecast",
+class Supabase:
+    def __init__(self, url: str, key: str):
+        self.base = url.rstrip("/") + "/rest/v1"
+        self.headers = {
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Accept": "application/json",
         }
 
-    # Forecast EVERY historical date (lets the dashboard show vs-Forecast
-    # deltas for any past period the operator filters to) plus
-    # `lookahead_days` of forward dates.
-    start = history[0].date
-    end   = today + timedelta(days=lookahead_days)
+    def select(self, table: str, columns: str = "*",
+               filters: dict | None = None,
+               range_header: str | None = None) -> list[dict]:
+        params = {"select": columns}
+        if filters:
+            params.update(filters)
+        url = f"{self.base}/{table}?{urlencode(params)}"
+        headers = dict(self.headers)
+        if range_header:
+            headers["Range"] = range_header
+        r = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
+        if r.status_code not in (200, 206):
+            raise RuntimeError(f"Supabase {r.status_code} on {table}: {r.text[:300]}")
+        return r.json()
 
-    rows: list[dict] = []
-    cur = start
-    while cur <= end:
-        row = generate_daily_forecast(cur, history, today)
-        if row is not None:
-            rows.append(row)
-        cur += timedelta(days=1)
 
-    return {
-        "as_of":  today.isoformat(),
-        "source": "forecast_engine_v1 (helixo-2 port)",
-        "daily":  rows,
-        "_note":  f"history range {history[0].date.isoformat()} → {history[-1].date.isoformat()}; "
-                  f"forward window {lookahead_days}d",
-    }
+def fetch_all_forecasts(sb: Supabase) -> list[dict]:
+    """Pull every row from helixo-2 daily_forecasts. PostgREST 1000-row
+    page cap; loop with Range until exhausted.
+
+    We pull ai_suggested_revenue + ai_suggested_covers + ai_confidence
+    explicitly. We DELIBERATELY do not pull manager_revenue —
+    that's helixo-2's manager-override field, not the AI prediction.
+    """
+    out: list[dict] = []
+    page_size = 1000
+    offset = 0
+    while True:
+        rng = f"{offset}-{offset + page_size - 1}"
+        rows = sb.select(
+            "daily_forecasts",
+            columns="location_id,business_date,ai_suggested_revenue,ai_suggested_covers,ai_confidence",
+            range_header=rng,
+        )
+        if not rows:
+            break
+        out.extend(rows)
+        if len(rows) < page_size:
+            break
+        offset += page_size
+    return out
+
+
+def fetch_locations_by_id(sb: Supabase, uuids: list[str]) -> dict[str, str]:
+    if not uuids:
+        return {}
+    in_clause = "in.(" + ",".join(uuids) + ")"
+    rows = sb.select("locations", columns="id,name", filters={"id": in_clause})
+    return {r["id"]: r.get("name") for r in rows}
 
 
 # ---------- I/O ----------
@@ -300,8 +201,6 @@ def write_outlet(data_dir: Path, outlet_id: str, payload: dict) -> None:
     tmp.replace(p)
 
 
-# ---------- driver ----------
-
 def discover_outlets(data_dir: Path) -> list[str]:
     return sorted(
         p.stem for p in data_dir.glob("*.json")
@@ -309,12 +208,136 @@ def discover_outlets(data_dir: Path) -> list[str]:
     )
 
 
+# ---------- driver ----------
+
+def cmd_probe(sb: Supabase) -> int:
+    print(f"Probing {sb.base}/daily_forecasts ...\n")
+    try:
+        rows = sb.select(
+            "daily_forecasts",
+            columns="location_id,business_date,ai_suggested_revenue,manager_revenue,is_override",
+            filters={"limit": "5"},
+        )
+        print(f"  ✓ daily_forecasts reachable ({len(rows)} sample row(s))")
+        for r in rows:
+            ai = r.get("ai_suggested_revenue")
+            mgr = r.get("manager_revenue")
+            ovr = r.get("is_override")
+            print(f"    {r.get('business_date')}  loc={r.get('location_id', '')[:8]}…  "
+                  f"ai=${ai}  mgr=${mgr}  override={ovr}")
+        return 0
+    except Exception as e:
+        sys.stderr.write(f"  ✗ {e}\n")
+        return 1
+
+
+def cmd_print_config(sb: Supabase) -> int:
+    rows = fetch_all_forecasts(sb)
+    by_loc: dict[str, dict] = defaultdict(lambda: {"total": 0, "with_ai": 0, "min": "", "max": ""})
+    for r in rows:
+        c = by_loc[r["location_id"]]
+        c["total"] += 1
+        if r.get("ai_suggested_revenue") is not None:
+            c["with_ai"] += 1
+        d = (r.get("business_date") or "")[:10]
+        if d:
+            c["min"] = d if not c["min"] or d < c["min"] else c["min"]
+            c["max"] = d if not c["max"] or d > c["max"] else c["max"]
+
+    if not by_loc:
+        print("(no daily_forecasts rows in helixo-2)")
+        return 0
+
+    name_lookup = fetch_locations_by_id(sb, sorted(by_loc.keys()))
+    print(f"{'location_id':<40}  {'name':<32}  {'outlet':<14}  {'total':>6}  {'ai_set':>7}  range")
+    print("-" * 130)
+    for uuid, c in sorted(by_loc.items(), key=lambda kv: -kv[1]["with_ai"]):
+        name = name_lookup.get(uuid, "(unknown)")
+        outlet = resolve_uuid_to_outlet(uuid, name_lookup) or "—"
+        rng = f"{c['min']} → {c['max']}" if c["min"] else ""
+        print(f"{uuid:<40}  {(name or ''):<32}  {outlet:<14}  {c['total']:>6}  {c['with_ai']:>7}  {rng}")
+    return 0
+
+
+def cmd_sync(sb: Supabase, data_dir: Path, only_outlet: str = "") -> int:
+    rows = fetch_all_forecasts(sb)
+    if not rows:
+        sys.stderr.write("no daily_forecasts rows in helixo-2 — nothing to sync\n")
+        return 0
+    name_lookup = fetch_locations_by_id(sb, sorted({r["location_id"] for r in rows}))
+
+    by_outlet: dict[str, list[dict]] = defaultdict(list)
+    skipped: dict[str, int] = defaultdict(int)
+    no_ai = 0
+    for r in rows:
+        if r.get("ai_suggested_revenue") is None:
+            # Row exists but AI hasn't filled it in yet — drop it. Don't
+            # fall through to manager_revenue (per Ross — that's the
+            # human override, not the AI prediction).
+            no_ai += 1
+            continue
+        outlet = resolve_uuid_to_outlet(r["location_id"], name_lookup)
+        if not outlet:
+            skipped[r["location_id"]] += 1
+            continue
+        # Schema mirrors forecast.daily / budget.daily for tri-comparison
+        # helper compat. Covers come straight from ai_suggested_covers
+        # when set; null otherwise (the dashboard renders "—" for null).
+        covers = r.get("ai_suggested_covers")
+        by_outlet[outlet].append({
+            "date":      (r.get("business_date") or "")[:10],
+            "net_sales": float(r["ai_suggested_revenue"]),
+            "guests":    int(float(covers)) if covers is not None else None,
+            "orders":    None,
+            "ai_confidence": r.get("ai_confidence"),
+        })
+
+    if no_ai:
+        sys.stderr.write(f"  ! {no_ai} daily_forecasts row(s) had null ai_suggested_revenue — skipped\n")
+    if skipped:
+        sys.stderr.write("  ! skipped forecast rows from unmapped locations:\n")
+        for uuid, count in sorted(skipped.items(), key=lambda x: -x[1]):
+            nm = name_lookup.get(uuid, "(unknown)")
+            sys.stderr.write(f"      uuid={uuid} name={nm!r}  rows={count}\n")
+
+    today = date.today().isoformat()
+    targets = [only_outlet] if only_outlet else sorted(by_outlet.keys())
+    print(f"Writing forecast.daily to {len(targets)} outlet(s) — source: helixo-2 ai_suggested_revenue")
+    for outlet in targets:
+        daily = sorted(by_outlet.get(outlet, []), key=lambda r: r["date"])
+        if not daily:
+            sys.stderr.write(f"  ! {outlet}: no AI forecast rows from helixo-2 — leaving forecast.daily empty\n")
+            payload = load_outlet(data_dir, outlet)
+            payload["forecast"] = {
+                "as_of":  today,
+                "source": "helixo2_daily_forecasts.ai_suggested_revenue",
+                "daily":  [],
+                "_note":  "no AI rows for this outlet in helixo-2 daily_forecasts (yet)",
+            }
+            write_outlet(data_dir, outlet, payload)
+            continue
+        payload = load_outlet(data_dir, outlet)
+        payload["forecast"] = {
+            "as_of":  today,
+            "source": "helixo2_daily_forecasts.ai_suggested_revenue",
+            "daily":  daily,
+            "_note":  f"range {daily[0]['date']} → {daily[-1]['date']} · {len(daily)} days · "
+                      f"ai_suggested_revenue (NOT manager_revenue)",
+        }
+        write_outlet(data_dir, outlet, payload)
+        rev_total = sum(r["net_sales"] for r in daily)
+        future = [r for r in daily if r["date"] > today]
+        print(f"  ✓ {outlet:<14} {len(daily):>4} days, ${rev_total:,.0f} total · {len(future)} forward")
+
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    ap.add_argument("--data-dir",  default="../data", help="dir of <outlet>.json")
-    ap.add_argument("--outlet",    default="",       help="single outlet id (default: all)")
-    ap.add_argument("--lookahead", type=int, default=120, help="forward window in days (default 120)")
-    ap.add_argument("--dry-run",   action="store_true", help="print summaries; no writes")
+    ap.add_argument("--data-dir",     default="../data", help="dir of <outlet>.json")
+    ap.add_argument("--outlet",       default="",       help="single outlet id (default: all)")
+    ap.add_argument("--probe",        action="store_true", help="auth-only probe")
+    ap.add_argument("--print-config", action="store_true", help="show daily_forecasts→outlet routing")
     args = ap.parse_args(argv)
 
     data_dir = Path(args.data_dir).resolve()
@@ -322,26 +345,21 @@ def main(argv: list[str] | None = None) -> int:
         sys.stderr.write(f"data dir not found: {data_dir}\n")
         return 1
 
-    outlets = [args.outlet] if args.outlet else discover_outlets(data_dir)
-    if not outlets:
-        sys.stderr.write("no outlets to forecast\n")
-        return 1
+    sb_url = os.environ.get("SUPABASE_URL", "").rstrip("/")
+    sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+    if not (sb_url and sb_key):
+        sys.stderr.write(
+            "SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY required — "
+            "exiting cleanly (no-op).\n"
+        )
+        return 0
+    sb = Supabase(sb_url, sb_key)
 
-    print(f"Forecasting {len(outlets)} outlet(s) — lookahead {args.lookahead}d")
-    for oid in outlets:
-        payload = load_outlet(data_dir, oid)
-        block = forecast_outlet(payload, lookahead_days=args.lookahead)
-        rows = block.get("daily") or []
-        future = [r for r in rows if r["date"] > date.today().isoformat()]
-        past   = [r for r in rows if r["date"] <= date.today().isoformat()]
-        rev_30 = sum(r["net_sales"] for r in future[:30])
-        print(f"  {oid:<14} history+forecast rows={len(rows):>5} (past={len(past)}, future={len(future)}) "
-              f"next-30d ${rev_30:,.0f}")
-        if not args.dry_run:
-            payload["forecast"] = block
-            write_outlet(data_dir, oid, payload)
-
-    return 0
+    if args.probe:
+        return cmd_probe(sb)
+    if args.print_config:
+        return cmd_print_config(sb)
+    return cmd_sync(sb, data_dir, only_outlet=args.outlet)
 
 
 if __name__ == "__main__":
