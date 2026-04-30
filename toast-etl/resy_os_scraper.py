@@ -432,6 +432,7 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
         return 1
 
     healthcheck_zero_count = 0
+    healthcheck_total_new = 0
     failures: list[str] = []
 
     with sync_playwright() as p:
@@ -507,6 +508,8 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
                   f"(+{n_surveys - n_existing})")
             if n_surveys == n_existing:
                 healthcheck_zero_count += 1
+            else:
+                healthcheck_total_new += (n_surveys - n_existing)
             payload["guest"] = new_guest
             payload["generated_at_resy"] = datetime.now(timezone.utc).isoformat()
             write_outlet(data_dir, oid, payload)
@@ -515,13 +518,28 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
 
     if failures:
         sys.stderr.write(f"\n{len(failures)} venue(s) failed: {failures}\n")
-    if healthcheck_zero_count > 2:
+
+    # Session-expiry detection: a dead storage state means EVERY venue gets
+    # redirected to login and writes 0 new rows. So the only reliable
+    # "session expired" signal is `total new surveys across the whole
+    # portfolio == 0`. A per-venue zero count alone is noisy — vessel
+    # (private events, no Resy), rosemary_rose (~2 surveys ever), and
+    # quoin (low volume) routinely come back empty even with a healthy
+    # session. Earlier logic exited 1 at >2 zero-venues, which threw away
+    # successful pulls on quiet days. See PR #52 / 2026-04-30 incident.
+    if healthcheck_total_new == 0 and len(targets) > 1:
         sys.stderr.write(
-            f"\n[healthcheck] {healthcheck_zero_count} venues had 0 new "
-            f"surveys — storage state likely expired. Run "
-            f"tools/refresh_resy_storage.py to reseed.\n"
+            "\n[healthcheck] 0 new surveys across all venues — storage "
+            "state likely expired. Run tools/refresh_resy_storage.py to "
+            "reseed.\n"
         )
         return 1
+    if healthcheck_zero_count > 2:
+        sys.stderr.write(
+            f"\n[healthcheck] {healthcheck_zero_count} venues quiet "
+            f"(0 new), but {healthcheck_total_new} new surveys captured "
+            f"elsewhere — session healthy, continuing.\n"
+        )
     return 0 if not failures else 1
 
 
