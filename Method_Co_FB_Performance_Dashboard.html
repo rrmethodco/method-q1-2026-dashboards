@@ -1431,6 +1431,17 @@ const POSITION_SYNONYMS = {
   'bar prep': 'Bartender',
   'event server': 'Server',
 };
+// Phantom labor jobs — Toast register/drawer artifacts that log "hours"
+// but don't represent a real person. Always $0 cost, but they bloat the
+// hours denominator and skew SPMH / Covers-per-Hr / Avg Wage. Excluded
+// from all labor reports. Per Ross 2026-04-30.
+const LABOR_PHANTOM_JOBS = new Set([
+  'ghost drawer',
+]);
+function isPhantomJob(canonicalTitle) {
+  if (!canonicalTitle) return false;
+  return LABOR_PHANTOM_JOBS.has(String(canonicalTitle).toLowerCase().trim());
+}
 function canonicalJobTitle(title) {
   if (!title) return title || 'Unknown';
   let s = String(title).trim();
@@ -1487,13 +1498,38 @@ function renderLaborSection() {
   const periodLabel = currentPeriodLabel();
   const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
 
+  // Phantom-hours map (in-period). Ghost Drawer & friends log hours against
+  // a register/drawer rather than a person; their cost is always $0, but
+  // they show up in lab.daily totals and inflate the hours denominator.
+  // Pre-compute per-date so we can subtract from labRows / labSum / the
+  // trend chart join. Phantom rows are also filtered from byJob below.
+  const phantomByDate = new Map();
+  let phantomHrsTotal = 0;
+  if (Array.isArray(lab.by_job_daily) && lab.by_job_daily.length) {
+    for (const r of lab.by_job_daily) {
+      if (!inRange(r.date)) continue;
+      if (!isPhantomJob(canonicalJobTitle(r.title))) continue;
+      const ph = r.hours || 0;
+      phantomByDate.set(r.date, (phantomByDate.get(r.date) || 0) + ph);
+      phantomHrsTotal += ph;
+    }
+  }
+
   // Labor in period — gated by FOH/BOH/Total filter. When filter is
   // 'total' we use the daily roll-up directly. When 'foh' or 'boh' we
   // re-aggregate from by_job_daily (which IS classified) so the KPIs
   // accurately reflect just that side of the house.
   let labSum, totalHrs, labRows;
   if (laborFilter === 'total' || !Array.isArray(lab.by_job_daily) || !lab.by_job_daily.length) {
-    labRows = lab.daily.filter(r => inRange(r.date));
+    // Subtract phantom hours from each day's regular_hours so daily charts
+    // and KPIs reflect "real people" only. Phantom cost is $0 so cost
+    // fields don't move.
+    labRows = lab.daily.filter(r => inRange(r.date)).map(r => {
+      const ph = phantomByDate.get(r.date) || 0;
+      return ph > 0
+        ? { ...r, regular_hours: Math.max(0, (r.regular_hours || 0) - ph) }
+        : r;
+    });
     labSum = labRows.reduce((a, r) => ({
       regular_hours: a.regular_hours + (r.regular_hours || 0),
       overtime_hours: a.overtime_hours + (r.overtime_hours || 0),
@@ -1543,6 +1579,7 @@ function renderLaborSection() {
     for (const r of lab.by_job_daily) {
       if (!inRange(r.date)) continue;
       const canonical = canonicalJobTitle(r.title);
+      if (isPhantomJob(canonical)) continue; // Drop Ghost Drawer + register artifacts entirely.
       const cls = classifyFohBoh(canonical);
       if (!filterPasses(cls)) continue;
       const cur = acc.get(canonical) || {
@@ -1570,6 +1607,7 @@ function renderLaborSection() {
     const acc = new Map();
     for (const r of (lab.by_job || [])) {
       const canonical = canonicalJobTitle(r.title);
+      if (isPhantomJob(canonical)) continue;
       const cls = classifyFohBoh(canonical);
       if (!filterPasses(cls)) continue;
       const cur = acc.get(canonical) || {
@@ -1632,12 +1670,16 @@ function renderLaborSection() {
 
   // FOH/BOH always-on split (independent of laborFilter chip) — drives the
   // Efficiency strip's FOH-vs-BOH comparisons. Re-walk by_job_daily so this
-  // works even when laborFilter === 'total'.
+  // works even when laborFilter === 'total'. Phantom jobs are OTHER class
+  // anyway, but guard explicitly so future phantoms in FOH/BOH-named
+  // categories still get dropped.
   let fohHrs = 0, fohCost = 0, bohHrs = 0, bohCost = 0;
   if (Array.isArray(lab.by_job_daily) && lab.by_job_daily.length) {
     for (const r of lab.by_job_daily) {
       if (!inRange(r.date)) continue;
-      const cls = classifyFohBoh(canonicalJobTitle(r.title));
+      const canonical = canonicalJobTitle(r.title);
+      if (isPhantomJob(canonical)) continue;
+      const cls = classifyFohBoh(canonical);
       if (cls === 'foh')      { fohHrs += r.hours || 0; fohCost += r.cost || 0; }
       else if (cls === 'boh') { bohHrs += r.hours || 0; bohCost += r.cost || 0; }
     }
@@ -1843,7 +1885,7 @@ function renderLaborSection() {
                                  : r.foh_boh === 'boh' ? 'var(--royal)'
                                  : 'var(--muted)';
                   return `<tr${tooltip}>
-                    <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}${(r.original_titles && r.original_titles.length > 1) ? ` <span style="color:var(--muted); font-size:10px">(×${r.original_titles.length})</span>` : ''}</td>
+                    <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}</td>
                     <td><span style="display:inline-block; padding:2px 8px; font-size:9px; letter-spacing:0.1em; background:${clsColor}; color:#fff; border-radius:2px;">${cls}</span></td>
                     <td style="text-align:right">${fmtHrs(r.hours)}</td>
                     <td style="text-align:right">${r.days != null ? r.days : '—'}</td>
@@ -2161,8 +2203,21 @@ function buildLaborTrendDaily(lab, ssDaily) {
   // Index sales by date so we can join in O(1).
   const ssByDate = Object.create(null);
   ssDaily.forEach(r => { ssByDate[r.date] = r; });
+  // Build phantom-hours-by-date from by_job_daily so we can strip Ghost
+  // Drawer-style register artifacts from the daily series. Cost on phantom
+  // rows is always $0, so only hours need adjusting.
+  const phantomByDate = Object.create(null);
+  if (Array.isArray(lab.by_job_daily)) {
+    lab.by_job_daily.forEach(r => {
+      if (isPhantomJob(canonicalJobTitle(r.title))) {
+        phantomByDate[r.date] = (phantomByDate[r.date] || 0) + (r.hours || 0);
+      }
+    });
+  }
   return (lab.daily || []).map(r => {
-    const hours    = (r.regular_hours || 0) + (r.overtime_hours || 0);
+    const rawHours = (r.regular_hours || 0) + (r.overtime_hours || 0);
+    const ph       = phantomByDate[r.date] || 0;
+    const hours    = Math.max(0, rawHours - ph);
     const cost     = r.total_cost || 0;
     const otHrs    = r.overtime_hours || 0;
     const otCost   = r.overtime_cost || 0;
