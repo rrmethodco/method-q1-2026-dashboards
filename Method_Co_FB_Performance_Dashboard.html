@@ -508,31 +508,36 @@ function hoursPerDayFor(outletId, rcKey) {
 // simple cases and "outletId:rcKey" for outlets whose RCs have different
 // service models (e.g. LSBR = Le Suprême full-service dinner vs Bar Rotunda
 // bar-forward). revpash is $/seat-hour. ticketMin is Toast open→paid minutes.
+// Industry-typical comps & discounts target % of net sales by concept
+// (used for the "vs Target" line on the Comps & Discounts KPI card).
+// 3% is the midpoint of the 2-4% industry-typical range for full-service
+// hospitality. Bars/lounges run higher (3-5%) due to manager-comp drinks.
+// All numbers are percent-of-net-sales, NOT percent-of-gross.
 const BENCHMARKS = {
   // LSBR — French bistro + attached cocktail bar
-  'lsbr':                  { concept: 'Upscale French Bistro',        revpash: [18, 28], ticketMin: [75, 120] },
-  'lsbr:le_supreme':       { concept: 'Upscale French Bistro',        revpash: [18, 28], ticketMin: [75, 120] },
-  'lsbr:bar_rotunda':      { concept: 'Hotel Cocktail Bar / Lounge',  revpash: [12, 22], ticketMin: [30, 60]  },
+  'lsbr':                  { concept: 'Upscale French Bistro',        revpash: [18, 28], ticketMin: [75, 120], compDiscTarget: 3 },
+  'lsbr:le_supreme':       { concept: 'Upscale French Bistro',        revpash: [18, 28], ticketMin: [75, 120], compDiscTarget: 3 },
+  'lsbr:bar_rotunda':      { concept: 'Hotel Cocktail Bar / Lounge',  revpash: [12, 22], ticketMin: [30, 60],  compDiscTarget: 4 },
   // Book Tower F&B — omakase
-  'hirokisan':             { concept: 'Upscale Japanese / Omakase',   revpash: [22, 32], ticketMin: [90, 150] },
+  'hirokisan':             { concept: 'Upscale Japanese / Omakase',   revpash: [22, 32], ticketMin: [90, 150], compDiscTarget: 2 },
   // HIROKI Philly — similar concept to Detroit
-  'hiroki':                { concept: 'Upscale Japanese',              revpash: [22, 32], ticketMin: [90, 150] },
+  'hiroki':                { concept: 'Upscale Japanese',              revpash: [22, 32], ticketMin: [90, 150], compDiscTarget: 2 },
   // Mulherin's — Italian neighborhood FSR
-  'mulherins':             { concept: 'Upscale Italian FSR',           revpash: [18, 28], ticketMin: [75, 120] },
+  'mulherins':             { concept: 'Upscale Italian FSR',           revpash: [18, 28], ticketMin: [75, 120], compDiscTarget: 3 },
   // Kampers — casual all-day
-  'kampers':               { concept: 'Casual All-Day FSR',            revpash: [10, 18], ticketMin: [45, 75]  },
+  'kampers':               { concept: 'Casual All-Day FSR',            revpash: [10, 18], ticketMin: [45, 75],  compDiscTarget: 3 },
   // Anthology — pure events, traditional RevPASH doesn't apply (use per sellable-hour)
-  'anthology':             { concept: 'Private Events',                revpash: null,     ticketMin: null      },
+  'anthology':             { concept: 'Private Events',                revpash: null,     ticketMin: null,      compDiscTarget: 2 },
   // Quoin — hotel rooftop / multiple outlets
-  'quoin':                 { concept: 'Hotel Rooftop Bar',             revpash: [12, 22], ticketMin: [30, 60]  },
+  'quoin':                 { concept: 'Hotel Rooftop Bar',             revpash: [12, 22], ticketMin: [30, 60],  compDiscTarget: 4 },
   // Lowland — FSR
-  'lowland':               { concept: 'Upscale FSR',                   revpash: [18, 28], ticketMin: [75, 120] },
+  'lowland':               { concept: 'Upscale FSR',                   revpash: [18, 28], ticketMin: [75, 120], compDiscTarget: 3 },
   // Rosemary Rose, Little Wing, Vessel — cocktail-forward concepts
-  'rosemaryrose':          { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60]  },
-  'littlewing':            { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60]  },
-  'vessel':                { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60]  },
+  'rosemaryrose':          { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60],  compDiscTarget: 4 },
+  'littlewing':            { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60],  compDiscTarget: 4 },
+  'vessel':                { concept: 'Cocktail / Wine Bar',           revpash: [12, 22], ticketMin: [30, 60],  compDiscTarget: 4 },
   // Fallback for anything unmapped
-  '_default':              { concept: 'Full-Service F&B',              revpash: [14, 22], ticketMin: [60, 90]  },
+  '_default':              { concept: 'Full-Service F&B',              revpash: [14, 22], ticketMin: [60, 90],  compDiscTarget: 3 },
 };
 function getBenchmarks(outletId, rcKey) {
   return BENCHMARKS[`${outletId}:${rcKey}`] || BENCHMARKS[outletId] || BENCHMARKS._default;
@@ -3039,7 +3044,7 @@ function renderRevenueSection() {
           </div>
           <div class="card-compare" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             <select id="trendMetricFilter" title="Metric">
-              <option value="revenue"   ${STATE.trendMetric==='revenue'  ?'selected':''}>Total F&amp;B Revenue</option>
+              <option value="revenue"   ${STATE.trendMetric==='revenue'  ?'selected':''}>Revenue</option>
               <option value="covers"    ${STATE.trendMetric==='covers'   ?'selected':''}>Covers</option>
               <option value="avgCheck"  ${STATE.trendMetric==='avgCheck' ?'selected':''}>Average Check</option>
               <option value="revpash"   ${STATE.trendMetric==='revpash'  ?'selected':''}>RevPASH</option>
@@ -3716,7 +3721,35 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
     { label: 'Net Sales',           val: fmtMoneyFull(cs.net_sales),                            cmpKey: 'net_sales',   sub: null },
     { label: 'Covers',              val: fmtNum(cs.guests),                                     cmpKey: 'guests',      sub: null },
     { label: 'Guest Avg',           val: guestAvg != null ? '$' + guestAvg.toFixed(2) : '—',    cmpKey: 'guestAvg',    sub: 'Net ÷ Covers',   curVal: guestAvg },
-    { label: 'Comps & Discounts %', val: compDiscPct == null ? '—' : fmtPct(compDiscPct),       cmpKey: null,          sub: compDiscPct == null ? 'awaiting Order Details' : fmtMoneyFull(co.disc) + ' in comps', invert: true },
+    { label: 'Comps & Discounts %', val: compDiscPct == null ? '—' : fmtPct(compDiscPct),
+      cmpKey: null,
+      // Custom multi-line delta block: vs STLY (using cmpCompDiscPct
+      // already computed above) + vs Target (industry-typical from
+      // BENCHMARKS.compDiscTarget for this concept). Down is good for
+      // both, so invertColor=true.
+      multiDelta: (() => {
+        if (compDiscPct == null) return null;
+        const lines = [];
+        if (cmpCompDiscPct != null) {
+          // Percentage-point delta — render as "-0.6 pp"
+          const pp = compDiscPct - cmpCompDiscPct;
+          const isGood = pp <= 0;
+          const cls = isGood ? 'pos' : 'neg';
+          lines.push({ label: 'vs STLY', html: `<span class="yoy ${cls}" style="font-size:11px;">vs STLY ${pp >= 0 ? '+' : ''}${pp.toFixed(1)} pp</span>` });
+        } else {
+          lines.push({ label: 'vs STLY', html: `<span class="yoy neutral" style="font-size:11px;opacity:.55;">vs STLY —</span>` });
+        }
+        const tgt = bench && bench.compDiscTarget;
+        if (tgt != null) {
+          const pp = compDiscPct - tgt;
+          const isGood = pp <= 0;
+          const cls = isGood ? 'pos' : 'neg';
+          lines.push({ label: 'vs Target', html: `<span class="yoy ${cls}" style="font-size:11px;">vs Target ${pp >= 0 ? '+' : ''}${pp.toFixed(1)} pp <span style="opacity:.6">(${tgt}% ${bench.concept || 'industry'})</span></span>` });
+        }
+        return lines;
+      })(),
+      sub: compDiscPct == null ? 'awaiting Order Details' : fmtMoneyFull(co.disc) + ' in comps',
+      invert: true },
     { label: 'RevPASH',             val: revPASH != null ? '$' + revPASH.toFixed(2) : '—',      cmpKey: null,          sub: revPashSub },
     { label: 'Avg Ticket Time',     val: avgTicketMin != null ? avgTicketMin.toFixed(1) + ' min' : '—', cmpKey: null,  sub: ticketSub, invert: true,
       // Avg Ticket Time keeps its STLY-only delta (forecast/budget don't
@@ -3727,10 +3760,16 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
   ];
 
   document.getElementById('kpiRow').innerHTML = cards.map(c => {
-    // Delta block — three lines (Forecast / STLY / Budget) when cmpKey set.
-    // Cards without a cmpKey fall back to a single-delta or empty block.
+    // Delta block precedence:
+    //   1. multiDelta — array of pre-built {html} lines (used by Comps
+    //      & Discounts to mix STLY + Target benchmarks).
+    //   2. cmpKey      — auto-build the 3-way (Forecast/STLY/Budget) tri-comparison.
+    //   3. singleDelta — one explicit delta line (Avg Ticket Time vs STLY).
+    //   4. nothing     — render an empty placeholder block to keep card heights aligned.
     let deltaHtml;
-    if (c.cmpKey) {
+    if (c.multiDelta && c.multiDelta.length) {
+      deltaHtml = `<div class="kpi-cmp">${c.multiDelta.map(l => `<div>${l.html}</div>`).join('')}</div>`;
+    } else if (c.cmpKey) {
       const v = c.curVal != null ? c.curVal : (
         c.cmpKey === 'net_sales' ? cs.net_sales :
         c.cmpKey === 'guests'    ? cs.guests :
@@ -4276,18 +4315,17 @@ function renderRC() {
       ' (PMIX window — Toast PMIX is all-time, not period-scoped)';
   }
 
-  // Build the list as a plain HTML table — same column structure as the
-  // legacy Top 25 Items table further down the page, scaled to the 10
-  // rows the operator asked for. % share is of the FILTERED bucket
-  // (not the full PMIX universe) so the percentages add up to a
-  // meaningful share-of-category number for the selected category.
+  // Build the list as a plain HTML table — # / Item / Qty / Avg / Net /
+  // Share. The Cat column was dropped per operator: the active filter
+  // (e.g. "Liquor") already implies category, so the column was just
+  // restating the filter selection on every row. % share is of the
+  // FILTERED bucket so picking Liquor shows share-of-Liquor.
   const bucketTotal = filtered.reduce((s, r) => s + (r.net || 0), 0) || 1;
   const tableRows = rows.map((r, i) => {
     const pct = (r.net || 0) / bucketTotal * 100;
     return `<tr>
       <td class="num" style="color:var(--royal);">${i + 1}</td>
       <td>${(r.item || '—').replace(/</g, '&lt;')}</td>
-      <td style="color:var(--royal);font-size:11px;">${(r.category || '—').replace(/</g, '&lt;')}</td>
       <td class="num">${fmtNum(r.qty || 0)}</td>
       <td class="num">$${(r.avg_price || 0).toFixed(2)}</td>
       <td class="num"><b>${fmtMoneyFull(r.net || 0)}</b></td>
@@ -4301,7 +4339,6 @@ function renderRC() {
         <tr style="border-bottom:2px solid var(--turquoise);">
           <th style="text-align:right;padding:8px 6px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;width:36px;">#</th>
           <th style="text-align:left; padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Item</th>
-          <th style="text-align:left; padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Cat</th>
           <th style="text-align:right;padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Qty</th>
           <th style="text-align:right;padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Avg</th>
           <th style="text-align:right;padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Net Sales</th>
