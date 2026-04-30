@@ -367,6 +367,14 @@ Chart.defaults.borderColor = C.grey;
 Chart.defaults.plugins.legend.labels.usePointStyle = true;
 Chart.defaults.plugins.legend.labels.boxWidth = 8;
 Chart.defaults.plugins.legend.labels.padding = 14;
+// Time-axis tooltips default to a localized full timestamp ("Apr 27,
+// 2026, 12:00:00 p.m.") because we parse dates as local-noon to dodge
+// the UTC-midnight timezone shift. Override the time-scale tooltip
+// format globally to date-only so daily/weekly/monthly bars and lines
+// don't show a meaningless "12:00:00 PM" suffix.
+Chart.defaults.scales = Chart.defaults.scales || {};
+Chart.defaults.scales.time = Chart.defaults.scales.time || {};
+Chart.defaults.scales.time.tooltipFormat = 'MMM d, yyyy';
 
 // ================================================== Utils
 const fmtMoney = v => { if (v == null || isNaN(v)) return '—'; const a=Math.abs(v); if (a>=1e6) return '$'+(v/1e6).toFixed(2)+'M'; if (a>=1e3) return '$'+(v/1e3).toFixed(1)+'K'; return '$'+v.toFixed(0); };
