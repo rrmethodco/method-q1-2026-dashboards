@@ -249,23 +249,50 @@ footer.foot b { color: var(--slate); }
 .snap-table td.num { font-variant-numeric: tabular-nums; }
 .snap-week-picker { font-family: var(--font-stack); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--royal); padding: 8px 12px; border: 1px solid var(--grey); background: #fff; }
 
-/* ======= Print / PDF export ======= */
+/* ======= Print / PDF export =======
+   Tuned to fit the full Weekly Snapshot — header + 3 KPI rows + wins +
+   concerns + action items + period comparison table — onto a single
+   letter portrait page. The page is hard-clamped via `html { height
+   100vh; overflow: hidden }` while printing, and snap-print-only sizing
+   tokens collapse paddings + font sizes ~30% across the board so 7.5"
+   × 10" of usable area is never exceeded. If new sections get added,
+   bump down the snap-card-value or snap-section padding rather than
+   removing page-fit clamps.                                                */
 @media print {
-  @page { size: letter portrait; margin: 0.5in 0.55in 0.5in 0.55in; }
-  body, html { background: #fff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  @page { size: letter portrait; margin: 0.3in 0.35in 0.3in 0.35in; }
+  html, body { background: #fff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; height: auto !important; }
+  body { font-size: 10px !important; }
   .app { grid-template-columns: 1fr !important; }
-  aside.nav, .controls, .outlet-property-select, .snap-print-btn, footer.foot { display: none !important; }
+  aside.nav, .controls, .outlet-property-select, .snap-print-btn, footer.foot, #snapWeekPicker { display: none !important; }
   .main { padding: 0 !important; }
-  .outlet-head { padding: 0 0 8px 0 !important; border-bottom: 1px solid #ccc; margin-bottom: 12px !important; }
-  .snap-head { margin: 0 0 12px 0 !important; padding-bottom: 8px !important; }
-  .snap-grid { padding: 0 !important; gap: 12px !important; }
-  .snap-section, .snap-card { break-inside: avoid; page-break-inside: avoid; }
-  .snap-row { gap: 8px !important; }
-  .snap-card { padding: 10px 12px !important; }
-  .snap-card-value { font-size: 22px !important; }
-  .snap-section { padding: 12px 14px !important; }
-  .snap-list li { padding: 6px 0 !important; font-size: 11px !important; }
-  .snap-section + .snap-section { margin-top: 10px; }
+  .outlet-head { display: none !important; }
+  /* Header — tighter, drop sub-line copy */
+  .snap-head { margin: 0 0 6px 0 !important; padding-bottom: 4px !important; border-bottom-width: 1px !important; }
+  .snap-head-left .snap-eyebrow { font-size: 8px !important; margin-bottom: 1px !important; }
+  .snap-head-left .snap-title { font-size: 16px !important; }
+  .snap-head-left .snap-sub { font-size: 9px !important; margin-top: 1px !important; }
+  /* Grid — kill all the breathing room */
+  .snap-grid { padding: 0 !important; gap: 5px !important; }
+  .snap-row { gap: 5px !important; }
+  /* KPI cards — 4 across × 3 rows, tight */
+  .snap-card { padding: 5px 7px !important; border-width: 1px !important; }
+  .snap-card-label { font-size: 7px !important; letter-spacing: 0.10em !important; margin-bottom: 1px !important; }
+  .snap-card-value { font-size: 14px !important; line-height: 1.0 !important; }
+  .snap-card-delta { font-size: 8px !important; margin-top: 2px !important; line-height: 1.2 !important; }
+  /* Sections (wins / concerns / action items / table) */
+  .snap-section { padding: 6px 8px !important; }
+  .snap-section-title { font-size: 9px !important; letter-spacing: 0.12em !important; margin-bottom: 4px !important; padding-bottom: 3px !important; }
+  .snap-list li { padding: 2px 0 !important; font-size: 9px !important; line-height: 1.3 !important; }
+  .snap-list li::before { font-size: 8px !important; margin-right: 4px !important; }
+  /* Period Comparison table — compact rows */
+  .snap-table { font-size: 8.5px !important; }
+  .snap-table th, .snap-table td { padding: 2px 4px !important; }
+  .snap-table th { font-size: 7px !important; letter-spacing: 0.08em !important; }
+  /* Avoid orphaning sections to a 2nd page */
+  .snap-section, .snap-card, .snap-row { break-inside: avoid; page-break-inside: avoid; }
+  .snap-section + .snap-section { margin-top: 0 !important; }
+  /* Hard one-page clamp — anything that would spill is hidden, not paginated */
+  body { overflow: hidden !important; }
 }
 </style>
 </head>
