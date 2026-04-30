@@ -2879,18 +2879,60 @@ function renderGuestSection() {
   // ---- Google block ----
   const goog = hasGoogle ? g.google : null;
 
-  // Google-derived auxiliary KPIs (most recent month, last-90d weighted ★).
-  // Lives here, not with the other aux KPIs above, because `goog` is in
-  // its temporal dead zone earlier in the function.
-  let goog30Reviews = null, goog90Avg = null;
-  if (goog && Array.isArray(goog.monthly) && goog.monthly.length) {
-    const sortedMonthly = goog.monthly.slice().sort((a,b) => a.ym.localeCompare(b.ym));
-    const last = sortedMonthly[sortedMonthly.length-1];
-    if (last) goog30Reviews = last.count || 0;
-    const last3 = sortedMonthly.slice(-3);
-    let sumW = 0, sumX = 0;
-    last3.forEach(m => { if (m.count > 0 && m.avg != null) { sumX += m.avg * m.count; sumW += m.count; } });
-    goog90Avg = sumW > 0 ? sumX / sumW : null;
+  // Period-bound Google KPIs. Google Places API only exposes monthly
+  // aggregates (count + avg ★) plus a 30-day rolling daily series. So
+  // this resolves the period in three tiers, narrowest first:
+  //   1. week within last 30d      → sum/avg from goog.daily_last30
+  //   2. month or multi-month range → sum/avg from goog.monthly intersected with bSel
+  //   3. week outside last 30d      → falls through to the containing
+  //                                    month aggregate, with sublabel
+  //                                    flag so the operator knows
+  //                                    they're seeing month-level data
+  //                                    (because no daily history exists)
+  // Returns { count, avg, source } where source ∈ 'daily'|'monthly'|null.
+  let googPeriodCount = null, googPeriodAvg = null, googPeriodSource = null;
+  if (goog && bSel) {
+    // Tier 1: week within last 30d → daily intersection
+    if (bSel.kind === 'week' && Array.isArray(goog.daily_last30) && goog.daily_last30.length) {
+      const dStart = bSel.start, dEnd = bSel.end;
+      let nSum = 0, sSum = 0, hit = false;
+      goog.daily_last30.forEach(d => {
+        if (d && d.d && d.d >= dStart && d.d <= dEnd) {
+          hit = true;
+          if (typeof d.n === 'number') nSum += d.n;
+          if (typeof d.avg === 'number' && d.n > 0) sSum += d.avg * d.n;
+        }
+      });
+      if (hit) {
+        googPeriodCount = nSum;
+        googPeriodAvg = nSum > 0 ? sSum / nSum : null;
+        googPeriodSource = 'daily';
+      }
+      // No hit means the week fell outside the 30-day window — fall
+      // through to monthly tier (less precise but better than blank).
+    }
+    // Tier 2/3: monthly intersection (any period kind that didn't get
+    // a hit above). For week-level periods that fall through here, we
+    // expand to the *containing* month — week starts and ends usually
+    // share a month, but a week spanning a month boundary picks up
+    // both.
+    if (googPeriodSource == null && Array.isArray(goog.monthly) && goog.monthly.length) {
+      const startYM = bSel.start.slice(0,7);
+      const endYM = bSel.end.slice(0,7);
+      let nSum = 0, sSum = 0, hit = false;
+      goog.monthly.forEach(m => {
+        if (m && m.ym && m.ym >= startYM && m.ym <= endYM) {
+          hit = true;
+          if (typeof m.count === 'number') nSum += m.count;
+          if (typeof m.avg === 'number' && m.count > 0) sSum += m.avg * m.count;
+        }
+      });
+      if (hit) {
+        googPeriodCount = nSum;
+        googPeriodAvg = nSum > 0 ? sSum / nSum : null;
+        googPeriodSource = 'monthly';
+      }
+    }
   }
 
   // ================================================== KPI helper ==================================================
@@ -2905,28 +2947,26 @@ function renderGuestSection() {
     ? 'Resy survey scope: Le Suprême only (Bar Rotunda has no Resy surveys).'
     : 'Resy survey scope: full venue (no RC split).';
 
-  body.innerHTML = `
-    <section>
-      <div class="sect-head">
-        <div class="sect-title">Guest Experience · ${o.name}</div>
-        <div class="sect-meta">${periodLabel} · ${scopeNote}</div>
-      </div>
-      <div class="kpis">
-        ${kpi('NPS', fmtNps(npsCur.nps), `${npsCur.promoters}P · ${npsCur.passives}N · ${npsCur.detractors}D`, npsTone(npsCur.nps))}
-        ${kpi('Surveys', fmtNum(sCur.length), 'Resy responses in period', 'neutral')}
-        ${kpi('Response Rate', responseRate != null ? responseRate.toFixed(1)+'%' : '—', `${fmtNum(sCur.length)} ÷ ${fmtNum(ssTot.guests)} covers`, 'neutral')}
-        ${kpi('Avg Recommend', avgRecommend != null ? avgRecommend.toFixed(1) : '—', '0–10 scale', 'neutral')}
-        ${kpi('Avg Overall', fmtScore(avgOverall), '0–100 composite', 'neutral')}
-        ${kpi('Resy ★ Avg', ratingAvg != null ? ratingAvg.toFixed(2)+' '+star : '—', `${fmtNum(ratingTotal)} ratings in period`, 'neutral')}
-        ${goog ? kpi('Google ★', goog.avg_rating != null ? goog.avg_rating.toFixed(2)+' '+star : '—', `lifetime · ${fmtNum(goog.total_reviews||0)} reviews`, 'neutral') : ''}
-        ${goog ? kpi('Owner Reply', goog.owner_reply_rate != null ? goog.owner_reply_rate.toFixed(1)+'%' : '—', 'Google replies / total', 'neutral') : ''}
-        ${kpi('Promoters',  fmtNum(npsCur.promoters), promoterPct  != null ? `${promoterPct.toFixed(0)}% of ${fmtNum(npsCur.n)}`  : 'no surveys', 'neutral')}
-        ${kpi('Detractors', fmtNum(npsCur.detractors), detractorPct != null ? `${detractorPct.toFixed(0)}% of ${fmtNum(npsCur.n)}` : 'no surveys', 'neutral')}
-        ${kpi('Avg Party',  avgPartySize != null ? avgPartySize.toFixed(1) : '—', partySizes.length ? `${fmtNum(partySizes.length)} surveys w/ covers` : 'no covers data', 'neutral')}
-        ${kpi('Top Server', topServer ? topServer.server.split(' ')[0] : '—', topServer ? `${fmtNum(topServer.n)} surveys · ${fmtNps(topServer.nps)} NPS` : 'no server attribution', 'neutral')}
-      </div>
-    </section>
+  // ---- Sub-tab routing inside the Guest Experience body ----
+  // Three views: Overview (best-of-both summary), Resy (deep survey
+  // diagnostic), Google (deep review diagnostic). Sub-tab choice lives
+  // on STATE.guestSubTab and persists across outlet/filter changes.
+  // Charts are gated on canvas presence below so non-active sections
+  // don't construct dangling Chart instances.
+  const subTab = ['overview','resy','google'].includes(STATE.guestSubTab)
+    ? STATE.guestSubTab : 'overview';
 
+  const subTabBar = `
+    <div class="labor-filter-bar">
+      <div class="labor-filter-label">View</div>
+      <button type="button" class="labor-filter-chip ${subTab==='overview'?'active':''}" data-guest-sub="overview">Overview</button>
+      <button type="button" class="labor-filter-chip ${subTab==='resy'?'active':''}"     data-guest-sub="resy">Resy</button>
+      ${goog ? `<button type="button" class="labor-filter-chip ${subTab==='google'?'active':''}" data-guest-sub="google">Google</button>` : ''}
+    </div>
+  `;
+
+  // ---- Reusable section fragments ----
+  const scoreBreakdownSect = `
     <section>
       <div class="sect-head">
         <div class="sect-title">Score Breakdown</div>
@@ -2941,7 +2981,9 @@ function renderGuestSection() {
         ${kpi('Detractor %',  detractorPct != null ? detractorPct.toFixed(0)+'%' : '—', `${fmtNum(npsCur.detractors)} of ${fmtNum(npsCur.n)} surveys (≤6)`, 'neutral')}
       </div>
     </section>
+  `;
 
+  const npsTrendSect = `
     <section>
       <div class="sect-head">
         <div class="sect-title">NPS Trend</div>
@@ -2953,7 +2995,9 @@ function renderGuestSection() {
         <div class="chart-wrap tall"><canvas id="guestNpsTrend"></canvas></div>
       </div>
     </section>
+  `;
 
+  const ratingsAndHeatSect = `
     <section>
       <div class="sect-head">
         <div class="sect-title">Resy Star Ratings</div>
@@ -2972,7 +3016,9 @@ function renderGuestSection() {
         </div>
       </div>
     </section>
+  `;
 
+  const serverTableSect = `
     <section>
       <div class="sect-head">
         <div class="sect-title">Server Performance</div>
@@ -3007,20 +3053,21 @@ function renderGuestSection() {
         </div>
       </div>
     </section>
+  `;
 
-    ${goog ? `
+  const googleSect = goog ? `
     <section>
       <div class="sect-head">
         <div class="sect-title">Google Reviews · ${(goog.venue||o.name).replace(/</g,'&lt;')}</div>
-        <div class="sect-meta">Lifetime metrics · ${anchorYM ? fmtMonth(anchorYM) : '—'} on the left, prior 11 months to the right</div>
+        <div class="sect-meta">${periodLabel} for period KPIs · lifetime where labeled · trend chart trails 12 months from ${anchorYM ? fmtMonth(anchorYM) : '—'}</div>
       </div>
       <div class="kpis">
-        ${kpi('Google ★ Avg',     goog.avg_rating != null ? goog.avg_rating.toFixed(2)+' '+star : '—', goog.google_published_rating!=null?`Published: ${goog.google_published_rating.toFixed(1)} ${star}`:'computed from sample', 'neutral')}
-        ${kpi('Total Reviews',    fmtNum(goog.total_reviews||0), 'lifetime', 'neutral')}
-        ${kpi('Owner Reply Rate', goog.owner_reply_rate!=null ? goog.owner_reply_rate.toFixed(1)+'%' : '—', `${fmtNum(goog.owner_reply_count||0)} replies`, 'neutral')}
-        ${kpi('Local Guides',     fmtNum(goog.local_guide_count||0), 'reviewers tagged Local Guide', 'neutral')}
-        ${kpi('Reviews · Recent Mo.', goog30Reviews != null ? fmtNum(goog30Reviews) : '—', goog30Reviews != null ? 'most recent month from monthly' : 'no monthly data', 'neutral')}
-        ${kpi('★ · Last 90d', goog90Avg != null ? goog90Avg.toFixed(2)+' '+star : '—', goog90Avg != null ? 'review-count weighted across last 3 months' : 'no monthly data', 'neutral')}
+        ${kpi('★ in Period', googPeriodAvg != null ? googPeriodAvg.toFixed(2)+' '+star : '—', googPeriodSource === 'daily' ? `daily · ${fmtNum(googPeriodCount||0)} reviews` : googPeriodSource === 'monthly' ? (bSel && bSel.kind === 'week' ? `month-level (no daily history) · ${fmtNum(googPeriodCount||0)} reviews` : `${fmtNum(googPeriodCount||0)} reviews`) : 'no Google reviews in period', 'neutral')}
+        ${kpi('Reviews in Period', googPeriodCount != null ? fmtNum(googPeriodCount) : '—', googPeriodSource === 'daily' ? 'sum of daily counts' : googPeriodSource === 'monthly' ? (bSel && bSel.kind === 'week' ? 'month-level (no daily history)' : 'sum of monthly counts') : 'no Google reviews in period', 'neutral')}
+        ${kpi('Google ★ Avg', goog.avg_rating != null ? goog.avg_rating.toFixed(2)+' '+star : '—', `lifetime · ${fmtNum(goog.total_reviews||0)} reviews`, 'neutral')}
+        ${kpi('Total Reviews', fmtNum(goog.total_reviews||0), 'lifetime', 'neutral')}
+        ${kpi('Owner Reply Rate', goog.owner_reply_rate!=null ? goog.owner_reply_rate.toFixed(1)+'%' : '—', `lifetime · ${fmtNum(goog.owner_reply_count||0)} replies`, 'neutral')}
+        ${kpi('Local Guides', fmtNum(goog.local_guide_count||0), 'lifetime · reviewers tagged Local Guide', 'neutral')}
       </div>
       <div class="grid grid-2" style="margin-top:18px;">
         <div class="card">
@@ -3034,18 +3081,73 @@ function renderGuestSection() {
           <div class="chart-wrap tall"><canvas id="guestGoogleDist"></canvas></div>
         </div>
       </div>
-    </section>` : ''}
+    </section>` : '';
 
+  // ---- Per-tab headers + KPI strips ----
+  const overviewHeader = `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Guest Experience · ${o.name}</div>
+        <div class="sect-meta">${periodLabel} · ${scopeNote}</div>
+      </div>
+      <div class="kpis">
+        ${kpi('NPS', fmtNps(npsCur.nps), `${npsCur.promoters}P · ${npsCur.passives}N · ${npsCur.detractors}D`, npsTone(npsCur.nps))}
+        ${kpi('Surveys', fmtNum(sCur.length), 'Resy responses in period', 'neutral')}
+        ${kpi('Response Rate', responseRate != null ? responseRate.toFixed(1)+'%' : '—', `${fmtNum(sCur.length)} ÷ ${fmtNum(ssTot.guests)} covers`, 'neutral')}
+        ${kpi('Avg Recommend', avgRecommend != null ? avgRecommend.toFixed(1) : '—', '0–10 scale', 'neutral')}
+        ${kpi('Resy ★ Avg', ratingAvg != null ? ratingAvg.toFixed(2)+' '+star : '—', `${fmtNum(ratingTotal)} ratings in period`, 'neutral')}
+        ${goog ? kpi('Google ★ (lifetime)', goog.avg_rating != null ? goog.avg_rating.toFixed(2)+' '+star : '—', `${fmtNum(goog.total_reviews||0)} reviews`, 'neutral') : ''}
+        ${goog ? kpi('★ in Period (Google)', googPeriodAvg != null ? googPeriodAvg.toFixed(2)+' '+star : '—', googPeriodCount != null ? `${fmtNum(googPeriodCount)} reviews` : 'no Google reviews', 'neutral') : ''}
+        ${goog ? kpi('Reviews in Period (Google)', googPeriodCount != null ? fmtNum(googPeriodCount) : '—', googPeriodSource === 'daily' ? 'daily sum' : googPeriodSource === 'monthly' ? 'monthly sum' : 'no data', 'neutral') : ''}
+      </div>
+    </section>
+  `;
+
+  const resyHeader = `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Resy · ${o.name}</div>
+        <div class="sect-meta">${periodLabel} · ${scopeNote}</div>
+      </div>
+      <div class="kpis">
+        ${kpi('NPS', fmtNps(npsCur.nps), `${npsCur.promoters}P · ${npsCur.passives}N · ${npsCur.detractors}D`, npsTone(npsCur.nps))}
+        ${kpi('Surveys', fmtNum(sCur.length), 'Resy responses in period', 'neutral')}
+        ${kpi('Response Rate', responseRate != null ? responseRate.toFixed(1)+'%' : '—', `${fmtNum(sCur.length)} ÷ ${fmtNum(ssTot.guests)} covers`, 'neutral')}
+        ${kpi('Avg Recommend', avgRecommend != null ? avgRecommend.toFixed(1) : '—', '0–10 scale', 'neutral')}
+        ${kpi('Avg Overall', fmtScore(avgOverall), '0–100 composite', 'neutral')}
+        ${kpi('Resy ★ Avg', ratingAvg != null ? ratingAvg.toFixed(2)+' '+star : '—', `${fmtNum(ratingTotal)} ratings in period`, 'neutral')}
+        ${kpi('Promoters',  fmtNum(npsCur.promoters), promoterPct  != null ? `${promoterPct.toFixed(0)}% of ${fmtNum(npsCur.n)}`  : 'no surveys', 'neutral')}
+        ${kpi('Detractors', fmtNum(npsCur.detractors), detractorPct != null ? `${detractorPct.toFixed(0)}% of ${fmtNum(npsCur.n)}` : 'no surveys', 'neutral')}
+        ${kpi('Avg Party',  avgPartySize != null ? avgPartySize.toFixed(1) : '—', partySizes.length ? `${fmtNum(partySizes.length)} surveys w/ covers` : 'no covers data', 'neutral')}
+        ${kpi('Top Server', topServer ? topServer.server.split(' ')[0] : '—', topServer ? `${fmtNum(topServer.n)} surveys · ${fmtNps(topServer.nps)} NPS` : 'no server attribution', 'neutral')}
+        ${kpi('Days Surveyed', fmtNum(daysSurveyed), 'unique survey dates in period', 'neutral')}
+      </div>
+    </section>
+  `;
+
+  // ---- Compose final body innerHTML by sub-tab ----
+  const footnote = `
     <p style="margin: 22px 28px; color: var(--muted); font-size: 11px;">
-      Resy survey data is venue-level (no revenue-center split). Response rate uses outlet-wide guest count, so it slightly understates for venues with non-Resy service areas (e.g. Bar Rotunda at lsbr).
-      Sourced from static NPS HTML exports — to be replaced by a live Resy + Google scraper.
+      Resy survey data is venue-level (no revenue-center split). Response rate uses outlet-wide guest count, so it slightly understates for venues with non-Resy service areas (e.g. Bar Rotunda at lsbr). Google data via Places API.
     </p>
   `;
+
+  let mainContent;
+  if (subTab === 'google' && goog) {
+    mainContent = googleSect;
+  } else if (subTab === 'resy') {
+    mainContent = resyHeader + scoreBreakdownSect + npsTrendSect + ratingsAndHeatSect + serverTableSect;
+  } else {
+    // overview (default + fallback when goog is missing and user clicks Google)
+    mainContent = overviewHeader + scoreBreakdownSect + npsTrendSect;
+  }
+
+  body.innerHTML = subTabBar + mainContent + footnote;
 
   // ================================================== Charts ==================================================
   // Monthly NPS line + survey volume bars
   destroy('guestNpsTrend');
-  if (months.length) {
+  if (months.length && document.getElementById('guestNpsTrend')) {
     // Inline plugin — draw the survey count just inside the top of each
     // Surveys bar (centered horizontally). Black text for legibility on
     // the seafoam fill. Skipped when the bar is too short (≤2 surveys
@@ -3095,7 +3197,7 @@ function renderGuestSection() {
 
   // Resy 1-5 distribution
   destroy('guestRatingDist');
-  if (ratingTotal > 0) {
+  if (ratingTotal > 0 && document.getElementById('guestRatingDist')) {
     new Chart(document.getElementById('guestRatingDist'), {
       type: 'bar',
       data: {
@@ -3143,7 +3245,9 @@ function renderGuestSection() {
   // the selected Month filter, rendered selected-month-on-the-left so
   // operators read most-recent-first. Empty months are kept as
   // {count:0, avg:null} so the axis is always 12 evenly-spaced ticks.
-  if (goog) {
+  // Guarded on canvas presence — the Google charts only exist in the DOM
+  // when subTab === 'google' (or 'overview' if we ever inline them).
+  if (goog && document.getElementById('guestGoogleMonthly')) {
     destroy('guestGoogleMonthly');
     const monthlyByYM = {};
     (goog.monthly || []).forEach(m => { if (m && m.ym) monthlyByYM[m.ym] = m; });
@@ -3206,9 +3310,10 @@ function renderGuestSection() {
     }
     destroy('guestGoogleDist');
     const dist = goog.distribution_full || null;
-    if (dist) {
+    const distCanvas = document.getElementById('guestGoogleDist');
+    if (dist && distCanvas) {
       const counts = [1,2,3,4,5].map(k => +(dist[k] || dist[String(k)] || 0));
-      new Chart(document.getElementById('guestGoogleDist'), {
+      new Chart(distCanvas, {
         type: 'bar',
         data: { labels: ['1 ★','2 ★','3 ★','4 ★','5 ★'], datasets: [{ label:'Reviews', data: counts, backgroundColor:[C.slate, C.royal, C.tan, C.seafoam, C.turquoise] }] },
         options: {
@@ -3219,6 +3324,16 @@ function renderGuestSection() {
       });
     }
   }
+
+  // Wire sub-tab chips. Re-renders the section in place so charts get
+  // built fresh against the new canvas set (rerenderSection() runs
+  // destroyAll() so chart leaks aren't a concern).
+  body.querySelectorAll('[data-guest-sub]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      STATE.guestSubTab = btn.dataset.guestSub;
+      rerenderSection();
+    });
+  });
 }
 // Renders the full detailed revenue analytics body (replaces the former single outlet body)
 function renderRevenueSection() {
