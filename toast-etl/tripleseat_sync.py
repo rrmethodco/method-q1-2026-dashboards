@@ -17,6 +17,12 @@ What we use
             properties (Tripleseat shares one account-level credential
             for the org, with location_id as the per-property dimension).
 
+            We pull this credential pair from the helixo-2 Supabase
+            project's `tripleseat_config` table — same source of truth
+            as helixo-2's working tripleseat-sync.ts in production.
+            That guarantees the dashboards repo stays in sync with
+            whatever Tripleseat key Method's leadership rotates.
+
   Base URL: https://api.tripleseat.com/v1
 
   Endpoints used:
@@ -27,30 +33,33 @@ What we use
                                              account and partition
                                              client-side by location +
                                              event_date)
-    GET /event_types.json                 → segment classification
 
   Rate limit: 10 req/sec per Tripleseat docs. We sleep 0.11s between
   pages (well below the cap).
 
 ============================================================================
-Setup (one-time)
+Setup
 ============================================================================
   GitHub Secrets:
+    SUPABASE_URL              (e.g. https://mmwislzsgnjxjxssynwm.supabase.co)
+    SUPABASE_SERVICE_ROLE_KEY (server key — bypasses RLS, needed to read
+                                tripleseat_config rows)
+
+  Optional (override Supabase lookup with hardcoded creds):
     TRIPLESEAT_CONSUMER_KEY
     TRIPLESEAT_CONSUMER_SECRET
 
-  If the API returns 401 "You don't have permission..." despite valid
-  creds, contact support@tripleseat.com to enable API access on the
-  account. The credentials in the integration email are issued
-  immediately but the activation is gated.
+  If neither path produces credentials, the sync exits cleanly with a
+  warning so the workflow still runs end-to-end.
 
 ============================================================================
 Usage
 ============================================================================
-  python3 tripleseat_sync.py                # all outlets
+  python3 tripleseat_sync.py                # all outlets (Supabase-driven)
   python3 tripleseat_sync.py --probe        # auth-only health check
-  python3 tripleseat_sync.py --discover     # list all sites + locations
+  python3 tripleseat_sync.py --discover     # list all Tripleseat sites
   python3 tripleseat_sync.py --dry-run      # write fixture, no network
+  python3 tripleseat_sync.py --print-config # show resolved TS site → outlet map
 """
 from __future__ import annotations
 
@@ -60,13 +69,14 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import secrets
 import sys
 import time
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 try:
     import requests
@@ -110,7 +120,205 @@ def _oauth1_header(consumer_key: str, consumer_secret: str,
                                 for k, v in o.items())
 
 
-# ---------- thin client ----------
+# ---------- Supabase-driven config ----------
+
+# Helixo-2 hardcoded these UUIDs in tripleseat-sync.ts. We mirror them so
+# we can map the Supabase location.id (UUID) back to Method's outlet slug
+# without needing additional metadata in the locations table. If a row in
+# tripleseat_config references a UUID that's not in this dict, the script
+# falls back to fuzzy-matching locations.name → outlet slug.
+SUPA_UUID_TO_OUTLET: dict[str, str] = {
+    "84f4ea7f-722d-4296-894b-6ecfe389b2d5": "anthology",
+    "b7d3e1a4-5f2c-4a8b-9e6d-1c3f5a7b9d2e": "kampers",
+    "ae99ee33-1b8e-4c8f-8451-e9f3d0fa28ce": "lsbr",
+    "b4035001-0928-4ada-a0f0-f2a272393147": "hiroki_det",
+    "580ae0a6-34b8-402e-a8a6-2e55310207e4": "rosemary_rose",
+}
+
+# Per helixo-2's tripleseat-sync.ts: hardcoded Tripleseat
+# location_id → Method outlet overrides that take precedence over the
+# Supabase config. Used for venues that Tripleseat models differently
+# than Method's Supabase locations table (e.g. The Nickel Hotel hosts
+# Rosemary Rose events under a separate location_id from the
+# restaurant's Supabase row).
+TS_LOC_HARDCODED_OUTLET: dict[int, str] = {
+    31924: "rosemary_rose",  # The Nickel Hotel → Rosemary Rose (Charleston)
+}
+
+# Tripleseat location_id of "Anthology Events at Book Tower" — single
+# Tripleseat venue covering 5 Method brands. Brand-split routing via
+# room names (see classify_room below).
+TS_LOC_BOOK_TOWER = 22266
+
+# Outlet IDs that can receive routed Book Tower events (via brand
+# allocation). Mirrors helixo-2's BRAND_TO_LOC keys.
+BOOK_TOWER_BRANDS = ("anthology", "kampers", "lsbr", "hiroki_det", "rosemary_rose")
+
+# Method outlet slugs that exist in this repo — used for fuzzy name matching
+KNOWN_OUTLETS = (
+    "anthology", "hiroki_det", "hiroki_phl", "kampers", "little_wing",
+    "lowland", "lsbr", "mulherins", "quoin", "rosemary_rose", "vessel",
+)
+
+
+def _normalize_name(name: str) -> str:
+    """Lowercase + strip non-alphanumerics for fuzzy matching."""
+    return re.sub(r"[^a-z0-9]+", "", (name or "").lower())
+
+
+# Manual name → slug overrides for cases where fuzzy matching would
+# otherwise fail or pick the wrong outlet. Operator updates this when
+# Supabase locations get renamed.
+NAME_TO_OUTLET_OVERRIDES: dict[str, str] = {
+    "wmmulherinssons": "mulherins",
+    "wmmulherinssonshotel": "mulherins",
+    "lowlandcharleston": "lowland",
+    "lowland": "lowland",
+    "thequoin": "quoin",
+    "quoinrooftop": "quoin",
+    "lesupreme": "lsbr",
+    "lesuprême": "lsbr",
+    "barrotunda": "lsbr",
+    "lesupremebarrotunda": "lsbr",
+    "kampersbar": "kampers",
+    "kampersrooftopbar": "kampers",
+    "hirokisandetroit": "hiroki_det",
+    "hirokisan": "hiroki_phl",  # default Hiroki goes Philly unless explicitly Detroit
+    "anthology": "anthology",
+    "anthologyevents": "anthology",
+    "anthologyeventsatbooktower": "anthology",
+    "rosemaryrose": "rosemary_rose",
+    "rosemaryandrose": "rosemary_rose",
+    "littlewing": "little_wing",
+    "littlewingcoffeeandgoods": "little_wing",
+    "vessel": "vessel",
+    "vesselroostbaltimore": "vessel",
+    "thenickelhotel": "rosemary_rose",  # restaurant inside Nickel Hotel
+}
+
+
+def name_to_outlet(name: str | None) -> str | None:
+    """Best-effort match of a Supabase locations.name → Method outlet slug."""
+    if not name:
+        return None
+    norm = _normalize_name(name)
+    if norm in NAME_TO_OUTLET_OVERRIDES:
+        return NAME_TO_OUTLET_OVERRIDES[norm]
+    # Direct slug-style match
+    for outlet in KNOWN_OUTLETS:
+        if _normalize_name(outlet) == norm:
+            return outlet
+    # Substring contains (last resort)
+    for outlet in KNOWN_OUTLETS:
+        if _normalize_name(outlet) in norm or norm in _normalize_name(outlet):
+            return outlet
+    return None
+
+
+# ---------- Supabase REST client (PostgREST) ----------
+
+class Supabase:
+    """Minimal Supabase REST client for read-only config lookups."""
+
+    def __init__(self, url: str, key: str):
+        self.base = url.rstrip("/") + "/rest/v1"
+        self.headers = {
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Accept": "application/json",
+        }
+
+    def select(self, table: str, columns: str = "*",
+               filters: dict | None = None) -> list[dict]:
+        params = {"select": columns}
+        if filters:
+            params.update(filters)
+        url = f"{self.base}/{table}?{urlencode(params)}"
+        r = requests.get(url, headers=self.headers, timeout=REQUEST_TIMEOUT)
+        if r.status_code != 200:
+            raise RuntimeError(f"Supabase {r.status_code} on {table}: {r.text[:300]}")
+        return r.json()
+
+
+def load_supabase_config(supabase: Supabase) -> tuple[str, str, dict[int, str]]:
+    """Pull tripleseat_config + locations from Supabase and resolve the
+    per-Tripleseat-location → Method outlet mapping.
+
+    Returns (consumer_key, consumer_secret, ts_location_id → outlet_slug).
+
+    The map covers every enabled config row (after deduping rows that
+    share a tripleseat_site_id, like Book Tower's 3 disabled+1 enabled
+    duplicates). The Book Tower entry itself maps to a sentinel
+    "__BOOK_TOWER__" slug so the partitioner knows to apply brand-split
+    rules instead of routing to a single outlet.
+    """
+    cfg_rows = supabase.select(
+        "tripleseat_config",
+        columns="location_id,tripleseat_site_id,consumer_key,consumer_secret,enabled",
+        filters={"enabled": "eq.true"},
+    )
+    if not cfg_rows:
+        raise RuntimeError("tripleseat_config returned 0 enabled rows")
+
+    # Locations lookup (UUID → name) for fuzzy outlet matching when the
+    # row's location_id isn't in SUPA_UUID_TO_OUTLET.
+    loc_uuids = sorted({r["location_id"] for r in cfg_rows})
+    in_clause = "in.(" + ",".join(loc_uuids) + ")"
+    loc_rows = supabase.select(
+        "locations",
+        columns="id,name",
+        filters={"id": in_clause},
+    )
+    name_by_uuid = {r["id"]: r.get("name") for r in loc_rows}
+
+    # All rows share the same key/secret (per Method's account-level
+    # Tripleseat creds). Pick the first non-empty pair.
+    ck = cs = None
+    for r in cfg_rows:
+        if r.get("consumer_key") and r.get("consumer_secret"):
+            ck, cs = r["consumer_key"], r["consumer_secret"]
+            break
+    if not (ck and cs):
+        raise RuntimeError("no consumer_key/consumer_secret in tripleseat_config rows")
+
+    # Build the TS location_id → outlet slug map. Dedupe by ts_site_id
+    # (Book Tower has 3 disabled + 1 enabled, all sharing site=22266).
+    seen_ts: set[int] = set()
+    ts_to_outlet: dict[int, str] = {}
+    for r in cfg_rows:
+        try:
+            ts_id = int(r["tripleseat_site_id"])
+        except (TypeError, ValueError):
+            continue
+        if ts_id in seen_ts:
+            continue
+        seen_ts.add(ts_id)
+
+        # Book Tower → sentinel
+        if ts_id == TS_LOC_BOOK_TOWER:
+            ts_to_outlet[ts_id] = "__BOOK_TOWER__"
+            continue
+
+        uuid = r["location_id"]
+        outlet = SUPA_UUID_TO_OUTLET.get(uuid)
+        if outlet is None:
+            outlet = name_to_outlet(name_by_uuid.get(uuid))
+        if outlet:
+            ts_to_outlet[ts_id] = outlet
+        else:
+            sys.stderr.write(
+                f"  ! tripleseat_site_id={ts_id} (loc {uuid} '{name_by_uuid.get(uuid)}') "
+                "did not match any known outlet — events will be skipped\n"
+            )
+
+    # Apply hardcoded overrides (always win)
+    for ts_id, slug in TS_LOC_HARDCODED_OUTLET.items():
+        ts_to_outlet[ts_id] = slug
+
+    return ck, cs, ts_to_outlet
+
+
+# ---------- Tripleseat client ----------
 
 class TripleseatClient:
     def __init__(self, consumer_key: str, consumer_secret: str):
@@ -125,8 +333,6 @@ class TripleseatClient:
     def _get(self, path: str, params: dict | None = None) -> dict | list:
         params = {k: str(v) for k, v in (params or {}).items()}
         url = f"{BASE_URL}{path}"
-        # Sign the URL WITHOUT query params (params are signed separately
-        # then appended to the URL).
         auth_header = _oauth1_header(self.ck, self.cs, "GET", url, params)
         r = self.session.get(url, headers={"Authorization": auth_header},
                              params=params, timeout=REQUEST_TIMEOUT)
@@ -143,21 +349,12 @@ class TripleseatClient:
         body = self._get("/sites.json")
         return body if isinstance(body, list) else (body.get("results") or body.get("sites") or [])
 
-    def get_event_types(self) -> list[dict]:
-        try:
-            body = self._get("/event_types.json")
-        except Exception:
-            return []
-        return body if isinstance(body, list) else (body.get("results") or body.get("event_types") or [])
-
     def get_all_events(self, show_financial: bool = True,
                        max_pages: int = 2000) -> list[dict]:
-        """Paginate through every event in the account.
-
-        Tripleseat's /events ignores date/location filters; partitioning
-        happens client-side. ~19k events for Method per helixo-2's notes,
-        ~5-30 min sync at 9 req/sec.
-        """
+        """Paginate through every event in the account. Tripleseat's
+        /events ignores date/location filters; partitioning happens
+        client-side. ~19k events for Method per helixo-2's notes
+        (5-30 min sync at 9 req/sec)."""
         out: list[dict] = []
         page = 1
         total_pages = None
@@ -177,23 +374,16 @@ class TripleseatClient:
             if total_pages and page >= total_pages:
                 break
             page += 1
+            if page % 25 == 0:
+                sys.stderr.write(f"    [tripleseat] paged {page} / {total_pages or '?'}\n")
         return out
 
 
 # ---------- Method Co brand-split rules (mirrors helixo-2/room-rules.ts) ----------
 
-# Tripleseat's "Anthology Events at Book Tower" location covers 5 brands.
-# Brands distinguished by room name. When a single event books rooms
-# across multiple brands, revenue splits per Method Co policy:
-#   - Anthology + outlets → 80% Anthology / 20% split among outlets
-#   - Multiple outlets only → split evenly
-#   - Unrecognized rooms → fall through to Anthology default
-
-OUTLET_BRANDS = ("anthology", "lsbr", "kampers", "hiroki_det", "rosemary_rose")
-
 
 def classify_room(room_name: str) -> str | None:
-    """Map a Tripleseat room name → Method outlet_id."""
+    """Map a Tripleseat room name → Method outlet_id (Book Tower only)."""
     if not room_name:
         return None
     lower = room_name.lower().strip()
@@ -230,29 +420,6 @@ def allocate_brands(room_names: list[str]) -> list[tuple[str, float]]:
         return [("anthology", 0.80)] + [(b, share) for b in others]
     sorted_b = sorted(brands)
     return [(b, 1.0 / len(sorted_b)) for b in sorted_b]
-
-
-# ---------- Tripleseat location → Method outlet ----------
-
-# Most properties are 1:1. Book Tower is special — handled by brand split
-# (see classify_room above). Operator updates this map as new locations
-# come online; the keys are Tripleseat numeric location_ids.
-LOCATION_TO_OUTLET: dict[int, str] = {
-    # Book Tower (Detroit) — single Tripleseat location for 5 Method
-    # brands (Anthology, Le Suprême + Bar Rotunda, Kamper's,
-    # HIROKI-SAN, Rosemary Rose). Brand split happens via room rules
-    # below; this entry exists so the location is recognized.
-    # Exact ID needs to be verified once /sites.json works:
-    # 22266: "_BOOK_TOWER_MULTI_BRAND",
-    # Standalone-property locations (1:1) — populate after probe:
-    # X: "mulherins",
-    # X: "lowland",
-    # X: "quoin",
-    # X: "hiroki_phl",
-    # X: "anthology" (if standalone),
-    # X: "vessel",
-    # X: "little_wing",
-}
 
 
 # ---------- segment classification (matches helixo-2 conventions) ----------
@@ -369,13 +536,12 @@ def transform_event(evt: dict) -> dict:
             rooms.append(r["name"])
     if not rooms:
         rooms = list(evt.get("room_names") or [])
-    # Booked revenue = max(actual_amount, fb_minimum) per helixo-2.
     booked_revenue = max(fin["actual_amount"], fin["fb_minimum"])
     if booked_revenue == 0:
         booked_revenue = fin["total"]
     return {
         "event_id": evt.get("id"),
-        "name": (evt.get("name") or "").strip()[:120],  # truncate for brevity
+        "name": (evt.get("name") or "").strip()[:120],
         "status": evt.get("status"),
         "event_start": evt.get("event_start"),
         "event_end": evt.get("event_end"),
@@ -403,25 +569,61 @@ def _lead_time_days(created_at: str | None, event_start: str | None) -> int | No
         return None
 
 
-def partition_to_outlets(events: list[dict]) -> dict[str, list[dict]]:
-    """Split Tripleseat events into per-outlet event lists, applying
-    brand-split rules at Book Tower. Outlets that don't book private
-    events get an empty list."""
+def partition_to_outlets(events: list[dict],
+                         ts_to_outlet: dict[int, str]) -> dict[str, list[dict]]:
+    """Split Tripleseat events into per-outlet event lists.
+
+    Routing rules (in priority order):
+      1. TS_LOC_HARDCODED_OUTLET overrides (e.g. 31924 → rosemary_rose)
+         — already merged into ts_to_outlet by load_supabase_config.
+      2. Book Tower (TS location 22266 / sentinel "__BOOK_TOWER__"):
+         brand-split via room names per Method Co policy.
+      3. Direct map from ts_to_outlet (1:1 location → outlet).
+      4. Unmapped Tripleseat locations: skipped with a stderr line.
+    """
     by_outlet: dict[str, list[dict]] = defaultdict(list)
+    skipped_ts: dict[int, int] = defaultdict(int)
     for evt in events:
         loc_id = evt.get("location_id")
-        outlet = LOCATION_TO_OUTLET.get(loc_id) if loc_id else None
-        if outlet == "_BOOK_TOWER_MULTI_BRAND" or outlet is None:
-            # Book Tower (or unmapped location) — apply brand-split.
-            allocations = allocate_brands(evt.get("rooms") or [])
+        try:
+            loc_id_int = int(loc_id) if loc_id is not None else None
+        except (TypeError, ValueError):
+            loc_id_int = None
+        outlet = ts_to_outlet.get(loc_id_int) if loc_id_int is not None else None
+
+        if outlet == "__BOOK_TOWER__":
+            # Book Tower — brand-split via room names. Multi-brand events
+            # produce multiple rows (revenue scaled by share).
+            room_names: list[str] = []
+            for r in (evt.get("rooms") or []):
+                if isinstance(r, dict) and r.get("name"):
+                    room_names.append(r["name"])
+            if not room_names:
+                room_names = list(evt.get("room_names") or [])
+            # Some payloads send "Bar Rotunda, 13th Floor - Event Space" as a
+            # single string — split on commas.
+            expanded: list[str] = []
+            for n in room_names:
+                for piece in re.split(r",\s*", str(n)):
+                    if piece.strip():
+                        expanded.append(piece.strip())
+            allocations = allocate_brands(expanded)
             for outlet_id, share in allocations:
                 shared = dict(evt)
                 shared["_revenue_share"] = share
                 by_outlet[outlet_id].append(shared)
-        else:
+        elif outlet:
             shared = dict(evt)
             shared["_revenue_share"] = 1.0
             by_outlet[outlet].append(shared)
+        else:
+            if loc_id_int is not None:
+                skipped_ts[loc_id_int] += 1
+
+    if skipped_ts:
+        sys.stderr.write("  ! skipped events from unmapped Tripleseat locations:\n")
+        for ts_id, count in sorted(skipped_ts.items(), key=lambda x: -x[1]):
+            sys.stderr.write(f"      ts_loc={ts_id}  events={count}\n")
     return by_outlet
 
 
@@ -431,12 +633,10 @@ def build_outlet_events_block(events: list[dict]) -> dict:
     for evt in events:
         t = transform_event(evt)
         t["revenue_share"] = evt.get("_revenue_share", 1.0)
-        # Apply share to financial totals
         t["booked_revenue"] = round(t["booked_revenue"] * t["revenue_share"], 2)
         for k in ("total", "grand_total", "food", "beverage", "rental", "av", "other"):
             t["financials"][k] = round(t["financials"][k] * t["revenue_share"], 2)
         transformed.append(t)
-    # Monthly + segment rollups
     monthly = defaultdict(lambda: {"events": 0, "guests": 0, "booked_revenue": 0.0,
                                      "fb_revenue": 0.0, "by_segment": defaultdict(float)})
     by_segment_total = defaultdict(lambda: {"events": 0, "booked_revenue": 0.0})
@@ -492,6 +692,39 @@ def write_outlet(data_dir: Path, outlet_id: str, payload: dict) -> None:
     tmp.replace(p)
 
 
+# ---------- credential resolution ----------
+
+def resolve_credentials() -> tuple[str | None, str | None, dict[int, str]]:
+    """Resolve Tripleseat creds + ts_location → outlet map.
+
+    Priority:
+      1. Supabase tripleseat_config (canonical, mirrors helixo-2 prod)
+      2. Hardcoded TRIPLESEAT_CONSUMER_KEY/SECRET env vars (fallback)
+         — uses TS_LOC_HARDCODED_OUTLET only, plus Book Tower sentinel.
+    """
+    sb_url = os.environ.get("SUPABASE_URL", "").rstrip("/")
+    sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+    if sb_url and sb_key:
+        try:
+            sb = Supabase(sb_url, sb_key)
+            ck, cs, ts_to_outlet = load_supabase_config(sb)
+            print(f"  ✓ loaded {len(ts_to_outlet)} Tripleseat→outlet mappings from Supabase")
+            for ts_id, outlet in sorted(ts_to_outlet.items()):
+                print(f"      ts_loc={ts_id:<6} → {outlet}")
+            return ck, cs, ts_to_outlet
+        except Exception as e:
+            sys.stderr.write(f"  ! Supabase lookup failed: {e}\n")
+    # Fallback to plain env vars (no per-location info beyond Book Tower
+    # + hardcoded overrides).
+    ck = os.environ.get("TRIPLESEAT_CONSUMER_KEY")
+    cs = os.environ.get("TRIPLESEAT_CONSUMER_SECRET")
+    if ck and cs:
+        ts_to_outlet = {TS_LOC_BOOK_TOWER: "__BOOK_TOWER__"}
+        ts_to_outlet.update(TS_LOC_HARDCODED_OUTLET)
+        return ck, cs, ts_to_outlet
+    return None, None, {}
+
+
 # ---------- commands ----------
 
 def cmd_probe(ck: str, cs: str) -> int:
@@ -512,7 +745,7 @@ def cmd_probe(ck: str, cs: str) -> int:
 
 def cmd_discover(ck: str, cs: str) -> int:
     """Print all sites + locations so the operator can populate
-    LOCATION_TO_OUTLET in this script."""
+    LOCATION_TO_OUTLET / Supabase rows."""
     client = TripleseatClient(ck, cs)
     sites = client.get_sites()
     print(f"\n{'site_id':<10} {'site name':<35} {'location_id':<14} {'location name'}")
@@ -524,16 +757,21 @@ def cmd_discover(ck: str, cs: str) -> int:
     return 0
 
 
-def cmd_sync(ck: str, cs: str, data_dir: Path, dry_run: bool) -> int:
+def cmd_sync(ck: str, cs: str, ts_to_outlet: dict[int, str],
+             data_dir: Path, dry_run: bool) -> int:
     if dry_run:
         print("[dry-run] writing fixture")
         fixture = {"as_of": date.today().isoformat(), "source": "tripleseat_dry_run",
                    "events": [], "monthly_rollup": [], "by_segment": []}
-        for oid in OUTLET_BRANDS:
+        for oid in BOOK_TOWER_BRANDS:
             payload = load_outlet(data_dir, oid)
             payload["events"] = fixture
             write_outlet(data_dir, oid, payload)
         return 0
+
+    if not ts_to_outlet:
+        sys.stderr.write("no Tripleseat→outlet mapping resolved — exiting\n")
+        return 1
 
     client = TripleseatClient(ck, cs)
     print("Pulling all events from Tripleseat — this can take 5-30 min for ~20k events...")
@@ -545,9 +783,17 @@ def cmd_sync(ck: str, cs: str, data_dir: Path, dry_run: bool) -> int:
         return 1
     print(f"  fetched {len(events)} events\n")
 
-    by_outlet = partition_to_outlets(events)
-    print(f"Partitioned into {len(by_outlet)} outlets:")
-    for outlet_id, oevents in sorted(by_outlet.items()):
+    by_outlet = partition_to_outlets(events, ts_to_outlet)
+
+    # Ensure every routed-to outlet (including Book Tower brands that
+    # didn't book any events this run) gets an empty block — keeps the
+    # dashboard from showing stale data.
+    routed_outlets = set(ts_to_outlet.values()) | set(BOOK_TOWER_BRANDS)
+    routed_outlets.discard("__BOOK_TOWER__")
+
+    print(f"Partitioned into {len(by_outlet)} outlets with events:")
+    for outlet_id in sorted(routed_outlets):
+        oevents = by_outlet.get(outlet_id, [])
         block = build_outlet_events_block(oevents)
         payload = load_outlet(data_dir, outlet_id)
         payload["events"] = block
@@ -557,10 +803,23 @@ def cmd_sync(ck: str, cs: str, data_dir: Path, dry_run: bool) -> int:
     return 0
 
 
+def cmd_print_config(ts_to_outlet: dict[int, str]) -> int:
+    if not ts_to_outlet:
+        print("(empty — set SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY and re-run)")
+        return 1
+    print(f"{'ts_location_id':<16}  outlet")
+    print("-" * 40)
+    for ts_id, slug in sorted(ts_to_outlet.items()):
+        print(f"{ts_id:<16}  {slug}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--probe", action="store_true", help="auth-only probe")
     ap.add_argument("--discover", action="store_true", help="list all sites + locations")
+    ap.add_argument("--print-config", action="store_true",
+                    help="show resolved TS site → outlet map (no network)")
     ap.add_argument("--dry-run", action="store_true", help="write fixture; no network")
     ap.add_argument("--data-dir", default="../data", help="dir of <outlet>.json files")
     args = ap.parse_args(argv)
@@ -570,18 +829,25 @@ def main(argv: list[str] | None = None) -> int:
         sys.stderr.write(f"data dir not found: {data_dir}\n")
         return 1
 
-    ck = os.environ.get("TRIPLESEAT_CONSUMER_KEY")
-    cs = os.environ.get("TRIPLESEAT_CONSUMER_SECRET")
     if args.dry_run:
-        return cmd_sync("DRY", "DRY", data_dir, dry_run=True)
+        return cmd_sync("DRY", "DRY", {}, data_dir, dry_run=True)
+
+    ck, cs, ts_to_outlet = resolve_credentials()
+
+    if args.print_config:
+        return cmd_print_config(ts_to_outlet)
     if not (ck and cs):
-        sys.stderr.write("TRIPLESEAT_CONSUMER_KEY / TRIPLESEAT_CONSUMER_SECRET missing — exiting cleanly (no-op)\n")
+        sys.stderr.write(
+            "no Tripleseat credentials — set SUPABASE_URL+SUPABASE_SERVICE_ROLE_KEY "
+            "OR TRIPLESEAT_CONSUMER_KEY+SECRET. Exiting cleanly (no-op).\n"
+        )
         return 0
+
     if args.probe:
         return cmd_probe(ck, cs)
     if args.discover:
         return cmd_discover(ck, cs)
-    return cmd_sync(ck, cs, data_dir, dry_run=False)
+    return cmd_sync(ck, cs, ts_to_outlet, data_dir, dry_run=False)
 
 
 if __name__ == "__main__":

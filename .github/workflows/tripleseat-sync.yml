@@ -54,16 +54,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r toast-etl/requirements.txt
 
+      # Credentials precedence inside tripleseat_sync.py:
+      #   1. SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY → reads
+      #      tripleseat_config rows (canonical, mirrors helixo-2 prod
+      #      so a key rotation at helixo-2 propagates here automatically).
+      #   2. TRIPLESEAT_CONSUMER_KEY/SECRET → fallback for manual override.
       - name: Run Tripleseat sync
         if: ${{ github.event.inputs.probe != 'true' && github.event.inputs.discover != 'true' }}
         env:
+          SUPABASE_URL:               ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY:  ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           TRIPLESEAT_CONSUMER_KEY:    ${{ secrets.TRIPLESEAT_CONSUMER_KEY }}
           TRIPLESEAT_CONSUMER_SECRET: ${{ secrets.TRIPLESEAT_CONSUMER_SECRET }}
           TRIPLESEAT_BASE_URL:        ${{ secrets.TRIPLESEAT_BASE_URL }}
         run: |
           cd toast-etl
-          if [ -z "$TRIPLESEAT_CONSUMER_KEY" ] || [ -z "$TRIPLESEAT_CONSUMER_SECRET" ]; then
-            echo "Tripleseat creds not configured — skipping"
+          if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ] && [ -z "$TRIPLESEAT_CONSUMER_KEY" ]; then
+            echo "no Tripleseat creds (Supabase nor direct) — skipping"
             exit 0
           fi
           python3 tripleseat_sync.py --data-dir ../data
@@ -71,6 +78,8 @@ jobs:
       - name: Run Tripleseat probe (manual only)
         if: ${{ github.event.inputs.probe == 'true' }}
         env:
+          SUPABASE_URL:               ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY:  ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           TRIPLESEAT_CONSUMER_KEY:    ${{ secrets.TRIPLESEAT_CONSUMER_KEY }}
           TRIPLESEAT_CONSUMER_SECRET: ${{ secrets.TRIPLESEAT_CONSUMER_SECRET }}
         run: |
@@ -80,6 +89,8 @@ jobs:
       - name: Run Tripleseat discover (manual only)
         if: ${{ github.event.inputs.discover == 'true' }}
         env:
+          SUPABASE_URL:               ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY:  ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           TRIPLESEAT_CONSUMER_KEY:    ${{ secrets.TRIPLESEAT_CONSUMER_KEY }}
           TRIPLESEAT_CONSUMER_SECRET: ${{ secrets.TRIPLESEAT_CONSUMER_SECRET }}
         run: |
