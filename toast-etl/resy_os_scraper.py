@@ -290,7 +290,7 @@ def transform_resy_survey_row(raw: dict) -> dict | None:
 
 def transform_to_guest_block(
     captured: list[dict], existing_guest: dict | None
-) -> dict:
+) -> tuple[dict, dict]:
     """Take a list of {url, json} responses and emit a `guest` block in the
     same shape renderGuestSection() consumes.
 
@@ -301,11 +301,20 @@ def transform_to_guest_block(
 
     `existing_guest` is the seed block (NPS-Report extractor). We APPEND-
     MERGE on a natural key — the seed historical tail always survives.
+
+    Returns (guest_block, stats) where stats tracks upgrade counts so the
+    caller's session-expiry healthcheck can distinguish "rows were
+    upgraded in place" (a healthy backfill — for example when the
+    free-text capture rolled out 2026-04-30 and existing 1.9k LSBR rows
+    refreshed) from "scraper got nothing back" (true session expiry).
+    Without stats, the healthcheck would mis-report a successful backfill
+    run as expired because survey row count didn't change.
     """
     surveys = list((existing_guest or {}).get("surveys") or [])
     ratings = list((existing_guest or {}).get("ratings") or [])
     comments = list((existing_guest or {}).get("comments") or [])
     google = (existing_guest or {}).get("google")
+    stats = {"added": 0, "upgraded": 0}
 
     # Dedup keys for survey rows — natural-key tuple so a re-scrape
     # doesn't double-count.
@@ -370,21 +379,23 @@ def transform_to_guest_block(
                 new_has_text = bool(row.get("text"))
                 if new_has_text and not old_has_text:
                     surveys[seen_index[k]] = row
+                    stats["upgraded"] += 1
                 continue
             surveys.append(row)
             seen_index[k] = len(surveys) - 1
+            stats["added"] += 1
         # Legacy path — seed-shaped rows (NPS-export extractor used these)
         for row in extract_ratings(body):
             ratings.append(row)
 
-    return {
+    return ({
         "as_of": date.today().isoformat(),
         "source": "resy_os_scraper",
         "surveys": surveys,
         "ratings": ratings,
         "comments": comments,
         **({"google": google} if google else {}),
-    }
+    }, stats)
 
 
 def scrape_venue(page, slug: str, discover: bool) -> list[dict]:
@@ -549,15 +560,22 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
             # Transform + merge
             payload = load_outlet(data_dir, oid)
             existing_guest = payload.get("guest") or {}
-            new_guest = transform_to_guest_block(captured, existing_guest)
+            new_guest, mstats = transform_to_guest_block(captured, existing_guest)
             n_surveys = len(new_guest.get("surveys") or [])
             n_existing = len(existing_guest.get("surveys") or [])
-            print(f"  surveys: {n_existing} → {n_surveys} "
-                  f"(+{n_surveys - n_existing})")
-            if n_surveys == n_existing:
+            added = mstats["added"]
+            upgraded = mstats["upgraded"]
+            tail = f" · upgraded {upgraded}" if upgraded else ""
+            print(f"  surveys: {n_existing} → {n_surveys} (+{added}){tail}")
+            # Healthcheck signal: a venue is "quiet" only if NEITHER
+            # new rows came in NOR existing rows were upgraded with
+            # text. A pure-upgrade run still proves the session is
+            # alive (the API returned data); we just happened to
+            # already have those rows.
+            if added == 0 and upgraded == 0:
                 healthcheck_zero_count += 1
             else:
-                healthcheck_total_new += (n_surveys - n_existing)
+                healthcheck_total_new += (added + upgraded)
             payload["guest"] = new_guest
             payload["generated_at_resy"] = datetime.now(timezone.utc).isoformat()
             write_outlet(data_dir, oid, payload)
@@ -567,25 +585,28 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
     if failures:
         sys.stderr.write(f"\n{len(failures)} venue(s) failed: {failures}\n")
 
-    # Session-expiry detection: a dead storage state means EVERY venue gets
-    # redirected to login and writes 0 new rows. So the only reliable
-    # "session expired" signal is `total new surveys across the whole
-    # portfolio == 0`. A per-venue zero count alone is noisy — vessel
+    # Session-expiry detection: a dead storage state means EVERY venue
+    # gets redirected to login and writes 0 new rows AND no upgrades to
+    # existing rows. So the only reliable "session expired" signal is
+    # `total activity across the whole portfolio == 0` (where activity
+    # = added + upgraded). Per-venue zero count alone is noisy — vessel
     # (private events, no Resy), rosemary_rose (~2 surveys ever), and
     # quoin (low volume) routinely come back empty even with a healthy
-    # session. Earlier logic exited 1 at >2 zero-venues, which threw away
-    # successful pulls on quiet days. See PR #52 / 2026-04-30 incident.
+    # session. Earlier logic exited 1 at >2 zero-venues, which threw
+    # away successful pulls on quiet days. See PR #52 / 2026-04-30
+    # incident. Upgrades count as activity to prevent the same false
+    # alarm during the text-capture backfill.
     if healthcheck_total_new == 0 and len(targets) > 1:
         sys.stderr.write(
-            "\n[healthcheck] 0 new surveys across all venues — storage "
-            "state likely expired. Run tools/refresh_resy_storage.py to "
-            "reseed.\n"
+            "\n[healthcheck] 0 new or upgraded surveys across all "
+            "venues — storage state likely expired. Run "
+            "tools/refresh_resy_storage.py to reseed.\n"
         )
         return 1
     if healthcheck_zero_count > 2:
         sys.stderr.write(
-            f"\n[healthcheck] {healthcheck_zero_count} venues quiet "
-            f"(0 new), but {healthcheck_total_new} new surveys captured "
+            f"\n[healthcheck] {healthcheck_zero_count} venues quiet, "
+            f"but {healthcheck_total_new} new/upgraded rows captured "
             f"elsewhere — session healthy, continuing.\n"
         )
     return 0 if not failures else 1
