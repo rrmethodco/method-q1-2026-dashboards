@@ -109,12 +109,17 @@ LOOKBACK_DAYS = int(os.environ.get("MARGINEDGE_LOOKBACK_DAYS") or 90)
 WITH_LINE_ITEMS = (os.environ.get("MARGINEDGE_WITH_LINE_ITEMS") or "1") in ("1", "true", "yes")
 REQUEST_TIMEOUT = 45
 USER_AGENT = "MethodCo-Dashboards/1.0 (marginedge_sync.py; +https://github.com/rrmethodco)"
-# ME's rate limits aren't published. Empirically, /orders/{id} starts
-# returning 429 after ~100 consecutive calls at 10/sec — bumping the
-# inter-call sleep to 0.30s (3.3 req/sec sustained) eliminates them.
-RATE_LIMIT_SLEEP = 0.30
+# ME's rate limits aren't published and shift over time. Empirically:
+# - 0.10s sleep (10 req/sec): 429s after ~100 calls
+# - 0.30s sleep (3.3 req/sec): worked briefly but degraded to 429-on-
+#   every-request once the line-item endpoint started getting hammered
+#   (run 25186157102 on 2026-04-30 — 90 min of nonstop 429s, no progress)
+# - 1.0s sleep (1 req/sec): conservative target. Each successful request
+#   "spends" 1s; if we still see 429s we add backoff, but the steady
+#   state should be one clean request per second.
+RATE_LIMIT_SLEEP = 1.0
 RATE_LIMIT_RETRIES = 6
-RATE_LIMIT_BACKOFF_BASE = 3.0  # 3, 6, 9, 12, 15, 18s before giving up
+RATE_LIMIT_BACKOFF_BASE = 5.0  # 5, 10, 15, 20, 25, 30s before giving up
 
 
 # Outlet (data/<id>.json basename) → MarginEdge restaurantUnitId.

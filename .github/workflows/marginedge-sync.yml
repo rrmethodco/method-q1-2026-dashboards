@@ -38,12 +38,14 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    # 90-min ceiling: line-item fetch is ~1 API call per order at 0.30s
-    # rate limit. With ~6k orders across 11 outlets and occasional 429
-    # retries, a full 90-day backfill runs ~45 min; nightly incrementals
-    # are <5 min. Was 30 — caused scheduled run 25171463855 to cancel
-    # mid-run on 2026-04-30 with no commit produced.
-    timeout-minutes: 90
+    # 5-hour ceiling: line-item fetch is ~1 API call per order at 1.0s
+    # rate limit. With ~6k orders across 11 outlets a full backfill runs
+    # ~2 hours; nightly incrementals are <10 min. Was 30 — caused
+    # scheduled run 25171463855 to cancel mid-fetch with no commit
+    # produced. Bumped briefly to 90, still insufficient under sustained
+    # 429-storm (run 25186157102, 2026-04-30). 300 gives plenty of
+    # headroom for the slower 1.0s-sleep cadence + 429 backoff.
+    timeout-minutes: 300
 
     steps:
       - name: Checkout
