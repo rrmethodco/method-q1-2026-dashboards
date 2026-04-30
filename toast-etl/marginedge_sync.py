@@ -491,10 +491,15 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
             # Try a few likely keys for the product's primary identifier
             # and category. Schema-flexible because the API hasn't been
             # documented end-to-end.
+            if products:
+                print(f"  [SCHEMA DEBUG] sample product keys: {list(products[0].keys())}")
+                print(f"  [SCHEMA DEBUG] sample product: {json.dumps(products[0], default=str)[:1000]}")
             product_cat_lookup = {}
             for p in products:
-                pid = p.get("companyConceptProductId") or p.get("productId") or p.get("id")
-                cid = p.get("categoryId")
+                pid = (p.get("companyConceptProductId") or p.get("productId") or
+                       p.get("id") or p.get("conceptProductId"))
+                cid = (p.get("categoryId") or p.get("category", {}).get("id") if isinstance(p.get("category"), dict) else None) or \
+                      p.get("companyConceptCategoryId") or p.get("conceptCategoryId")
                 if pid and cid:
                     product_cat_lookup[pid] = cid
             print(f"  product→category mappings built: {len(product_cat_lookup)} of {len(products)}")
