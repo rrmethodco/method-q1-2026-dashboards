@@ -308,24 +308,26 @@ footer.foot b { color: var(--slate); }
      the grid at all, pushing the entire content to page 2 with the
      snap-head orphaned on page 1. Cards and sections still stay
      together — those are the indivisible units; rows can split. */
-  .snap-grid { padding: 0 !important; gap: 8px !important; break-inside: auto !important; page-break-inside: auto !important; }
-  .snap-row { gap: 7px !important; break-inside: auto !important; page-break-inside: auto !important; }
+  .snap-grid { padding: 0 !important; gap: 5px !important; break-inside: auto !important; page-break-inside: auto !important; }
+  .snap-row { gap: 5px !important; break-inside: auto !important; page-break-inside: auto !important; }
   /* KPI cards — 4 across × 3 rows. Value font sized so '$120,000' fits
-     the column at the widest outlet name. */
-  .snap-card { padding: 9px 11px !important; border-width: 1px !important; }
-  .snap-card-label { font-size: 9px !important; letter-spacing: 0.12em !important; margin-bottom: 3px !important; }
-  .snap-card-value { font-size: 19px !important; line-height: 1.05 !important; }
-  .snap-card-delta { font-size: 10px !important; margin-top: 3px !important; line-height: 1.3 !important; }
+     the column at the widest outlet name. Tightened from the previous
+     19px/9px/9px/9px sizing to recover the ~180px needed to pull the
+     Period Comparison table back onto page 1. */
+  .snap-card { padding: 6px 9px !important; border-width: 1px !important; }
+  .snap-card-label { font-size: 8.5px !important; letter-spacing: 0.12em !important; margin-bottom: 2px !important; }
+  .snap-card-value { font-size: 17px !important; line-height: 1.05 !important; }
+  .snap-card-delta { font-size: 9.5px !important; margin-top: 2px !important; line-height: 1.25 !important; }
   /* Sections (wins / concerns / action items / table) */
-  .snap-section { padding: 9px 12px !important; }
-  .snap-section-title { font-size: 11px !important; letter-spacing: 0.14em !important; margin-bottom: 6px !important; padding-bottom: 4px !important; }
-  .snap-list li { padding: 4px 0 !important; font-size: 11px !important; line-height: 1.4 !important; }
-  .snap-list li::before { font-size: 10px !important; margin-right: 5px !important; }
+  .snap-section { padding: 6px 10px !important; }
+  .snap-section-title { font-size: 10.5px !important; letter-spacing: 0.14em !important; margin-bottom: 4px !important; padding-bottom: 3px !important; }
+  .snap-list li { padding: 2px 0 !important; font-size: 10.5px !important; line-height: 1.3 !important; }
+  .snap-list li::before { font-size: 9.5px !important; margin-right: 5px !important; }
   /* Period Comparison table — wide rows, readable. white-space: nowrap
      keeps multi-row wrapping (e.g. "+24.5% vs") from doubling row height. */
-  .snap-table { font-size: 10.5px !important; }
-  .snap-table th, .snap-table td { padding: 5px 8px !important; white-space: nowrap !important; }
-  .snap-table th { font-size: 9px !important; letter-spacing: 0.10em !important; }
+  .snap-table { font-size: 10px !important; }
+  .snap-table th, .snap-table td { padding: 3px 6px !important; white-space: nowrap !important; }
+  .snap-table th { font-size: 8.5px !important; letter-spacing: 0.10em !important; }
   /* Keep individual cards and sections from splitting mid-element, but
      LEAVE rows + grid free to break — see the .snap-grid comment above
      for the orphaned-snap-head bug this prevents. */
@@ -608,6 +610,7 @@ function renderNav() {
     { id: 'cogs',     label: 'Cost of Goods' },
     { id: 'events',   label: 'Private Events' },
     { id: 'guest',    label: 'Guest Experience' },
+    { id: 'forecast', label: 'Forecast Accuracy' },
     { id: 'snapshot', label: 'Weekly Snapshot' },
   ];
   list.innerHTML = sections.map(s =>
@@ -1011,6 +1014,7 @@ function renderOutlet() {
   if (STATE.section === 'cogs')         return renderCogsSection();
   if (STATE.section === 'events')       return renderEventsSection();
   if (STATE.section === 'guest')        return renderGuestSection();
+  if (STATE.section === 'forecast')     return renderForecastSection();
   if (STATE.section === 'snapshot')     return renderSnapshotSection();
 }
 
@@ -2931,6 +2935,363 @@ function snapshotBuildActionItems(snap) {
   }
 
   return items.slice(0, 8);
+}
+
+// ================================================================
+// FORECAST ACCURACY SECTION
+// ================================================================
+// Source for forecasts: helixo-2's proprietary AI engine (Supabase
+// daily_forecasts.ai_suggested_revenue / ai_suggested_covers). We
+// pass it through; we do not retrain. This section measures how well
+// helixo-2's predictions held up against Toast actuals on the days
+// where both exist.
+//
+// Metrics shown:
+//   - WAPE (weighted absolute % error) on net sales + covers — preferred
+//     over MAPE because zero/near-zero actuals blow up MAPE.
+//   - Bias (MPE) — sum signed % error. Tells us whether helixo-2 is
+//     systematically over- or under-forecasting.
+//   - Naive baseline (same DOW prior week) — if helixo-2 isn't beating
+//     this, the AI is providing no value over a 7-day-ago lookup.
+//   - Daily forecast vs actual line chart, daily APE bar chart.
+//   - Forward-window peek: next 7 / 14 / 28 days of helixo-2 prediction.
+function _forecastBuildPairs(o) {
+  const fc = (o && o.forecast && Array.isArray(o.forecast.daily)) ? o.forecast.daily : [];
+  const actuals = (o && o.order_details && o.order_details.main && Array.isArray(o.order_details.main.daily))
+    ? o.order_details.main.daily : [];
+  if (!fc.length) return { fc: [], actuals: [], pairs: [], future: [] };
+  const actByDate = new Map(actuals.map(r => [r.date, r]));
+  // pair = days where both forecast and actual exist
+  const pairs = [];
+  const future = [];
+  const todayIso = new Date().toISOString().slice(0, 10);
+  fc.forEach(f => {
+    const a = actByDate.get(f.date);
+    if (a && a.amount != null) {
+      pairs.push({
+        date: f.date,
+        forecastRev: f.net_sales,
+        actualRev:   a.amount,
+        forecastCov: f.guests,
+        actualCov:   a.guests,
+        confidence:  f.ai_confidence,
+      });
+    } else if (f.date >= todayIso && f.net_sales != null) {
+      future.push(f);
+    }
+  });
+  pairs.sort((a, b) => a.date.localeCompare(b.date));
+  future.sort((a, b) => a.date.localeCompare(b.date));
+  return { fc, actuals, pairs, future };
+}
+function _forecastMetrics(pairs, key) {
+  // Returns { n, wape, bias, mae, medianApe, p95Ape }
+  const F = key === 'rev' ? 'forecastRev' : 'forecastCov';
+  const A = key === 'rev' ? 'actualRev'   : 'actualCov';
+  const valid = pairs.filter(p => p[F] != null && p[A] != null && p[A] > 0);
+  if (!valid.length) return { n: 0 };
+  let absErrSum = 0, actualSum = 0, signedErrSum = 0, mae = 0;
+  const apes = [];
+  valid.forEach(p => {
+    const err = p[F] - p[A];
+    absErrSum  += Math.abs(err);
+    actualSum  += p[A];
+    signedErrSum += err / p[A];
+    mae        += Math.abs(err);
+    apes.push(Math.abs(err) / p[A]);
+  });
+  apes.sort((a, b) => a - b);
+  const median = apes[Math.floor(apes.length / 2)];
+  const p95    = apes[Math.floor(apes.length * 0.95)];
+  return {
+    n:         valid.length,
+    wape:      actualSum > 0 ? absErrSum / actualSum : null,   // 0..∞ (typically 0..1)
+    bias:      signedErrSum / valid.length,                    // signed
+    mae:       mae / valid.length,
+    medianApe: median,
+    p95Ape:    p95,
+  };
+}
+function _forecastNaiveBaselineWape(pairs, actuals, key) {
+  // Naive: forecast for date D = actual for date D-7. WAPE on the same
+  // pair window so it's comparable to helixo-2's WAPE.
+  const A = key === 'rev' ? 'actualRev' : 'actualCov';
+  const actByDate = new Map(actuals.map(r => [r.date, r]));
+  const realKey = key === 'rev' ? 'amount' : 'guests';
+  let absErrSum = 0, actualSum = 0, n = 0;
+  pairs.forEach(p => {
+    const dt = new Date(p.date + 'T12:00:00');
+    dt.setDate(dt.getDate() - 7);
+    const prevIso = dt.toISOString().slice(0, 10);
+    const prev = actByDate.get(prevIso);
+    if (!prev || prev[realKey] == null || p[A] == null || p[A] <= 0) return;
+    absErrSum += Math.abs(prev[realKey] - p[A]);
+    actualSum += p[A];
+    n++;
+  });
+  if (!n || !actualSum) return { n: 0, wape: null };
+  return { n, wape: absErrSum / actualSum };
+}
+function renderForecastSection() {
+  const o = DATA.outlets[STATE.outlet];
+  const body = document.getElementById('outletBody');
+  if (!o) { body.innerHTML = ''; return; }
+  const { fc, actuals, pairs, future } = _forecastBuildPairs(o);
+
+  // No forecast data at all — empty state with explanation
+  if (!fc.length) {
+    body.innerHTML = `
+      <section>
+        <div class="sect-head">
+          <div class="sect-title">Forecast Accuracy · ${o.name}</div>
+          <div class="sect-meta">helixo-2 AI · daily revenue + covers</div>
+        </div>
+        <div class="empty-chart" style="padding: 30px; text-align: center;">
+          <div class="empty-title">Forecast not wired for this outlet</div>
+          <div class="empty-sub">helixo-2 hasn't generated AI forecasts for ${o.name}. Check toast-etl/forecast_engine.py SUPA_UUID_TO_OUTLET — this outlet may not be mapped.</div>
+        </div>
+      </section>`;
+    return;
+  }
+
+  // Metrics
+  const revM   = _forecastMetrics(pairs, 'rev');
+  const covM   = _forecastMetrics(pairs, 'cov');
+  const naiveR = _forecastNaiveBaselineWape(pairs, actuals, 'rev');
+  const naiveC = _forecastNaiveBaselineWape(pairs, actuals, 'cov');
+  const aiConfAvg = pairs.length
+    ? pairs.filter(p => p.confidence != null).reduce((s, p) => s + p.confidence, 0) /
+      Math.max(1, pairs.filter(p => p.confidence != null).length)
+    : null;
+  const lastForecastDate = fc[fc.length - 1]?.date || '—';
+  const firstForecastDate = fc[0]?.date || '—';
+  const beatsNaiveRev = (revM.wape != null && naiveR.wape != null) ? (revM.wape < naiveR.wape) : null;
+  const beatsNaiveCov = (covM.wape != null && naiveC.wape != null) ? (covM.wape < naiveC.wape) : null;
+
+  // ai_confidence calibration — bin pairs and report WAPE per bin
+  const bins = [
+    { lo: 0,    hi: 0.7,  label: '< 0.70' },
+    { lo: 0.7,  hi: 0.85, label: '0.70 – 0.85' },
+    { lo: 0.85, hi: 1.01, label: '≥ 0.85' },
+  ];
+  const calib = bins.map(b => {
+    const subset = pairs.filter(p => p.confidence != null && p.confidence >= b.lo && p.confidence < b.hi);
+    return { ...b, m: _forecastMetrics(subset, 'rev') };
+  });
+
+  // Top-10 worst error days
+  const worstDays = pairs
+    .filter(p => p.forecastRev != null && p.actualRev != null && p.actualRev > 0)
+    .map(p => ({ ...p, ape: Math.abs(p.forecastRev - p.actualRev) / p.actualRev }))
+    .sort((a, b) => b.ape - a.ape)
+    .slice(0, 10);
+
+  // Helpers
+  const kpi = (label, val, sub, tone) =>
+    `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub ? `<div class="yoy ${tone || 'neutral'}">${sub}</div>` : ''}</div>`;
+  const wapeStr = w => w == null ? '—' : (w * 100).toFixed(1) + '%';
+  const biasStr = b => b == null ? '—' : (b > 0 ? '+' : '') + (b * 100).toFixed(1) + '%';
+  const beatsTag = won => won == null ? '—' : (won ? '<span style="color:#1a8754;font-weight:600;">✓ beats naive</span>' : '<span style="color:#b03030;font-weight:600;">✗ worse than naive</span>');
+
+  body.innerHTML = `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Forecast Accuracy · ${o.name}</div>
+        <div class="sect-meta">helixo-2 AI · ${pairs.length} day(s) of overlap · range ${firstForecastDate} → ${lastForecastDate}</div>
+      </div>
+      <div class="kpis">
+        ${kpi('WAPE · Revenue', wapeStr(revM.wape),
+          `${revM.n} days · ${beatsTag(beatsNaiveRev)} (naive ${wapeStr(naiveR.wape)})`, 'neutral')}
+        ${kpi('WAPE · Covers',  wapeStr(covM.wape),
+          `${covM.n} days · ${beatsTag(beatsNaiveCov)} (naive ${wapeStr(naiveC.wape)})`, 'neutral')}
+        ${kpi('Bias · Revenue', biasStr(revM.bias),
+          revM.bias == null ? '—' : (revM.bias > 0 ? 'over-forecasting' : 'under-forecasting'), 'neutral')}
+        ${kpi('Median APE',     wapeStr(revM.medianApe),
+          `p95 ${wapeStr(revM.p95Ape)} · half of days within ${wapeStr(revM.medianApe)}`, 'neutral')}
+        ${kpi('avg ai_confidence', aiConfAvg != null ? (aiConfAvg * 100).toFixed(0) + '%' : '—',
+          'helixo-2 self-reported · uncalibrated unless lower-conf bin shows higher WAPE', 'neutral')}
+        ${kpi('Forecast horizon', `${future.length} days`,
+          future.length ? `forward through ${future[future.length-1].date}` : 'no forward days', 'neutral')}
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Forecast vs Actual · Revenue</div>
+        <div class="sect-meta">Daily helixo-2 prediction (turquoise) vs Toast actual (slate). Future days show forecast only.</div>
+      </div>
+      <div class="card"><div class="chart-wrap tall"><canvas id="forecastRevTrend"></canvas></div></div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Forecast vs Actual · Covers</div>
+        <div class="sect-meta">Daily covers — forecast vs actual.</div>
+      </div>
+      <div class="card"><div class="chart-wrap tall"><canvas id="forecastCovTrend"></canvas></div></div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Daily Error · APE</div>
+        <div class="sect-meta">Absolute % error per day. Bars over 25% are flagged in red.</div>
+      </div>
+      <div class="card"><div class="chart-wrap tall"><canvas id="forecastApe"></canvas></div></div>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">ai_confidence calibration</div>
+        <div class="sect-meta">If higher confidence → lower WAPE, the score is calibrated. If not, treat ai_confidence as noise.</div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Confidence bin</th><th class="num">Days</th><th class="num">WAPE Revenue</th><th class="num">Median APE</th></tr></thead>
+        <tbody>
+          ${calib.map(b => `
+            <tr>
+              <td>${b.label}</td>
+              <td class="num">${b.m.n || 0}</td>
+              <td class="num">${wapeStr(b.m.wape)}</td>
+              <td class="num">${wapeStr(b.m.medianApe)}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Worst Error Days (top 10)</div>
+        <div class="sect-meta">Days where helixo-2 missed by the largest %. Cross-reference these dates against events / weather / holidays / menu changes.</div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Date</th><th>DOW</th><th class="num">Forecast</th><th class="num">Actual</th><th class="num">Δ</th><th class="num">APE</th></tr></thead>
+        <tbody>
+          ${worstDays.length ? worstDays.map(p => {
+            const dow = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(p.date+'T12:00:00').getDay()];
+            const delta = p.forecastRev - p.actualRev;
+            return `<tr>
+              <td>${p.date}</td>
+              <td>${dow}</td>
+              <td class="num">${fmtMoneyFull(p.forecastRev)}</td>
+              <td class="num">${fmtMoneyFull(p.actualRev)}</td>
+              <td class="num" style="color:${delta >= 0 ? '#1a8754' : '#b03030'}">${delta >= 0 ? '+' : ''}${fmtMoneyFull(delta)}</td>
+              <td class="num"><b>${(p.ape * 100).toFixed(1)}%</b></td>
+            </tr>`;
+          }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--royal);font-style:italic;padding:18px;">No paired days yet — backfill actuals or wait for forecast horizon to elapse.</td></tr>'}
+        </tbody>
+      </table>
+    </section>
+
+    ${future.length ? `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Forward Window · helixo-2 next ${Math.min(future.length, 28)} days</div>
+        <div class="sect-meta">No actuals yet — these are the predictions the dashboard's "vs Forecast" KPI cards will compare against.</div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Date</th><th>DOW</th><th class="num">Forecast Revenue</th><th class="num">Forecast Covers</th><th class="num">ai_confidence</th></tr></thead>
+        <tbody>
+          ${future.slice(0, 28).map(f => {
+            const dow = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(f.date+'T12:00:00').getDay()];
+            return `<tr>
+              <td>${f.date}</td>
+              <td>${dow}</td>
+              <td class="num">${fmtMoneyFull(f.net_sales)}</td>
+              <td class="num">${fmtNum(f.guests)}</td>
+              <td class="num">${f.ai_confidence != null ? (f.ai_confidence * 100).toFixed(0) + '%' : '—'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </section>
+    ` : ''}
+  `;
+
+  // Charts — guarded with safeChart so a render failure doesn't blank the page
+  const toDate = s => new Date(s + 'T12:00:00');
+
+  if (pairs.length || future.length) {
+    safeChart('forecastRevTrend', () => {
+      const allDates = [...pairs.map(p => p.date), ...future.map(f => f.date)];
+      const labels = allDates.map(d => toDate(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const fcSeries = allDates.map(d => {
+        const p = pairs.find(x => x.date === d);
+        if (p) return p.forecastRev;
+        const f = future.find(x => x.date === d);
+        return f ? f.net_sales : null;
+      });
+      const acSeries = allDates.map(d => {
+        const p = pairs.find(x => x.date === d);
+        return p ? p.actualRev : null;
+      });
+      charts.forecastRevTrend = new Chart(document.getElementById('forecastRevTrend'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'helixo-2 Forecast', data: fcSeries, borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.10)', borderWidth: 2, pointRadius: 2, tension: 0.2, spanGaps: true },
+            { label: 'Actual',            data: acSeries, borderColor: '#212931', backgroundColor: 'rgba(33,41,49,0.10)', borderWidth: 2.5, pointRadius: 2, tension: 0.2, spanGaps: true },
+          ],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtMoneyFull(c.parsed.y) } } },
+          scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtMoney(v) } } },
+        },
+      });
+    }, 'Revenue forecast chart unavailable', 'Check console for details.');
+  }
+
+  if (pairs.length || future.length) {
+    safeChart('forecastCovTrend', () => {
+      const allDates = [...pairs.map(p => p.date), ...future.map(f => f.date)];
+      const labels = allDates.map(d => toDate(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const fcSeries = allDates.map(d => {
+        const p = pairs.find(x => x.date === d);
+        if (p) return p.forecastCov;
+        const f = future.find(x => x.date === d);
+        return f ? f.guests : null;
+      });
+      const acSeries = allDates.map(d => {
+        const p = pairs.find(x => x.date === d);
+        return p ? p.actualCov : null;
+      });
+      charts.forecastCovTrend = new Chart(document.getElementById('forecastCovTrend'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Forecast Covers', data: fcSeries, borderColor: '#BCC8BE', backgroundColor: 'rgba(188,200,190,0.20)', borderWidth: 2, pointRadius: 2, tension: 0.2, spanGaps: true },
+            { label: 'Actual Covers',   data: acSeries, borderColor: '#405766', backgroundColor: 'rgba(64,87,102,0.10)', borderWidth: 2.5, pointRadius: 2, tension: 0.2, spanGaps: true },
+          ],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtNum(c.parsed.y) } } },
+          scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => fmtNum(v) } } },
+        },
+      });
+    }, 'Cover forecast chart unavailable', 'Check console for details.');
+  }
+
+  if (pairs.length) {
+    safeChart('forecastApe', () => {
+      const sorted = [...pairs].sort((a, b) => a.date.localeCompare(b.date))
+        .filter(p => p.forecastRev != null && p.actualRev != null && p.actualRev > 0);
+      const labels = sorted.map(p => toDate(p.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const apes = sorted.map(p => (Math.abs(p.forecastRev - p.actualRev) / p.actualRev) * 100);
+      const colors = apes.map(a => a > 25 ? '#b03030' : '#2BA6BB');
+      charts.forecastApe = new Chart(document.getElementById('forecastApe'), {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'APE %', data: apes, backgroundColor: colors, borderRadius: 2 }] },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.y.toFixed(1) + '%' } } },
+          scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v.toFixed(0) + '%' }, grid: { color: '#F0EDEC' } } },
+        },
+      });
+    }, 'APE chart unavailable', 'Check console for details.');
+  }
 }
 
 function renderSnapshotSection() {
@@ -5840,6 +6201,7 @@ function rerenderSection() {
   if (STATE.section === 'cogs')     return renderCogsSection();
   if (STATE.section === 'events')   return renderEventsSection();
   if (STATE.section === 'guest')    return renderGuestSection();
+  if (STATE.section === 'forecast') return renderForecastSection();
   if (STATE.section === 'snapshot') return renderSnapshotSection();
 }
 
