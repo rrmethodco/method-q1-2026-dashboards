@@ -43,7 +43,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: forecast-sync
+  # Shared with the other data/<outlet>.json writers (toast-sync,
+  # budget-sync, guest-sync, marginedge-sync, tripleseat-sync) so
+  # cross-workflow runs serialize on git push instead of racing into
+  # rebase conflicts. See toast-sync.yml for the full rationale.
+  group: data-sync
   cancel-in-progress: false
 
 jobs:

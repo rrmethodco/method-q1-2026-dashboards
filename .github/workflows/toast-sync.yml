@@ -27,7 +27,14 @@ permissions:
   contents: write  # needed to commit regenerated JSON
 
 concurrency:
-  group: toast-sync
+  # Shared with the other data/<outlet>.json writers (budget-sync,
+  # forecast-sync, guest-sync, marginedge-sync, tripleseat-sync). They
+  # all commit to the same files, so running concurrently produces
+  # rebase conflicts on push (e.g. data/kampers.json modified by both
+  # a 2h toast-sync backfill and the 18:57Z budget-sync nightly). The
+  # shared group serializes them; cancel-in-progress: false keeps any
+  # queued run alive until it gets the lock.
+  group: data-sync
   cancel-in-progress: false
 
 jobs:
