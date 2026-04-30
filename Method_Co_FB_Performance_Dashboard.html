@@ -438,7 +438,7 @@ const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
 // weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
 // filter to a single Mon..Sun 7-day window. When set, periodBounds returns
 // that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all', heatMetric: '$', trendMetric: 'revenue', trendType: 'area', trendLine: 'none' };
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all', heatMetric: '$', trendMetric: 'revenue', trendType: 'area', trendLine: 'none', laborTrendMetric: 'hours', laborTrendType: 'area', laborTrendLine: 'none', laborTrendCompare: 'none', laborGran: 'D' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -1422,6 +1422,15 @@ const LABOR_PROPERTY_PREFIXES = [
   "Kamper's", "Kampers", "Lowland", "Quoin", "Anthology", "Vessel",
   "Mulherin's", "Mulherins", "WMS", "LSD", "LS", "BR", "RR",
 ];
+// Operator-driven aliases — fold variants into a canonical role so the
+// Position Detail table doesn't fragment. Per Ross 2026-04-30:
+//   "Bar Prep" rolls into Bartender (it's a bartender prep shift, not BOH)
+//   "Event Server" rolls into Server (just a server on event shift)
+// Keys are lowercased; values are the display title.
+const POSITION_SYNONYMS = {
+  'bar prep': 'Bartender',
+  'event server': 'Server',
+};
 function canonicalJobTitle(title) {
   if (!title) return title || 'Unknown';
   let s = String(title).trim();
@@ -1433,11 +1442,17 @@ function canonicalJobTitle(title) {
   }
   // Strip a generic 2-5 letter ALL-CAPS abbreviation prefix followed by " - "
   s = s.replace(/^[A-Z]{2,5}\s*-\s*/, '');
+  // Apply synonym fold last so "Bar Prep" → "Bartender" survives any
+  // earlier prefix stripping. Match on case-insensitive whole title.
+  const synonym = POSITION_SYNONYMS[s.toLowerCase()];
+  if (synonym) s = synonym;
   return s.trim() || title;
 }
 // Classify a (canonical) job title into FOH / BOH / OTHER.
 // Conservative keyword matching — anything ambiguous lands in "other".
-const FOH_PATTERNS = /\b(server|host(?:ess)?|bartender|bar back|barback|busser|food runner|runner|sommelier|maitre|waiter|waitress|cashier|barista|reservationist|expo)\b/i;
+// "training" is included as FOH per Ross — Training shifts are scheduled
+// against FOH service hours, not kitchen ops.
+const FOH_PATTERNS = /\b(server|host(?:ess)?|bartender|bar back|barback|busser|food runner|runner|sommelier|maitre|waiter|waitress|cashier|barista|reservationist|expo|training)\b/i;
 const BOH_PATTERNS = /\b(cook|chef|saute|grill|fryer?|line|prep|expediter|dishwasher|dish\s*(?:tank|pit)?|porter|gardé?\s*manger|garde manger|pastry|baker|butcher|sushi|kitchen)\b/i;
 const MGR_PATTERNS = /\b(manager|gm|general manager|director|supervisor|captain|lead)\b/i;
 function classifyFohBoh(canonicalTitle) {
@@ -1701,12 +1716,52 @@ function renderLaborSection() {
 
     <section>
       <div class="sect-head">
-        <div class="sect-title">Daily Labor</div>
-        <div class="sect-meta">Hours &amp; cost by business day</div>
+        <div class="sect-title">Performance Trend</div>
+        <div class="sect-meta">Multi-metric labor trend with granularity, chart type, trend-line overlay &amp; comparison</div>
       </div>
-      <div class="grid grid-2">
-        <div class="card"><h3>Hours by Day</h3><div class="desc">Regular + Overtime · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="laborHoursDaily"></canvas></div></div>
-        <div class="card"><h3>Labor $ by Day</h3><div class="desc">Total cost · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="laborCostDaily"></canvas></div></div>
+      <div class="card">
+        <div class="card-head" style="align-items:flex-start;">
+          <div>
+            <h3 style="margin:0;">Labor Performance Trends</h3>
+            <div class="desc" style="margin-top:2px;" id="laborTrendSubtitle">${periodLabel}</div>
+          </div>
+          <div class="card-compare" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <select id="laborTrendMetricFilter" title="Metric">
+              <option value="hours"     ${STATE.laborTrendMetric==='hours'    ?'selected':''}>Hours</option>
+              <option value="cost"      ${STATE.laborTrendMetric==='cost'     ?'selected':''}>Labor $</option>
+              <option value="laborPct"  ${STATE.laborTrendMetric==='laborPct' ?'selected':''}>Labor %</option>
+              <option value="otHrs"     ${STATE.laborTrendMetric==='otHrs'    ?'selected':''}>OT Hours</option>
+              <option value="otCost"    ${STATE.laborTrendMetric==='otCost'   ?'selected':''}>OT $</option>
+              <option value="splh"      ${STATE.laborTrendMetric==='splh'     ?'selected':''}>SPMH</option>
+              <option value="cphl"      ${STATE.laborTrendMetric==='cphl'     ?'selected':''}>Covers / Labor Hr</option>
+            </select>
+            <select id="laborTrendGranFilter" title="Granularity">
+              <option value="D" ${STATE.laborGran==='D'?'selected':''}>Daily</option>
+              <option value="W" ${STATE.laborGran==='W'?'selected':''}>Weekly</option>
+              <option value="M" ${STATE.laborGran==='M'?'selected':''}>Monthly</option>
+            </select>
+            <select id="laborTrendTypeFilter" title="Chart type">
+              <option value="line" ${STATE.laborTrendType==='line'?'selected':''}>Line</option>
+              <option value="area" ${STATE.laborTrendType==='area'?'selected':''}>Area</option>
+              <option value="bar"  ${STATE.laborTrendType==='bar' ?'selected':''}>Bar</option>
+            </select>
+            <select id="laborTrendLineFilter" title="Trend line overlay">
+              <option value="none"   ${STATE.laborTrendLine==='none'  ?'selected':''}>No trend line</option>
+              <option value="linear" ${STATE.laborTrendLine==='linear'?'selected':''}>Linear trend</option>
+              <option value="sma7"   ${STATE.laborTrendLine==='sma7'  ?'selected':''}>7-period MA</option>
+            </select>
+            <button type="button" id="laborTrendDownloadBtn" title="Download CSV"
+              style="background:transparent;border:1px solid var(--grey);padding:6px 8px;cursor:pointer;border-radius:2px;font-size:12px;line-height:1;">↓</button>
+            <select id="laborTrendCompareFilter" title="Comparison overlay">
+              <option value="none" ${STATE.laborTrendCompare==='none'?'selected':''}>No comparison</option>
+              <option value="STLY" ${STATE.laborTrendCompare==='STLY'?'selected':''}>STLY</option>
+              <option value="T2W"  ${STATE.laborTrendCompare==='T2W' ?'selected':''}>T2W Avg</option>
+              <option value="LW"   ${STATE.laborTrendCompare==='LW'  ?'selected':''}>vs LW</option>
+              <option value="all"  ${STATE.laborTrendCompare==='all' ?'selected':''}>All</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-wrap tall"><canvas id="laborTrendChart"></canvas></div>
       </div>
     </section>
 
@@ -1753,7 +1808,7 @@ function renderLaborSection() {
       <div class="card" style="margin-top: 14px;">
         <h3>Position Detail</h3>
         <div class="desc">Consolidated across RCs · ${laborFilter === 'total' ? 'all positions' : laborFilter.toUpperCase() + ' only'} · SPMH = Outlet Net Sales ÷ position hours (gross, not attributed)</div>
-        <div style="overflow:auto; max-height: 420px;">
+        <div style="overflow:auto; max-height: 480px;">
           <table class="tbl">
             <thead><tr>
               <th style="text-align:left">Position</th>
@@ -1767,30 +1822,78 @@ function renderLaborSection() {
               <th style="text-align:right">SPMH</th>
             </tr></thead>
             <tbody>
-              ${byJob.map(r => {
-                const pct        = byJobTotalCost > 0 ? (r.cost / byJobTotalCost * 100) : null;
-                const pctOfSales = ssTot.net_sales > 0 ? (r.cost / ssTot.net_sales * 100) : null;
-                const rate       = r.hours > 0 ? (r.cost / r.hours) : null;
-                const spmh       = r.hours > 0 && ssTot.net_sales > 0 ? (ssTot.net_sales / r.hours) : null;
-                const tooltip = (r.original_titles && r.original_titles.length > 1)
-                  ? ` title="combines: ${r.original_titles.join(' · ').replace(/"/g,'&quot;')}"`
-                  : '';
-                const cls = (r.foh_boh || 'other').toUpperCase();
-                const clsColor = r.foh_boh === 'foh' ? 'var(--turquoise)'
-                               : r.foh_boh === 'boh' ? 'var(--royal)'
-                               : 'var(--muted)';
-                return `<tr${tooltip}>
-                  <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}${(r.original_titles && r.original_titles.length > 1) ? ` <span style="color:var(--muted); font-size:10px">(×${r.original_titles.length})</span>` : ''}</td>
-                  <td><span style="display:inline-block; padding:2px 8px; font-size:9px; letter-spacing:0.1em; background:${clsColor}; color:#fff; border-radius:2px;">${cls}</span></td>
-                  <td style="text-align:right">${fmtHrs(r.hours)}</td>
-                  <td style="text-align:right">${r.days != null ? r.days : '—'}</td>
-                  <td style="text-align:right">${fmtMoney(r.cost)}</td>
-                  <td style="text-align:right">${pct!=null?pct.toFixed(1)+'%':'—'}</td>
-                  <td style="text-align:right">${pctOfSales!=null?pctOfSales.toFixed(1)+'%':'—'}</td>
-                  <td style="text-align:right">${rate!=null?'$'+rate.toFixed(2):'—'}</td>
-                  <td style="text-align:right">${spmh!=null?'$'+spmh.toFixed(0):'—'}</td>
-                </tr>`;
-              }).join('')}
+              ${(() => {
+                // Group rows by FOH / BOH / OTHER, render each bucket's
+                // rows in the existing cost-desc sort, then emit a subtotal
+                // row that pulls from the always-on FOH/BOH aggregates so
+                // the math agrees with the Efficiency strip. Grand total
+                // at the very bottom.
+                const buckets = { foh: [], boh: [], other: [] };
+                byJob.forEach(r => { (buckets[r.foh_boh] || buckets.other).push(r); });
+                const renderRow = (r) => {
+                  const pct        = byJobTotalCost > 0 ? (r.cost / byJobTotalCost * 100) : null;
+                  const pctOfSales = ssTot.net_sales > 0 ? (r.cost / ssTot.net_sales * 100) : null;
+                  const rate       = r.hours > 0 ? (r.cost / r.hours) : null;
+                  const spmh       = r.hours > 0 && ssTot.net_sales > 0 ? (ssTot.net_sales / r.hours) : null;
+                  const tooltip = (r.original_titles && r.original_titles.length > 1)
+                    ? ` title="combines: ${r.original_titles.join(' · ').replace(/"/g,'&quot;')}"`
+                    : '';
+                  const cls = (r.foh_boh || 'other').toUpperCase();
+                  const clsColor = r.foh_boh === 'foh' ? 'var(--turquoise)'
+                                 : r.foh_boh === 'boh' ? 'var(--royal)'
+                                 : 'var(--muted)';
+                  return `<tr${tooltip}>
+                    <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}${(r.original_titles && r.original_titles.length > 1) ? ` <span style="color:var(--muted); font-size:10px">(×${r.original_titles.length})</span>` : ''}</td>
+                    <td><span style="display:inline-block; padding:2px 8px; font-size:9px; letter-spacing:0.1em; background:${clsColor}; color:#fff; border-radius:2px;">${cls}</span></td>
+                    <td style="text-align:right">${fmtHrs(r.hours)}</td>
+                    <td style="text-align:right">${r.days != null ? r.days : '—'}</td>
+                    <td style="text-align:right">${fmtMoney(r.cost)}</td>
+                    <td style="text-align:right">${pct!=null?pct.toFixed(1)+'%':'—'}</td>
+                    <td style="text-align:right">${pctOfSales!=null?pctOfSales.toFixed(1)+'%':'—'}</td>
+                    <td style="text-align:right">${rate!=null?'$'+rate.toFixed(2):'—'}</td>
+                    <td style="text-align:right">${spmh!=null?'$'+spmh.toFixed(0):'—'}</td>
+                  </tr>`;
+                };
+                const renderSubtotal = (label, hrs, cost, rate, spmh, sectionPctOfSales, isGrand) => {
+                  const pctOfLabor = byJobTotalCost > 0 && cost != null ? (cost / byJobTotalCost * 100) : null;
+                  const bg   = isGrand ? 'var(--slate)' : 'var(--grey)';
+                  const fg   = isGrand ? '#fff' : 'var(--black)';
+                  const wt   = isGrand ? 700 : 600;
+                  const bdr  = isGrand ? '2px solid var(--slate)' : '1px solid var(--royal)';
+                  return `<tr style="background:${bg}; color:${fg}; font-weight:${wt}; border-top:${bdr};">
+                    <td style="padding:8px 6px;">${label}</td>
+                    <td></td>
+                    <td style="text-align:right">${hrs != null ? fmtHrs(hrs) : '—'}</td>
+                    <td style="text-align:right">—</td>
+                    <td style="text-align:right">${cost != null ? fmtMoney(cost) : '—'}</td>
+                    <td style="text-align:right">${pctOfLabor!=null?pctOfLabor.toFixed(1)+'%':'—'}</td>
+                    <td style="text-align:right">${sectionPctOfSales!=null?sectionPctOfSales.toFixed(1)+'%':'—'}</td>
+                    <td style="text-align:right">${rate!=null?'$'+rate.toFixed(2):'—'}</td>
+                    <td style="text-align:right">${spmh!=null?'$'+spmh.toFixed(0):'—'}</td>
+                  </tr>`;
+                };
+                let html = '';
+                if (buckets.foh.length) {
+                  html += buckets.foh.map(renderRow).join('');
+                  html += renderSubtotal('FOH SUBTOTAL', fohHrs, fohCost, fohRate, splhFOH, fohCostPct, false);
+                }
+                if (buckets.boh.length) {
+                  html += buckets.boh.map(renderRow).join('');
+                  html += renderSubtotal('BOH SUBTOTAL', bohHrs, bohCost, bohRate, splhBOH, bohCostPct, false);
+                }
+                if (buckets.other.length) {
+                  html += buckets.other.map(renderRow).join('');
+                }
+                // Grand total: only show when filter shows everything and
+                // numbers actually agree with byJob sum. When the filter
+                // narrows to FOH or BOH, the "FOH SUBTOTAL" / "BOH SUBTOTAL"
+                // already serves as the total for what's displayed.
+                if (laborFilter === 'total') {
+                  const totalPctOfSales = ssTot.net_sales > 0 ? (byJobTotalCost / ssTot.net_sales * 100) : null;
+                  html += renderSubtotal('TOTAL LABOR', totalHrs, byJobTotalCost, blendedRate, sphl, totalPctOfSales, true);
+                }
+                return html;
+              })()}
             </tbody>
           </table>
         </div>
@@ -1803,44 +1906,12 @@ function renderLaborSection() {
     </p>
   `;
 
-  // Charts
-  const labels = labRows.map(r => r.date);
-  destroy('laborHoursDaily');
-  if (labels.length) {
-    new Chart(document.getElementById('laborHoursDaily'), {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [
-          { label: 'Regular',  data: labRows.map(r => r.regular_hours),  backgroundColor: C.royal,    stack: 'h' },
-          { label: 'Overtime', data: labRows.map(r => r.overtime_hours), backgroundColor: C.turquoise, stack: 'h' },
-        ],
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } },
-        scales: {
-          x: { type: 'time', time: { unit: 'day', tooltipFormat: 'MMM d', displayFormats: { day: 'MMM d' } }, grid: { display: false } },
-          y: { stacked: true, beginAtZero: true, ticks: { callback: v => v.toLocaleString() + ' hr' } },
-        },
-      },
-    });
-  }
-  destroy('laborCostDaily');
-  if (labels.length) {
-    new Chart(document.getElementById('laborCostDaily'), {
-      type: 'bar',
-      data: { labels, datasets: [{ label: 'Total Labor $', data: labRows.map(r => r.total_cost), backgroundColor: C.slate }] },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { type: 'time', time: { unit: 'day', tooltipFormat: 'MMM d', displayFormats: { day: 'MMM d' } }, grid: { display: false } },
-          y: { beginAtZero: true, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' } },
-        },
-      },
-    });
-  }
+  // ===== Labor Performance Trend (single full-width card replacing the
+  // old Hours by Day / Labor $ by Day twin charts). Mirrors the Revenue
+  // tab's F&B Performance Trends UI and capabilities — metric, granularity,
+  // chart type, trend-line overlay, comparison overlays (STLY/LW/T2W),
+  // and CSV download.
+  renderLaborTrend(lab, ssDaily, bSel, periodLabel, laborFilter);
   destroy('laborByJobBar');
   if (byJob.length) {
     const top = byJob.slice(0, 12);
@@ -2068,6 +2139,314 @@ function renderLaborSection() {
       rerenderSection();
     });
   });
+}
+
+// =====================================================================
+// Labor Performance Trend — drives the full-width trend card on the Labor
+// tab. Mirrors renderTrend() (Revenue tab) so operators get a familiar UX:
+// metric / granularity / type / trend-line / compare overlay / CSV export.
+// Joins labor.daily with combinedDailySales() so SPMH / Labor% / Covers-per-Hr
+// can resolve. Per-row period is filtered by bSel (the active period bounds).
+// =====================================================================
+const LABOR_TREND_METRICS = {
+  hours:    { label: 'Hours',             field: 'hours',     fmtY: v => Math.round(v||0).toLocaleString() + ' hr', fmtTip: v => (v||0).toFixed(1) + ' hr' },
+  cost:     { label: 'Labor $',           field: 'cost',      fmtY: v => '$' + ((v||0)/1000).toFixed(1) + 'k',      fmtTip: v => '$' + Math.round(v||0).toLocaleString() },
+  laborPct: { label: 'Labor %',           field: 'laborPct',  fmtY: v => (v||0).toFixed(1) + '%',                   fmtTip: v => (v||0).toFixed(1) + '%' },
+  otHrs:    { label: 'OT Hours',          field: 'otHrs',     fmtY: v => (v||0).toFixed(1) + ' hr',                 fmtTip: v => (v||0).toFixed(1) + ' hr' },
+  otCost:   { label: 'OT $',              field: 'otCost',    fmtY: v => '$' + ((v||0)/1000).toFixed(2) + 'k',      fmtTip: v => '$' + Math.round(v||0).toLocaleString() },
+  splh:     { label: 'SPMH',              field: 'splh',      fmtY: v => '$' + Math.round(v||0),                    fmtTip: v => '$' + Math.round(v||0) },
+  cphl:     { label: 'Covers / Labor Hr', field: 'cphl',      fmtY: v => (v||0).toFixed(2),                         fmtTip: v => (v||0).toFixed(2) },
+};
+function buildLaborTrendDaily(lab, ssDaily) {
+  // Index sales by date so we can join in O(1).
+  const ssByDate = Object.create(null);
+  ssDaily.forEach(r => { ssByDate[r.date] = r; });
+  return (lab.daily || []).map(r => {
+    const hours    = (r.regular_hours || 0) + (r.overtime_hours || 0);
+    const cost     = r.total_cost || 0;
+    const otHrs    = r.overtime_hours || 0;
+    const otCost   = r.overtime_cost || 0;
+    const ss       = ssByDate[r.date];
+    const netSales = ss ? (ss.net_sales || 0) : 0;
+    const guests   = ss ? (ss.guests    || 0) : 0;
+    const orders   = ss ? (ss.orders    || 0) : 0;
+    return {
+      date: r.date,
+      hours, cost, otHrs, otCost,
+      net_sales: netSales, guests, orders,
+      laborPct: netSales > 0 ? cost / netSales * 100 : null,
+      splh:     hours > 0 ? netSales / hours : null,
+      cphl:     hours > 0 ? guests / hours : null,
+    };
+  }).sort((a,b) => a.date.localeCompare(b.date));
+}
+function rollupLaborTrend(rows, gran) {
+  if (gran === 'D') return rows;
+  // Sum the additive fields per bucket; recompute derived metrics from
+  // the aggregated numerators/denominators so the rollup actually agrees
+  // with the period totals (avoid average-of-averages on Labor% / SPMH).
+  const map = {};
+  rows.forEach(r => {
+    const k = gran === 'W' ? weekStart(r.date) : r.date.slice(0,7);
+    if (!map[k]) {
+      map[k] = { date: k, hours: 0, cost: 0, otHrs: 0, otCost: 0, net_sales: 0, guests: 0, orders: 0 };
+    }
+    map[k].hours     += r.hours     || 0;
+    map[k].cost      += r.cost      || 0;
+    map[k].otHrs     += r.otHrs     || 0;
+    map[k].otCost    += r.otCost    || 0;
+    map[k].net_sales += r.net_sales || 0;
+    map[k].guests    += r.guests    || 0;
+    map[k].orders    += r.orders    || 0;
+  });
+  return Object.values(map)
+    .map(b => ({
+      ...b,
+      laborPct: b.net_sales > 0 ? b.cost / b.net_sales * 100 : null,
+      splh:     b.hours > 0 ? b.net_sales / b.hours : null,
+      cphl:     b.hours > 0 ? b.guests / b.hours : null,
+    }))
+    .sort((a,b) => a.date < b.date ? -1 : 1);
+}
+function filterLaborTrend(rows, b) {
+  if (!b) return rows;
+  return rows.filter(r => r.date >= b.start && r.date <= b.end);
+}
+function renderLaborTrend(lab, ssDaily, bSel, periodLabel, laborFilter) {
+  destroy('laborTrend');
+  const cv = document.getElementById('laborTrendChart');
+  if (!cv) return;
+  const metricKey = STATE.laborTrendMetric || 'hours';
+  const metric    = LABOR_TREND_METRICS[metricKey] || LABOR_TREND_METRICS.hours;
+  const gran      = STATE.laborGran || 'D';
+  const trendType = STATE.laborTrendType || 'area';
+  const isBar     = trendType === 'bar';
+  const isArea    = trendType === 'area';
+
+  // Subtitle (mirrors revenue trend's "<Metric> - <Period>" pattern).
+  const sub = document.getElementById('laborTrendSubtitle');
+  if (sub) sub.textContent = `${metric.label} - ${periodLabel}`;
+
+  const daily = buildLaborTrendDaily(lab, ssDaily);
+  const curRows = filterLaborTrend(daily, bSel);
+  if (!curRows.length) {
+    showEmpty('laborTrendChart', 'No labor data in this period', 'Select a different month or wait for the next Toast labor sync.');
+    wireLaborTrendControls(lab, ssDaily, bSel, periodLabel, laborFilter);
+    return;
+  }
+  const curRoll = rollupLaborTrend(curRows, gran);
+  safeChart('laborTrendChart', () => {
+    const ctx = cv.getContext('2d');
+    let areaFill = 'rgba(43,166,187,0.25)';
+    try {
+      const grad = ctx.createLinearGradient(0, 0, 0, 360);
+      grad.addColorStop(0, 'rgba(43,166,187,0.40)');
+      grad.addColorStop(1, 'rgba(43,166,187,0.02)');
+      areaFill = grad;
+    } catch (_) {}
+
+    const yField = metric.field;
+    const datasets = [{
+      type: isBar ? 'bar' : 'line',
+      label: metric.label,
+      data: curRoll.map(r => ({ x: toLocalNoon(r.date), y: r[yField] })),
+      backgroundColor: isBar ? C.turquoise : (isArea ? areaFill : 'transparent'),
+      borderColor: C.turquoise,
+      borderWidth: isBar ? 0 : 2.5,
+      fill: isArea ? 'origin' : false,
+      tension: 0.4,
+      pointRadius: 0, pointHoverRadius: 5,
+      pointBackgroundColor: C.turquoise, pointBorderColor: '#fff', pointBorderWidth: 2,
+      borderRadius: isBar ? 2 : 0,
+      barPercentage: 0.8, categoryPercentage: 0.9,
+      order: 2,
+    }];
+
+    // ===== Comparison overlays =====
+    const cmpModes = cmpModesFor(STATE.laborTrendCompare);
+    if (cmpModes.length && bSel) {
+      const startDt = toLocalNoon(bSel.start);
+      const endDt   = toLocalNoon(bSel.end);
+      const periodDays = Math.round((endDt - startDt) / 86400000) + 1;
+      cmpModes.forEach(mode => {
+        const color = CMP_COLOR[mode];
+        const label = CMP_LABEL[mode];
+        let cmpB = null;
+        if (mode === 'STLY') {
+          cmpB = priorYearBounds(bSel);
+        } else if (mode === 'LW') {
+          const cmpEnd = new Date(startDt); cmpEnd.setDate(cmpEnd.getDate() - 1);
+          const cmpStart = new Date(cmpEnd); cmpStart.setDate(cmpStart.getDate() - (periodDays - 1));
+          cmpB = { start: isoLocal(cmpStart), end: isoLocal(cmpEnd), kind: 'window' };
+        } else if (mode === 'T2W') {
+          const cmpEnd = new Date(startDt); cmpEnd.setDate(cmpEnd.getDate() - 1);
+          const cmpStart = new Date(cmpEnd); cmpStart.setDate(cmpStart.getDate() - 13);
+          cmpB = { start: isoLocal(cmpStart), end: isoLocal(cmpEnd), kind: 'window' };
+        }
+        if (!cmpB) return;
+        const cmpRows = filterLaborTrend(daily, cmpB);
+        if (!cmpRows.length) return;
+        if (mode === 'T2W') {
+          // T2W = flat per-day average across the prior 14 days, projected
+          // onto the current period as a baseline.
+          const totals = cmpRows.reduce((a, r) => {
+            a.hours += r.hours; a.cost += r.cost; a.otHrs += r.otHrs; a.otCost += r.otCost;
+            a.net_sales += r.net_sales; a.guests += r.guests; a.orders += r.orders;
+            return a;
+          }, { hours:0, cost:0, otHrs:0, otCost:0, net_sales:0, guests:0, orders:0 });
+          const days = 14;
+          const avgRow = {
+            hours: totals.hours/days, cost: totals.cost/days,
+            otHrs: totals.otHrs/days, otCost: totals.otCost/days,
+            net_sales: totals.net_sales/days, guests: totals.guests/days, orders: totals.orders/days,
+          };
+          avgRow.laborPct = avgRow.net_sales > 0 ? avgRow.cost / avgRow.net_sales * 100 : null;
+          avgRow.splh     = avgRow.hours > 0 ? avgRow.net_sales / avgRow.hours : null;
+          avgRow.cphl     = avgRow.hours > 0 ? avgRow.guests / avgRow.hours : null;
+          datasets.push({
+            type: 'line', label: label + ' / day',
+            data: curRoll.map(r => ({ x: toLocalNoon(r.date), y: avgRow[yField] })),
+            borderColor: color, backgroundColor: 'transparent',
+            borderWidth: 2, borderDash: [4, 4], fill: false,
+            tension: 0, pointRadius: 0, pointHoverRadius: 0,
+            order: 1,
+          });
+          return;
+        }
+        // STLY / LW: roll up the comparison window same gran, shift dates
+        // forward to align day-for-day with the current period.
+        const cmpRoll = rollupLaborTrend(cmpRows, gran);
+        const data = cmpRoll.map(r => {
+          const dt = toLocalNoon(r.date);
+          if (mode === 'STLY') {
+            if (bSel.kind === 'week') dt.setDate(dt.getDate() + 364);
+            else dt.setFullYear(dt.getFullYear() + 1);
+          } else {
+            dt.setDate(dt.getDate() + periodDays);
+          }
+          return { x: dt, y: r[yField] };
+        });
+        datasets.push({
+          type: 'line', label: label,
+          data, borderColor: color, backgroundColor: 'transparent',
+          borderWidth: 2, borderDash: [6, 4], fill: false,
+          tension: 0.4, pointRadius: 0, pointHoverRadius: 4,
+          order: 1,
+        });
+      });
+    }
+
+    // ===== Trend-line overlay (linear / SMA-7) =====
+    const tl = STATE.laborTrendLine || 'none';
+    if (tl !== 'none' && curRoll.length >= 2) {
+      const ys = curRoll.map(r => r[yField]).map(v => v == null ? 0 : v);
+      let overlay = null;
+      if (tl === 'linear') {
+        // Least-squares linear fit on point index → y.
+        const n = ys.length;
+        let sx=0, sy=0, sxx=0, sxy=0;
+        for (let i = 0; i < n; i++) { sx += i; sy += ys[i]; sxx += i*i; sxy += i*ys[i]; }
+        const slope = (n*sxy - sx*sy) / (n*sxx - sx*sx);
+        const intercept = (sy - slope*sx) / n;
+        overlay = ys.map((_, i) => slope*i + intercept);
+      } else if (tl === 'sma7') {
+        const w = 7;
+        overlay = ys.map((_, i) => {
+          const s = Math.max(0, i - w + 1);
+          let acc = 0, c = 0;
+          for (let j = s; j <= i; j++) { acc += ys[j]; c++; }
+          return c ? acc / c : null;
+        });
+      }
+      if (overlay) {
+        datasets.push({
+          type: 'line', label: tl === 'linear' ? 'Linear trend' : '7-period MA',
+          data: curRoll.map((r, i) => ({ x: toLocalNoon(r.date), y: overlay[i] })),
+          borderColor: C.slate, backgroundColor: 'transparent',
+          borderWidth: 2, borderDash: tl === 'linear' ? [2, 4] : [],
+          fill: false, tension: 0, pointRadius: 0, pointHoverRadius: 0,
+          order: 0,
+        });
+      }
+    }
+
+    return new Chart(ctx, {
+      data: { datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${metric.fmtTip(ctx.parsed.y)}`,
+            },
+          },
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: gran === 'M' ? 'month' : (gran === 'W' ? 'week' : 'day'),
+              tooltipFormat: gran === 'M' ? "MMM yyyy" : 'MMM d',
+              displayFormats: { day: 'MMM d', week: 'MMM d', month: "MMM yy" },
+            },
+            grid: { display: false },
+            min: bSel ? toLocalNoon(bSel.start) : undefined,
+            max: bSel ? toLocalNoon(bSel.end) : undefined,
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { callback: v => metric.fmtY(v) },
+          },
+        },
+      },
+    });
+  });
+  wireLaborTrendControls(lab, ssDaily, bSel, periodLabel, laborFilter);
+}
+function wireLaborTrendControls(lab, ssDaily, bSel, periodLabel, laborFilter) {
+  // Each control mutates STATE then triggers rerenderSection() (which
+  // reruns renderLaborSection top-to-bottom). The KPIs and other charts
+  // don't care about laborTrend* state, so re-render is safe and cheap.
+  const wire = (id, key) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('change', () => { STATE[key] = el.value; rerenderSection(); });
+  };
+  wire('laborTrendMetricFilter',  'laborTrendMetric');
+  wire('laborTrendGranFilter',    'laborGran');
+  wire('laborTrendTypeFilter',    'laborTrendType');
+  wire('laborTrendLineFilter',    'laborTrendLine');
+  wire('laborTrendCompareFilter', 'laborTrendCompare');
+  const dl = document.getElementById('laborTrendDownloadBtn');
+  if (dl) dl.addEventListener('click', () => downloadLaborTrendCsv(lab, ssDaily, bSel));
+}
+function downloadLaborTrendCsv(lab, ssDaily, bSel) {
+  const daily = buildLaborTrendDaily(lab, ssDaily);
+  const rows  = filterLaborTrend(daily, bSel);
+  const roll  = rollupLaborTrend(rows, STATE.laborGran || 'D');
+  const header = ['date','hours','cost','ot_hours','ot_cost','net_sales','guests','orders','labor_pct','spmh','covers_per_labor_hr'];
+  const csv = [header.join(',')].concat(roll.map(r => [
+    r.date,
+    (r.hours||0).toFixed(2),
+    (r.cost||0).toFixed(2),
+    (r.otHrs||0).toFixed(2),
+    (r.otCost||0).toFixed(2),
+    (r.net_sales||0).toFixed(2),
+    r.guests||0,
+    r.orders||0,
+    r.laborPct != null ? r.laborPct.toFixed(2) : '',
+    r.splh != null ? r.splh.toFixed(2) : '',
+    r.cphl != null ? r.cphl.toFixed(4) : '',
+  ].join(','))).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `labor-trend_${(STATE.outlet||'outlet')}_${(STATE.laborTrendMetric||'metric')}_${(STATE.laborGran||'D')}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
 }
 
 // Renders the Guest Experience section using Resy survey + 1-5 ratings + Google
