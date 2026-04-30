@@ -396,10 +396,11 @@ def _spread_shift_across_hours(
     by-day rollup matching Toast's businessDate semantics imperfectly but
     consistently — Toast's businessDate may differ for late-night shifts.
 
-    Timezone caveat: ISO timestamps are parsed in their declared zone, then
-    we read the LOCAL hour. Mews/Toast both emit zoned ISO so this works
-    without an outlet-side IANA config. Naive (no-zone) inputs are read as
-    UTC — same caveat documented in the existing transform_orders.
+    Timezone: Toast emits inDate/outDate as Z-suffixed UTC. We convert to
+    the outlet's local zone (America/New_York for every Method Co outlet)
+    before bucketing, so a 6pm-2am Mulherin's bartender appears in hours
+    18-1 ET, not 22-5 UTC. zoneinfo handles DST automatically. The same
+    fix landed for orders in `_as_local_date`.
     """
     if not in_iso or not out_iso or total_hours <= 0:
         return []
@@ -407,6 +408,12 @@ def _spread_shift_across_hours(
     out_dt = _parse_iso(out_iso)
     if not in_dt or not out_dt or out_dt <= in_dt:
         return []
+    if in_dt.tzinfo is None:
+        in_dt = in_dt.replace(tzinfo=timezone.utc)
+    if out_dt.tzinfo is None:
+        out_dt = out_dt.replace(tzinfo=timezone.utc)
+    in_dt = in_dt.astimezone(_OUTLET_TZ)
+    out_dt = out_dt.astimezone(_OUTLET_TZ)
     span_seconds = (out_dt - in_dt).total_seconds()
     if span_seconds <= 0:
         return []
