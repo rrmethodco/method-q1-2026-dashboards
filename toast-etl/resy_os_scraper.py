@@ -428,11 +428,27 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
     LIMIT_KEYS = {"limit", "per_page", "pagesize", "take", "count"}
     OFFSET_KEYS = {"offset", "page", "skip", "start"}
     BIG_LIMIT = "10000"
+    # Headers we must NOT forward — Playwright's request context manages
+    # them itself and replaying them breaks the request. Cookies are
+    # auto-attached from the page context. Pseudo-headers (`:authority`
+    # etc.) are HTTP/2-specific. Content-length is recomputed by
+    # Playwright. Sec-Fetch-* are renderer-asserted and may not match.
+    DROP_HEADERS = {
+        "host", "content-length", "cookie",
+        ":authority", ":method", ":path", ":scheme",
+        "sec-fetch-mode", "sec-fetch-site", "sec-fetch-dest",
+        "sec-fetch-user", "connection", "transfer-encoding",
+    }
 
     expanded: list[dict] = []
     seen_bases: set[str] = set()
     for cap in captured:
         url = cap.get("url") or ""
+        # Only re-issue GET endpoints. Resy's analytics report (POST)
+        # has been showing up as a candidate but isn't a list endpoint
+        # we want to bump.
+        if (cap.get("method") or "GET").upper() != "GET":
+            continue
         # Only expand the survey/ratings list endpoints, not unrelated
         # candidate URLs (auth, config, profile, etc.).
         u_lc = url.lower()
@@ -452,8 +468,14 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
         if not any(k.lower() in LIMIT_KEYS for k in qs):
             qs["limit"] = [BIG_LIMIT]
         new_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
+        # Forward the SPA's request headers, especially Authorization.
+        # Without the Bearer JWT, survey.resy.com 401s — cookies alone
+        # are not sufficient for that host.
+        src_headers = cap.get("request_headers") or {}
+        headers = {k: v for k, v in src_headers.items()
+                   if k.lower() not in DROP_HEADERS and not k.startswith(":")}
         try:
-            resp = page.request.get(new_url, timeout=45_000)
+            resp = page.request.get(new_url, headers=headers, timeout=45_000)
         except Exception as e:
             sys.stderr.write(f"  full-history bump request failed for {base}: {e}\n")
             continue
@@ -499,7 +521,19 @@ def scrape_venue(page, slug: str, discover: bool) -> list[dict]:
             body = resp.json()
         except Exception:
             return
-        captured.append({"url": url, "status": resp.status, "json": body})
+        # Stash request method + headers so the limit-bump replay can
+        # forward the SPA's Authorization header (JWT in localStorage,
+        # not in cookies — page.request lacks renderer-side state).
+        try:
+            req = resp.request
+            req_method = (req.method or "GET").upper()
+            req_headers = dict(req.headers or {})
+        except Exception:
+            req_method, req_headers = "GET", {}
+        captured.append({
+            "url": url, "status": resp.status, "json": body,
+            "method": req_method, "request_headers": req_headers,
+        })
 
     page.on("response", on_response)
 
