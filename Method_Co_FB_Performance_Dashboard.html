@@ -271,9 +271,14 @@ footer.foot b { color: var(--slate); }
   .snap-head-left .snap-title { font-size: 22px !important; }
   .snap-head-left .snap-sub { font-size: 11px !important; margin-top: 2px !important; }
   /* Grid — gaps sized so the 3 KPI rows + wins/concerns + actions +
-     comparison table fully consume the page without overflowing. */
-  .snap-grid { padding: 0 !important; gap: 8px !important; }
-  .snap-row { gap: 7px !important; }
+     comparison table fully consume the page without overflowing.
+     Explicitly allow break-inside on the grid + rows: previous attempt
+     had `break-inside: avoid` on .snap-row and Chrome refused to split
+     the grid at all, pushing the entire content to page 2 with the
+     snap-head orphaned on page 1. Cards and sections still stay
+     together — those are the indivisible units; rows can split. */
+  .snap-grid { padding: 0 !important; gap: 8px !important; break-inside: auto !important; page-break-inside: auto !important; }
+  .snap-row { gap: 7px !important; break-inside: auto !important; page-break-inside: auto !important; }
   /* KPI cards — 4 across × 3 rows. Value font sized so '$120,000' fits
      the column at the widest outlet name. */
   .snap-card { padding: 9px 11px !important; border-width: 1px !important; }
@@ -290,8 +295,10 @@ footer.foot b { color: var(--slate); }
   .snap-table { font-size: 10.5px !important; }
   .snap-table th, .snap-table td { padding: 5px 8px !important; white-space: nowrap !important; }
   .snap-table th { font-size: 9px !important; letter-spacing: 0.10em !important; }
-  /* Avoid orphaning sections to a 2nd page */
-  .snap-section, .snap-card, .snap-row { break-inside: avoid; page-break-inside: avoid; }
+  /* Keep individual cards and sections from splitting mid-element, but
+     LEAVE rows + grid free to break — see the .snap-grid comment above
+     for the orphaned-snap-head bug this prevents. */
+  .snap-section, .snap-card { break-inside: avoid; page-break-inside: avoid; }
   .snap-section + .snap-section { margin-top: 0 !important; }
 }
 </style>
