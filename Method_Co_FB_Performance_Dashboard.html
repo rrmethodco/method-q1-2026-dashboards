@@ -163,6 +163,24 @@ section { margin-bottom: 40px; }
 }
 .card h3 { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--royal); font-weight: 600; margin-bottom: 4px; }
 .card .desc { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+/* Review / comment tile — used on the Guest Experience tab to surface
+   actual Resy survey free-text and Google review samples. Score badge
+   on the left rail (color-coded by sentiment), comment body fills the
+   rest of the card. */
+.review-tile { display: flex; gap: 14px; padding: 14px 16px; border: 1px solid var(--grey); background: var(--white); margin-bottom: 10px; }
+.review-tile.pos { border-left: 3px solid var(--turquoise); }
+.review-tile.neg { border-left: 3px solid #c44; }
+.review-tile.neu { border-left: 3px solid var(--royal); }
+.review-tile .rt-rail { display: flex; flex-direction: column; align-items: center; min-width: 56px; }
+.review-tile .rt-score { font-size: 22px; font-weight: 700; color: var(--slate); line-height: 1; font-family: var(--font-stack); }
+.review-tile .rt-scale { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.review-tile .rt-body { flex: 1; min-width: 0; }
+.review-tile .rt-meta { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.review-tile .rt-text { font-size: 13px; color: var(--slate); line-height: 1.5; font-style: italic; }
+.review-tile .rt-q { font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--royal); font-weight: 600; margin-top: 8px; margin-bottom: 2px; }
+.review-tile .rt-q + .rt-text { font-size: 12.5px; margin-top: 0; }
+.review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 1100px) { .review-grid { grid-template-columns: 1fr; } }
 .chart-wrap { position: relative; height: 270px; }
 .chart-wrap.tall { height: 320px; }
 .empty-chart { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; color: var(--muted); font-size: 12px; text-align: center; padding: 20px; background: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(191,185,182,0.18) 8px, rgba(191,185,182,0.18) 16px); border: 1px dashed var(--grey); }
@@ -3394,6 +3412,80 @@ function renderGuestSection() {
   const fmtNps   = v => (v == null) ? '—' : (v >= 0 ? '+' : '') + v.toFixed(0);
   const npsTone  = v => v == null ? 'neutral' : (v >= 50 ? 'pos' : v < 0 ? 'neg' : 'neutral');
   const star     = '★';
+  const escHtml  = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  // ---- Reviews & Comments — pull text-bearing surveys + Google samples ----
+  // Resy: each survey row may carry .text = [{q, a}, ...] with the free-
+  // text answers from the Resy OS portal. Older rows pre-dating the text-
+  // capture patch (2026-04-30) won't have it; the dedup-upgrade in
+  // resy_os_scraper.py backfills them on subsequent scrapes.
+  // Google: goog.samples carries 5 reviews per venue with full text,
+  // rating (1-5), author, relative time. Split into highlights / issues
+  // by rating threshold.
+  const resyTextSurveys = (g && Array.isArray(g.surveys) ? g.surveys : [])
+    .filter(s => Array.isArray(s.text) && s.text.length && inRange(s.date));
+  const sortedByOverallDesc = resyTextSurveys.slice().sort((a,b) => (b.overall ?? -1) - (a.overall ?? -1));
+  const sortedByOverallAsc  = resyTextSurveys.slice().sort((a,b) => (a.overall ?? 999) - (b.overall ?? 999));
+  const resyHighlights = sortedByOverallDesc.slice(0, 6);
+  const resyIssues = sortedByOverallAsc.filter(s => (s.overall ?? 100) < 90).slice(0, 6);
+
+  const googleSamples = (goog && Array.isArray(goog.samples) ? goog.samples : []);
+  const googleHighlights = googleSamples.filter(s => (s.rating ?? 0) >= 4);
+  const googleIssues = googleSamples.filter(s => (s.rating ?? 0) <= 3);
+
+  // Renders one Resy survey card with all of its text answers grouped
+  // by question. Score badge on the rail is the 0-100 overall score.
+  const resyTile = s => {
+    const tone = (s.overall ?? 0) >= 90 ? 'pos' : (s.overall ?? 0) <= 70 ? 'neg' : 'neu';
+    const meta = [
+      s.date,
+      s.server ? `Server: ${escHtml(s.server)}` : null,
+      s.recommend != null ? `Recommend: ${s.recommend}/10` : null,
+      s.covers != null ? `${s.covers} guests` : null,
+    ].filter(Boolean).join(' · ');
+    const body = (s.text || []).map(t => `
+      ${t.q ? `<div class="rt-q">${escHtml(t.q)}</div>` : ''}
+      <div class="rt-text">${escHtml(t.a)}</div>
+    `).join('');
+    return `
+      <div class="review-tile ${tone}">
+        <div class="rt-rail">
+          <div class="rt-score">${s.overall != null ? s.overall : '—'}</div>
+          <div class="rt-scale">/ 100</div>
+        </div>
+        <div class="rt-body">
+          <div class="rt-meta">${meta}</div>
+          ${body}
+        </div>
+      </div>
+    `;
+  };
+  // Google review tile — rating shown as N/5 with stars; full text body.
+  const googleTile = s => {
+    const r = s.rating ?? 0;
+    const tone = r >= 4 ? 'pos' : r <= 2 ? 'neg' : 'neu';
+    const stars = star.repeat(Math.max(0, Math.min(5, Math.round(r))));
+    const meta = [
+      escHtml(s.author || 'Anonymous'),
+      escHtml(s.relative || ''),
+      s.is_local_guide ? 'Local Guide' : null,
+    ].filter(Boolean).join(' · ');
+    return `
+      <div class="review-tile ${tone}">
+        <div class="rt-rail">
+          <div class="rt-score">${r || '—'}</div>
+          <div class="rt-scale">${stars}</div>
+        </div>
+        <div class="rt-body">
+          <div class="rt-meta">${meta}</div>
+          <div class="rt-text">${escHtml(s.text || '')}</div>
+        </div>
+      </div>
+    `;
+  };
+  const reviewListHtml = (items, renderer, emptyMsg) => items.length
+    ? items.map(renderer).join('')
+    : `<div style="padding:18px; color:var(--muted); font-size:12px; font-style:italic;">${emptyMsg}</div>`;
 
   // ---- Sub-tab routing inside the Guest Experience body ----
   // Three views: Overview (best-of-both summary), Resy (deep survey
@@ -3461,6 +3553,67 @@ function renderGuestSection() {
       </div>
     </section>
   `;
+
+  // Reviews & Comments section — Resy-only (server detail tab)
+  const resyCommentsSect = `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Reviews &amp; Comments · Resy</div>
+      </div>
+      <div class="review-grid">
+        <div>
+          <h3 style="font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--royal); margin:0 0 10px 2px;">Highlights · Top Scoring</h3>
+          ${reviewListHtml(resyHighlights, resyTile, resyTextSurveys.length ? 'No high-scoring comments in this period.' : 'Comments populate after the next nightly Resy scrape (text-capture rolled out 2026-04-30).')}
+        </div>
+        <div>
+          <h3 style="font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--royal); margin:0 0 10px 2px;">Issues · Lowest Scoring</h3>
+          ${reviewListHtml(resyIssues, resyTile, resyTextSurveys.length ? 'No low-scoring comments in this period.' : 'Comments populate after the next nightly Resy scrape.')}
+        </div>
+      </div>
+    </section>
+  `;
+
+  // Reviews & Comments section — Google-only (Google detail tab)
+  const googleCommentsSect = goog ? `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Reviews · Google</div>
+      </div>
+      <div class="review-grid">
+        <div>
+          <h3 style="font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--royal); margin:0 0 10px 2px;">Highlights · 4–5 ${star}</h3>
+          ${reviewListHtml(googleHighlights, googleTile, 'No 4–5 star reviews in sample (5 most-helpful are pulled by the Google Places API).')}
+        </div>
+        <div>
+          <h3 style="font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--royal); margin:0 0 10px 2px;">Issues · 1–3 ${star}</h3>
+          ${reviewListHtml(googleIssues, googleTile, 'No 1–3 star reviews in sample.')}
+        </div>
+      </div>
+    </section>
+  ` : '';
+
+  // Combined overview snippet — 3 best Resy + 3 best Google + 3 worst of each.
+  const overviewCommentsSect = (resyTextSurveys.length || googleSamples.length) ? `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Reviews &amp; Comments</div>
+      </div>
+      <div class="review-grid">
+        <div>
+          <h3 style="font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--royal); margin:0 0 10px 2px;">Highlights</h3>
+          ${reviewListHtml(resyHighlights.slice(0,2), resyTile, '')}
+          ${reviewListHtml(googleHighlights.slice(0,2), googleTile, '')}
+          ${(resyHighlights.length === 0 && googleHighlights.length === 0) ? `<div style="padding:18px; color:var(--muted); font-size:12px; font-style:italic;">No highlights yet.</div>` : ''}
+        </div>
+        <div>
+          <h3 style="font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--royal); margin:0 0 10px 2px;">Issues</h3>
+          ${reviewListHtml(resyIssues.slice(0,2), resyTile, '')}
+          ${reviewListHtml(googleIssues.slice(0,2), googleTile, '')}
+          ${(resyIssues.length === 0 && googleIssues.length === 0) ? `<div style="padding:18px; color:var(--muted); font-size:12px; font-style:italic;">No flagged issues — nice.</div>` : ''}
+        </div>
+      </div>
+    </section>
+  ` : '';
 
   const serverTableSect = `
     <section>
@@ -3566,12 +3719,12 @@ function renderGuestSection() {
   // ---- Compose final body innerHTML by sub-tab ----
   let mainContent;
   if (subTab === 'google' && goog) {
-    mainContent = googleSect;
+    mainContent = googleSect + googleCommentsSect;
   } else if (subTab === 'resy') {
-    mainContent = resyHeader + scoreBreakdownSect + npsTrendSect + ratingsAndHeatSect + serverTableSect;
+    mainContent = resyHeader + scoreBreakdownSect + npsTrendSect + resyCommentsSect + ratingsAndHeatSect + serverTableSect;
   } else {
     // overview (default + fallback when goog is missing and user clicks Google)
-    mainContent = overviewHeader + scoreBreakdownSect + npsTrendSect;
+    mainContent = overviewHeader + scoreBreakdownSect + npsTrendSect + overviewCommentsSect;
   }
 
   body.innerHTML = subTabBar + mainContent;

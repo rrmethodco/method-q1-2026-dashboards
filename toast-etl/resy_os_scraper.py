@@ -205,10 +205,12 @@ def transform_resy_survey_row(raw: dict) -> dict | None:
         return ""
 
     food = service = atmos = sentiment = recommend = None
+    text_responses: list[dict] = []   # free-text answers — surface in UI
     for r in (raw.get("responses") or []):
         if not isinstance(r, dict):
             continue
-        q = _question_text(r.get("question"))
+        q_raw = r.get("question")
+        q = _question_text(q_raw)
         ans = r.get("response")
         if ans is None:
             continue
@@ -226,18 +228,49 @@ def transform_resy_survey_row(raw: dict) -> dict | None:
                 score = float(ans)
             except (TypeError, ValueError):
                 pass
-        if score is None:
+        if score is not None:
+            if "food" in q or "menu" in q:
+                food = score
+            elif "service" in q or "staff" in q:
+                service = score
+            elif "atmos" in q or "ambien" in q or "vibe" in q or "decor" in q:
+                atmos = score
+            elif "sentiment" in q or "experience" in q or "overall" in q:
+                sentiment = score
+            elif ("recomm" in q or "likel" in q or "promot" in q or "nps" in q):
+                recommend = score
             continue
-        if "food" in q or "menu" in q:
-            food = score
-        elif "service" in q or "staff" in q:
-            service = score
-        elif "atmos" in q or "ambien" in q or "vibe" in q or "decor" in q:
-            atmos = score
-        elif "sentiment" in q or "experience" in q or "overall" in q:
-            sentiment = score
-        elif ("recomm" in q or "likel" in q or "promot" in q or "nps" in q):
-            recommend = score
+        # Non-numeric answer → likely a free-text comment. Resy's open-
+        # text questions ("Anything else you'd like to share?", "What
+        # could we have done better?", etc.) come through with the same
+        # row shape but `response` as a string. Capture for the UI.
+        # Filter trivial yes/no responses since they're not useful.
+        text = None
+        if isinstance(ans, str):
+            text = ans.strip()
+        elif isinstance(ans, dict):
+            for k in ("text", "value", "answer", "response"):
+                v = ans.get(k)
+                if isinstance(v, str) and v.strip():
+                    text = v.strip(); break
+        if not text or len(text) < 4:
+            continue
+        if text.lower() in {"yes", "no", "n/a", "na", "none", "nothing"}:
+            continue
+        # Pull the operator-facing question text (preserve original case
+        # so it reads like the operator wrote it).
+        q_disp = q
+        if isinstance(q_raw, dict):
+            for k in ("text", "title", "label", "question", "prompt", "name"):
+                v = q_raw.get(k)
+                if isinstance(v, str) and v:
+                    q_disp = v; break
+        elif isinstance(q_raw, str):
+            q_disp = q_raw
+        text_responses.append({
+            "q": (q_disp or "")[:120],
+            "a": text[:600],
+        })
 
     return {
         "date":      date_completed,
@@ -251,6 +284,7 @@ def transform_resy_survey_row(raw: dict) -> dict | None:
         "covers":    rsv.get("party_size"),
         "dow":       dow,
         "hour":      hour,
+        "text":      text_responses or None,
     }
 
 
@@ -278,7 +312,12 @@ def transform_to_guest_block(
     def survey_key(s: dict) -> tuple:
         return (s.get("date"), s.get("server"), s.get("overall"), s.get("covers"))
 
-    seen_keys = {survey_key(s) for s in surveys}
+    # Track existing rows by natural key AND remember their index so we
+    # can replace text-less rows in place when a fresh API response
+    # carries the free-text answers (added 2026-04-30 — see PR for the
+    # `text` field on survey rows). Without this, the 1.9k existing
+    # surveys would never receive their newly-captured comment text.
+    seen_index = {survey_key(s): i for i, s in enumerate(surveys)}
     rating_fields = {"r1", "r2", "r3", "r4", "r5"}
 
     def unwrap(node):
@@ -321,10 +360,19 @@ def transform_to_guest_block(
         # Resy surveys path — traverse + transform
         for row in extract_resy_surveys(body):
             k = survey_key(row)
-            if k in seen_keys:
+            if k in seen_index:
+                # Existing row — only replace if the new payload adds
+                # something the old one lacks (text comments, score
+                # bucket coverage). Avoids unnecessary writes while
+                # still backfilling pre-text-capture history.
+                old = surveys[seen_index[k]]
+                old_has_text = bool(old.get("text"))
+                new_has_text = bool(row.get("text"))
+                if new_has_text and not old_has_text:
+                    surveys[seen_index[k]] = row
                 continue
             surveys.append(row)
-            seen_keys.add(k)
+            seen_index[k] = len(surveys) - 1
         # Legacy path — seed-shaped rows (NPS-export extractor used these)
         for row in extract_ratings(body):
             ratings.append(row)
