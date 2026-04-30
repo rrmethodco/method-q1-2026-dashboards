@@ -3418,7 +3418,19 @@ function renderGuestSection() {
   const resyHighlights = sortedByOverallDesc.slice(0, 6);
   const resyIssues = sortedByOverallAsc.filter(s => (s.overall ?? 100) < 90).slice(0, 6);
 
-  const googleSamples = (goog && Array.isArray(goog.samples) ? goog.samples : []);
+  // Google samples: filter by `time` (Unix epoch sec) so the review
+  // tiles respect the Month/Week filter. Places API exposes ~5 samples
+  // per venue total, so a narrow period often returns zero — that's
+  // accurate, not a bug. The empty-state copy in the section calls this
+  // out so the operator knows the source is small.
+  const googleSamplesAll = (goog && Array.isArray(goog.samples) ? goog.samples : []);
+  let googleSamples = googleSamplesAll;
+  if (bSel && googleSamplesAll.length) {
+    const startSec = Math.floor(new Date(bSel.start + 'T00:00:00Z').getTime() / 1000);
+    const endSec   = Math.floor(new Date(bSel.end   + 'T23:59:59Z').getTime() / 1000);
+    googleSamples = googleSamplesAll.filter(s =>
+      typeof s.time === 'number' && s.time >= startSec && s.time <= endSec);
+  }
   const googleHighlights = googleSamples.filter(s => (s.rating ?? 0) >= 4);
   const googleIssues = googleSamples.filter(s => (s.rating ?? 0) <= 3);
 
@@ -3563,6 +3575,11 @@ function renderGuestSection() {
   `;
 
   // Reviews & Comments section — Google-only (Google detail tab)
+  const googleEmptyMsg = googleSamplesAll.length === 0
+    ? 'No Google reviews available.'
+    : googleSamples.length === 0
+      ? `No Google reviews in ${periodLabel} · sample only includes 5 most-helpful from Places API.`
+      : null;
   const googleCommentsSect = goog ? `
     <section>
       <div class="sect-head">
@@ -3571,11 +3588,11 @@ function renderGuestSection() {
       <div class="review-grid">
         <div>
           <h3 style="font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--royal); margin:0 0 10px 2px;">Highlights · 4–5 ${star}</h3>
-          ${reviewListHtml(googleHighlights, googleTile, 'No 4–5 star reviews in sample (5 most-helpful are pulled by the Google Places API).')}
+          ${reviewListHtml(googleHighlights, googleTile, googleEmptyMsg || 'No 4–5 star reviews in sample.')}
         </div>
         <div>
           <h3 style="font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--royal); margin:0 0 10px 2px;">Issues · 1–3 ${star}</h3>
-          ${reviewListHtml(googleIssues, googleTile, 'No 1–3 star reviews in sample.')}
+          ${reviewListHtml(googleIssues, googleTile, googleEmptyMsg || 'No 1–3 star reviews in sample.')}
         </div>
       </div>
     </section>
