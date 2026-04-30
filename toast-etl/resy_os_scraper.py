@@ -469,41 +469,22 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
     SPA capture and the bumped fetch is harmless.
     """
     import urllib.parse as _u
-    LIMIT_KEYS = {"limit", "per_page", "pagesize", "take", "count"}
-    OFFSET_KEYS = {"offset", "page", "skip", "start"}
-    # Resy's surveys endpoint returns HTTP 500 when limit > ~100. Try a
-    # ladder of known-safe values; first one that works wins. Then
-    # paginate via `offset` until the page returns fewer rows than the
-    # limit (= we're at the tail).
-    PAGE_SIZES = ["100", "50", "25"]
-    MAX_PAGES = 200  # hard cap so a misbehaving cursor can't loop
+    # Verified via run #25189914424 diagnostics: Resy's surveys endpoint
+    # paginates via `all=true` (not `limit`) within a `start_date` /
+    # `end_date` window. With `all=true` LSBR's April returned 120 rows
+    # vs. the default 20. So full history = wide date range + all=true
+    # + follow `data.next_request` cursor if present.
     DROP_HEADERS = {
         "host", "content-length", "cookie",
         ":authority", ":method", ":path", ":scheme",
         "sec-fetch-mode", "sec-fetch-site", "sec-fetch-dest",
         "sec-fetch-user", "connection", "transfer-encoding",
     }
-
-    def _count_rows(body):
-        """Heuristic: how many survey rows are in this payload? Walks
-        common shapes — {data: [...]}, {data: {surveys: [...]}}, or a
-        bare list. Used to decide whether to keep paginating."""
-        if isinstance(body, list):
-            return len(body)
-        if isinstance(body, dict):
-            d = body.get("data")
-            if isinstance(d, list):
-                return len(d)
-            if isinstance(d, dict):
-                for k in ("surveys", "rows", "items", "results"):
-                    v = d.get(k)
-                    if isinstance(v, list):
-                        return len(v)
-            for k in ("surveys", "rows", "items", "results"):
-                v = body.get(k)
-                if isinstance(v, list):
-                    return len(v)
-        return 0
+    # Earliest plausible Resy survey date — Method's first venue went on
+    # Resy ~2022. Bracket wide so we capture every venue's full history.
+    WIDE_START = "2022-01-01T00:00:00"
+    WIDE_END = "2030-12-31T23:59:59"
+    MAX_PAGES = 100  # safety net for cursor loops
 
     expanded: list[dict] = []
     seen_bases: set[str] = set()
@@ -511,8 +492,10 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
         url = cap.get("url") or ""
         if (cap.get("method") or "GET").upper() != "GET":
             continue
+        # Only target the surveys list endpoint — analytics is a
+        # different shape and doesn't have rows to bump.
         u_lc = url.lower()
-        if not any(t in u_lc for t in ("survey", "rating", "feedback", "review")):
+        if "survey.resy.com/api/1/venue/surveys" not in u_lc:
             continue
         parts = _u.urlparse(url)
         base = f"{parts.scheme}://{parts.netloc}{parts.path}"
@@ -522,72 +505,76 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
         src_headers = cap.get("request_headers") or {}
         headers = {k: v for k, v in src_headers.items()
                    if k.lower() not in DROP_HEADERS and not k.startswith(":")}
-        # Find a working page-size by trying the ladder.
-        chosen_limit = None
-        first_body = None
-        first_url = None
-        for ps in PAGE_SIZES:
-            qs = _u.parse_qs(parts.query, keep_blank_values=True)
-            limit_key = next((k for k in qs if k.lower() in LIMIT_KEYS), "limit")
-            qs[limit_key] = [ps]
-            offset_key = next((k for k in qs if k.lower() in OFFSET_KEYS), None)
-            if offset_key:
-                qs[offset_key] = ["0"]
-            else:
-                qs.setdefault("offset", ["0"])
-                offset_key = "offset"
-            try_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
+        # Build the full-history URL: same path, wide date window,
+        # all=true, drop any question-id filters (we want ALL surveys,
+        # not just one question's responses).
+        qs = _u.parse_qs(parts.query, keep_blank_values=True)
+        qs["start_date"] = [WIDE_START]
+        qs["end_date"] = [WIDE_END]
+        qs["all"] = ["true"]
+        # Strip any `surveyresponse__question_id` and ..__isnull
+        # filters — those scope to a specific question and would
+        # exclude rows that don't have that question answered.
+        for k in list(qs.keys()):
+            if k.startswith("surveyresponse__"):
+                qs.pop(k)
+        new_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
+        # Follow `next_request` cursor if Resy returns one (saw it as
+        # a sibling of `surveys` in the data block).
+        page_idx = 0
+        cur_url = new_url
+        while page_idx < MAX_PAGES:
             try:
-                resp = page.request.get(try_url, headers=headers, timeout=45_000)
+                resp = page.request.get(cur_url, headers=headers, timeout=60_000)
             except Exception as e:
-                sys.stderr.write(f"  full-history probe failed at limit={ps}: {e}\n")
-                continue
+                sys.stderr.write(f"  full-history fetch failed page {page_idx}: {e}\n")
+                break
             if not resp.ok:
                 sys.stderr.write(
-                    f"  full-history probe HTTP {resp.status} at limit={ps} for {base}\n"
+                    f"  full-history fetch HTTP {resp.status} page {page_idx} for {base}\n"
                 )
-                continue
+                break
             try:
                 body = resp.json()
-            except Exception:
-                continue
-            chosen_limit = int(ps)
-            first_body = body
-            first_url = try_url
-            break
-        if chosen_limit is None:
-            continue
-        expanded.append({"url": first_url, "status": 200, "json": first_body})
-        first_count = _count_rows(first_body)
-        # Walk pages until we get back fewer rows than chosen_limit
-        # (signals last page) or hit MAX_PAGES.
-        if first_count >= chosen_limit:
-            page_idx = 1
-            while page_idx < MAX_PAGES:
-                qs = _u.parse_qs(parts.query, keep_blank_values=True)
-                limit_key = next((k for k in qs if k.lower() in LIMIT_KEYS), "limit")
-                qs[limit_key] = [str(chosen_limit)]
-                qs[offset_key] = [str(page_idx * chosen_limit)]
-                page_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
-                try:
-                    resp = page.request.get(page_url, headers=headers, timeout=45_000)
-                except Exception as e:
-                    sys.stderr.write(f"  full-history page {page_idx} failed: {e}\n")
+            except Exception as e:
+                sys.stderr.write(f"  full-history JSON parse failed page {page_idx}: {e}\n")
+                break
+            expanded.append({"url": cur_url, "status": resp.status, "json": body})
+            # Find next_request — Resy puts it inside `data` per
+            # diagnostic output. Could be absolute URL, relative path,
+            # or a query string fragment.
+            next_req = None
+            if isinstance(body, dict):
+                d = body.get("data")
+                if isinstance(d, dict):
+                    next_req = d.get("next_request")
+                if next_req is None:
+                    next_req = body.get("next_request")
+            if not next_req:
+                break
+            if isinstance(next_req, str):
+                if next_req.startswith("http"):
+                    cur_url = next_req
+                elif next_req.startswith("/"):
+                    cur_url = f"{parts.scheme}://{parts.netloc}{next_req}"
+                elif next_req.startswith("?"):
+                    cur_url = f"{parts.scheme}://{parts.netloc}{parts.path}{next_req}"
+                else:
+                    # Unknown shape — bail to avoid loops
                     break
-                if not resp.ok:
-                    sys.stderr.write(
-                        f"  full-history page {page_idx} HTTP {resp.status}\n"
-                    )
+            elif isinstance(next_req, dict):
+                # Likely {url: ..., params: {...}}
+                nxt_u = next_req.get("url") or next_req.get("href")
+                if not nxt_u:
                     break
-                try:
-                    pbody = resp.json()
-                except Exception:
-                    break
-                pcount = _count_rows(pbody)
-                expanded.append({"url": page_url, "status": 200, "json": pbody})
-                if pcount < chosen_limit:
-                    break
-                page_idx += 1
+                cur_url = nxt_u if nxt_u.startswith("http") else f"{parts.scheme}://{parts.netloc}{nxt_u}"
+                nxt_p = next_req.get("params") or next_req.get("query")
+                if isinstance(nxt_p, dict) and nxt_p:
+                    sep = "&" if "?" in cur_url else "?"
+                    cur_url = f"{cur_url}{sep}{_u.urlencode(nxt_p, doseq=True)}"
+            else:
+                break
+            page_idx += 1
     return expanded
 
 
