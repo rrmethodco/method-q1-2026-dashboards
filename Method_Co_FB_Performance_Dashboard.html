@@ -885,11 +885,11 @@ function tripleKpiDelta(curVal, sums, key, opts) {
     if (p == null) {
       const txt = missing ? `${label} <span style="opacity:.55">— not wired</span>`
                           : `<span style="opacity:.55">${label} —</span>`;
-      return `<div class="yoy neutral" style="font-size:11px;">${txt}</div>`;
+      return `<div class="yoy neutral">${txt}</div>`;
     }
     const isGood = invert ? p < 0 : p >= 0;
     const cls = isGood ? 'pos' : 'neg';
-    return `<div class="yoy ${cls}" style="font-size:11px;">${label} ${(p>=0?'+':'')}${p.toFixed(1)}%</div>`;
+    return `<div class="yoy ${cls}">${label} ${(p>=0?'+':'')}${p.toFixed(1)}%</div>`;
   };
   return [
     line('vs Forecast', sums.forecast ? sums.forecast[key] : null, !sums.forecast),
@@ -3158,6 +3158,7 @@ function renderRevenueSection() {
               <select id="hourMetricFilter">
                 <option value="$"      ${STATE.hourMetric==='$'?'selected':''}>$ Net Sales</option>
                 <option value="guests" ${STATE.hourMetric==='guests'?'selected':''}>Covers</option>
+                <option value="avg"    ${STATE.hourMetric==='avg'?'selected':''}>Avg Check</option>
               </select>
               <select id="hourDowFilter">
                 <option value="all" ${(STATE.hourDow||'all')==='all'?'selected':''}>All days</option>
@@ -3171,7 +3172,7 @@ function renderRevenueSection() {
               </select>
             </div>
           </div>
-          <div class="desc">${STATE.hourMetric==='$' ? 'Net sales' : 'Covers'} by hour · ${periodLabel}${(STATE.hourDow && STATE.hourDow !== 'all') ? ' · ' + STATE.hourDow + ' only' : ''}</div>
+          <div class="desc">${STATE.hourMetric==='avg' ? 'Avg check ($/order)' : (STATE.hourMetric==='guests' ? 'Covers' : 'Net sales')} by hour · ${periodLabel}${(STATE.hourDow && STATE.hourDow !== 'all') ? ' · ' + STATE.hourDow + ' only' : ''}</div>
           <div class="chart-wrap tall"><canvas id="hourChart"></canvas></div>
         </div>
       </div>
@@ -3725,7 +3726,7 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
   const cards = [
     { label: 'Net Sales',           val: fmtMoneyFull(cs.net_sales),                            cmpKey: 'net_sales',   sub: null },
     { label: 'Covers',              val: fmtNum(cs.guests),                                     cmpKey: 'guests',      sub: null },
-    { label: 'Guest Avg',           val: guestAvg != null ? '$' + guestAvg.toFixed(2) : '—',    cmpKey: 'guestAvg',    sub: 'Net ÷ Covers',   curVal: guestAvg },
+    { label: 'Guest Avg',           val: guestAvg != null ? '$' + guestAvg.toFixed(2) : '—',    cmpKey: 'guestAvg',    sub: null,             curVal: guestAvg },
     { label: 'Comps & Discounts %', val: compDiscPct == null ? '—' : fmtPct(compDiscPct),
       cmpKey: null,
       // Custom multi-line delta block: vs STLY (using cmpCompDiscPct
@@ -3740,16 +3741,18 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
           const pp = compDiscPct - cmpCompDiscPct;
           const isGood = pp <= 0;
           const cls = isGood ? 'pos' : 'neg';
-          lines.push({ label: 'vs STLY', html: `<span class="yoy ${cls}" style="font-size:11px;">vs STLY ${pp >= 0 ? '+' : ''}${pp.toFixed(1)} pp</span>` });
+          lines.push({ label: 'vs STLY', html: `<span class="yoy ${cls}">vs STLY ${pp >= 0 ? '+' : ''}${pp.toFixed(1)} pp</span>` });
         } else {
-          lines.push({ label: 'vs STLY', html: `<span class="yoy neutral" style="font-size:11px;opacity:.55;">vs STLY —</span>` });
+          lines.push({ label: 'vs STLY', html: `<span class="yoy neutral" style="opacity:.55;">vs STLY —</span>` });
         }
         const tgt = bench && bench.compDiscTarget;
         if (tgt != null) {
           const pp = compDiscPct - tgt;
           const isGood = pp <= 0;
           const cls = isGood ? 'pos' : 'neg';
-          lines.push({ label: 'vs Target', html: `<span class="yoy ${cls}" style="font-size:11px;">vs Target ${pp >= 0 ? '+' : ''}${pp.toFixed(1)} pp <span style="opacity:.6">(${tgt}% ${bench.concept || 'industry'})</span></span>` });
+          // Drop the "(3% Upscale French Bistro)" suffix per operator —
+          // the concept tag was redundant noise. Just show the pp delta.
+          lines.push({ label: 'vs Target', html: `<span class="yoy ${cls}">vs Target ${pp >= 0 ? '+' : ''}${pp.toFixed(1)} pp</span>` });
         }
         return lines;
       })(),
@@ -3786,7 +3789,7 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
       const p = c.singleDelta.pct;
       const isGood = c.singleDelta.invert ? p < 0 : p >= 0;
       const cls = isGood ? 'pos' : 'neg';
-      deltaHtml = `<div class="kpi-cmp"><div class="yoy ${cls}" style="font-size:11px;">${c.singleDelta.label} ${(p>=0?'+':'')}${p.toFixed(1)}%</div></div>`;
+      deltaHtml = `<div class="kpi-cmp"><div class="yoy ${cls}">${c.singleDelta.label} ${(p>=0?'+':'')}${p.toFixed(1)}%</div></div>`;
     } else {
       deltaHtml = '<div class="kpi-cmp">&nbsp;</div>';
     }
@@ -4247,8 +4250,10 @@ function renderHour() {
     const maxDate = ssDaily.length ? ssDaily[ssDaily.length-1].date : null;
     const b = maxDate ? periodBounds(maxDate) : null;
     const src = getOrderDetailsSource();
-    const isDollars = (STATE.hourMetric || '$') === '$';
-    const field = isDollars ? 'amount' : 'guests';
+    const metric = STATE.hourMetric || '$';
+    const isDollars = metric === '$';
+    const isCovers  = metric === 'guests';
+    const isAvg     = metric === 'avg';
     const dowFilter = STATE.hourDow || 'all';
     const DOW_ABBR = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     // Derive DOW from a YYYY-MM-DD string. Parse at local noon to dodge
@@ -4260,33 +4265,64 @@ function renderHour() {
       const d = new Date(date + 'T12:00:00');
       return DOW_ABBR[d.getDay()];
     };
-    const map = {}; for (let h=0; h<24; h++) map[h] = 0;
+    // For sales/covers we accumulate a single number per hour. For
+    // avg-check we accumulate {amount, orders} then divide post-loop
+    // (don't average-of-averages).
+    const map = {};
+    for (let h=0; h<24; h++) map[h] = isAvg ? { amount: 0, orders: 0 } : 0;
     if (src) {
       Object.values(src).forEach(od => (od.hour_daily || od.hour_dow || []).forEach(r => {
-        // hour_daily has {date, hour, amount, guests} → filter by date; legacy hour_dow has no date so include.
+        // hour_daily has {date, hour, amount, orders, guests} → filter by date; legacy hour_dow has no date so include.
         if (r.date && b && (r.date < b.start || r.date > b.end)) return;
         if (dowFilter !== 'all') {
-          // hour_daily rows have a date → derive DOW; legacy hour_dow rows
-          // already have a `dow` field, fall back to that. If neither
-          // can produce a DOW, skip when a specific day is selected.
           const rdow = r.dow || dowOf(r.date);
           if (rdow !== dowFilter) return;
         }
-        map[r.hour] = (map[r.hour]||0) + (r[field]||0);
+        if (isAvg) {
+          map[r.hour].amount += (r.amount || 0);
+          map[r.hour].orders += (r.orders || 0);
+        } else if (isCovers) {
+          map[r.hour] += (r.guests || 0);
+        } else {
+          map[r.hour] += (r.amount || 0);
+        }
       }));
     }
+    // Resolve per-hour values for plotting + total guard.
+    const hourVal = (h) => {
+      if (isAvg) {
+        const c = map[h];
+        return c && c.orders ? c.amount / c.orders : 0;
+      }
+      return map[h] || 0;
+    };
     const hours = Array.from({length:24}, (_,i)=>i);
-    const total = hours.reduce((a,h) => a + (map[h]||0), 0);
-    if (!total) { showEmpty('hourChart', isDollars ? 'No hour-of-day sales data' : 'No covers in this period', 'No orders recorded in this period.'); return; }
+    const total = hours.reduce((a,h) => a + hourVal(h), 0);
+    if (!total) {
+      const emptyMsg = isDollars ? 'No hour-of-day sales data'
+                                  : (isCovers ? 'No covers in this period'
+                                              : 'No avg-check data');
+      showEmpty('hourChart', emptyMsg, 'No orders recorded in this period.');
+      return;
+    }
     const lbl = h => (h===0?'12a':h<12?h+'a':h===12?'12p':(h-12)+'p');
     const ctx = document.getElementById('hourChart').getContext('2d');
+    // Per-metric label / formatter for the bar dataset + axis + tooltip.
+    const seriesLabel = isAvg ? 'Avg Check' : (isCovers ? 'Covers' : 'Net Sales');
+    const valFmt = isAvg
+      ? v => '$' + (v||0).toFixed(2)
+      : (isCovers ? v => fmtNum(v) + ' covers'
+                  : v => fmtMoneyFull(v));
+    const axisFmt = isAvg
+      ? v => '$' + Math.round(v)
+      : (isCovers ? v => fmtNum(v) : v => fmtMoney(v));
     charts.hour = new Chart(ctx, {
       type: 'bar',
-      data: { labels: hours.map(lbl), datasets: [{ label: isDollars ? 'Net Sales' : 'Covers', data: hours.map(h => map[h]||0), backgroundColor: C.royal, borderRadius: 1 }] },
+      data: { labels: hours.map(lbl), datasets: [{ label: seriesLabel, data: hours.map(h => hourVal(h)), backgroundColor: C.royal, borderRadius: 1 }] },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => isDollars ? fmtMoneyFull(c.parsed.y) : (fmtNum(c.parsed.y) + ' covers') } } },
-        scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => isDollars ? fmtMoney(v) : fmtNum(v) }, grid: { color: '#F0EDEC' } } }
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => valFmt(c.parsed.y) } } },
+        scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => axisFmt(v) }, grid: { color: '#F0EDEC' } } }
       }
     });
   }, 'Hour-of-day unavailable', 'Chart.js error — see console.');
