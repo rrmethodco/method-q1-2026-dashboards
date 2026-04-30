@@ -427,12 +427,12 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
     import urllib.parse as _u
     LIMIT_KEYS = {"limit", "per_page", "pagesize", "take", "count"}
     OFFSET_KEYS = {"offset", "page", "skip", "start"}
-    BIG_LIMIT = "10000"
-    # Headers we must NOT forward — Playwright's request context manages
-    # them itself and replaying them breaks the request. Cookies are
-    # auto-attached from the page context. Pseudo-headers (`:authority`
-    # etc.) are HTTP/2-specific. Content-length is recomputed by
-    # Playwright. Sec-Fetch-* are renderer-asserted and may not match.
+    # Resy's surveys endpoint returns HTTP 500 when limit > ~100. Try a
+    # ladder of known-safe values; first one that works wins. Then
+    # paginate via `offset` until the page returns fewer rows than the
+    # limit (= we're at the tail).
+    PAGE_SIZES = ["100", "50", "25"]
+    MAX_PAGES = 200  # hard cap so a misbehaving cursor can't loop
     DROP_HEADERS = {
         "host", "content-length", "cookie",
         ":authority", ":method", ":path", ":scheme",
@@ -440,17 +440,33 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
         "sec-fetch-user", "connection", "transfer-encoding",
     }
 
+    def _count_rows(body):
+        """Heuristic: how many survey rows are in this payload? Walks
+        common shapes — {data: [...]}, {data: {surveys: [...]}}, or a
+        bare list. Used to decide whether to keep paginating."""
+        if isinstance(body, list):
+            return len(body)
+        if isinstance(body, dict):
+            d = body.get("data")
+            if isinstance(d, list):
+                return len(d)
+            if isinstance(d, dict):
+                for k in ("surveys", "rows", "items", "results"):
+                    v = d.get(k)
+                    if isinstance(v, list):
+                        return len(v)
+            for k in ("surveys", "rows", "items", "results"):
+                v = body.get(k)
+                if isinstance(v, list):
+                    return len(v)
+        return 0
+
     expanded: list[dict] = []
     seen_bases: set[str] = set()
     for cap in captured:
         url = cap.get("url") or ""
-        # Only re-issue GET endpoints. Resy's analytics report (POST)
-        # has been showing up as a candidate but isn't a list endpoint
-        # we want to bump.
         if (cap.get("method") or "GET").upper() != "GET":
             continue
-        # Only expand the survey/ratings list endpoints, not unrelated
-        # candidate URLs (auth, config, profile, etc.).
         u_lc = url.lower()
         if not any(t in u_lc for t in ("survey", "rating", "feedback", "review")):
             continue
@@ -459,37 +475,75 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
         if base in seen_bases:
             continue
         seen_bases.add(base)
-        qs = _u.parse_qs(parts.query, keep_blank_values=True)
-        for k in list(qs.keys()):
-            if k.lower() in LIMIT_KEYS:
-                qs[k] = [BIG_LIMIT]
-            if k.lower() in OFFSET_KEYS:
-                qs.pop(k)
-        if not any(k.lower() in LIMIT_KEYS for k in qs):
-            qs["limit"] = [BIG_LIMIT]
-        new_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
-        # Forward the SPA's request headers, especially Authorization.
-        # Without the Bearer JWT, survey.resy.com 401s — cookies alone
-        # are not sufficient for that host.
         src_headers = cap.get("request_headers") or {}
         headers = {k: v for k, v in src_headers.items()
                    if k.lower() not in DROP_HEADERS and not k.startswith(":")}
-        try:
-            resp = page.request.get(new_url, headers=headers, timeout=45_000)
-        except Exception as e:
-            sys.stderr.write(f"  full-history bump request failed for {base}: {e}\n")
+        # Find a working page-size by trying the ladder.
+        chosen_limit = None
+        first_body = None
+        first_url = None
+        for ps in PAGE_SIZES:
+            qs = _u.parse_qs(parts.query, keep_blank_values=True)
+            limit_key = next((k for k in qs if k.lower() in LIMIT_KEYS), "limit")
+            qs[limit_key] = [ps]
+            offset_key = next((k for k in qs if k.lower() in OFFSET_KEYS), None)
+            if offset_key:
+                qs[offset_key] = ["0"]
+            else:
+                qs.setdefault("offset", ["0"])
+                offset_key = "offset"
+            try_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
+            try:
+                resp = page.request.get(try_url, headers=headers, timeout=45_000)
+            except Exception as e:
+                sys.stderr.write(f"  full-history probe failed at limit={ps}: {e}\n")
+                continue
+            if not resp.ok:
+                sys.stderr.write(
+                    f"  full-history probe HTTP {resp.status} at limit={ps} for {base}\n"
+                )
+                continue
+            try:
+                body = resp.json()
+            except Exception:
+                continue
+            chosen_limit = int(ps)
+            first_body = body
+            first_url = try_url
+            break
+        if chosen_limit is None:
             continue
-        if not resp.ok:
-            sys.stderr.write(
-                f"  full-history bump returned HTTP {resp.status} for {base}\n"
-            )
-            continue
-        try:
-            body = resp.json()
-        except Exception as e:
-            sys.stderr.write(f"  full-history bump JSON parse failed for {base}: {e}\n")
-            continue
-        expanded.append({"url": new_url, "status": resp.status, "json": body})
+        expanded.append({"url": first_url, "status": 200, "json": first_body})
+        first_count = _count_rows(first_body)
+        # Walk pages until we get back fewer rows than chosen_limit
+        # (signals last page) or hit MAX_PAGES.
+        if first_count >= chosen_limit:
+            page_idx = 1
+            while page_idx < MAX_PAGES:
+                qs = _u.parse_qs(parts.query, keep_blank_values=True)
+                limit_key = next((k for k in qs if k.lower() in LIMIT_KEYS), "limit")
+                qs[limit_key] = [str(chosen_limit)]
+                qs[offset_key] = [str(page_idx * chosen_limit)]
+                page_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
+                try:
+                    resp = page.request.get(page_url, headers=headers, timeout=45_000)
+                except Exception as e:
+                    sys.stderr.write(f"  full-history page {page_idx} failed: {e}\n")
+                    break
+                if not resp.ok:
+                    sys.stderr.write(
+                        f"  full-history page {page_idx} HTTP {resp.status}\n"
+                    )
+                    break
+                try:
+                    pbody = resp.json()
+                except Exception:
+                    break
+                pcount = _count_rows(pbody)
+                expanded.append({"url": page_url, "status": 200, "json": pbody})
+                if pcount < chosen_limit:
+                    break
+                page_idx += 1
     return expanded
 
 
