@@ -3807,7 +3807,7 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
 // combinedDailySales merged with combinedDailyOrders for non-revenue
 // metrics. Returns null when the metric can't be computed for that row.
 const TREND_METRICS = {
-  revenue:   { label: 'Total F&B Revenue', y: r => r.net_sales || 0,
+  revenue:   { label: 'Revenue', y: r => r.net_sales || 0,
                valFmt: v => fmtMoneyFull(v), axisFmt: v => fmtMoney(v) },
   covers:    { label: 'Covers',            y: r => r.guests || 0,
                valFmt: v => fmtNum(v) + ' covers', axisFmt: v => fmtNum(v) },
@@ -3865,7 +3865,11 @@ function renderTrend(cur, py) {
   // to reflect the active metric + period without HTML re-render.
   const subtitleEl = document.getElementById('trendSubtitle');
   const periodSub = currentPeriodLabel();
-  if (subtitleEl) subtitleEl.textContent = `${metric.label} · ${periodSub}`;
+  // Subtitle format: "Revenue - Apr 2026" (en-dash separator,
+  // brand-consistent with the rest of the title bar). The metric.label
+  // for revenue is just "Revenue" since PR #50 — the "F&B" qualifier
+  // already lives in the card title above.
+  if (subtitleEl) subtitleEl.textContent = `${metric.label} - ${periodSub}`;
   safeChart('trendChart', () => {
     // Rebuild rows from the underlying SS+OD merge so avgCheck/comps
     // metrics can resolve. Falls back to the caller-provided `cur` for
