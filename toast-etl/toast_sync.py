@@ -634,9 +634,27 @@ def _tip_bin(amount: float, tip: float) -> int:
     return 10  # 100%+
 
 
+try:
+    from zoneinfo import ZoneInfo
+    _OUTLET_TZ = ZoneInfo("America/New_York")
+except ImportError:  # py < 3.9 fallback (shouldn't hit on the GH runner)
+    _OUTLET_TZ = timezone(timedelta(hours=-5))  # EST fixed; misses DST
+
+
 def _as_local_date(iso: str | None) -> tuple[str, int, str] | None:
-    """Return (YYYY-MM-DD, hour 0-23, DOW) in UTC. Close enough for heatmaps;
-    swap to the restaurant's IANA tz once we have it per-outlet."""
+    """Return (YYYY-MM-DD, hour 0-23, DOW) in the outlet's local time.
+
+    Every Method Co outlet is in America/New_York (Detroit, Philadelphia,
+    Charleston, Wilmington, Baltimore, Cleveland, Tampa — all ET). Toast
+    emits paidDate as UTC ISO ("...Z"); without a tz conversion the
+    hour-of-day chart and the heatmap show 19:00 ET dinner rush as
+    23:00 / 00:00 buckets — operator-confusing.
+
+    The IANA zone handles DST automatically (EDT in summer, EST in
+    winter), which a fixed UTC-5 offset would not. If a future outlet
+    lands outside ET, replace the global ZoneInfo with a per-outlet
+    lookup keyed on outlet_id.
+    """
     if not iso:
         return None
     try:
@@ -644,7 +662,10 @@ def _as_local_date(iso: str | None) -> tuple[str, int, str] | None:
         dt = datetime.fromisoformat(iso.replace("Z", "+00:00"))
     except ValueError:
         return None
-    return dt.strftime("%Y-%m-%d"), dt.hour, DOW[dt.weekday()]
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    local = dt.astimezone(_OUTLET_TZ)
+    return local.strftime("%Y-%m-%d"), local.hour, DOW[local.weekday()]
 
 
 def _parse_iso(iso: str | None) -> datetime | None:
