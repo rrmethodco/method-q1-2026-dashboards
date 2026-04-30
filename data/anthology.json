@@ -1,6 +1,6 @@
 {
   "outlet_id": "anthology",
-  "generated_at": "2026-04-30T13:29:06+00:00",
+  "generated_at": "2026-04-30T15:07:39+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -2382,17 +2382,6 @@
           "ticket_time_count": 2
         },
         {
-          "date": "2026-04-26",
-          "orders": 1,
-          "guests": 4,
-          "amount": 34521.09,
-          "tip": 0.0,
-          "gratuity": 0.0,
-          "discount": 0.0,
-          "ticket_time_sec_sum": 13630.0,
-          "ticket_time_count": 1
-        },
-        {
           "date": "2026-04-29",
           "orders": 3,
           "guests": 6,
@@ -2406,9 +2395,9 @@
       ],
       "monthly": [
         {
-          "orders": 6,
-          "guests": 6,
-          "amount": 10351.5,
+          "orders": 5,
+          "guests": 5,
+          "amount": 1489.0,
           "tip": 0.0,
           "discount": 0.0,
           "month": "2025-03"
@@ -2510,9 +2499,9 @@
           "month": "2026-03"
         },
         {
-          "orders": 4,
-          "guests": 10,
-          "amount": 35571.09,
+          "orders": 45,
+          "guests": 59,
+          "amount": 278755.57,
           "tip": 0.0,
           "discount": 0.0,
           "month": "2026-04"
@@ -2521,31 +2510,17 @@
       "hour_dow": [
         {
           "hour": 0,
-          "dow": "Mon",
-          "amount": 787.5,
-          "orders": 1,
-          "guests": 1
-        },
-        {
-          "hour": 0,
-          "dow": "Wed",
-          "amount": 2122.72,
-          "orders": 6,
-          "guests": 6
-        },
-        {
-          "hour": 0,
-          "dow": "Thu",
-          "amount": 13505.0,
-          "orders": 15,
-          "guests": 15
-        },
-        {
-          "hour": 0,
           "dow": "Fri",
           "amount": 5825.0,
           "orders": 26,
           "guests": 26
+        },
+        {
+          "hour": 0,
+          "dow": "Mon",
+          "amount": 787.5,
+          "orders": 1,
+          "guests": 1
         },
         {
           "hour": 0,
@@ -2562,25 +2537,18 @@
           "guests": 4
         },
         {
-          "hour": 1,
-          "dow": "Tue",
-          "amount": 8862.5,
-          "orders": 1,
-          "guests": 1
-        },
-        {
-          "hour": 1,
-          "dow": "Wed",
-          "amount": 75675.56,
-          "orders": 4,
-          "guests": 4
-        },
-        {
-          "hour": 1,
+          "hour": 0,
           "dow": "Thu",
-          "amount": 23230.95,
-          "orders": 2,
-          "guests": 2
+          "amount": 13505.0,
+          "orders": 15,
+          "guests": 15
+        },
+        {
+          "hour": 0,
+          "dow": "Wed",
+          "amount": 2122.72,
+          "orders": 6,
+          "guests": 6
         },
         {
           "hour": 1,
@@ -2604,25 +2572,25 @@
           "guests": 3
         },
         {
-          "hour": 2,
-          "dow": "Mon",
-          "amount": 72353.9,
-          "orders": 3,
-          "guests": 4
-        },
-        {
-          "hour": 2,
-          "dow": "Wed",
-          "amount": 2837.0,
-          "orders": 13,
-          "guests": 13
-        },
-        {
-          "hour": 2,
+          "hour": 1,
           "dow": "Thu",
-          "amount": 88028.6,
+          "amount": 23230.95,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 1,
+          "dow": "Tue",
+          "amount": 8862.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 1,
+          "dow": "Wed",
+          "amount": 75675.56,
           "orders": 4,
-          "guests": 5
+          "guests": 4
         },
         {
           "hour": 2,
@@ -2630,6 +2598,13 @@
           "amount": 77492.25,
           "orders": 5,
           "guests": 5
+        },
+        {
+          "hour": 2,
+          "dow": "Mon",
+          "amount": 72353.9,
+          "orders": 3,
+          "guests": 4
         },
         {
           "hour": 2,
@@ -2646,18 +2621,18 @@
           "guests": 9
         },
         {
-          "hour": 3,
-          "dow": "Mon",
-          "amount": 97611.49,
+          "hour": 2,
+          "dow": "Thu",
+          "amount": 88028.6,
           "orders": 4,
           "guests": 5
         },
         {
-          "hour": 3,
+          "hour": 2,
           "dow": "Wed",
-          "amount": 80103.42,
-          "orders": 1,
-          "guests": 1
+          "amount": 2837.0,
+          "orders": 13,
+          "guests": 13
         },
         {
           "hour": 3,
@@ -2665,6 +2640,13 @@
           "amount": 30915.75,
           "orders": 3,
           "guests": 3
+        },
+        {
+          "hour": 3,
+          "dow": "Mon",
+          "amount": 97611.49,
+          "orders": 4,
+          "guests": 5
         },
         {
           "hour": 3,
@@ -2679,6 +2661,13 @@
           "amount": 76825.63,
           "orders": 3,
           "guests": 5
+        },
+        {
+          "hour": 3,
+          "dow": "Wed",
+          "amount": 80103.42,
+          "orders": 1,
+          "guests": 1
         },
         {
           "hour": 4,
@@ -2724,6 +2713,20 @@
         },
         {
           "hour": 13,
+          "dow": "Fri",
+          "amount": 34611.4,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 13,
+          "dow": "Sat",
+          "amount": 500.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 13,
           "dow": "Tue",
           "amount": 525.0,
           "orders": 1,
@@ -2737,16 +2740,9 @@
           "guests": 1
         },
         {
-          "hour": 13,
-          "dow": "Fri",
-          "amount": 34611.4,
-          "orders": 2,
-          "guests": 2
-        },
-        {
-          "hour": 13,
+          "hour": 14,
           "dow": "Sat",
-          "amount": 500.0,
+          "amount": 1575.0,
           "orders": 1,
           "guests": 1
         },
@@ -2765,11 +2761,11 @@
           "guests": 2
         },
         {
-          "hour": 14,
-          "dow": "Sat",
-          "amount": 1575.0,
-          "orders": 1,
-          "guests": 1
+          "hour": 15,
+          "dow": "Fri",
+          "amount": 4913.75,
+          "orders": 3,
+          "guests": 3
         },
         {
           "hour": 15,
@@ -2780,10 +2776,10 @@
         },
         {
           "hour": 15,
-          "dow": "Tue",
-          "amount": 7151.88,
-          "orders": 2,
-          "guests": 2
+          "dow": "Sat",
+          "amount": 1181.25,
+          "orders": 1,
+          "guests": 1
         },
         {
           "hour": 15,
@@ -2794,29 +2790,8 @@
         },
         {
           "hour": 15,
-          "dow": "Fri",
-          "amount": 4913.75,
-          "orders": 3,
-          "guests": 3
-        },
-        {
-          "hour": 15,
-          "dow": "Sat",
-          "amount": 1181.25,
-          "orders": 1,
-          "guests": 1
-        },
-        {
-          "hour": 16,
-          "dow": "Wed",
-          "amount": 1550.0,
-          "orders": 3,
-          "guests": 3
-        },
-        {
-          "hour": 16,
-          "dow": "Thu",
-          "amount": 40205.26,
+          "dow": "Tue",
+          "amount": 7151.88,
           "orders": 2,
           "guests": 2
         },
@@ -2842,6 +2817,34 @@
           "guests": 1
         },
         {
+          "hour": 16,
+          "dow": "Thu",
+          "amount": 40205.26,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "hour": 16,
+          "dow": "Wed",
+          "amount": 1550.0,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 17,
+          "dow": "Fri",
+          "amount": 525.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 17,
+          "dow": "Thu",
+          "amount": 13252.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
           "hour": 17,
           "dow": "Tue",
           "amount": 11957.5,
@@ -2856,18 +2859,11 @@
           "guests": 5
         },
         {
-          "hour": 17,
-          "dow": "Thu",
-          "amount": 13252.5,
-          "orders": 2,
-          "guests": 2
-        },
-        {
-          "hour": 17,
+          "hour": 18,
           "dow": "Fri",
-          "amount": 525.0,
-          "orders": 1,
-          "guests": 1
+          "amount": 29222.5,
+          "orders": 4,
+          "guests": 5
         },
         {
           "hour": 18,
@@ -2875,34 +2871,6 @@
           "amount": 525.0,
           "orders": 1,
           "guests": 1
-        },
-        {
-          "hour": 18,
-          "dow": "Tue",
-          "amount": 96360.19,
-          "orders": 7,
-          "guests": 122
-        },
-        {
-          "hour": 18,
-          "dow": "Wed",
-          "amount": 78724.86,
-          "orders": 5,
-          "guests": 5
-        },
-        {
-          "hour": 18,
-          "dow": "Thu",
-          "amount": 2600.0,
-          "orders": 3,
-          "guests": 3
-        },
-        {
-          "hour": 18,
-          "dow": "Fri",
-          "amount": 29222.5,
-          "orders": 4,
-          "guests": 5
         },
         {
           "hour": 18,
@@ -2919,32 +2887,25 @@
           "guests": 11
         },
         {
-          "hour": 19,
-          "dow": "Mon",
-          "amount": 7050.0,
-          "orders": 2,
-          "guests": 2
-        },
-        {
-          "hour": 19,
-          "dow": "Tue",
-          "amount": 3303.75,
+          "hour": 18,
+          "dow": "Thu",
+          "amount": 2600.0,
           "orders": 3,
           "guests": 3
         },
         {
-          "hour": 19,
-          "dow": "Wed",
-          "amount": 69990.15,
-          "orders": 28,
-          "guests": 28
+          "hour": 18,
+          "dow": "Tue",
+          "amount": 96360.19,
+          "orders": 7,
+          "guests": 122
         },
         {
-          "hour": 19,
-          "dow": "Thu",
-          "amount": 52073.15,
-          "orders": 4,
-          "guests": 4
+          "hour": 18,
+          "dow": "Wed",
+          "amount": 78724.86,
+          "orders": 5,
+          "guests": 5
         },
         {
           "hour": 19,
@@ -2952,6 +2913,13 @@
           "amount": 19021.7,
           "orders": 4,
           "guests": 4
+        },
+        {
+          "hour": 19,
+          "dow": "Mon",
+          "amount": 7050.0,
+          "orders": 2,
+          "guests": 2
         },
         {
           "hour": 19,
@@ -2968,32 +2936,25 @@
           "guests": 2
         },
         {
-          "hour": 20,
-          "dow": "Mon",
-          "amount": 71819.66,
-          "orders": 4,
-          "guests": 161
-        },
-        {
-          "hour": 20,
-          "dow": "Tue",
-          "amount": 14379.75,
-          "orders": 4,
-          "guests": 4
-        },
-        {
-          "hour": 20,
-          "dow": "Wed",
-          "amount": 108622.49,
-          "orders": 7,
-          "guests": 7
-        },
-        {
-          "hour": 20,
+          "hour": 19,
           "dow": "Thu",
-          "amount": 26280.14,
+          "amount": 52073.15,
           "orders": 4,
           "guests": 4
+        },
+        {
+          "hour": 19,
+          "dow": "Tue",
+          "amount": 3303.75,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "hour": 19,
+          "dow": "Wed",
+          "amount": 69990.15,
+          "orders": 28,
+          "guests": 28
         },
         {
           "hour": 20,
@@ -3001,6 +2962,13 @@
           "amount": 4343.75,
           "orders": 1,
           "guests": 1
+        },
+        {
+          "hour": 20,
+          "dow": "Mon",
+          "amount": 71819.66,
+          "orders": 4,
+          "guests": 161
         },
         {
           "hour": 20,
@@ -3017,11 +2985,53 @@
           "guests": 4
         },
         {
+          "hour": 20,
+          "dow": "Thu",
+          "amount": 26280.14,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 20,
+          "dow": "Tue",
+          "amount": 14379.75,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 20,
+          "dow": "Wed",
+          "amount": 108622.49,
+          "orders": 7,
+          "guests": 7
+        },
+        {
+          "hour": 21,
+          "dow": "Fri",
+          "amount": 890.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
           "hour": 21,
           "dow": "Mon",
           "amount": 76801.67,
           "orders": 10,
           "guests": 10
+        },
+        {
+          "hour": 21,
+          "dow": "Sat",
+          "amount": 1980.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 21,
+          "dow": "Thu",
+          "amount": 42779.23,
+          "orders": 5,
+          "guests": 6
         },
         {
           "hour": 21,
@@ -3033,28 +3043,14 @@
         {
           "hour": 21,
           "dow": "Wed",
-          "amount": 6355.75,
-          "orders": 6,
-          "guests": 6
+          "amount": 7405.75,
+          "orders": 9,
+          "guests": 12
         },
         {
-          "hour": 21,
-          "dow": "Thu",
-          "amount": 42779.23,
-          "orders": 5,
-          "guests": 6
-        },
-        {
-          "hour": 21,
+          "hour": 22,
           "dow": "Fri",
-          "amount": 890.0,
-          "orders": 1,
-          "guests": 1
-        },
-        {
-          "hour": 21,
-          "dow": "Sat",
-          "amount": 1980.0,
+          "amount": 12.0,
           "orders": 1,
           "guests": 1
         },
@@ -3064,34 +3060,6 @@
           "amount": 6052.5,
           "orders": 5,
           "guests": 5
-        },
-        {
-          "hour": 22,
-          "dow": "Tue",
-          "amount": 2778.0,
-          "orders": 8,
-          "guests": 8
-        },
-        {
-          "hour": 22,
-          "dow": "Wed",
-          "amount": 86816.86,
-          "orders": 4,
-          "guests": 4
-        },
-        {
-          "hour": 22,
-          "dow": "Thu",
-          "amount": 35372.85,
-          "orders": 9,
-          "guests": 9
-        },
-        {
-          "hour": 22,
-          "dow": "Fri",
-          "amount": 12.0,
-          "orders": 1,
-          "guests": 1
         },
         {
           "hour": 22,
@@ -3108,11 +3076,53 @@
           "guests": 1
         },
         {
+          "hour": 22,
+          "dow": "Thu",
+          "amount": 35372.85,
+          "orders": 9,
+          "guests": 9
+        },
+        {
+          "hour": 22,
+          "dow": "Tue",
+          "amount": 2778.0,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "hour": 22,
+          "dow": "Wed",
+          "amount": 86816.86,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 23,
+          "dow": "Fri",
+          "amount": 20082.75,
+          "orders": 17,
+          "guests": 17
+        },
+        {
           "hour": 23,
           "dow": "Mon",
           "amount": 2241.0,
           "orders": 6,
           "guests": 6
+        },
+        {
+          "hour": 23,
+          "dow": "Sat",
+          "amount": 30024.74,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "hour": 23,
+          "dow": "Thu",
+          "amount": 4666.0,
+          "orders": 18,
+          "guests": 18
         },
         {
           "hour": 23,
@@ -3127,27 +3137,6 @@
           "amount": 25213.04,
           "orders": 11,
           "guests": 11
-        },
-        {
-          "hour": 23,
-          "dow": "Thu",
-          "amount": 4666.0,
-          "orders": 18,
-          "guests": 18
-        },
-        {
-          "hour": 23,
-          "dow": "Fri",
-          "amount": 20082.75,
-          "orders": 17,
-          "guests": 17
-        },
-        {
-          "hour": 23,
-          "dow": "Sat",
-          "amount": 30024.74,
-          "orders": 4,
-          "guests": 4
         }
       ],
       "hour_daily": [
@@ -5138,6 +5127,13 @@
           "amount": 34521.09,
           "orders": 1,
           "guests": 4
+        },
+        {
+          "date": "2026-04-29",
+          "hour": 21,
+          "amount": 1050.0,
+          "orders": 3,
+          "guests": 6
         }
       ],
       "categories_daily": [
@@ -5149,1281 +5145,6603 @@
         },
         {
           "date": "2025-03-26",
-          "category": "Other",
-          "amount": 1489.0,
-          "orders": 21
+          "category": "Food",
+          "amount": 1105.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-03-26",
+          "category": "Wine",
+          "amount": 384.0,
+          "orders": 16
         },
         {
           "date": "2025-04-02",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 4750.0,
           "orders": 1
         },
         {
           "date": "2025-04-06",
-          "category": "Other",
-          "amount": 33767.9,
-          "orders": 33
-        },
-        {
-          "date": "2025-04-13",
-          "category": "Other",
-          "amount": 29022.0,
-          "orders": 39
-        },
-        {
-          "date": "2025-04-15",
-          "category": "Other",
-          "amount": 1663.0,
+          "category": "Bottled Beer",
+          "amount": 1011.18,
           "orders": 4
         },
         {
-          "date": "2025-04-17",
-          "category": "Other",
-          "amount": 1874.0,
-          "orders": 19
+          "date": "2025-04-06",
+          "category": "Food",
+          "amount": 17003.0,
+          "orders": 3
         },
         {
-          "date": "2025-04-20",
-          "category": "Other",
-          "amount": 28099.4,
-          "orders": 37
+          "date": "2025-04-06",
+          "category": "Liquor",
+          "amount": 2384.77,
+          "orders": 7
         },
         {
-          "date": "2025-04-21",
-          "category": "Other",
-          "amount": 2991.0,
-          "orders": 27
+          "date": "2025-04-06",
+          "category": "Misc. Guest Fees",
+          "amount": 6114.0,
+          "orders": 2
         },
         {
-          "date": "2025-04-24",
-          "category": "Other",
-          "amount": 21240.0,
-          "orders": 33
+          "date": "2025-04-06",
+          "category": "NA Beverage",
+          "amount": 520.0,
+          "orders": 10
         },
         {
-          "date": "2025-04-26",
-          "category": "Other",
-          "amount": 33470.0,
-          "orders": 39
+          "date": "2025-04-06",
+          "category": "Wine",
+          "amount": 6734.95,
+          "orders": 7
         },
         {
-          "date": "2025-04-27",
-          "category": "Other",
-          "amount": 33372.0,
-          "orders": 40
-        },
-        {
-          "date": "2025-04-28",
-          "category": "Other",
-          "amount": 20715.0,
-          "orders": 32
-        },
-        {
-          "date": "2025-04-30",
-          "category": "Other",
-          "amount": 16125.0,
-          "orders": 24
-        },
-        {
-          "date": "2025-05-01",
-          "category": "Other",
-          "amount": 27336.0,
-          "orders": 25
-        },
-        {
-          "date": "2025-05-03",
-          "category": "Other",
-          "amount": 24184.4,
-          "orders": 39
-        },
-        {
-          "date": "2025-05-04",
-          "category": "Other",
-          "amount": 34415.2,
-          "orders": 38
-        },
-        {
-          "date": "2025-05-06",
-          "category": "Other",
-          "amount": 4005.0,
+          "date": "2025-04-13",
+          "category": "Bottled Beer",
+          "amount": 885.0,
           "orders": 5
         },
         {
+          "date": "2025-04-13",
+          "category": "Draft Beer",
+          "amount": 99.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-13",
+          "category": "Food",
+          "amount": 14200.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-04-13",
+          "category": "Liquor",
+          "amount": 2503.0,
+          "orders": 11
+        },
+        {
+          "date": "2025-04-13",
+          "category": "Misc. Guest Fees",
+          "amount": 4540.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-04-13",
+          "category": "NA Beverage",
+          "amount": 386.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-04-13",
+          "category": "Wine",
+          "amount": 6409.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-04-15",
+          "category": "Food",
+          "amount": 858.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-04-15",
+          "category": "Misc. Guest Fees",
+          "amount": 350.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-15",
+          "category": "NA Beverage",
+          "amount": 455.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-17",
+          "category": "Food",
+          "amount": 1300.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-04-17",
+          "category": "Wine",
+          "amount": 574.0,
+          "orders": 14
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Bottled Beer",
+          "amount": 1094.88,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Draft Beer",
+          "amount": 135.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Food",
+          "amount": 15334.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Liquor",
+          "amount": 4253.82,
+          "orders": 11
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-20",
+          "category": "NA Beverage",
+          "amount": 60.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Valet",
+          "amount": 315.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Wine",
+          "amount": 4906.7,
+          "orders": 9
+        },
+        {
+          "date": "2025-04-21",
+          "category": "Food",
+          "amount": 1620.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-21",
+          "category": "Room Rental",
+          "amount": 750.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-21",
+          "category": "Wine",
+          "amount": 621.0,
+          "orders": 20
+        },
+        {
+          "date": "2025-04-24",
+          "category": "Bottled Beer",
+          "amount": 1559.2,
+          "orders": 5
+        },
+        {
+          "date": "2025-04-24",
+          "category": "Food",
+          "amount": 12240.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-04-24",
+          "category": "Liquor",
+          "amount": 2656.3,
+          "orders": 9
+        },
+        {
+          "date": "2025-04-24",
+          "category": "NA Beverage",
+          "amount": 67.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-24",
+          "category": "Wine",
+          "amount": 4717.5,
+          "orders": 9
+        },
+        {
+          "date": "2025-04-26",
+          "category": "Bottled Beer",
+          "amount": 712.2,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-26",
+          "category": "Food",
+          "amount": 22560.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-04-26",
+          "category": "Liquor",
+          "amount": 5127.8,
+          "orders": 9
+        },
+        {
+          "date": "2025-04-26",
+          "category": "NA Beverage",
+          "amount": 337.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-04-26",
+          "category": "Room Rental",
+          "amount": 750.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-26",
+          "category": "Valet",
+          "amount": 35.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-26",
+          "category": "Wine",
+          "amount": 3948.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Bottled Beer",
+          "amount": 1487.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Draft Beer",
+          "amount": 171.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Food",
+          "amount": 17145.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Liquor",
+          "amount": 4584.5,
+          "orders": 10
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Misc. Guest Fees",
+          "amount": 1300.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-27",
+          "category": "NA Beverage",
+          "amount": 899.0,
+          "orders": 11
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Valet",
+          "amount": 360.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Wine",
+          "amount": 7425.5,
+          "orders": 7
+        },
+        {
+          "date": "2025-04-28",
+          "category": "Bottled Beer",
+          "amount": 816.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-04-28",
+          "category": "Food",
+          "amount": 9534.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-04-28",
+          "category": "Liquor",
+          "amount": 3272.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-04-28",
+          "category": "Misc. Guest Fees",
+          "amount": 2350.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-04-28",
+          "category": "NA Beverage",
+          "amount": 397.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-04-28",
+          "category": "Valet",
+          "amount": 735.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-28",
+          "category": "Wine",
+          "amount": 3611.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-30",
+          "category": "Bottled Beer",
+          "amount": 1373.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-30",
+          "category": "Draft Beer",
+          "amount": 72.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-30",
+          "category": "Food",
+          "amount": 9750.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-04-30",
+          "category": "Misc. Guest Fees",
+          "amount": 125.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-30",
+          "category": "NA Beverage",
+          "amount": 102.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-30",
+          "category": "Wine",
+          "amount": 4703.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Bottled Beer",
+          "amount": 2018.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Food",
+          "amount": 9450.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Liquor",
+          "amount": 3884.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Misc. Guest Fees",
+          "amount": 5136.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-01",
+          "category": "NA Beverage",
+          "amount": 171.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Wine",
+          "amount": 5177.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Bottled Beer",
+          "amount": 755.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Draft Beer",
+          "amount": 72.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Food",
+          "amount": 10917.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Liquor",
+          "amount": 3450.4,
+          "orders": 11
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-03",
+          "category": "NA Beverage",
+          "amount": 333.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Room Rental",
+          "amount": 2500.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Valet",
+          "amount": 1225.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-03",
+          "category": "Wine",
+          "amount": 4432.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-04",
+          "category": "Bottled Beer",
+          "amount": 1603.84,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-04",
+          "category": "Food",
+          "amount": 19362.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-04",
+          "category": "Liquor",
+          "amount": 5345.76,
+          "orders": 11
+        },
+        {
+          "date": "2025-05-04",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-04",
+          "category": "NA Beverage",
+          "amount": 340.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-05-04",
+          "category": "Valet",
+          "amount": 1110.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-04",
+          "category": "Wine",
+          "amount": 6153.6,
+          "orders": 9
+        },
+        {
+          "date": "2025-05-06",
+          "category": "Food",
+          "amount": 1530.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-06",
+          "category": "Misc. Guest Fees",
+          "amount": 350.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-06",
+          "category": "NA Beverage",
+          "amount": 1125.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-06",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
           "date": "2025-05-07",
-          "category": "Other",
-          "amount": 8847.0,
-          "orders": 33
+          "category": "Food",
+          "amount": 5415.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-07",
+          "category": "Misc. Guest Fees",
+          "amount": 2237.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-07",
+          "category": "Room Rental",
+          "amount": 750.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-07",
+          "category": "Wine",
+          "amount": 445.0,
+          "orders": 20
         },
         {
           "date": "2025-05-09",
-          "category": "Other",
-          "amount": 23130.0,
-          "orders": 30
+          "category": "Bottled Beer",
+          "amount": 1186.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Food",
+          "amount": 10650.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Liquor",
+          "amount": 2397.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Misc. Guest Fees",
+          "amount": 4180.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-09",
+          "category": "NA Beverage",
+          "amount": 99.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Wine",
+          "amount": 3118.0,
+          "orders": 5
         },
         {
           "date": "2025-05-10",
-          "category": "Other",
-          "amount": 26245.0,
-          "orders": 34
+          "category": "Bottled Beer",
+          "amount": 1284.6,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-10",
+          "category": "Draft Beer",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-10",
+          "category": "Food",
+          "amount": 15565.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-10",
+          "category": "Liquor",
+          "amount": 3142.9,
+          "orders": 9
+        },
+        {
+          "date": "2025-05-10",
+          "category": "NA Beverage",
+          "amount": 333.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-10",
+          "category": "Wine",
+          "amount": 5910.5,
+          "orders": 8
         },
         {
           "date": "2025-05-12",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 5000.0,
           "orders": 1
         },
         {
           "date": "2025-05-13",
-          "category": "Other",
-          "amount": 48080.4,
-          "orders": 60
+          "category": "Bottled Beer",
+          "amount": 1959.88,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-13",
+          "category": "Food",
+          "amount": 23522.0,
+          "orders": 12
+        },
+        {
+          "date": "2025-05-13",
+          "category": "Liquor",
+          "amount": 3831.82,
+          "orders": 9
+        },
+        {
+          "date": "2025-05-13",
+          "category": "Misc. Guest Fees",
+          "amount": 6616.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-13",
+          "category": "NA Beverage",
+          "amount": 1884.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-13",
+          "category": "Valet",
+          "amount": 2610.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-13",
+          "category": "Wine",
+          "amount": 7656.7,
+          "orders": 21
         },
         {
           "date": "2025-05-14",
-          "category": "Other",
-          "amount": 3850.0,
-          "orders": 7
+          "category": "Food",
+          "amount": 1980.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-14",
+          "category": "NA Beverage",
+          "amount": 780.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-14",
+          "category": "Room Rental",
+          "amount": 600.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-14",
+          "category": "Valet",
+          "amount": 490.0,
+          "orders": 1
         },
         {
           "date": "2025-05-15",
-          "category": "Other",
+          "category": "Misc. Guest Fees",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-05-16",
-          "category": "Other",
+          "category": "Liquor",
           "amount": 12.0,
           "orders": 1
         },
         {
           "date": "2025-05-17",
-          "category": "Other",
-          "amount": 30077.0,
-          "orders": 30
+          "category": "AV / Tech",
+          "amount": 125.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-17",
+          "category": "Bottled Beer",
+          "amount": 653.6,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-17",
+          "category": "Food",
+          "amount": 20752.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-17",
+          "category": "Liquor",
+          "amount": 3992.9,
+          "orders": 13
+        },
+        {
+          "date": "2025-05-17",
+          "category": "Misc. Guest Fees",
+          "amount": 2550.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-17",
+          "category": "Wine",
+          "amount": 2003.5,
+          "orders": 6
         },
         {
           "date": "2025-05-18",
-          "category": "Other",
-          "amount": 27832.0,
-          "orders": 40
+          "category": "Bottled Beer",
+          "amount": 1322.6,
+          "orders": 6
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Food",
+          "amount": 15195.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Liquor",
+          "amount": 2576.9,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-18",
+          "category": "NA Beverage",
+          "amount": 326.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Valet",
+          "amount": 770.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Wine",
+          "amount": 5141.5,
+          "orders": 9
+        },
+        {
+          "date": "2025-05-20",
+          "category": "Bottled Beer",
+          "amount": 2205.2,
+          "orders": 11
+        },
+        {
+          "date": "2025-05-20",
+          "category": "Draft Beer",
+          "amount": 45.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-20",
+          "category": "Food",
+          "amount": 20151.0,
+          "orders": 12
+        },
+        {
+          "date": "2025-05-20",
+          "category": "Liquor",
+          "amount": 5972.3,
+          "orders": 16
+        },
+        {
+          "date": "2025-05-20",
+          "category": "Misc. Guest Fees",
+          "amount": 2750.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-20",
+          "category": "NA Beverage",
+          "amount": 2103.0,
+          "orders": 11
         },
         {
           "date": "2025-05-20",
           "category": "Other",
-          "amount": 40880.0,
-          "orders": 67
+          "amount": 950.0,
+          "orders": 3
         },
         {
-          "date": "2025-05-21",
-          "category": "Other",
-          "amount": 853.0,
+          "date": "2025-05-20",
+          "category": "Service Charge",
+          "amount": 525.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-20",
+          "category": "Valet",
+          "amount": 420.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-20",
+          "category": "Wine",
+          "amount": 5758.5,
           "orders": 9
         },
         {
+          "date": "2025-05-21",
+          "category": "Bottled Beer",
+          "amount": 8.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-21",
+          "category": "Misc. Guest Fees",
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-21",
+          "category": "NA Beverage",
+          "amount": 39.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-21",
+          "category": "Wine",
+          "amount": 556.0,
+          "orders": 4
+        },
+        {
           "date": "2025-05-22",
-          "category": "Other",
-          "amount": 3280.0,
+          "category": "Food",
+          "amount": 2500.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-22",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-22",
+          "category": "Valet",
+          "amount": 280.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-24",
+          "category": "Bottled Beer",
+          "amount": 1507.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-24",
+          "category": "Food",
+          "amount": 10695.0,
           "orders": 5
         },
         {
           "date": "2025-05-24",
-          "category": "Other",
-          "amount": 24854.0,
-          "orders": 42
+          "category": "Liquor",
+          "amount": 4093.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-05-24",
+          "category": "NA Beverage",
+          "amount": 1124.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-24",
+          "category": "Room Rental",
+          "amount": 1625.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-24",
+          "category": "Valet",
+          "amount": 2065.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-24",
+          "category": "Wine",
+          "amount": 3745.0,
+          "orders": 8
         },
         {
           "date": "2025-05-25",
-          "category": "Other",
-          "amount": 28079.6,
-          "orders": 40
+          "category": "Bottled Beer",
+          "amount": 881.92,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-25",
+          "category": "Food",
+          "amount": 14606.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-25",
+          "category": "Liquor",
+          "amount": 6923.38,
+          "orders": 15
+        },
+        {
+          "date": "2025-05-25",
+          "category": "NA Beverage",
+          "amount": 409.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-25",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-25",
+          "category": "Valet",
+          "amount": 1015.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-25",
+          "category": "Wine",
+          "amount": 3244.3,
+          "orders": 5
         },
         {
           "date": "2025-05-26",
-          "category": "Other",
-          "amount": 17949.2,
-          "orders": 35
+          "category": "Bottled Beer",
+          "amount": 744.44,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-26",
+          "category": "Food",
+          "amount": 9734.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-26",
+          "category": "Liquor",
+          "amount": 1976.66,
+          "orders": 7
+        },
+        {
+          "date": "2025-05-26",
+          "category": "Misc. Guest Fees",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-26",
+          "category": "NA Beverage",
+          "amount": 364.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-05-26",
+          "category": "Wine",
+          "amount": 4130.1,
+          "orders": 9
         },
         {
           "date": "2025-05-28",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-05-29",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-05-30",
-          "category": "Other",
-          "amount": 18005.0,
-          "orders": 10
+          "category": "Food",
+          "amount": 12000.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-05-30",
+          "category": "NA Beverage",
+          "amount": 3000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-30",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-30",
+          "category": "Service Charge",
+          "amount": 175.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-30",
+          "category": "Valet",
+          "amount": 1330.0,
+          "orders": 1
         },
         {
           "date": "2025-05-31",
-          "category": "Other",
-          "amount": 27076.4,
-          "orders": 37
+          "category": "Bottled Beer",
+          "amount": 1329.08,
+          "orders": 6
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Draft Beer",
+          "amount": 36.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Food",
+          "amount": 14510.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Liquor",
+          "amount": 3945.12,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Misc. Guest Fees",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-31",
+          "category": "NA Beverage",
+          "amount": 401.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Valet",
+          "amount": 1100.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Wine",
+          "amount": 4755.2,
+          "orders": 8
         },
         {
           "date": "2025-06-01",
-          "category": "Other",
-          "amount": 25492.6,
-          "orders": 34
+          "category": "Bottled Beer",
+          "amount": 1150.92,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-01",
+          "category": "Food",
+          "amount": 11014.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-06-01",
+          "category": "Liquor",
+          "amount": 3051.88,
+          "orders": 9
+        },
+        {
+          "date": "2025-06-01",
+          "category": "Misc. Guest Fees",
+          "amount": 2235.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-01",
+          "category": "NA Beverage",
+          "amount": 18.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-01",
+          "category": "Valet",
+          "amount": 570.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-01",
+          "category": "Wine",
+          "amount": 7452.8,
+          "orders": 9
         },
         {
           "date": "2025-06-02",
-          "category": "Other",
-          "amount": 20958.2,
-          "orders": 37
+          "category": "Bottled Beer",
+          "amount": 558.24,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-02",
+          "category": "Food",
+          "amount": 10555.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-02",
+          "category": "Liquor",
+          "amount": 3254.36,
+          "orders": 11
+        },
+        {
+          "date": "2025-06-02",
+          "category": "Misc. Guest Fees",
+          "amount": 2500.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-02",
+          "category": "NA Beverage",
+          "amount": 371.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-02",
+          "category": "Wine",
+          "amount": 3719.6,
+          "orders": 10
         },
         {
           "date": "2025-06-03",
-          "category": "Other",
-          "amount": 20754.0,
-          "orders": 23
+          "category": "Bottled Beer",
+          "amount": 89.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-03",
+          "category": "Food",
+          "amount": 5617.0,
+          "orders": 11
+        },
+        {
+          "date": "2025-06-03",
+          "category": "Liquor",
+          "amount": 81.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-03",
+          "category": "Misc. Guest Fees",
+          "amount": 13254.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-03",
+          "category": "NA Beverage",
+          "amount": 129.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-03",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-03",
+          "category": "Wine",
+          "amount": 84.0,
+          "orders": 2
         },
         {
           "date": "2025-06-04",
-          "category": "Other",
-          "amount": 6983.0,
-          "orders": 13
+          "category": "Food",
+          "amount": 5744.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-06-04",
+          "category": "NA Beverage",
+          "amount": 1204.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-04",
+          "category": "Valet",
+          "amount": 35.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Bottled Beer",
+          "amount": 552.6,
+          "orders": 6
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Food",
+          "amount": 14514.0,
+          "orders": 15
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Liquor",
+          "amount": 2677.4,
+          "orders": 11
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-07",
+          "category": "NA Beverage",
+          "amount": 1372.4,
+          "orders": 10
         },
         {
           "date": "2025-06-07",
           "category": "Other",
-          "amount": 28041.0,
-          "orders": 58
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Room Rental",
+          "amount": 2710.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Valet",
+          "amount": 980.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Wine",
+          "amount": 2984.6,
+          "orders": 9
         },
         {
           "date": "2025-06-08",
-          "category": "Other",
-          "amount": 29519.4,
-          "orders": 35
+          "category": "Bottled Beer",
+          "amount": 1521.48,
+          "orders": 7
+        },
+        {
+          "date": "2025-06-08",
+          "category": "Food",
+          "amount": 16550.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-08",
+          "category": "Liquor",
+          "amount": 4445.22,
+          "orders": 8
+        },
+        {
+          "date": "2025-06-08",
+          "category": "NA Beverage",
+          "amount": 590.37,
+          "orders": 8
+        },
+        {
+          "date": "2025-06-08",
+          "category": "Valet",
+          "amount": 1435.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-08",
+          "category": "Wine",
+          "amount": 4977.33,
+          "orders": 8
         },
         {
           "date": "2025-06-09",
-          "category": "Other",
-          "amount": 29701.0,
-          "orders": 52
+          "category": "Bottled Beer",
+          "amount": 1385.2,
+          "orders": 6
+        },
+        {
+          "date": "2025-06-09",
+          "category": "Food",
+          "amount": 11199.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-09",
+          "category": "Liquor",
+          "amount": 3462.3,
+          "orders": 12
+        },
+        {
+          "date": "2025-06-09",
+          "category": "Misc. Guest Fees",
+          "amount": 1100.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-09",
+          "category": "NA Beverage",
+          "amount": 1072.05,
+          "orders": 9
+        },
+        {
+          "date": "2025-06-09",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-09",
+          "category": "Valet",
+          "amount": 1330.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-09",
+          "category": "Wine",
+          "amount": 9152.45,
+          "orders": 17
         },
         {
           "date": "2025-06-10",
-          "category": "Other",
-          "amount": 2778.0,
-          "orders": 29
+          "category": "Food",
+          "amount": 1950.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-06-10",
+          "category": "Wine",
+          "amount": 828.0,
+          "orders": 21
+        },
+        {
+          "date": "2025-06-11",
+          "category": "Food",
+          "amount": 6660.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-11",
+          "category": "Misc. Guest Fees",
+          "amount": 4620.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-11",
+          "category": "NA Beverage",
+          "amount": 2340.0,
+          "orders": 1
         },
         {
           "date": "2025-06-11",
           "category": "Other",
-          "amount": 15620.0,
-          "orders": 7
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-11",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
         },
         {
           "date": "2025-06-12",
-          "category": "Other",
-          "amount": 3800.0,
-          "orders": 4
+          "category": "Food",
+          "amount": 2425.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-12",
+          "category": "NA Beverage",
+          "amount": 875.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-12",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
         },
         {
           "date": "2025-06-13",
-          "category": "Other",
-          "amount": 3675.0,
+          "category": "Food",
+          "amount": 2000.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-13",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-13",
+          "category": "NA Beverage",
+          "amount": 675.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-13",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Bottled Beer",
+          "amount": 1496.6,
           "orders": 6
         },
         {
           "date": "2025-06-14",
-          "category": "Other",
-          "amount": 32729.0,
-          "orders": 36
+          "category": "Draft Beer",
+          "amount": 18.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Food",
+          "amount": 16048.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Liquor",
+          "amount": 3481.4,
+          "orders": 10
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Misc. Guest Fees",
+          "amount": 4106.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-14",
+          "category": "NA Beverage",
+          "amount": 519.9,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Valet",
+          "amount": 1450.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Wine",
+          "amount": 4109.1,
+          "orders": 7
         },
         {
           "date": "2025-06-15",
-          "category": "Other",
-          "amount": 32688.6,
-          "orders": 36
+          "category": "Bottled Beer",
+          "amount": 2019.12,
+          "orders": 8
         },
         {
-          "date": "2025-06-17",
-          "category": "Other",
-          "amount": 5100.0,
+          "date": "2025-06-15",
+          "category": "Food",
+          "amount": 16515.0,
           "orders": 3
         },
         {
+          "date": "2025-06-15",
+          "category": "Liquor",
+          "amount": 4006.18,
+          "orders": 11
+        },
+        {
+          "date": "2025-06-15",
+          "category": "Misc. Guest Fees",
+          "amount": 3000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-15",
+          "category": "NA Beverage",
+          "amount": 106.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-15",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-15",
+          "category": "Wine",
+          "amount": 6542.3,
+          "orders": 7
+        },
+        {
+          "date": "2025-06-17",
+          "category": "Misc. Guest Fees",
+          "amount": 850.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-17",
+          "category": "Room Rental",
+          "amount": 4250.0,
+          "orders": 1
+        },
+        {
           "date": "2025-06-19",
-          "category": "Other",
-          "amount": 13355.0,
-          "orders": 30
+          "category": "Bottled Beer",
+          "amount": 962.8,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-19",
+          "category": "Food",
+          "amount": 5880.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-19",
+          "category": "Liquor",
+          "amount": 2455.2,
+          "orders": 9
+        },
+        {
+          "date": "2025-06-19",
+          "category": "Misc. Guest Fees",
+          "amount": 125.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-19",
+          "category": "NA Beverage",
+          "amount": 424.2,
+          "orders": 8
+        },
+        {
+          "date": "2025-06-19",
+          "category": "Room Rental",
+          "amount": 1250.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-19",
+          "category": "Wine",
+          "amount": 2257.8,
+          "orders": 3
         },
         {
           "date": "2025-06-21",
-          "category": "Other",
-          "amount": 21143.2,
-          "orders": 30
+          "category": "Bottled Beer",
+          "amount": 750.64,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-21",
+          "category": "Food",
+          "amount": 11914.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-21",
+          "category": "Liquor",
+          "amount": 2716.96,
+          "orders": 9
+        },
+        {
+          "date": "2025-06-21",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-21",
+          "category": "NA Beverage",
+          "amount": 499.66,
+          "orders": 8
+        },
+        {
+          "date": "2025-06-21",
+          "category": "Valet",
+          "amount": 210.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-21",
+          "category": "Wine",
+          "amount": 3051.94,
+          "orders": 6
         },
         {
           "date": "2025-06-22",
-          "category": "Other",
-          "amount": 30099.8,
-          "orders": 42
+          "category": "Bottled Beer",
+          "amount": 1654.96,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Draft Beer",
+          "amount": 27.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Food",
+          "amount": 13963.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Liquor",
+          "amount": 5047.94,
+          "orders": 12
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-22",
+          "category": "NA Beverage",
+          "amount": 552.99,
+          "orders": 8
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Room Rental",
+          "amount": 300.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Valet",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Wine",
+          "amount": 5553.91,
+          "orders": 9
         },
         {
           "date": "2025-06-23",
-          "category": "Other",
-          "amount": 25198.0,
-          "orders": 27
+          "category": "Bottled Beer",
+          "amount": 780.4,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-23",
+          "category": "Food",
+          "amount": 14210.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-06-23",
+          "category": "Liquor",
+          "amount": 6036.6,
+          "orders": 11
+        },
+        {
+          "date": "2025-06-23",
+          "category": "NA Beverage",
+          "amount": 96.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-23",
+          "category": "Wine",
+          "amount": 4075.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-25",
+          "category": "Bottled Beer",
+          "amount": 1966.4,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-25",
+          "category": "Food",
+          "amount": 16380.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-06-25",
+          "category": "Liquor",
+          "amount": 3867.1,
+          "orders": 6
+        },
+        {
+          "date": "2025-06-25",
+          "category": "NA Beverage",
+          "amount": 856.85,
+          "orders": 7
         },
         {
           "date": "2025-06-25",
           "category": "Other",
-          "amount": 35325.0,
-          "orders": 32
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-25",
+          "category": "Room Rental",
+          "amount": 3000.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-25",
+          "category": "Valet",
+          "amount": 2975.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-25",
+          "category": "Wine",
+          "amount": 5279.65,
+          "orders": 7
+        },
+        {
+          "date": "2025-06-26",
+          "category": "Food",
+          "amount": 14689.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-06-26",
+          "category": "Misc. Guest Fees",
+          "amount": 4966.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-26",
+          "category": "NA Beverage",
+          "amount": 686.0,
+          "orders": 5
         },
         {
           "date": "2025-06-26",
           "category": "Other",
-          "amount": 26987.0,
-          "orders": 21
-        },
-        {
-          "date": "2025-06-29",
-          "category": "Other",
-          "amount": 1750.0,
+          "amount": 612.0,
           "orders": 3
         },
         {
+          "date": "2025-06-26",
+          "category": "Room Rental",
+          "amount": 2000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-26",
+          "category": "Valet",
+          "amount": 2835.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-26",
+          "category": "Wine",
+          "amount": 1199.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-29",
+          "category": "Food",
+          "amount": 200.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-29",
+          "category": "Room Rental",
+          "amount": 1550.0,
+          "orders": 2
+        },
+        {
           "date": "2025-06-30",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-07-01",
-          "category": "Other",
+          "category": "Misc. Guest Fees",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-07-02",
+          "category": "Bottled Beer",
+          "amount": 2578.24,
+          "orders": 8
+        },
+        {
+          "date": "2025-07-02",
+          "category": "Draft Beer",
+          "amount": 297.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-07-02",
+          "category": "Food",
+          "amount": 35379.0,
+          "orders": 15
+        },
+        {
+          "date": "2025-07-02",
+          "category": "Liquor",
+          "amount": 14414.26,
+          "orders": 33
+        },
+        {
+          "date": "2025-07-02",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-02",
+          "category": "NA Beverage",
+          "amount": 995.81,
+          "orders": 14
+        },
+        {
+          "date": "2025-07-02",
           "category": "Other",
-          "amount": 72904.6,
-          "orders": 97
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-02",
+          "category": "Room Rental",
+          "amount": 4000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-02",
+          "category": "Valet",
+          "amount": 1615.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-02",
+          "category": "Wine",
+          "amount": 10625.29,
+          "orders": 19
         },
         {
           "date": "2025-07-09",
-          "category": "Other",
-          "amount": 53496.0,
-          "orders": 61
+          "category": "Bottled Beer",
+          "amount": 2619.4,
+          "orders": 7
+        },
+        {
+          "date": "2025-07-09",
+          "category": "Food",
+          "amount": 30378.0,
+          "orders": 12
+        },
+        {
+          "date": "2025-07-09",
+          "category": "Liquor",
+          "amount": 5784.1,
+          "orders": 16
+        },
+        {
+          "date": "2025-07-09",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-09",
+          "category": "NA Beverage",
+          "amount": 1411.85,
+          "orders": 10
+        },
+        {
+          "date": "2025-07-09",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-09",
+          "category": "Valet",
+          "amount": 1430.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-09",
+          "category": "Wine",
+          "amount": 8872.65,
+          "orders": 12
         },
         {
           "date": "2025-07-12",
-          "category": "Other",
-          "amount": 23673.4,
-          "orders": 34
+          "category": "Bottled Beer",
+          "amount": 1346.48,
+          "orders": 5
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Draft Beer",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Food",
+          "amount": 11236.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Liquor",
+          "amount": 3425.22,
+          "orders": 10
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-12",
+          "category": "NA Beverage",
+          "amount": 593.87,
+          "orders": 5
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Wine",
+          "amount": 5062.83,
+          "orders": 6
         },
         {
           "date": "2025-07-13",
-          "category": "Other",
-          "amount": 28827.6,
-          "orders": 36
+          "category": "Bottled Beer",
+          "amount": 1011.52,
+          "orders": 4
+        },
+        {
+          "date": "2025-07-13",
+          "category": "Food",
+          "amount": 17056.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-07-13",
+          "category": "Liquor",
+          "amount": 3120.28,
+          "orders": 10
+        },
+        {
+          "date": "2025-07-13",
+          "category": "Misc. Guest Fees",
+          "amount": 2750.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-13",
+          "category": "NA Beverage",
+          "amount": 537.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-07-13",
+          "category": "Valet",
+          "amount": 620.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-13",
+          "category": "Wine",
+          "amount": 3732.8,
+          "orders": 8
         },
         {
           "date": "2025-07-14",
-          "category": "Other",
-          "amount": 16766.4,
-          "orders": 26
+          "category": "Bottled Beer",
+          "amount": 887.68,
+          "orders": 3
+        },
+        {
+          "date": "2025-07-14",
+          "category": "Draft Beer",
+          "amount": 45.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-14",
+          "category": "Food",
+          "amount": 7710.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-07-14",
+          "category": "Liquor",
+          "amount": 1930.02,
+          "orders": 9
+        },
+        {
+          "date": "2025-07-14",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-14",
+          "category": "NA Beverage",
+          "amount": 367.17,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-14",
+          "category": "Wine",
+          "amount": 3826.53,
+          "orders": 7
         },
         {
           "date": "2025-07-16",
-          "category": "Other",
-          "amount": 11653.0,
-          "orders": 32
+          "category": "Bottled Beer",
+          "amount": 244.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-16",
+          "category": "Food",
+          "amount": 6053.0,
+          "orders": 14
+        },
+        {
+          "date": "2025-07-16",
+          "category": "Liquor",
+          "amount": 408.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-07-16",
+          "category": "Misc. Guest Fees",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-16",
+          "category": "NA Beverage",
+          "amount": 2018.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-07-16",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-16",
+          "category": "Valet",
+          "amount": 350.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-16",
+          "category": "Wine",
+          "amount": 580.0,
+          "orders": 3
         },
         {
           "date": "2025-07-20",
-          "category": "Other",
-          "amount": 25785.4,
-          "orders": 38
+          "category": "Bottled Beer",
+          "amount": 812.68,
+          "orders": 5
+        },
+        {
+          "date": "2025-07-20",
+          "category": "Draft Beer",
+          "amount": 162.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-20",
+          "category": "Food",
+          "amount": 14118.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-07-20",
+          "category": "Liquor",
+          "amount": 5088.52,
+          "orders": 12
+        },
+        {
+          "date": "2025-07-20",
+          "category": "NA Beverage",
+          "amount": 461.42,
+          "orders": 6
+        },
+        {
+          "date": "2025-07-20",
+          "category": "Valet",
+          "amount": 1155.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-20",
+          "category": "Wine",
+          "amount": 3987.78,
+          "orders": 5
         },
         {
           "date": "2025-07-22",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-07-24",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 1000.0,
           "orders": 2
         },
         {
           "date": "2025-07-26",
-          "category": "Other",
-          "amount": 33024.8,
-          "orders": 43
+          "category": "Bottled Beer",
+          "amount": 1638.56,
+          "orders": 4
         },
         {
-          "date": "2025-07-27",
-          "category": "Other",
-          "amount": 27871.8,
-          "orders": 41
+          "date": "2025-07-26",
+          "category": "Draft Beer",
+          "amount": 180.0,
+          "orders": 2
         },
         {
-          "date": "2025-07-28",
-          "category": "Other",
-          "amount": 19139.4,
-          "orders": 34
-        },
-        {
-          "date": "2025-07-30",
-          "category": "Other",
-          "amount": 592.0,
+          "date": "2025-07-26",
+          "category": "Food",
+          "amount": 18446.0,
           "orders": 5
         },
         {
+          "date": "2025-07-26",
+          "category": "Liquor",
+          "amount": 4886.34,
+          "orders": 14
+        },
+        {
+          "date": "2025-07-26",
+          "category": "NA Beverage",
+          "amount": 433.39,
+          "orders": 7
+        },
+        {
+          "date": "2025-07-26",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-26",
+          "category": "Valet",
+          "amount": 1190.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-26",
+          "category": "Wine",
+          "amount": 5250.51,
+          "orders": 8
+        },
+        {
+          "date": "2025-07-27",
+          "category": "Bottled Beer",
+          "amount": 782.16,
+          "orders": 5
+        },
+        {
+          "date": "2025-07-27",
+          "category": "Draft Beer",
+          "amount": 531.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-27",
+          "category": "Food",
+          "amount": 15705.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-07-27",
+          "category": "Liquor",
+          "amount": 5586.24,
+          "orders": 15
+        },
+        {
+          "date": "2025-07-27",
+          "category": "NA Beverage",
+          "amount": 237.54,
+          "orders": 7
+        },
+        {
+          "date": "2025-07-27",
+          "category": "Valet",
+          "amount": 1050.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-27",
+          "category": "Wine",
+          "amount": 3979.86,
+          "orders": 7
+        },
+        {
+          "date": "2025-07-28",
+          "category": "Bottled Beer",
+          "amount": 979.68,
+          "orders": 3
+        },
+        {
+          "date": "2025-07-28",
+          "category": "Draft Beer",
+          "amount": 45.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-28",
+          "category": "Food",
+          "amount": 10052.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-07-28",
+          "category": "Liquor",
+          "amount": 2091.02,
+          "orders": 8
+        },
+        {
+          "date": "2025-07-28",
+          "category": "NA Beverage",
+          "amount": 865.67,
+          "orders": 8
+        },
+        {
+          "date": "2025-07-28",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-28",
+          "category": "Wine",
+          "amount": 3606.03,
+          "orders": 8
+        },
+        {
+          "date": "2025-07-30",
+          "category": "NA Beverage",
+          "amount": 92.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-07-30",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
           "date": "2025-07-31",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-08-01",
-          "category": "Other",
-          "amount": 2205.0,
+          "category": "Food",
+          "amount": 720.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-01",
+          "category": "NA Beverage",
+          "amount": 9.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-01",
+          "category": "Wine",
+          "amount": 1476.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-02",
+          "category": "Bottled Beer",
+          "amount": 2528.56,
           "orders": 5
         },
         {
           "date": "2025-08-02",
-          "category": "Other",
-          "amount": 53627.8,
-          "orders": 65
+          "category": "Draft Beer",
+          "amount": 45.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-02",
+          "category": "Food",
+          "amount": 34004.0,
+          "orders": 15
+        },
+        {
+          "date": "2025-08-02",
+          "category": "Liquor",
+          "amount": 5666.84,
+          "orders": 16
+        },
+        {
+          "date": "2025-08-02",
+          "category": "NA Beverage",
+          "amount": 1584.14,
+          "orders": 16
+        },
+        {
+          "date": "2025-08-02",
+          "category": "Valet",
+          "amount": 3150.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-02",
+          "category": "Wine",
+          "amount": 6649.26,
+          "orders": 9
         },
         {
           "date": "2025-08-03",
-          "category": "Other",
-          "amount": 30117.0,
-          "orders": 35
+          "category": "Bottled Beer",
+          "amount": 2009.6,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-03",
+          "category": "Food",
+          "amount": 15200.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-03",
+          "category": "Liquor",
+          "amount": 5604.4,
+          "orders": 11
+        },
+        {
+          "date": "2025-08-03",
+          "category": "NA Beverage",
+          "amount": 499.4,
+          "orders": 8
+        },
+        {
+          "date": "2025-08-03",
+          "category": "Valet",
+          "amount": 1190.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-03",
+          "category": "Wine",
+          "amount": 5613.6,
+          "orders": 6
         },
         {
           "date": "2025-08-04",
-          "category": "Other",
-          "amount": 27256.8,
-          "orders": 33
+          "category": "Bottled Beer",
+          "amount": 1325.76,
+          "orders": 3
+        },
+        {
+          "date": "2025-08-04",
+          "category": "Draft Beer",
+          "amount": 27.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-04",
+          "category": "Food",
+          "amount": 15644.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-04",
+          "category": "Liquor",
+          "amount": 5186.64,
+          "orders": 9
+        },
+        {
+          "date": "2025-08-04",
+          "category": "NA Beverage",
+          "amount": 679.44,
+          "orders": 7
+        },
+        {
+          "date": "2025-08-04",
+          "category": "Wine",
+          "amount": 4393.96,
+          "orders": 8
         },
         {
           "date": "2025-08-05",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-08-07",
-          "category": "Other",
-          "amount": 7457.0,
-          "orders": 29
+          "category": "Bottled Beer",
+          "amount": 206.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-07",
+          "category": "Food",
+          "amount": 3320.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-07",
+          "category": "Liquor",
+          "amount": 1639.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-08-07",
+          "category": "NA Beverage",
+          "amount": 76.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-07",
+          "category": "Wine",
+          "amount": 2216.0,
+          "orders": 10
         },
         {
           "date": "2025-08-08",
-          "category": "Other",
-          "amount": 23920.0,
-          "orders": 33
+          "category": "Bottled Beer",
+          "amount": 689.6,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-08",
+          "category": "Food",
+          "amount": 13125.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-08",
+          "category": "Liquor",
+          "amount": 3274.4,
+          "orders": 14
+        },
+        {
+          "date": "2025-08-08",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-08",
+          "category": "NA Beverage",
+          "amount": 387.4,
+          "orders": 7
+        },
+        {
+          "date": "2025-08-08",
+          "category": "Room Rental",
+          "amount": 2000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-08",
+          "category": "Wine",
+          "amount": 3943.6,
+          "orders": 7
         },
         {
           "date": "2025-08-09",
-          "category": "Other",
-          "amount": 21773.6,
-          "orders": 41
+          "category": "Bottled Beer",
+          "amount": 1013.32,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-09",
+          "category": "Draft Beer",
+          "amount": 54.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-09",
+          "category": "Food",
+          "amount": 11859.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-09",
+          "category": "Liquor",
+          "amount": 2578.98,
+          "orders": 13
+        },
+        {
+          "date": "2025-08-09",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-09",
+          "category": "NA Beverage",
+          "amount": 497.33,
+          "orders": 8
+        },
+        {
+          "date": "2025-08-09",
+          "category": "Wine",
+          "amount": 3770.97,
+          "orders": 9
         },
         {
           "date": "2025-08-10",
-          "category": "Other",
-          "amount": 33766.4,
-          "orders": 32
+          "category": "Bottled Beer",
+          "amount": 1784.88,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-10",
+          "category": "Draft Beer",
+          "amount": 18.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-10",
+          "category": "Food",
+          "amount": 15666.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-10",
+          "category": "Liquor",
+          "amount": 4952.82,
+          "orders": 9
+        },
+        {
+          "date": "2025-08-10",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-10",
+          "category": "NA Beverage",
+          "amount": 450.47,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-10",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-10",
+          "category": "Valet",
+          "amount": 1400.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-10",
+          "category": "Wine",
+          "amount": 6494.23,
+          "orders": 6
         },
         {
           "date": "2025-08-11",
-          "category": "Other",
-          "amount": 19026.75,
-          "orders": 32
+          "category": "Bottled Beer",
+          "amount": 946.95,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-11",
+          "category": "Draft Beer",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-11",
+          "category": "Food",
+          "amount": 10213.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-11",
+          "category": "Liquor",
+          "amount": 1997.43,
+          "orders": 7
+        },
+        {
+          "date": "2025-08-11",
+          "category": "NA Beverage",
+          "amount": 541.73,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-11",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-11",
+          "category": "Service Charge",
+          "amount": 700.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-11",
+          "category": "Valet",
+          "amount": 245.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-11",
+          "category": "Wine",
+          "amount": 3873.64,
+          "orders": 5
         },
         {
           "date": "2025-08-12",
-          "category": "Other",
-          "amount": 3750.0,
-          "orders": 17
+          "category": "Bottled Beer",
+          "amount": 191.4,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-12",
+          "category": "Food",
+          "amount": 2150.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-12",
+          "category": "Liquor",
+          "amount": 209.1,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-12",
+          "category": "Misc. Guest Fees",
+          "amount": 350.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-12",
+          "category": "NA Beverage",
+          "amount": 55.85,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-12",
+          "category": "Wine",
+          "amount": 793.65,
+          "orders": 5
         },
         {
           "date": "2025-08-13",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-08-15",
-          "category": "Other",
-          "amount": 16570.0,
-          "orders": 33
+          "category": "Bottled Beer",
+          "amount": 610.8,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-15",
+          "category": "Food",
+          "amount": 10660.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-15",
+          "category": "Liquor",
+          "amount": 2483.7,
+          "orders": 10
+        },
+        {
+          "date": "2025-08-15",
+          "category": "Misc. Guest Fees",
+          "amount": 200.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-15",
+          "category": "NA Beverage",
+          "amount": 291.95,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-15",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-15",
+          "category": "Wine",
+          "amount": 1823.55,
+          "orders": 4
         },
         {
           "date": "2025-08-17",
-          "category": "Other",
-          "amount": 27422.6,
-          "orders": 42
+          "category": "Bottled Beer",
+          "amount": 1180.12,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-17",
+          "category": "Draft Beer",
+          "amount": 63.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-17",
+          "category": "Food",
+          "amount": 14651.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-17",
+          "category": "Liquor",
+          "amount": 4445.68,
+          "orders": 12
+        },
+        {
+          "date": "2025-08-17",
+          "category": "NA Beverage",
+          "amount": 419.28,
+          "orders": 7
+        },
+        {
+          "date": "2025-08-17",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-17",
+          "category": "Valet",
+          "amount": 1590.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-17",
+          "category": "Wine",
+          "amount": 4073.52,
+          "orders": 8
         },
         {
           "date": "2025-08-18",
-          "category": "Other",
-          "amount": 20380.14,
-          "orders": 37
+          "category": "Bottled Beer",
+          "amount": 966.43,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-18",
+          "category": "Food",
+          "amount": 9927.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-18",
+          "category": "Liquor",
+          "amount": 2309.14,
+          "orders": 12
+        },
+        {
+          "date": "2025-08-18",
+          "category": "Misc. Guest Fees",
+          "amount": 2500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-18",
+          "category": "NA Beverage",
+          "amount": 272.36,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-18",
+          "category": "Valet",
+          "amount": 1015.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-18",
+          "category": "Wine",
+          "amount": 3390.21,
+          "orders": 9
         },
         {
           "date": "2025-08-21",
-          "category": "Other",
-          "amount": 21325.84,
-          "orders": 38
+          "category": "Bottled Beer",
+          "amount": 550.8,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-21",
+          "category": "Draft Beer",
+          "amount": 63.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-21",
+          "category": "Food",
+          "amount": 11508.84,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-21",
+          "category": "Liquor",
+          "amount": 1847.7,
+          "orders": 8
+        },
+        {
+          "date": "2025-08-21",
+          "category": "NA Beverage",
+          "amount": 254.95,
+          "orders": 8
+        },
+        {
+          "date": "2025-08-21",
+          "category": "Room Rental",
+          "amount": 1250.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-21",
+          "category": "Valet",
+          "amount": 735.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-21",
+          "category": "Wine",
+          "amount": 5115.55,
+          "orders": 9
         },
         {
           "date": "2025-08-23",
-          "category": "Other",
-          "amount": 20051.2,
-          "orders": 32
+          "category": "Bottled Beer",
+          "amount": 865.84,
+          "orders": 3
+        },
+        {
+          "date": "2025-08-23",
+          "category": "Food",
+          "amount": 11439.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-23",
+          "category": "Liquor",
+          "amount": 3185.76,
+          "orders": 11
+        },
+        {
+          "date": "2025-08-23",
+          "category": "NA Beverage",
+          "amount": 375.96,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-23",
+          "category": "Valet",
+          "amount": 990.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-23",
+          "category": "Wine",
+          "amount": 3194.64,
+          "orders": 6
         },
         {
           "date": "2025-08-24",
-          "category": "Other",
-          "amount": 25824.8,
-          "orders": 38
+          "category": "Bottled Beer",
+          "amount": 948.56,
+          "orders": 3
+        },
+        {
+          "date": "2025-08-24",
+          "category": "Draft Beer",
+          "amount": 45.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-24",
+          "category": "Food",
+          "amount": 12188.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-24",
+          "category": "Liquor",
+          "amount": 5329.84,
+          "orders": 16
+        },
+        {
+          "date": "2025-08-24",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-24",
+          "category": "NA Beverage",
+          "amount": 337.14,
+          "orders": 3
+        },
+        {
+          "date": "2025-08-24",
+          "category": "Valet",
+          "amount": 720.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-24",
+          "category": "Wine",
+          "amount": 4256.26,
+          "orders": 7
         },
         {
           "date": "2025-08-25",
-          "category": "Other",
-          "amount": 24357.4,
-          "orders": 34
+          "category": "Bottled Beer",
+          "amount": 1083.48,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-25",
+          "category": "Draft Beer",
+          "amount": 36.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-25",
+          "category": "Food",
+          "amount": 14603.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-25",
+          "category": "Liquor",
+          "amount": 3962.72,
+          "orders": 16
+        },
+        {
+          "date": "2025-08-25",
+          "category": "NA Beverage",
+          "amount": 259.62,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-25",
+          "category": "Wine",
+          "amount": 4412.58,
+          "orders": 4
         },
         {
           "date": "2025-08-26",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 250.0,
           "orders": 1
         },
         {
           "date": "2025-08-30",
-          "category": "Other",
-          "amount": 19877.6,
-          "orders": 34
+          "category": "Bottled Beer",
+          "amount": 498.88,
+          "orders": 4
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Draft Beer",
+          "amount": 117.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Food",
+          "amount": 10458.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Liquor",
+          "amount": 4623.93,
+          "orders": 10
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-30",
+          "category": "NA Beverage",
+          "amount": 138.97,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Wine",
+          "amount": 2040.82,
+          "orders": 5
         },
         {
           "date": "2025-08-31",
-          "category": "Other",
-          "amount": 35000.0,
-          "orders": 37
+          "category": "Bottled Beer",
+          "amount": 1877.2,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-31",
+          "category": "Draft Beer",
+          "amount": 162.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-08-31",
+          "category": "Food",
+          "amount": 19310.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-08-31",
+          "category": "Liquor",
+          "amount": 6809.3,
+          "orders": 10
+        },
+        {
+          "date": "2025-08-31",
+          "category": "NA Beverage",
+          "amount": 420.55,
+          "orders": 5
+        },
+        {
+          "date": "2025-08-31",
+          "category": "Wine",
+          "amount": 6420.95,
+          "orders": 10
         },
         {
           "date": "2025-09-01",
-          "category": "Other",
-          "amount": 19561.0,
-          "orders": 44
+          "category": "Bottled Beer",
+          "amount": 656.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-09-01",
+          "category": "Draft Beer",
+          "amount": 432.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-01",
+          "category": "Food",
+          "amount": 10803.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-09-01",
+          "category": "Liquor",
+          "amount": 4481.0,
+          "orders": 16
+        },
+        {
+          "date": "2025-09-01",
+          "category": "NA Beverage",
+          "amount": 165.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-09-01",
+          "category": "Wine",
+          "amount": 3024.0,
+          "orders": 8
         },
         {
           "date": "2025-09-02",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-09-05",
-          "category": "Other",
-          "amount": 1376.0,
-          "orders": 10
+          "category": "Bottled Beer",
+          "amount": 136.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-05",
+          "category": "Misc. Guest Fees",
+          "amount": 350.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-05",
+          "category": "NA Beverage",
+          "amount": 24.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-09-05",
+          "category": "Wine",
+          "amount": 866.0,
+          "orders": 4
         },
         {
           "date": "2025-09-06",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 625.0,
           "orders": 2
         },
         {
           "date": "2025-09-07",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 1250.0,
           "orders": 2
         },
         {
           "date": "2025-09-08",
-          "category": "Other",
-          "amount": 54120.6,
-          "orders": 77
+          "category": "Bottled Beer",
+          "amount": 2472.52,
+          "orders": 7
+        },
+        {
+          "date": "2025-09-08",
+          "category": "Draft Beer",
+          "amount": 180.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-08",
+          "category": "Food",
+          "amount": 30509.0,
+          "orders": 13
+        },
+        {
+          "date": "2025-09-08",
+          "category": "Liquor",
+          "amount": 7859.28,
+          "orders": 21
+        },
+        {
+          "date": "2025-09-08",
+          "category": "NA Beverage",
+          "amount": 857.88,
+          "orders": 13
+        },
+        {
+          "date": "2025-09-08",
+          "category": "Room Rental",
+          "amount": 850.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-08",
+          "category": "Valet",
+          "amount": 2660.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-08",
+          "category": "Wine",
+          "amount": 8731.92,
+          "orders": 15
         },
         {
           "date": "2025-09-10",
-          "category": "Other",
-          "amount": 28104.0,
-          "orders": 29
+          "category": "AV / Tech",
+          "amount": 175.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Bottled Beer",
+          "amount": 49.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Draft Beer",
+          "amount": 90.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Food",
+          "amount": 21285.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Liquor",
+          "amount": 747.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-09-10",
+          "category": "NA Beverage",
+          "amount": 120.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Service Charge",
+          "amount": 350.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Valet",
+          "amount": 1820.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-10",
+          "category": "Wine",
+          "amount": 1968.0,
+          "orders": 4
         },
         {
           "date": "2025-09-12",
-          "category": "Other",
-          "amount": 22780.0,
-          "orders": 22
+          "category": "Bottled Beer",
+          "amount": 465.8,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-12",
+          "category": "Food",
+          "amount": 10953.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-09-12",
+          "category": "Liquor",
+          "amount": 1303.7,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-12",
+          "category": "Misc. Guest Fees",
+          "amount": 4759.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-12",
+          "category": "NA Beverage",
+          "amount": 137.45,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-12",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-12",
+          "category": "Valet",
+          "amount": 1225.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-12",
+          "category": "Wine",
+          "amount": 2436.05,
+          "orders": 5
         },
         {
           "date": "2025-09-13",
-          "category": "Other",
-          "amount": 34254.6,
-          "orders": 35
+          "category": "Bottled Beer",
+          "amount": 1320.12,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-13",
+          "category": "Draft Beer",
+          "amount": 45.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-13",
+          "category": "Food",
+          "amount": 15715.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-09-13",
+          "category": "Liquor",
+          "amount": 3319.18,
+          "orders": 11
+        },
+        {
+          "date": "2025-09-13",
+          "category": "Misc. Guest Fees",
+          "amount": 800.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-13",
+          "category": "NA Beverage",
+          "amount": 440.53,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-13",
+          "category": "Service Charge",
+          "amount": 5796.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-13",
+          "category": "Wine",
+          "amount": 6818.77,
+          "orders": 9
         },
         {
           "date": "2025-09-14",
-          "category": "Other",
-          "amount": 30805.0,
-          "orders": 33
+          "category": "Bottled Beer",
+          "amount": 1743.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-09-14",
+          "category": "Draft Beer",
+          "amount": 18.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-14",
+          "category": "Food",
+          "amount": 15390.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-14",
+          "category": "Liquor",
+          "amount": 5913.5,
+          "orders": 12
+        },
+        {
+          "date": "2025-09-14",
+          "category": "NA Beverage",
+          "amount": 405.25,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-14",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-14",
+          "category": "Wine",
+          "amount": 5835.25,
+          "orders": 8
         },
         {
           "date": "2025-09-15",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-09-17",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-09-19",
-          "category": "Other",
-          "amount": 48470.0,
-          "orders": 73
+          "category": "Bottled Beer",
+          "amount": 1320.8,
+          "orders": 6
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Draft Beer",
+          "amount": 54.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Food",
+          "amount": 25594.0,
+          "orders": 12
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Liquor",
+          "amount": 4546.2,
+          "orders": 19
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Misc. Guest Fees",
+          "amount": 5924.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-19",
+          "category": "NA Beverage",
+          "amount": 520.2,
+          "orders": 12
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Valet",
+          "amount": 3115.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Wine",
+          "amount": 5895.8,
+          "orders": 18
         },
         {
           "date": "2025-09-20",
-          "category": "Other",
-          "amount": 26911.6,
-          "orders": 32
+          "category": "Bottled Beer",
+          "amount": 1480.12,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-20",
+          "category": "Draft Beer",
+          "amount": 153.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-20",
+          "category": "Food",
+          "amount": 13230.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-09-20",
+          "category": "Liquor",
+          "amount": 3845.18,
+          "orders": 10
+        },
+        {
+          "date": "2025-09-20",
+          "category": "NA Beverage",
+          "amount": 330.53,
+          "orders": 5
+        },
+        {
+          "date": "2025-09-20",
+          "category": "Room Rental",
+          "amount": 3500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-20",
+          "category": "Wine",
+          "amount": 4372.77,
+          "orders": 7
         },
         {
           "date": "2025-09-21",
-          "category": "Other",
-          "amount": 27079.6,
-          "orders": 43
+          "category": "Bottled Beer",
+          "amount": 1515.12,
+          "orders": 8
+        },
+        {
+          "date": "2025-09-21",
+          "category": "Food",
+          "amount": 13010.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-21",
+          "category": "Liquor",
+          "amount": 4478.68,
+          "orders": 11
+        },
+        {
+          "date": "2025-09-21",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-21",
+          "category": "NA Beverage",
+          "amount": 271.78,
+          "orders": 5
+        },
+        {
+          "date": "2025-09-21",
+          "category": "Wine",
+          "amount": 5804.02,
+          "orders": 14
         },
         {
           "date": "2025-09-22",
-          "category": "Other",
-          "amount": 23432.5,
-          "orders": 47
+          "category": "Bottled Beer",
+          "amount": 865.7,
+          "orders": 3
+        },
+        {
+          "date": "2025-09-22",
+          "category": "Draft Beer",
+          "amount": 27.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-22",
+          "category": "Food",
+          "amount": 14030.0,
+          "orders": 13
+        },
+        {
+          "date": "2025-09-22",
+          "category": "Liquor",
+          "amount": 2270.05,
+          "orders": 12
+        },
+        {
+          "date": "2025-09-22",
+          "category": "Misc. Guest Fees",
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-22",
+          "category": "NA Beverage",
+          "amount": 1262.17,
+          "orders": 6
+        },
+        {
+          "date": "2025-09-22",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-22",
+          "category": "Valet",
+          "amount": 140.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-22",
+          "category": "Wine",
+          "amount": 4087.58,
+          "orders": 8
         },
         {
           "date": "2025-09-24",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-09-26",
-          "category": "Other",
-          "amount": 16207.57,
-          "orders": 29
+          "category": "Bottled Beer",
+          "amount": 664.51,
+          "orders": 3
+        },
+        {
+          "date": "2025-09-26",
+          "category": "Food",
+          "amount": 9379.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-26",
+          "category": "Liquor",
+          "amount": 1144.77,
+          "orders": 7
+        },
+        {
+          "date": "2025-09-26",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-26",
+          "category": "NA Beverage",
+          "amount": 159.13,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-26",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-26",
+          "category": "Service Charge",
+          "amount": 525.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-26",
+          "category": "Valet",
+          "amount": 35.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-26",
+          "category": "Wine",
+          "amount": 2300.16,
+          "orders": 9
         },
         {
           "date": "2025-09-27",
-          "category": "Other",
-          "amount": 21739.6,
-          "orders": 34
+          "category": "Bottled Beer",
+          "amount": 1111.52,
+          "orders": 3
+        },
+        {
+          "date": "2025-09-27",
+          "category": "Draft Beer",
+          "amount": 72.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-27",
+          "category": "Food",
+          "amount": 12270.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-09-27",
+          "category": "Liquor",
+          "amount": 3546.78,
+          "orders": 11
+        },
+        {
+          "date": "2025-09-27",
+          "category": "NA Beverage",
+          "amount": 413.13,
+          "orders": 5
+        },
+        {
+          "date": "2025-09-27",
+          "category": "Wine",
+          "amount": 4326.17,
+          "orders": 10
         },
         {
           "date": "2025-09-28",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 1750.0,
           "orders": 2
         },
         {
           "date": "2025-09-29",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-09-30",
-          "category": "Other",
-          "amount": 38361.4,
-          "orders": 68
+          "category": "Bottled Beer",
+          "amount": 1523.28,
+          "orders": 11
         },
         {
-          "date": "2025-10-04",
-          "category": "Other",
-          "amount": 21811.8,
-          "orders": 39
+          "date": "2025-09-30",
+          "category": "Draft Beer",
+          "amount": 171.0,
+          "orders": 1
         },
         {
-          "date": "2025-10-05",
-          "category": "Other",
-          "amount": 2134.0,
+          "date": "2025-09-30",
+          "category": "Food",
+          "amount": 21532.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-09-30",
+          "category": "Liquor",
+          "amount": 6404.92,
+          "orders": 17
+        },
+        {
+          "date": "2025-09-30",
+          "category": "NA Beverage",
+          "amount": 613.32,
+          "orders": 15
+        },
+        {
+          "date": "2025-09-30",
+          "category": "Room Rental",
+          "amount": 2000.0,
           "orders": 3
         },
         {
+          "date": "2025-09-30",
+          "category": "Valet",
+          "amount": 1015.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-30",
+          "category": "Wine",
+          "amount": 5101.88,
+          "orders": 12
+        },
+        {
+          "date": "2025-10-04",
+          "category": "Bottled Beer",
+          "amount": 767.76,
+          "orders": 5
+        },
+        {
+          "date": "2025-10-04",
+          "category": "Draft Beer",
+          "amount": 18.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-04",
+          "category": "Food",
+          "amount": 12983.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-10-04",
+          "category": "Liquor",
+          "amount": 4145.14,
+          "orders": 10
+        },
+        {
+          "date": "2025-10-04",
+          "category": "NA Beverage",
+          "amount": 339.19,
+          "orders": 7
+        },
+        {
+          "date": "2025-10-04",
+          "category": "Wine",
+          "amount": 3558.71,
+          "orders": 10
+        },
+        {
+          "date": "2025-10-05",
+          "category": "Food",
+          "amount": 384.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-05",
+          "category": "Room Rental",
+          "amount": 1750.0,
+          "orders": 2
+        },
+        {
           "date": "2025-10-07",
-          "category": "Other",
-          "amount": 47477.0,
-          "orders": 82
+          "category": "Bottled Beer",
+          "amount": 1400.2,
+          "orders": 13
+        },
+        {
+          "date": "2025-10-07",
+          "category": "Draft Beer",
+          "amount": 45.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-07",
+          "category": "Food",
+          "amount": 24622.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-10-07",
+          "category": "Liquor",
+          "amount": 8517.8,
+          "orders": 23
+        },
+        {
+          "date": "2025-10-07",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-07",
+          "category": "NA Beverage",
+          "amount": 1816.48,
+          "orders": 13
+        },
+        {
+          "date": "2025-10-07",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-07",
+          "category": "Valet",
+          "amount": 1855.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-07",
+          "category": "Wine",
+          "amount": 6220.52,
+          "orders": 17
         },
         {
           "date": "2025-10-09",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-10-10",
-          "category": "Other",
-          "amount": 29142.0,
-          "orders": 51
+          "category": "Bottled Beer",
+          "amount": 34.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-10",
+          "category": "Food",
+          "amount": 14480.0,
+          "orders": 18
+        },
+        {
+          "date": "2025-10-10",
+          "category": "Liquor",
+          "amount": 776.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-10-10",
+          "category": "Misc. Guest Fees",
+          "amount": 2350.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-10",
+          "category": "NA Beverage",
+          "amount": 1271.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-10-10",
+          "category": "Room Rental",
+          "amount": 2250.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-10",
+          "category": "Service Charge",
+          "amount": 300.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-10",
+          "category": "Wine",
+          "amount": 7681.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-10-11",
+          "category": "Bottled Beer",
+          "amount": 614.72,
+          "orders": 5
+        },
+        {
+          "date": "2025-10-11",
+          "category": "Draft Beer",
+          "amount": 18.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-11",
+          "category": "Food",
+          "amount": 12385.0,
+          "orders": 11
+        },
+        {
+          "date": "2025-10-11",
+          "category": "Liquor",
+          "amount": 1214.58,
+          "orders": 9
+        },
+        {
+          "date": "2025-10-11",
+          "category": "NA Beverage",
+          "amount": 278.43,
+          "orders": 2
         },
         {
           "date": "2025-10-11",
           "category": "Other",
-          "amount": 17986.6,
-          "orders": 39
+          "amount": 200.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-11",
+          "category": "Service Charge",
+          "amount": 350.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-11",
+          "category": "Wine",
+          "amount": 2925.87,
+          "orders": 9
         },
         {
           "date": "2025-10-12",
-          "category": "Other",
-          "amount": 31359.0,
-          "orders": 35
+          "category": "Bottled Beer",
+          "amount": 1726.8,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-12",
+          "category": "Draft Beer",
+          "amount": 171.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-12",
+          "category": "Food",
+          "amount": 16095.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-10-12",
+          "category": "Liquor",
+          "amount": 3609.7,
+          "orders": 9
+        },
+        {
+          "date": "2025-10-12",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-12",
+          "category": "NA Beverage",
+          "amount": 440.95,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-12",
+          "category": "Room Rental",
+          "amount": 750.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-12",
+          "category": "Valet",
+          "amount": 480.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-12",
+          "category": "Wine",
+          "amount": 6085.55,
+          "orders": 9
         },
         {
           "date": "2025-10-16",
-          "category": "Other",
-          "amount": 18470.2,
-          "orders": 36
+          "category": "Bottled Beer",
+          "amount": 916.04,
+          "orders": 5
+        },
+        {
+          "date": "2025-10-16",
+          "category": "Draft Beer",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-16",
+          "category": "Food",
+          "amount": 8951.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-16",
+          "category": "Liquor",
+          "amount": 3085.56,
+          "orders": 10
+        },
+        {
+          "date": "2025-10-16",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-16",
+          "category": "NA Beverage",
+          "amount": 222.26,
+          "orders": 6
+        },
+        {
+          "date": "2025-10-16",
+          "category": "Valet",
+          "amount": 560.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-16",
+          "category": "Wine",
+          "amount": 2726.34,
+          "orders": 8
         },
         {
           "date": "2025-10-18",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 1000.0,
           "orders": 2
         },
         {
           "date": "2025-10-20",
-          "category": "Other",
-          "amount": 1729.0,
-          "orders": 5
+          "category": "Food",
+          "amount": 682.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-20",
+          "category": "Liquor",
+          "amount": 297.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-20",
+          "category": "Room Rental",
+          "amount": 750.0,
+          "orders": 1
         },
         {
           "date": "2025-10-21",
-          "category": "Other",
-          "amount": 1641.5,
+          "category": "Food",
+          "amount": 407.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-21",
+          "category": "NA Beverage",
+          "amount": 297.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-21",
+          "category": "Room Rental",
+          "amount": 937.5,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Bottled Beer",
+          "amount": 2983.42,
+          "orders": 12
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Draft Beer",
+          "amount": 261.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Food",
+          "amount": 37625.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Liquor",
+          "amount": 9736.1,
+          "orders": 21
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Misc. Guest Fees",
+          "amount": 6109.0,
           "orders": 3
         },
         {
           "date": "2025-10-22",
+          "category": "NA Beverage",
+          "amount": 1146.88,
+          "orders": 18
+        },
+        {
+          "date": "2025-10-22",
           "category": "Other",
-          "amount": 77576.5,
-          "orders": 107
+          "amount": 200.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Room Rental",
+          "amount": 3250.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Valet",
+          "amount": 2835.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-22",
+          "category": "Wine",
+          "amount": 13430.1,
+          "orders": 32
         },
         {
           "date": "2025-10-24",
-          "category": "Other",
-          "amount": 16916.0,
-          "orders": 31
+          "category": "AV / Tech",
+          "amount": 175.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-24",
+          "category": "Bottled Beer",
+          "amount": 166.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-24",
+          "category": "Draft Beer",
+          "amount": 117.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-24",
+          "category": "Food",
+          "amount": 11625.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-24",
+          "category": "Liquor",
+          "amount": 482.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-10-24",
+          "category": "NA Beverage",
+          "amount": 35.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-24",
+          "category": "Room Rental",
+          "amount": 3500.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-24",
+          "category": "Wine",
+          "amount": 816.0,
+          "orders": 8
         },
         {
           "date": "2025-10-25",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 1750.0,
           "orders": 2
         },
         {
           "date": "2025-10-26",
-          "category": "Other",
-          "amount": 885.0,
+          "category": "Room Rental",
+          "amount": 750.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-26",
+          "category": "Wine",
+          "amount": 135.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-27",
+          "category": "Bottled Beer",
+          "amount": 5231.25,
+          "orders": 13
+        },
+        {
+          "date": "2025-10-27",
+          "category": "Draft Beer",
+          "amount": 72.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-27",
+          "category": "Food",
+          "amount": 42198.0,
+          "orders": 15
+        },
+        {
+          "date": "2025-10-27",
+          "category": "Liquor",
+          "amount": 12377.81,
+          "orders": 33
+        },
+        {
+          "date": "2025-10-27",
+          "category": "Misc. Guest Fees",
+          "amount": 2500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-27",
+          "category": "NA Beverage",
+          "amount": 3675.4,
+          "orders": 18
+        },
+        {
+          "date": "2025-10-27",
+          "category": "Room Rental",
+          "amount": 3500.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-27",
+          "category": "Valet",
+          "amount": 2100.0,
           "orders": 3
         },
         {
           "date": "2025-10-27",
-          "category": "Other",
-          "amount": 85281.1,
-          "orders": 120
+          "category": "Wine",
+          "amount": 13626.64,
+          "orders": 29
+        },
+        {
+          "date": "2025-10-28",
+          "category": "Food",
+          "amount": 1610.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-28",
+          "category": "Misc. Guest Fees",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-28",
+          "category": "NA Beverage",
+          "amount": 1495.0,
+          "orders": 1
         },
         {
           "date": "2025-10-28",
           "category": "Other",
-          "amount": 5355.0,
-          "orders": 9
+          "amount": 450.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-10-28",
+          "category": "Room Rental",
+          "amount": 800.0,
+          "orders": 2
         },
         {
           "date": "2025-10-29",
-          "category": "Other",
-          "amount": 17330.0,
-          "orders": 10
+          "category": "Food",
+          "amount": 7770.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-10-29",
+          "category": "Misc. Guest Fees",
+          "amount": 5795.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-29",
+          "category": "NA Beverage",
+          "amount": 2730.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-10-29",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-10-29",
+          "category": "Valet",
+          "amount": 35.0,
+          "orders": 1
         },
         {
           "date": "2025-10-30",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-11-01",
-          "category": "Other",
-          "amount": 21541.0,
-          "orders": 43
+          "category": "Bottled Beer",
+          "amount": 1028.8,
+          "orders": 4
+        },
+        {
+          "date": "2025-11-01",
+          "category": "Draft Beer",
+          "amount": 153.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-01",
+          "category": "Food",
+          "amount": 11745.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-11-01",
+          "category": "Liquor",
+          "amount": 2433.7,
+          "orders": 12
+        },
+        {
+          "date": "2025-11-01",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-01",
+          "category": "NA Beverage",
+          "amount": 211.45,
+          "orders": 6
+        },
+        {
+          "date": "2025-11-01",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-01",
+          "category": "Wine",
+          "amount": 3469.05,
+          "orders": 12
         },
         {
           "date": "2025-11-02",
-          "category": "Other",
-          "amount": 30804.6,
-          "orders": 40
+          "category": "Bottled Beer",
+          "amount": 1404.15,
+          "orders": 5
+        },
+        {
+          "date": "2025-11-02",
+          "category": "Food",
+          "amount": 15711.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-11-02",
+          "category": "Liquor",
+          "amount": 4492.15,
+          "orders": 11
+        },
+        {
+          "date": "2025-11-02",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-02",
+          "category": "NA Beverage",
+          "amount": 1279.15,
+          "orders": 4
+        },
+        {
+          "date": "2025-11-02",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-02",
+          "category": "Valet",
+          "amount": 540.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-02",
+          "category": "Wine",
+          "amount": 4378.15,
+          "orders": 11
         },
         {
           "date": "2025-11-03",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 250.0,
           "orders": 1
         },
         {
           "date": "2025-11-04",
-          "category": "Other",
-          "amount": 8422.5,
-          "orders": 8
+          "category": "Food",
+          "amount": 3240.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-11-04",
+          "category": "Misc. Guest Fees",
+          "amount": 2938.5,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-04",
+          "category": "NA Beverage",
+          "amount": 864.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-04",
+          "category": "Room Rental",
+          "amount": 750.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-04",
+          "category": "Valet",
+          "amount": 630.0,
+          "orders": 1
         },
         {
           "date": "2025-11-05",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 250.0,
           "orders": 1
         },
         {
           "date": "2025-11-08",
-          "category": "Other",
-          "amount": 28786.0,
-          "orders": 11
+          "category": "Food",
+          "amount": 14122.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-11-08",
+          "category": "Misc. Guest Fees",
+          "amount": 2500.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-08",
+          "category": "NA Beverage",
+          "amount": 9254.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-08",
+          "category": "Room Rental",
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-08",
+          "category": "Valet",
+          "amount": 2030.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-08",
+          "category": "Wine",
+          "amount": 630.0,
+          "orders": 1
         },
         {
           "date": "2025-11-09",
-          "category": "Other",
-          "amount": 41078.8,
-          "orders": 39
+          "category": "Bottled Beer",
+          "amount": 2083.6,
+          "orders": 6
+        },
+        {
+          "date": "2025-11-09",
+          "category": "Food",
+          "amount": 19139.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-11-09",
+          "category": "Liquor",
+          "amount": 4271.6,
+          "orders": 12
+        },
+        {
+          "date": "2025-11-09",
+          "category": "Misc. Guest Fees",
+          "amount": 2500.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-09",
+          "category": "NA Beverage",
+          "amount": 78.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-11-09",
+          "category": "Room Rental",
+          "amount": 4444.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-09",
+          "category": "Valet",
+          "amount": 2135.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-09",
+          "category": "Wine",
+          "amount": 6427.6,
+          "orders": 6
         },
         {
           "date": "2025-11-13",
-          "category": "Other",
-          "amount": 11034.0,
-          "orders": 30
+          "category": "Bottled Beer",
+          "amount": 7.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-13",
+          "category": "Draft Beer",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-13",
+          "category": "Food",
+          "amount": 6976.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-11-13",
+          "category": "Liquor",
+          "amount": 772.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-11-13",
+          "category": "Misc. Guest Fees",
+          "amount": 925.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-11-13",
+          "category": "NA Beverage",
+          "amount": 20.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-11-13",
+          "category": "Room Rental",
+          "amount": 1300.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-13",
+          "category": "Valet",
+          "amount": 35.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-13",
+          "category": "Wine",
+          "amount": 990.0,
+          "orders": 4
         },
         {
           "date": "2025-11-15",
-          "category": "Other",
-          "amount": 20754.3,
-          "orders": 31
+          "category": "Bottled Beer",
+          "amount": 1306.1,
+          "orders": 5
+        },
+        {
+          "date": "2025-11-15",
+          "category": "Food",
+          "amount": 12187.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-11-15",
+          "category": "Liquor",
+          "amount": 3480.1,
+          "orders": 10
+        },
+        {
+          "date": "2025-11-15",
+          "category": "NA Beverage",
+          "amount": 497.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-11-15",
+          "category": "Valet",
+          "amount": 980.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-15",
+          "category": "Wine",
+          "amount": 2304.1,
+          "orders": 4
         },
         {
           "date": "2025-11-16",
-          "category": "Other",
-          "amount": 32697.51,
-          "orders": 38
+          "category": "Bottled Beer",
+          "amount": 2423.17,
+          "orders": 6
+        },
+        {
+          "date": "2025-11-16",
+          "category": "Food",
+          "amount": 16902.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-11-16",
+          "category": "Liquor",
+          "amount": 5373.17,
+          "orders": 13
+        },
+        {
+          "date": "2025-11-16",
+          "category": "NA Beverage",
+          "amount": 120.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-11-16",
+          "category": "Room Rental",
+          "amount": 2500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-16",
+          "category": "Valet",
+          "amount": 105.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-16",
+          "category": "Wine",
+          "amount": 5274.17,
+          "orders": 8
         },
         {
           "date": "2025-11-17",
-          "category": "Other",
-          "amount": 1700.0,
+          "category": "Food",
+          "amount": 1200.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-17",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-21",
+          "category": "Bottled Beer",
+          "amount": 128.0,
           "orders": 2
         },
         {
           "date": "2025-11-21",
-          "category": "Other",
-          "amount": 3104.0,
+          "category": "Food",
+          "amount": 1560.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-21",
+          "category": "Liquor",
+          "amount": 640.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-21",
+          "category": "NA Beverage",
+          "amount": 15.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-11-21",
+          "category": "Wine",
+          "amount": 761.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-11-22",
+          "category": "Bottled Beer",
+          "amount": 1333.07,
+          "orders": 5
+        },
+        {
+          "date": "2025-11-22",
+          "category": "Food",
+          "amount": 11576.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-11-22",
+          "category": "Liquor",
+          "amount": 3067.07,
           "orders": 11
         },
         {
           "date": "2025-11-22",
-          "category": "Other",
-          "amount": 21173.21,
-          "orders": 40
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-22",
+          "category": "NA Beverage",
+          "amount": 162.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-11-22",
+          "category": "Wine",
+          "amount": 3035.07,
+          "orders": 10
         },
         {
           "date": "2025-11-23",
-          "category": "Other",
-          "amount": 30952.2,
-          "orders": 48
+          "category": "Bottled Beer",
+          "amount": 1990.4,
+          "orders": 6
+        },
+        {
+          "date": "2025-11-23",
+          "category": "Food",
+          "amount": 15757.0,
+          "orders": 10
+        },
+        {
+          "date": "2025-11-23",
+          "category": "Liquor",
+          "amount": 4033.4,
+          "orders": 13
+        },
+        {
+          "date": "2025-11-23",
+          "category": "Misc. Guest Fees",
+          "amount": 4250.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-11-23",
+          "category": "NA Beverage",
+          "amount": 405.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-11-23",
+          "category": "Valet",
+          "amount": 630.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-11-23",
+          "category": "Wine",
+          "amount": 3886.4,
+          "orders": 9
         },
         {
           "date": "2025-11-24",
-          "category": "Other",
+          "category": "Misc. Guest Fees",
           "amount": 1000.0,
           "orders": 2
         },
         {
           "date": "2025-11-26",
-          "category": "Other",
-          "amount": 4734.8,
-          "orders": 40
+          "category": "Food",
+          "amount": 4645.8,
+          "orders": 38
+        },
+        {
+          "date": "2025-11-26",
+          "category": "Wine",
+          "amount": 89.0,
+          "orders": 2
         },
         {
           "date": "2025-12-02",
-          "category": "Other",
-          "amount": 12020.0,
-          "orders": 31
+          "category": "Bottled Beer",
+          "amount": 871.5,
+          "orders": 5
+        },
+        {
+          "date": "2025-12-02",
+          "category": "Draft Beer",
+          "amount": 36.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-12-02",
+          "category": "Food",
+          "amount": 6660.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-12-02",
+          "category": "Liquor",
+          "amount": 1491.5,
+          "orders": 7
+        },
+        {
+          "date": "2025-12-02",
+          "category": "Misc. Guest Fees",
+          "amount": 150.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-02",
+          "category": "NA Beverage",
+          "amount": 380.5,
+          "orders": 3
+        },
+        {
+          "date": "2025-12-02",
+          "category": "Valet",
+          "amount": 980.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-02",
+          "category": "Wine",
+          "amount": 1450.5,
+          "orders": 5
         },
         {
           "date": "2025-12-03",
-          "category": "Other",
-          "amount": 7622.0,
-          "orders": 53
+          "category": "Bottled Beer",
+          "amount": 217.25,
+          "orders": 4
+        },
+        {
+          "date": "2025-12-03",
+          "category": "Food",
+          "amount": 4590.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-12-03",
+          "category": "Liquor",
+          "amount": 795.25,
+          "orders": 11
+        },
+        {
+          "date": "2025-12-03",
+          "category": "NA Beverage",
+          "amount": 281.25,
+          "orders": 10
+        },
+        {
+          "date": "2025-12-03",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-03",
+          "category": "Valet",
+          "amount": 525.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-03",
+          "category": "Wine",
+          "amount": 713.25,
+          "orders": 22
         },
         {
           "date": "2025-12-04",
-          "category": "Other",
+          "category": "Misc. Guest Fees",
           "amount": 1000.0,
           "orders": 3
         },
         {
           "date": "2025-12-06",
-          "category": "Other",
-          "amount": 21542.0,
-          "orders": 37
+          "category": "Bottled Beer",
+          "amount": 1765.66,
+          "orders": 7
+        },
+        {
+          "date": "2025-12-06",
+          "category": "Food",
+          "amount": 10287.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-12-06",
+          "category": "Liquor",
+          "amount": 3335.67,
+          "orders": 11
+        },
+        {
+          "date": "2025-12-06",
+          "category": "Misc. Guest Fees",
+          "amount": 2500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-06",
+          "category": "NA Beverage",
+          "amount": 116.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-12-06",
+          "category": "Wine",
+          "amount": 3537.67,
+          "orders": 9
         },
         {
           "date": "2025-12-07",
-          "category": "Other",
-          "amount": 25330.0,
-          "orders": 23
+          "category": "Bottled Beer",
+          "amount": 2710.66,
+          "orders": 2
+        },
+        {
+          "date": "2025-12-07",
+          "category": "Food",
+          "amount": 13680.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-12-07",
+          "category": "Liquor",
+          "amount": 3980.67,
+          "orders": 8
+        },
+        {
+          "date": "2025-12-07",
+          "category": "Service Charge",
+          "amount": 700.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-07",
+          "category": "Valet",
+          "amount": 1050.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-07",
+          "category": "Wine",
+          "amount": 3208.67,
+          "orders": 5
         },
         {
           "date": "2025-12-08",
-          "category": "Other",
-          "amount": 1500.0,
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-08",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-12-10",
+          "category": "Food",
+          "amount": 2136.0,
           "orders": 3
         },
         {
           "date": "2025-12-10",
-          "category": "Other",
-          "amount": 3311.0,
-          "orders": 5
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-10",
+          "category": "NA Beverage",
+          "amount": 675.0,
+          "orders": 1
         },
         {
           "date": "2025-12-11",
-          "category": "Other",
+          "category": "Misc. Guest Fees",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2025-12-12",
-          "category": "Other",
-          "amount": 6436.0,
-          "orders": 23
+          "category": "Bottled Beer",
+          "amount": 20.66,
+          "orders": 2
+        },
+        {
+          "date": "2025-12-12",
+          "category": "Food",
+          "amount": 3114.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-12-12",
+          "category": "Liquor",
+          "amount": 518.67,
+          "orders": 6
+        },
+        {
+          "date": "2025-12-12",
+          "category": "Misc. Guest Fees",
+          "amount": 700.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-12-12",
+          "category": "NA Beverage",
+          "amount": 980.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-12-12",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-12-12",
+          "category": "Wine",
+          "amount": 102.67,
+          "orders": 2
         },
         {
           "date": "2025-12-13",
-          "category": "Other",
-          "amount": 25216.0,
-          "orders": 42
+          "category": "Bottled Beer",
+          "amount": 1786.66,
+          "orders": 5
+        },
+        {
+          "date": "2025-12-13",
+          "category": "Food",
+          "amount": 14212.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-12-13",
+          "category": "Liquor",
+          "amount": 3021.67,
+          "orders": 8
+        },
+        {
+          "date": "2025-12-13",
+          "category": "NA Beverage",
+          "amount": 598.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-12-13",
+          "category": "Valet",
+          "amount": 770.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-13",
+          "category": "Wine",
+          "amount": 4827.67,
+          "orders": 16
         },
         {
           "date": "2025-12-14",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 750.0,
           "orders": 1
         },
         {
           "date": "2025-12-15",
+          "category": "AV / Tech",
+          "amount": 525.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-15",
+          "category": "Bottled Beer",
+          "amount": 3273.66,
+          "orders": 8
+        },
+        {
+          "date": "2025-12-15",
+          "category": "Food",
+          "amount": 38602.0,
+          "orders": 14
+        },
+        {
+          "date": "2025-12-15",
+          "category": "Liquor",
+          "amount": 6152.67,
+          "orders": 21
+        },
+        {
+          "date": "2025-12-15",
+          "category": "Misc. Guest Fees",
+          "amount": 3900.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-12-15",
+          "category": "NA Beverage",
+          "amount": 1300.0,
+          "orders": 12
+        },
+        {
+          "date": "2025-12-15",
           "category": "Other",
-          "amount": 70602.0,
-          "orders": 77
+          "amount": 300.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-15",
+          "category": "Service Charge",
+          "amount": 350.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-15",
+          "category": "Valet",
+          "amount": 2695.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-12-15",
+          "category": "Wine",
+          "amount": 13503.67,
+          "orders": 11
         },
         {
           "date": "2025-12-18",
-          "category": "Other",
+          "category": "Food",
           "amount": 2175.0,
           "orders": 8
         },
         {
           "date": "2025-12-19",
+          "category": "Food",
+          "amount": 7520.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-12-19",
+          "category": "Liquor",
+          "amount": 1580.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-12-19",
+          "category": "Misc. Guest Fees",
+          "amount": 175.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-19",
+          "category": "NA Beverage",
+          "amount": 46.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-12-19",
           "category": "Other",
-          "amount": 10317.0,
-          "orders": 25
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-19",
+          "category": "Valet",
+          "amount": 570.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-12-19",
+          "category": "Wine",
+          "amount": 176.0,
+          "orders": 3
         },
         {
           "date": "2025-12-21",
-          "category": "Other",
-          "amount": 1622.1,
-          "orders": 13
+          "category": "Liquor",
+          "amount": 20.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-12-21",
+          "category": "Room Rental",
+          "amount": 1602.1,
+          "orders": 11
         },
         {
           "date": "2025-12-23",
-          "category": "Other",
+          "category": "Food",
           "amount": 1215.0,
           "orders": 6
         },
         {
           "date": "2025-12-31",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 750.0,
           "orders": 1
         },
         {
           "date": "2026-01-06",
-          "category": "Other",
-          "amount": 29847.31,
-          "orders": 44
+          "category": "Bottled Beer",
+          "amount": 1247.43,
+          "orders": 5
+        },
+        {
+          "date": "2026-01-06",
+          "category": "Food",
+          "amount": 15677.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-01-06",
+          "category": "Liquor",
+          "amount": 4839.44,
+          "orders": 14
+        },
+        {
+          "date": "2026-01-06",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-06",
+          "category": "NA Beverage",
+          "amount": 207.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-01-06",
+          "category": "Wine",
+          "amount": 5876.44,
+          "orders": 14
         },
         {
           "date": "2026-01-07",
-          "category": "Other",
+          "category": "Food",
           "amount": 2475.0,
           "orders": 11
         },
         {
           "date": "2026-01-08",
+          "category": "Bottled Beer",
+          "amount": 2678.66,
+          "orders": 5
+        },
+        {
+          "date": "2026-01-08",
+          "category": "Food",
+          "amount": 17889.0,
+          "orders": 6
+        },
+        {
+          "date": "2026-01-08",
+          "category": "Liquor",
+          "amount": 4006.66,
+          "orders": 10
+        },
+        {
+          "date": "2026-01-08",
+          "category": "Misc. Guest Fees",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-08",
           "category": "Other",
-          "amount": 32775.49,
-          "orders": 33
+          "amount": 207.5,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-08",
+          "category": "Valet",
+          "amount": 1410.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-08",
+          "category": "Wine",
+          "amount": 4583.67,
+          "orders": 9
         },
         {
           "date": "2026-01-14",
-          "category": "Other",
-          "amount": 83408.33,
-          "orders": 71
+          "category": "Bottled Beer",
+          "amount": 4256.11,
+          "orders": 11
+        },
+        {
+          "date": "2026-01-14",
+          "category": "Draft Beer",
+          "amount": 387.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-14",
+          "category": "Food",
+          "amount": 48365.0,
+          "orders": 8
+        },
+        {
+          "date": "2026-01-14",
+          "category": "Liquor",
+          "amount": 12684.11,
+          "orders": 24
+        },
+        {
+          "date": "2026-01-14",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-14",
+          "category": "NA Beverage",
+          "amount": 525.0,
+          "orders": 12
+        },
+        {
+          "date": "2026-01-14",
+          "category": "Room Rental",
+          "amount": 8437.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-01-14",
+          "category": "Service Charge",
+          "amount": 525.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-14",
+          "category": "Wine",
+          "amount": 7729.11,
+          "orders": 11
         },
         {
           "date": "2026-01-16",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2026-01-17",
-          "category": "Other",
-          "amount": 22710.0,
-          "orders": 36
+          "category": "Bottled Beer",
+          "amount": 1175.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-01-17",
+          "category": "Food",
+          "amount": 11370.0,
+          "orders": 6
+        },
+        {
+          "date": "2026-01-17",
+          "category": "Liquor",
+          "amount": 3306.0,
+          "orders": 10
+        },
+        {
+          "date": "2026-01-17",
+          "category": "Misc. Guest Fees",
+          "amount": 1500.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-01-17",
+          "category": "NA Beverage",
+          "amount": 1100.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-01-17",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-17",
+          "category": "Service Charge",
+          "amount": 525.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-17",
+          "category": "Valet",
+          "amount": 665.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-17",
+          "category": "Wine",
+          "amount": 2069.0,
+          "orders": 5
         },
         {
           "date": "2026-01-21",
-          "category": "Other",
-          "amount": 27457.6,
-          "orders": 41
+          "category": "Bottled Beer",
+          "amount": 2154.53,
+          "orders": 6
+        },
+        {
+          "date": "2026-01-21",
+          "category": "Deposits",
+          "amount": 810.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-21",
+          "category": "Food",
+          "amount": 13230.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-01-21",
+          "category": "Liquor",
+          "amount": 3477.54,
+          "orders": 10
+        },
+        {
+          "date": "2026-01-21",
+          "category": "Misc. Guest Fees",
+          "amount": 2500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-21",
+          "category": "NA Beverage",
+          "amount": 410.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-01-21",
+          "category": "Valet",
+          "amount": 210.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-21",
+          "category": "Wine",
+          "amount": 4665.53,
+          "orders": 12
         },
         {
           "date": "2026-01-23",
-          "category": "Other",
+          "category": "Food",
           "amount": 3600.0,
           "orders": 13
         },
         {
           "date": "2026-01-29",
-          "category": "Other",
+          "category": "Misc. Guest Fees",
           "amount": 1000.0,
           "orders": 2
         },
         {
           "date": "2026-01-31",
-          "category": "Other",
-          "amount": 3495.0,
-          "orders": 9
+          "category": "Bottled Beer",
+          "amount": 152.25,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-31",
+          "category": "Food",
+          "amount": 1054.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-31",
+          "category": "Liquor",
+          "amount": 152.25,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-31",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-01-31",
+          "category": "NA Beverage",
+          "amount": 989.25,
+          "orders": 2
+        },
+        {
+          "date": "2026-01-31",
+          "category": "Room Rental",
+          "amount": 495.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-01-31",
+          "category": "Wine",
+          "amount": 152.25,
+          "orders": 1
         },
         {
           "date": "2026-02-01",
-          "category": "Other",
-          "amount": 11623.0,
-          "orders": 29
+          "category": "Bottled Beer",
+          "amount": 578.75,
+          "orders": 6
+        },
+        {
+          "date": "2026-02-01",
+          "category": "Food",
+          "amount": 8160.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-02-01",
+          "category": "Liquor",
+          "amount": 736.75,
+          "orders": 8
+        },
+        {
+          "date": "2026-02-01",
+          "category": "NA Beverage",
+          "amount": 523.75,
+          "orders": 4
+        },
+        {
+          "date": "2026-02-01",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-01",
+          "category": "Valet",
+          "amount": 35.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-01",
+          "category": "Wine",
+          "amount": 1088.75,
+          "orders": 6
         },
         {
           "date": "2026-02-04",
-          "category": "Other",
+          "category": "Room Rental",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2026-02-07",
-          "category": "Other",
-          "amount": 3644.0,
-          "orders": 23
+          "category": "Bottled Beer",
+          "amount": 34.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-02-07",
+          "category": "Food",
+          "amount": 2560.52,
+          "orders": 4
+        },
+        {
+          "date": "2026-02-07",
+          "category": "Liquor",
+          "amount": 35.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-02-07",
+          "category": "Misc. Guest Fees",
+          "amount": 873.89,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-07",
+          "category": "Valet",
+          "amount": 30.59,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-07",
+          "category": "Wine",
+          "amount": 110.0,
+          "orders": 9
         },
         {
           "date": "2026-02-08",
-          "category": "Other",
-          "amount": 365.0,
-          "orders": 31
+          "category": "Bottled Beer",
+          "amount": 46.0,
+          "orders": 7
+        },
+        {
+          "date": "2026-02-08",
+          "category": "Liquor",
+          "amount": 72.0,
+          "orders": 6
+        },
+        {
+          "date": "2026-02-08",
+          "category": "NA Beverage",
+          "amount": 51.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-02-08",
+          "category": "Wine",
+          "amount": 196.0,
+          "orders": 16
         },
         {
           "date": "2026-02-10",
-          "category": "Other",
-          "amount": 10145.0,
-          "orders": 5
+          "category": "Food",
+          "amount": 5250.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-02-10",
+          "category": "Misc. Guest Fees",
+          "amount": 3895.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-10",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
         },
         {
           "date": "2026-02-11",
-          "category": "Other",
-          "amount": 9560.0,
-          "orders": 5
+          "category": "Food",
+          "amount": 6400.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-02-11",
+          "category": "NA Beverage",
+          "amount": 2160.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-11",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
         },
         {
           "date": "2026-02-13",
-          "category": "Other",
+          "category": "Food",
           "amount": 2175.0,
           "orders": 9
         },
         {
           "date": "2026-02-17",
-          "category": "Other",
+          "category": "Misc. Guest Fees",
           "amount": 1250.0,
           "orders": 2
         },
         {
           "date": "2026-02-19",
-          "category": "Other",
-          "amount": 216.0,
-          "orders": 14
+          "category": "Bottled Beer",
+          "amount": 7.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-19",
+          "category": "Liquor",
+          "amount": 115.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-02-19",
+          "category": "NA Beverage",
+          "amount": 22.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-02-19",
+          "category": "Wine",
+          "amount": 72.0,
+          "orders": 3
         },
         {
           "date": "2026-02-25",
-          "category": "Other",
-          "amount": 5731.4,
-          "orders": 23
+          "category": "Bottled Beer",
+          "amount": 237.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-02-25",
+          "category": "Food",
+          "amount": 3131.4,
+          "orders": 10
+        },
+        {
+          "date": "2026-02-25",
+          "category": "Liquor",
+          "amount": 223.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-25",
+          "category": "Misc. Guest Fees",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-25",
+          "category": "NA Beverage",
+          "amount": 281.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-02-25",
+          "category": "Wine",
+          "amount": 859.0,
+          "orders": 5
         },
         {
           "date": "2026-02-26",
-          "category": "Other",
-          "amount": 27140.8,
-          "orders": 47
+          "category": "AV / Tech",
+          "amount": 175.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-26",
+          "category": "Bottled Beer",
+          "amount": 936.6,
+          "orders": 5
+        },
+        {
+          "date": "2026-02-26",
+          "category": "Food",
+          "amount": 13013.0,
+          "orders": 8
+        },
+        {
+          "date": "2026-02-26",
+          "category": "Liquor",
+          "amount": 1461.6,
+          "orders": 9
+        },
+        {
+          "date": "2026-02-26",
+          "category": "Misc. Guest Fees",
+          "amount": 5500.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-02-26",
+          "category": "NA Beverage",
+          "amount": 2900.0,
+          "orders": 6
+        },
+        {
+          "date": "2026-02-26",
+          "category": "Valet",
+          "amount": 910.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-02-26",
+          "category": "Wine",
+          "amount": 2244.6,
+          "orders": 11
         },
         {
           "date": "2026-02-27",
-          "category": "Other",
-          "amount": 5843.0,
-          "orders": 113
+          "category": "Bottled Beer",
+          "amount": 56.0,
+          "orders": 6
+        },
+        {
+          "date": "2026-02-27",
+          "category": "Food",
+          "amount": 3680.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-02-27",
+          "category": "Liquor",
+          "amount": 939.0,
+          "orders": 55
+        },
+        {
+          "date": "2026-02-27",
+          "category": "NA Beverage",
+          "amount": 92.0,
+          "orders": 18
+        },
+        {
+          "date": "2026-02-27",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-02-27",
+          "category": "Wine",
+          "amount": 576.0,
+          "orders": 30
         },
         {
           "date": "2026-02-28",
-          "category": "Other",
-          "amount": 7527.0,
-          "orders": 14
+          "category": "Food",
+          "amount": 5220.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-02-28",
+          "category": "Liquor",
+          "amount": 1227.0,
+          "orders": 10
+        },
+        {
+          "date": "2026-02-28",
+          "category": "Wine",
+          "amount": 1080.0,
+          "orders": 2
         },
         {
           "date": "2026-03-01",
-          "category": "Other",
-          "amount": 9690.0,
-          "orders": 54
+          "category": "Bottled Beer",
+          "amount": 88.0,
+          "orders": 13
+        },
+        {
+          "date": "2026-03-01",
+          "category": "Food",
+          "amount": 7260.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-03-01",
+          "category": "Liquor",
+          "amount": 642.0,
+          "orders": 15
+        },
+        {
+          "date": "2026-03-01",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-01",
+          "category": "NA Beverage",
+          "amount": 20.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-03-01",
+          "category": "Room Rental",
+          "amount": 1000.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-01",
+          "category": "Wine",
+          "amount": 180.0,
+          "orders": 15
         },
         {
           "date": "2026-03-05",
-          "category": "Other",
+          "category": "Misc. Guest Fees",
           "amount": 500.0,
           "orders": 1
         },
         {
           "date": "2026-03-06",
-          "category": "Other",
-          "amount": 25352.0,
-          "orders": 38
+          "category": "Food",
+          "amount": 17046.0,
+          "orders": 17
         },
         {
-          "date": "2026-03-11",
-          "category": "Other",
-          "amount": 2890.0,
+          "date": "2026-03-06",
+          "category": "Liquor",
+          "amount": 726.0,
           "orders": 5
         },
         {
-          "date": "2026-03-14",
+          "date": "2026-03-06",
+          "category": "NA Beverage",
+          "amount": 242.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-03-06",
           "category": "Other",
-          "amount": 7436.0,
-          "orders": 43
+          "amount": 650.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-03-06",
+          "category": "Room Rental",
+          "amount": 3853.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-03-06",
+          "category": "Valet",
+          "amount": 455.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-06",
+          "category": "Wine",
+          "amount": 2380.0,
+          "orders": 8
+        },
+        {
+          "date": "2026-03-11",
+          "category": "Food",
+          "amount": 2075.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-03-11",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-11",
+          "category": "Valet",
+          "amount": 315.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-14",
+          "category": "Bottled Beer",
+          "amount": 335.5,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-14",
+          "category": "Food",
+          "amount": 3248.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-03-14",
+          "category": "Liquor",
+          "amount": 525.5,
+          "orders": 19
+        },
+        {
+          "date": "2026-03-14",
+          "category": "NA Beverage",
+          "amount": 343.5,
+          "orders": 3
+        },
+        {
+          "date": "2026-03-14",
+          "category": "Room Rental",
+          "amount": 1500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-14",
+          "category": "Valet",
+          "amount": 980.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-14",
+          "category": "Wine",
+          "amount": 503.5,
+          "orders": 15
         },
         {
           "date": "2026-03-22",
-          "category": "Other",
-          "amount": 13988.0,
-          "orders": 148
+          "category": "Bottled Beer",
+          "amount": 594.5,
+          "orders": 6
+        },
+        {
+          "date": "2026-03-22",
+          "category": "Food",
+          "amount": 7998.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-03-22",
+          "category": "Liquor",
+          "amount": 1786.5,
+          "orders": 100
+        },
+        {
+          "date": "2026-03-22",
+          "category": "NA Beverage",
+          "amount": 869.5,
+          "orders": 19
+        },
+        {
+          "date": "2026-03-22",
+          "category": "Room Rental",
+          "amount": 2000.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-03-22",
+          "category": "Wine",
+          "amount": 739.5,
+          "orders": 16
         },
         {
           "date": "2026-03-28",
-          "category": "Other",
-          "amount": 18773.8,
-          "orders": 205
+          "category": "Bottled Beer",
+          "amount": 1150.7,
+          "orders": 67
+        },
+        {
+          "date": "2026-03-28",
+          "category": "Food",
+          "amount": 9531.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-03-28",
+          "category": "Liquor",
+          "amount": 1765.7,
+          "orders": 91
+        },
+        {
+          "date": "2026-03-28",
+          "category": "Misc. Guest Fees",
+          "amount": 350.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-28",
+          "category": "NA Beverage",
+          "amount": 792.7,
+          "orders": 14
+        },
+        {
+          "date": "2026-03-28",
+          "category": "Room Rental",
+          "amount": 2500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-03-28",
+          "category": "Wine",
+          "amount": 2683.7,
+          "orders": 28
         },
         {
           "date": "2026-04-02",
-          "category": "Other",
+          "category": "Food",
           "amount": 4125.0,
           "orders": 15
         },
         {
           "date": "2026-04-03",
-          "category": "Other",
-          "amount": 4161.0,
-          "orders": 7
+          "category": "Food",
+          "amount": 2136.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-04-03",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-03",
+          "category": "NA Beverage",
+          "amount": 675.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-03",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-03",
+          "category": "Valet",
+          "amount": 350.0,
+          "orders": 1
         },
         {
           "date": "2026-04-11",
-          "category": "Other",
-          "amount": 27679.8,
-          "orders": 321
+          "category": "Bottled Beer",
+          "amount": 1083.8,
+          "orders": 93
         },
         {
-          "date": "2026-04-12",
-          "category": "Other",
-          "amount": 14063.99,
-          "orders": 26
+          "date": "2026-04-11",
+          "category": "Draft Beer",
+          "amount": 9.0,
+          "orders": 1
         },
         {
-          "date": "2026-04-13",
-          "category": "Other",
-          "amount": 3582.0,
+          "date": "2026-04-11",
+          "category": "Food",
+          "amount": 14504.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-04-11",
+          "category": "Liquor",
+          "amount": 4415.0,
+          "orders": 179
+        },
+        {
+          "date": "2026-04-11",
+          "category": "Misc. Guest Fees",
+          "amount": 3750.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-04-11",
+          "category": "NA Beverage",
+          "amount": 106.0,
           "orders": 8
         },
         {
+          "date": "2026-04-11",
+          "category": "Wine",
+          "amount": 3812.0,
+          "orders": 33
+        },
+        {
+          "date": "2026-04-12",
+          "category": "AV / Tech",
+          "amount": 175.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Bottled Beer",
+          "amount": 282.67,
+          "orders": 3
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Deposits",
+          "amount": 390.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Food",
+          "amount": 8081.0,
+          "orders": 8
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Liquor",
+          "amount": 212.66,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Misc. Guest Fees",
+          "amount": 570.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-12",
+          "category": "NA Beverage",
+          "amount": 318.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Room Rental",
+          "amount": 2000.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Valet",
+          "amount": 175.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-12",
+          "category": "Wine",
+          "amount": 1859.66,
+          "orders": 6
+        },
+        {
+          "date": "2026-04-13",
+          "category": "Food",
+          "amount": 1232.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-04-13",
+          "category": "Misc. Guest Fees",
+          "amount": 350.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-04-13",
+          "category": "Room Rental",
+          "amount": 2000.0,
+          "orders": 2
+        },
+        {
           "date": "2026-04-14",
-          "category": "Other",
-          "amount": 1858.0,
-          "orders": 5
+          "category": "Food",
+          "amount": 561.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-04-14",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-14",
+          "category": "NA Beverage",
+          "amount": 297.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-14",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
         },
         {
           "date": "2026-04-16",
-          "category": "Other",
-          "amount": 54836.0,
-          "orders": 401
+          "category": "Bottled Beer",
+          "amount": 3093.33,
+          "orders": 82
         },
         {
-          "date": "2026-04-18",
-          "category": "Other",
-          "amount": 21332.99,
+          "date": "2026-04-16",
+          "category": "Food",
+          "amount": 34944.0,
+          "orders": 11
+        },
+        {
+          "date": "2026-04-16",
+          "category": "Liquor",
+          "amount": 7171.33,
           "orders": 224
         },
         {
+          "date": "2026-04-16",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-16",
+          "category": "NA Beverage",
+          "amount": 192.0,
+          "orders": 27
+        },
+        {
+          "date": "2026-04-16",
+          "category": "Room Rental",
+          "amount": 2000.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-04-16",
+          "category": "Wine",
+          "amount": 6935.34,
+          "orders": 54
+        },
+        {
+          "date": "2026-04-18",
+          "category": "Bottled Beer",
+          "amount": 1637.67,
+          "orders": 55
+        },
+        {
+          "date": "2026-04-18",
+          "category": "Food",
+          "amount": 10068.0,
+          "orders": 6
+        },
+        {
+          "date": "2026-04-18",
+          "category": "Liquor",
+          "amount": 3350.66,
+          "orders": 121
+        },
+        {
+          "date": "2026-04-18",
+          "category": "Misc. Guest Fees",
+          "amount": 3000.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-04-18",
+          "category": "NA Beverage",
+          "amount": 85.0,
+          "orders": 15
+        },
+        {
+          "date": "2026-04-18",
+          "category": "Wine",
+          "amount": 3191.66,
+          "orders": 25
+        },
+        {
           "date": "2026-04-19",
-          "category": "Other",
-          "amount": 29860.3,
-          "orders": 311
+          "category": "Bottled Beer",
+          "amount": 2180.76,
+          "orders": 56
+        },
+        {
+          "date": "2026-04-19",
+          "category": "Food",
+          "amount": 18153.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-04-19",
+          "category": "Liquor",
+          "amount": 4746.77,
+          "orders": 189
+        },
+        {
+          "date": "2026-04-19",
+          "category": "NA Beverage",
+          "amount": 157.0,
+          "orders": 17
+        },
+        {
+          "date": "2026-04-19",
+          "category": "Wine",
+          "amount": 4622.77,
+          "orders": 45
         },
         {
           "date": "2026-04-21",
-          "category": "Other",
+          "category": "Food",
           "amount": 1875.0,
           "orders": 6
         },
         {
           "date": "2026-04-23",
-          "category": "Other",
-          "amount": 7557.0,
-          "orders": 9
+          "category": "AV / Tech",
+          "amount": 4282.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-04-23",
+          "category": "Food",
+          "amount": 2100.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-04-23",
+          "category": "NA Beverage",
+          "amount": 675.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-23",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
         },
         {
           "date": "2026-04-25",
-          "category": "Other",
-          "amount": 26400.4,
-          "orders": 118
+          "category": "Bottled Beer",
+          "amount": 2726.46,
+          "orders": 31
+        },
+        {
+          "date": "2026-04-25",
+          "category": "Food",
+          "amount": 13821.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-04-25",
+          "category": "Liquor",
+          "amount": 3362.46,
+          "orders": 49
+        },
+        {
+          "date": "2026-04-25",
+          "category": "Misc. Guest Fees",
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-25",
+          "category": "NA Beverage",
+          "amount": 81.0,
+          "orders": 3
+        },
+        {
+          "date": "2026-04-25",
+          "category": "Room Rental",
+          "amount": 2500.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-04-25",
+          "category": "Wine",
+          "amount": 3659.48,
+          "orders": 27
         },
         {
           "date": "2026-04-26",
-          "category": "Other",
-          "amount": 29471.2,
-          "orders": 183
+          "category": "Bottled Beer",
+          "amount": 2520.93,
+          "orders": 28
+        },
+        {
+          "date": "2026-04-26",
+          "category": "Food",
+          "amount": 14567.0,
+          "orders": 5
+        },
+        {
+          "date": "2026-04-26",
+          "category": "Liquor",
+          "amount": 5385.33,
+          "orders": 103
+        },
+        {
+          "date": "2026-04-26",
+          "category": "Misc. Guest Fees",
+          "amount": 250.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-26",
+          "category": "NA Beverage",
+          "amount": 69.0,
+          "orders": 12
+        },
+        {
+          "date": "2026-04-26",
+          "category": "Room Rental",
+          "amount": 1250.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-26",
+          "category": "Wine",
+          "amount": 5428.94,
+          "orders": 33
+        },
+        {
+          "date": "2026-04-29",
+          "category": "Misc. Guest Fees",
+          "amount": 500.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-04-29",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
         }
       ],
       "service_modes_daily": [
@@ -7938,21 +13256,28 @@
           "amount": 36333.59,
           "orders": 2,
           "guests": 5
+        },
+        {
+          "date": "2026-04-29",
+          "mode": "Unspecified",
+          "amount": 1050.0,
+          "orders": 3,
+          "guests": 6
         }
       ],
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 507.0,
-        "guests": 813.0,
-        "amount": 4449101.9799999995,
+        "orders": 506.0,
+        "guests": 809.0,
+        "amount": 4414580.89,
         "tip": 0.0,
         "gratuity": 0.0,
         "discount": 10611.2,
-        "ticket_time_sec_sum": 1084738.8999999997,
-        "ticket_time_count": 447,
-        "avg_check": 8775.349072978303,
-        "avg_ticket_time_sec": 2426.7089485458605
+        "ticket_time_sec_sum": 1071108.8999999997,
+        "ticket_time_count": 446,
+        "avg_check": 8724.468162055335,
+        "avg_ticket_time_sec": 2401.5894618834072
       }
     }
   },
@@ -11350,7 +16675,7 @@
         "regular_cost": 0.0,
         "overtime_cost": 0.0,
         "total_cost": 0.0,
-        "head_count": 2,
+        "head_count": 5,
         "date": "2026-04-30"
       }
     ],
@@ -55132,6 +60457,20 @@
         "date": "2026-04-30",
         "job_guid": "b1512743-6e6a-4139-b7bf-992b8cd12290",
         "title": "Cook",
+        "hours": 0.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "job_guid": "831e09fc-3985-4820-bdbe-aa0067bf8892",
+        "title": "Dishwasher",
+        "hours": 0.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "job_guid": "ee530a98-9409-405f-b06e-b627b07cf63f",
+        "title": "Line Cook",
         "hours": 0.0,
         "cost": 0.0
       }

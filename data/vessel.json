@@ -1,6 +1,6 @@
 {
   "outlet_id": "vessel",
-  "generated_at": "2026-04-30T13:29:09+00:00",
+  "generated_at": "2026-04-30T15:19:06+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -753,13 +753,6 @@
         },
         {
           "hour": 21,
-          "dow": "Thu",
-          "amount": 28.0,
-          "orders": 1,
-          "guests": 3
-        },
-        {
-          "hour": 21,
           "dow": "Fri",
           "amount": 0.0,
           "orders": 2,
@@ -773,11 +766,11 @@
           "guests": 6
         },
         {
-          "hour": 22,
+          "hour": 21,
           "dow": "Thu",
-          "amount": 190.0,
-          "orders": 6,
-          "guests": 11
+          "amount": 28.0,
+          "orders": 1,
+          "guests": 3
         },
         {
           "hour": 22,
@@ -794,18 +787,11 @@
           "guests": 42
         },
         {
-          "hour": 23,
-          "dow": "Wed",
-          "amount": 0.0,
-          "orders": 1,
-          "guests": 1
-        },
-        {
-          "hour": 23,
+          "hour": 22,
           "dow": "Thu",
-          "amount": 339.0,
-          "orders": 8,
-          "guests": 13
+          "amount": 190.0,
+          "orders": 6,
+          "guests": 11
         },
         {
           "hour": 23,
@@ -820,6 +806,20 @@
           "amount": 1178.8,
           "orders": 19,
           "guests": 55
+        },
+        {
+          "hour": 23,
+          "dow": "Thu",
+          "amount": 339.0,
+          "orders": 8,
+          "guests": 13
+        },
+        {
+          "hour": 23,
+          "dow": "Wed",
+          "amount": 0.0,
+          "orders": 1,
+          "guests": 1
         }
       ],
       "hour_daily": [
@@ -1499,165 +1499,495 @@
       "categories_daily": [
         {
           "date": "2025-03-29",
-          "category": "Other",
-          "amount": 190.0,
-          "orders": 13
+          "category": "Food",
+          "amount": 26.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-03-29",
+          "category": "Liquor",
+          "amount": 89.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-03-29",
+          "category": "NA Beverage",
+          "amount": 5.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-03-29",
+          "category": "Wine",
+          "amount": 70.0,
+          "orders": 5
         },
         {
           "date": "2025-03-30",
-          "category": "Other",
-          "amount": 223.0,
-          "orders": 15
+          "category": "Bottled Beer",
+          "amount": 7.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-03-30",
+          "category": "Liquor",
+          "amount": 94.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-03-30",
+          "category": "Wine",
+          "amount": 122.0,
+          "orders": 8
         },
         {
           "date": "2025-04-05",
-          "category": "Other",
-          "amount": 187.4,
-          "orders": 13
+          "category": "Bottled Beer",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-05",
+          "category": "Food",
+          "amount": 26.4,
+          "orders": 2
+        },
+        {
+          "date": "2025-04-05",
+          "category": "Liquor",
+          "amount": 75.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-04-05",
+          "category": "Wine",
+          "amount": 77.0,
+          "orders": 5
         },
         {
           "date": "2025-04-17",
-          "category": "Other",
-          "amount": 76.0,
-          "orders": 7
+          "category": "Bottled Beer",
+          "amount": 6.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-17",
+          "category": "Food",
+          "amount": 32.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-04-17",
+          "category": "Liquor",
+          "amount": 30.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-04-17",
+          "category": "Wine",
+          "amount": 8.0,
+          "orders": 1
         },
         {
           "date": "2025-04-18",
-          "category": "Other",
-          "amount": 147.0,
-          "orders": 13
+          "category": "Bottled Beer",
+          "amount": 36.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-04-18",
+          "category": "Liquor",
+          "amount": 83.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-18",
+          "category": "Wine",
+          "amount": 28.0,
+          "orders": 2
         },
         {
           "date": "2025-04-19",
-          "category": "Other",
-          "amount": 380.8,
-          "orders": 32
+          "category": "Food",
+          "amount": 105.2,
+          "orders": 9
+        },
+        {
+          "date": "2025-04-19",
+          "category": "Liquor",
+          "amount": 244.8,
+          "orders": 19
+        },
+        {
+          "date": "2025-04-19",
+          "category": "Wine",
+          "amount": 30.8,
+          "orders": 4
         },
         {
           "date": "2025-04-20",
-          "category": "Other",
-          "amount": 443.7,
-          "orders": 28
+          "category": "Food",
+          "amount": 55.5,
+          "orders": 6
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Liquor",
+          "amount": 331.55,
+          "orders": 19
+        },
+        {
+          "date": "2025-04-20",
+          "category": "NA Beverage",
+          "amount": 16.65,
+          "orders": 2
+        },
+        {
+          "date": "2025-04-20",
+          "category": "Wine",
+          "amount": 40.0,
+          "orders": 1
         },
         {
           "date": "2025-04-24",
-          "category": "Other",
-          "amount": 179.0,
-          "orders": 17
+          "category": "Bottled Beer",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-24",
+          "category": "Food",
+          "amount": 10.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-24",
+          "category": "Liquor",
+          "amount": 86.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-04-24",
+          "category": "Wine",
+          "amount": 74.0,
+          "orders": 7
         },
         {
           "date": "2025-04-25",
-          "category": "Other",
+          "category": "Wine",
           "amount": 42.0,
           "orders": 3
         },
         {
           "date": "2025-04-26",
-          "category": "Other",
+          "category": "Liquor",
           "amount": 10.0,
           "orders": 1
         },
         {
           "date": "2025-04-27",
-          "category": "Other",
-          "amount": 96.0,
+          "category": "Food",
+          "amount": 22.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Liquor",
+          "amount": 38.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-04-27",
+          "category": "Wine",
+          "amount": 36.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Bottled Beer",
+          "amount": 6.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-01",
+          "category": "Liquor",
+          "amount": 80.0,
           "orders": 5
         },
         {
           "date": "2025-05-01",
-          "category": "Other",
-          "amount": 118.0,
-          "orders": 10
+          "category": "Wine",
+          "amount": 32.0,
+          "orders": 4
         },
         {
           "date": "2025-05-02",
-          "category": "Other",
-          "amount": 33.0,
+          "category": "Bottled Beer",
+          "amount": 18.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-02",
+          "category": "Liquor",
+          "amount": 15.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-08",
+          "category": "Food",
+          "amount": 30.0,
           "orders": 3
         },
         {
           "date": "2025-05-08",
-          "category": "Other",
-          "amount": 50.0,
-          "orders": 5
+          "category": "Liquor",
+          "amount": 20.0,
+          "orders": 2
         },
         {
           "date": "2025-05-09",
-          "category": "Other",
-          "amount": 472.0,
-          "orders": 33
+          "category": "Bottled Beer",
+          "amount": 31.0,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Food",
+          "amount": 54.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Liquor",
+          "amount": 125.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-05-09",
+          "category": "NA Beverage",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-09",
+          "category": "Wine",
+          "amount": 253.0,
+          "orders": 17
         },
         {
           "date": "2025-05-10",
-          "category": "Other",
-          "amount": 463.0,
-          "orders": 44
+          "category": "Bottled Beer",
+          "amount": 6.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-10",
+          "category": "Food",
+          "amount": 76.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-10",
+          "category": "Liquor",
+          "amount": 204.0,
+          "orders": 17
+        },
+        {
+          "date": "2025-05-10",
+          "category": "NA Beverage",
+          "amount": 9.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-10",
+          "category": "Wine",
+          "amount": 168.0,
+          "orders": 20
         },
         {
           "date": "2025-05-11",
-          "category": "Other",
-          "amount": 233.0,
-          "orders": 16
+          "category": "Food",
+          "amount": 42.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-05-11",
+          "category": "Liquor",
+          "amount": 186.0,
+          "orders": 12
+        },
+        {
+          "date": "2025-05-11",
+          "category": "NA Beverage",
+          "amount": 5.0,
+          "orders": 1
         },
         {
           "date": "2025-05-15",
-          "category": "Other",
+          "category": "Wine",
           "amount": 24.0,
           "orders": 3
         },
         {
           "date": "2025-05-17",
-          "category": "Other",
-          "amount": 92.0,
-          "orders": 7
+          "category": "Bottled Beer",
+          "amount": 6.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-17",
+          "category": "Food",
+          "amount": 22.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-17",
+          "category": "Liquor",
+          "amount": 64.0,
+          "orders": 4
         },
         {
           "date": "2025-05-18",
-          "category": "Other",
-          "amount": 356.3,
-          "orders": 28
+          "category": "Food",
+          "amount": 41.1,
+          "orders": 4
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Liquor",
+          "amount": 250.3,
+          "orders": 19
+        },
+        {
+          "date": "2025-05-18",
+          "category": "NA Beverage",
+          "amount": 5.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-18",
+          "category": "Wine",
+          "amount": 59.9,
+          "orders": 4
         },
         {
           "date": "2025-05-25",
-          "category": "Other",
-          "amount": 327.0,
-          "orders": 16
+          "category": "Food",
+          "amount": 38.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-25",
+          "category": "Liquor",
+          "amount": 289.0,
+          "orders": 14
         },
         {
           "date": "2025-05-31",
-          "category": "Other",
-          "amount": 181.0,
-          "orders": 15
+          "category": "Bottled Beer",
+          "amount": 12.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Food",
+          "amount": 22.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Liquor",
+          "amount": 91.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-05-31",
+          "category": "Wine",
+          "amount": 56.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-06-06",
+          "category": "Food",
+          "amount": 52.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-06",
+          "category": "Liquor",
+          "amount": 80.0,
+          "orders": 5
         },
         {
           "date": "2025-06-06",
           "category": "Other",
-          "amount": 400.0,
-          "orders": 21
+          "amount": 102.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-06-06",
+          "category": "Wine",
+          "amount": 166.0,
+          "orders": 6
+        },
+        {
+          "date": "2025-06-07",
+          "category": "Liquor",
+          "amount": 36.0,
+          "orders": 1
         },
         {
           "date": "2025-06-07",
           "category": "Other",
-          "amount": 208.0,
-          "orders": 11
+          "amount": 172.0,
+          "orders": 10
         },
         {
           "date": "2025-06-13",
-          "category": "Other",
-          "amount": 186.0,
-          "orders": 15
+          "category": "Food",
+          "amount": 16.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-13",
+          "category": "Liquor",
+          "amount": 145.0,
+          "orders": 12
+        },
+        {
+          "date": "2025-06-13",
+          "category": "Wine",
+          "amount": 25.0,
+          "orders": 2
         },
         {
           "date": "2025-06-14",
-          "category": "Other",
-          "amount": 121.0,
-          "orders": 8
+          "category": "Food",
+          "amount": 46.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-14",
+          "category": "Liquor",
+          "amount": 75.0,
+          "orders": 6
         },
         {
           "date": "2025-06-15",
-          "category": "Other",
-          "amount": 288.0,
-          "orders": 17
+          "category": "Food",
+          "amount": 72.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-15",
+          "category": "Liquor",
+          "amount": 194.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-06-15",
+          "category": "NA Beverage",
+          "amount": 22.0,
+          "orders": 3
         },
         {
           "date": "2025-06-20",
@@ -1667,133 +1997,325 @@
         },
         {
           "date": "2025-06-21",
+          "category": "Liquor",
+          "amount": 82.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-21",
+          "category": "NA Beverage",
+          "amount": 5.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-21",
           "category": "Other",
-          "amount": 155.0,
+          "amount": 68.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Bottled Beer",
+          "amount": 12.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Food",
+          "amount": 16.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Liquor",
+          "amount": 166.0,
           "orders": 11
         },
         {
           "date": "2025-06-22",
-          "category": "Other",
-          "amount": 330.0,
-          "orders": 26
+          "category": "NA Beverage",
+          "amount": 8.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-22",
+          "category": "Wine",
+          "amount": 128.0,
+          "orders": 10
         },
         {
           "date": "2025-06-27",
-          "category": "Other",
-          "amount": 127.0,
-          "orders": 9
+          "category": "Food",
+          "amount": 30.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-06-27",
+          "category": "Liquor",
+          "amount": 97.0,
+          "orders": 7
         },
         {
           "date": "2025-06-29",
-          "category": "Other",
-          "amount": 146.0,
-          "orders": 11
+          "category": "Food",
+          "amount": 48.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-06-29",
+          "category": "Liquor",
+          "amount": 93.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-06-29",
+          "category": "NA Beverage",
+          "amount": 5.0,
+          "orders": 1
         },
         {
           "date": "2025-07-04",
-          "category": "Other",
+          "category": "Food",
           "amount": 128.0,
           "orders": 10
         },
         {
           "date": "2025-07-10",
-          "category": "Other",
+          "category": "Liquor",
           "amount": 23.0,
           "orders": 2
         },
         {
           "date": "2025-07-11",
-          "category": "Other",
-          "amount": 145.0,
-          "orders": 12
+          "category": "Food",
+          "amount": 126.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-07-11",
+          "category": "NA Beverage",
+          "amount": 6.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-11",
+          "category": "Wine",
+          "amount": 13.0,
+          "orders": 1
         },
         {
           "date": "2025-07-12",
-          "category": "Other",
-          "amount": 195.0,
-          "orders": 17
+          "category": "Bottled Beer",
+          "amount": 14.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Food",
+          "amount": 42.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Liquor",
+          "amount": 104.0,
+          "orders": 8
+        },
+        {
+          "date": "2025-07-12",
+          "category": "NA Beverage",
+          "amount": 5.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-12",
+          "category": "Wine",
+          "amount": 30.0,
+          "orders": 3
         },
         {
           "date": "2025-07-13",
-          "category": "Other",
-          "amount": 120.0,
+          "category": "Food",
+          "amount": 10.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-13",
+          "category": "Liquor",
+          "amount": 78.0,
+          "orders": 5
+        },
+        {
+          "date": "2025-07-13",
+          "category": "Wine",
+          "amount": 32.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-07-19",
+          "category": "Bottled Beer",
+          "amount": 52.0,
           "orders": 8
         },
         {
           "date": "2025-07-19",
-          "category": "Other",
-          "amount": 503.0,
-          "orders": 51
+          "category": "Food",
+          "amount": 146.0,
+          "orders": 10
         },
         {
-          "date": "2025-07-20",
-          "category": "Other",
-          "amount": 23.0,
+          "date": "2025-07-19",
+          "category": "Liquor",
+          "amount": 223.0,
+          "orders": 22
+        },
+        {
+          "date": "2025-07-19",
+          "category": "NA Beverage",
+          "amount": 10.0,
           "orders": 2
         },
         {
+          "date": "2025-07-19",
+          "category": "Wine",
+          "amount": 72.0,
+          "orders": 9
+        },
+        {
+          "date": "2025-07-20",
+          "category": "Bottled Beer",
+          "amount": 8.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-07-20",
+          "category": "Wine",
+          "amount": 15.0,
+          "orders": 1
+        },
+        {
           "date": "2025-08-01",
-          "category": "Other",
+          "category": "Food",
           "amount": 226.0,
           "orders": 17
         },
         {
           "date": "2025-08-02",
-          "category": "Other",
+          "category": "Food",
           "amount": 220.0,
           "orders": 16
         },
         {
           "date": "2025-08-29",
-          "category": "Other",
-          "amount": 87.0,
-          "orders": 6
+          "category": "Food",
+          "amount": 32.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-29",
+          "category": "Liquor",
+          "amount": 55.0,
+          "orders": 4
         },
         {
           "date": "2025-08-30",
-          "category": "Other",
-          "amount": 521.0,
-          "orders": 45
+          "category": "Bottled Beer",
+          "amount": 56.0,
+          "orders": 7
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Food",
+          "amount": 163.0,
+          "orders": 14
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Liquor",
+          "amount": 192.0,
+          "orders": 13
+        },
+        {
+          "date": "2025-08-30",
+          "category": "NA Beverage",
+          "amount": 28.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-08-30",
+          "category": "Wine",
+          "amount": 82.0,
+          "orders": 9
         },
         {
           "date": "2025-08-31",
-          "category": "Other",
-          "amount": 42.0,
-          "orders": 4
+          "category": "Liquor",
+          "amount": 34.0,
+          "orders": 3
+        },
+        {
+          "date": "2025-08-31",
+          "category": "Wine",
+          "amount": 8.0,
+          "orders": 1
         },
         {
           "date": "2025-09-13",
-          "category": "Other",
-          "amount": 40.0,
-          "orders": 4
+          "category": "Liquor",
+          "amount": 30.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-13",
+          "category": "NA Beverage",
+          "amount": 10.0,
+          "orders": 2
         },
         {
           "date": "2025-09-14",
-          "category": "Other",
+          "category": "Liquor",
           "amount": 82.0,
           "orders": 6
         },
         {
           "date": "2025-09-19",
-          "category": "Other",
-          "amount": 28.0,
-          "orders": 3
+          "category": "Food",
+          "amount": 10.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Liquor",
+          "amount": 10.0,
+          "orders": 1
+        },
+        {
+          "date": "2025-09-19",
+          "category": "Wine",
+          "amount": 8.0,
+          "orders": 1
         },
         {
           "date": "2025-09-25",
-          "category": "Other",
-          "amount": 28.0,
-          "orders": 3
+          "category": "Liquor",
+          "amount": 20.0,
+          "orders": 2
+        },
+        {
+          "date": "2025-09-25",
+          "category": "Wine",
+          "amount": 8.0,
+          "orders": 1
         },
         {
           "date": "2025-10-02",
-          "category": "Other",
+          "category": "Food",
           "amount": 59.0,
           "orders": 4
         },
         {
           "date": "2025-10-05",
-          "category": "Other",
+          "category": "Food",
           "amount": 16.5,
           "orders": 2
         }
@@ -1815,10 +2337,17 @@
         },
         {
           "date": "2025-04-05",
+          "mode": "Dine In",
+          "amount": 156.4,
+          "orders": 5,
+          "guests": 9
+        },
+        {
+          "date": "2025-04-05",
           "mode": "Unspecified",
-          "amount": 187.4,
-          "orders": 6,
-          "guests": 11
+          "amount": 31.0,
+          "orders": 1,
+          "guests": 2
         },
         {
           "date": "2025-04-17",
@@ -41234,6 +41763,12 @@
       },
       {
         "date": "2026-04-28",
+        "hour": 0,
+        "hours": 0.17,
+        "cost": 3.59
+      },
+      {
+        "date": "2026-04-28",
         "hour": 9,
         "hours": 0.04,
         "cost": 0.75
@@ -50825,8 +51360,8 @@
       {
         "hour": 0,
         "dow": "TUE",
-        "hours": 7.96,
-        "cost": 158.9
+        "hours": 8.13,
+        "cost": 162.49
       },
       {
         "hour": 0,
