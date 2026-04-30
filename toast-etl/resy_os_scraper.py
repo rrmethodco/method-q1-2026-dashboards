@@ -398,6 +398,79 @@ def transform_to_guest_block(
     }, stats)
 
 
+def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
+    """Re-issue each captured survey/ratings URL with a bumped
+    pagination limit so we receive the venue's *full* history in one
+    response, not just the SPA's first page.
+
+    Resy OS's analytics SPA paginates client-side (~20 rows per fetch)
+    so the original `on_response` capture only sees the latest page.
+    For free-text comments to be useful as a period-filtered review
+    feed, we need every survey row, not just the most recent ones.
+    Playwright's `page.request` shares the storage-state cookies, so
+    these fetches reuse the same auth without a separate session.
+
+    Strategy:
+      • dedup by base URL (scheme+host+path)
+      • bump common limit params (`limit`, `per_page`, `pageSize`,
+        `take`, `count`) to a large value
+      • strip offset/cursor params (`offset`, `page`, `skip`, `start`)
+      • if no recognized limit param exists, add `limit=10000`
+      • bail gracefully on per-venue failure (HTTP error, JSON parse,
+        etc.) — the SPA-captured page-1 results stay in `captured`
+        so we still get *something* from the venue.
+
+    Returns expanded responses to be merged with `captured`. The
+    transformer dedups via natural key, so any overlap between the
+    SPA capture and the bumped fetch is harmless.
+    """
+    import urllib.parse as _u
+    LIMIT_KEYS = {"limit", "per_page", "pagesize", "take", "count"}
+    OFFSET_KEYS = {"offset", "page", "skip", "start"}
+    BIG_LIMIT = "10000"
+
+    expanded: list[dict] = []
+    seen_bases: set[str] = set()
+    for cap in captured:
+        url = cap.get("url") or ""
+        # Only expand the survey/ratings list endpoints, not unrelated
+        # candidate URLs (auth, config, profile, etc.).
+        u_lc = url.lower()
+        if not any(t in u_lc for t in ("survey", "rating", "feedback", "review")):
+            continue
+        parts = _u.urlparse(url)
+        base = f"{parts.scheme}://{parts.netloc}{parts.path}"
+        if base in seen_bases:
+            continue
+        seen_bases.add(base)
+        qs = _u.parse_qs(parts.query, keep_blank_values=True)
+        for k in list(qs.keys()):
+            if k.lower() in LIMIT_KEYS:
+                qs[k] = [BIG_LIMIT]
+            if k.lower() in OFFSET_KEYS:
+                qs.pop(k)
+        if not any(k.lower() in LIMIT_KEYS for k in qs):
+            qs["limit"] = [BIG_LIMIT]
+        new_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
+        try:
+            resp = page.request.get(new_url, timeout=45_000)
+        except Exception as e:
+            sys.stderr.write(f"  full-history bump request failed for {base}: {e}\n")
+            continue
+        if not resp.ok:
+            sys.stderr.write(
+                f"  full-history bump returned HTTP {resp.status} for {base}\n"
+            )
+            continue
+        try:
+            body = resp.json()
+        except Exception as e:
+            sys.stderr.write(f"  full-history bump JSON parse failed for {base}: {e}\n")
+            continue
+        expanded.append({"url": new_url, "status": resp.status, "json": body})
+    return expanded
+
+
 def scrape_venue(page, slug: str, discover: bool) -> list[dict]:
     """Navigate through the venue's insight pages, capture candidate
     JSON responses. Returns list of {url, status, json}.
@@ -465,7 +538,15 @@ def scrape_venue(page, slug: str, discover: bool) -> list[dict]:
                                          "hubspot", "imrworldwide"])})
         for p in seen_paths[:30]:
             print(f"    seen: {p}")
-    return captured
+        return captured
+    # Re-issue each captured survey URL with a bumped `limit` to fetch
+    # the venue's full history (not just the SPA's first page of ~20).
+    # Free-text comments are only useful for period filtering when we
+    # have all rows, not just the most recent. See expand_via_limit_bump.
+    expanded = expand_via_limit_bump(page, captured)
+    if expanded:
+        print(f"    full-history fetch: {len(expanded)} response(s) bumped to limit=10000")
+    return captured + expanded
 
 
 def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
