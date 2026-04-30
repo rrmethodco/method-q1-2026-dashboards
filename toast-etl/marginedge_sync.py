@@ -223,12 +223,28 @@ COGS_TYPES = {
 }
 
 
-def cogs_bucket(category_type: str | None) -> str:
-    """Map a MarginEdge categoryType → our cogs bucket name.
-    LABOR/OTHER/null all return None → excluded from COGS rollups."""
-    if not category_type:
-        return None
-    return COGS_TYPES.get(category_type.upper())
+def cogs_bucket(category_type: str | None, category_name: str | None = None) -> str | None:
+    """Map a MarginEdge category → our cogs bucket name.
+
+    Primary mapping is by categoryType (FOOD/BEER/WINE/LIQUOR/NA_BEVERAGES).
+    LABOR/OTHER/null all return None → excluded from COGS rollups.
+
+    Fallback: if categoryType is null/unmapped but the category name is
+    "Sake" (or contains "sake"), roll into wine. MarginEdge typically
+    leaves categoryType null on Sake even though every Method outlet
+    that pours it (Hiroki Det/Phl, Le Supreme, Mulherins, Lowland) has a
+    dedicated "Sake" category. Without this name override, sake spend
+    would silently land in the uncategorized bucket.
+    """
+    if category_type:
+        bucket = COGS_TYPES.get(category_type.upper())
+        if bucket:
+            return bucket
+    if category_name:
+        n = category_name.strip().lower()
+        if n == "sake" or "sake" in n:
+            return "wine"
+    return None
 
 
 def transform_order(o: dict, line_items: list | None,
@@ -251,7 +267,7 @@ def transform_order(o: dict, line_items: list | None,
             "category":      cat_name,
             "category_id":   cat_id,
             "category_type": cat_type,           # FOOD / BEER / WINE / LIQUOR / NA_BEVERAGES / OTHER / LABOR
-            "cogs_bucket":   cogs_bucket(cat_type),  # food/beer/wine/liquor/na_beverages or None
+            "cogs_bucket":   cogs_bucket(cat_type, cat_name),  # food/liquor/beer/wine/na_beverages or None
             "quantity":      li.get("quantity"),
             "unit_price":    li.get("unitPrice"),
             "extended":      li.get("linePrice"),
@@ -476,8 +492,19 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
                 "invoices": merged_invoices,
                 "vendors": [{"id": vid, "name": vendor_lookup[vid]}
                             for vid in vendor_lookup if vid],
-                "categories": [{"id": cid, "name": cat_lookup[cid]}
-                               for cid in cat_lookup if cid],
+                # categoryType + cogs_bucket persisted alongside name so
+                # the dashboard can map raw category → hospitality bucket
+                # (Food / Liquor / Beer / Wine·Sake / NA Bev) even on
+                # invoices fetched without line items.
+                "categories": [
+                    {
+                        "id":            cid,
+                        "name":          cat_lookup[cid],
+                        "category_type": cat_type_lookup.get(cid),
+                        "cogs_bucket":   cogs_bucket(cat_type_lookup.get(cid), cat_lookup[cid]),
+                    }
+                    for cid in cat_lookup if cid
+                ],
                 **rollups,
             }
             write_outlet(data_dir, oid, payload)
