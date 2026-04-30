@@ -1268,6 +1268,39 @@ def _recompute_hour_dow(hour_daily: list) -> list:
     return out
 
 
+def _recompute_orders_hour_dow(hour_daily: list) -> list:
+    """Aggregate order-side hour_daily ({date, hour, amount, orders, guests})
+    into the (hour, dow) heatmap cells the dashboard reads. Mirrors
+    _recompute_hour_dow but for the orders schema (amount/orders/guests
+    instead of labor's hours/cost)."""
+    from collections import defaultdict
+    bucket = defaultdict(lambda: {"amount": 0.0, "orders": 0, "guests": 0})
+    for r in hour_daily or []:
+        date_s = r.get("date") or ""
+        try:
+            d = datetime.strptime(date_s, "%Y-%m-%d")
+        except (ValueError, TypeError):
+            continue
+        # Capitalize first letter only ("Mon", "Tue", ...) to match the
+        # transform_orders output format.
+        dow = d.strftime("%a")
+        h = r.get("hour")
+        if h is None:
+            continue
+        b = bucket[(int(h), dow)]
+        b["amount"] += float(r.get("amount") or 0)
+        b["orders"] += int(r.get("orders") or 0)
+        b["guests"] += int(r.get("guests") or 0)
+    out = []
+    for (h, dow), b in bucket.items():
+        out.append({"hour": h, "dow": dow,
+                    "amount": round(b["amount"], 2),
+                    "orders": b["orders"],
+                    "guests": b["guests"]})
+    out.sort(key=lambda r: (r["hour"], r["dow"]))
+    return out
+
+
 def _recompute_by_job(by_job_daily: list) -> list:
     from collections import defaultdict
     bucket = defaultdict(lambda: {"hours": 0.0, "regular_hours": 0.0,
@@ -1345,6 +1378,26 @@ def merge_payloads(existing: dict | None, fresh: dict, pull_start_iso: str) -> d
             new_rc["monthly"] = _merge_by_month(
                 existing_rc.get("monthly"), fresh_rc.get("monthly"), cutoff)
             new_rc["totals"] = _recompute_rc_totals(new_rc["daily"])
+            # Date-keyed breakdown rollups (multiple rows per day, e.g. one
+            # per category / service mode / hour). _merge_by_date filters
+            # existing to date < cutoff and appends ALL fresh rows, which
+            # is exactly what we want here. Without this, the salesCategory
+            # GUID-resolution fix (PR #33) would never reach the dashboard
+            # because fresh categories_daily was being silently dropped in
+            # favor of the stale "Other"-only rows from the existing
+            # payload.
+            for breakdown_key in ("categories_daily", "service_modes_daily",
+                                  "hour_daily"):
+                if breakdown_key in fresh_rc or breakdown_key in existing_rc:
+                    new_rc[breakdown_key] = _merge_by_date(
+                        existing_rc.get(breakdown_key),
+                        fresh_rc.get(breakdown_key),
+                        cutoff,
+                    )
+            # Recompute the non-date-keyed hour_dow rollup from the merged
+            # hour_daily so it reflects the full historical window.
+            if new_rc.get("hour_daily"):
+                new_rc["hour_dow"] = _recompute_orders_hour_dow(new_rc["hour_daily"])
             for k in ("outlet", "revenue_summary", "rev_centers_breakdown"):
                 if k in fresh_rc:
                     new_rc[k] = fresh_rc[k]
