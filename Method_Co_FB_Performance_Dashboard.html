@@ -2269,7 +2269,11 @@ function renderSnapshotSection() {
           'net sales ÷ guests')}
       </div>
 
-      <!-- KPI strip — cost structure (the financial trio + NPS) -->
+      <!-- KPI strip — cost structure + comps/discount.
+           Comps + Disc. lives here (4th slot) so the row shows the full
+           cost-control story: COGS, Labor, Prime Cost, then revenue
+           leakage from comps/discounts. Order per operator request:
+           NPS moved down to row 3 alongside the other guest metrics. -->
       <div class="snap-row">
         ${snapshotKpiCard('COGS %', cogsPct != null ? cogsPct.toFixed(1) + '%' : '—',
           snapshotDeltaSpan(cogsPct, cogsPctPrior, 'prior wk', true),
@@ -2280,21 +2284,23 @@ function renderSnapshotSection() {
         ${snapshotKpiCard('Prime Cost %', primePct != null ? primePct.toFixed(1) + '%' : '—',
           snapshotDeltaSpan(primePct, primePctPrior, 'prior wk', true),
           primeCost != null ? `${fmtMoney(primeCost)} (Labor + COGS) · target ≤ 60-65%` : 'needs both Labor + COGS')}
+        ${snapshotKpiCard('Comps + Disc.', discPct != null ? discPct.toFixed(1) + '%' : '—',
+          snapshotDeltaSpan(discPct, discPctPrior, 'prior wk', true),
+          od ? `${fmtMoney(od.discount)} off ${fmtMoney(od.net_sales_od)}` : 'no order details')}
+      </div>
+
+      <!-- KPI strip — guest experience + ticket flow. Dwell Time leads
+           (operations metric kicking off the row), NPS sits adjacent
+           to its supporting Promoters/Detractors counts. -->
+      <div class="snap-row">
+        ${snapshotKpiCard('Dwell Time', dwellMin != null ? dwellMin.toFixed(0) + ' min' : '—',
+          snapshotDeltaSpan(dwellMin, dwellMinPrior, 'prior wk', true),
+          od ? `avg ticket time on ${fmtNum(od.orders)} orders` : null)}
         ${snapshotKpiCard('NPS', surveys && surveys.nps != null ? (surveys.nps > 0 ? '+' : '') + surveys.nps : '—',
           surveys && surveysPrior && surveysPrior.nps != null ? snapshotDeltaSpan(surveys.nps, surveysPrior.nps, 'prior wk') : null,
           surveys && surveys.fallback
             ? `trailing ${surveys.fallback.days === 'lifetime' ? 'lifetime' : surveys.fallback.days+'d'} · ${surveys.n} surveys`
             : surveys ? `${surveys.n} surveys this week` : 'awaiting Resy sync')}
-      </div>
-
-      <!-- KPI strip — operations -->
-      <div class="snap-row">
-        ${snapshotKpiCard('Comps + Disc.', discPct != null ? discPct.toFixed(1) + '%' : '—',
-          snapshotDeltaSpan(discPct, discPctPrior, 'prior wk', true),
-          od ? `${fmtMoney(od.discount)} off ${fmtMoney(od.net_sales_od)}` : 'no order details')}
-        ${snapshotKpiCard('Dwell Time', dwellMin != null ? dwellMin.toFixed(0) + ' min' : '—',
-          snapshotDeltaSpan(dwellMin, dwellMinPrior, 'prior wk', true),
-          od ? `avg ticket time on ${fmtNum(od.orders)} orders` : null)}
         ${snapshotKpiCard('Promoters', surveys ? fmtNum(surveys.promoters || 0) : '—',
           null,
           surveys && surveys.n ? `${((surveys.promoters || 0) / surveys.n * 100).toFixed(0)}% of ${fmtNum(surveys.n)} surveys` : 'no surveys')}
