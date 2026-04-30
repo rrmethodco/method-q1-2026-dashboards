@@ -3864,10 +3864,8 @@ function renderTrend(cur, py) {
     // T2W   — flat per-day average of the 14 days preceding the current period.
     // all   — show all three at once. Each comparison gets its own distinct
     //         color (CMP_COLOR) so the legend reads cleanly.
+    // (ssDailyAll / maxDateAll / curB already defined above for buildTrendRows.)
     const cmpModes = cmpModesFor(STATE.trendCompare);
-    const ssDailyAll = combinedDailySales();
-    const maxDateAll = ssDailyAll.length ? ssDailyAll[ssDailyAll.length-1].date : null;
-    const curB = maxDateAll ? periodBounds(maxDateAll) : null;
     if (cmpModes.length && curB) {
       const iso = isoLocal;
       const startDt = toLocalNoon(curB.start);
