@@ -253,17 +253,32 @@ def cogs_bucket(category_type: str | None, category_name: str | None = None) -> 
 
 
 def transform_order(o: dict, line_items: list | None,
-                    category_lookup: dict, category_type_lookup: dict) -> dict:
+                    category_lookup: dict, category_type_lookup: dict,
+                    product_category_lookup: dict | None = None) -> dict:
     """Project an ME order into the dashboard's invoice schema.
 
     `category_type_lookup` maps categoryId → categoryType (FOOD, BEER,
     WINE, LIQUOR, NA_BEVERAGES, LABOR, OTHER). We attach categoryType
     on each line item so the dashboard can group spend by hospitality
     cost-of-goods buckets without a second lookup at render time.
+
+    `product_category_lookup` maps companyConceptProductId → categoryId.
+    MarginEdge's /orders/{id} endpoint returns line items WITHOUT
+    categoryId populated (verified empirically 2026-04-30 — all 977 of
+    kampers' line items came back with categoryId=null). Categories are
+    actually attached to the product in the catalog, so we fall back to
+    looking up the line item's product_id against the products catalog.
     """
+    pcl = product_category_lookup or {}
     out_li = []
     for li in (line_items or []):
         cat_id = li.get("categoryId")
+        if not cat_id:
+            # Fallback: line items often have no categoryId; resolve
+            # via product → category mapping from the catalog.
+            pid = li.get("companyConceptProductId")
+            if pid:
+                cat_id = pcl.get(pid)
         cat_name = category_lookup.get(cat_id)
         cat_type = category_type_lookup.get(cat_id)
         out_li.append({
@@ -461,13 +476,28 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
         try:
             categories = client.get_categories(unit_id)
             vendors = client.get_vendors(unit_id)
+            # Products catalog provides product_id → categoryId mapping,
+            # which is required because /orders/{id} line items return
+            # categoryId=null. Without products, all line items bucket
+            # to None.
+            products = client.get_products(unit_id) if with_line_items else []
             orders = client.get_orders(unit_id, start_iso, end_iso)
             print(f"  fetched: {len(vendors)} vendors, {len(categories)} categories, "
-                  f"{len(orders)} orders")
+                  f"{len(products)} products, {len(orders)} orders")
 
             cat_lookup = {c.get("categoryId"): c.get("categoryName") for c in categories}
             cat_type_lookup = {c.get("categoryId"): c.get("categoryType") for c in categories}
             vendor_lookup = {v.get("vendorId"): v.get("vendorName") for v in vendors}
+            # Try a few likely keys for the product's primary identifier
+            # and category. Schema-flexible because the API hasn't been
+            # documented end-to-end.
+            product_cat_lookup = {}
+            for p in products:
+                pid = p.get("companyConceptProductId") or p.get("productId") or p.get("id")
+                cid = p.get("categoryId")
+                if pid and cid:
+                    product_cat_lookup[pid] = cid
+            print(f"  product→category mappings built: {len(product_cat_lookup)} of {len(products)}")
 
             # Line item fetch — adds ~1 API call per order (~10 min for
             # all outlets) but unlocks per-category COGS rollup
@@ -475,18 +505,27 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
             invoices = []
             if with_line_items:
                 print(f"  fetching line items for {len(orders)} orders (~{len(orders) * RATE_LIMIT_SLEEP:.0f}s)...")
+                # Track a few stats so we can see if the product-fallback
+                # is actually rescuing line items or if data is just gappy.
+                li_total = li_with_li_cat = li_via_product = li_unresolved = 0
                 for i, o in enumerate(orders):
                     detail = client.get_order_detail(o.get("orderId"), unit_id)
-                    if i == 0:
-                        # SCHEMA DEBUG: dump the first order's raw response
-                        # so we can see what fields ME actually populates
-                        # (kampers' 977 line items came back with all
-                        # categoryId/category_type/cogs_bucket = null).
-                        print(f"  [SCHEMA DEBUG] first order raw response:")
-                        print(f"  {json.dumps(detail, indent=2, default=str)[:3000]}")
-                    invoices.append(transform_order(o, detail.get("lineItems") or [], cat_lookup, cat_type_lookup))
-                    if (i + 1) % 50 == 0:
+                    raw_lis = detail.get("lineItems") or []
+                    for li in raw_lis:
+                        li_total += 1
+                        if li.get("categoryId"):
+                            li_with_li_cat += 1
+                        elif product_cat_lookup.get(li.get("companyConceptProductId")):
+                            li_via_product += 1
+                        else:
+                            li_unresolved += 1
+                    invoices.append(transform_order(o, raw_lis, cat_lookup, cat_type_lookup,
+                                                    product_category_lookup=product_cat_lookup))
+                    if (i + 1) % 100 == 0:
                         print(f"    ...{i+1}/{len(orders)}")
+                print(f"  line items: total={li_total}, "
+                      f"direct-cat={li_with_li_cat}, via-product={li_via_product}, "
+                      f"unresolved={li_unresolved}")
             else:
                 invoices = [transform_order(o, None, cat_lookup, cat_type_lookup) for o in orders]
 
