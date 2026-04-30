@@ -1587,14 +1587,22 @@ function renderLaborSection() {
     }
   }
   const hourCurveHasData = hourCurveCost.some(v => v > 0) || hourCurveHours.some(v => v > 0);
-  // Day-of-week roll-up from hour_dow (all-time average of position-weighted shifts)
+  // Day-of-week roll-up from hour_dow (all-time average of position-weighted shifts).
+  // Toast labor exports DOW as upper-case 3-letter codes ("MON","TUE",...) but
+  // we display "Mon","Tue",...; normalize on read so the lookup actually hits.
   const dowOrder = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const dowKey = (s) => {
+    if (!s) return null;
+    const k = String(s).slice(0, 3).toLowerCase();
+    return k.charAt(0).toUpperCase() + k.slice(1);
+  };
   const dowHours = Object.fromEntries(dowOrder.map(d => [d, 0]));
   const dowCost  = Object.fromEntries(dowOrder.map(d => [d, 0]));
   for (const r of hourDow) {
-    if (dowHours[r.dow] != null) {
-      dowHours[r.dow] += r.hours || 0;
-      dowCost[r.dow]  += r.cost  || 0;
+    const k = dowKey(r.dow);
+    if (k && dowHours[k] != null) {
+      dowHours[k] += r.hours || 0;
+      dowCost[k]  += r.cost  || 0;
     }
   }
   const dowHasData = dowOrder.some(d => dowHours[d] > 0 || dowCost[d] > 0);
@@ -1630,6 +1638,13 @@ function renderLaborSection() {
   const otCostPctOfLab = labSum.total_cost > 0 ? labSum.overtime_cost / labSum.total_cost * 100 : null;
   const fohCostPct     = ssTot.net_sales > 0 && fohCost > 0 ? fohCost / ssTot.net_sales * 100 : null;
   const bohCostPct     = ssTot.net_sales > 0 && bohCost > 0 ? bohCost / ssTot.net_sales * 100 : null;
+  // Extra fillers so the Efficiency strip lands cleanly on the 6-col grid.
+  const hrsPerCover    = ssTot.guests > 0 && totalHrs > 0 ? totalHrs / ssTot.guests : null;
+  const fohRate        = fohHrs > 0 && fohCost > 0 ? fohCost / fohHrs : null;
+  const bohRate        = bohHrs > 0 && bohCost > 0 ? bohCost / bohHrs : null;
+  // Days in period — for "avg hrs / day" gut-check.
+  const daysInPeriod   = labRows.length;
+  const hrsPerDay      = daysInPeriod > 0 ? totalHrs / daysInPeriod : null;
 
   const kpi = (label, val, sub, yoy) => `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub?`<div class="yoy neutral">${sub}</div>`:''}${yoy!=null?`<div class="yoy ${yoy>=0?'pos':'neg'}">${(yoy>=0?'+':'')+yoy.toFixed(1)}% YoY</div>`:''}</div>`;
 
@@ -1673,10 +1688,14 @@ function renderLaborSection() {
         ${kpi('SPMH · BOH', splhBOH != null ? '$'+splhBOH.toFixed(0) : '—', `Net Sales ÷ ${fmtHrs(bohHrs)} BOH hr`, null)}
         ${kpi('Covers / FOH Hr', coversPerFOH != null ? coversPerFOH.toFixed(1) : '—', 'FOH productivity', null)}
         ${kpi('Covers / BOH Hr', coversPerBOH != null ? coversPerBOH.toFixed(1) : '—', 'BOH productivity', null)}
+        ${kpi('Hours / Cover', hrsPerCover != null ? hrsPerCover.toFixed(2) : '—', 'Total labor hrs ÷ guests', null)}
+        ${kpi('Hours / Day', hrsPerDay != null ? fmtHrs(hrsPerDay) : '—', `${daysInPeriod} day${daysInPeriod===1?'':'s'} in period`, null)}
         ${kpi('Labor $ / Cover', labPerCover != null ? '$'+labPerCover.toFixed(2) : '—', `${labPerCoverFOH != null ? '$'+labPerCoverFOH.toFixed(2)+' FOH' : '— FOH'} · ${labPerCoverBOH != null ? '$'+labPerCoverBOH.toFixed(2)+' BOH' : '— BOH'}`, null)}
         ${kpi('Labor $ / Check', labPerCheck != null ? '$'+labPerCheck.toFixed(2) : '—', 'Labor cost per order', null)}
-        ${kpi('FOH Cost % of Sales', fmtPct(fohCostPct), `BOH ${fmtPct(bohCostPct)}`, null)}
-        ${kpi('OT $ % of Labor $', fmtPct(otCostPctOfLab), `${fmtMoney(labSum.overtime_cost)} OT cost`, null)}
+        ${kpi('FOH Cost % of Sales', fmtPct(fohCostPct), `${fmtMoney(fohCost)} FOH cost`, null)}
+        ${kpi('BOH Cost % of Sales', fmtPct(bohCostPct), `${fmtMoney(bohCost)} BOH cost`, null)}
+        ${kpi('Avg Wage · FOH', fohRate != null ? '$'+fohRate.toFixed(2)+'/hr' : '—', 'Cost ÷ FOH hours', null)}
+        ${kpi('Avg Wage · BOH', bohRate != null ? '$'+bohRate.toFixed(2)+'/hr' : '—', 'Cost ÷ BOH hours', null)}
       </div>
     </section>
 
