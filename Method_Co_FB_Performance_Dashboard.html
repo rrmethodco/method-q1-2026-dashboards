@@ -435,7 +435,7 @@ const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
 // weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
 // filter to a single Mon..Sun 7-day window. When set, periodBounds returns
 // that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all', heatMetric: '$', trendMetric: 'revenue', trendType: 'area' };
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all', heatMetric: '$', trendMetric: 'revenue', trendType: 'area', trendLine: 'none' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -3055,10 +3055,15 @@ function renderRevenueSection() {
               <option value="W" ${STATE.gran==='W'?'selected':''}>Weekly</option>
               <option value="M" ${STATE.gran==='M'?'selected':''}>Monthly</option>
             </select>
-            <select id="trendTypeFilter" title="Chart type">
+<select id="trendTypeFilter" title="Chart type">
               <option value="line" ${STATE.trendType==='line'?'selected':''}>Line</option>
               <option value="area" ${STATE.trendType==='area'?'selected':''}>Area</option>
               <option value="bar"  ${STATE.trendType==='bar' ?'selected':''}>Bar</option>
+            </select>
+            <select id="trendLineFilter" title="Trend line overlay">
+              <option value="none"   ${STATE.trendLine==='none'  ?'selected':''}>No trend line</option>
+              <option value="linear" ${STATE.trendLine==='linear'?'selected':''}>Linear trend</option>
+              <option value="sma7"   ${STATE.trendLine==='sma7'  ?'selected':''}>7-period MA</option>
             </select>
             <button type="button" id="trendDownloadBtn" title="Download CSV"
               style="background:transparent;border:1px solid var(--grey);padding:6px 8px;cursor:pointer;border-radius:2px;font-size:12px;line-height:1;">↓</button>
@@ -3996,6 +4001,62 @@ function renderTrend(cur, py) {
     // pad a phantom extra tick past the last data point (e.g. showing "Apr 6"
     // on a WE 4/5 week that ends 4/5). Use the current-year dataset only —
     // prior-year points are shifted to the same window.
+    // ===== Optional trend-line overlay =====
+    // STATE.trendLine controls a 4th dataset on top of primary + comparisons:
+    //   'linear' — least-squares best-fit line through all rolled-up points,
+    //              evaluated at each x. Useful for "is the period trending
+    //              up/down overall" reading at any granularity.
+    //   'sma7'   — 7-period simple moving average. Smooths daily noise so
+    //              the day-of-week swing doesn't drown out the underlying
+    //              trajectory. Best at gran='D'; degrades gracefully at W/M.
+    //   'none'   — skip.
+    const trendLineMode = STATE.trendLine || 'none';
+    if (trendLineMode !== 'none' && curRoll.length >= 2) {
+      const xs = curRoll.map((_, i) => i);
+      const ys = yVals.map(v => (v == null ? 0 : v));
+      const n = xs.length;
+      let trendY = null;
+      if (trendLineMode === 'linear') {
+        // Standard least-squares: slope = (nΣxy − ΣxΣy) / (nΣx² − (Σx)²)
+        const sumX = xs.reduce((a, b) => a + b, 0);
+        const sumY = ys.reduce((a, b) => a + b, 0);
+        const sumXY = xs.reduce((a, x, i) => a + x * ys[i], 0);
+        const sumX2 = xs.reduce((a, x) => a + x * x, 0);
+        const denom = n * sumX2 - sumX * sumX;
+        const m = denom === 0 ? 0 : (n * sumXY - sumX * sumY) / denom;
+        const b = (sumY - m * sumX) / n;
+        trendY = xs.map(x => m * x + b);
+      } else if (trendLineMode === 'sma7') {
+        // Trailing 7-period mean. For the first 6 points we have <7 buckets
+        // available — use whatever is in the trailing window so the line
+        // starts at point 0 instead of leaving a 6-bucket gap.
+        const w = 7;
+        trendY = xs.map(i => {
+          const start = Math.max(0, i - (w - 1));
+          const slice = ys.slice(start, i + 1);
+          return slice.reduce((a, v) => a + v, 0) / slice.length;
+        });
+      }
+      if (trendY) {
+        datasets.push({
+          type: 'line',
+          label: trendLineMode === 'linear' ? 'Linear trend' : '7-period MA',
+          data: curRoll.map((r, i) => ({ x: toLocalNoon(r.date), y: trendY[i] })),
+          // Use Royal (#405766) so the trend line stands apart from the
+          // turquoise primary + black-ish STLY comparison.
+          borderColor: C.royal,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          borderDash: trendLineMode === 'linear' ? [2, 2] : [],
+          fill: false,
+          tension: trendLineMode === 'sma7' ? 0.3 : 0,
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          order: 0, // draw on top of primary + overlays
+        });
+      }
+    }
+
     const xMin = curRoll.length ? toLocalNoon(curRoll[0].date) : null;
     const xMax = curRoll.length ? toLocalNoon(curRoll[curRoll.length - 1].date) : null;
     charts.trend = new Chart(ctx, {
@@ -4874,6 +4935,9 @@ document.addEventListener('change', e => {
     rerenderSection();
   } else if (e.target.id === 'trendTypeFilter') {
     STATE.trendType = e.target.value || 'area';
+    rerenderSection();
+  } else if (e.target.id === 'trendLineFilter') {
+    STATE.trendLine = e.target.value || 'none';
     rerenderSection();
   } else if (e.target.id === 'trendGranInline') {
     // Mirror to STATE.gran so the global granFilter stays in sync.
