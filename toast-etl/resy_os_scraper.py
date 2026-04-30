@@ -611,6 +611,44 @@ def scrape_venue(page, slug: str, discover: bool) -> list[dict]:
             page.wait_for_timeout(7000)
         except Exception:
             pass
+        # Look for an Export button on the Surveys page and click it —
+        # captures whatever endpoint the export fires (likely a CSV
+        # download or a /export endpoint). We don't actually need the
+        # download blob since on_response will pick up the URL; we
+        # just need the SPA to emit the request so we can re-use it.
+        if "Surveys" in sub or "Reviews" in sub or "Comments" in sub:
+            for sel in [
+                'button:has-text("Export")',
+                'button:has-text("Download")',
+                'a:has-text("Export")',
+                '[aria-label*="export" i]',
+                '[data-testid*="export" i]',
+            ]:
+                try:
+                    btn = page.locator(sel).first
+                    if btn and btn.count() > 0 and btn.is_visible(timeout=1000):
+                        print(f"  [{slug}] found export-like control: {sel}")
+                        # Race a download event with a navigation guard —
+                        # if the click triggers a CSV download, we save
+                        # it; otherwise the on_response listener catches
+                        # the XHR.
+                        try:
+                            with page.expect_download(timeout=20_000) as dl_info:
+                                btn.click(timeout=5000)
+                            dl = dl_info.value
+                            csv_path = f"/tmp/resy_export_{slug.replace('/', '_')}.csv"
+                            dl.save_as(csv_path)
+                            print(f"  [{slug}] export saved to {csv_path}")
+                        except PWTimeout:
+                            # No download fired — the click probably
+                            # triggered an XHR which on_response caught.
+                            print(f"  [{slug}] export click fired no download (XHR path)")
+                        except Exception as e:
+                            print(f"  [{slug}] export click failed: {e}")
+                        page.wait_for_timeout(5000)  # let any XHR settle
+                        break
+                except Exception:
+                    continue
         if captured and not discover:
             break  # got something useful — be polite
 
@@ -627,13 +665,41 @@ def scrape_venue(page, slug: str, discover: bool) -> list[dict]:
         for p in seen_paths[:30]:
             print(f"    seen: {p}")
         return captured
+    # Diagnostic: log the actual URLs the SPA fired and the response
+    # shapes so we can identify pagination params Resy expects (which
+    # aren't `limit`/`offset` since those 500). Without this we're
+    # debugging blind.
+    for c in captured:
+        c_url = c.get("url", "")
+        if any(t in c_url.lower() for t in ("survey", "rating", "feedback", "review")):
+            body = c.get("json")
+            top_keys = list(body.keys())[:8] if isinstance(body, dict) else type(body).__name__
+            data_node = body.get("data") if isinstance(body, dict) else None
+            data_keys = list(data_node.keys())[:8] if isinstance(data_node, dict) else (
+                f"list[{len(data_node)}]" if isinstance(data_node, list) else None
+            )
+            row_count = None
+            if isinstance(data_node, dict):
+                for k in ("surveys", "rows", "items", "results"):
+                    v = data_node.get(k)
+                    if isinstance(v, list):
+                        row_count = f"{k}={len(v)}"
+                        break
+            elif isinstance(data_node, list):
+                row_count = f"data={len(data_node)}"
+            meta_node = body.get("meta") if isinstance(body, dict) else None
+            meta_keys = list(meta_node.keys())[:10] if isinstance(meta_node, dict) else None
+            print(f"  [diag] method={c.get('method')} url={c_url}")
+            print(f"  [diag]   top_keys={top_keys} data_keys={data_keys} rows={row_count}")
+            if meta_keys:
+                print(f"  [diag]   meta_keys={meta_keys} meta={meta_node}")
     # Re-issue each captured survey URL with a bumped `limit` to fetch
     # the venue's full history (not just the SPA's first page of ~20).
     # Free-text comments are only useful for period filtering when we
     # have all rows, not just the most recent. See expand_via_limit_bump.
     expanded = expand_via_limit_bump(page, captured)
     if expanded:
-        print(f"    full-history fetch: {len(expanded)} response(s) bumped to limit=10000")
+        print(f"    full-history fetch: captured {len(expanded)} additional response(s)")
     return captured + expanded
 
 
