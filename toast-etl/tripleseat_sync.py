@@ -183,6 +183,8 @@ NAME_TO_OUTLET_OVERRIDES: dict[str, str] = {
     "kampersbar": "kampers",
     "kampersrooftopbar": "kampers",
     "hirokisandetroit": "hiroki_det",
+    "hirokisanphiladelphia": "hiroki_phl",
+    "hirokiphiladelphia": "hiroki_phl",
     "hirokisan": "hiroki_phl",  # default Hiroki goes Philly unless explicitly Detroit
     "anthology": "anthology",
     "anthologyevents": "anthology",
