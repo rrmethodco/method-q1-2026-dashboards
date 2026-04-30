@@ -5299,6 +5299,22 @@ async function __loadOutletData() {
         o.events = payload.events;
         o.sources.tripleseat = true;
       }
+      // Forecast — generated nightly by forecast_engine.py
+      // (helixo-2 forecast.service.ts port). Powers the
+      // "vs Forecast" line on every KPI tri-comparison block.
+      // Schema: { as_of, source, daily: [{date, net_sales, guests, orders}] }
+      if (payload.forecast && Array.isArray(payload.forecast.daily) && payload.forecast.daily.length) {
+        o.forecast = payload.forecast;
+        o.sources.forecast = true;
+      }
+      // Budget — pulled nightly by budget_sync.py from helixo-2's
+      // daily_budget Supabase table. Powers "vs Budget" line on KPI cards.
+      // Schema mirrors forecast.daily; guests/orders are null because
+      // helixo-2 only tracks per-day revenue budget, not covers/orders.
+      if (payload.budget && Array.isArray(payload.budget.daily) && payload.budget.daily.length) {
+        o.budget = payload.budget;
+        o.sources.budget = true;
+      }
     } catch (_) { /* keep inline fallback */ }
   }));
   // Recompute portfolio rollup so nav reflects what actually has data.
