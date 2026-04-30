@@ -488,19 +488,24 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
             cat_lookup = {c.get("categoryId"): c.get("categoryName") for c in categories}
             cat_type_lookup = {c.get("categoryId"): c.get("categoryType") for c in categories}
             vendor_lookup = {v.get("vendorId"): v.get("vendorName") for v in vendors}
-            # Try a few likely keys for the product's primary identifier
-            # and category. Schema-flexible because the API hasn't been
-            # documented end-to-end.
-            if products:
-                print(f"  [SCHEMA DEBUG] sample product keys: {list(products[0].keys())}")
-                print(f"  [SCHEMA DEBUG] sample product: {json.dumps(products[0], default=str)[:1000]}")
+            # Build product → category mapping. Verified schema 2026-04-30:
+            #   {companyConceptProductId, centralProductId, productName,
+            #    categories: [{categoryId, percentAllocation}], ...}
+            # `categories` is an ARRAY because MarginEdge supports splitting
+            # a product across multiple GL categories (e.g. an item that's
+            # 60% food / 40% bev). For bucketing we pick the highest-
+            # allocation category — when split, the dominant category
+            # determines which COGS bucket the spend lands in.
             product_cat_lookup = {}
             for p in products:
-                pid = (p.get("companyConceptProductId") or p.get("productId") or
-                       p.get("id") or p.get("conceptProductId"))
-                cid = (p.get("categoryId") or p.get("category", {}).get("id") if isinstance(p.get("category"), dict) else None) or \
-                      p.get("companyConceptCategoryId") or p.get("conceptCategoryId")
-                if pid and cid:
+                pid = p.get("companyConceptProductId") or p.get("centralProductId")
+                cats = p.get("categories") or []
+                if not pid or not cats:
+                    continue
+                # Pick highest-allocation category
+                best = max(cats, key=lambda c: c.get("percentAllocation") or 0)
+                cid = best.get("categoryId")
+                if cid:
                     product_cat_lookup[pid] = cid
             print(f"  product→category mappings built: {len(product_cat_lookup)} of {len(products)}")
 
