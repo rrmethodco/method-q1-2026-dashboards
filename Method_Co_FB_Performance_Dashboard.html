@@ -425,7 +425,7 @@ const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
 // weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
 // filter to a single Mon..Sun 7-day window. When set, periodBounds returns
 // that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top' };
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -829,6 +829,60 @@ function sumDaily(rows, fields=['net_sales','orders','guests']) {
   if (fields.includes('net_sales') && out.guests) out.ppa = out.net_sales/out.guests;
   return out;
 }
+// ---- Tri-comparison helpers (Forecast / STLY / Budget) ----
+// Method's KPI cards always show three deltas:
+//   1. vs Forecast (5-Out feed)   ← primary, color-coded
+//   2. vs STLY    (sales summary)
+//   3. vs Budget  (Sage Intacct feed)
+// Forecast + Budget data live on `outlet.forecast.daily` / `outlet.budget.daily`
+// in the same {date, net_sales, orders, guests} shape as combinedDailySales().
+// Until those feeds are wired, the helpers return nulls and the UI shows
+// "not wired" muted text in the secondary lines — STLY keeps working.
+function periodCompareSums(o, b) {
+  const out = { forecast: null, stly: null, budget: null };
+  if (b) {
+    const stlyB = priorYearBounds(b);
+    if (stlyB) {
+      const stlyRows = filter(combinedDailySales(), stlyB);
+      if (stlyRows.length) out.stly = sumDaily(stlyRows, ['net_sales','orders','guests']);
+    }
+    if (o && o.forecast && Array.isArray(o.forecast.daily) && o.forecast.daily.length) {
+      const fr = filter(o.forecast.daily, b);
+      if (fr.length) out.forecast = sumDaily(fr, ['net_sales','orders','guests']);
+    }
+    if (o && o.budget && Array.isArray(o.budget.daily) && o.budget.daily.length) {
+      const br = filter(o.budget.daily, b);
+      if (br.length) out.budget = sumDaily(br, ['net_sales','orders','guests']);
+    }
+  }
+  return out;
+}
+function pctDelta(cur, prior) {
+  if (cur == null || prior == null || prior === 0) return null;
+  return (cur - prior) / prior * 100;
+}
+function tripleKpiDelta(curVal, sums, key, opts) {
+  // opts: { invert: bool — when true, lower-is-better (e.g. labor%, dwell time) }
+  // Returns three <div class="yoy ..."> rows: vs Forecast / vs STLY / vs Budget.
+  const invert = !!(opts && opts.invert);
+  const line = (label, prior, missing) => {
+    const p = pctDelta(curVal, prior);
+    if (p == null) {
+      const txt = missing ? `${label} <span style="opacity:.55">— not wired</span>`
+                          : `<span style="opacity:.55">${label} —</span>`;
+      return `<div class="yoy neutral" style="font-size:11px;">${txt}</div>`;
+    }
+    const isGood = invert ? p < 0 : p >= 0;
+    const cls = isGood ? 'pos' : 'neg';
+    return `<div class="yoy ${cls}" style="font-size:11px;">${label} ${(p>=0?'+':'')}${p.toFixed(1)}%</div>`;
+  };
+  return [
+    line('vs Forecast', sums.forecast ? sums.forecast[key] : null, !sums.forecast),
+    line('vs STLY',     sums.stly     ? sums.stly[key]     : null, !sums.stly),
+    line('vs Budget',   sums.budget   ? sums.budget[key]   : null, !sums.budget),
+  ].join('');
+}
+
 function weekStart(d) { const dt = new Date(d + 'T12:00:00'); const toMon = (dt.getDay()+6)%7; dt.setDate(dt.getDate()-toMon); return dt.toISOString().slice(0,10); }
 function rollup(rows, gran, fields) {
   if (gran === 'D') return rows;
@@ -2019,12 +2073,61 @@ function snapshotDeltaSpan(cur, prior, fmt, invertColor) {
   return `<span class="${cls}">${sign}${pct.toFixed(1)}% vs ${fmt}</span>`;
 }
 function snapshotKpiCard(label, value, delta, sub) {
+  // `delta` can be either a single span (legacy) OR an array of spans
+  // for the new tri-comparison block (vs Forecast / vs STLY / vs Budget).
+  // Each entry renders as its own snap-card-delta line.
+  let deltaHtml = '';
+  if (Array.isArray(delta)) {
+    deltaHtml = delta.filter(Boolean).map(d => `<div class="snap-card-delta">${d}</div>`).join('');
+  } else if (delta) {
+    deltaHtml = `<div class="snap-card-delta">${delta}</div>`;
+  }
   return `<div class="snap-card">
     <div class="snap-card-label">${label}</div>
     <div class="snap-card-value">${value}</div>
-    ${delta ? `<div class="snap-card-delta">${delta}</div>` : ''}
+    ${deltaHtml}
     ${sub ? `<div class="snap-card-delta snap-delta-flat">${sub}</div>` : ''}
   </div>`;
+}
+
+// Forecast (5-Out feed) and Budget (Sage Intacct feed) aggregators —
+// same shape as snapshotSumDaily. Until both feeds are wired into the
+// outlet payload (`outlet.forecast.daily` / `outlet.budget.daily` with
+// {date, net_sales, guests, orders} rows), these return null and the
+// tri-comparison block falls back to "Forecast not wired" muted text.
+function snapshotSumFromDailyFeed(rows, start, end) {
+  if (!Array.isArray(rows)) return null;
+  const slice = rows.filter(r => r.date >= start && r.date <= end);
+  if (!slice.length) return null;
+  return slice.reduce((a, r) => ({
+    net_sales: a.net_sales + (r.net_sales || 0),
+    guests:    a.guests    + (r.guests    || 0),
+    orders:    a.orders    + (r.orders    || 0),
+  }), { net_sales: 0, guests: 0, orders: 0 });
+}
+function snapshotSumForecast(o, start, end) {
+  return o && o.forecast ? snapshotSumFromDailyFeed(o.forecast.daily, start, end) : null;
+}
+function snapshotSumBudget(o, start, end) {
+  return o && o.budget ? snapshotSumFromDailyFeed(o.budget.daily, start, end) : null;
+}
+// Tri-comparison delta block builder for the snapshot. Returns an array
+// of three spans (Forecast / STLY / Budget) ready for snapshotKpiCard.
+// Each span uses the existing snap-delta-up/-down/-flat classes so the
+// turquoise/red color cues stay consistent. invertColor=true → "down
+// is good" (e.g., COGS%, Labor%, Dwell Time).
+function snapshotTriDeltaSpans(curVal, fcst, stly, bud, key, invertColor) {
+  const span = (label, prior, missing) => {
+    if (prior == null) {
+      return `<span class="snap-delta-flat" style="opacity:.55">${label} ${missing ? 'not wired' : '—'}</span>`;
+    }
+    return snapshotDeltaSpan(curVal, prior, label.replace(/^vs\s+/, ''), invertColor);
+  };
+  return [
+    span('vs Forecast', fcst ? fcst[key] : null, !fcst),
+    span('vs STLY',     stly ? stly[key] : null, !stly),
+    span('vs Budget',   bud  ? bud[key]  : null, !bud),
+  ];
 }
 function snapshotBuildActionItems(snap) {
   // Rule-based prescriptive engine. Each rule returns 0+ items; we cap the
@@ -2161,6 +2264,18 @@ function renderSnapshotSection() {
   const rev   = snapshotSumDaily(daily, wb.start, wb.end);
   const prior = snapshotSumDaily(daily, wb.pwStart, wb.pwEnd);
   const yoy   = snapshotSumDaily(daily, wb.yyStart, wb.yyEnd);
+  // Tri-comparison sources for the snapshot week. STLY = same week last
+  // year, already computed above as `yoy`. Forecast and Budget pull
+  // from outlet.forecast.daily / outlet.budget.daily — null until the
+  // 5-Out and Sage Intacct feeds land. Augment each with derived
+  // ratios (avgGuestSpend, etc.) so the per-card lookups stay clean.
+  const fcst = snapshotSumForecast(o, wb.start, wb.end);
+  const bud  = snapshotSumBudget(o, wb.start, wb.end);
+  [fcst, yoy, bud].forEach(s => {
+    if (!s) return;
+    s.avgGuestSpend = s.guests ? s.net_sales / s.guests : null;
+  });
+  rev.avgGuestSpend = rev.guests ? rev.net_sales / rev.guests : null;
   const labor = snapshotSumLabor(o, wb.start, wb.end);
   const laborPrior = snapshotSumLabor(o, wb.pwStart, wb.pwEnd);
   // Survey data: try the strict snapshot week first; if empty, fall back
@@ -2253,27 +2368,33 @@ function renderSnapshotSection() {
     </div>
 
     <div class="snap-grid">
-      <!-- KPI strip — revenue + spend -->
+      <!-- KPI strip — revenue + spend.
+           Each card shows three deltas: vs Forecast (5-Out), vs STLY,
+           vs Budget (Sage Intacct). Forecast and Budget feeds aren't
+           wired yet — those lines render "not wired" until the data
+           lands; STLY keeps working off historical sales. -->
       <div class="snap-row">
         ${snapshotKpiCard('Net Sales', fmtMoney(rev.net_sales),
-          snapshotDeltaSpan(rev.net_sales, prior.net_sales, 'prior wk'),
-          snapshotDeltaSpan(rev.net_sales, yoy.net_sales, 'STLY'))}
-        ${snapshotKpiCard('Guests', fmtNum(rev.guests),
-          snapshotDeltaSpan(rev.guests, prior.guests, 'prior wk'),
-          snapshotDeltaSpan(rev.guests, yoy.guests, 'STLY'))}
+          snapshotTriDeltaSpans(rev.net_sales, fcst, yoy, bud, 'net_sales', false),
+          null)}
+        ${snapshotKpiCard('Covers', fmtNum(rev.guests),
+          snapshotTriDeltaSpans(rev.guests, fcst, yoy, bud, 'guests', false),
+          null)}
         ${snapshotKpiCard('RevPASH', revpash != null ? '$' + revpash.toFixed(2) : '—',
           snapshotDeltaSpan(revpash, revpashPrior, 'prior wk'),
           revpash != null ? 'rev / seat-hour' : 'configure seats + open hours')}
         ${snapshotKpiCard('Avg Guest Spend', avgGuestSpend != null ? '$' + avgGuestSpend.toFixed(2) : '—',
-          snapshotDeltaSpan(avgGuestSpend, avgGuestSpendPrior, 'prior wk'),
-          'net sales ÷ guests')}
+          snapshotTriDeltaSpans(avgGuestSpend, fcst, yoy, bud, 'avgGuestSpend', false),
+          'net sales ÷ covers')}
       </div>
 
       <!-- KPI strip — cost structure + comps/discount.
            Comps + Disc. lives here (4th slot) so the row shows the full
            cost-control story: COGS, Labor, Prime Cost, then revenue
-           leakage from comps/discounts. Order per operator request:
-           NPS moved down to row 3 alongside the other guest metrics. -->
+           leakage from comps/discounts. Cost-side cards keep their
+           legacy single-line "vs prior wk" delta because forecast and
+           budget feeds for COGS / Labor don't share the same daily
+           shape — invertColor=true means down is good. -->
       <div class="snap-row">
         ${snapshotKpiCard('COGS %', cogsPct != null ? cogsPct.toFixed(1) + '%' : '—',
           snapshotDeltaSpan(cogsPct, cogsPctPrior, 'prior wk', true),
@@ -2947,15 +3068,30 @@ function renderRevenueSection() {
         <div class="card">
           <div class="card-head">
             <h3>Hour of Day</h3>
-            <div class="card-compare">
-              <span class="ctrl-label">Metric</span>
-              <select id="hourMetricFilter">
-                <option value="$"      ${STATE.hourMetric==='$'?'selected':''}>$ Net Sales</option>
-                <option value="guests" ${STATE.hourMetric==='guests'?'selected':''}>Covers</option>
-              </select>
+            <div class="card-compare" style="display:flex;gap:8px;">
+              <div style="display:flex;align-items:center;gap:4px;">
+                <span class="ctrl-label">Metric</span>
+                <select id="hourMetricFilter">
+                  <option value="$"      ${STATE.hourMetric==='$'?'selected':''}>$ Net Sales</option>
+                  <option value="guests" ${STATE.hourMetric==='guests'?'selected':''}>Covers</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;">
+                <span class="ctrl-label">Day</span>
+                <select id="hourDowFilter">
+                  <option value="all" ${(STATE.hourDow||'all')==='all'?'selected':''}>All days</option>
+                  <option value="Mon" ${STATE.hourDow==='Mon'?'selected':''}>Monday</option>
+                  <option value="Tue" ${STATE.hourDow==='Tue'?'selected':''}>Tuesday</option>
+                  <option value="Wed" ${STATE.hourDow==='Wed'?'selected':''}>Wednesday</option>
+                  <option value="Thu" ${STATE.hourDow==='Thu'?'selected':''}>Thursday</option>
+                  <option value="Fri" ${STATE.hourDow==='Fri'?'selected':''}>Friday</option>
+                  <option value="Sat" ${STATE.hourDow==='Sat'?'selected':''}>Saturday</option>
+                  <option value="Sun" ${STATE.hourDow==='Sun'?'selected':''}>Sunday</option>
+                </select>
+              </div>
             </div>
           </div>
-          <div class="desc">${STATE.hourMetric==='$' ? 'Net sales' : 'Covers'} by hour · ${periodLabel}</div>
+          <div class="desc">${STATE.hourMetric==='$' ? 'Net sales' : 'Covers'} by hour · ${periodLabel}${(STATE.hourDow && STATE.hourDow !== 'all') ? ' · ' + STATE.hourDow + ' only' : ''}</div>
           <div class="chart-wrap tall"><canvas id="hourChart"></canvas></div>
         </div>
         <div class="card">
@@ -3132,11 +3268,36 @@ function renderSummarySection() {
     return o.product_mix.combined || null;
   })();
 
-  const kpi = (label, val, sub, yoy) => `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub?`<div class="yoy neutral">${sub}</div>`:''}${yoy!=null?`<div class="yoy ${yoy>=0?'pos':'neg'}">${(yoy>=0?'+':'')+yoy.toFixed(1)}% YoY</div>`:''}</div>`;
+  // Tri-comparison sums (Forecast / STLY / Budget) — same helper as Revenue tab.
+  const sumsSummary = periodCompareSums(o, bSel);
+  if (sumsSummary.forecast) {
+    sumsSummary.forecast.check_avg = sumsSummary.forecast.orders ? sumsSummary.forecast.net_sales / sumsSummary.forecast.orders : null;
+    sumsSummary.forecast.ppa       = sumsSummary.forecast.guests ? sumsSummary.forecast.net_sales / sumsSummary.forecast.guests : null;
+  }
+  if (sumsSummary.stly) {
+    sumsSummary.stly.check_avg = sumsSummary.stly.orders ? sumsSummary.stly.net_sales / sumsSummary.stly.orders : null;
+    sumsSummary.stly.ppa       = sumsSummary.stly.guests ? sumsSummary.stly.net_sales / sumsSummary.stly.guests : null;
+  }
+  if (sumsSummary.budget) {
+    sumsSummary.budget.check_avg = sumsSummary.budget.orders ? sumsSummary.budget.net_sales / sumsSummary.budget.orders : null;
+    sumsSummary.budget.ppa       = sumsSummary.budget.guests ? sumsSummary.budget.net_sales / sumsSummary.budget.guests : null;
+  }
+  // KPI helper — supports a `cmpKey` argument that drives the 3-way
+  // tri-comparison block (vs Forecast / vs STLY / vs Budget). Cards
+  // without a cmpKey (Tip %, etc.) just show their sub line.
+  const kpi = (label, val, sub, cmpKey, curVal) => {
+    const cmp = cmpKey
+      ? `<div class="kpi-cmp">${tripleKpiDelta(curVal, sumsSummary, cmpKey)}</div>`
+      : '';
+    return `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${cmp}${sub?`<div class="yoy neutral">${sub}</div>`:''}</div>`;
+  };
 
   const periodLabel = currentPeriodLabel();
   const rangeLabel  = bSel && bSel.start ? (bSel.start + ' → ' + bSel.end) : 'All available dates';
   const yoyLabel    = pySel ? ('vs. ' + pySel.start + ' → ' + pySel.end) : '';
+
+  const checkAvg = curSum.orders ? curSum.net_sales / curSum.orders : null;
+  const ppa      = curSum.guests ? curSum.net_sales / curSum.guests : null;
 
   body.innerHTML = `
     <section>
@@ -3145,12 +3306,12 @@ function renderSummarySection() {
         <div class="sect-meta">${periodLabel} · ${rangeLabel} ${yoyLabel}</div>
       </div>
       <div class="kpis">
-        ${kpi('Net Sales', fmtMoney(curSum.net_sales), periodLabel, yoyPct(curSum.net_sales, pySum.net_sales))}
-        ${kpi('Orders', fmtNum(curSum.orders), periodLabel, yoyPct(curSum.orders, pySum.orders))}
-        ${kpi('Guests', fmtNum(curSum.guests), periodLabel, yoyPct(curSum.guests, pySum.guests))}
-        ${kpi('Check Avg', curSum.orders ? '$'+(curSum.net_sales/curSum.orders).toFixed(2) : '—', 'Net ÷ Orders', null)}
-        ${kpi('PPA', curSum.guests ? '$'+(curSum.net_sales/curSum.guests).toFixed(2) : '—', 'Net ÷ Guests', null)}
-        ${kpi('Tip %', tipPct!=null ? tipPct.toFixed(1)+'%' : '—', 'Order-level · ' + periodLabel, null)}
+        ${kpi('Net Sales', fmtMoney(curSum.net_sales), periodLabel, 'net_sales', curSum.net_sales)}
+        ${kpi('Orders',    fmtNum(curSum.orders),     periodLabel, 'orders',    curSum.orders)}
+        ${kpi('Covers',    fmtNum(curSum.guests),     periodLabel, 'guests',    curSum.guests)}
+        ${kpi('Check Avg', checkAvg != null ? '$' + checkAvg.toFixed(2) : '—', 'Net ÷ Orders',  'check_avg', checkAvg)}
+        ${kpi('PPA',       ppa != null ? '$' + ppa.toFixed(2) : '—',           'Net ÷ Covers',  'ppa',       ppa)}
+        ${kpi('Tip %', tipPct!=null ? tipPct.toFixed(1)+'%' : '—', 'Order-level · ' + periodLabel, null, null)}
       </div>
     </section>
 
@@ -3483,70 +3644,56 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
     : 'awaiting Toast order-details sync';
   const ticketSub = ticketTargetSub ? `${ticketBase}\n${ticketTargetSub}` : ticketBase;
 
+  // ===== Tri-comparison sums (Forecast / STLY / Budget) =====
+  // The global Compare dropdown still drives chart overlays, but KPI
+  // cards now ALWAYS show the same 3-way comparison block per Ross's
+  // operator brief: vs Forecast (primary), vs STLY, vs Budget.
+  const sums = periodCompareSums(o, bSS);
+  // Derived per-card sums for ratios (Guest Avg, Comps %, etc.) — built
+  // on the fly so the helper stays generic.
+  if (sums.forecast) sums.forecast.guestAvg = sums.forecast.guests ? sums.forecast.net_sales / sums.forecast.guests : null;
+  if (sums.stly)     sums.stly.guestAvg     = sums.stly.guests     ? sums.stly.net_sales     / sums.stly.guests     : null;
+  if (sums.budget)   sums.budget.guestAvg   = sums.budget.guests   ? sums.budget.net_sales   / sums.budget.guests   : null;
+
   // ===== Build six KPI cards =====
+  // Each card declares the value to display and a `cmpKey` that the
+  // tripleKpiDelta helper uses to extract the same field from each of
+  // {forecast, stly, budget} for delta math. invert=true → lower is
+  // better (used for Avg Ticket Time + Comps & Discounts).
   const cards = [
-    {
-      label: 'Net Sales',
-      val: fmtMoneyFull(cs.net_sales),
-      delta: cmpSum ? yoy(cs.net_sales, cmpSum.net_sales) : null,
-      sub: cmpMode === 'BUDGET' ? 'Budget not wired' : null
-    },
-    {
-      label: 'Guests',
-      val: fmtNum(cs.guests),
-      delta: cmpSum ? yoy(cs.guests, cmpSum.guests) : null,
-      sub: cmpMode === 'BUDGET' ? 'Budget not wired' : null
-    },
-    {
-      label: 'Guest Avg',
-      val: guestAvg != null ? '$' + guestAvg.toFixed(2) : '—',
-      delta: (cmpSum && cmpSum.guestAvg) ? yoy(guestAvg, cmpSum.guestAvg) : null,
-      sub: cmpMode === 'BUDGET' ? 'Budget not wired' : 'Net ÷ Guests'
-    },
-    {
-      label: 'Comps & Discounts %',
-      val: compDiscPct == null ? '—' : fmtPct(compDiscPct),
-      delta: (cmpCompDiscPct != null && compDiscPct != null) ? (compDiscPct - cmpCompDiscPct) : null,
-      deltaUnit: 'pp',
-      sub: compDiscPct == null ? 'awaiting Order Details' : fmtMoneyFull(co.disc) + ' in comps'
-    },
-    {
-      label: 'RevPASH',
-      val: revPASH != null ? '$' + revPASH.toFixed(2) : '—',
-      delta: null,
-      sub: revPashSub
-    },
-    {
-      label: 'Avg Ticket Time',
-      val: avgTicketMin != null ? avgTicketMin.toFixed(1) + ' min' : '—',
-      // Ticket-time delta: lower is better, so invert sign for visual cue (green if shorter).
-      delta: (avgTicketMin != null && stlyTicketMin != null) ? -(avgTicketMin - stlyTicketMin) : null,
-      deltaUnit: 'min',
-      deltaLabel: 'vs STLY',
-      sub: ticketSub
-    }
+    { label: 'Net Sales',           val: fmtMoneyFull(cs.net_sales),                            cmpKey: 'net_sales',   sub: null },
+    { label: 'Covers',              val: fmtNum(cs.guests),                                     cmpKey: 'guests',      sub: null },
+    { label: 'Guest Avg',           val: guestAvg != null ? '$' + guestAvg.toFixed(2) : '—',    cmpKey: 'guestAvg',    sub: 'Net ÷ Covers',   curVal: guestAvg },
+    { label: 'Comps & Discounts %', val: compDiscPct == null ? '—' : fmtPct(compDiscPct),       cmpKey: null,          sub: compDiscPct == null ? 'awaiting Order Details' : fmtMoneyFull(co.disc) + ' in comps', invert: true },
+    { label: 'RevPASH',             val: revPASH != null ? '$' + revPASH.toFixed(2) : '—',      cmpKey: null,          sub: revPashSub },
+    { label: 'Avg Ticket Time',     val: avgTicketMin != null ? avgTicketMin.toFixed(1) + ' min' : '—', cmpKey: null,  sub: ticketSub, invert: true,
+      // Avg Ticket Time keeps its STLY-only delta (forecast/budget don't
+      // model ticket time). Render a single delta line instead of the 3-way.
+      singleDelta: (avgTicketMin != null && stlyTicketMin != null)
+        ? { label: 'vs STLY', pct: ((avgTicketMin - stlyTicketMin) / stlyTicketMin * 100), invert: true }
+        : null },
   ];
+
   document.getElementById('kpiRow').innerHTML = cards.map(c => {
-    let deltaHtml = '';
-    if (c.delta != null) {
-      const cls = c.delta >= 0 ? 'pos' : 'neg';
-      let unit;
-      if (c.deltaUnit === 'pp' || c.deltaUnit === '%') {
-        // Percentage-point deltas render as "+0.4%" per Ross's convention —
-        // we never show "pp" in the UI.
-        unit = (c.delta>=0?'+':'') + c.delta.toFixed(1) + '%';
-      } else if (c.deltaUnit === 'min') {
-        unit = (c.delta>=0?'+':'') + c.delta.toFixed(1) + ' min';
-      } else {
-        unit = fmtYoY(c.delta);
-      }
-      const label = c.deltaLabel || cmpLabelShort;
-      deltaHtml = `<div><span class="yoy ${cls}">${label} ${unit}</span></div>`;
+    // Delta block — three lines (Forecast / STLY / Budget) when cmpKey set.
+    // Cards without a cmpKey fall back to a single-delta or empty block.
+    let deltaHtml;
+    if (c.cmpKey) {
+      const v = c.curVal != null ? c.curVal : (
+        c.cmpKey === 'net_sales' ? cs.net_sales :
+        c.cmpKey === 'guests'    ? cs.guests :
+        c.cmpKey === 'orders'    ? cs.orders :
+        null
+      );
+      deltaHtml = `<div class="kpi-cmp">${tripleKpiDelta(v, sums, c.cmpKey, { invert: !!c.invert })}</div>`;
+    } else if (c.singleDelta) {
+      const p = c.singleDelta.pct;
+      const isGood = c.singleDelta.invert ? p < 0 : p >= 0;
+      const cls = isGood ? 'pos' : 'neg';
+      deltaHtml = `<div class="kpi-cmp"><div class="yoy ${cls}" style="font-size:11px;">${c.singleDelta.label} ${(p>=0?'+':'')}${p.toFixed(1)}%</div></div>`;
     } else {
-      deltaHtml = '<div>&nbsp;</div>';
+      deltaHtml = '<div class="kpi-cmp">&nbsp;</div>';
     }
-    // Sub is always rendered when present — \n separates sub-lines (e.g.
-    // "275 seats · 10hr/day · 7 days" \n "Target $18-28/hr · Upscale ...").
     const subHtml = c.sub
       ? `<div class="yoy neutral">${String(c.sub).replace(/\n/g, '<br>')}</div>`
       : '';
@@ -3828,18 +3975,39 @@ function renderHour() {
   safeChart('hourChart', () => {
     // Period-aware: aggregate hour_daily rows whose date is in current bounds.
     // Metric is $ (amount) by default, switchable to Covers (guests) via
-    // the per-card selector → STATE.hourMetric.
+    // the per-card selector → STATE.hourMetric. Day filter (STATE.hourDow,
+    // 'all'|'Mon'|'Tue'|...) restricts the aggregation to a single weekday
+    // — useful for spotting hour patterns specific to e.g. Fri lunch vs
+    // Sat brunch.
     const ssDaily = combinedDailySales();
     const maxDate = ssDaily.length ? ssDaily[ssDaily.length-1].date : null;
     const b = maxDate ? periodBounds(maxDate) : null;
     const src = getOrderDetailsSource();
     const isDollars = (STATE.hourMetric || '$') === '$';
     const field = isDollars ? 'amount' : 'guests';
+    const dowFilter = STATE.hourDow || 'all';
+    const DOW_ABBR = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    // Derive DOW from a YYYY-MM-DD string. Parse at local noon to dodge
+    // the same UTC-midnight TZ shift the chart's time-axis tooltip fix
+    // protects against — without it, dates near a DST boundary can land
+    // on the wrong weekday.
+    const dowOf = (date) => {
+      if (!date) return null;
+      const d = new Date(date + 'T12:00:00');
+      return DOW_ABBR[d.getDay()];
+    };
     const map = {}; for (let h=0; h<24; h++) map[h] = 0;
     if (src) {
       Object.values(src).forEach(od => (od.hour_daily || od.hour_dow || []).forEach(r => {
         // hour_daily has {date, hour, amount, guests} → filter by date; legacy hour_dow has no date so include.
         if (r.date && b && (r.date < b.start || r.date > b.end)) return;
+        if (dowFilter !== 'all') {
+          // hour_daily rows have a date → derive DOW; legacy hour_dow rows
+          // already have a `dow` field, fall back to that. If neither
+          // can produce a DOW, skip when a specific day is selected.
+          const rdow = r.dow || dowOf(r.date);
+          if (rdow !== dowFilter) return;
+        }
         map[r.hour] = (map[r.hour]||0) + (r[field]||0);
       }));
     }
@@ -4340,6 +4508,9 @@ document.addEventListener('change', e => {
     rerenderSection();
   } else if (e.target.id === 'pmixDirFilter') {
     STATE.pmixDir = e.target.value || 'top';
+    rerenderSection();
+  } else if (e.target.id === 'hourDowFilter') {
+    STATE.hourDow = e.target.value || 'all';
     rerenderSection();
   }
 });
