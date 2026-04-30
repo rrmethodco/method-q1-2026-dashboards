@@ -1740,7 +1740,6 @@ function renderLaborSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Labor · ${o.name}</div>
-        <div class="sect-meta">Toast Labor API · outlet-level (no RC split) · ${periodLabel}</div>
       </div>
       ${filterBar}
       <div class="kpis">
@@ -1756,7 +1755,6 @@ function renderLaborSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Efficiency</div>
-        <div class="sect-meta">FOH vs BOH productivity · ${periodLabel} · classified from canonical position titles</div>
       </div>
       <div class="kpis">
         ${kpi('SPMH · FOH', splhFOH != null ? '$'+splhFOH.toFixed(0) : '—', `Net Sales ÷ ${fmtHrs(fohHrs)} FOH hr`, null)}
@@ -1777,7 +1775,6 @@ function renderLaborSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Performance Trend</div>
-        <div class="sect-meta">Multi-metric labor trend with granularity, chart type, trend-line overlay &amp; comparison</div>
       </div>
       <div class="card">
         <div class="card-head" style="align-items:flex-start;">
@@ -1828,7 +1825,6 @@ function renderLaborSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Hour of Day</div>
-        <div class="sect-meta">Distributed from clock-in/out · ${periodLabel}${laborFilter !== 'total' ? ' · across all positions (FOH/BOH split not available at hour granularity)' : ''}</div>
       </div>
       <div class="grid grid-2">
         <div class="card"><h3>Hours by Hour of Day</h3><div class="desc">Total labor hours per hour bucket · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="laborHoursByHour"></canvas></div></div>
@@ -1843,7 +1839,6 @@ function renderLaborSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Productivity (Hour × Day)</div>
-        <div class="sect-meta">Sales per Labor Hour by hour-of-week · ${periodLabel} · darker = higher SPLH</div>
       </div>
       <div class="labor-filter-bar">
         <span class="labor-filter-label">Metric:</span>
@@ -1859,7 +1854,6 @@ function renderLaborSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">By Position</div>
-        <div class="sect-meta">Hours &amp; cost by job · ${byJobScope}</div>
       </div>
       <div class="grid grid-2">
         <div class="card"><h3>Cost Mix by Position</h3><div class="desc">Top jobs by labor $</div><div class="chart-wrap tall"><canvas id="laborByJobBar"></canvas></div></div>
@@ -1959,11 +1953,6 @@ function renderLaborSection() {
         </div>
       </div>
     </section>
-
-    <p style="margin: 22px 28px; color: var(--muted); font-size: 11px;">
-      Labor figures cover hourly clock-ins via Toast Labor API. Salaried managers and tip-credit hours are excluded.
-      OT cost applies the FLSA 1.5× multiplier to overtime hours only.
-    </p>
   `;
 
   // ===== Labor Performance Trend (single full-width card replacing the
