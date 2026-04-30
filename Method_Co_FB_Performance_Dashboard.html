@@ -2961,11 +2961,6 @@ function renderGuestSection() {
   const npsTone  = v => v == null ? 'neutral' : (v >= 50 ? 'pos' : v < 0 ? 'neg' : 'neutral');
   const star     = '★';
 
-  // Note about scope — Resy is venue-level (lsbr's surveys are Le Suprême only).
-  const scopeNote = (STATE.outlet === 'lsbr')
-    ? 'Resy survey scope: Le Suprême only (Bar Rotunda has no Resy surveys).'
-    : 'Resy survey scope: full venue (no RC split).';
-
   // ---- Sub-tab routing inside the Guest Experience body ----
   // Three views: Overview (best-of-both summary), Resy (deep survey
   // diagnostic), Google (deep review diagnostic). Sub-tab choice lives
@@ -2989,7 +2984,6 @@ function renderGuestSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Score Breakdown</div>
-        <div class="sect-meta">Avg 0–100 by category · ${periodLabel}</div>
       </div>
       <div class="kpis">
         ${kpi('Food',         fmtScore(avgFood),      `${sCur.filter(s=>typeof s.food==='number').length} responses`, 'neutral')}
@@ -3006,11 +3000,9 @@ function renderGuestSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">NPS Trend</div>
-        <div class="sect-meta">Monthly NPS line + survey volume bars · ${anchorYM ? fmtMonth(anchorYM) : '—'} on the left, prior 11 months to the right</div>
       </div>
       <div class="card">
         <h3>NPS &amp; Survey Volume by Month</h3>
-        <div class="desc">Bars = surveys, Line = NPS</div>
         <div class="chart-wrap tall"><canvas id="guestNpsTrend"></canvas></div>
       </div>
     </section>
@@ -3020,7 +3012,6 @@ function renderGuestSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Resy Star Ratings</div>
-        <div class="sect-meta">1–5 distribution · ${periodLabel}</div>
       </div>
       <div class="grid grid-2">
         <div class="card">
@@ -3030,7 +3021,7 @@ function renderGuestSection() {
         </div>
         <div class="card">
           <h3>Daypart × Day of Week</h3>
-          <div class="desc">Avg overall (0–100) · cell shade = survey volume</div>
+          <div class="desc">Cell shade = survey volume · number = avg overall</div>
           <div id="guestDaypartHeat" style="margin-top:8px;"></div>
         </div>
       </div>
@@ -3041,7 +3032,6 @@ function renderGuestSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Server Performance</div>
-        <div class="sect-meta">${servers.length} servers with surveys · ${periodLabel} · sorted by survey count</div>
       </div>
       <div class="card">
         <div style="overflow:auto; max-height: 480px;">
@@ -3078,25 +3068,22 @@ function renderGuestSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Google Reviews · ${(goog.venue||o.name).replace(/</g,'&lt;')}</div>
-        <div class="sect-meta">${periodLabel} for period KPIs · lifetime where labeled · trend chart trails 12 months from ${anchorYM ? fmtMonth(anchorYM) : '—'}</div>
       </div>
       <div class="kpis">
-        ${kpi('★ in Period', googPeriodAvg != null ? googPeriodAvg.toFixed(2)+' '+star : '—', googPeriodSource === 'daily' ? `daily · ${fmtNum(googPeriodCount||0)} reviews` : googPeriodSource === 'monthly' ? (bSel && bSel.kind === 'week' ? `month-level (no daily history) · ${fmtNum(googPeriodCount||0)} reviews` : `${fmtNum(googPeriodCount||0)} reviews`) : 'no Google reviews in period', 'neutral')}
-        ${kpi('Reviews in Period', googPeriodCount != null ? fmtNum(googPeriodCount) : '—', googPeriodSource === 'daily' ? 'sum of daily counts' : googPeriodSource === 'monthly' ? (bSel && bSel.kind === 'week' ? 'month-level (no daily history)' : 'sum of monthly counts') : 'no Google reviews in period', 'neutral')}
-        ${kpi('Google ★ Avg', goog.avg_rating != null ? goog.avg_rating.toFixed(2)+' '+star : '—', `lifetime · ${fmtNum(goog.total_reviews||0)} reviews`, 'neutral')}
+        ${kpi('★ in Period', googPeriodAvg != null ? googPeriodAvg.toFixed(2)+' '+star : '—', googPeriodSource === 'daily' ? `${fmtNum(googPeriodCount||0)} reviews` : googPeriodSource === 'monthly' ? (bSel && bSel.kind === 'week' ? `month-level · ${fmtNum(googPeriodCount||0)} reviews` : `${fmtNum(googPeriodCount||0)} reviews`) : '—', 'neutral')}
+        ${kpi('Reviews in Period', googPeriodCount != null ? fmtNum(googPeriodCount) : '—', googPeriodSource === 'monthly' && bSel && bSel.kind === 'week' ? 'month-level' : '', 'neutral')}
+        ${kpi('Google ★ Avg', goog.avg_rating != null ? goog.avg_rating.toFixed(2)+' '+star : '—', `lifetime · ${fmtNum(goog.total_reviews||0)}`, 'neutral')}
         ${kpi('Total Reviews', fmtNum(goog.total_reviews||0), 'lifetime', 'neutral')}
         ${kpi('Owner Reply Rate', goog.owner_reply_rate!=null ? goog.owner_reply_rate.toFixed(1)+'%' : '—', `lifetime · ${fmtNum(goog.owner_reply_count||0)} replies`, 'neutral')}
-        ${kpi('Local Guides', fmtNum(goog.local_guide_count||0), 'lifetime · reviewers tagged Local Guide', 'neutral')}
+        ${kpi('Local Guides', fmtNum(goog.local_guide_count||0), 'lifetime', 'neutral')}
       </div>
       <div class="grid grid-2" style="margin-top:18px;">
         <div class="card">
           <h3>Avg Star Rating by Month</h3>
-          <div class="desc">Bars = review count · Line = avg ${star}</div>
           <div class="chart-wrap tall"><canvas id="guestGoogleMonthly"></canvas></div>
         </div>
         <div class="card">
           <h3>Lifetime Star Distribution</h3>
-          <div class="desc">All Google reviews · 1–5</div>
           <div class="chart-wrap tall"><canvas id="guestGoogleDist"></canvas></div>
         </div>
       </div>
@@ -3107,17 +3094,16 @@ function renderGuestSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Guest Experience · ${o.name}</div>
-        <div class="sect-meta">${periodLabel} · ${scopeNote}</div>
       </div>
       <div class="kpis">
         ${kpi('NPS', fmtNps(npsCur.nps), `${npsCur.promoters}P · ${npsCur.passives}N · ${npsCur.detractors}D`, npsTone(npsCur.nps))}
-        ${kpi('Surveys', fmtNum(sCur.length), 'Resy responses in period', 'neutral')}
-        ${kpi('Response Rate', responseRate != null ? responseRate.toFixed(1)+'%' : '—', `${fmtNum(sCur.length)} ÷ ${fmtNum(ssTot.guests)} covers`, 'neutral')}
-        ${kpi('Avg Recommend', avgRecommend != null ? avgRecommend.toFixed(1) : '—', '0–10 scale', 'neutral')}
-        ${kpi('Resy ★ Avg', ratingAvg != null ? ratingAvg.toFixed(2)+' '+star : '—', `${fmtNum(ratingTotal)} ratings in period`, 'neutral')}
-        ${goog ? kpi('Google ★ (lifetime)', goog.avg_rating != null ? goog.avg_rating.toFixed(2)+' '+star : '—', `${fmtNum(goog.total_reviews||0)} reviews`, 'neutral') : ''}
-        ${goog ? kpi('★ in Period (Google)', googPeriodAvg != null ? googPeriodAvg.toFixed(2)+' '+star : '—', googPeriodCount != null ? `${fmtNum(googPeriodCount)} reviews` : 'no Google reviews', 'neutral') : ''}
-        ${goog ? kpi('Reviews in Period (Google)', googPeriodCount != null ? fmtNum(googPeriodCount) : '—', googPeriodSource === 'daily' ? 'daily sum' : googPeriodSource === 'monthly' ? 'monthly sum' : 'no data', 'neutral') : ''}
+        ${kpi('Surveys', fmtNum(sCur.length), '', 'neutral')}
+        ${kpi('Response Rate', responseRate != null ? responseRate.toFixed(1)+'%' : '—', `${fmtNum(sCur.length)} / ${fmtNum(ssTot.guests)} covers`, 'neutral')}
+        ${kpi('Avg Recommend', avgRecommend != null ? avgRecommend.toFixed(1) : '—', '', 'neutral')}
+        ${kpi('Resy ★ Avg', ratingAvg != null ? ratingAvg.toFixed(2)+' '+star : '—', `${fmtNum(ratingTotal)} ratings`, 'neutral')}
+        ${goog ? kpi('Google ★', goog.avg_rating != null ? goog.avg_rating.toFixed(2)+' '+star : '—', `lifetime · ${fmtNum(goog.total_reviews||0)}`, 'neutral') : ''}
+        ${goog ? kpi('★ in Period', googPeriodAvg != null ? googPeriodAvg.toFixed(2)+' '+star : '—', googPeriodCount != null ? `${fmtNum(googPeriodCount)} Google reviews` : '—', 'neutral') : ''}
+        ${goog ? kpi('Reviews in Period', googPeriodCount != null ? fmtNum(googPeriodCount) : '—', 'Google', 'neutral') : ''}
       </div>
     </section>
   `;
@@ -3126,31 +3112,24 @@ function renderGuestSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Resy · ${o.name}</div>
-        <div class="sect-meta">${periodLabel} · ${scopeNote}</div>
       </div>
       <div class="kpis">
         ${kpi('NPS', fmtNps(npsCur.nps), `${npsCur.promoters}P · ${npsCur.passives}N · ${npsCur.detractors}D`, npsTone(npsCur.nps))}
-        ${kpi('Surveys', fmtNum(sCur.length), 'Resy responses in period', 'neutral')}
-        ${kpi('Response Rate', responseRate != null ? responseRate.toFixed(1)+'%' : '—', `${fmtNum(sCur.length)} ÷ ${fmtNum(ssTot.guests)} covers`, 'neutral')}
-        ${kpi('Avg Recommend', avgRecommend != null ? avgRecommend.toFixed(1) : '—', '0–10 scale', 'neutral')}
-        ${kpi('Avg Overall', fmtScore(avgOverall), '0–100 composite', 'neutral')}
-        ${kpi('Resy ★ Avg', ratingAvg != null ? ratingAvg.toFixed(2)+' '+star : '—', `${fmtNum(ratingTotal)} ratings in period`, 'neutral')}
-        ${kpi('Promoters',  fmtNum(npsCur.promoters), promoterPct  != null ? `${promoterPct.toFixed(0)}% of ${fmtNum(npsCur.n)}`  : 'no surveys', 'neutral')}
-        ${kpi('Detractors', fmtNum(npsCur.detractors), detractorPct != null ? `${detractorPct.toFixed(0)}% of ${fmtNum(npsCur.n)}` : 'no surveys', 'neutral')}
-        ${kpi('Avg Party',  avgPartySize != null ? avgPartySize.toFixed(1) : '—', partySizes.length ? `${fmtNum(partySizes.length)} surveys w/ covers` : 'no covers data', 'neutral')}
-        ${kpi('Top Server', topServer ? topServer.server.split(' ')[0] : '—', topServer ? `${fmtNum(topServer.n)} surveys · ${fmtNps(topServer.nps)} NPS` : 'no server attribution', 'neutral')}
-        ${kpi('Days Surveyed', fmtNum(daysSurveyed), 'unique survey dates in period', 'neutral')}
+        ${kpi('Surveys', fmtNum(sCur.length), '', 'neutral')}
+        ${kpi('Response Rate', responseRate != null ? responseRate.toFixed(1)+'%' : '—', `${fmtNum(sCur.length)} / ${fmtNum(ssTot.guests)} covers`, 'neutral')}
+        ${kpi('Avg Recommend', avgRecommend != null ? avgRecommend.toFixed(1) : '—', '', 'neutral')}
+        ${kpi('Avg Overall', fmtScore(avgOverall), '', 'neutral')}
+        ${kpi('Resy ★ Avg', ratingAvg != null ? ratingAvg.toFixed(2)+' '+star : '—', `${fmtNum(ratingTotal)} ratings`, 'neutral')}
+        ${kpi('Promoters',  fmtNum(npsCur.promoters), promoterPct  != null ? `${promoterPct.toFixed(0)}%`  : '', 'neutral')}
+        ${kpi('Detractors', fmtNum(npsCur.detractors), detractorPct != null ? `${detractorPct.toFixed(0)}%` : '', 'neutral')}
+        ${kpi('Avg Party',  avgPartySize != null ? avgPartySize.toFixed(1) : '—', '', 'neutral')}
+        ${kpi('Top Server', topServer ? topServer.server.split(' ')[0] : '—', topServer ? `${fmtNum(topServer.n)} surveys · ${fmtNps(topServer.nps)} NPS` : '', 'neutral')}
+        ${kpi('Days Surveyed', fmtNum(daysSurveyed), '', 'neutral')}
       </div>
     </section>
   `;
 
   // ---- Compose final body innerHTML by sub-tab ----
-  const footnote = `
-    <p style="margin: 22px 28px; color: var(--muted); font-size: 11px;">
-      Resy survey data is venue-level (no revenue-center split). Response rate uses outlet-wide guest count, so it slightly understates for venues with non-Resy service areas (e.g. Bar Rotunda at lsbr). Google data via Places API.
-    </p>
-  `;
-
   let mainContent;
   if (subTab === 'google' && goog) {
     mainContent = googleSect;
@@ -3161,7 +3140,7 @@ function renderGuestSection() {
     mainContent = overviewHeader + scoreBreakdownSect + npsTrendSect;
   }
 
-  body.innerHTML = subTabBar + mainContent + footnote;
+  body.innerHTML = subTabBar + mainContent;
 
   // ================================================== Charts ==================================================
   // Monthly NPS line + survey volume bars
