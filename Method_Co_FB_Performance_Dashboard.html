@@ -188,10 +188,20 @@ table tr:hover td { background: var(--hover); }
 table tr.total td { font-weight: 600; border-top: 1px solid var(--royal); border-bottom: none; background: var(--grey); }
 
 /* ======= Heatmap ======= */
-.heatmap { display: grid; grid-template-columns: 60px repeat(7, 1fr); gap: 2px; font-size: 11px; }
-.heatmap .h-cell { padding: 6px 4px; text-align: center; color: var(--white); font-variant-numeric: tabular-nums; font-weight: 500; }
-.heatmap .h-lbl { color: var(--muted); padding: 6px 4px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
-.heatmap .h-top { color: var(--slate); font-weight: 600; text-align: center; padding: 6px 4px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+.heatmap { display: grid; grid-template-columns: 48px repeat(7, 1fr); gap: 1px; font-size: 10px; }
+.heatmap .h-cell { padding: 3px 2px; text-align: center; color: var(--white); font-variant-numeric: tabular-nums; font-weight: 500; }
+.heatmap .h-lbl { color: var(--muted); padding: 3px 4px; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; text-align: right; }
+.heatmap .h-top { color: var(--slate); font-weight: 600; text-align: center; padding: 3px 2px; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* ======= Private Events Revenue card (Time Horizons) ======= */
+.pe-row { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--grey); }
+.pe-row:last-child { border-bottom: none; }
+.pe-row-label { font-family: var(--font-stack); font-size: 13px; font-weight: 600; color: var(--black); letter-spacing: 0.02em; }
+.pe-row-sub { font-family: var(--font-stack); font-size: 11px; color: var(--royal); margin-top: 2px; }
+.pe-row-cmp { font-family: var(--font-stack); font-size: 11px; color: var(--royal); margin-top: 4px; }
+.pe-row-val { font-family: var(--font-stack); font-size: 22px; font-weight: 700; color: var(--black); text-align: right; line-height: 1; font-variant-numeric: tabular-nums; }
+.pe-pos { color: #1a8754; font-weight: 600; }
+.pe-neg { color: #b03030; font-weight: 600; }
 
 /* ======= Empty / placeholder ======= */
 .placeholder {
@@ -425,7 +435,7 @@ const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
 // weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
 // filter to a single Mon..Sun 7-day window. When set, periodBounds returns
 // that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all' };
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all', heatMetric: '$' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -3122,9 +3132,30 @@ function renderRevenueSection() {
           <div class="chart-wrap tall" style="overflow:auto;padding:0;"><div id="rcChart"></div></div>
         </div>
       </div>
-      <div class="card" style="margin-top:12px;"><h3>Hour × Day-of-Week Heatmap</h3>
-        <div class="desc">Sales concentration by hour and weekday · ${periodLabel}. Darker = higher.</div>
-        <div id="heatmapContainer"></div>
+      <div class="grid grid-2eq" style="margin-top:12px;">
+        <div class="card">
+          <div class="card-head">
+            <h3>Hour × Day-of-Week Heatmap</h3>
+            <div class="card-compare">
+              <span class="ctrl-label">Metric</span>
+              <select id="heatMetricFilter">
+                <option value="$"      ${(STATE.heatMetric||'$')==='$'?'selected':''}>$ Net Sales</option>
+                <option value="covers" ${STATE.heatMetric==='covers'?'selected':''}>Covers</option>
+                <option value="avg"    ${STATE.heatMetric==='avg'?'selected':''}>Avg Check</option>
+              </select>
+            </div>
+          </div>
+          <div class="desc">${(STATE.heatMetric||'$')==='covers' ? 'Covers' : (STATE.heatMetric==='avg' ? 'Avg check ($/order)' : 'Sales')} concentration by hour and weekday · ${periodLabel}. Darker = higher.</div>
+          <div id="heatmapContainer"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Private Events Revenue</h3>
+            <span class="period-chip">Time Horizons</span>
+          </div>
+          <div class="desc">Tripleseat · separated by horizon · vs same window prior year</div>
+          <div id="privateEventsCard"></div>
+        </div>
       </div>
     </section>
 
@@ -3218,6 +3249,7 @@ function renderEverything() {
   guard('hour',    () => renderHour());
   guard('rc',      () => renderRC());
   guard('heatmap', () => renderHeatmap());
+  guard('privateEvents', () => renderPrivateEventsCard());
   // Monthly Comparison is a multi-month trend; if we're filtered to a single
   // week, fall back to the full monthly rollup so the chart remains useful.
   guard('monthly', () => renderMonthly(bSS && bSS.kind === 'week' ? null : curODRows));
@@ -4157,6 +4189,120 @@ function renderRC() {
   });
 }
 
+// Parse a Tripleseat event_start string. Tripleseat's /events.json
+// returns event_start in US format ("12/6/1985 6:00 PM") rather than
+// ISO; we also accept ISO if a future ETL update normalizes it. Returns
+// a JS Date (anchored at noon to dodge UTC-midnight DST shift) or null.
+function parseEventDate(s) {
+  if (!s) return null;
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+    return new Date(s.length === 10 ? s + 'T12:00:00' : s);
+  }
+  const m = String(s).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (!m) return null;
+  return new Date(+m[3], +m[1] - 1, +m[2], 12, 0, 0);
+}
+
+function renderPrivateEventsCard() {
+  // Renders the 4-horizon Tripleseat revenue card next to the heatmap
+  // on the Revenue tab. Each row shows current-period booked revenue
+  // alongside the same window 1 year prior, with a colored % delta —
+  // the operator's quick read on whether the events pipeline is
+  // pacing ahead of or behind PY.
+  //
+  // Horizons (anchored at today, in outlet local time = ET):
+  //   MTD Closed       — DEFINITE, eventDate in this month, ≤ today
+  //   Current Month OTB — DEFINITE+TENTATIVE, eventDate after today, in this month
+  //   Next 90 OTB      — DEFINITE+TENTATIVE, eventDate within next 90 days
+  //   YTD Closed       — DEFINITE, eventDate this year, ≤ today
+  // PY = same horizon shifted back 1 year.
+  const host = document.getElementById('privateEventsCard');
+  if (!host) return;
+  const o = DATA.outlets[STATE.outlet];
+  const ev = o && o.events && Array.isArray(o.events.events) ? o.events.events : null;
+  if (!ev || !ev.length) {
+    host.innerHTML =
+      `<div class="placeholder" style="padding:24px;text-align:center;">
+         <p>No Tripleseat events synced for this outlet yet.</p>
+       </div>`;
+    return;
+  }
+
+  const today = new Date(); today.setHours(12, 0, 0, 0);
+  const yr = today.getFullYear();
+  const mo = today.getMonth();
+  // Bounds in JS Date form (inclusive). Shift PY back 365 days
+  // (rather than calendar year) so day-of-week / month-end alignment
+  // stays roughly consistent — restaurant pacing is week-shaped.
+  const startOfMonth = new Date(yr, mo, 1, 12, 0, 0);
+  const endOfMonth   = new Date(yr, mo + 1, 0, 23, 59, 59);
+  const startOfYear  = new Date(yr, 0, 1, 12, 0, 0);
+  const next90End    = new Date(today.getTime() + 90 * 24 * 3600 * 1000);
+  const shiftYear = (d) => new Date(d.getFullYear() - 1, d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
+
+  // Sum booked_revenue across events matching predicate.
+  const sumBy = (predicate) => {
+    let total = 0;
+    for (const e of ev) {
+      const d = parseEventDate(e.event_start);
+      if (!d) continue;
+      if (!predicate(e, d)) continue;
+      total += (e.booked_revenue || 0);
+    }
+    return total;
+  };
+
+  const closedStatuses = new Set(['DEFINITE']);
+  const otbStatuses = new Set(['DEFINITE', 'TENTATIVE']);
+  const isClosed = (e) => closedStatuses.has((e.status || '').toUpperCase());
+  const isOTB    = (e) => otbStatuses.has((e.status || '').toUpperCase());
+
+  const horizons = [
+    {
+      label: 'MTD Closed', sub: 'L30D actualized',
+      cur: sumBy((e, d) => isClosed(e) && d >= startOfMonth && d <= today),
+      py:  sumBy((e, d) => isClosed(e) && d >= shiftYear(startOfMonth) && d <= shiftYear(today)),
+    },
+    {
+      label: 'Current Month OTB', sub: 'contracted',
+      cur: sumBy((e, d) => isOTB(e) && d > today && d <= endOfMonth),
+      py:  sumBy((e, d) => isOTB(e) && d > shiftYear(today) && d <= shiftYear(endOfMonth)),
+    },
+    {
+      label: 'Next 90 OTB', sub: 'forward pipeline',
+      cur: sumBy((e, d) => isOTB(e) && d >= today && d <= next90End),
+      py:  sumBy((e, d) => isOTB(e) && d >= shiftYear(today) && d <= shiftYear(next90End)),
+    },
+    {
+      label: 'YTD Closed', sub: 'YTD actualized',
+      cur: sumBy((e, d) => isClosed(e) && d >= startOfYear && d <= today),
+      py:  sumBy((e, d) => isClosed(e) && d >= shiftYear(startOfYear) && d <= shiftYear(today)),
+    },
+  ];
+
+  // Format a comparison line. Returns "vs $X PY · ±%" with green/red
+  // pct color cue; if PY is zero, just shows "vs $0 PY · —" so we
+  // don't render misleading "+Inf%".
+  const cmpLine = (cur, py) => {
+    if (!py) return `<span style="color:var(--royal);">vs ${fmtMoney(py || 0)} PY · —</span>`;
+    const pct = (cur - py) / py * 100;
+    const cls = pct >= 0 ? 'pe-pos' : 'pe-neg';
+    const sign = pct >= 0 ? '+' : '';
+    return `<span style="color:var(--royal);">vs ${fmtMoney(py)} PY · </span><span class="${cls}">${sign}${pct.toFixed(1)}%</span>`;
+  };
+
+  host.innerHTML = horizons.map(h => `
+    <div class="pe-row">
+      <div>
+        <div class="pe-row-label">${h.label}</div>
+        <div class="pe-row-sub">${h.sub}</div>
+        <div class="pe-row-cmp">${cmpLine(h.cur, h.py)}</div>
+      </div>
+      <div class="pe-row-val">${fmtMoney(h.cur)}</div>
+    </div>
+  `).join('');
+}
+
 function renderHeatmap() {
   const cont = document.getElementById('heatmapContainer');
   if (!cont) return;
@@ -4165,11 +4311,19 @@ function renderHeatmap() {
     if (!src) { cont.innerHTML = '<div class="placeholder" style="padding:40px"><p>No order-detail data for this revenue center.</p></div>'; return; }
     const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     const dowAbbr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    // Metric mode: $ (sales), covers (guests), avg (avg check = $/order).
+    // Avg-check needs separate amount + orders accumulators per cell so
+    // we divide at the end (don't average-of-averages by hour).
+    const metric = STATE.heatMetric || '$';
+    const isAvg     = metric === 'avg';
+    const isCovers  = metric === 'covers';
     // Period bounds — heatmap aggregates hour_daily rows in [start, end].
     const ssDaily = combinedDailySales();
     const maxDate = ssDaily.length ? ssDaily[ssDaily.length-1].date : null;
     const b = maxDate ? periodBounds(maxDate) : null;
-    const cells = {}; let max = 0;
+    // For sales/covers we accumulate a single number per cell.
+    // For avg-check we accumulate {amount, orders} then derive amount/orders.
+    const cells = {};
     Object.values(src).forEach(od => {
       // Prefer hour_daily (per-day, can filter); fallback to legacy hour_dow.
       const rows = od.hour_daily;
@@ -4178,33 +4332,64 @@ function renderHeatmap() {
           if (b && (r.date < b.start || r.date > b.end)) return;
           const dow = dowAbbr[toLocalNoon(r.date).getDay()];
           const k = r.hour + '|' + dow;
-          cells[k] = (cells[k]||0) + (r.amount||0);
-          if (cells[k] > max) max = cells[k];
+          if (isAvg) {
+            const c = cells[k] || (cells[k] = { amount: 0, orders: 0 });
+            c.amount += (r.amount  || 0);
+            c.orders += (r.orders  || 0);
+          } else {
+            cells[k] = (cells[k] || 0) + (isCovers ? (r.guests||0) : (r.amount||0));
+          }
         });
       } else {
         (od.hour_dow||[]).forEach(r => {
           const k = r.hour + '|' + r.dow;
-          cells[k] = (cells[k]||0) + r.amount;
-          if (cells[k] > max) max = cells[k];
+          if (isAvg) {
+            const c = cells[k] || (cells[k] = { amount: 0, orders: 0 });
+            c.amount += (r.amount || 0);
+            c.orders += (r.orders || 0);
+          } else {
+            cells[k] = (cells[k] || 0) + (isCovers ? (r.guests || 0) : (r.amount || 0));
+          }
         });
       }
     });
+    // Derive per-cell value and find max for shading.
+    const cellVal = (k) => {
+      const v = cells[k];
+      if (v == null) return 0;
+      if (isAvg) return v.orders ? v.amount / v.orders : 0;
+      return v;
+    };
+    const cellOrders = (k) => isAvg ? ((cells[k] && cells[k].orders) || 0) : null;
+    let max = 0;
+    Object.keys(cells).forEach(k => { const v = cellVal(k); if (v > max) max = v; });
     if (!max) { cont.innerHTML = '<div class="placeholder" style="padding:40px"><p>No hour-of-week activity recorded yet.</p></div>'; return; }
     // hours with >= 1% of max total to trim quiet hours
     const hoursSet = new Set(); Object.keys(cells).forEach(k => hoursSet.add(+k.split('|')[0]));
     const hours = Array.from(hoursSet).filter(h => {
-      const total = days.reduce((a,d) => a + (cells[h+'|'+d]||0), 0);
+      const total = days.reduce((a,d) => a + cellVal(h+'|'+d), 0);
       return total / max >= 0.01;
     }).sort((a,b)=>a-b);
     const lbl = h => (h===0?'12 AM':h<12?h+' AM':h===12?'12 PM':(h-12)+' PM');
+    // Format cell value per metric. Avg-check cells with zero orders
+    // render blank — averaging on no orders is meaningless.
+    const fmtCell = (k, v) => {
+      if (!v) return '';
+      if (isAvg) {
+        if (!cellOrders(k)) return '';
+        return '$' + Math.round(v);
+      }
+      return isCovers ? fmtNum(Math.round(v)) : fmtMoney(v);
+    };
     let html = '<div class="heatmap"><div class="h-top"></div>' + days.map(d => `<div class="h-top">${d}</div>`).join('');
     hours.forEach(h => {
       html += `<div class="h-lbl">${lbl(h)}</div>`;
       days.forEach(d => {
-        const v = cells[h+'|'+d] || 0;
+        const k = h + '|' + d;
+        const v = cellVal(k);
         const t = max ? v/max : 0;
         const alpha = 0.06 + t*0.94;
-        html += `<div class="h-cell" style="background: rgba(33,41,49,${alpha.toFixed(2)}); color: ${t>0.45?'#fff':'#231F20'};">${v===0?'':fmtMoney(v)}</div>`;
+        html += `<div class="h-cell" style="background: rgba(33,41,49,${alpha.toFixed(2)}); color: ${t>0.45?'#fff':'#231F20'};">${fmtCell(k, v)}</div>`;
       });
     });
     html += '</div>';
@@ -4511,6 +4696,9 @@ document.addEventListener('change', e => {
     rerenderSection();
   } else if (e.target.id === 'hourDowFilter') {
     STATE.hourDow = e.target.value || 'all';
+    rerenderSection();
+  } else if (e.target.id === 'heatMetricFilter') {
+    STATE.heatMetric = e.target.value || '$';
     rerenderSection();
   }
 });
