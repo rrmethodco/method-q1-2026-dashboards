@@ -1,6 +1,6 @@
 {
   "outlet_id": "anthology",
-  "generated_at": "2026-04-29T19:12:46+00:00",
+  "generated_at": "2026-04-30T13:29:06+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -2380,6 +2380,28 @@
           "discount": 0.0,
           "ticket_time_sec_sum": 13632.1,
           "ticket_time_count": 2
+        },
+        {
+          "date": "2026-04-26",
+          "orders": 1,
+          "guests": 4,
+          "amount": 34521.09,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 13630.0,
+          "ticket_time_count": 1
+        },
+        {
+          "date": "2026-04-29",
+          "orders": 3,
+          "guests": 6,
+          "amount": 1050.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 3.4,
+          "ticket_time_count": 2
         }
       ],
       "monthly": [
@@ -2488,9 +2510,9 @@
           "month": "2026-03"
         },
         {
-          "orders": 42,
-          "guests": 53,
-          "amount": 277705.57,
+          "orders": 4,
+          "guests": 10,
+          "amount": 35571.09,
           "tip": 0.0,
           "discount": 0.0,
           "month": "2026-04"
@@ -7921,16 +7943,16 @@
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 503.0,
-        "guests": 803.0,
-        "amount": 4413530.89,
+        "orders": 507.0,
+        "guests": 813.0,
+        "amount": 4449101.9799999995,
         "tip": 0.0,
         "gratuity": 0.0,
         "discount": 10611.2,
-        "ticket_time_sec_sum": 1071105.4999999998,
-        "ticket_time_count": 444,
-        "avg_check": 8774.415288270377,
-        "avg_ticket_time_sec": 2412.3997747747744
+        "ticket_time_sec_sum": 1084738.8999999997,
+        "ticket_time_count": 447,
+        "avg_check": 8775.349072978303,
+        "avg_ticket_time_sec": 2426.7089485458605
       }
     }
   },
@@ -7955,7 +7977,7 @@
         {
           "author": "Peyton Bias",
           "rating": 5,
-          "text": "We got married at Book Tower on 12/29/24 and it was truly the perfect day. I knew when we toured the venue back while it was still under construction that it was going to be special, and I was thrilled to be totally correct! We had such a great experience with the Anthology Events team, Lauren was always super responsive and collaborative throughout the planning process and Maggie ensured everything was flawless on wedding day. The food is excellent, drinks were on point, the staff was friendly and attentive. They really went the extra mile to make sure we had a beautiful day, they even provided sweetheart tray of our cocktail hour bites for us to enjoy privately in the bridal suite and those first few moments alone together as husband and wife were so appreciated. I highly recommend Book Tower, you really couldn’t ask for a more beautiful, modern Detroit venue or a better staff.",
+          "text": "We got married at Book Tower on 12/29/24 and it was truly the perfect day. I knew when we toured the venue back while it was still under construction that it was going to be special, and I was thrilled to be totally correct! We had such a great experience with the Anthology Events team, Lauren was always super responsive and collaborative throughout the planning process and Maggie ensured everything was flawless on wedding day. The food is excellent, drinks were on point, the staff was friendly and attentive. They really went the extra mile to make sure we had a beautiful day, they even provided sweetheart tray of our cocktail hour bites for us to enjoy privately in the bridal suite and those first few moments alone together as husband and wife were so appreciated. I highly recommend Book Tower, you really couldn\u2019t ask for a more beautiful, modern Detroit venue or a better staff.",
           "relative": "a year ago",
           "time": 1736966635,
           "is_local_guide": false
@@ -11314,13 +11336,22 @@
         "date": "2026-04-27"
       },
       {
+        "regular_hours": 19.86,
+        "overtime_hours": 0.0,
+        "regular_cost": 552.5,
+        "overtime_cost": 0.0,
+        "total_cost": 552.5,
+        "head_count": 2,
+        "date": "2026-04-29"
+      },
+      {
         "regular_hours": 0.0,
         "overtime_hours": 0.0,
         "regular_cost": 0.0,
         "overtime_cost": 0.0,
         "total_cost": 0.0,
         "head_count": 2,
-        "date": "2026-04-29"
+        "date": "2026-04-30"
       }
     ],
     "hour_daily": [
@@ -43081,6 +43112,84 @@
         "hour": 19,
         "hours": 0.93,
         "cost": 23.24
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 10,
+        "hours": 0.45,
+        "cost": 13.54
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 11,
+        "hours": 1.0,
+        "cost": 29.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 12,
+        "hours": 1.0,
+        "cost": 29.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 13,
+        "hours": 1.56,
+        "cost": 43.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 14,
+        "hours": 2.0,
+        "cost": 54.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 15,
+        "hours": 2.0,
+        "cost": 54.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 16,
+        "hours": 2.0,
+        "cost": 54.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 17,
+        "hours": 2.0,
+        "cost": 54.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 18,
+        "hours": 2.0,
+        "cost": 54.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 19,
+        "hours": 2.0,
+        "cost": 54.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 20,
+        "hours": 2.0,
+        "cost": 54.99
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 21,
+        "hours": 1.75,
+        "cost": 47.58
+      },
+      {
+        "date": "2026-04-29",
+        "hour": 22,
+        "hours": 0.1,
+        "cost": 2.52
       }
     ],
     "by_job_daily": [
@@ -55002,13 +55111,27 @@
         "date": "2026-04-29",
         "job_guid": "d6c3f2dd-4f0b-4ba2-b396-9cfb84caf2f2",
         "title": "Captain",
-        "hours": 0.0,
-        "cost": 0.0
+        "hours": 11.2,
+        "cost": 336.0
       },
       {
         "date": "2026-04-29",
         "job_guid": "5216a90f-a5a1-43f8-90b8-6e3a5a6ac1bd",
         "title": "Sales Coordinator",
+        "hours": 8.66,
+        "cost": 216.5
+      },
+      {
+        "date": "2026-04-30",
+        "job_guid": "5216a90f-a5a1-43f8-90b8-6e3a5a6ac1bd",
+        "title": "Sales Coordinator",
+        "hours": 0.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "job_guid": "b1512743-6e6a-4139-b7bf-992b8cd12290",
+        "title": "Cook",
         "hours": 0.0,
         "cost": 0.0
       }
@@ -55431,8 +55554,8 @@
       {
         "hour": 10,
         "dow": "WED",
-        "hours": 16.14,
-        "cost": 410.83
+        "hours": 16.59,
+        "cost": 424.37
       },
       {
         "hour": 10,
@@ -55473,8 +55596,8 @@
       {
         "hour": 11,
         "dow": "WED",
-        "hours": 39.86,
-        "cost": 973.43
+        "hours": 40.86,
+        "cost": 1003.42
       },
       {
         "hour": 11,
@@ -55515,8 +55638,8 @@
       {
         "hour": 12,
         "dow": "WED",
-        "hours": 71.49,
-        "cost": 1655.81
+        "hours": 72.49,
+        "cost": 1685.8
       },
       {
         "hour": 12,
@@ -55557,8 +55680,8 @@
       {
         "hour": 13,
         "dow": "WED",
-        "hours": 122.11,
-        "cost": 2797.56
+        "hours": 123.67,
+        "cost": 2841.55
       },
       {
         "hour": 13,
@@ -55599,8 +55722,8 @@
       {
         "hour": 14,
         "dow": "WED",
-        "hours": 166.81,
-        "cost": 3848.47
+        "hours": 168.81,
+        "cost": 3903.46
       },
       {
         "hour": 14,
@@ -55641,8 +55764,8 @@
       {
         "hour": 15,
         "dow": "WED",
-        "hours": 206.57,
-        "cost": 4768.18
+        "hours": 208.57,
+        "cost": 4823.17
       },
       {
         "hour": 15,
@@ -55683,8 +55806,8 @@
       {
         "hour": 16,
         "dow": "WED",
-        "hours": 236.45,
-        "cost": 5485.49
+        "hours": 238.45,
+        "cost": 5540.48
       },
       {
         "hour": 16,
@@ -55725,8 +55848,8 @@
       {
         "hour": 17,
         "dow": "WED",
-        "hours": 263.66,
-        "cost": 6132.94
+        "hours": 265.66,
+        "cost": 6187.93
       },
       {
         "hour": 17,
@@ -55767,8 +55890,8 @@
       {
         "hour": 18,
         "dow": "WED",
-        "hours": 274.15,
-        "cost": 6448.07
+        "hours": 276.15,
+        "cost": 6503.06
       },
       {
         "hour": 18,
@@ -55809,8 +55932,8 @@
       {
         "hour": 19,
         "dow": "WED",
-        "hours": 279.12,
-        "cost": 6652.2
+        "hours": 281.12,
+        "cost": 6707.19
       },
       {
         "hour": 19,
@@ -55851,8 +55974,8 @@
       {
         "hour": 20,
         "dow": "WED",
-        "hours": 283.46,
-        "cost": 6758.51
+        "hours": 285.46,
+        "cost": 6813.5
       },
       {
         "hour": 20,
@@ -55893,8 +56016,8 @@
       {
         "hour": 21,
         "dow": "WED",
-        "hours": 267.95,
-        "cost": 6375.66
+        "hours": 269.7,
+        "cost": 6423.24
       },
       {
         "hour": 21,
@@ -55935,8 +56058,8 @@
       {
         "hour": 22,
         "dow": "WED",
-        "hours": 227.0,
-        "cost": 5352.55
+        "hours": 227.1,
+        "cost": 5355.07
       },
       {
         "hour": 22,
@@ -56007,11 +56130,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 28539.1,
+    "regular_hours": 28558.96,
     "overtime_hours": 948.73,
-    "regular_cost": 657826.56,
+    "regular_cost": 658379.06,
     "overtime_cost": 37006.15,
-    "total_cost": 694832.64
+    "total_cost": 695385.14
   },
   "cogs": {
     "as_of": "2026-04-29",
