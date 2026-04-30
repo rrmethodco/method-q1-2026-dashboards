@@ -480,11 +480,18 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
         "sec-fetch-mode", "sec-fetch-site", "sec-fetch-dest",
         "sec-fetch-user", "connection", "transfer-encoding",
     }
-    # Earliest plausible Resy survey date — Method's first venue went on
-    # Resy ~2022. Bracket wide so we capture every venue's full history.
-    WIDE_START = "2022-01-01T00:00:00"
-    WIDE_END = "2030-12-31T23:59:59"
-    MAX_PAGES = 100  # safety net for cursor loops
+    # Year-chunked fetch. A single wide-date-range request times out at
+    # 60s for high-volume venues (LSBR ~1900 rows, Lowland ~1500). Hit
+    # one calendar year at a time — each response is bounded and fast,
+    # and the natural-key dedup absorbs any overlap. Cover Method's
+    # earliest Resy presence (mid-2022) through the current year, plus
+    # one in the future to catch edge cases.
+    from datetime import datetime as _dt
+    _now_year = _dt.utcnow().year
+    YEAR_CHUNKS = [(y, f"{y}-01-01T00:00:00", f"{y}-12-31T23:59:59")
+                   for y in range(2022, _now_year + 2)]
+    MAX_PAGES_PER_YEAR = 50  # safety net for cursor loops within a year
+    REQUEST_TIMEOUT_MS = 90_000
 
     expanded: list[dict] = []
     seen_bases: set[str] = set()
@@ -505,76 +512,87 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
         src_headers = cap.get("request_headers") or {}
         headers = {k: v for k, v in src_headers.items()
                    if k.lower() not in DROP_HEADERS and not k.startswith(":")}
-        # Build the full-history URL: same path, wide date window,
-        # all=true, drop any question-id filters (we want ALL surveys,
-        # not just one question's responses).
-        qs = _u.parse_qs(parts.query, keep_blank_values=True)
-        qs["start_date"] = [WIDE_START]
-        qs["end_date"] = [WIDE_END]
-        qs["all"] = ["true"]
-        # Strip any `surveyresponse__question_id` and ..__isnull
-        # filters — those scope to a specific question and would
-        # exclude rows that don't have that question answered.
-        for k in list(qs.keys()):
+        # Build the per-year base query template: drop any
+        # surveyresponse__question_id filter (those scope to one
+        # question's responses), set all=true, set sort. start_date
+        # and end_date are filled in per chunk below.
+        base_qs = _u.parse_qs(parts.query, keep_blank_values=True)
+        for k in list(base_qs.keys()):
             if k.startswith("surveyresponse__"):
-                qs.pop(k)
-        new_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
-        # Follow `next_request` cursor if Resy returns one (saw it as
-        # a sibling of `surveys` in the data block).
-        page_idx = 0
-        cur_url = new_url
-        while page_idx < MAX_PAGES:
-            try:
-                resp = page.request.get(cur_url, headers=headers, timeout=60_000)
-            except Exception as e:
-                sys.stderr.write(f"  full-history fetch failed page {page_idx}: {e}\n")
-                break
-            if not resp.ok:
-                sys.stderr.write(
-                    f"  full-history fetch HTTP {resp.status} page {page_idx} for {base}\n"
-                )
-                break
-            try:
-                body = resp.json()
-            except Exception as e:
-                sys.stderr.write(f"  full-history JSON parse failed page {page_idx}: {e}\n")
-                break
-            expanded.append({"url": cur_url, "status": resp.status, "json": body})
-            # Find next_request — Resy puts it inside `data` per
-            # diagnostic output. Could be absolute URL, relative path,
-            # or a query string fragment.
-            next_req = None
-            if isinstance(body, dict):
-                d = body.get("data")
-                if isinstance(d, dict):
-                    next_req = d.get("next_request")
-                if next_req is None:
-                    next_req = body.get("next_request")
-            if not next_req:
-                break
-            if isinstance(next_req, str):
-                if next_req.startswith("http"):
-                    cur_url = next_req
-                elif next_req.startswith("/"):
-                    cur_url = f"{parts.scheme}://{parts.netloc}{next_req}"
-                elif next_req.startswith("?"):
-                    cur_url = f"{parts.scheme}://{parts.netloc}{parts.path}{next_req}"
+                base_qs.pop(k)
+        base_qs["all"] = ["true"]
+        base_qs.setdefault("sort", ["-reservation__date_booked"])
+
+        # Walk one calendar year at a time. Year-chunking caps each
+        # response size + wall time so we don't blow past the 90s
+        # request timeout on high-volume venues.
+        for year, start_iso, end_iso in YEAR_CHUNKS:
+            qs = {k: list(v) for k, v in base_qs.items()}
+            qs["start_date"] = [start_iso]
+            qs["end_date"] = [end_iso]
+            year_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
+            page_idx = 0
+            cur_url = year_url
+            while page_idx < MAX_PAGES_PER_YEAR:
+                try:
+                    resp = page.request.get(cur_url, headers=headers, timeout=REQUEST_TIMEOUT_MS)
+                except Exception as e:
+                    sys.stderr.write(
+                        f"  full-history {year} fetch failed page {page_idx}: {e}\n"
+                    )
+                    break
+                if not resp.ok:
+                    sys.stderr.write(
+                        f"  full-history {year} HTTP {resp.status} page {page_idx} for {base}\n"
+                    )
+                    break
+                try:
+                    body = resp.json()
+                except Exception as e:
+                    sys.stderr.write(
+                        f"  full-history {year} JSON parse failed page {page_idx}: {e}\n"
+                    )
+                    break
+                expanded.append({"url": cur_url, "status": resp.status, "json": body})
+                # Stop early if year has no data — saves a lot of
+                # round-trips for venues that only opened recently.
+                if isinstance(body, dict):
+                    d = body.get("data")
+                    if isinstance(d, dict):
+                        rows = d.get("surveys")
+                        if isinstance(rows, list) and not rows:
+                            break
+                # Follow next_request cursor within the year.
+                next_req = None
+                if isinstance(body, dict):
+                    d = body.get("data")
+                    if isinstance(d, dict):
+                        next_req = d.get("next_request")
+                    if next_req is None:
+                        next_req = body.get("next_request")
+                if not next_req:
+                    break
+                if isinstance(next_req, str):
+                    if next_req.startswith("http"):
+                        cur_url = next_req
+                    elif next_req.startswith("/"):
+                        cur_url = f"{parts.scheme}://{parts.netloc}{next_req}"
+                    elif next_req.startswith("?"):
+                        cur_url = f"{parts.scheme}://{parts.netloc}{parts.path}{next_req}"
+                    else:
+                        break
+                elif isinstance(next_req, dict):
+                    nxt_u = next_req.get("url") or next_req.get("href")
+                    if not nxt_u:
+                        break
+                    cur_url = nxt_u if nxt_u.startswith("http") else f"{parts.scheme}://{parts.netloc}{nxt_u}"
+                    nxt_p = next_req.get("params") or next_req.get("query")
+                    if isinstance(nxt_p, dict) and nxt_p:
+                        sep = "&" if "?" in cur_url else "?"
+                        cur_url = f"{cur_url}{sep}{_u.urlencode(nxt_p, doseq=True)}"
                 else:
-                    # Unknown shape — bail to avoid loops
                     break
-            elif isinstance(next_req, dict):
-                # Likely {url: ..., params: {...}}
-                nxt_u = next_req.get("url") or next_req.get("href")
-                if not nxt_u:
-                    break
-                cur_url = nxt_u if nxt_u.startswith("http") else f"{parts.scheme}://{parts.netloc}{nxt_u}"
-                nxt_p = next_req.get("params") or next_req.get("query")
-                if isinstance(nxt_p, dict) and nxt_p:
-                    sep = "&" if "?" in cur_url else "?"
-                    cur_url = f"{cur_url}{sep}{_u.urlencode(nxt_p, doseq=True)}"
-            else:
-                break
-            page_idx += 1
+                page_idx += 1
     return expanded
 
 
