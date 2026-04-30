@@ -435,7 +435,7 @@ const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
 // weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
 // filter to a single Mon..Sun 7-day window. When set, periodBounds returns
 // that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all', heatMetric: '$' };
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top', hourDow: 'all', heatMetric: '$', trendMetric: 'revenue', trendType: 'area' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -3027,31 +3027,56 @@ function renderRevenueSection() {
         <div class="sect-title">This Period <span class="period-chip">${periodLabel}</span></div>
         <div class="sect-meta">Computed from daily data for the selected month · ${granLabel}</div>
       </div>
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-head">
-            <h3>Net Sales Trend</h3>
-            <div class="card-compare">
-              <span class="ctrl-label">Compare</span>
-              <select id="trendCompareFilter">
-                <option value="none" ${STATE.trendCompare==='none'?'selected':''}>None</option>
-                <option value="STLY" ${STATE.trendCompare==='STLY'?'selected':''}>STLY</option>
-                <option value="T2W"  ${STATE.trendCompare==='T2W' ?'selected':''}>T2W Avg</option>
-                <option value="LW"   ${STATE.trendCompare==='LW'  ?'selected':''}>vs LW</option>
-                <option value="all"  ${STATE.trendCompare==='all' ?'selected':''}>All</option>
-              </select>
-            </div>
+      <!-- ROW 1: F&B Performance Trends — full width.
+           Multi-metric (Total F&B Revenue / Covers / Avg Check / RevPASH /
+           Comps & Discount), 3 chart types (line/area/bar), 3 granularities,
+           comparison overlay, and CSV download. -->
+      <div class="card">
+        <div class="card-head" style="align-items:flex-start;">
+          <div>
+            <h3 style="margin:0;">F&amp;B Performance Trends</h3>
+            <div class="desc" style="margin-top:2px;" id="trendSubtitle">${periodLabel}</div>
           </div>
-          <div class="desc">Daily net sales in ${periodLabel}${STATE.trendCompare !== 'none' ? ' · comparison overlay dashed Turquoise' : ''}</div>
-          <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
+          <div class="card-compare" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <select id="trendMetricFilter" title="Metric">
+              <option value="revenue"   ${STATE.trendMetric==='revenue'  ?'selected':''}>Total F&amp;B Revenue</option>
+              <option value="covers"    ${STATE.trendMetric==='covers'   ?'selected':''}>Covers</option>
+              <option value="avgCheck"  ${STATE.trendMetric==='avgCheck' ?'selected':''}>Average Check</option>
+              <option value="revpash"   ${STATE.trendMetric==='revpash'  ?'selected':''}>RevPASH</option>
+              <option value="compsDisc" ${STATE.trendMetric==='compsDisc'?'selected':''}>Comps &amp; Discount</option>
+            </select>
+            <select id="trendGranInline" title="Granularity">
+              <option value="D" ${STATE.gran==='D'?'selected':''}>Daily</option>
+              <option value="W" ${STATE.gran==='W'?'selected':''}>Weekly</option>
+              <option value="M" ${STATE.gran==='M'?'selected':''}>Monthly</option>
+            </select>
+            <select id="trendTypeFilter" title="Chart type">
+              <option value="line" ${STATE.trendType==='line'?'selected':''}>Line</option>
+              <option value="area" ${STATE.trendType==='area'?'selected':''}>Area</option>
+              <option value="bar"  ${STATE.trendType==='bar' ?'selected':''}>Bar</option>
+            </select>
+            <button type="button" id="trendDownloadBtn" title="Download CSV"
+              style="background:transparent;border:1px solid var(--grey);padding:6px 8px;cursor:pointer;border-radius:2px;font-size:12px;line-height:1;">↓</button>
+            <select id="trendCompareFilter" title="Comparison overlay">
+              <option value="none" ${STATE.trendCompare==='none'?'selected':''}>No comparison</option>
+              <option value="STLY" ${STATE.trendCompare==='STLY'?'selected':''}>STLY</option>
+              <option value="T2W"  ${STATE.trendCompare==='T2W' ?'selected':''}>T2W Avg</option>
+              <option value="LW"   ${STATE.trendCompare==='LW'  ?'selected':''}>vs LW</option>
+              <option value="all"  ${STATE.trendCompare==='all' ?'selected':''}>All</option>
+            </select>
+          </div>
         </div>
+        <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
+      </div>
+
+      <!-- ROW 2: Day of Week | Product Mix | Private Events Revenue -->
+      <div class="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;">
         <div class="card">
           <div class="card-head">
             <h3>Day of Week</h3>
             <div class="card-compare">
-              <span class="ctrl-label">Compare</span>
               <select id="dowCompareFilter">
-                <option value="none" ${STATE.dowCompare==='none'?'selected':''}>None</option>
+                <option value="none" ${STATE.dowCompare==='none'?'selected':''}>No compare</option>
                 <option value="STLY" ${STATE.dowCompare==='STLY'?'selected':''}>STLY</option>
                 <option value="T2W"  ${STATE.dowCompare==='T2W' ?'selected':''}>T2W Avg</option>
                 <option value="LW"   ${STATE.dowCompare==='LW'  ?'selected':''}>vs LW</option>
@@ -3062,82 +3087,50 @@ function renderRevenueSection() {
           <div class="desc">Net sales by weekday in ${periodLabel}</div>
           <div class="chart-wrap tall"><canvas id="dowChart"></canvas></div>
         </div>
-      </div>
-      <!-- Hidden 2026-04-24: Monthly Comparison + Weekly Discount &amp; Comp Trend cards removed per operator request. Render functions kept in place. -->
-    </section>
-
-    <!-- Restored 2026-04-27: Hour of Day + Heatmap + RC Breakdown — now
-         period-aware via the new hour_daily ETL field. Cat/Daypart/Mode and
-         the hidden tipHist/monthly/discTrend charts stay parked below. -->
-    <section>
-      <div class="sect-head">
-        <div class="sect-title">Hourly &amp; RC Detail <span class="period-chip">${periodLabel}</span></div>
-        <div class="sect-meta">Per-day hourly + RC totals filtered by the selected month/week.</div>
-      </div>
-      <div class="grid grid-2eq">
-        <div class="card">
-          <div class="card-head">
-            <h3>Hour of Day</h3>
-            <div class="card-compare" style="display:flex;gap:8px;">
-              <div style="display:flex;align-items:center;gap:4px;">
-                <span class="ctrl-label">Metric</span>
-                <select id="hourMetricFilter">
-                  <option value="$"      ${STATE.hourMetric==='$'?'selected':''}>$ Net Sales</option>
-                  <option value="guests" ${STATE.hourMetric==='guests'?'selected':''}>Covers</option>
-                </select>
-              </div>
-              <div style="display:flex;align-items:center;gap:4px;">
-                <span class="ctrl-label">Day</span>
-                <select id="hourDowFilter">
-                  <option value="all" ${(STATE.hourDow||'all')==='all'?'selected':''}>All days</option>
-                  <option value="Mon" ${STATE.hourDow==='Mon'?'selected':''}>Monday</option>
-                  <option value="Tue" ${STATE.hourDow==='Tue'?'selected':''}>Tuesday</option>
-                  <option value="Wed" ${STATE.hourDow==='Wed'?'selected':''}>Wednesday</option>
-                  <option value="Thu" ${STATE.hourDow==='Thu'?'selected':''}>Thursday</option>
-                  <option value="Fri" ${STATE.hourDow==='Fri'?'selected':''}>Friday</option>
-                  <option value="Sat" ${STATE.hourDow==='Sat'?'selected':''}>Saturday</option>
-                  <option value="Sun" ${STATE.hourDow==='Sun'?'selected':''}>Sunday</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="desc">${STATE.hourMetric==='$' ? 'Net sales' : 'Covers'} by hour · ${periodLabel}${(STATE.hourDow && STATE.hourDow !== 'all') ? ' · ' + STATE.hourDow + ' only' : ''}</div>
-          <div class="chart-wrap tall"><canvas id="hourChart"></canvas></div>
-        </div>
         <div class="card">
           <div class="card-head">
             <h3>Product Mix</h3>
             <div class="card-compare" style="display:flex;gap:8px;">
-              <div style="display:flex;align-items:center;gap:4px;">
-                <span class="ctrl-label">Category</span>
-                <select id="pmixCatFilter">
-                  <option value="food"     ${STATE.pmixCat==='food'    ?'selected':''}>Food</option>
-                  <option value="beverage" ${STATE.pmixCat==='beverage'?'selected':''}>Beverage</option>
-                  <option value="liquor"   ${STATE.pmixCat==='liquor'  ?'selected':''}>Liquor</option>
-                  <option value="beer"     ${STATE.pmixCat==='beer'    ?'selected':''}>Beer</option>
-                  <option value="wine"     ${STATE.pmixCat==='wine'    ?'selected':''}>Wine</option>
-                  <option value="na"       ${STATE.pmixCat==='na'      ?'selected':''}>NA Bev</option>
-                </select>
-              </div>
-              <div style="display:flex;align-items:center;gap:4px;">
-                <span class="ctrl-label">Rank</span>
-                <select id="pmixDirFilter">
-                  <option value="top"    ${STATE.pmixDir!=='bottom'?'selected':''}>Top 10</option>
-                  <option value="bottom" ${STATE.pmixDir==='bottom'?'selected':''}>Bottom 10</option>
-                </select>
-              </div>
+              <select id="pmixCatFilter">
+                <option value="food"     ${STATE.pmixCat==='food'    ?'selected':''}>Food</option>
+                <option value="beverage" ${STATE.pmixCat==='beverage'?'selected':''}>Beverage</option>
+                <option value="liquor"   ${STATE.pmixCat==='liquor'  ?'selected':''}>Liquor</option>
+                <option value="beer"     ${STATE.pmixCat==='beer'    ?'selected':''}>Beer</option>
+                <option value="wine"     ${STATE.pmixCat==='wine'    ?'selected':''}>Wine</option>
+                <option value="na"       ${STATE.pmixCat==='na'      ?'selected':''}>NA Bev</option>
+              </select>
+              <select id="pmixDirFilter">
+                <option value="top"    ${STATE.pmixDir!=='bottom'?'selected':''}>Top 10</option>
+                <option value="bottom" ${STATE.pmixDir==='bottom'?'selected':''}>Bottom 10</option>
+              </select>
             </div>
           </div>
           <div class="desc" id="pmixRevDesc">Top items by net sales · ${periodLabel}</div>
           <div class="chart-wrap tall" style="overflow:auto;padding:0;"><div id="rcChart"></div></div>
         </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Private Events Revenue</h3>
+            <span class="period-chip">Time Horizons</span>
+          </div>
+          <div class="desc">Tripleseat · separated by horizon · vs same window prior year</div>
+          <div id="privateEventsCard"></div>
+        </div>
       </div>
-      <div class="grid grid-2eq" style="margin-top:12px;">
+      <!-- Hidden 2026-04-24: Monthly Comparison + Weekly Discount &amp; Comp Trend cards removed per operator request. Render functions kept in place. -->
+    </section>
+
+    <!-- ROW 3: Heatmap | Hour of Day -->
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Hourly &amp; Day-of-Week Detail <span class="period-chip">${periodLabel}</span></div>
+        <div class="sect-meta">Per-day hourly aggregation filtered by the selected month/week.</div>
+      </div>
+      <div class="grid grid-2eq">
         <div class="card">
           <div class="card-head">
             <h3>Hour × Day-of-Week Heatmap</h3>
             <div class="card-compare">
-              <span class="ctrl-label">Metric</span>
               <select id="heatMetricFilter">
                 <option value="$"      ${(STATE.heatMetric||'$')==='$'?'selected':''}>$ Net Sales</option>
                 <option value="covers" ${STATE.heatMetric==='covers'?'selected':''}>Covers</option>
@@ -3150,11 +3143,26 @@ function renderRevenueSection() {
         </div>
         <div class="card">
           <div class="card-head">
-            <h3>Private Events Revenue</h3>
-            <span class="period-chip">Time Horizons</span>
+            <h3>Hour of Day</h3>
+            <div class="card-compare" style="display:flex;gap:8px;">
+              <select id="hourMetricFilter">
+                <option value="$"      ${STATE.hourMetric==='$'?'selected':''}>$ Net Sales</option>
+                <option value="guests" ${STATE.hourMetric==='guests'?'selected':''}>Covers</option>
+              </select>
+              <select id="hourDowFilter">
+                <option value="all" ${(STATE.hourDow||'all')==='all'?'selected':''}>All days</option>
+                <option value="Mon" ${STATE.hourDow==='Mon'?'selected':''}>Monday</option>
+                <option value="Tue" ${STATE.hourDow==='Tue'?'selected':''}>Tuesday</option>
+                <option value="Wed" ${STATE.hourDow==='Wed'?'selected':''}>Wednesday</option>
+                <option value="Thu" ${STATE.hourDow==='Thu'?'selected':''}>Thursday</option>
+                <option value="Fri" ${STATE.hourDow==='Fri'?'selected':''}>Friday</option>
+                <option value="Sat" ${STATE.hourDow==='Sat'?'selected':''}>Saturday</option>
+                <option value="Sun" ${STATE.hourDow==='Sun'?'selected':''}>Sunday</option>
+              </select>
+            </div>
           </div>
-          <div class="desc">Tripleseat · separated by horizon · vs same window prior year</div>
-          <div id="privateEventsCard"></div>
+          <div class="desc">${STATE.hourMetric==='$' ? 'Net sales' : 'Covers'} by hour · ${periodLabel}${(STATE.hourDow && STATE.hourDow !== 'all') ? ' · ' + STATE.hourDow + ' only' : ''}</div>
+          <div class="chart-wrap tall"><canvas id="hourChart"></canvas></div>
         </div>
       </div>
     </section>
@@ -3733,26 +3741,122 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
   }).join('');
 }
 
+// ---- Trend metric resolver ----------------------------------------------
+// Map STATE.trendMetric (revenue/covers/avgCheck/revpash/compsDisc) to a
+// per-row value extractor + display config (label, formatters). Each row
+// passed in here is a rolled-up daily/weekly/monthly bucket from
+// combinedDailySales merged with combinedDailyOrders for non-revenue
+// metrics. Returns null when the metric can't be computed for that row.
+const TREND_METRICS = {
+  revenue:   { label: 'Total F&B Revenue', y: r => r.net_sales || 0,
+               valFmt: v => fmtMoneyFull(v), axisFmt: v => fmtMoney(v) },
+  covers:    { label: 'Covers',            y: r => r.guests || 0,
+               valFmt: v => fmtNum(v) + ' covers', axisFmt: v => fmtNum(v) },
+  avgCheck:  { label: 'Average Check',     y: r => (r.orders ? (r.net_sales || r.amount || 0) / r.orders : null),
+               valFmt: v => '$' + (v||0).toFixed(2), axisFmt: v => '$' + Math.round(v) },
+  revpash:   { label: 'RevPASH',           y: null /* set per outlet below */,
+               valFmt: v => '$' + (v||0).toFixed(2) + '/seat-hr', axisFmt: v => '$' + (v||0).toFixed(0) },
+  compsDisc: { label: 'Comps & Discount',  y: r => r.discount || 0,
+               valFmt: v => fmtMoneyFull(v), axisFmt: v => fmtMoney(v) },
+};
+
+// Build a per-row dataset honoring the selected metric. Merges
+// combinedDailyOrders into the rollup so avgCheck/compsDisc can resolve
+// (those fields don't live on sales_summary daily).
+function buildTrendRows(periodBoundsObj) {
+  const ssAll = combinedDailySales();
+  const odAll = combinedDailyOrders();
+  // Index OD by date for quick join.
+  const odByDate = {};
+  odAll.forEach(r => { odByDate[r.date] = r; });
+  // Filter sales summary to the selected period, merge in OD fields.
+  const merged = (periodBoundsObj ? filter(ssAll, periodBoundsObj) : ssAll).map(r => {
+    const od = odByDate[r.date] || {};
+    return {
+      date: r.date,
+      net_sales: r.net_sales || 0,
+      orders:    od.orders   || r.orders || 0,
+      guests:    r.guests    || od.guests || 0,
+      amount:    od.amount   || r.net_sales || 0,
+      discount:  od.discount || 0,
+    };
+  });
+  // Roll up to current granularity. For avgCheck we need amount + orders
+  // post-roll then divide; rollup() sums fields, so request both.
+  return rollup(merged, STATE.gran, ['net_sales','orders','guests','amount','discount']);
+}
+
 function renderTrend(cur, py) {
   destroy('trend');
-  if (!cur || !cur.length) { showEmpty('trendChart', 'No sales in this period', 'Select a different month or revenue center.'); return; }
+  // Resolve metric config + custom y-extractor for RevPASH (needs outlet
+  // seats + open hours, computed against rolled-up rows).
+  const metricKey = STATE.trendMetric || 'revenue';
+  const metric = TREND_METRICS[metricKey] || TREND_METRICS.revenue;
+  const o = DATA.outlets[STATE.outlet];
+  const seats = (o && (o.seats || (o.config && o.config.seats))) || null;
+  const hoursPerDay = (o && (o.open_hours_per_day || (o.config && o.config.open_hours_per_day))) || null;
+  // RevPASH = revenue / (seats × hours/day × period_days). Per row, the
+  // bucket has period_days = (1 if daily, 7 if weekly, ~30 if monthly).
+  const bucketDays = STATE.gran === 'D' ? 1 : (STATE.gran === 'W' ? 7 : 30);
+  const yExtractor = metricKey === 'revpash'
+    ? (r) => (seats && hoursPerDay) ? (r.net_sales / (seats * hoursPerDay * bucketDays)) : null
+    : metric.y;
+  if (!cur || !cur.length) { showEmpty('trendChart', 'No data in this period', 'Select a different month or revenue center.'); return; }
+  // Update subtitle copy (description below the title) on each render
+  // to reflect the active metric + period without HTML re-render.
+  const subtitleEl = document.getElementById('trendSubtitle');
+  const periodSub = currentPeriodLabel();
+  if (subtitleEl) subtitleEl.textContent = `${metric.label} · ${periodSub}`;
   safeChart('trendChart', () => {
-    const curRoll = rollup(cur, STATE.gran, ['net_sales']);
+    // Rebuild rows from the underlying SS+OD merge so avgCheck/comps
+    // metrics can resolve. Falls back to the caller-provided `cur` for
+    // revenue metric (preserves the existing call signature).
+    const ssDailyAll = combinedDailySales();
+    const maxDateAll = ssDailyAll.length ? ssDailyAll[ssDailyAll.length-1].date : null;
+    const curB = maxDateAll ? periodBounds(maxDateAll) : null;
+    const curRoll = (metricKey === 'revenue')
+      ? rollup(cur, STATE.gran, ['net_sales'])
+      : buildTrendRows(curB);
     const ctx = document.getElementById('trendChart').getContext('2d');
+    // Chart-type wiring: line/area share type:'line' (area = fill:true);
+    // bar uses type:'bar'. Comparison overlays in the original function
+    // used type:'bar' — they get overridden to type:'line' (dashed) when
+    // the primary chart is line/area so they read as overlays.
+    const trendType = STATE.trendType || 'area';
+    const isBar = trendType === 'bar';
+    const isArea = trendType === 'area';
+
+    // Build a vertical gradient for area mode. Chart.js needs the chart
+    // dimensions to gradient properly — wait until the chart's first
+    // animation tick via the `beforeRender` plugin doesn't help here, so
+    // build a static fallback gradient now.
+    let areaFill = 'rgba(43,166,187,0.25)'; // Method turquoise w/ alpha — fallback
+    try {
+      const grad = ctx.createLinearGradient(0, 0, 0, 360);
+      grad.addColorStop(0, 'rgba(43,166,187,0.40)');
+      grad.addColorStop(1, 'rgba(43,166,187,0.02)');
+      areaFill = grad;
+    } catch (_) { /* keep solid fallback */ }
+
+    const yVals = curRoll.map(yExtractor);
     const datasets = [{
-      type: 'bar',
-      label: 'Net Sales',
-      // Parse as local noon so the X-axis tick matches the date we mean —
-      // a raw 'YYYY-MM-DD' string is parsed by Chart.js's date-fns adapter
-      // as UTC midnight, which in ET shifts every point back one day.
-      data: curRoll.map(r => ({ x: toLocalNoon(r.date), y: r.net_sales })),
-      backgroundColor: C.slate,
-      borderColor: C.slate,
-      borderWidth: 0,
-      borderRadius: 2,
+      type: isBar ? 'bar' : 'line',
+      label: metric.label,
+      data: curRoll.map((r, i) => ({ x: toLocalNoon(r.date), y: yVals[i] })),
+      backgroundColor: isBar ? C.turquoise : (isArea ? areaFill : 'transparent'),
+      borderColor: C.turquoise,
+      borderWidth: isBar ? 0 : 2.5,
+      fill: isArea ? 'origin' : false,
+      tension: 0.4,
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      pointBackgroundColor: C.turquoise,
+      pointBorderColor: '#fff',
+      pointBorderWidth: 2,
+      borderRadius: isBar ? 2 : 0,
       barPercentage: 0.8,
       categoryPercentage: 0.9,
-      order: 2
+      order: 2,
     }];
     // ===== Comparison overlays driven by the per-card selector =====
     // STLY  — prior-year window shifted forward to align dates.
@@ -3778,7 +3882,9 @@ function renderTrend(cur, py) {
           if (py2 && py2.length) {
             const pyRoll = rollup(py2, STATE.gran, ['net_sales']);
             datasets.push({
-              type: 'bar',
+              // Comparison overlay always renders as a dashed line — easier to
+              // read against the primary line/area, and renders cleanly on bars too.
+              type: 'line',
               label: label,
               data: pyRoll.map(r => {
                 const dt = toLocalNoon(r.date);
@@ -3786,9 +3892,10 @@ function renderTrend(cur, py) {
                 else dt.setFullYear(dt.getFullYear() + 1);
                 return { x: dt, y: r.net_sales };
               }),
-              backgroundColor: color, borderRadius: 2,
-              barPercentage: 0.8, categoryPercentage: 0.9,
-              order: 2
+              borderColor: color, backgroundColor: 'transparent',
+              borderWidth: 2, borderDash: [6, 4], fill: false,
+              tension: 0.4, pointRadius: 0, pointHoverRadius: 4,
+              order: 1,
             });
           }
         } else if (mode === 'LW') {
@@ -3799,16 +3906,17 @@ function renderTrend(cur, py) {
           if (lwRows && lwRows.length) {
             const lwRoll = rollup(lwRows, STATE.gran, ['net_sales']);
             datasets.push({
-              type: 'bar',
+              type: 'line',
               label: label,
               data: lwRoll.map(r => {
                 const dt = toLocalNoon(r.date);
                 dt.setDate(dt.getDate() + periodDays);
                 return { x: dt, y: r.net_sales };
               }),
-              backgroundColor: color, borderRadius: 2,
-              barPercentage: 0.8, categoryPercentage: 0.9,
-              order: 2
+              borderColor: color, backgroundColor: 'transparent',
+              borderWidth: 2, borderDash: [6, 4], fill: false,
+              tension: 0.4, pointRadius: 0, pointHoverRadius: 4,
+              order: 1,
             });
           }
         } else if (mode === 'T2W') {
@@ -3823,12 +3931,13 @@ function renderTrend(cur, py) {
             // benchmark height. Reads as a "stepped baseline" the user can
             // compare each day's actual against.
             datasets.push({
-              type: 'bar',
+              type: 'line',
               label: label + ' / day',
               data: curRoll.map(r => ({ x: toLocalNoon(r.date), y: avgPerDay })),
-              backgroundColor: color, borderRadius: 2,
-              barPercentage: 0.8, categoryPercentage: 0.9,
-              order: 2
+              borderColor: color, backgroundColor: 'transparent',
+              borderWidth: 2, borderDash: [4, 4], fill: false,
+              tension: 0, pointRadius: 0, pointHoverRadius: 0,
+              order: 1,
             });
           }
         }
@@ -3841,27 +3950,40 @@ function renderTrend(cur, py) {
     const xMin = curRoll.length ? toLocalNoon(curRoll[0].date) : null;
     const xMax = curRoll.length ? toLocalNoon(curRoll[curRoll.length - 1].date) : null;
     charts.trend = new Chart(ctx, {
-      // Default chart type = bar (Net Sales). Comparison datasets self-declare
-      // type:'line' so the overlay stays as a thin dashed line on top of the
-      // bars (cleaner read than grouped bars on a time axis).
-      type: 'bar', data: { datasets },
+      type: isBar ? 'bar' : 'line',
+      data: { datasets },
       options: {
-        responsive: true, maintainAspectRatio: false, interaction: { mode:'index', intersect: false },
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
         scales: {
           x: {
             type: 'time',
             min: xMin, max: xMax,
             time: { unit: STATE.gran==='M'?'month':(STATE.gran==='W'?'week':'day'), displayFormats: { day:'MMM d', week:'MMM d', month:'MMM yyyy' } },
-            offset: true, // give the first/last bar half-cell breathing room
+            offset: isBar,
             grid: { display: false },
-            ticks: { maxTicksLimit: 10, source: 'data' },
+            ticks: { maxTicksLimit: 14, source: 'data', maxRotation: 45, minRotation: 0 },
             bounds: 'data'
           },
-          y: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' }, beginAtZero: true }
+          y: {
+            ticks: { callback: v => metric.axisFmt(v) },
+            grid: { color: '#F0EDEC' },
+            beginAtZero: true,
+          }
         },
-        plugins: { legend: { position: 'top', align: 'end' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtMoneyFull(c.parsed.y) } } }
+        plugins: {
+          legend: { position: 'top', align: 'end' },
+          tooltip: {
+            callbacks: { label: c => `${c.dataset.label}: ${metric.valFmt(c.parsed.y)}` }
+          }
+        }
       }
     });
+    // Stash the row data on the chart instance so the CSV download
+    // handler can pull it without re-querying combinedDailySales.
+    charts.trend.__exportRows = curRoll.map((r, i) => ({
+      date: r.date, value: yVals[i], label: metric.label,
+    }));
   }, 'Trend unavailable', 'Chart.js error — see console.');
 }
 
@@ -4700,7 +4822,39 @@ document.addEventListener('change', e => {
   } else if (e.target.id === 'heatMetricFilter') {
     STATE.heatMetric = e.target.value || '$';
     rerenderSection();
+  } else if (e.target.id === 'trendMetricFilter') {
+    STATE.trendMetric = e.target.value || 'revenue';
+    rerenderSection();
+  } else if (e.target.id === 'trendTypeFilter') {
+    STATE.trendType = e.target.value || 'area';
+    rerenderSection();
+  } else if (e.target.id === 'trendGranInline') {
+    // Mirror to STATE.gran so the global granFilter stays in sync.
+    STATE.gran = e.target.value || 'D';
+    const gf = document.getElementById('granFilter');
+    if (gf) gf.value = STATE.gran;
+    rerenderSection();
   }
+});
+
+// CSV download for the F&B Performance Trends chart. Uses the rows
+// stashed on the chart instance during render so the download exactly
+// reflects what's plotted (current outlet, RC, period, metric, gran).
+document.addEventListener('click', e => {
+  if (!e.target || e.target.id !== 'trendDownloadBtn') return;
+  const ch = charts.trend;
+  if (!ch || !ch.__exportRows) return;
+  const rows = ch.__exportRows;
+  const meta = `${(DATA.outlets[STATE.outlet]||{}).name || STATE.outlet} · ${STATE.rc} · ${rows[0]?.label || ''}`;
+  const header = `# ${meta}\ndate,${rows[0]?.label || 'value'}\n`;
+  const csv = header + rows.map(r => `${r.date},${r.value == null ? '' : r.value}`).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${STATE.outlet}-${STATE.rc}-${(STATE.trendMetric||'revenue')}-${STATE.gran || 'D'}.csv`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
 });
 
 // ================================================== Runtime data loader
