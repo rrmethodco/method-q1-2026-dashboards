@@ -252,12 +252,17 @@ footer.foot b { color: var(--slate); }
 /* ======= Print / PDF export =======
    Tuned to fit the full Weekly Snapshot — header + 3 KPI rows + wins +
    concerns + action items + period comparison table — onto a single
-   letter portrait page. The page is hard-clamped via `html { height
-   100vh; overflow: hidden }` while printing, and snap-print-only sizing
-   tokens collapse paddings + font sizes ~30% across the board so 7.5"
-   × 10" of usable area is never exceeded. If new sections get added,
-   bump down the snap-card-value or snap-section padding rather than
-   removing page-fit clamps.                                                */
+   letter portrait page. Belt-and-suspenders approach:
+     1. Aggressive padding/font reductions (~50%) on all snap-* elements
+     2. Drop outlet-head + snap-week-picker (operator only needs the
+        snap-head title block)
+     3. `zoom: 0.86` on the snap-grid as a final scale-down. zoom is a
+        Chrome/WebKit-supported property that DOES paginate correctly in
+        the print engine, unlike CSS transforms.
+     4. white-space: nowrap on table rows to prevent row-doubling on
+        long column labels
+   If new sections get added, drop the zoom factor (e.g. 0.86 → 0.80)
+   rather than weakening other clamps.                                    */
 @media print {
   @page { size: letter portrait; margin: 0.3in 0.35in 0.3in 0.35in; }
   html, body { background: #fff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; height: auto !important; }
@@ -271,28 +276,30 @@ footer.foot b { color: var(--slate); }
   .snap-head-left .snap-eyebrow { font-size: 8px !important; margin-bottom: 1px !important; }
   .snap-head-left .snap-title { font-size: 16px !important; }
   .snap-head-left .snap-sub { font-size: 9px !important; margin-top: 1px !important; }
-  /* Grid — kill all the breathing room */
-  .snap-grid { padding: 0 !important; gap: 5px !important; }
-  .snap-row { gap: 5px !important; }
+  /* Grid — kill all the breathing room. The zoom factor scales every
+     descendant proportionally, so paddings/fonts I set below are
+     applied first then shrunk by 14% on top — gives ~25% extra
+     vertical headroom past my explicit shrinks. */
+  .snap-grid { padding: 0 !important; gap: 4px !important; zoom: 0.86 !important; }
+  .snap-row { gap: 4px !important; }
   /* KPI cards — 4 across × 3 rows, tight */
-  .snap-card { padding: 5px 7px !important; border-width: 1px !important; }
+  .snap-card { padding: 4px 6px !important; border-width: 1px !important; }
   .snap-card-label { font-size: 7px !important; letter-spacing: 0.10em !important; margin-bottom: 1px !important; }
   .snap-card-value { font-size: 14px !important; line-height: 1.0 !important; }
   .snap-card-delta { font-size: 8px !important; margin-top: 2px !important; line-height: 1.2 !important; }
   /* Sections (wins / concerns / action items / table) */
-  .snap-section { padding: 6px 8px !important; }
-  .snap-section-title { font-size: 9px !important; letter-spacing: 0.12em !important; margin-bottom: 4px !important; padding-bottom: 3px !important; }
-  .snap-list li { padding: 2px 0 !important; font-size: 9px !important; line-height: 1.3 !important; }
+  .snap-section { padding: 5px 7px !important; }
+  .snap-section-title { font-size: 9px !important; letter-spacing: 0.12em !important; margin-bottom: 3px !important; padding-bottom: 2px !important; }
+  .snap-list li { padding: 1.5px 0 !important; font-size: 9px !important; line-height: 1.25 !important; }
   .snap-list li::before { font-size: 8px !important; margin-right: 4px !important; }
-  /* Period Comparison table — compact rows */
+  /* Period Comparison table — compact rows. white-space: nowrap on tds
+     keeps multi-row wrapping (e.g. "+24.5% vs") from doubling row height. */
   .snap-table { font-size: 8.5px !important; }
-  .snap-table th, .snap-table td { padding: 2px 4px !important; }
+  .snap-table th, .snap-table td { padding: 1.5px 4px !important; white-space: nowrap !important; }
   .snap-table th { font-size: 7px !important; letter-spacing: 0.08em !important; }
   /* Avoid orphaning sections to a 2nd page */
   .snap-section, .snap-card, .snap-row { break-inside: avoid; page-break-inside: avoid; }
   .snap-section + .snap-section { margin-top: 0 !important; }
-  /* Hard one-page clamp — anything that would spill is hidden, not paginated */
-  body { overflow: hidden !important; }
 }
 </style>
 </head>
@@ -324,19 +331,19 @@ footer.foot b { color: var(--slate); }
 </div>
 
 <div class="controls" id="controlsBar">
-  <div class="ctrl-group">
+  <div class="ctrl-group" data-ctrl="rc">
     <span class="ctrl-label">Revenue Center</span>
     <select id="rcFilter"></select>
   </div>
-  <div class="ctrl-group">
+  <div class="ctrl-group" data-ctrl="month">
     <span class="ctrl-label">Month</span>
     <select id="monthJump"></select>
   </div>
-  <div class="ctrl-group">
+  <div class="ctrl-group" data-ctrl="weekend">
     <span class="ctrl-label">Week Ending</span>
     <select id="weekEndFilter"></select>
   </div>
-  <div class="ctrl-group">
+  <div class="ctrl-group" data-ctrl="gran">
     <span class="ctrl-label">Trend Granularity</span>
     <select id="granFilter">
       <option value="D" selected>Daily</option>
@@ -344,7 +351,7 @@ footer.foot b { color: var(--slate); }
       <option value="M">Monthly</option>
     </select>
   </div>
-  <div class="ctrl-group">
+  <div class="ctrl-group" data-ctrl="compare">
     <span class="ctrl-label">Compare</span>
     <select id="compareFilter">
       <option value="LM">Last Month</option>
@@ -891,7 +898,23 @@ function renderOutlet() {
   if (gf) gf.value = STATE.gran || 'D';
 
   // Section dispatcher
-  controls.style.display = (STATE.section === 'revenue' || STATE.section === 'summary' || STATE.section === 'guest') ? '' : 'none';
+  // Per-section control visibility:
+  //   revenue / summary / guest → all 5 controls (RC, Month, Week, Gran, Compare)
+  //   labor                     → Month + Week only (Toast Labor API has no
+  //                               RC dimension; trend gran + compare aren't
+  //                               wired to the labor charts. Same period
+  //                               filter as Revenue, just narrower UI.)
+  //   cogs / events / snapshot  → no controls bar
+  const _ctrlSections = new Set(['revenue', 'summary', 'guest', 'labor']);
+  controls.style.display = _ctrlSections.has(STATE.section) ? '' : 'none';
+  if (_ctrlSections.has(STATE.section)) {
+    const _laborOnly = STATE.section === 'labor';
+    const _hideOnLabor = ['rc', 'gran', 'compare'];
+    document.querySelectorAll('.controls .ctrl-group').forEach(g => {
+      const k = g.getAttribute('data-ctrl');
+      g.style.display = (_laborOnly && _hideOnLabor.includes(k)) ? 'none' : '';
+    });
+  }
   if (STATE.section === 'summary')      return renderSummarySection();
   if (STATE.section === 'revenue')      return renderRevenueSection();
   if (STATE.section === 'labor')        return renderLaborSection();
