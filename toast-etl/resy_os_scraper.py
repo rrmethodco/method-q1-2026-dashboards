@@ -148,6 +148,16 @@ def is_candidate_url(url: str) -> bool:
     return any(p in u for p in CANDIDATE_URL_PATTERNS)
 
 
+# Schema-drift diagnostic state. Populated by transform_resy_survey_row
+# whenever a survey has a non-empty responses[] but our keyword router
+# fails to extract any of the 5 score fields (food/service/atmos/
+# sentiment/recommend). Dumped to stderr at end of run so the operator
+# sees actionable evidence to fix the parser when Resy changes shape.
+# Cap at 8 samples to avoid log spam — the first 8 are enough to read
+# the new schema.
+_DRIFT_SAMPLES: list[dict] = []
+
+
 def transform_resy_survey_row(raw: dict) -> dict | None:
     """Map a Resy OS survey row → the dashboard's survey schema.
 
@@ -206,6 +216,8 @@ def transform_resy_survey_row(raw: dict) -> dict | None:
 
     food = service = atmos = sentiment = recommend = None
     text_responses: list[dict] = []   # free-text answers — surface in UI
+    responses = raw.get("responses") or []
+    _resp_count = len(responses) if isinstance(responses, list) else 0
     for r in (raw.get("responses") or []):
         if not isinstance(r, dict):
             continue
@@ -272,6 +284,38 @@ def transform_resy_survey_row(raw: dict) -> dict | None:
             "a": text[:600],
         })
 
+    # Schema-drift diagnostic — if Resy emitted a non-empty responses[]
+    # but our keyword router didn't bucket ANY of the 5 score fields,
+    # capture a redacted shape sample. Dashboard's NPS card depends on
+    # `recommend` being populated; recent surveys (post 2026-04-16, see
+    # docs notes) all have null scores → schema drift suspected.
+    bucketed = sum(v is not None for v in (food, service, atmos, sentiment, recommend))
+    if _resp_count > 0 and bucketed == 0 and len(_DRIFT_SAMPLES) < 8:
+        sample_rows = []
+        for r in responses[:3]:  # first 3 entries — enough to read structure
+            if not isinstance(r, dict):
+                sample_rows.append({"_type": type(r).__name__})
+                continue
+            sample_rows.append({
+                "row_keys": sorted(r.keys()),
+                "question_type": type(r.get("question")).__name__,
+                "question_preview": (
+                    str(r.get("question"))[:120] if not isinstance(r.get("question"), dict)
+                    else {k: type(v).__name__ for k, v in r.get("question", {}).items()}
+                ),
+                "response_type": type(r.get("response")).__name__,
+                "response_preview": (
+                    None if r.get("response") is None
+                    else (str(r.get("response"))[:120] if not isinstance(r.get("response"), dict)
+                          else {k: type(v).__name__ for k, v in r.get("response", {}).items()})
+                ),
+            })
+        _DRIFT_SAMPLES.append({
+            "date": date_completed,
+            "row_keys": sorted(raw.keys()),
+            "responses_count": _resp_count,
+            "first_3_responses": sample_rows,
+        })
     return {
         "date":      date_completed,
         "overall":   raw.get("overall_score"),
@@ -844,6 +888,31 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
             f"but {healthcheck_total_new} new/upgraded rows captured "
             f"elsewhere — session healthy, continuing.\n"
         )
+
+    # Schema-drift dump — surfaces evidence when our keyword router
+    # silently fails to bucket score fields (e.g. food/service/atmos/
+    # sentiment/recommend all null on a row that DID have responses).
+    # The Apr 2026 incident: dashboard NPS card flatlined because
+    # every survey post 2026-04-16 had a non-empty responses[] but no
+    # parseable score in any of them — the parser got nothing back from
+    # _question_text. This dump tells you what changed.
+    if _DRIFT_SAMPLES:
+        sys.stderr.write(
+            f"\n[schema-drift] {len(_DRIFT_SAMPLES)} survey row(s) had "
+            "responses[] but no parseable score buckets. Sample shape(s):\n"
+        )
+        for i, sample in enumerate(_DRIFT_SAMPLES, 1):
+            sys.stderr.write(
+                f"  [{i}] date={sample['date']} responses_count="
+                f"{sample['responses_count']} row_keys={sample['row_keys']}\n"
+            )
+            for j, r in enumerate(sample['first_3_responses'], 1):
+                sys.stderr.write(f"      response[{j}]: {json.dumps(r, default=str)}\n")
+        sys.stderr.write(
+            "  → Update transform_resy_survey_row keyword routes in "
+            "resy_os_scraper.py based on the question/response shapes above.\n"
+        )
+
     return 0 if not failures else 1
 
 
