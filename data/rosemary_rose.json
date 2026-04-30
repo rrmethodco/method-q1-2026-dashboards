@@ -30875,7 +30875,13 @@
         "server": null,
         "covers": 7,
         "dow": 4,
-        "hour": 22
+        "hour": 22,
+        "text": [
+          {
+            "q": "Please provide feedback on your experience.",
+            "a": "Fantastic.  Love the space and service"
+          }
+        ]
       },
       {
         "date": "2026-04-11",
@@ -30888,7 +30894,21 @@
         "server": null,
         "covers": 3,
         "dow": 5,
-        "hour": 23
+        "hour": 23,
+        "text": [
+          {
+            "q": "Please provide feedback on your experience.",
+            "a": "No response"
+          },
+          {
+            "q": "Please provide any additional feedback on the food.",
+            "a": "No response"
+          },
+          {
+            "q": "Is there anything we can change to make you dine with us more frequently?",
+            "a": "No response"
+          }
+        ]
       }
     ],
     "ratings": [],
@@ -30947,7 +30967,7 @@
       "source": "google_places_api"
     }
   },
-  "generated_at_resy": "2026-04-30T19:35:55.370508+00:00",
+  "generated_at_resy": "2026-04-30T20:58:03.623203+00:00",
   "config": {
     "open_hours_per_day": 7.43,
     "open_hours_per_week": 52.0,
