@@ -425,7 +425,7 @@ const fmtYoY = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
 // weekEnd: optional ISO date (YYYY-MM-DD, always a Sunday) narrowing the Month
 // filter to a single Mon..Sun 7-day window. When set, periodBounds returns
 // that week; the selector is scoped to weeks whose WE-Sunday falls in monthJump.
-let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$' };
+let STATE = { outlet: 'lsbr', section: 'summary', rc: 'combined', gran: 'D', monthJump: '', weekEnd: '', compare: 'STLY', dowCompare: 'none', trendCompare: 'STLY', hourMetric: '$', pmixCat: 'food', pmixDir: 'top' };
 let charts = {};
 
 // ================================================== Outlet metadata (seats + hours for RevPASH)
@@ -2958,7 +2958,33 @@ function renderRevenueSection() {
           <div class="desc">${STATE.hourMetric==='$' ? 'Net sales' : 'Covers'} by hour · ${periodLabel}</div>
           <div class="chart-wrap tall"><canvas id="hourChart"></canvas></div>
         </div>
-        <div class="card"><h3>Revenue Center Breakdown</h3><div class="desc">Net sales by RC · ${periodLabel}</div><div class="chart-wrap tall"><canvas id="rcChart"></canvas></div></div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Product Mix</h3>
+            <div class="card-compare" style="display:flex;gap:8px;">
+              <div style="display:flex;align-items:center;gap:4px;">
+                <span class="ctrl-label">Category</span>
+                <select id="pmixCatFilter">
+                  <option value="food"     ${STATE.pmixCat==='food'    ?'selected':''}>Food</option>
+                  <option value="beverage" ${STATE.pmixCat==='beverage'?'selected':''}>Beverage</option>
+                  <option value="liquor"   ${STATE.pmixCat==='liquor'  ?'selected':''}>Liquor</option>
+                  <option value="beer"     ${STATE.pmixCat==='beer'    ?'selected':''}>Beer</option>
+                  <option value="wine"     ${STATE.pmixCat==='wine'    ?'selected':''}>Wine</option>
+                  <option value="na"       ${STATE.pmixCat==='na'      ?'selected':''}>NA Bev</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;">
+                <span class="ctrl-label">Rank</span>
+                <select id="pmixDirFilter">
+                  <option value="top"    ${STATE.pmixDir!=='bottom'?'selected':''}>Top 10</option>
+                  <option value="bottom" ${STATE.pmixDir==='bottom'?'selected':''}>Bottom 10</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="desc" id="pmixRevDesc">Top items by net sales · ${periodLabel}</div>
+          <div class="chart-wrap tall"><canvas id="rcChart"></canvas></div>
+        </div>
       </div>
       <div class="card" style="margin-top:12px;"><h3>Hour × Day-of-Week Heatmap</h3>
         <div class="desc">Sales concentration by hour and weekday · ${periodLabel}. Darker = higher.</div>
@@ -3834,39 +3860,116 @@ function renderHour() {
   }, 'Hour-of-day unavailable', 'Chart.js error — see console.');
 }
 
+// PMIX category buckets — the 6 filter options collapse Toast's raw
+// PMIX category strings (Food / Liquor / Wine BTL / Wine GLS / Sake /
+// Draft Beer / Bottled Beer / NA Beverage / etc.) into the operator-
+// facing groupings. "Beverage" is everything that isn't Food.
+// "Uncategorized" + "Retail" are intentionally left out — the operator
+// asked for actionable F&B mix, not catch-alls.
+const PMIX_BUCKETS = {
+  food:     (cat) => /^food$/i.test(cat),
+  liquor:   (cat) => /^liquor$/i.test(cat),
+  wine:     (cat) => /^wine|^sake/i.test(cat),
+  beer:     (cat) => /beer$/i.test(cat),
+  na:       (cat) => /^na\s*beverage|^non[- ]?alcoholic/i.test(cat),
+  beverage: (cat) => !/^food$/i.test(cat) && !/^uncategorized$|^retail$/i.test(cat),
+};
+const PMIX_BUCKET_LABEL = {
+  food: 'Food', beverage: 'Beverage', liquor: 'Liquor',
+  beer: 'Beer', wine: 'Wine', na: 'NA Bev',
+};
+
 function renderRC() {
+  // The card was rebranded to "Product Mix" — same canvas id (rcChart)
+  // is reused so destroy('rc') / cached chart wiring stays compatible.
+  // Filters: STATE.pmixCat (food/beverage/liquor/beer/wine/na) ×
+  //          STATE.pmixDir (top/bottom).
   destroy('rc');
   safeChart('rcChart', () => {
-    // Period-aware RC breakdown: sum each RC's order_details.daily.amount in
-    // the current period bounds. Falls back to all-time sales_summary
-    // revenue_centers if order_details isn't present for that outlet.
     const o = DATA.outlets[STATE.outlet];
-    const ssDaily = combinedDailySales();
-    const maxDate = ssDaily.length ? ssDaily[ssDaily.length-1].date : null;
-    const b = maxDate ? periodBounds(maxDate) : null;
-    const rows = [];
-    if (o.order_details && Object.keys(o.order_details).length) {
-      // RC-label resolver: outlet's revenue_centers metadata maps id->label.
-      const rcLabel = {}; (o.revenue_centers||[]).forEach(r => { rcLabel[r.id] = r.label; });
-      Object.entries(o.order_details).forEach(([rcKey, od]) => {
-        const total = (od.daily||[])
-          .filter(r => !b || (r.date >= b.start && r.date <= b.end))
-          .reduce((a,r) => a + (r.amount || 0), 0);
-        if (total > 0) rows.push({ rc: rcLabel[rcKey] || rcKey, net_sales: total });
-      });
-    } else if (o.sales_summary) {
-      Object.values(o.sales_summary).forEach(s => (s.revenue_centers||[]).forEach(r => {
-        if (r.net_sales > 0) rows.push({ rc: r.rc, net_sales: r.net_sales });
-      }));
+    const pm = (o && o.product_mix) || null;
+    const rcKey = STATE.rc === 'bar_rotunda' ? 'bar_rotunda'
+                : STATE.rc === 'le_supreme'  ? 'le_supreme'
+                : 'combined';
+    const body = pm && (pm[rcKey] || pm.combined);
+    if (!body || !Array.isArray(body.items_top) || !body.items_top.length) {
+      showEmpty('rcChart', 'Product Mix unavailable',
+        'No Toast Product Mix data synced for this outlet yet. ' +
+        'PMIX is pulled outside the standard nightly Toast ETL — ' +
+        'see toast-etl/regenerate_dashboard.py for the PMIX feed.');
+      return;
     }
-    rows.sort((a,b)=>b.net_sales-a.net_sales);
-    if (!rows.length) { showEmpty('rcChart', 'No revenue-center breakdown', 'No data in this period for any RC.'); return; }
+
+    const cat = (STATE.pmixCat || 'food');
+    const dir = (STATE.pmixDir === 'bottom') ? 'bottom' : 'top';
+    const matcher = PMIX_BUCKETS[cat] || PMIX_BUCKETS.food;
+
+    // Filter items_top to the selected bucket; require positive net
+    // (zero-net items are voids and not interesting for ranking).
+    const filtered = (body.items_top || [])
+      .filter(it => it && it.category && matcher(it.category) && (it.net || 0) > 0);
+
+    if (!filtered.length) {
+      showEmpty('rcChart', 'No items in selected category',
+        `${PMIX_BUCKET_LABEL[cat]} category has no positive-net items in this PMIX window.`);
+      return;
+    }
+
+    // Sort: top → desc by net (biggest first); bottom → asc by net.
+    // Tie-break by qty so two same-net items rank by volume.
+    const sorted = filtered.slice().sort((a, b) => {
+      const dn = (b.net || 0) - (a.net || 0);
+      if (dn) return dn;
+      return (b.qty || 0) - (a.qty || 0);
+    });
+    const rows = (dir === 'top') ? sorted.slice(0, 10) : sorted.slice(-10).reverse();
+    // For bottom, reverse so the smallest is at the top of the bar
+    // chart (matches how operators read "bottom of the menu").
+
+    const desc = document.getElementById('pmixRevDesc');
+    if (desc) {
+      const periodLabel = currentPeriodLabel();
+      desc.textContent = (dir === 'top' ? 'Top 10' : 'Bottom 10') +
+        ' ' + PMIX_BUCKET_LABEL[cat] + ' items by net sales · ' + periodLabel +
+        ' (PMIX window — Toast PMIX is all-time, not period-scoped)';
+    }
+
     const ctx = document.getElementById('rcChart').getContext('2d');
     charts.rc = new Chart(ctx, {
-      type: 'bar', data: { labels: rows.map(r=>r.rc), datasets: [{ label:'Net Sales', data: rows.map(r=>r.net_sales), backgroundColor: rows.map((_,i)=>palette[i%palette.length]), borderRadius: 2 }] },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtMoneyFull(c.parsed.x) } } }, scales: { x: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } }, y: { grid: { display: false } } } }
+      type: 'bar',
+      data: {
+        labels: rows.map(r => r.item),
+        datasets: [{
+          label: 'Net Sales',
+          data: rows.map(r => r.net),
+          backgroundColor: rows.map((_, i) => palette[i % palette.length]),
+          borderRadius: 2,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: {
+            label: c => {
+              const r = rows[c.dataIndex];
+              return [
+                fmtMoneyFull(r.net) + ' net',
+                fmtNum(r.qty) + ' sold @ $' + (r.avg_price || 0).toFixed(2) + ' avg',
+                r.category || '',
+              ].filter(Boolean);
+            }
+          } }
+        },
+        scales: {
+          x: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } },
+          y: { grid: { display: false } }
+        }
+      }
     });
-  }, 'Revenue center unavailable', 'Chart.js error — see console.');
+  }, 'Product Mix unavailable', 'Chart.js error — see console.');
 }
 
 function renderHeatmap() {
@@ -4214,6 +4317,12 @@ document.addEventListener('change', e => {
     rerenderSection();
   } else if (e.target.id === 'hourMetricFilter') {
     STATE.hourMetric = e.target.value || '$';
+    rerenderSection();
+  } else if (e.target.id === 'pmixCatFilter') {
+    STATE.pmixCat = e.target.value || 'food';
+    rerenderSection();
+  } else if (e.target.id === 'pmixDirFilter') {
+    STATE.pmixDir = e.target.value || 'top';
     rerenderSection();
   }
 });
