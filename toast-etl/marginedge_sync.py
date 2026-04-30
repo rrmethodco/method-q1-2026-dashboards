@@ -477,6 +477,13 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
                 print(f"  fetching line items for {len(orders)} orders (~{len(orders) * RATE_LIMIT_SLEEP:.0f}s)...")
                 for i, o in enumerate(orders):
                     detail = client.get_order_detail(o.get("orderId"), unit_id)
+                    if i == 0:
+                        # SCHEMA DEBUG: dump the first order's raw response
+                        # so we can see what fields ME actually populates
+                        # (kampers' 977 line items came back with all
+                        # categoryId/category_type/cogs_bucket = null).
+                        print(f"  [SCHEMA DEBUG] first order raw response:")
+                        print(f"  {json.dumps(detail, indent=2, default=str)[:3000]}")
                     invoices.append(transform_order(o, detail.get("lineItems") or [], cat_lookup, cat_type_lookup))
                     if (i + 1) % 50 == 0:
                         print(f"    ...{i+1}/{len(orders)}")
