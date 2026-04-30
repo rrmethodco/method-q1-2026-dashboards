@@ -142,6 +142,9 @@ section { margin-bottom: 40px; }
 .labor-filter-chip { background: #fff; color: var(--black); border: 1px solid var(--grey); padding: 6px 14px; font-family: var(--font-stack); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; font-weight: 600; cursor: pointer; border-radius: 2px; transition: background 0.1s; }
 .labor-filter-chip:hover { background: var(--seafoam); }
 .labor-filter-chip.active { background: var(--turquoise); color: #fff; border-color: var(--turquoise); }
+.labor-prod-chip { background: #fff; color: var(--black); border: 1px solid var(--grey); padding: 6px 14px; font-family: var(--font-stack); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; font-weight: 600; cursor: pointer; border-radius: 2px; transition: background 0.1s; }
+.labor-prod-chip:hover { background: var(--seafoam); }
+.labor-prod-chip.active { background: var(--royal); color: #fff; border-color: var(--royal); }
 .kpi { background: var(--white); padding: 18px 18px; }
 .kpi .label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
 .kpi .val { font-size: 24px; font-weight: 300; letter-spacing: -0.01em; color: var(--black); margin-top: 8px; font-variant-numeric: tabular-nums; }
@@ -1533,19 +1536,22 @@ function renderLaborSection() {
         foh_boh: cls,
         hours: 0,
         cost: 0,
+        dates: new Set(),
       };
       cur.hours += r.hours || 0;
       cur.cost  += r.cost  || 0;
       cur.original_titles.add(r.title);
+      if (r.date) cur.dates.add(r.date);
       acc.set(canonical, cur);
     }
     byJob = Array.from(acc.values())
-      .map(r => ({ ...r, original_titles: Array.from(r.original_titles) }))
+      .map(r => ({ ...r, original_titles: Array.from(r.original_titles), days: r.dates.size }))
       .sort((a, b) => b.cost - a.cost);
     byJobScope = bSel ? `period (${periodLabel})` : 'all time';
   } else {
     // Older syncs without by_job_daily — apply the same canonicalization
-    // + filter to the all-time by_job rollup.
+    // + filter to the all-time by_job rollup. Day count unavailable in
+    // this fallback (the source rollup has no date dimension).
     const acc = new Map();
     for (const r of (lab.by_job || [])) {
       const canonical = canonicalJobTitle(r.title);
@@ -1561,7 +1567,7 @@ function renderLaborSection() {
       acc.set(canonical, cur);
     }
     byJob = Array.from(acc.values())
-      .map(r => ({ ...r, original_titles: Array.from(r.original_titles) }))
+      .map(r => ({ ...r, original_titles: Array.from(r.original_titles), days: null }))
       .sort((a, b) => b.cost - a.cost);
     byJobScope = 'sync window (period filter awaiting next sync)';
   }
@@ -1601,6 +1607,30 @@ function renderLaborSection() {
   const sphl = totalHrs > 0 && ssTot.net_sales > 0 ? (ssTot.net_sales / totalHrs) : null;
   const blendedRate = totalHrs > 0 ? (labSum.total_cost / totalHrs) : null;
 
+  // FOH/BOH always-on split (independent of laborFilter chip) — drives the
+  // Efficiency strip's FOH-vs-BOH comparisons. Re-walk by_job_daily so this
+  // works even when laborFilter === 'total'.
+  let fohHrs = 0, fohCost = 0, bohHrs = 0, bohCost = 0;
+  if (Array.isArray(lab.by_job_daily) && lab.by_job_daily.length) {
+    for (const r of lab.by_job_daily) {
+      if (!inRange(r.date)) continue;
+      const cls = classifyFohBoh(canonicalJobTitle(r.title));
+      if (cls === 'foh')      { fohHrs += r.hours || 0; fohCost += r.cost || 0; }
+      else if (cls === 'boh') { bohHrs += r.hours || 0; bohCost += r.cost || 0; }
+    }
+  }
+  const splhFOH        = fohHrs > 0 && ssTot.net_sales > 0 ? ssTot.net_sales / fohHrs : null;
+  const splhBOH        = bohHrs > 0 && ssTot.net_sales > 0 ? ssTot.net_sales / bohHrs : null;
+  const coversPerFOH   = fohHrs > 0 && ssTot.guests > 0 ? ssTot.guests / fohHrs : null;
+  const coversPerBOH   = bohHrs > 0 && ssTot.guests > 0 ? ssTot.guests / bohHrs : null;
+  const labPerCover    = ssTot.guests > 0 ? labSum.total_cost / ssTot.guests : null;
+  const labPerCoverFOH = ssTot.guests > 0 && fohCost > 0 ? fohCost / ssTot.guests : null;
+  const labPerCoverBOH = ssTot.guests > 0 && bohCost > 0 ? bohCost / ssTot.guests : null;
+  const labPerCheck    = ssTot.orders > 0 ? labSum.total_cost / ssTot.orders : null;
+  const otCostPctOfLab = labSum.total_cost > 0 ? labSum.overtime_cost / labSum.total_cost * 100 : null;
+  const fohCostPct     = ssTot.net_sales > 0 && fohCost > 0 ? fohCost / ssTot.net_sales * 100 : null;
+  const bohCostPct     = ssTot.net_sales > 0 && bohCost > 0 ? bohCost / ssTot.net_sales * 100 : null;
+
   const kpi = (label, val, sub, yoy) => `<div class="kpi"><div class="label">${label}</div><div class="val">${val}</div>${sub?`<div class="yoy neutral">${sub}</div>`:''}${yoy!=null?`<div class="yoy ${yoy>=0?'pos':'neg'}">${(yoy>=0?'+':'')+yoy.toFixed(1)}% YoY</div>`:''}</div>`;
 
   // FOH/BOH/Total filter UI — applies to KPIs, daily charts, and the
@@ -1635,6 +1665,23 @@ function renderLaborSection() {
 
     <section>
       <div class="sect-head">
+        <div class="sect-title">Efficiency</div>
+        <div class="sect-meta">FOH vs BOH productivity · ${periodLabel} · classified from canonical position titles</div>
+      </div>
+      <div class="kpis">
+        ${kpi('SPMH · FOH', splhFOH != null ? '$'+splhFOH.toFixed(0) : '—', `Net Sales ÷ ${fmtHrs(fohHrs)} FOH hr`, null)}
+        ${kpi('SPMH · BOH', splhBOH != null ? '$'+splhBOH.toFixed(0) : '—', `Net Sales ÷ ${fmtHrs(bohHrs)} BOH hr`, null)}
+        ${kpi('Covers / FOH Hr', coversPerFOH != null ? coversPerFOH.toFixed(1) : '—', 'FOH productivity', null)}
+        ${kpi('Covers / BOH Hr', coversPerBOH != null ? coversPerBOH.toFixed(1) : '—', 'BOH productivity', null)}
+        ${kpi('Labor $ / Cover', labPerCover != null ? '$'+labPerCover.toFixed(2) : '—', `${labPerCoverFOH != null ? '$'+labPerCoverFOH.toFixed(2)+' FOH' : '— FOH'} · ${labPerCoverBOH != null ? '$'+labPerCoverBOH.toFixed(2)+' BOH' : '— BOH'}`, null)}
+        ${kpi('Labor $ / Check', labPerCheck != null ? '$'+labPerCheck.toFixed(2) : '—', 'Labor cost per order', null)}
+        ${kpi('FOH Cost % of Sales', fmtPct(fohCostPct), `BOH ${fmtPct(bohCostPct)}`, null)}
+        ${kpi('OT $ % of Labor $', fmtPct(otCostPctOfLab), `${fmtMoney(labSum.overtime_cost)} OT cost`, null)}
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
         <div class="sect-title">Daily Labor</div>
         <div class="sect-meta">Hours &amp; cost by business day</div>
       </div>
@@ -1661,38 +1708,72 @@ function renderLaborSection() {
 
     <section>
       <div class="sect-head">
+        <div class="sect-title">Productivity (Hour × Day)</div>
+        <div class="sect-meta">Sales per Labor Hour by hour-of-week · ${periodLabel} · darker = higher SPLH</div>
+      </div>
+      <div class="labor-filter-bar">
+        <span class="labor-filter-label">Metric:</span>
+        <button type="button" class="labor-prod-chip ${(STATE.laborProdMetric||'splh')==='splh' ? 'active' : ''}" data-prod-metric="splh">SPLH ($/Hr)</button>
+        <button type="button" class="labor-prod-chip ${STATE.laborProdMetric==='laborpct' ? 'active' : ''}" data-prod-metric="laborpct">Labor %</button>
+        <button type="button" class="labor-prod-chip ${STATE.laborProdMetric==='cph' ? 'active' : ''}" data-prod-metric="cph">Covers / Hr</button>
+      </div>
+      <div class="card" style="padding: 14px 16px;">
+        <div id="laborProductivityHeatmap"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sect-head">
         <div class="sect-title">By Position</div>
         <div class="sect-meta">Hours &amp; cost by job · ${byJobScope}</div>
       </div>
       <div class="grid grid-2">
         <div class="card"><h3>Cost Mix by Position</h3><div class="desc">Top jobs by labor $</div><div class="chart-wrap tall"><canvas id="laborByJobBar"></canvas></div></div>
-        <div class="card"><h3>Position Detail</h3><div class="desc">Consolidated across RCs · ${laborFilter === 'total' ? 'all positions' : laborFilter.toUpperCase() + ' only'}</div>
-          <div style="overflow:auto; max-height: 360px;">
-            <table class="tbl">
-              <thead><tr><th style="text-align:left">Position</th><th style="text-align:left">Type</th><th style="text-align:right">Hours</th><th style="text-align:right">Cost</th><th style="text-align:right">% of Total</th><th style="text-align:right">Avg $/Hr</th></tr></thead>
-              <tbody>
-                ${byJob.map(r => {
-                  const pct = byJobTotalCost > 0 ? (r.cost / byJobTotalCost * 100) : null;
-                  const rate = r.hours > 0 ? (r.cost / r.hours) : null;
-                  const tooltip = (r.original_titles && r.original_titles.length > 1)
-                    ? ` title="combines: ${r.original_titles.join(' · ').replace(/"/g,'&quot;')}"`
-                    : '';
-                  const cls = (r.foh_boh || 'other').toUpperCase();
-                  const clsColor = r.foh_boh === 'foh' ? 'var(--turquoise)'
-                                 : r.foh_boh === 'boh' ? 'var(--royal)'
-                                 : 'var(--muted)';
-                  return `<tr${tooltip}>
-                    <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}${(r.original_titles && r.original_titles.length > 1) ? ` <span style="color:var(--muted); font-size:10px">(×${r.original_titles.length})</span>` : ''}</td>
-                    <td><span style="display:inline-block; padding:2px 8px; font-size:9px; letter-spacing:0.1em; background:${clsColor}; color:#fff; border-radius:2px;">${cls}</span></td>
-                    <td style="text-align:right">${fmtHrs(r.hours)}</td>
-                    <td style="text-align:right">${fmtMoney(r.cost)}</td>
-                    <td style="text-align:right">${pct!=null?pct.toFixed(1)+'%':'—'}</td>
-                    <td style="text-align:right">${rate!=null?'$'+rate.toFixed(2):'—'}</td>
-                  </tr>`;
-                }).join('')}
-              </tbody>
-            </table>
-          </div>
+        <div class="card"><h3>Hours Mix by Position</h3><div class="desc">Top jobs by labor hours</div><div class="chart-wrap tall"><canvas id="laborByJobHrsBar"></canvas></div></div>
+      </div>
+      <div class="card" style="margin-top: 14px;">
+        <h3>Position Detail</h3>
+        <div class="desc">Consolidated across RCs · ${laborFilter === 'total' ? 'all positions' : laborFilter.toUpperCase() + ' only'} · SPMH = Outlet Net Sales ÷ position hours (gross, not attributed)</div>
+        <div style="overflow:auto; max-height: 420px;">
+          <table class="tbl">
+            <thead><tr>
+              <th style="text-align:left">Position</th>
+              <th style="text-align:left">Type</th>
+              <th style="text-align:right">Hours</th>
+              <th style="text-align:right">Days</th>
+              <th style="text-align:right">Cost</th>
+              <th style="text-align:right">% of Labor</th>
+              <th style="text-align:right">% of Sales</th>
+              <th style="text-align:right">Avg $/Hr</th>
+              <th style="text-align:right">SPMH</th>
+            </tr></thead>
+            <tbody>
+              ${byJob.map(r => {
+                const pct        = byJobTotalCost > 0 ? (r.cost / byJobTotalCost * 100) : null;
+                const pctOfSales = ssTot.net_sales > 0 ? (r.cost / ssTot.net_sales * 100) : null;
+                const rate       = r.hours > 0 ? (r.cost / r.hours) : null;
+                const spmh       = r.hours > 0 && ssTot.net_sales > 0 ? (ssTot.net_sales / r.hours) : null;
+                const tooltip = (r.original_titles && r.original_titles.length > 1)
+                  ? ` title="combines: ${r.original_titles.join(' · ').replace(/"/g,'&quot;')}"`
+                  : '';
+                const cls = (r.foh_boh || 'other').toUpperCase();
+                const clsColor = r.foh_boh === 'foh' ? 'var(--turquoise)'
+                               : r.foh_boh === 'boh' ? 'var(--royal)'
+                               : 'var(--muted)';
+                return `<tr${tooltip}>
+                  <td>${(r.title||'(unnamed)').replace(/</g,'&lt;')}${(r.original_titles && r.original_titles.length > 1) ? ` <span style="color:var(--muted); font-size:10px">(×${r.original_titles.length})</span>` : ''}</td>
+                  <td><span style="display:inline-block; padding:2px 8px; font-size:9px; letter-spacing:0.1em; background:${clsColor}; color:#fff; border-radius:2px;">${cls}</span></td>
+                  <td style="text-align:right">${fmtHrs(r.hours)}</td>
+                  <td style="text-align:right">${r.days != null ? r.days : '—'}</td>
+                  <td style="text-align:right">${fmtMoney(r.cost)}</td>
+                  <td style="text-align:right">${pct!=null?pct.toFixed(1)+'%':'—'}</td>
+                  <td style="text-align:right">${pctOfSales!=null?pctOfSales.toFixed(1)+'%':'—'}</td>
+                  <td style="text-align:right">${rate!=null?'$'+rate.toFixed(2):'—'}</td>
+                  <td style="text-align:right">${spmh!=null?'$'+spmh.toFixed(0):'—'}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
@@ -1756,6 +1837,28 @@ function renderLaborSection() {
         plugins: { legend: { display: false } },
         scales: {
           x: { beginAtZero: true, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' } },
+          y: { ticks: { autoSkip: false } },
+        },
+      },
+    });
+  }
+  destroy('laborByJobHrsBar');
+  if (byJob.length) {
+    // Sort by hours (descending) for the hours-mix chart so the ordering
+    // can differ from the cost chart — surfaces low-rate / high-hour roles.
+    const topHrs = byJob.slice().sort((a, b) => (b.hours || 0) - (a.hours || 0)).slice(0, 12);
+    new Chart(document.getElementById('laborByJobHrsBar'), {
+      type: 'bar',
+      data: {
+        labels: topHrs.map(r => r.title || '(unnamed)'),
+        datasets: [{ label: 'Hours', data: topHrs.map(r => r.hours), backgroundColor: topHrs.map((_, i) => palette[i % palette.length]) }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, ticks: { callback: v => v.toLocaleString() + ' hr' } },
           y: { ticks: { autoSkip: false } },
         },
       },
@@ -1829,6 +1932,114 @@ function renderLaborSection() {
       },
     });
   }
+
+  // ===== Productivity Heatmap (Hour × DOW) =====
+  // Cross-source: sales come from order_details[*].hour_daily (all RCs in
+  // outlet, period-filtered), labor hours/cost from lab.hour_daily (also
+  // period-filtered). Aggregating into (hour, dow) buckets lets us divide
+  // sales-per-hour by labor-hours-per-hour to expose true SPLH gradients.
+  // FOH/BOH split isn't available at hour granularity (ETL doesn't carry
+  // hour×job decomposition), so this view is total-position regardless of
+  // the FOH/BOH chip.
+  (function renderLaborProductivity() {
+    const cont = document.getElementById('laborProductivityHeatmap');
+    if (!cont) return;
+    const metric = STATE.laborProdMetric || 'splh';
+    const dowAbbr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const days    = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    // Sales per (hour, dow) — prefer hour_daily so we honor period bounds.
+    const salesByCell  = {};   // key = h|dow → $
+    const guestsByCell = {};   // key = h|dow → covers
+    const od = (o && o.order_details) || {};
+    Object.values(od).forEach(rc => {
+      const rows = Array.isArray(rc.hour_daily) ? rc.hour_daily : [];
+      rows.forEach(r => {
+        if (bSel && (r.date < bSel.start || r.date > bSel.end)) return;
+        const dow = dowAbbr[toLocalNoon(r.date).getDay()];
+        const k = r.hour + '|' + dow;
+        salesByCell[k]  = (salesByCell[k]  || 0) + (r.amount || 0);
+        guestsByCell[k] = (guestsByCell[k] || 0) + (r.guests || 0);
+      });
+    });
+    // Labor hours + cost per (hour, dow).
+    const laborHrsByCell  = {};
+    const laborCostByCell = {};
+    (Array.isArray(lab.hour_daily) ? lab.hour_daily : []).forEach(r => {
+      if (bSel && (r.date < bSel.start || r.date > bSel.end)) return;
+      const dow = dowAbbr[toLocalNoon(r.date).getDay()];
+      const k = r.hour + '|' + dow;
+      laborHrsByCell[k]  = (laborHrsByCell[k]  || 0) + (r.hours || 0);
+      laborCostByCell[k] = (laborCostByCell[k] || 0) + (r.cost  || 0);
+    });
+    // Compute the metric value for a given cell.
+    const cellVal = (k) => {
+      const sales = salesByCell[k]  || 0;
+      const hrs   = laborHrsByCell[k]  || 0;
+      const cost  = laborCostByCell[k] || 0;
+      const cov   = guestsByCell[k] || 0;
+      if (metric === 'splh')     return hrs > 0 ? sales / hrs : 0;
+      if (metric === 'laborpct') return sales > 0 ? cost / sales * 100 : 0;
+      if (metric === 'cph')      return hrs > 0 ? cov / hrs : 0;
+      return 0;
+    };
+    // Trim quiet hours (< 1% of any-cell labor activity in the window).
+    const allHrs = new Set();
+    Object.keys(laborHrsByCell).forEach(k => allHrs.add(+k.split('|')[0]));
+    Object.keys(salesByCell).forEach(k => allHrs.add(+k.split('|')[0]));
+    let activityMax = 0;
+    allHrs.forEach(h => days.forEach(d => {
+      const a = (laborHrsByCell[h+'|'+d] || 0) + (salesByCell[h+'|'+d] || 0)/100;
+      if (a > activityMax) activityMax = a;
+    }));
+    const hours = Array.from(allHrs).filter(h => {
+      const total = days.reduce((a,d) => a + (laborHrsByCell[h+'|'+d] || 0) + (salesByCell[h+'|'+d] || 0)/100, 0);
+      return activityMax > 0 ? total / activityMax >= 0.01 : false;
+    }).sort((a,b)=>a-b);
+    if (!hours.length) {
+      cont.innerHTML = '<div class="placeholder" style="padding:40px"><p>No hour-of-week activity recorded yet for this period.</p></div>';
+      return;
+    }
+    // Find max for shading. Labor % uses inverted scale (lower = better, so
+    // darker for higher labor %). SPLH and Covers/Hr darker = better.
+    let max = 0;
+    hours.forEach(h => days.forEach(d => { const v = cellVal(h+'|'+d); if (v > max) max = v; }));
+    if (!max) {
+      cont.innerHTML = '<div class="placeholder" style="padding:40px"><p>Not enough overlap between sales and labor for this metric.</p></div>';
+      return;
+    }
+    const fmtCellVal = (v) => {
+      if (!v) return '';
+      if (metric === 'splh')     return '$' + Math.round(v);
+      if (metric === 'laborpct') return v.toFixed(0) + '%';
+      if (metric === 'cph')      return v.toFixed(1);
+      return '';
+    };
+    const lbl = (h) => h===0?'12 AM':h<12?h+' AM':h===12?'12 PM':(h-12)+' PM';
+    let html = '<div class="heatmap"><div class="h-top"></div>' + days.map(d => `<div class="h-top">${d}</div>`).join('');
+    hours.forEach(h => {
+      html += `<div class="h-lbl">${lbl(h)}</div>`;
+      days.forEach(d => {
+        const k = h + '|' + d;
+        const v = cellVal(k);
+        const t = max ? v/max : 0;
+        const alpha = 0.06 + t*0.94;
+        // SPLH/Cov-per-Hr = darker is better. Labor% = darker is worse.
+        // Color tint: turquoise for productivity (good high), royal for cost.
+        const tint = metric === 'laborpct' ? '64,87,102' : '43,166,187';
+        html += `<div class="h-cell" style="background: rgba(${tint},${alpha.toFixed(2)}); color: ${t>0.45?'#fff':'#231F20'};">${fmtCellVal(v)}</div>`;
+      });
+    });
+    html += '</div>';
+    cont.innerHTML = html;
+  })();
+
+  // Wire productivity-metric chips.
+  body.querySelectorAll('.labor-prod-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      STATE.laborProdMetric = chip.dataset.prodMetric || 'splh';
+      rerenderSection();
+    });
+  });
 
   // Wire FOH/BOH/Total filter chips. Re-renders the section in place
   // (rerenderSection() destroys all charts first to avoid leaks).
