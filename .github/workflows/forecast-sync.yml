@@ -1,16 +1,23 @@
 name: Forecast Sync
 
-# Regenerate the forecast.daily block in each data/<outlet>.json using
-# the helixo-2 port forecast engine. The dashboard's tri-comparison
-# KPI cards (vs Forecast / vs STLY / vs Budget) read this block.
+# Pull helixo-2's proprietary AI forecast (daily_forecasts table) →
+# write forecast.daily into each data/<outlet>.json. The dashboard's
+# tri-comparison KPI cards (vs Forecast / vs STLY / vs Budget) read
+# this block.
 #
-# Runs LAST in the nightly ETL cadence so it can fold in fresh Toast
-# actuals from earlier syncs:
-#   12:00 UTC  Toast Sync           → refreshes order_details.daily
-#   12:15 UTC  Guest Sync           (Resy + Google)
-#   12:30 UTC  MarginEdge Sync      (COGS)
-#   12:45 UTC  Tripleseat Sync      (Private Events)
-#   13:00 UTC  Forecast Sync        (this — 1hr after Toast lands)
+# Per Ross: source is helixo-2's PROPRIETARY AI engine output —
+# specifically `ai_suggested_revenue` from daily_forecasts. NOT the
+# manager_revenue override field (that's human-edited and not what
+# we want for "vs Forecast"). NOT a local Python recomputation.
+#
+# Slotted at 13:00 UTC = 08:00 ET, after the Toast/Guest/MarginEdge/
+# Tripleseat actuals land:
+#   12:00 UTC  Toast Sync
+#   12:15 UTC  Guest Sync
+#   12:30 UTC  MarginEdge Sync
+#   12:45 UTC  Tripleseat Sync
+#   13:00 UTC  Forecast Sync         (this — pulls helixo-2 AI)
+#   13:15 UTC  Budget Sync           (helixo-2 daily_budget)
 
 on:
   schedule:
@@ -21,10 +28,16 @@ on:
         description: 'Optional single outlet id (leave blank = all)'
         required: false
         default: ''
-      lookahead:
-        description: 'Forward forecast window in days (default 120)'
+      probe:
+        description: 'Run --probe (auth-only health check)'
+        type: boolean
         required: false
-        default: '120'
+        default: false
+      print_config:
+        description: 'Run --print-config (location → outlet routing, no writes)'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: write
@@ -46,22 +59,51 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: toast-etl/requirements.txt
 
-      - name: Run forecast engine
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r toast-etl/requirements.txt
+
+      - name: Run forecast probe (manual only)
+        if: ${{ github.event.inputs.probe == 'true' }}
+        env:
+          SUPABASE_URL:              ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           cd toast-etl
+          python3 forecast_engine.py --probe --data-dir ../data
+
+      - name: Print routing (manual only)
+        if: ${{ github.event.inputs.print_config == 'true' }}
+        env:
+          SUPABASE_URL:              ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          cd toast-etl
+          python3 forecast_engine.py --print-config --data-dir ../data
+
+      - name: Run forecast sync
+        if: ${{ github.event.inputs.probe != 'true' && github.event.inputs.print_config != 'true' }}
+        env:
+          SUPABASE_URL:              ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          cd toast-etl
+          if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "Supabase service role key not set — skipping forecast sync"
+            exit 0
+          fi
           if [ -n "${{ github.event.inputs.outlet }}" ]; then
-            python3 forecast_engine.py \
-              --outlet "${{ github.event.inputs.outlet }}" \
-              --lookahead "${{ github.event.inputs.lookahead || '120' }}" \
-              --data-dir ../data
+            python3 forecast_engine.py --outlet "${{ github.event.inputs.outlet }}" --data-dir ../data
           else
-            python3 forecast_engine.py \
-              --lookahead "${{ github.event.inputs.lookahead || '120' }}" \
-              --data-dir ../data
+            python3 forecast_engine.py --data-dir ../data
           fi
 
       - name: Commit refreshed forecasts
+        if: ${{ github.event.inputs.probe != 'true' && github.event.inputs.print_config != 'true' }}
         run: |
           git config user.name  "method-forecast-sync[bot]"
           git config user.email "method-forecast-sync@users.noreply.github.com"
@@ -71,9 +113,7 @@ jobs:
             exit 0
           fi
           STAMP="$(date -u +%Y-%m-%dT%H:%MZ)"
-          git commit -m "chore(data): nightly forecast sync ${STAMP}"
-          # Rebase-and-retry guard against any concurrent push race
-          # with earlier ETLs that finished close to our 13:00 UTC slot.
+          git commit -m "chore(data): nightly forecast sync ${STAMP} (helixo-2 AI)"
           for i in 1 2 3; do
             if git push; then
               echo "push succeeded on attempt $i"
