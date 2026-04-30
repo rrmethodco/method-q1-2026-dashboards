@@ -364047,5 +364047,7740 @@
         "booked_revenue": 656340.85
       }
     ]
+  },
+  "forecast": {
+    "as_of": "2026-04-30",
+    "source": "forecast_engine_v1 (helixo-2 port)",
+    "daily": [
+      {
+        "date": "2024-11-23",
+        "net_sales": 50684.32,
+        "guests": 1250,
+        "orders": 548,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-11-24",
+        "net_sales": 35406.18,
+        "guests": 935,
+        "orders": 380,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-11-25",
+        "net_sales": 8003.27,
+        "guests": 205,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-11-26",
+        "net_sales": 9854.08,
+        "guests": 223,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-11-27",
+        "net_sales": 13901.58,
+        "guests": 330,
+        "orders": 158,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-11-28",
+        "net_sales": 12680.67,
+        "guests": 286,
+        "orders": 150,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-11-29",
+        "net_sales": 18512.21,
+        "guests": 419,
+        "orders": 222,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-11-30",
+        "net_sales": 47302.75,
+        "guests": 1145,
+        "orders": 494,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-01",
+        "net_sales": 36326.06,
+        "guests": 945,
+        "orders": 380,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-02",
+        "net_sales": 7580.3,
+        "guests": 193,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-03",
+        "net_sales": 9237.99,
+        "guests": 209,
+        "orders": 115,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-04",
+        "net_sales": 13768.27,
+        "guests": 320,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-05",
+        "net_sales": 15169.02,
+        "guests": 365,
+        "orders": 175,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-06",
+        "net_sales": 19969.38,
+        "guests": 467,
+        "orders": 223,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-07",
+        "net_sales": 45481.06,
+        "guests": 1192,
+        "orders": 520,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-08",
+        "net_sales": 36326.06,
+        "guests": 945,
+        "orders": 380,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-09",
+        "net_sales": 7580.3,
+        "guests": 193,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-10",
+        "net_sales": 9237.99,
+        "guests": 209,
+        "orders": 115,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-11",
+        "net_sales": 13768.27,
+        "guests": 320,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-12",
+        "net_sales": 15169.02,
+        "guests": 365,
+        "orders": 175,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-13",
+        "net_sales": 19969.38,
+        "guests": 467,
+        "orders": 223,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-14",
+        "net_sales": 45481.06,
+        "guests": 1192,
+        "orders": 520,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-15",
+        "net_sales": 36326.06,
+        "guests": 945,
+        "orders": 380,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-16",
+        "net_sales": 7580.3,
+        "guests": 193,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-17",
+        "net_sales": 9237.99,
+        "guests": 209,
+        "orders": 115,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-18",
+        "net_sales": 13768.27,
+        "guests": 320,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-19",
+        "net_sales": 15169.02,
+        "guests": 365,
+        "orders": 175,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-20",
+        "net_sales": 19969.38,
+        "guests": 467,
+        "orders": 223,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-21",
+        "net_sales": 45481.06,
+        "guests": 1192,
+        "orders": 520,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-22",
+        "net_sales": 36326.06,
+        "guests": 945,
+        "orders": 380,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-23",
+        "net_sales": 7580.3,
+        "guests": 193,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-24",
+        "net_sales": 9237.99,
+        "guests": 209,
+        "orders": 115,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-25",
+        "net_sales": 13768.27,
+        "guests": 320,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-26",
+        "net_sales": 15169.02,
+        "guests": 365,
+        "orders": 175,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-27",
+        "net_sales": 19969.38,
+        "guests": 467,
+        "orders": 223,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-28",
+        "net_sales": 45481.06,
+        "guests": 1192,
+        "orders": 520,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-29",
+        "net_sales": 36326.06,
+        "guests": 945,
+        "orders": 380,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-30",
+        "net_sales": 7580.3,
+        "guests": 193,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2024-12-31",
+        "net_sales": 9237.99,
+        "guests": 209,
+        "orders": 115,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-01",
+        "net_sales": 7689.46,
+        "guests": 199,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-02",
+        "net_sales": 8362.49,
+        "guests": 201,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-03",
+        "net_sales": 13718.32,
+        "guests": 299,
+        "orders": 144,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-04",
+        "net_sales": 29317.47,
+        "guests": 793,
+        "orders": 349,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-05",
+        "net_sales": 24173.89,
+        "guests": 648,
+        "orders": 271,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-06",
+        "net_sales": 4835.52,
+        "guests": 126,
+        "orders": 67,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-07",
+        "net_sales": 5144.69,
+        "guests": 124,
+        "orders": 69,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-08",
+        "net_sales": 7689.46,
+        "guests": 199,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-09",
+        "net_sales": 8362.49,
+        "guests": 201,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-10",
+        "net_sales": 13718.32,
+        "guests": 299,
+        "orders": 144,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-11",
+        "net_sales": 29317.47,
+        "guests": 793,
+        "orders": 349,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-12",
+        "net_sales": 24173.89,
+        "guests": 648,
+        "orders": 271,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-13",
+        "net_sales": 4835.52,
+        "guests": 126,
+        "orders": 67,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-14",
+        "net_sales": 5144.69,
+        "guests": 124,
+        "orders": 69,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-15",
+        "net_sales": 7689.46,
+        "guests": 199,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-16",
+        "net_sales": 8362.49,
+        "guests": 201,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-17",
+        "net_sales": 13718.32,
+        "guests": 299,
+        "orders": 144,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-18",
+        "net_sales": 29317.47,
+        "guests": 793,
+        "orders": 349,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-19",
+        "net_sales": 24173.89,
+        "guests": 648,
+        "orders": 271,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-20",
+        "net_sales": 4835.52,
+        "guests": 126,
+        "orders": 67,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-21",
+        "net_sales": 5144.69,
+        "guests": 124,
+        "orders": 69,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-22",
+        "net_sales": 7689.46,
+        "guests": 199,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-23",
+        "net_sales": 8362.49,
+        "guests": 201,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-24",
+        "net_sales": 13718.32,
+        "guests": 299,
+        "orders": 144,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-25",
+        "net_sales": 29317.47,
+        "guests": 793,
+        "orders": 349,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-26",
+        "net_sales": 24173.89,
+        "guests": 648,
+        "orders": 271,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-27",
+        "net_sales": 4835.52,
+        "guests": 126,
+        "orders": 67,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-28",
+        "net_sales": 5144.69,
+        "guests": 124,
+        "orders": 69,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-29",
+        "net_sales": 7689.46,
+        "guests": 199,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-30",
+        "net_sales": 8362.49,
+        "guests": 201,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-01-31",
+        "net_sales": 13718.32,
+        "guests": 299,
+        "orders": 144,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-01",
+        "net_sales": 27538.92,
+        "guests": 742,
+        "orders": 327,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-02",
+        "net_sales": 20113.97,
+        "guests": 607,
+        "orders": 249,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-03",
+        "net_sales": 3436.52,
+        "guests": 95,
+        "orders": 56,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-04",
+        "net_sales": 4381.22,
+        "guests": 110,
+        "orders": 60,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-05",
+        "net_sales": 4689.59,
+        "guests": 129,
+        "orders": 71,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-06",
+        "net_sales": 5794.16,
+        "guests": 134,
+        "orders": 78,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-07",
+        "net_sales": 12350.69,
+        "guests": 254,
+        "orders": 136,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-08",
+        "net_sales": 27538.92,
+        "guests": 742,
+        "orders": 327,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-09",
+        "net_sales": 20113.97,
+        "guests": 607,
+        "orders": 249,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-10",
+        "net_sales": 3436.52,
+        "guests": 95,
+        "orders": 56,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-11",
+        "net_sales": 4381.22,
+        "guests": 110,
+        "orders": 60,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-12",
+        "net_sales": 4689.59,
+        "guests": 129,
+        "orders": 71,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-13",
+        "net_sales": 5794.16,
+        "guests": 134,
+        "orders": 78,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-14",
+        "net_sales": 12350.69,
+        "guests": 254,
+        "orders": 136,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-15",
+        "net_sales": 27538.92,
+        "guests": 742,
+        "orders": 327,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-16",
+        "net_sales": 20113.97,
+        "guests": 607,
+        "orders": 249,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-17",
+        "net_sales": 3436.52,
+        "guests": 95,
+        "orders": 56,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-18",
+        "net_sales": 4381.22,
+        "guests": 110,
+        "orders": 60,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-19",
+        "net_sales": 4689.59,
+        "guests": 129,
+        "orders": 71,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-20",
+        "net_sales": 5794.16,
+        "guests": 134,
+        "orders": 78,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-21",
+        "net_sales": 12350.69,
+        "guests": 254,
+        "orders": 136,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-22",
+        "net_sales": 27538.92,
+        "guests": 742,
+        "orders": 327,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-23",
+        "net_sales": 20113.97,
+        "guests": 607,
+        "orders": 249,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-24",
+        "net_sales": 3436.52,
+        "guests": 95,
+        "orders": 56,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-25",
+        "net_sales": 4381.22,
+        "guests": 110,
+        "orders": 60,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-26",
+        "net_sales": 4689.59,
+        "guests": 129,
+        "orders": 71,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-27",
+        "net_sales": 5794.16,
+        "guests": 134,
+        "orders": 78,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-02-28",
+        "net_sales": 12350.69,
+        "guests": 254,
+        "orders": 136,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-01",
+        "net_sales": 33105.09,
+        "guests": 885,
+        "orders": 403,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-02",
+        "net_sales": 23059.37,
+        "guests": 671,
+        "orders": 276,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-03",
+        "net_sales": 4104.68,
+        "guests": 113,
+        "orders": 68,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-04",
+        "net_sales": 5149.58,
+        "guests": 161,
+        "orders": 74,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-05",
+        "net_sales": 6065.8,
+        "guests": 149,
+        "orders": 89,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-06",
+        "net_sales": 7071.09,
+        "guests": 184,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-07",
+        "net_sales": 13712.22,
+        "guests": 313,
+        "orders": 179,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-08",
+        "net_sales": 33105.09,
+        "guests": 885,
+        "orders": 403,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-09",
+        "net_sales": 23059.37,
+        "guests": 671,
+        "orders": 276,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-10",
+        "net_sales": 4104.68,
+        "guests": 113,
+        "orders": 68,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-11",
+        "net_sales": 5149.58,
+        "guests": 161,
+        "orders": 74,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-12",
+        "net_sales": 6065.8,
+        "guests": 149,
+        "orders": 89,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-13",
+        "net_sales": 7071.09,
+        "guests": 184,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-14",
+        "net_sales": 13712.22,
+        "guests": 313,
+        "orders": 179,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-15",
+        "net_sales": 33105.09,
+        "guests": 885,
+        "orders": 403,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-16",
+        "net_sales": 23059.37,
+        "guests": 671,
+        "orders": 276,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-17",
+        "net_sales": 4104.68,
+        "guests": 113,
+        "orders": 68,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-18",
+        "net_sales": 5149.58,
+        "guests": 161,
+        "orders": 74,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-19",
+        "net_sales": 6065.8,
+        "guests": 149,
+        "orders": 89,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-20",
+        "net_sales": 7071.09,
+        "guests": 184,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-21",
+        "net_sales": 13712.22,
+        "guests": 313,
+        "orders": 179,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-22",
+        "net_sales": 33105.09,
+        "guests": 885,
+        "orders": 403,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-23",
+        "net_sales": 23059.37,
+        "guests": 671,
+        "orders": 276,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-24",
+        "net_sales": 4104.68,
+        "guests": 113,
+        "orders": 68,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-25",
+        "net_sales": 5149.58,
+        "guests": 161,
+        "orders": 74,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-26",
+        "net_sales": 6065.8,
+        "guests": 149,
+        "orders": 89,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-27",
+        "net_sales": 7071.09,
+        "guests": 184,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-28",
+        "net_sales": 13712.22,
+        "guests": 313,
+        "orders": 179,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-29",
+        "net_sales": 33105.09,
+        "guests": 885,
+        "orders": 403,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-30",
+        "net_sales": 23059.37,
+        "guests": 671,
+        "orders": 276,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-03-31",
+        "net_sales": 4104.68,
+        "guests": 113,
+        "orders": 68,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-01",
+        "net_sales": 5895.91,
+        "guests": 184,
+        "orders": 84,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-02",
+        "net_sales": 7396.22,
+        "guests": 175,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-03",
+        "net_sales": 7617.84,
+        "guests": 208,
+        "orders": 105,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-04",
+        "net_sales": 16591.0,
+        "guests": 384,
+        "orders": 211,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-05",
+        "net_sales": 37948.75,
+        "guests": 1034,
+        "orders": 466,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-06",
+        "net_sales": 26450.53,
+        "guests": 763,
+        "orders": 311,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-07",
+        "net_sales": 4656.7,
+        "guests": 122,
+        "orders": 75,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-08",
+        "net_sales": 5668.58,
+        "guests": 177,
+        "orders": 81,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-09",
+        "net_sales": 6611.64,
+        "guests": 164,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-10",
+        "net_sales": 7377.36,
+        "guests": 197,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-11",
+        "net_sales": 17828.91,
+        "guests": 425,
+        "orders": 228,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-12",
+        "net_sales": 38249.03,
+        "guests": 1041,
+        "orders": 466,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-13",
+        "net_sales": 26885.16,
+        "guests": 785,
+        "orders": 313,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-14",
+        "net_sales": 4494.6,
+        "guests": 121,
+        "orders": 75,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-15",
+        "net_sales": 5668.58,
+        "guests": 177,
+        "orders": 81,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-16",
+        "net_sales": 6611.64,
+        "guests": 164,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-17",
+        "net_sales": 7377.36,
+        "guests": 197,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-18",
+        "net_sales": 17658.96,
+        "guests": 423,
+        "orders": 229,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-19",
+        "net_sales": 38834.17,
+        "guests": 1055,
+        "orders": 468,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-20",
+        "net_sales": 26885.16,
+        "guests": 785,
+        "orders": 313,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-21",
+        "net_sales": 4494.6,
+        "guests": 121,
+        "orders": 75,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-22",
+        "net_sales": 5668.58,
+        "guests": 177,
+        "orders": 81,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-23",
+        "net_sales": 6611.64,
+        "guests": 164,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-24",
+        "net_sales": 7377.36,
+        "guests": 197,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-25",
+        "net_sales": 17658.96,
+        "guests": 423,
+        "orders": 229,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-26",
+        "net_sales": 38834.17,
+        "guests": 1055,
+        "orders": 468,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-27",
+        "net_sales": 26885.16,
+        "guests": 785,
+        "orders": 313,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-28",
+        "net_sales": 4494.6,
+        "guests": 121,
+        "orders": 75,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-29",
+        "net_sales": 5668.58,
+        "guests": 177,
+        "orders": 81,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-04-30",
+        "net_sales": 6611.64,
+        "guests": 164,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-01",
+        "net_sales": 9423.76,
+        "guests": 236,
+        "orders": 115,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-02",
+        "net_sales": 17205.84,
+        "guests": 420,
+        "orders": 231,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-03",
+        "net_sales": 43465.66,
+        "guests": 1168,
+        "orders": 504,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-04",
+        "net_sales": 28554.65,
+        "guests": 836,
+        "orders": 337,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-05",
+        "net_sales": 6069.51,
+        "guests": 162,
+        "orders": 93,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-06",
+        "net_sales": 7303.39,
+        "guests": 215,
+        "orders": 96,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-07",
+        "net_sales": 7573.08,
+        "guests": 183,
+        "orders": 107,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-08",
+        "net_sales": 9312.05,
+        "guests": 241,
+        "orders": 118,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-09",
+        "net_sales": 17791.76,
+        "guests": 441,
+        "orders": 241,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-10",
+        "net_sales": 42426.26,
+        "guests": 1158,
+        "orders": 501,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-11",
+        "net_sales": 27903.17,
+        "guests": 838,
+        "orders": 335,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-12",
+        "net_sales": 5822.76,
+        "guests": 153,
+        "orders": 88,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-13",
+        "net_sales": 6597.46,
+        "guests": 204,
+        "orders": 92,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-14",
+        "net_sales": 7572.84,
+        "guests": 178,
+        "orders": 106,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-15",
+        "net_sales": 9676.41,
+        "guests": 243,
+        "orders": 117,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-16",
+        "net_sales": 18416.55,
+        "guests": 452,
+        "orders": 244,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-17",
+        "net_sales": 44441.0,
+        "guests": 1180,
+        "orders": 507,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-18",
+        "net_sales": 28289.26,
+        "guests": 842,
+        "orders": 335,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-19",
+        "net_sales": 5864.44,
+        "guests": 155,
+        "orders": 89,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-20",
+        "net_sales": 6976.49,
+        "guests": 207,
+        "orders": 93,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-21",
+        "net_sales": 8010.37,
+        "guests": 184,
+        "orders": 107,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-22",
+        "net_sales": 9343.86,
+        "guests": 234,
+        "orders": 114,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-23",
+        "net_sales": 17396.71,
+        "guests": 426,
+        "orders": 231,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-24",
+        "net_sales": 43881.3,
+        "guests": 1184,
+        "orders": 508,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-25",
+        "net_sales": 28064.96,
+        "guests": 829,
+        "orders": 333,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-26",
+        "net_sales": 5219.07,
+        "guests": 136,
+        "orders": 82,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-27",
+        "net_sales": 6988.43,
+        "guests": 209,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-28",
+        "net_sales": 8038.16,
+        "guests": 186,
+        "orders": 108,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-29",
+        "net_sales": 9747.8,
+        "guests": 241,
+        "orders": 120,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-30",
+        "net_sales": 17636.25,
+        "guests": 440,
+        "orders": 238,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-05-31",
+        "net_sales": 44189.32,
+        "guests": 1187,
+        "orders": 512,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-01",
+        "net_sales": 31864.51,
+        "guests": 888,
+        "orders": 372,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-02",
+        "net_sales": 7038.64,
+        "guests": 171,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-03",
+        "net_sales": 8465.6,
+        "guests": 293,
+        "orders": 112,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-04",
+        "net_sales": 9902.14,
+        "guests": 232,
+        "orders": 127,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-05",
+        "net_sales": 11248.56,
+        "guests": 299,
+        "orders": 143,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-06",
+        "net_sales": 23540.48,
+        "guests": 575,
+        "orders": 286,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-07",
+        "net_sales": 45503.61,
+        "guests": 1242,
+        "orders": 558,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-08",
+        "net_sales": 31545.55,
+        "guests": 862,
+        "orders": 371,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-09",
+        "net_sales": 6797.93,
+        "guests": 168,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-10",
+        "net_sales": 7978.88,
+        "guests": 241,
+        "orders": 110,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-11",
+        "net_sales": 10261.39,
+        "guests": 243,
+        "orders": 130,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-12",
+        "net_sales": 11400.13,
+        "guests": 301,
+        "orders": 145,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-13",
+        "net_sales": 23247.96,
+        "guests": 568,
+        "orders": 287,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-14",
+        "net_sales": 45878.9,
+        "guests": 1255,
+        "orders": 568,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-15",
+        "net_sales": 31293.25,
+        "guests": 886,
+        "orders": 374,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-16",
+        "net_sales": 6447.44,
+        "guests": 164,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-17",
+        "net_sales": 8469.87,
+        "guests": 294,
+        "orders": 114,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-18",
+        "net_sales": 10486.0,
+        "guests": 236,
+        "orders": 129,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-19",
+        "net_sales": 11205.64,
+        "guests": 290,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-20",
+        "net_sales": 22966.5,
+        "guests": 563,
+        "orders": 280,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-21",
+        "net_sales": 45661.11,
+        "guests": 1247,
+        "orders": 560,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-22",
+        "net_sales": 32303.14,
+        "guests": 911,
+        "orders": 382,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-23",
+        "net_sales": 6709.57,
+        "guests": 168,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-24",
+        "net_sales": 8577.33,
+        "guests": 290,
+        "orders": 111,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-25",
+        "net_sales": 9798.01,
+        "guests": 237,
+        "orders": 127,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-26",
+        "net_sales": 10775.67,
+        "guests": 287,
+        "orders": 139,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-27",
+        "net_sales": 22193.32,
+        "guests": 526,
+        "orders": 279,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-28",
+        "net_sales": 45852.07,
+        "guests": 1243,
+        "orders": 562,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-29",
+        "net_sales": 31761.45,
+        "guests": 880,
+        "orders": 370,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-06-30",
+        "net_sales": 6699.84,
+        "guests": 164,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-01",
+        "net_sales": 8828.34,
+        "guests": 218,
+        "orders": 112,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-02",
+        "net_sales": 10730.76,
+        "guests": 247,
+        "orders": 124,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-03",
+        "net_sales": 12676.76,
+        "guests": 318,
+        "orders": 162,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-04",
+        "net_sales": 23124.79,
+        "guests": 556,
+        "orders": 275,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-05",
+        "net_sales": 42650.41,
+        "guests": 1200,
+        "orders": 545,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-06",
+        "net_sales": 28727.65,
+        "guests": 807,
+        "orders": 354,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-07",
+        "net_sales": 6917.65,
+        "guests": 171,
+        "orders": 86,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-08",
+        "net_sales": 8719.89,
+        "guests": 214,
+        "orders": 112,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-09",
+        "net_sales": 10099.92,
+        "guests": 237,
+        "orders": 123,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-10",
+        "net_sales": 12858.59,
+        "guests": 320,
+        "orders": 161,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-11",
+        "net_sales": 22612.74,
+        "guests": 549,
+        "orders": 268,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-12",
+        "net_sales": 40564.49,
+        "guests": 1145,
+        "orders": 518,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-13",
+        "net_sales": 28339.33,
+        "guests": 793,
+        "orders": 343,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-14",
+        "net_sales": 7162.5,
+        "guests": 173,
+        "orders": 86,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-15",
+        "net_sales": 8326.88,
+        "guests": 209,
+        "orders": 110,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-16",
+        "net_sales": 10022.78,
+        "guests": 240,
+        "orders": 119,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-17",
+        "net_sales": 11525.9,
+        "guests": 294,
+        "orders": 151,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-18",
+        "net_sales": 23031.42,
+        "guests": 558,
+        "orders": 274,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-19",
+        "net_sales": 41001.02,
+        "guests": 1148,
+        "orders": 521,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-20",
+        "net_sales": 27981.32,
+        "guests": 781,
+        "orders": 345,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-21",
+        "net_sales": 7325.7,
+        "guests": 177,
+        "orders": 87,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-22",
+        "net_sales": 8824.78,
+        "guests": 211,
+        "orders": 108,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-23",
+        "net_sales": 10399.75,
+        "guests": 239,
+        "orders": 118,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-24",
+        "net_sales": 12365.11,
+        "guests": 308,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-25",
+        "net_sales": 22445.74,
+        "guests": 539,
+        "orders": 265,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-26",
+        "net_sales": 40543.42,
+        "guests": 1146,
+        "orders": 520,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-27",
+        "net_sales": 28085.31,
+        "guests": 776,
+        "orders": 341,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-28",
+        "net_sales": 7034.78,
+        "guests": 172,
+        "orders": 85,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-29",
+        "net_sales": 8863.44,
+        "guests": 213,
+        "orders": 110,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-30",
+        "net_sales": 10308.96,
+        "guests": 235,
+        "orders": 118,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-07-31",
+        "net_sales": 12401.15,
+        "guests": 314,
+        "orders": 159,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-01",
+        "net_sales": 22351.96,
+        "guests": 479,
+        "orders": 248,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-02",
+        "net_sales": 41072.55,
+        "guests": 1145,
+        "orders": 521,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-03",
+        "net_sales": 28283.61,
+        "guests": 782,
+        "orders": 350,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-04",
+        "net_sales": 7923.88,
+        "guests": 202,
+        "orders": 96,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-05",
+        "net_sales": 8130.7,
+        "guests": 203,
+        "orders": 108,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-06",
+        "net_sales": 9892.29,
+        "guests": 238,
+        "orders": 123,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-07",
+        "net_sales": 11172.99,
+        "guests": 281,
+        "orders": 148,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-08",
+        "net_sales": 21875.03,
+        "guests": 468,
+        "orders": 246,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-09",
+        "net_sales": 41870.42,
+        "guests": 1164,
+        "orders": 524,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-10",
+        "net_sales": 29117.43,
+        "guests": 794,
+        "orders": 349,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-11",
+        "net_sales": 8043.06,
+        "guests": 205,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-12",
+        "net_sales": 7785.13,
+        "guests": 201,
+        "orders": 108,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-13",
+        "net_sales": 9800.99,
+        "guests": 236,
+        "orders": 122,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-14",
+        "net_sales": 11354.78,
+        "guests": 285,
+        "orders": 146,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-15",
+        "net_sales": 21690.44,
+        "guests": 466,
+        "orders": 240,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-16",
+        "net_sales": 42003.41,
+        "guests": 1156,
+        "orders": 518,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-17",
+        "net_sales": 28712.07,
+        "guests": 792,
+        "orders": 348,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-18",
+        "net_sales": 7753.88,
+        "guests": 201,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-19",
+        "net_sales": 7929.46,
+        "guests": 202,
+        "orders": 109,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-20",
+        "net_sales": 9659.01,
+        "guests": 233,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-21",
+        "net_sales": 10971.19,
+        "guests": 266,
+        "orders": 143,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-22",
+        "net_sales": 21015.27,
+        "guests": 465,
+        "orders": 245,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-23",
+        "net_sales": 42210.43,
+        "guests": 1148,
+        "orders": 522,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-24",
+        "net_sales": 29193.28,
+        "guests": 790,
+        "orders": 347,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-25",
+        "net_sales": 7983.09,
+        "guests": 206,
+        "orders": 97,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-26",
+        "net_sales": 8210.31,
+        "guests": 203,
+        "orders": 108,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-27",
+        "net_sales": 10023.8,
+        "guests": 242,
+        "orders": 125,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-28",
+        "net_sales": 10927.31,
+        "guests": 275,
+        "orders": 142,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-29",
+        "net_sales": 22510.87,
+        "guests": 480,
+        "orders": 247,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-30",
+        "net_sales": 42475.47,
+        "guests": 1176,
+        "orders": 530,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-08-31",
+        "net_sales": 29371.37,
+        "guests": 796,
+        "orders": 350,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-01",
+        "net_sales": 8083.54,
+        "guests": 196,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-02",
+        "net_sales": 7877.03,
+        "guests": 198,
+        "orders": 106,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-03",
+        "net_sales": 9789.78,
+        "guests": 238,
+        "orders": 119,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-04",
+        "net_sales": 11399.91,
+        "guests": 278,
+        "orders": 141,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-05",
+        "net_sales": 19150.07,
+        "guests": 428,
+        "orders": 225,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-06",
+        "net_sales": 43276.05,
+        "guests": 1077,
+        "orders": 491,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-07",
+        "net_sales": 27524.69,
+        "guests": 745,
+        "orders": 332,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-08",
+        "net_sales": 9194.39,
+        "guests": 228,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-09",
+        "net_sales": 7882.85,
+        "guests": 198,
+        "orders": 105,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-10",
+        "net_sales": 9460.06,
+        "guests": 233,
+        "orders": 115,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-11",
+        "net_sales": 11090.91,
+        "guests": 267,
+        "orders": 137,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-12",
+        "net_sales": 20076.12,
+        "guests": 436,
+        "orders": 227,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-13",
+        "net_sales": 40322.18,
+        "guests": 1011,
+        "orders": 472,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-14",
+        "net_sales": 26344.84,
+        "guests": 713,
+        "orders": 315,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-15",
+        "net_sales": 8513.69,
+        "guests": 215,
+        "orders": 99,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-16",
+        "net_sales": 7725.09,
+        "guests": 194,
+        "orders": 104,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-17",
+        "net_sales": 9109.85,
+        "guests": 217,
+        "orders": 112,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-18",
+        "net_sales": 10965.35,
+        "guests": 266,
+        "orders": 136,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-19",
+        "net_sales": 17961.23,
+        "guests": 406,
+        "orders": 216,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-20",
+        "net_sales": 42065.48,
+        "guests": 1037,
+        "orders": 472,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-21",
+        "net_sales": 26627.03,
+        "guests": 723,
+        "orders": 320,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-22",
+        "net_sales": 9164.82,
+        "guests": 222,
+        "orders": 100,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-23",
+        "net_sales": 8180.94,
+        "guests": 201,
+        "orders": 108,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-24",
+        "net_sales": 9229.0,
+        "guests": 221,
+        "orders": 114,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-25",
+        "net_sales": 11269.03,
+        "guests": 271,
+        "orders": 137,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-26",
+        "net_sales": 18774.93,
+        "guests": 408,
+        "orders": 216,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-27",
+        "net_sales": 42263.52,
+        "guests": 1042,
+        "orders": 475,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-28",
+        "net_sales": 26576.98,
+        "guests": 727,
+        "orders": 321,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-29",
+        "net_sales": 8737.06,
+        "guests": 219,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-09-30",
+        "net_sales": 8079.78,
+        "guests": 198,
+        "orders": 104,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-01",
+        "net_sales": 10515.84,
+        "guests": 261,
+        "orders": 128,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-02",
+        "net_sales": 12663.53,
+        "guests": 302,
+        "orders": 155,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-03",
+        "net_sales": 18378.48,
+        "guests": 424,
+        "orders": 228,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-04",
+        "net_sales": 48528.13,
+        "guests": 1133,
+        "orders": 506,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-05",
+        "net_sales": 31443.91,
+        "guests": 847,
+        "orders": 360,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-06",
+        "net_sales": 8528.23,
+        "guests": 220,
+        "orders": 103,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-07",
+        "net_sales": 7533.98,
+        "guests": 192,
+        "orders": 104,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-08",
+        "net_sales": 10286.9,
+        "guests": 259,
+        "orders": 128,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-09",
+        "net_sales": 12952.83,
+        "guests": 292,
+        "orders": 153,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-10",
+        "net_sales": 18835.9,
+        "guests": 440,
+        "orders": 234,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-11",
+        "net_sales": 48132.68,
+        "guests": 1124,
+        "orders": 508,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-12",
+        "net_sales": 31047.21,
+        "guests": 833,
+        "orders": 355,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-13",
+        "net_sales": 8228.62,
+        "guests": 214,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-14",
+        "net_sales": 7859.0,
+        "guests": 195,
+        "orders": 106,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-15",
+        "net_sales": 10875.47,
+        "guests": 261,
+        "orders": 131,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-16",
+        "net_sales": 12736.21,
+        "guests": 297,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-17",
+        "net_sales": 18418.82,
+        "guests": 428,
+        "orders": 232,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-18",
+        "net_sales": 44871.63,
+        "guests": 1138,
+        "orders": 510,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-19",
+        "net_sales": 30811.3,
+        "guests": 833,
+        "orders": 350,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-20",
+        "net_sales": 7718.22,
+        "guests": 195,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-21",
+        "net_sales": 7835.3,
+        "guests": 194,
+        "orders": 106,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-22",
+        "net_sales": 10276.47,
+        "guests": 262,
+        "orders": 131,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-23",
+        "net_sales": 12979.09,
+        "guests": 299,
+        "orders": 158,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-24",
+        "net_sales": 18131.36,
+        "guests": 428,
+        "orders": 231,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-25",
+        "net_sales": 48075.01,
+        "guests": 1118,
+        "orders": 500,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-26",
+        "net_sales": 31701.07,
+        "guests": 854,
+        "orders": 362,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-27",
+        "net_sales": 8026.68,
+        "guests": 213,
+        "orders": 104,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-28",
+        "net_sales": 7807.71,
+        "guests": 191,
+        "orders": 104,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-29",
+        "net_sales": 10825.64,
+        "guests": 264,
+        "orders": 130,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-30",
+        "net_sales": 13463.85,
+        "guests": 307,
+        "orders": 157,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-10-31",
+        "net_sales": 18844.63,
+        "guests": 432,
+        "orders": 231,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-01",
+        "net_sales": 47863.35,
+        "guests": 1157,
+        "orders": 503,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-02",
+        "net_sales": 35790.67,
+        "guests": 940,
+        "orders": 387,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-03",
+        "net_sales": 8764.12,
+        "guests": 226,
+        "orders": 107,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-04",
+        "net_sales": 10104.03,
+        "guests": 229,
+        "orders": 122,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-05",
+        "net_sales": 14434.15,
+        "guests": 333,
+        "orders": 157,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-06",
+        "net_sales": 13031.5,
+        "guests": 292,
+        "orders": 151,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-07",
+        "net_sales": 18891.53,
+        "guests": 427,
+        "orders": 222,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-08",
+        "net_sales": 46065.96,
+        "guests": 1132,
+        "orders": 492,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-09",
+        "net_sales": 35170.41,
+        "guests": 929,
+        "orders": 379,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-10",
+        "net_sales": 9038.93,
+        "guests": 235,
+        "orders": 111,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-11",
+        "net_sales": 9948.66,
+        "guests": 227,
+        "orders": 123,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-12",
+        "net_sales": 14229.65,
+        "guests": 331,
+        "orders": 157,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-13",
+        "net_sales": 12908.62,
+        "guests": 293,
+        "orders": 153,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-14",
+        "net_sales": 18468.61,
+        "guests": 419,
+        "orders": 219,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-15",
+        "net_sales": 45862.06,
+        "guests": 1123,
+        "orders": 491,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-16",
+        "net_sales": 34686.87,
+        "guests": 912,
+        "orders": 375,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-17",
+        "net_sales": 8929.87,
+        "guests": 228,
+        "orders": 110,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-18",
+        "net_sales": 10092.09,
+        "guests": 230,
+        "orders": 124,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-19",
+        "net_sales": 14309.57,
+        "guests": 329,
+        "orders": 157,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-20",
+        "net_sales": 13186.26,
+        "guests": 291,
+        "orders": 149,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-21",
+        "net_sales": 18571.66,
+        "guests": 422,
+        "orders": 221,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-22",
+        "net_sales": 45702.54,
+        "guests": 1127,
+        "orders": 494,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-23",
+        "net_sales": 34576.29,
+        "guests": 912,
+        "orders": 374,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-24",
+        "net_sales": 8548.96,
+        "guests": 223,
+        "orders": 107,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-25",
+        "net_sales": 9809.53,
+        "guests": 228,
+        "orders": 123,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-26",
+        "net_sales": 13964.14,
+        "guests": 325,
+        "orders": 155,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-27",
+        "net_sales": 11934.29,
+        "guests": 256,
+        "orders": 138,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-28",
+        "net_sales": 19498.21,
+        "guests": 439,
+        "orders": 229,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-29",
+        "net_sales": 47264.1,
+        "guests": 1138,
+        "orders": 498,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-11-30",
+        "net_sales": 36126.44,
+        "guests": 949,
+        "orders": 392,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-01",
+        "net_sales": 7550.03,
+        "guests": 201,
+        "orders": 103,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-02",
+        "net_sales": 8900.11,
+        "guests": 204,
+        "orders": 111,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-03",
+        "net_sales": 13307.22,
+        "guests": 321,
+        "orders": 152,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-04",
+        "net_sales": 15001.46,
+        "guests": 370,
+        "orders": 177,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-05",
+        "net_sales": 19586.86,
+        "guests": 455,
+        "orders": 221,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-06",
+        "net_sales": 46439.0,
+        "guests": 1192,
+        "orders": 517,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-07",
+        "net_sales": 36437.22,
+        "guests": 985,
+        "orders": 392,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-08",
+        "net_sales": 7238.11,
+        "guests": 189,
+        "orders": 95,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-09",
+        "net_sales": 8912.6,
+        "guests": 201,
+        "orders": 110,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-10",
+        "net_sales": 13793.24,
+        "guests": 308,
+        "orders": 152,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-11",
+        "net_sales": 15100.25,
+        "guests": 358,
+        "orders": 176,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-12",
+        "net_sales": 17861.74,
+        "guests": 455,
+        "orders": 223,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-13",
+        "net_sales": 46591.62,
+        "guests": 1203,
+        "orders": 517,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-14",
+        "net_sales": 36842.73,
+        "guests": 941,
+        "orders": 386,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-15",
+        "net_sales": 7454.92,
+        "guests": 194,
+        "orders": 100,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-16",
+        "net_sales": 8648.62,
+        "guests": 202,
+        "orders": 111,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-17",
+        "net_sales": 12563.49,
+        "guests": 313,
+        "orders": 151,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-18",
+        "net_sales": 14307.7,
+        "guests": 356,
+        "orders": 176,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-19",
+        "net_sales": 19688.43,
+        "guests": 461,
+        "orders": 221,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-20",
+        "net_sales": 45076.77,
+        "guests": 1189,
+        "orders": 519,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-21",
+        "net_sales": 35630.18,
+        "guests": 949,
+        "orders": 383,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-22",
+        "net_sales": 6636.03,
+        "guests": 177,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-23",
+        "net_sales": 7682.43,
+        "guests": 180,
+        "orders": 103,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-24",
+        "net_sales": 12276.92,
+        "guests": 284,
+        "orders": 143,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-25",
+        "net_sales": 16185.12,
+        "guests": 393,
+        "orders": 192,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-26",
+        "net_sales": 21038.35,
+        "guests": 492,
+        "orders": 238,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-27",
+        "net_sales": 46948.66,
+        "guests": 1183,
+        "orders": 519,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-28",
+        "net_sales": 37082.79,
+        "guests": 964,
+        "orders": 387,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-29",
+        "net_sales": 7107.23,
+        "guests": 188,
+        "orders": 99,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-30",
+        "net_sales": 8788.18,
+        "guests": 202,
+        "orders": 112,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2025-12-31",
+        "net_sales": 12566.83,
+        "guests": 293,
+        "orders": 144,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.2,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-01",
+        "net_sales": 6612.41,
+        "guests": 152,
+        "orders": 82,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-02",
+        "net_sales": 13599.36,
+        "guests": 291,
+        "orders": 142,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-03",
+        "net_sales": 31257.9,
+        "guests": 813,
+        "orders": 357,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-04",
+        "net_sales": 25414.16,
+        "guests": 697,
+        "orders": 286,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-05",
+        "net_sales": 5092.8,
+        "guests": 132,
+        "orders": 70,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-06",
+        "net_sales": 5724.57,
+        "guests": 132,
+        "orders": 74,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-07",
+        "net_sales": 8822.18,
+        "guests": 215,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-08",
+        "net_sales": 9257.59,
+        "guests": 215,
+        "orders": 103,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-09",
+        "net_sales": 14138.54,
+        "guests": 311,
+        "orders": 151,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-10",
+        "net_sales": 31774.29,
+        "guests": 812,
+        "orders": 360,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-11",
+        "net_sales": 24757.06,
+        "guests": 675,
+        "orders": 277,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-12",
+        "net_sales": 4928.48,
+        "guests": 129,
+        "orders": 68,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-13",
+        "net_sales": 5752.83,
+        "guests": 132,
+        "orders": 73,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-14",
+        "net_sales": 8688.61,
+        "guests": 208,
+        "orders": 98,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-15",
+        "net_sales": 9085.79,
+        "guests": 207,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-16",
+        "net_sales": 14020.17,
+        "guests": 294,
+        "orders": 148,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-17",
+        "net_sales": 31019.65,
+        "guests": 825,
+        "orders": 358,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-18",
+        "net_sales": 23926.55,
+        "guests": 662,
+        "orders": 273,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-19",
+        "net_sales": 4770.44,
+        "guests": 127,
+        "orders": 67,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-20",
+        "net_sales": 5763.77,
+        "guests": 133,
+        "orders": 73,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-21",
+        "net_sales": 8830.75,
+        "guests": 210,
+        "orders": 99,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-22",
+        "net_sales": 9289.56,
+        "guests": 210,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-23",
+        "net_sales": 13522.84,
+        "guests": 301,
+        "orders": 148,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-24",
+        "net_sales": 32440.2,
+        "guests": 846,
+        "orders": 370,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-25",
+        "net_sales": 25264.97,
+        "guests": 692,
+        "orders": 284,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-26",
+        "net_sales": 5210.46,
+        "guests": 134,
+        "orders": 70,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-27",
+        "net_sales": 5770.58,
+        "guests": 136,
+        "orders": 75,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-28",
+        "net_sales": 8983.24,
+        "guests": 216,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-29",
+        "net_sales": 9341.77,
+        "guests": 217,
+        "orders": 105,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-30",
+        "net_sales": 14653.3,
+        "guests": 317,
+        "orders": 151,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-01-31",
+        "net_sales": 31786.89,
+        "guests": 835,
+        "orders": 363,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.85,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-01",
+        "net_sales": 20993.36,
+        "guests": 613,
+        "orders": 252,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-02",
+        "net_sales": 3656.32,
+        "guests": 98,
+        "orders": 58,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-03",
+        "net_sales": 4310.8,
+        "guests": 110,
+        "orders": 60,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-04",
+        "net_sales": 4668.94,
+        "guests": 132,
+        "orders": 73,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-05",
+        "net_sales": 5932.47,
+        "guests": 140,
+        "orders": 80,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-06",
+        "net_sales": 11346.58,
+        "guests": 267,
+        "orders": 137,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-07",
+        "net_sales": 27552.8,
+        "guests": 735,
+        "orders": 330,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-08",
+        "net_sales": 20908.94,
+        "guests": 615,
+        "orders": 251,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-09",
+        "net_sales": 3726.8,
+        "guests": 99,
+        "orders": 57,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-10",
+        "net_sales": 4270.08,
+        "guests": 108,
+        "orders": 59,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-11",
+        "net_sales": 4664.13,
+        "guests": 129,
+        "orders": 72,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-12",
+        "net_sales": 5801.63,
+        "guests": 139,
+        "orders": 80,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-13",
+        "net_sales": 11742.25,
+        "guests": 254,
+        "orders": 134,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-14",
+        "net_sales": 26484.51,
+        "guests": 695,
+        "orders": 309,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-15",
+        "net_sales": 19896.32,
+        "guests": 598,
+        "orders": 238,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-16",
+        "net_sales": 3240.29,
+        "guests": 91,
+        "orders": 54,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-17",
+        "net_sales": 4214.65,
+        "guests": 110,
+        "orders": 60,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-18",
+        "net_sales": 4726.09,
+        "guests": 121,
+        "orders": 71,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-19",
+        "net_sales": 6077.05,
+        "guests": 143,
+        "orders": 82,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-20",
+        "net_sales": 12790.53,
+        "guests": 280,
+        "orders": 142,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-21",
+        "net_sales": 28265.05,
+        "guests": 755,
+        "orders": 332,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-22",
+        "net_sales": 21061.24,
+        "guests": 628,
+        "orders": 254,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-23",
+        "net_sales": 3595.54,
+        "guests": 92,
+        "orders": 55,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-24",
+        "net_sales": 4246.37,
+        "guests": 107,
+        "orders": 58,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-25",
+        "net_sales": 4746.99,
+        "guests": 129,
+        "orders": 71,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-26",
+        "net_sales": 5539.15,
+        "guests": 135,
+        "orders": 77,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-27",
+        "net_sales": 12364.26,
+        "guests": 273,
+        "orders": 136,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-02-28",
+        "net_sales": 27496.15,
+        "guests": 730,
+        "orders": 322,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.8,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-01",
+        "net_sales": 24024.12,
+        "guests": 691,
+        "orders": 291,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-02",
+        "net_sales": 4452.58,
+        "guests": 117,
+        "orders": 71,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-03",
+        "net_sales": 5148.09,
+        "guests": 156,
+        "orders": 72,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-04",
+        "net_sales": 6266.24,
+        "guests": 163,
+        "orders": 91,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-05",
+        "net_sales": 6899.25,
+        "guests": 180,
+        "orders": 90,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-06",
+        "net_sales": 14270.9,
+        "guests": 331,
+        "orders": 181,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-07",
+        "net_sales": 34558.57,
+        "guests": 933,
+        "orders": 422,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-08",
+        "net_sales": 24276.18,
+        "guests": 696,
+        "orders": 291,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-09",
+        "net_sales": 4413.39,
+        "guests": 119,
+        "orders": 72,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-10",
+        "net_sales": 5156.61,
+        "guests": 157,
+        "orders": 72,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-11",
+        "net_sales": 6132.56,
+        "guests": 161,
+        "orders": 90,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-12",
+        "net_sales": 6849.92,
+        "guests": 184,
+        "orders": 93,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-13",
+        "net_sales": 14732.91,
+        "guests": 330,
+        "orders": 183,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-14",
+        "net_sales": 34659.8,
+        "guests": 929,
+        "orders": 424,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-15",
+        "net_sales": 24657.27,
+        "guests": 700,
+        "orders": 295,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-16",
+        "net_sales": 4544.19,
+        "guests": 121,
+        "orders": 72,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-17",
+        "net_sales": 4846.54,
+        "guests": 155,
+        "orders": 74,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-18",
+        "net_sales": 6323.8,
+        "guests": 164,
+        "orders": 91,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-19",
+        "net_sales": 6945.35,
+        "guests": 185,
+        "orders": 94,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-20",
+        "net_sales": 14879.73,
+        "guests": 335,
+        "orders": 184,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-21",
+        "net_sales": 34665.32,
+        "guests": 931,
+        "orders": 423,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-22",
+        "net_sales": 24430.45,
+        "guests": 700,
+        "orders": 291,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-23",
+        "net_sales": 4571.36,
+        "guests": 119,
+        "orders": 71,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-24",
+        "net_sales": 4958.8,
+        "guests": 158,
+        "orders": 72,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-25",
+        "net_sales": 6055.47,
+        "guests": 160,
+        "orders": 90,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-26",
+        "net_sales": 6858.07,
+        "guests": 180,
+        "orders": 91,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-27",
+        "net_sales": 14706.7,
+        "guests": 328,
+        "orders": 180,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-28",
+        "net_sales": 33995.14,
+        "guests": 899,
+        "orders": 413,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-29",
+        "net_sales": 24349.73,
+        "guests": 663,
+        "orders": 292,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-30",
+        "net_sales": 4671.08,
+        "guests": 122,
+        "orders": 73,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-03-31",
+        "net_sales": 5109.21,
+        "guests": 152,
+        "orders": 72,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 0.9,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-01",
+        "net_sales": 7276.26,
+        "guests": 171,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-02",
+        "net_sales": 7674.33,
+        "guests": 209,
+        "orders": 105,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-03",
+        "net_sales": 16827.97,
+        "guests": 383,
+        "orders": 210,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-04",
+        "net_sales": 38714.05,
+        "guests": 1049,
+        "orders": 464,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-05",
+        "net_sales": 27727.39,
+        "guests": 798,
+        "orders": 321,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-06",
+        "net_sales": 4750.79,
+        "guests": 126,
+        "orders": 78,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-07",
+        "net_sales": 6046.5,
+        "guests": 186,
+        "orders": 86,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-08",
+        "net_sales": 7247.52,
+        "guests": 176,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-09",
+        "net_sales": 7743.64,
+        "guests": 208,
+        "orders": 104,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-10",
+        "net_sales": 18560.62,
+        "guests": 437,
+        "orders": 231,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-11",
+        "net_sales": 37626.75,
+        "guests": 1044,
+        "orders": 467,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-12",
+        "net_sales": 27280.55,
+        "guests": 778,
+        "orders": 308,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-13",
+        "net_sales": 4431.1,
+        "guests": 119,
+        "orders": 73,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-14",
+        "net_sales": 5719.5,
+        "guests": 183,
+        "orders": 84,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-15",
+        "net_sales": 7287.45,
+        "guests": 176,
+        "orders": 101,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-16",
+        "net_sales": 7689.24,
+        "guests": 202,
+        "orders": 104,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-17",
+        "net_sales": 17350.47,
+        "guests": 430,
+        "orders": 228,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-18",
+        "net_sales": 38630.05,
+        "guests": 1052,
+        "orders": 468,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-19",
+        "net_sales": 26723.63,
+        "guests": 794,
+        "orders": 311,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-20",
+        "net_sales": 4578.91,
+        "guests": 121,
+        "orders": 74,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-21",
+        "net_sales": 5857.7,
+        "guests": 156,
+        "orders": 83,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-22",
+        "net_sales": 7335.19,
+        "guests": 176,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-23",
+        "net_sales": 7494.11,
+        "guests": 173,
+        "orders": 102,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-24",
+        "net_sales": 18160.21,
+        "guests": 430,
+        "orders": 229,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-25",
+        "net_sales": 38731.19,
+        "guests": 1055,
+        "orders": 468,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-26",
+        "net_sales": 27305.15,
+        "guests": 789,
+        "orders": 312,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-27",
+        "net_sales": 4451.17,
+        "guests": 119,
+        "orders": 73,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-28",
+        "net_sales": 5749.11,
+        "guests": 174,
+        "orders": 81,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-29",
+        "net_sales": 6459.32,
+        "guests": 173,
+        "orders": 100,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-04-30",
+        "net_sales": 7147.28,
+        "guests": 208,
+        "orders": 109,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.0,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-01",
+        "net_sales": 18465.76,
+        "guests": 454,
+        "orders": 245,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-02",
+        "net_sales": 44971.93,
+        "guests": 1206,
+        "orders": 517,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-03",
+        "net_sales": 29142.66,
+        "guests": 857,
+        "orders": 343,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-04",
+        "net_sales": 6164.32,
+        "guests": 163,
+        "orders": 92,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-05",
+        "net_sales": 6916.39,
+        "guests": 213,
+        "orders": 99,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-06",
+        "net_sales": 8227.18,
+        "guests": 189,
+        "orders": 109,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-07",
+        "net_sales": 9892.84,
+        "guests": 244,
+        "orders": 119,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-08",
+        "net_sales": 18465.76,
+        "guests": 454,
+        "orders": 245,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-09",
+        "net_sales": 44971.93,
+        "guests": 1206,
+        "orders": 517,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-10",
+        "net_sales": 29142.66,
+        "guests": 857,
+        "orders": 343,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-11",
+        "net_sales": 6164.32,
+        "guests": 163,
+        "orders": 92,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-12",
+        "net_sales": 6916.39,
+        "guests": 213,
+        "orders": 99,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-13",
+        "net_sales": 8227.18,
+        "guests": 189,
+        "orders": 109,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-14",
+        "net_sales": 9892.84,
+        "guests": 244,
+        "orders": 119,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-15",
+        "net_sales": 18465.76,
+        "guests": 454,
+        "orders": 245,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-16",
+        "net_sales": 44971.93,
+        "guests": 1206,
+        "orders": 517,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-17",
+        "net_sales": 29142.66,
+        "guests": 857,
+        "orders": 343,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-18",
+        "net_sales": 6164.32,
+        "guests": 163,
+        "orders": 92,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-19",
+        "net_sales": 6916.39,
+        "guests": 213,
+        "orders": 99,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-20",
+        "net_sales": 8227.18,
+        "guests": 189,
+        "orders": 109,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-21",
+        "net_sales": 9892.84,
+        "guests": 244,
+        "orders": 119,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-22",
+        "net_sales": 18465.76,
+        "guests": 454,
+        "orders": 245,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-23",
+        "net_sales": 44971.93,
+        "guests": 1206,
+        "orders": 517,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-24",
+        "net_sales": 29142.66,
+        "guests": 857,
+        "orders": 343,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-25",
+        "net_sales": 6164.32,
+        "guests": 163,
+        "orders": 92,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-26",
+        "net_sales": 6916.39,
+        "guests": 213,
+        "orders": 99,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-27",
+        "net_sales": 8227.18,
+        "guests": 189,
+        "orders": 109,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-28",
+        "net_sales": 9892.84,
+        "guests": 244,
+        "orders": 119,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-29",
+        "net_sales": 18465.76,
+        "guests": 454,
+        "orders": 245,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-30",
+        "net_sales": 44971.93,
+        "guests": 1206,
+        "orders": 517,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-05-31",
+        "net_sales": 29142.66,
+        "guests": 857,
+        "orders": 343,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-01",
+        "net_sales": 7036.78,
+        "guests": 172,
+        "orders": 96,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-02",
+        "net_sales": 8030.62,
+        "guests": 288,
+        "orders": 113,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-03",
+        "net_sales": 10158.47,
+        "guests": 235,
+        "orders": 126,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-04",
+        "net_sales": 11330.62,
+        "guests": 294,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-05",
+        "net_sales": 23119.93,
+        "guests": 571,
+        "orders": 285,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-06",
+        "net_sales": 46184.51,
+        "guests": 1266,
+        "orders": 562,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-07",
+        "net_sales": 31874.86,
+        "guests": 888,
+        "orders": 376,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-08",
+        "net_sales": 7036.78,
+        "guests": 172,
+        "orders": 96,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-09",
+        "net_sales": 8030.62,
+        "guests": 288,
+        "orders": 113,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-10",
+        "net_sales": 10158.47,
+        "guests": 235,
+        "orders": 126,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-11",
+        "net_sales": 11330.62,
+        "guests": 294,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-12",
+        "net_sales": 23119.93,
+        "guests": 571,
+        "orders": 285,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-13",
+        "net_sales": 46184.51,
+        "guests": 1266,
+        "orders": 562,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-14",
+        "net_sales": 31874.86,
+        "guests": 888,
+        "orders": 376,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-15",
+        "net_sales": 7036.78,
+        "guests": 172,
+        "orders": 96,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-16",
+        "net_sales": 8030.62,
+        "guests": 288,
+        "orders": 113,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-17",
+        "net_sales": 10158.47,
+        "guests": 235,
+        "orders": 126,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-18",
+        "net_sales": 11330.62,
+        "guests": 294,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-19",
+        "net_sales": 23119.93,
+        "guests": 571,
+        "orders": 285,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-20",
+        "net_sales": 46184.51,
+        "guests": 1266,
+        "orders": 562,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-21",
+        "net_sales": 31874.86,
+        "guests": 888,
+        "orders": 376,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-22",
+        "net_sales": 7036.78,
+        "guests": 172,
+        "orders": 96,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-23",
+        "net_sales": 8030.62,
+        "guests": 288,
+        "orders": 113,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-24",
+        "net_sales": 10158.47,
+        "guests": 235,
+        "orders": 126,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-25",
+        "net_sales": 11330.62,
+        "guests": 294,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-26",
+        "net_sales": 23119.93,
+        "guests": 571,
+        "orders": 285,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-27",
+        "net_sales": 46184.51,
+        "guests": 1266,
+        "orders": 562,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-28",
+        "net_sales": 31874.86,
+        "guests": 888,
+        "orders": 376,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-29",
+        "net_sales": 7036.78,
+        "guests": 172,
+        "orders": 96,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-06-30",
+        "net_sales": 8030.62,
+        "guests": 288,
+        "orders": 113,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.15,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-01",
+        "net_sales": 10713.04,
+        "guests": 240,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-02",
+        "net_sales": 12245.56,
+        "guests": 304,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-03",
+        "net_sales": 22465.98,
+        "guests": 542,
+        "orders": 264,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-04",
+        "net_sales": 40063.85,
+        "guests": 1126,
+        "orders": 516,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-05",
+        "net_sales": 28390.97,
+        "guests": 804,
+        "orders": 350,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-06",
+        "net_sales": 6761.99,
+        "guests": 169,
+        "orders": 85,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-07",
+        "net_sales": 8747.03,
+        "guests": 214,
+        "orders": 111,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-08",
+        "net_sales": 10713.04,
+        "guests": 240,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-09",
+        "net_sales": 12245.56,
+        "guests": 304,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-10",
+        "net_sales": 22465.98,
+        "guests": 542,
+        "orders": 264,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-11",
+        "net_sales": 40063.85,
+        "guests": 1126,
+        "orders": 516,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-12",
+        "net_sales": 28390.97,
+        "guests": 804,
+        "orders": 350,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-13",
+        "net_sales": 6761.99,
+        "guests": 169,
+        "orders": 85,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-14",
+        "net_sales": 8747.03,
+        "guests": 214,
+        "orders": 111,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-15",
+        "net_sales": 10713.04,
+        "guests": 240,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-16",
+        "net_sales": 12245.56,
+        "guests": 304,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-17",
+        "net_sales": 22465.98,
+        "guests": 542,
+        "orders": 264,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-18",
+        "net_sales": 40063.85,
+        "guests": 1126,
+        "orders": 516,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-19",
+        "net_sales": 28390.97,
+        "guests": 804,
+        "orders": 350,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-20",
+        "net_sales": 6761.99,
+        "guests": 169,
+        "orders": 85,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-21",
+        "net_sales": 8747.03,
+        "guests": 214,
+        "orders": 111,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-22",
+        "net_sales": 10713.04,
+        "guests": 240,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-23",
+        "net_sales": 12245.56,
+        "guests": 304,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-24",
+        "net_sales": 22465.98,
+        "guests": 542,
+        "orders": 264,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-25",
+        "net_sales": 40063.85,
+        "guests": 1126,
+        "orders": 516,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-26",
+        "net_sales": 28390.97,
+        "guests": 804,
+        "orders": 350,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-27",
+        "net_sales": 6761.99,
+        "guests": 169,
+        "orders": 85,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-28",
+        "net_sales": 8747.03,
+        "guests": 214,
+        "orders": 111,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-29",
+        "net_sales": 10713.04,
+        "guests": 240,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-30",
+        "net_sales": 12245.56,
+        "guests": 304,
+        "orders": 154,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-07-31",
+        "net_sales": 22465.98,
+        "guests": 542,
+        "orders": 264,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.1,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-01",
+        "net_sales": 42389.35,
+        "guests": 1167,
+        "orders": 527,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-02",
+        "net_sales": 28967.85,
+        "guests": 788,
+        "orders": 351,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-03",
+        "net_sales": 8051.0,
+        "guests": 206,
+        "orders": 97,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-04",
+        "net_sales": 8037.51,
+        "guests": 198,
+        "orders": 107,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-05",
+        "net_sales": 9429.88,
+        "guests": 235,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-06",
+        "net_sales": 10242.92,
+        "guests": 263,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-07",
+        "net_sales": 22314.73,
+        "guests": 482,
+        "orders": 251,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-08",
+        "net_sales": 42389.35,
+        "guests": 1167,
+        "orders": 527,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-09",
+        "net_sales": 28967.85,
+        "guests": 788,
+        "orders": 351,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-10",
+        "net_sales": 8051.0,
+        "guests": 206,
+        "orders": 97,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-11",
+        "net_sales": 8037.51,
+        "guests": 198,
+        "orders": 107,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-12",
+        "net_sales": 9429.88,
+        "guests": 235,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-13",
+        "net_sales": 10242.92,
+        "guests": 263,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-14",
+        "net_sales": 22314.73,
+        "guests": 482,
+        "orders": 251,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-15",
+        "net_sales": 42389.35,
+        "guests": 1167,
+        "orders": 527,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-16",
+        "net_sales": 28967.85,
+        "guests": 788,
+        "orders": 351,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-17",
+        "net_sales": 8051.0,
+        "guests": 206,
+        "orders": 97,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-18",
+        "net_sales": 8037.51,
+        "guests": 198,
+        "orders": 107,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-19",
+        "net_sales": 9429.88,
+        "guests": 235,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "net_sales": 10242.92,
+        "guests": 263,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-21",
+        "net_sales": 22314.73,
+        "guests": 482,
+        "orders": 251,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-22",
+        "net_sales": 42389.35,
+        "guests": 1167,
+        "orders": 527,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.1,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "net_sales": 28967.85,
+        "guests": 788,
+        "orders": 351,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-24",
+        "net_sales": 8051.0,
+        "guests": 206,
+        "orders": 97,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.65,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-25",
+        "net_sales": 8037.51,
+        "guests": 198,
+        "orders": 107,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.7,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-26",
+        "net_sales": 9429.88,
+        "guests": 235,
+        "orders": 121,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.75,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-27",
+        "net_sales": 10242.92,
+        "guests": 263,
+        "orders": 140,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 0.85,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      },
+      {
+        "date": "2026-08-28",
+        "net_sales": 22314.73,
+        "guests": 482,
+        "orders": 251,
+        "_meta": {
+          "similar_days": 10,
+          "day_factor": 1.15,
+          "season_factor": 1.05,
+          "model": "weighted_ensemble"
+        }
+      }
+    ],
+    "_note": "history range 2024-11-23 → 2026-04-30; forward window 120d"
   }
 }
