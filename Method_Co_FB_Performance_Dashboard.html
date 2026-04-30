@@ -375,7 +375,7 @@ footer.foot b { color: var(--slate); }
 <div class="content" id="outletBody"></div>
 
 <footer class="foot">
-  <b>Method Co F&amp;B Performance Dashboard</b> · Sources: Toast POS · Currency USD · Confidential
+  <b>Method Co F&amp;B Performance Dashboard</b>
 </footer>
 
 </main>
@@ -3028,10 +3028,10 @@ function renderRevenueSection() {
     </section>
 
     <section>
-      <div class="sect-head">
-        <div class="sect-title">This Period <span class="period-chip">${periodLabel}</span></div>
-        <div class="sect-meta">Computed from daily data for the selected month · ${granLabel}</div>
-      </div>
+      <!-- "This Period" header + "Computed from daily data" sub
+           dropped per operator: the F&B Performance Trends card
+           below already carries its own metric/period subtitle, so
+           the section header was repeating context. -->
       <!-- ROW 1: F&B Performance Trends — full width.
            Multi-metric (Total F&B Revenue / Covers / Avg Check / RevPASH /
            Comps & Discount), 3 chart types (line/area/bar), 3 granularities,
@@ -3624,7 +3624,7 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
   // Pull per-concept benchmarks for this outlet/RC combination.
   const bench = getBenchmarks(STATE.outlet, STATE.rc);
   const fmtRange = (r, prefix='$') => r ? `${prefix}${r[0]}–${prefix}${r[1]}` : null;
-  const revPashTargetSub = bench.revpash ? `Target ${fmtRange(bench.revpash)}/hr · ${bench.concept}` : null;
+  const revPashTargetSub = bench.revpash ? `Target ${fmtRange(bench.revpash)}/hr` : null;
   let revPashSub;
   if (revPASH != null) {
     const base = `${seats} seats · ${hoursPerDay} hr/day · ${openDays} open days`;
@@ -3701,7 +3701,7 @@ function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
       if (stlyTAgg.cnt) stlyTicketMin = stlyTAgg.sec / stlyTAgg.cnt / 60;
     }
   }
-  const ticketTargetSub = bench.ticketMin ? `Target ${bench.ticketMin[0]}–${bench.ticketMin[1]} min · ${bench.concept}` : null;
+  const ticketTargetSub = bench.ticketMin ? `Target ${bench.ticketMin[0]}–${bench.ticketMin[1]} min` : null;
   const ticketBase = avgTicketMin != null
     ? `${fmtNum(ticketAgg.cnt)} tickets · open→paid`
     : 'awaiting Toast order-details sync';
