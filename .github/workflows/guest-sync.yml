@@ -121,8 +121,29 @@ jobs:
           git add data/*.json
           if git diff --cached --quiet; then
             echo "no guest data changes"
-          else
-            STAMP="$(date -u +%Y-%m-%dT%H:%MZ)"
-            git commit -m "chore(data): nightly guest sync ${STAMP}"
-            git push
+            exit 0
           fi
+          STAMP="$(date -u +%Y-%m-%dT%H:%MZ)"
+          git commit -m "chore(data): nightly guest sync ${STAMP}"
+          # Rebase-and-retry guard against race with toast-sync /
+          # marginedge-sync / tripleseat-sync / budget-sync. They all
+          # push to data/*.json on overlapping schedules; a naked push
+          # gets rejected when another job lands first and the commit is
+          # silently dropped. Mirrors toast-sync.yml's pattern (PR #58
+          # 2026-04-30 incident: guest-sync committed +12 surveys then
+          # lost the push to a concurrent toast-sync). Three attempts
+          # with linear backoff.
+          for i in 1 2 3; do
+            if git push; then
+              echo "push succeeded on attempt $i"
+              exit 0
+            fi
+            echo "push rejected (attempt $i) — pulling and retrying"
+            git pull --rebase origin main || {
+              echo "rebase failed; aborting to avoid clobbering remote"
+              exit 1
+            }
+            sleep $((i * 5))
+          done
+          echo "push failed after 3 attempts"
+          exit 1
