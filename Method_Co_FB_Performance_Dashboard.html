@@ -2983,7 +2983,7 @@ function renderRevenueSection() {
             </div>
           </div>
           <div class="desc" id="pmixRevDesc">Top items by net sales · ${periodLabel}</div>
-          <div class="chart-wrap tall"><canvas id="rcChart"></canvas></div>
+          <div class="chart-wrap tall" style="overflow:auto;padding:0;"><div id="rcChart"></div></div>
         </div>
       </div>
       <div class="card" style="margin-top:12px;"><h3>Hour × Day-of-Week Heatmap</h3>
@@ -3880,96 +3880,113 @@ const PMIX_BUCKET_LABEL = {
 };
 
 function renderRC() {
-  // The card was rebranded to "Product Mix" — same canvas id (rcChart)
-  // is reused so destroy('rc') / cached chart wiring stays compatible.
-  // Filters: STATE.pmixCat (food/beverage/liquor/beer/wine/na) ×
-  //          STATE.pmixDir (top/bottom).
+  // The card was rebranded to "Product Mix" — renders a TABLE (not a
+  // Chart.js bar chart) keyed off STATE.pmixCat × STATE.pmixDir.
+  // The container id is still `rcChart` (now a <div>, not a <canvas>)
+  // so renderEverything()'s `guard('rc', ...)` wiring stays in place.
+  // destroy('rc') is still called as a no-op safety net in case a
+  // previous chart instance was registered under that key.
   destroy('rc');
-  safeChart('rcChart', () => {
-    const o = DATA.outlets[STATE.outlet];
-    const pm = (o && o.product_mix) || null;
-    const rcKey = STATE.rc === 'bar_rotunda' ? 'bar_rotunda'
-                : STATE.rc === 'le_supreme'  ? 'le_supreme'
-                : 'combined';
-    const body = pm && (pm[rcKey] || pm.combined);
-    if (!body || !Array.isArray(body.items_top) || !body.items_top.length) {
-      showEmpty('rcChart', 'Product Mix unavailable',
-        'No Toast Product Mix data synced for this outlet yet. ' +
-        'PMIX is pulled outside the standard nightly Toast ETL — ' +
-        'see toast-etl/regenerate_dashboard.py for the PMIX feed.');
-      return;
-    }
+  const host = document.getElementById('rcChart');
+  if (!host) return;
 
-    const cat = (STATE.pmixCat || 'food');
-    const dir = (STATE.pmixDir === 'bottom') ? 'bottom' : 'top';
-    const matcher = PMIX_BUCKETS[cat] || PMIX_BUCKETS.food;
+  const o = DATA.outlets[STATE.outlet];
+  const pm = (o && o.product_mix) || null;
+  const rcKey = STATE.rc === 'bar_rotunda' ? 'bar_rotunda'
+              : STATE.rc === 'le_supreme'  ? 'le_supreme'
+              : 'combined';
+  const body = pm && (pm[rcKey] || pm.combined);
+  if (!body || !Array.isArray(body.items_top) || !body.items_top.length) {
+    host.innerHTML =
+      `<div class="placeholder" style="padding:40px;text-align:center;">
+         <h3>Product Mix unavailable</h3>
+         <p>No Toast Product Mix data synced for this outlet yet. ` +
+      `PMIX is pulled outside the standard nightly Toast ETL.</p>
+       </div>`;
+    return;
+  }
 
-    // Filter items_top to the selected bucket; require positive net
-    // (zero-net items are voids and not interesting for ranking).
-    const filtered = (body.items_top || [])
-      .filter(it => it && it.category && matcher(it.category) && (it.net || 0) > 0);
+  const cat = (STATE.pmixCat || 'food');
+  const dir = (STATE.pmixDir === 'bottom') ? 'bottom' : 'top';
+  const matcher = PMIX_BUCKETS[cat] || PMIX_BUCKETS.food;
 
-    if (!filtered.length) {
-      showEmpty('rcChart', 'No items in selected category',
-        `${PMIX_BUCKET_LABEL[cat]} category has no positive-net items in this PMIX window.`);
-      return;
-    }
+  // Positive-net only — zero-net items are voids/comps and don't belong
+  // on a "top items by sales" or "bottom 10 worst sellers" list.
+  const filtered = (body.items_top || [])
+    .filter(it => it && it.category && matcher(it.category) && (it.net || 0) > 0);
 
-    // Sort: top → desc by net (biggest first); bottom → asc by net.
-    // Tie-break by qty so two same-net items rank by volume.
-    const sorted = filtered.slice().sort((a, b) => {
-      const dn = (b.net || 0) - (a.net || 0);
-      if (dn) return dn;
-      return (b.qty || 0) - (a.qty || 0);
+  if (!filtered.length) {
+    host.innerHTML =
+      `<div class="placeholder" style="padding:40px;text-align:center;">
+         <h3>No items in selected category</h3>
+         <p>${PMIX_BUCKET_LABEL[cat]} category has no positive-net items in this PMIX window.</p>
+       </div>`;
+    return;
+  }
+
+  // Sort: top → desc by net (biggest first); bottom → asc by net.
+  // Tie-break by qty so two same-net items rank by volume.
+  const sorted = filtered.slice().sort((a, b) => {
+    const dn = (b.net || 0) - (a.net || 0);
+    if (dn) return dn;
+    return (b.qty || 0) - (a.qty || 0);
+  });
+  // Bottom 10 = the LOWEST 10 net values, ordered ascending so #1 is
+  // the worst seller. (sorted is descending, so take the tail and
+  // reverse for ascending presentation.)
+  const rows = (dir === 'top') ? sorted.slice(0, 10) : sorted.slice(-10).reverse();
+
+  const desc = document.getElementById('pmixRevDesc');
+  if (desc) {
+    const periodLabel = currentPeriodLabel();
+    desc.textContent = (dir === 'top' ? 'Top 10' : 'Bottom 10') +
+      ' ' + PMIX_BUCKET_LABEL[cat] + ' items by net sales · ' + periodLabel +
+      ' (PMIX window — Toast PMIX is all-time, not period-scoped)';
+  }
+
+  // Build the list as a plain HTML table — same column structure as the
+  // legacy Top 25 Items table further down the page, scaled to the 10
+  // rows the operator asked for. % share is of the FILTERED bucket
+  // (not the full PMIX universe) so the percentages add up to a
+  // meaningful share-of-category number for the selected category.
+  const bucketTotal = filtered.reduce((s, r) => s + (r.net || 0), 0) || 1;
+  const tableRows = rows.map((r, i) => {
+    const pct = (r.net || 0) / bucketTotal * 100;
+    return `<tr>
+      <td class="num" style="color:var(--royal);">${i + 1}</td>
+      <td>${(r.item || '—').replace(/</g, '&lt;')}</td>
+      <td style="color:var(--royal);font-size:11px;">${(r.category || '—').replace(/</g, '&lt;')}</td>
+      <td class="num">${fmtNum(r.qty || 0)}</td>
+      <td class="num">$${(r.avg_price || 0).toFixed(2)}</td>
+      <td class="num"><b>${fmtMoneyFull(r.net || 0)}</b></td>
+      <td class="num" style="color:var(--royal);">${pct.toFixed(1)}%</td>
+    </tr>`;
+  }).join('');
+
+  host.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-family:var(--font-stack);font-size:13px;">
+      <thead>
+        <tr style="border-bottom:2px solid var(--turquoise);">
+          <th style="text-align:right;padding:8px 6px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;width:36px;">#</th>
+          <th style="text-align:left; padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Item</th>
+          <th style="text-align:left; padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Cat</th>
+          <th style="text-align:right;padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Qty</th>
+          <th style="text-align:right;padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Avg</th>
+          <th style="text-align:right;padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Net Sales</th>
+          <th style="text-align:right;padding:8px 8px;font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--royal);font-weight:600;">Share</th>
+        </tr>
+      </thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+  `;
+  // Table-cell padding/border styling — kept inline so the shared
+  // `td.num` class stays effective without a global CSS rewrite.
+  host.querySelectorAll('tbody tr').forEach(tr => {
+    tr.style.borderBottom = '1px solid var(--grey)';
+    tr.querySelectorAll('td').forEach(td => {
+      td.style.padding = '8px 8px';
     });
-    const rows = (dir === 'top') ? sorted.slice(0, 10) : sorted.slice(-10).reverse();
-    // For bottom, reverse so the smallest is at the top of the bar
-    // chart (matches how operators read "bottom of the menu").
-
-    const desc = document.getElementById('pmixRevDesc');
-    if (desc) {
-      const periodLabel = currentPeriodLabel();
-      desc.textContent = (dir === 'top' ? 'Top 10' : 'Bottom 10') +
-        ' ' + PMIX_BUCKET_LABEL[cat] + ' items by net sales · ' + periodLabel +
-        ' (PMIX window — Toast PMIX is all-time, not period-scoped)';
-    }
-
-    const ctx = document.getElementById('rcChart').getContext('2d');
-    charts.rc = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: rows.map(r => r.item),
-        datasets: [{
-          label: 'Net Sales',
-          data: rows.map(r => r.net),
-          backgroundColor: rows.map((_, i) => palette[i % palette.length]),
-          borderRadius: 2,
-        }],
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: {
-            label: c => {
-              const r = rows[c.dataIndex];
-              return [
-                fmtMoneyFull(r.net) + ' net',
-                fmtNum(r.qty) + ' sold @ $' + (r.avg_price || 0).toFixed(2) + ' avg',
-                r.category || '',
-              ].filter(Boolean);
-            }
-          } }
-        },
-        scales: {
-          x: { ticks: { callback: v => fmtMoney(v) }, grid: { color: '#F0EDEC' } },
-          y: { grid: { display: false } }
-        }
-      }
-    });
-  }, 'Product Mix unavailable', 'Chart.js error — see console.');
+  });
 }
 
 function renderHeatmap() {
