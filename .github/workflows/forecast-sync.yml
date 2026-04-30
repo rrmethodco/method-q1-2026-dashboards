@@ -1,0 +1,90 @@
+name: Forecast Sync
+
+# Regenerate the forecast.daily block in each data/<outlet>.json using
+# the helixo-2 port forecast engine. The dashboard's tri-comparison
+# KPI cards (vs Forecast / vs STLY / vs Budget) read this block.
+#
+# Runs LAST in the nightly ETL cadence so it can fold in fresh Toast
+# actuals from earlier syncs:
+#   12:00 UTC  Toast Sync           → refreshes order_details.daily
+#   12:15 UTC  Guest Sync           (Resy + Google)
+#   12:30 UTC  MarginEdge Sync      (COGS)
+#   12:45 UTC  Tripleseat Sync      (Private Events)
+#   13:00 UTC  Forecast Sync        (this — 1hr after Toast lands)
+
+on:
+  schedule:
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+    inputs:
+      outlet:
+        description: 'Optional single outlet id (leave blank = all)'
+        required: false
+        default: ''
+      lookahead:
+        description: 'Forward forecast window in days (default 120)'
+        required: false
+        default: '120'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: forecast-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run forecast engine
+        run: |
+          cd toast-etl
+          if [ -n "${{ github.event.inputs.outlet }}" ]; then
+            python3 forecast_engine.py \
+              --outlet "${{ github.event.inputs.outlet }}" \
+              --lookahead "${{ github.event.inputs.lookahead || '120' }}" \
+              --data-dir ../data
+          else
+            python3 forecast_engine.py \
+              --lookahead "${{ github.event.inputs.lookahead || '120' }}" \
+              --data-dir ../data
+          fi
+
+      - name: Commit refreshed forecasts
+        run: |
+          git config user.name  "method-forecast-sync[bot]"
+          git config user.email "method-forecast-sync@users.noreply.github.com"
+          git add data/*.json
+          if git diff --cached --quiet; then
+            echo "no forecast changes"
+            exit 0
+          fi
+          STAMP="$(date -u +%Y-%m-%dT%H:%MZ)"
+          git commit -m "chore(data): nightly forecast sync ${STAMP}"
+          # Rebase-and-retry guard against any concurrent push race
+          # with earlier ETLs that finished close to our 13:00 UTC slot.
+          for i in 1 2 3; do
+            if git push; then
+              echo "push succeeded on attempt $i"
+              exit 0
+            fi
+            echo "push rejected (attempt $i) — pulling and retrying"
+            git pull --rebase origin main || {
+              echo "rebase failed; aborting"
+              exit 1
+            }
+            sleep $((i * 5))
+          done
+          echo "push failed after 3 attempts"
+          exit 1
