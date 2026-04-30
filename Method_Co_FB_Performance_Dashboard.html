@@ -3272,11 +3272,18 @@ function renderEverything() {
   const lbl = bSS && bSS.start
     ? bSS.start + ' → ' + bSS.end + (pySS ? '  vs  ' + pySS.start + ' → ' + pySS.end : '')
     : 'All available dates';
-  document.getElementById('trendMeta').textContent = lbl;
+  // The PR #47 layout restructure dropped the legacy #orderMeta sub-line
+  // (was on the now-removed "Hourly & RC Detail" section header). Both
+  // metas are looked up defensively so a future markup tweak doesn't
+  // throw the way it did when `null.textContent = ...` blew up
+  // renderEverything mid-pass.
+  const trendMetaEl = document.getElementById('trendMeta');
+  if (trendMetaEl) trendMetaEl.textContent = lbl;
   const ordLbl = bOD && bOD.start
     ? bOD.start + ' → ' + bOD.end + (pyOD ? '  vs  ' + pyOD.start + ' → ' + pyOD.end : '')
     : 'Jan 2025 – Mar 2026';
-  document.getElementById('orderMeta').textContent = 'Toast Order Details · ' + ordLbl;
+  const orderMetaEl = document.getElementById('orderMeta');
+  if (orderMetaEl) orderMetaEl.textContent = 'Toast Order Details · ' + ordLbl;
 }
 
 function yoy(cur, py) { if (py == null || py === 0) return null; return (cur-py)/py*100; }
@@ -3580,6 +3587,11 @@ function renderSummarySection() {
 }
 
 function renderKPIs(curSS, pySS, bSS, curOD, pyOD) {
+  // Outlet handle for tri-comparison forecast/budget feeds (used at the
+  // bottom of this fn). PR #45 referenced `o` without declaring it,
+  // breaking the entire kpiRow render — every Revenue-tab visit logged
+  // "ReferenceError: o is not defined" and the KPI cards stayed empty.
+  const o = DATA.outlets[STATE.outlet];
   // ===== Current-period metrics (Sales Summary for net/guests; Order Details for discounts) =====
   const cs = sumDaily(curSS);
   const guestAvg = cs.guests ? cs.net_sales / cs.guests : null;
