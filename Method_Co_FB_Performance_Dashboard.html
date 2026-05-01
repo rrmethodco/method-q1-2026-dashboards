@@ -3169,11 +3169,38 @@ function _forecastNaiveBaselineWape(pairs, actuals, key) {
   if (!n || !actualSum) return { n: 0, wape: null };
   return { n, wape: absErrSum / actualSum };
 }
+// OpenWeather icon code → emoji glyph for the Forward Window weather
+// column. Matches the codes Helixo's daily_weather table stores
+// (01d, 02d, …, 50d). Day/night variants collapse to the same emoji
+// because the Forward Window doesn't display nighttime forecasts.
+const WEATHER_ICON_TO_EMOJI = {
+  '01d': '☀️', '01n': '☀️',
+  '02d': '⛅', '02n': '⛅',
+  '03d': '☁️', '03n': '☁️',
+  '04d': '☁️', '04n': '☁️',
+  '09d': '🌧️', '09n': '🌧️',
+  '10d': '🌦️', '10n': '🌦️',
+  '11d': '⛈️', '11n': '⛈️',
+  '13d': '❄️', '13n': '❄️',
+  '50d': '🌫️', '50n': '🌫️',
+};
+
 function renderForecastSection() {
   const o = DATA.outlets[STATE.outlet];
   const body = document.getElementById('outletBody');
   if (!o) { body.innerHTML = ''; return; }
   const { fc, actuals, pairs, future } = _forecastBuildPairs(o);
+
+  // Weather lookup keyed by date — used by the Forward Window table.
+  // outlet.weather.daily comes from weather_sync.py, which mirrors
+  // Helixo's daily_weather table. Falls back to {} if the outlet
+  // hasn't been weather-synced yet (column renders "—").
+  const weatherByDate = {};
+  if (o.weather && Array.isArray(o.weather.daily)) {
+    for (const w of o.weather.daily) {
+      if (w && w.date) weatherByDate[w.date] = w;
+    }
+  }
 
   // No forecast data at all — empty state with explanation
   if (!fc.length) {
@@ -3326,13 +3353,35 @@ function renderForecastSection() {
         <div class="sect-meta">No actuals yet — these are the predictions the dashboard's "vs Forecast" KPI cards will compare against.</div>
       </div>
       <table class="tbl">
-        <thead><tr><th>Date</th><th>DOW</th><th class="num">Forecast Revenue</th><th class="num">Forecast Covers</th><th class="num">ai_confidence</th></tr></thead>
+        <thead><tr>
+          <th>Date</th>
+          <th>DOW</th>
+          <th>Weather</th>
+          <th class="num">Temp</th>
+          <th class="num">Forecast Revenue</th>
+          <th class="num">Forecast Covers</th>
+          <th class="num">ai_confidence</th>
+        </tr></thead>
         <tbody>
           ${future.slice(0, 28).map(f => {
             const dow = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(f.date+'T12:00:00').getDay()];
+            // Weather + temp pulled per-date from outlet.weather.daily.
+            // If the date is past Helixo's forecast horizon (~15 days
+            // ahead), w will be undefined and both cells render "—".
+            const w = weatherByDate[f.date];
+            const emoji = w && w.icon ? (WEATHER_ICON_TO_EMOJI[w.icon] || '') : '';
+            const condTitle = w ? (w.description || w.condition || '').replace(/"/g, '&quot;') : '';
+            const weatherCell = w
+              ? `<span title="${condTitle}" style="font-size:16px;line-height:1;">${emoji || (w.condition || '—')}</span>`
+              : '<span style="color:var(--royal);">—</span>';
+            const tempCell = (w && w.temp_high != null)
+              ? `${Math.round(w.temp_high)}°`
+              : '<span style="color:var(--royal);">—</span>';
             return `<tr>
               <td>${f.date}</td>
               <td>${dow}</td>
+              <td>${weatherCell}</td>
+              <td class="num">${tempCell}</td>
               <td class="num">${fmtMoneyFull(f.net_sales)}</td>
               <td class="num">${fmtNum(f.guests)}</td>
               <td class="num">${f.ai_confidence != null ? (f.ai_confidence * 100).toFixed(0) + '%' : '—'}</td>
@@ -6519,6 +6568,16 @@ async function __loadOutletData() {
       if (payload.budget && Array.isArray(payload.budget.daily) && payload.budget.daily.length) {
         o.budget = payload.budget;
         o.sources.budget = true;
+      }
+      // Weather — pulled nightly by weather_sync.py from Helixo's
+      // daily_weather Supabase table (forecast horizon ~15 days
+      // ahead). Powers the Forward Window forecast table's Weather +
+      // Temp columns. Schema:
+      //   { as_of, source, daily: [{ date, temp_high, temp_low,
+      //     condition, icon, description, precipitation_pct }] }
+      if (payload.weather && Array.isArray(payload.weather.daily) && payload.weather.daily.length) {
+        o.weather = payload.weather;
+        o.sources.weather = true;
       }
     } catch (_) { /* keep inline fallback */ }
   }));
