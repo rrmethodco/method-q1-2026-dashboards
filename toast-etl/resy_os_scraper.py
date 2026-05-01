@@ -408,21 +408,44 @@ def transform_to_guest_block(
                 out.extend(extract_ratings(v))
         return out
 
+    # Per-row merge: each Resy API query returns a different SUBSET of
+    # the survey's responses[]. The score-question query (question_id=2)
+    # returns numeric ratings; the comment-question query (question_id=29)
+    # returns text. Same survey row, different fields populated. We must
+    # MERGE per-field, never wholesale replace, or the second pass clobbers
+    # the first. (PR #80 hit this: text-only fetches blanked out scores on
+    # 100% of rows that previously had both.)
+    SCORE_FIELDS = ("food", "service", "atmos", "sentiment", "recommend",
+                    "overall", "server", "covers", "dow", "hour")
     for cap in captured:
         body = cap.get("json")
         # Resy surveys path — traverse + transform
         for row in extract_resy_surveys(body):
             k = survey_key(row)
             if k in seen_index:
-                # Existing row — only replace if the new payload adds
-                # something the old one lacks (text comments, score
-                # bucket coverage). Avoids unnecessary writes while
-                # still backfilling pre-text-capture history.
                 old = surveys[seen_index[k]]
-                old_has_text = bool(old.get("text"))
-                new_has_text = bool(row.get("text"))
-                if new_has_text and not old_has_text:
-                    surveys[seen_index[k]] = row
+                changed = False
+                # Numeric fields & metadata — keep old if non-null, else
+                # take new. Never overwrite a non-null value with null.
+                for f in SCORE_FIELDS:
+                    new_v = row.get(f)
+                    if new_v is None:
+                        continue
+                    if old.get(f) is None:
+                        old[f] = new_v
+                        changed = True
+                # Text answers — union by (question, answer) tuple.
+                old_text = old.get("text") or []
+                new_text = row.get("text") or []
+                if new_text:
+                    seen_pairs = {(t.get("q"), t.get("a")) for t in old_text if isinstance(t, dict)}
+                    additions = [t for t in new_text
+                                 if isinstance(t, dict)
+                                 and (t.get("q"), t.get("a")) not in seen_pairs]
+                    if additions:
+                        old["text"] = old_text + additions
+                        changed = True
+                if changed:
                     stats["upgraded"] += 1
                 continue
             surveys.append(row)
@@ -512,24 +535,40 @@ def expand_via_limit_bump(page, captured: list[dict]) -> list[dict]:
         src_headers = cap.get("request_headers") or {}
         headers = {k: v for k, v in src_headers.items()
                    if k.lower() not in DROP_HEADERS and not k.startswith(":")}
-        # Build the per-year base query template: drop any
-        # surveyresponse__question_id filter (those scope to one
-        # question's responses), set all=true, set sort. start_date
-        # and end_date are filled in per chunk below.
-        base_qs = _u.parse_qs(parts.query, keep_blank_values=True)
-        for k in list(base_qs.keys()):
+        # Build the per-year base query template. Resy returns DIFFERENT
+        # subsets of each survey's responses[] depending on the
+        # surveyresponse__question_id filter — id=2 returns numeric
+        # ratings (recommend, food, service, atmos, sentiment); id=29
+        # returns the free-text comment. Without any question filter, we
+        # get only the comment. So we run the year-loop TWICE: once for
+        # scores (q=2) and once unfiltered for text (sets the dashboard's
+        # NPS card and the Reviews & Comments tiles respectively).
+        base_qs_template = _u.parse_qs(parts.query, keep_blank_values=True)
+        for k in list(base_qs_template.keys()):
             if k.startswith("surveyresponse__"):
-                base_qs.pop(k)
-        base_qs["all"] = ["true"]
-        base_qs.setdefault("sort", ["-reservation__date_booked"])
+                base_qs_template.pop(k)
+        base_qs_template["all"] = ["true"]
+        base_qs_template.setdefault("sort", ["-reservation__date_booked"])
+
+        # Two query variants per year: text (no question filter) and
+        # scores (question_id=2). The merge in transform_to_guest_block
+        # unions fields per row.
+        QUERY_VARIANTS = [
+            {},  # text-only (no question filter)
+            {"surveyresponse__question_id": ["2"],
+             "surveyresponse__response__isnull": ["False"]},
+        ]
 
         # Walk one calendar year at a time. Year-chunking caps each
         # response size + wall time so we don't blow past the 90s
         # request timeout on high-volume venues.
         for year, start_iso, end_iso in YEAR_CHUNKS:
-            qs = {k: list(v) for k, v in base_qs.items()}
+         for variant in QUERY_VARIANTS:
+            qs = {k: list(v) for k, v in base_qs_template.items()}
             qs["start_date"] = [start_iso]
             qs["end_date"] = [end_iso]
+            for vk, vv in variant.items():
+                qs[vk] = vv
             year_url = _u.urlunparse(parts._replace(query=_u.urlencode(qs, doseq=True)))
             page_idx = 0
             cur_url = year_url
