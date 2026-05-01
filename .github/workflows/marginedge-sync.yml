@@ -32,7 +32,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: marginedge-sync
+  # Shared with the other data/<outlet>.json writers (toast-sync,
+  # budget-sync, forecast-sync, guest-sync, tripleseat-sync) so
+  # cross-workflow runs serialize on git push instead of racing into
+  # rebase conflicts. See toast-sync.yml for the full rationale.
+  group: data-sync
   cancel-in-progress: false
 
 jobs:
