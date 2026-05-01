@@ -1,6 +1,6 @@
 {
   "outlet_id": "vessel",
-  "generated_at": "2026-04-30T23:24:40+00:00",
+  "generated_at": "2026-05-01T13:07:00+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -5996,13 +5996,22 @@
         "date": "2026-04-29"
       },
       {
-        "regular_hours": 13.15,
+        "regular_hours": 21.12,
         "overtime_hours": 0.0,
         "regular_cost": 268.88,
         "overtime_cost": 0.0,
         "total_cost": 268.88,
         "head_count": 3,
         "date": "2026-04-30"
+      },
+      {
+        "regular_hours": 0.0,
+        "overtime_hours": 0.0,
+        "regular_cost": 0.0,
+        "overtime_cost": 0.0,
+        "total_cost": 0.0,
+        "head_count": 2,
+        "date": "2026-05-01"
       }
     ],
     "hour_daily": [
@@ -41607,14 +41616,56 @@
       {
         "date": "2026-04-30",
         "hour": 12,
-        "hours": 2.0,
+        "hours": 2.87,
         "cost": 41.01
       },
       {
         "date": "2026-04-30",
         "hour": 13,
-        "hours": 0.97,
+        "hours": 1.97,
         "cost": 20.16
+      },
+      {
+        "date": "2026-04-30",
+        "hour": 14,
+        "hours": 1.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "hour": 15,
+        "hours": 1.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "hour": 16,
+        "hours": 1.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "hour": 17,
+        "hours": 1.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "hour": 18,
+        "hours": 1.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "hour": 19,
+        "hours": 1.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-04-30",
+        "hour": 20,
+        "hours": 0.1,
+        "cost": 0.0
       }
     ],
     "by_job_daily": [
@@ -51016,6 +51067,20 @@
         "date": "2026-04-30",
         "job_guid": "197bbd50-c1c7-4a24-8535-582d1a3dbb8e",
         "title": "Chef",
+        "hours": 7.97,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-05-01",
+        "job_guid": "cd62458d-03ee-415d-a07d-8f18b152d1bf",
+        "title": "Shift Manager / Assistant Manager",
+        "hours": 0.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-05-01",
+        "job_guid": "197bbd50-c1c7-4a24-8535-582d1a3dbb8e",
+        "title": "Chef",
         "hours": 0.0,
         "cost": 0.0
       }
@@ -51504,7 +51569,7 @@
       {
         "hour": 12,
         "dow": "THU",
-        "hours": 150.52,
+        "hours": 151.39,
         "cost": 2392.4
       },
       {
@@ -51546,7 +51611,7 @@
       {
         "hour": 13,
         "dow": "THU",
-        "hours": 135.26,
+        "hours": 136.26,
         "cost": 1934.61
       },
       {
@@ -51588,7 +51653,7 @@
       {
         "hour": 14,
         "dow": "THU",
-        "hours": 123.98,
+        "hours": 124.98,
         "cost": 1572.63
       },
       {
@@ -51630,7 +51695,7 @@
       {
         "hour": 15,
         "dow": "THU",
-        "hours": 113.84,
+        "hours": 114.84,
         "cost": 1491.54
       },
       {
@@ -51672,7 +51737,7 @@
       {
         "hour": 16,
         "dow": "THU",
-        "hours": 124.74,
+        "hours": 125.74,
         "cost": 1773.44
       },
       {
@@ -51714,7 +51779,7 @@
       {
         "hour": 17,
         "dow": "THU",
-        "hours": 120.35,
+        "hours": 121.35,
         "cost": 1755.69
       },
       {
@@ -51756,7 +51821,7 @@
       {
         "hour": 18,
         "dow": "THU",
-        "hours": 92.25,
+        "hours": 93.25,
         "cost": 1331.6
       },
       {
@@ -51798,7 +51863,7 @@
       {
         "hour": 19,
         "dow": "THU",
-        "hours": 83.4,
+        "hours": 84.4,
         "cost": 1171.12
       },
       {
@@ -51840,7 +51905,7 @@
       {
         "hour": 20,
         "dow": "THU",
-        "hours": 73.93,
+        "hours": 74.03,
         "cost": 989.79
       },
       {
@@ -51990,7 +52055,7 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 11575.95,
+    "regular_hours": 11583.92,
     "overtime_hours": 197.2,
     "regular_cost": 189899.37,
     "overtime_cost": 3473.46,

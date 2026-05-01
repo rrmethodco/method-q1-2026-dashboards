@@ -1,6 +1,6 @@
 {
   "outlet_id": "anthology",
-  "generated_at": "2026-04-30T23:11:06+00:00",
+  "generated_at": "2026-05-01T13:06:56+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -2422,9 +2422,9 @@
           "month": "2026-03"
         },
         {
-          "orders": 46,
-          "guests": 60,
-          "amount": 290869.43,
+          "orders": 8,
+          "guests": 18,
+          "amount": 143877.96,
           "tip": 0.0,
           "discount": 0.0,
           "month": "2026-04"
@@ -16173,13 +16173,22 @@
         "date": "2026-04-29"
       },
       {
-        "regular_hours": 18.36,
+        "regular_hours": 23.73,
         "overtime_hours": 0.0,
-        "regular_cost": 443.36,
+        "regular_cost": 529.28,
         "overtime_cost": 0.0,
-        "total_cost": 443.36,
+        "total_cost": 529.28,
         "head_count": 5,
         "date": "2026-04-30"
+      },
+      {
+        "regular_hours": 0.0,
+        "overtime_hours": 0.0,
+        "regular_cost": 0.0,
+        "overtime_cost": 0.0,
+        "total_cost": 0.0,
+        "head_count": 1,
+        "date": "2026-05-01"
       }
     ],
     "hour_daily": [
@@ -48028,44 +48037,44 @@
       {
         "date": "2026-04-30",
         "hour": 9,
-        "hours": 1.81,
-        "cost": 43.71
+        "hours": 1.93,
+        "cost": 45.56
       },
       {
         "date": "2026-04-30",
         "hour": 10,
-        "hours": 3.0,
-        "cost": 70.97
+        "hours": 4.0,
+        "cost": 86.98
       },
       {
         "date": "2026-04-30",
         "hour": 11,
-        "hours": 3.94,
-        "cost": 94.53
+        "hours": 4.94,
+        "cost": 110.55
       },
       {
         "date": "2026-04-30",
         "hour": 12,
-        "hours": 4.0,
-        "cost": 95.95
+        "hours": 5.0,
+        "cost": 111.96
       },
       {
         "date": "2026-04-30",
         "hour": 13,
-        "hours": 3.01,
-        "cost": 73.15
+        "hours": 4.01,
+        "cost": 89.17
       },
       {
         "date": "2026-04-30",
         "hour": 14,
-        "hours": 1.88,
-        "cost": 46.95
+        "hours": 2.88,
+        "cost": 62.96
       },
       {
         "date": "2026-04-30",
         "hour": 15,
-        "hours": 0.43,
-        "cost": 10.67
+        "hours": 0.68,
+        "cost": 14.67
       }
     ],
     "by_job_daily": [
@@ -60022,6 +60031,13 @@
         "date": "2026-04-30",
         "job_guid": "831e09fc-3985-4820-bdbe-aa0067bf8892",
         "title": "Dishwasher",
+        "hours": 5.37,
+        "cost": 85.92
+      },
+      {
+        "date": "2026-05-01",
+        "job_guid": "b1512743-6e6a-4139-b7bf-992b8cd12290",
+        "title": "Cook",
         "hours": 0.0,
         "cost": 0.0
       }
@@ -60390,8 +60406,8 @@
       {
         "hour": 9,
         "dow": "THU",
-        "hours": 117.07,
-        "cost": 2707.93
+        "hours": 117.19,
+        "cost": 2709.78
       },
       {
         "hour": 9,
@@ -60432,8 +60448,8 @@
       {
         "hour": 10,
         "dow": "THU",
-        "hours": 175.74,
-        "cost": 4089.04
+        "hours": 176.74,
+        "cost": 4105.05
       },
       {
         "hour": 10,
@@ -60474,8 +60490,8 @@
       {
         "hour": 11,
         "dow": "THU",
-        "hours": 234.29,
-        "cost": 5426.61
+        "hours": 235.29,
+        "cost": 5442.63
       },
       {
         "hour": 11,
@@ -60516,8 +60532,8 @@
       {
         "hour": 12,
         "dow": "THU",
-        "hours": 280.25,
-        "cost": 6499.25
+        "hours": 281.25,
+        "cost": 6515.26
       },
       {
         "hour": 12,
@@ -60558,8 +60574,8 @@
       {
         "hour": 13,
         "dow": "THU",
-        "hours": 295.27,
-        "cost": 6851.75
+        "hours": 296.27,
+        "cost": 6867.77
       },
       {
         "hour": 13,
@@ -60600,8 +60616,8 @@
       {
         "hour": 14,
         "dow": "THU",
-        "hours": 341.95,
-        "cost": 7938.84
+        "hours": 342.95,
+        "cost": 7954.85
       },
       {
         "hour": 14,
@@ -60642,8 +60658,8 @@
       {
         "hour": 15,
         "dow": "THU",
-        "hours": 338.65,
-        "cost": 7964.24
+        "hours": 338.9,
+        "cost": 7968.24
       },
       {
         "hour": 15,
@@ -61002,11 +61018,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 28577.32,
+    "regular_hours": 28582.69,
     "overtime_hours": 948.73,
-    "regular_cost": 658822.42,
+    "regular_cost": 658908.34,
     "overtime_cost": 37006.15,
-    "total_cost": 695828.5
+    "total_cost": 695914.42
   },
   "cogs": {
     "as_of": "2026-04-29",
