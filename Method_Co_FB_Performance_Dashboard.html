@@ -1244,7 +1244,10 @@ function renderCogsSection() {
   const maxDate = ssDailyAll.length ? ssDailyAll[ssDailyAll.length-1].date : null;
   const bSel = periodBounds(maxDate);
   const inRange = (d) => !bSel || (d >= bSel.start && d <= bSel.end);
-  const periodLabel = bSel ? bSel.label : (STATE.monthJump ? fmtMonth(STATE.monthJump) : 'Latest');
+  // periodBounds() only sets .label for week-level results; for month-level
+  // it returns just {start, end, kind:'month'}. Use the canonical helper so
+  // section headers don't render "undefined" when the user hasn't picked a week.
+  const periodLabel = currentPeriodLabel();
 
   // Filter invoices to the period
   const invCur = c.invoices.filter(inv => inRange(inv.date || ''));
@@ -1255,18 +1258,64 @@ function renderCogsSection() {
   const netSalesPeriod = ssCur.reduce((s, r) => s + (r.net_sales || 0), 0);
   const cogsPct = netSalesPeriod > 0 ? (invTotal / netSalesPeriod) * 100 : null;
 
-  // Aggregate by vendor + category from period invoices
+  // Aggregate by vendor + raw-category + hospitality COGS bucket from
+  // period invoices. The five fixed buckets (Food / Liquor / Beer /
+  // Wine·Sake / NA Bev) are the primary view — they match how Method's
+  // F&B P&L is organized. Raw category breakdown stays available below
+  // for diagnostic drilldown.
+  //
+  // Sake handling: MarginEdge often leaves categoryType=null on the
+  // "Sake" category, so cogs_bucket would come back null from the ETL.
+  // We catch sake by name here and roll it into wine — every Method
+  // outlet that pours sake (Hiroki Det/Phl, Le Supreme, Mulherins,
+  // Lowland) has a single ME category literally named "Sake".
+  const COGS_BUCKETS = ['food', 'liquor', 'beer', 'wine', 'na_beverages'];
+  const COGS_BUCKET_LABEL = {
+    food:          'Food',
+    liquor:        'Liquor',
+    beer:          'Beer',
+    wine:          'Wine / Sake',
+    na_beverages:  'NA Bev',
+  };
+  const COGS_BUCKET_COLOR = {
+    food:          C.tan,
+    liquor:        C.slate,
+    beer:          C.seafoam,
+    wine:          C.royal,
+    na_beverages:  C.turquoise,
+  };
+  const resolveBucket = (li) => {
+    if (li.cogs_bucket && COGS_BUCKETS.includes(li.cogs_bucket)) return li.cogs_bucket;
+    const name = (li.category || '').toLowerCase();
+    if (name === 'sake' || name.includes('sake')) return 'wine';
+    return null;
+  };
+
   const byVendor = {};
   const byCategory = {};
+  const byBucket = Object.fromEntries(COGS_BUCKETS.map(b => [b, 0]));
+  let cogsOnlyTotal = 0;        // food+bev only — excludes opex/labor/uncategorized
+  let uncategorizedTotal = 0;   // line items that fell outside the 5 buckets
   invCur.forEach(inv => {
     byVendor[inv.vendor_name || 'Unknown'] = (byVendor[inv.vendor_name || 'Unknown'] || 0) + (inv.total || 0);
     (inv.line_items || []).forEach(li => {
       const cat = li.category || 'Uncategorized';
-      byCategory[cat] = (byCategory[cat] || 0) + (li.extended || 0);
+      const ext = li.extended || 0;
+      byCategory[cat] = (byCategory[cat] || 0) + ext;
+      const b = resolveBucket(li);
+      if (b) {
+        byBucket[b] += ext;
+        cogsOnlyTotal += ext;
+      } else {
+        uncategorizedTotal += ext;
+      }
     });
   });
   const topVendors = Object.entries(byVendor).sort((a,b) => b[1] - a[1]).slice(0, 10);
   const topCats = Object.entries(byCategory).sort((a,b) => b[1] - a[1]).slice(0, 10);
+  const bucketRows = COGS_BUCKETS.map(b => [b, byBucket[b]]);  // fixed order: Food→Liquor→Beer→Wine·Sake→NA Bev
+  const bucketTotal = bucketRows.reduce((s,[,v]) => s + v, 0);
+  const hasBucketData = bucketTotal > 0;
 
   // Pre-built rollups from the ETL (drives the trend charts)
   const monthly = (c.monthly_rollup || []).slice().sort((a,b) => a.month.localeCompare(b.month));
@@ -1286,8 +1335,12 @@ function renderCogsSection() {
         ${kpi('COGS $',          fmtMoney(invTotal), `${fmtNum(invCur.length)} invoices in period`, 'neutral')}
         ${kpi('Net Sales',       fmtMoney(netSalesPeriod), `Toast pre-tax`, 'neutral')}
         ${kpi('COGS %',          cogsPct != null ? cogsPct.toFixed(1)+'%' : '—', 'industry target 28-35%', cogsTone(cogsPct))}
+        ${kpi('Food + Bev COGS', hasBucketData ? fmtMoney(cogsOnlyTotal) : '—',
+              hasBucketData
+                ? `${(cogsOnlyTotal/invTotal*100).toFixed(0)}% of invoice $ · excl. opex`
+                : 'awaiting line-item sync',
+              'neutral')}
         ${kpi('Vendors',         fmtNum(Object.keys(byVendor).length), `unique in period`, 'neutral')}
-        ${kpi('Categories',      fmtNum(Object.keys(byCategory).length), `unique in period`, 'neutral')}
         ${kpi('Avg Invoice',     invCur.length ? fmtMoney(invTotal / invCur.length) : '—', 'mean per invoice', 'neutral')}
       </div>
     </section>
@@ -1323,14 +1376,48 @@ function renderCogsSection() {
 
     <section>
       <div class="sect-head">
-        <div class="sect-title">Spend by Category · ${periodLabel}</div>
-        <div class="sect-meta">Top 10 categories by line-item total</div>
+        <div class="sect-title">Spend by Cost Type · ${periodLabel}</div>
+        <div class="sect-meta">Food → Liquor → Beer → Wine·Sake → NA Bev · MarginEdge categoryType + sake-by-name override</div>
       </div>
       <div class="grid grid-2">
         <div class="card">
-          <h3>Category Breakdown</h3>
-          <div class="desc">${fmtNum(topCats.length)} categories · ${fmtMoney(topCats.reduce((s,[,v])=>s+v,0))} of ${fmtMoney(invTotal)} total</div>
-          <div class="chart-wrap tall"><canvas id="cogsCategoryBar"></canvas></div>
+          <h3>Cost Type Breakdown</h3>
+          <div class="desc">
+            ${hasBucketData
+              ? `${fmtMoney(cogsOnlyTotal)} food + bev · ${fmtMoney(uncategorizedTotal)} opex/uncategorized · ${fmtMoney(invTotal)} total invoice $`
+              : 'No line-item data yet — next MarginEdge sync will populate the buckets.'}
+          </div>
+          ${hasBucketData ? `
+          <div class="chart-wrap tall"><canvas id="cogsBucketBar"></canvas></div>
+          <table class="tbl" style="margin-top: 14px;">
+            <thead><tr>
+              <th style="text-align:left">Cost Type</th>
+              <th style="text-align:right">Spend</th>
+              <th style="text-align:right">% of Food+Bev</th>
+              <th style="text-align:right">% of Invoice $</th>
+            </tr></thead>
+            <tbody>
+              ${bucketRows.map(([b, v]) => `
+                <tr>
+                  <td><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${COGS_BUCKET_COLOR[b]};margin-right:6px;vertical-align:middle;"></span>${COGS_BUCKET_LABEL[b]}</td>
+                  <td style="text-align:right">${fmtMoney(v)}</td>
+                  <td style="text-align:right">${cogsOnlyTotal>0 ? (v/cogsOnlyTotal*100).toFixed(1)+'%' : '—'}</td>
+                  <td style="text-align:right">${invTotal>0 ? (v/invTotal*100).toFixed(1)+'%' : '—'}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>` : `
+          <div style="display:flex;flex-direction:column;gap:8px;padding:18px 0;">
+            ${COGS_BUCKETS.map(b => `
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#FAFAF9;border-radius:6px;border-left:3px solid ${COGS_BUCKET_COLOR[b]};">
+                <span style="font-weight:600;color:var(--ink);min-width:90px;">${COGS_BUCKET_LABEL[b]}</span>
+                <span style="color:var(--muted);font-size:12px;">awaiting line-item sync</span>
+              </div>`).join('')}
+          </div>
+          <p style="margin: 12px 0 0; color: var(--muted); font-size: 11px;">
+            The 5-bucket breakdown reads <code>cogs_bucket</code> off each invoice line item.
+            Current data was synced before line items were enabled (see <code>with_line_items</code> in the cogs payload).
+            Tonight's MarginEdge cron run pulls line items by default — buckets fill in automatically tomorrow.
+          </p>`}
         </div>
         <div class="card">
           <h3>Monthly COGS Trend</h3>
@@ -1339,6 +1426,31 @@ function renderCogsSection() {
         </div>
       </div>
     </section>
+
+    ${topCats.length ? `
+    <section>
+      <div class="sect-head">
+        <div class="sect-title">Granular Categories · ${periodLabel}</div>
+        <div class="sect-meta">Top 10 raw MarginEdge categories — drilldown beneath the 5 cost-type buckets above</div>
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr>
+            <th style="text-align:left">Category</th>
+            <th style="text-align:right">Spend</th>
+            <th style="text-align:right">% of Invoice $</th>
+          </tr></thead>
+          <tbody>
+            ${topCats.map(([cat, v]) => `
+              <tr>
+                <td>${(cat||'').toString().replace(/</g,'&lt;')}</td>
+                <td style="text-align:right">${fmtMoney(v)}</td>
+                <td style="text-align:right">${invTotal>0 ? (v/invTotal*100).toFixed(1)+'%' : '—'}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </section>` : ''}
 
     <section>
       <div class="sect-head">
@@ -1376,24 +1488,42 @@ function renderCogsSection() {
   `;
 
   // ---- Charts ----
-  destroy('cogsCategoryBar');
-  if (topCats.length) {
-    new Chart(document.getElementById('cogsCategoryBar'), {
+  // Cost-type bucket chart — fixed order Food → Liquor → Beer →
+  // Wine·Sake → NA Bev. The canvas is only emitted when hasBucketData
+  // is true; the empty-state path renders a static legend list instead
+  // (Chart.js with all-zero values draws a blank canvas, which reads as
+  // a missing section).
+  destroy('cogsBucketBar');
+  const bucketCanvas = document.getElementById('cogsBucketBar');
+  if (bucketCanvas && hasBucketData) {
+    new Chart(bucketCanvas, {
       type: 'bar',
       data: {
-        labels: topCats.map(([cat]) => cat),
+        labels: COGS_BUCKETS.map(b => COGS_BUCKET_LABEL[b]),
         datasets: [{
           label: 'Spend',
-          data: topCats.map(([, total]) => total),
-          backgroundColor: C.tan,
+          data: COGS_BUCKETS.map(b => byBucket[b]),
+          backgroundColor: COGS_BUCKETS.map(b => COGS_BUCKET_COLOR[b]),
         }],
       },
       options: {
         indexAxis: 'y',
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const v = ctx.parsed.x;
+                const pctOnly = cogsOnlyTotal>0 ? (v/cogsOnlyTotal*100).toFixed(1)+'%' : '—';
+                const pctAll  = invTotal>0      ? (v/invTotal*100).toFixed(1)+'%'      : '—';
+                return [`${fmtMoney(v)}`, `${pctOnly} of food+bev · ${pctAll} of invoice $`];
+              },
+            },
+          },
+        },
         scales: {
-          x: { ticks: { callback: v => '$' + (v >= 1000 ? (v/1000).toFixed(0)+'K' : v.toFixed(0)) }, grid: { display: false } },
+          x: { ticks: { callback: v => '$' + (v >= 1000 ? (v/1000).toFixed(0)+'K' : v.toFixed(0)) }, grid: { display: false }, beginAtZero: true },
           y: { grid: { display: false } },
         },
       },
@@ -2671,17 +2801,24 @@ function snapshotSumLabor(o, start, end) {
 function snapshotSumCogs(o, start, end) {
   if (!o || !o.cogs || !Array.isArray(o.cogs.invoices)) return null;
   let total = 0, n = 0;
-  // Per-bucket totals (food/beer/wine/liquor/na_beverages) when line
+  // Per-bucket totals (food/liquor/beer/wine/na_beverages) when line
   // items have been fetched. When line items are off, only `total` is
   // populated; the buckets stay at 0 and the dashboard hides them.
-  const byType = { food: 0, beer: 0, wine: 0, liquor: 0, na_beverages: 0 };
+  // Order matches the COGS-section ordering: Food → Liquor → Beer →
+  // Wine·Sake → NA Bev. Sake's MarginEdge categoryType is null on every
+  // outlet, so we catch it by category name and roll into wine.
+  const byType = { food: 0, liquor: 0, beer: 0, wine: 0, na_beverages: 0 };
   o.cogs.invoices.forEach(inv => {
     const d = inv.date || '';
     if (d >= start && d <= end) {
       total += inv.total || 0;
       n++;
       (inv.line_items || []).forEach(li => {
-        const b = li.cogs_bucket;
+        let b = li.cogs_bucket;
+        if (!b) {
+          const name = (li.category || '').toLowerCase();
+          if (name === 'sake' || name.includes('sake')) b = 'wine';
+        }
         if (b && b in byType) byType[b] += li.extended || 0;
       });
     }

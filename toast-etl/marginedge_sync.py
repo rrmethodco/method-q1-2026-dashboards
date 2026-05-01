@@ -109,12 +109,17 @@ LOOKBACK_DAYS = int(os.environ.get("MARGINEDGE_LOOKBACK_DAYS") or 90)
 WITH_LINE_ITEMS = (os.environ.get("MARGINEDGE_WITH_LINE_ITEMS") or "1") in ("1", "true", "yes")
 REQUEST_TIMEOUT = 45
 USER_AGENT = "MethodCo-Dashboards/1.0 (marginedge_sync.py; +https://github.com/rrmethodco)"
-# ME's rate limits aren't published. Empirically, /orders/{id} starts
-# returning 429 after ~100 consecutive calls at 10/sec — bumping the
-# inter-call sleep to 0.30s (3.3 req/sec sustained) eliminates them.
-RATE_LIMIT_SLEEP = 0.30
+# ME's rate limits aren't published and shift over time. Empirically:
+# - 0.10s sleep (10 req/sec): 429s after ~100 calls
+# - 0.30s sleep (3.3 req/sec): worked briefly but degraded to 429-on-
+#   every-request once the line-item endpoint started getting hammered
+#   (run 25186157102 on 2026-04-30 — 90 min of nonstop 429s, no progress)
+# - 1.0s sleep (1 req/sec): conservative target. Each successful request
+#   "spends" 1s; if we still see 429s we add backoff, but the steady
+#   state should be one clean request per second.
+RATE_LIMIT_SLEEP = 1.0
 RATE_LIMIT_RETRIES = 6
-RATE_LIMIT_BACKOFF_BASE = 3.0  # 3, 6, 9, 12, 15, 18s before giving up
+RATE_LIMIT_BACKOFF_BASE = 5.0  # 5, 10, 15, 20, 25, 30s before giving up
 
 
 # Outlet (data/<id>.json basename) → MarginEdge restaurantUnitId.
@@ -223,26 +228,57 @@ COGS_TYPES = {
 }
 
 
-def cogs_bucket(category_type: str | None) -> str:
-    """Map a MarginEdge categoryType → our cogs bucket name.
-    LABOR/OTHER/null all return None → excluded from COGS rollups."""
-    if not category_type:
-        return None
-    return COGS_TYPES.get(category_type.upper())
+def cogs_bucket(category_type: str | None, category_name: str | None = None) -> str | None:
+    """Map a MarginEdge category → our cogs bucket name.
+
+    Primary mapping is by categoryType (FOOD/BEER/WINE/LIQUOR/NA_BEVERAGES).
+    LABOR/OTHER/null all return None → excluded from COGS rollups.
+
+    Fallback: if categoryType is null/unmapped but the category name is
+    "Sake" (or contains "sake"), roll into wine. MarginEdge typically
+    leaves categoryType null on Sake even though every Method outlet
+    that pours it (Hiroki Det/Phl, Le Supreme, Mulherins, Lowland) has a
+    dedicated "Sake" category. Without this name override, sake spend
+    would silently land in the uncategorized bucket.
+    """
+    if category_type:
+        bucket = COGS_TYPES.get(category_type.upper())
+        if bucket:
+            return bucket
+    if category_name:
+        n = category_name.strip().lower()
+        if n == "sake" or "sake" in n:
+            return "wine"
+    return None
 
 
 def transform_order(o: dict, line_items: list | None,
-                    category_lookup: dict, category_type_lookup: dict) -> dict:
+                    category_lookup: dict, category_type_lookup: dict,
+                    product_category_lookup: dict | None = None) -> dict:
     """Project an ME order into the dashboard's invoice schema.
 
     `category_type_lookup` maps categoryId → categoryType (FOOD, BEER,
     WINE, LIQUOR, NA_BEVERAGES, LABOR, OTHER). We attach categoryType
     on each line item so the dashboard can group spend by hospitality
     cost-of-goods buckets without a second lookup at render time.
+
+    `product_category_lookup` maps companyConceptProductId → categoryId.
+    MarginEdge's /orders/{id} endpoint returns line items WITHOUT
+    categoryId populated (verified empirically 2026-04-30 — all 977 of
+    kampers' line items came back with categoryId=null). Categories are
+    actually attached to the product in the catalog, so we fall back to
+    looking up the line item's product_id against the products catalog.
     """
+    pcl = product_category_lookup or {}
     out_li = []
     for li in (line_items or []):
         cat_id = li.get("categoryId")
+        if not cat_id:
+            # Fallback: line items often have no categoryId; resolve
+            # via product → category mapping from the catalog.
+            pid = li.get("companyConceptProductId")
+            if pid:
+                cat_id = pcl.get(pid)
         cat_name = category_lookup.get(cat_id)
         cat_type = category_type_lookup.get(cat_id)
         out_li.append({
@@ -251,7 +287,7 @@ def transform_order(o: dict, line_items: list | None,
             "category":      cat_name,
             "category_id":   cat_id,
             "category_type": cat_type,           # FOOD / BEER / WINE / LIQUOR / NA_BEVERAGES / OTHER / LABOR
-            "cogs_bucket":   cogs_bucket(cat_type),  # food/beer/wine/liquor/na_beverages or None
+            "cogs_bucket":   cogs_bucket(cat_type, cat_name),  # food/liquor/beer/wine/na_beverages or None
             "quantity":      li.get("quantity"),
             "unit_price":    li.get("unitPrice"),
             "extended":      li.get("linePrice"),
@@ -440,13 +476,38 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
         try:
             categories = client.get_categories(unit_id)
             vendors = client.get_vendors(unit_id)
+            # Products catalog provides product_id → categoryId mapping,
+            # which is required because /orders/{id} line items return
+            # categoryId=null. Without products, all line items bucket
+            # to None.
+            products = client.get_products(unit_id) if with_line_items else []
             orders = client.get_orders(unit_id, start_iso, end_iso)
             print(f"  fetched: {len(vendors)} vendors, {len(categories)} categories, "
-                  f"{len(orders)} orders")
+                  f"{len(products)} products, {len(orders)} orders")
 
             cat_lookup = {c.get("categoryId"): c.get("categoryName") for c in categories}
             cat_type_lookup = {c.get("categoryId"): c.get("categoryType") for c in categories}
             vendor_lookup = {v.get("vendorId"): v.get("vendorName") for v in vendors}
+            # Build product → category mapping. Verified schema 2026-04-30:
+            #   {companyConceptProductId, centralProductId, productName,
+            #    categories: [{categoryId, percentAllocation}], ...}
+            # `categories` is an ARRAY because MarginEdge supports splitting
+            # a product across multiple GL categories (e.g. an item that's
+            # 60% food / 40% bev). For bucketing we pick the highest-
+            # allocation category — when split, the dominant category
+            # determines which COGS bucket the spend lands in.
+            product_cat_lookup = {}
+            for p in products:
+                pid = p.get("companyConceptProductId") or p.get("centralProductId")
+                cats = p.get("categories") or []
+                if not pid or not cats:
+                    continue
+                # Pick highest-allocation category
+                best = max(cats, key=lambda c: c.get("percentAllocation") or 0)
+                cid = best.get("categoryId")
+                if cid:
+                    product_cat_lookup[pid] = cid
+            print(f"  product→category mappings built: {len(product_cat_lookup)} of {len(products)}")
 
             # Line item fetch — adds ~1 API call per order (~10 min for
             # all outlets) but unlocks per-category COGS rollup
@@ -454,11 +515,27 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
             invoices = []
             if with_line_items:
                 print(f"  fetching line items for {len(orders)} orders (~{len(orders) * RATE_LIMIT_SLEEP:.0f}s)...")
+                # Track a few stats so we can see if the product-fallback
+                # is actually rescuing line items or if data is just gappy.
+                li_total = li_with_li_cat = li_via_product = li_unresolved = 0
                 for i, o in enumerate(orders):
                     detail = client.get_order_detail(o.get("orderId"), unit_id)
-                    invoices.append(transform_order(o, detail.get("lineItems") or [], cat_lookup, cat_type_lookup))
-                    if (i + 1) % 50 == 0:
+                    raw_lis = detail.get("lineItems") or []
+                    for li in raw_lis:
+                        li_total += 1
+                        if li.get("categoryId"):
+                            li_with_li_cat += 1
+                        elif product_cat_lookup.get(li.get("companyConceptProductId")):
+                            li_via_product += 1
+                        else:
+                            li_unresolved += 1
+                    invoices.append(transform_order(o, raw_lis, cat_lookup, cat_type_lookup,
+                                                    product_category_lookup=product_cat_lookup))
+                    if (i + 1) % 100 == 0:
                         print(f"    ...{i+1}/{len(orders)}")
+                print(f"  line items: total={li_total}, "
+                      f"direct-cat={li_with_li_cat}, via-product={li_via_product}, "
+                      f"unresolved={li_unresolved}")
             else:
                 invoices = [transform_order(o, None, cat_lookup, cat_type_lookup) for o in orders]
 
@@ -476,8 +553,19 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
                 "invoices": merged_invoices,
                 "vendors": [{"id": vid, "name": vendor_lookup[vid]}
                             for vid in vendor_lookup if vid],
-                "categories": [{"id": cid, "name": cat_lookup[cid]}
-                               for cid in cat_lookup if cid],
+                # categoryType + cogs_bucket persisted alongside name so
+                # the dashboard can map raw category → hospitality bucket
+                # (Food / Liquor / Beer / Wine·Sake / NA Bev) even on
+                # invoices fetched without line items.
+                "categories": [
+                    {
+                        "id":            cid,
+                        "name":          cat_lookup[cid],
+                        "category_type": cat_type_lookup.get(cid),
+                        "cogs_bucket":   cogs_bucket(cat_type_lookup.get(cid), cat_lookup[cid]),
+                    }
+                    for cid in cat_lookup if cid
+                ],
                 **rollups,
             }
             write_outlet(data_dir, oid, payload)
