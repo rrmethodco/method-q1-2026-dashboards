@@ -204,7 +204,7 @@ section { margin-bottom: 40px; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
 table th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--grey); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 table td { padding: 8px 10px; border-bottom: 1px solid var(--rule); }
-table td.num { text-align: right; }
+table th.num, table td.num { text-align: right; }
 table tr:hover td { background: var(--hover); }
 table tr.total td { font-weight: 600; border-top: 1px solid var(--royal); border-bottom: none; background: var(--grey); }
 
@@ -1058,7 +1058,7 @@ function renderEventsSection() {
   if (!hasEvents) {
     return renderPlaceholderSection(
       'Private Events',
-      'Awaiting Tripleseat sync. Once the API is enabled (creds saved; activation pending Tripleseat support per the integration email), this section will show events booked, F&amp;B revenue, booked revenue by segment, lead time, and the most recent events. Brand-split rules from helixo-2 are pre-applied in the ETL — Anthology / LSBR / Kampers / Hiroki-San / Rosemary Rose share the Book Tower Tripleseat location.',
+      'Awaiting Tripleseat sync. Once the API is enabled (creds saved; activation pending Tripleseat support per the integration email), this section will show events booked, F&amp;B revenue, booked revenue by segment, lead time, and the most recent events. Brand-split rules from Helixo are pre-applied in the ETL — Anthology / LSBR / Kampers / Hiroki-San / Rosemary Rose share the Book Tower Tripleseat location.',
       ['tripleseat']
     );
   }
@@ -2940,21 +2940,21 @@ function snapshotBuildActionItems(snap) {
 // ================================================================
 // FORECAST ACCURACY SECTION
 // ================================================================
-// Source for forecasts: helixo-2's proprietary AI engine (Supabase
+// Source for forecasts: Helixo's proprietary AI engine (Supabase
 // daily_forecasts.ai_suggested_revenue / ai_suggested_covers). We
 // pass it through; we do not retrain. This section measures how well
-// helixo-2's predictions held up against Toast actuals on the days
+// Helixo's predictions held up against Toast actuals on the days
 // where both exist.
 //
 // Metrics shown:
 //   - WAPE (weighted absolute % error) on net sales + covers — preferred
 //     over MAPE because zero/near-zero actuals blow up MAPE.
-//   - Bias (MPE) — sum signed % error. Tells us whether helixo-2 is
+//   - Bias (MPE) — sum signed % error. Tells us whether Helixo is
 //     systematically over- or under-forecasting.
-//   - Naive baseline (same DOW prior week) — if helixo-2 isn't beating
+//   - Naive baseline (same DOW prior week) — if Helixo isn't beating
 //     this, the AI is providing no value over a 7-day-ago lookup.
 //   - Daily forecast vs actual line chart, daily APE bar chart.
-//   - Forward-window peek: next 7 / 14 / 28 days of helixo-2 prediction.
+//   - Forward-window peek: next 7 / 14 / 28 days of Helixo prediction.
 function _forecastBuildPairs(o) {
   const fc = (o && o.forecast && Array.isArray(o.forecast.daily)) ? o.forecast.daily : [];
   const actuals = (o && o.order_details && o.order_details.main && Array.isArray(o.order_details.main.daily))
@@ -3014,7 +3014,7 @@ function _forecastMetrics(pairs, key) {
 }
 function _forecastNaiveBaselineWape(pairs, actuals, key) {
   // Naive: forecast for date D = actual for date D-7. WAPE on the same
-  // pair window so it's comparable to helixo-2's WAPE.
+  // pair window so it's comparable to Helixo's WAPE.
   const A = key === 'rev' ? 'actualRev' : 'actualCov';
   const actByDate = new Map(actuals.map(r => [r.date, r]));
   const realKey = key === 'rev' ? 'amount' : 'guests';
@@ -3044,11 +3044,11 @@ function renderForecastSection() {
       <section>
         <div class="sect-head">
           <div class="sect-title">Forecast Accuracy · ${o.name}</div>
-          <div class="sect-meta">helixo-2 AI · daily revenue + covers</div>
+          <div class="sect-meta">Helixo AI · daily revenue + covers</div>
         </div>
         <div class="empty-chart" style="padding: 30px; text-align: center;">
           <div class="empty-title">Forecast not wired for this outlet</div>
-          <div class="empty-sub">helixo-2 hasn't generated AI forecasts for ${o.name}. Check toast-etl/forecast_engine.py SUPA_UUID_TO_OUTLET — this outlet may not be mapped.</div>
+          <div class="empty-sub">Helixo hasn't generated AI forecasts for ${o.name}. Check toast-etl/forecast_engine.py SUPA_UUID_TO_OUTLET — this outlet may not be mapped.</div>
         </div>
       </section>`;
     return;
@@ -3097,7 +3097,7 @@ function renderForecastSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Forecast Accuracy · ${o.name}</div>
-        <div class="sect-meta">helixo-2 AI · ${pairs.length} day(s) of overlap · range ${firstForecastDate} → ${lastForecastDate}</div>
+        <div class="sect-meta">Helixo AI · ${pairs.length} day(s) of overlap · range ${firstForecastDate} → ${lastForecastDate}</div>
       </div>
       <div class="kpis">
         ${kpi('WAPE · Revenue', wapeStr(revM.wape),
@@ -3109,7 +3109,7 @@ function renderForecastSection() {
         ${kpi('Median APE',     wapeStr(revM.medianApe),
           `p95 ${wapeStr(revM.p95Ape)} · half of days within ${wapeStr(revM.medianApe)}`, 'neutral')}
         ${kpi('avg ai_confidence', aiConfAvg != null ? (aiConfAvg * 100).toFixed(0) + '%' : '—',
-          'helixo-2 self-reported · uncalibrated unless lower-conf bin shows higher WAPE', 'neutral')}
+          'Helixo self-reported · uncalibrated unless lower-conf bin shows higher WAPE', 'neutral')}
         ${kpi('Forecast horizon', `${future.length} days`,
           future.length ? `forward through ${future[future.length-1].date}` : 'no forward days', 'neutral')}
       </div>
@@ -3118,7 +3118,7 @@ function renderForecastSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Forecast vs Actual · Revenue</div>
-        <div class="sect-meta">Daily helixo-2 prediction (turquoise) vs Toast actual (slate). Future days show forecast only.</div>
+        <div class="sect-meta">Daily Helixo prediction (turquoise) vs Toast actual (slate). Future days show forecast only.</div>
       </div>
       <div class="card"><div class="chart-wrap tall"><canvas id="forecastRevTrend"></canvas></div></div>
     </section>
@@ -3161,7 +3161,7 @@ function renderForecastSection() {
     <section>
       <div class="sect-head">
         <div class="sect-title">Worst Error Days (top 10)</div>
-        <div class="sect-meta">Days where helixo-2 missed by the largest %. Cross-reference these dates against events / weather / holidays / menu changes.</div>
+        <div class="sect-meta">Days where Helixo missed by the largest %. Cross-reference these dates against events / weather / holidays / menu changes.</div>
       </div>
       <table class="tbl">
         <thead><tr><th>Date</th><th>DOW</th><th class="num">Forecast</th><th class="num">Actual</th><th class="num">Δ</th><th class="num">APE</th></tr></thead>
@@ -3185,7 +3185,7 @@ function renderForecastSection() {
     ${future.length ? `
     <section>
       <div class="sect-head">
-        <div class="sect-title">Forward Window · helixo-2 next ${Math.min(future.length, 28)} days</div>
+        <div class="sect-title">Forward Window · Helixo next ${Math.min(future.length, 28)} days</div>
         <div class="sect-meta">No actuals yet — these are the predictions the dashboard's "vs Forecast" KPI cards will compare against.</div>
       </div>
       <table class="tbl">
@@ -3229,7 +3229,7 @@ function renderForecastSection() {
         data: {
           labels,
           datasets: [
-            { label: 'helixo-2 Forecast', data: fcSeries, borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.10)', borderWidth: 2, pointRadius: 2, tension: 0.2, spanGaps: true },
+            { label: 'Helixo Forecast', data: fcSeries, borderColor: '#2BA6BB', backgroundColor: 'rgba(43,166,187,0.10)', borderWidth: 2, pointRadius: 2, tension: 0.2, spanGaps: true },
             { label: 'Actual',            data: acSeries, borderColor: '#212931', backgroundColor: 'rgba(33,41,49,0.10)', borderWidth: 2.5, pointRadius: 2, tension: 0.2, spanGaps: true },
           ],
         },
@@ -6368,17 +6368,17 @@ async function __loadOutletData() {
         o.sources.tripleseat = true;
       }
       // Forecast — generated nightly by forecast_engine.py
-      // (helixo-2 forecast.service.ts port). Powers the
+      // (Helixo forecast.service.ts port). Powers the
       // "vs Forecast" line on every KPI tri-comparison block.
       // Schema: { as_of, source, daily: [{date, net_sales, guests, orders}] }
       if (payload.forecast && Array.isArray(payload.forecast.daily) && payload.forecast.daily.length) {
         o.forecast = payload.forecast;
         o.sources.forecast = true;
       }
-      // Budget — pulled nightly by budget_sync.py from helixo-2's
+      // Budget — pulled nightly by budget_sync.py from Helixo's
       // daily_budget Supabase table. Powers "vs Budget" line on KPI cards.
       // Schema mirrors forecast.daily; guests/orders are null because
-      // helixo-2 only tracks per-day revenue budget, not covers/orders.
+      // Helixo only tracks per-day revenue budget, not covers/orders.
       if (payload.budget && Array.isArray(payload.budget.daily) && payload.budget.daily.length) {
         o.budget = payload.budget;
         o.sources.budget = true;
