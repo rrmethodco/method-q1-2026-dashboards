@@ -316152,7 +316152,7 @@
     ]
   },
   "events": {
-    "as_of": "2026-04-30",
+    "as_of": "2026-05-02",
     "source": "tripleseat_api",
     "events": [
       {
@@ -355738,6 +355738,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 59362304,
+        "name": "Visiting Professor - Fox Chase Cancer Center",
+        "status": "PROSPECT",
+        "event_start": "6/11/2026 6:00 PM",
+        "event_end": "6/11/2026 9:00 PM",
+        "guest_count": 18,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 17784,
+        "booking_id": 56058475,
+        "rooms": [
+          "Wood Oven Room"
+        ],
+        "created_at": "4/30/2026 1:23 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 53646859,
         "name": "Rehearsal dinner",
         "status": "PROSPECT",
@@ -362590,8 +362623,8 @@
       },
       {
         "month": "6/11/20",
-        "events": 3,
-        "guests": 89,
+        "events": 4,
+        "guests": 107,
         "booked_revenue": 5000.0,
         "fb_revenue": 4030.0,
         "by_segment": {
@@ -363641,7 +363674,7 @@
       },
       {
         "segment": "Wedding",
-        "events": 1202,
+        "events": 1203,
         "booked_revenue": 1588494.48
       }
     ]

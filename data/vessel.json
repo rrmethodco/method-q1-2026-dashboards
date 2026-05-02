@@ -86290,7 +86290,7 @@
     ]
   },
   "events": {
-    "as_of": "2026-04-30",
+    "as_of": "2026-05-02",
     "source": "tripleseat_api",
     "events": [
       {
@@ -95373,20 +95373,20 @@
         "created_at": "3/25/2026 3:10 PM",
         "lead_time_days": null,
         "financials": {
-          "total": 1936.25,
-          "grand_total": 1936.25,
+          "total": 1892.5,
+          "grand_total": 1892.5,
           "food": 0.0,
           "beverage": 0.0,
           "rental": 0.0,
           "av": 0.0,
-          "other": 749.0,
+          "other": 714.0,
           "tax": 0.0,
           "gratuity": 0.0,
           "service_charge": 0.0,
-          "actual_amount": 749.0,
+          "actual_amount": 714.0,
           "fb_minimum": 0.0
         },
-        "booked_revenue": 749.0,
+        "booked_revenue": 714.0,
         "revenue_share": 1.0
       },
       {
@@ -95526,7 +95526,7 @@
         "name": "UnitedHealthcare Services, Inc",
         "status": "DEFINITE",
         "event_start": "5/14/2026 11:00 AM",
-        "event_end": "5/14/2026 5:00 PM",
+        "event_end": "5/14/2026 4:30 PM",
         "guest_count": 11,
         "event_type": "Meeting",
         "segment": "Corporate",
@@ -95604,20 +95604,20 @@
         "created_at": "4/16/2026 2:25 PM",
         "lead_time_days": null,
         "financials": {
-          "total": 1200.0,
-          "grand_total": 1200.0,
-          "food": 0.0,
+          "total": 1818.75,
+          "grand_total": 1849.94,
+          "food": 495.0,
           "beverage": 0.0,
           "rental": 0.0,
           "av": 0.0,
           "other": 0.0,
-          "tax": 0.0,
+          "tax": 31.19,
           "gratuity": 0.0,
           "service_charge": 0.0,
-          "actual_amount": 0.0,
+          "actual_amount": 495.0,
           "fb_minimum": 0.0
         },
-        "booked_revenue": 1200.0,
+        "booked_revenue": 495.0,
         "revenue_share": 1.0
       },
       {
@@ -96677,6 +96677,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 59405717,
+        "name": "Business Reception",
+        "status": "PROSPECT",
+        "event_start": "6/14/2026 5:30 PM",
+        "event_end": "6/14/2026 8:30 PM",
+        "guest_count": 50,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 30297,
+        "booking_id": 56097889,
+        "rooms": [
+          "Vessel Buyout"
+        ],
+        "created_at": "5/1/2026 4:36 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 57163783,
         "name": "50th Birthday",
         "status": "LOST",
@@ -96938,6 +96971,39 @@
           "fb_minimum": 3500.0
         },
         "booked_revenue": 3500.0,
+        "revenue_share": 1.0
+      },
+      {
+        "event_id": 59405085,
+        "name": "Baby Shower",
+        "status": "PROSPECT",
+        "event_start": "6/27/2026 6:00 PM",
+        "event_end": "6/27/2026 9:00 PM",
+        "guest_count": 100,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 30297,
+        "booking_id": 56097296,
+        "rooms": [
+          "Vessel Buyout"
+        ],
+        "created_at": "5/1/2026 4:22 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
         "revenue_share": 1.0
       },
       {
@@ -99898,11 +99964,11 @@
         "month": "5/15/20",
         "events": 2,
         "guests": 41,
-        "booked_revenue": 1200.0,
-        "fb_revenue": 0.0,
+        "booked_revenue": 495.0,
+        "fb_revenue": 495.0,
         "by_segment": {
           "Social": 0.0,
-          "Corporate": 1200.0
+          "Corporate": 495.0
         }
       },
       {
@@ -100068,11 +100134,11 @@
         "month": "5/6/202",
         "events": 2,
         "guests": 57,
-        "booked_revenue": 2189.0,
+        "booked_revenue": 2154.0,
         "fb_revenue": 1440.0,
         "by_segment": {
           "Social": 1440.0,
-          "Corporate": 749.0
+          "Corporate": 714.0
         }
       },
       {
@@ -100119,8 +100185,8 @@
       },
       {
         "month": "6/14/20",
-        "events": 4,
-        "guests": 100,
+        "events": 5,
+        "guests": 150,
         "booked_revenue": 1960.0,
         "fb_revenue": 0.0,
         "by_segment": {
@@ -100236,8 +100302,8 @@
       },
       {
         "month": "6/27/20",
-        "events": 5,
-        "guests": 290,
+        "events": 6,
+        "guests": 390,
         "booked_revenue": 13382.5,
         "fb_revenue": 6907.5,
         "by_segment": {
@@ -100893,7 +100959,7 @@
       {
         "segment": "Corporate",
         "events": 93,
-        "booked_revenue": 222141.84
+        "booked_revenue": 221401.84
       },
       {
         "segment": "Other",
@@ -100907,7 +100973,7 @@
       },
       {
         "segment": "Wedding",
-        "events": 92,
+        "events": 94,
         "booked_revenue": 144853.52
       }
     ]

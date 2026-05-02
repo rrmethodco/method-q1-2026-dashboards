@@ -265435,7 +265435,7 @@
     ]
   },
   "events": {
-    "as_of": "2026-04-30",
+    "as_of": "2026-05-02",
     "source": "tripleseat_api",
     "events": [
       {
@@ -280628,6 +280628,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 59389154,
+        "name": "Cini - Wedding After Party",
+        "status": "LOST",
+        "event_start": "5/2/2026 6:00 PM",
+        "event_end": "5/2/2026 9:00 PM",
+        "guest_count": 22,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 22266,
+        "booking_id": 56083261,
+        "rooms": [
+          "Hiroki-San Buyout"
+        ],
+        "created_at": "5/1/2026 11:08 AM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 58438549,
         "name": "Lesson - Birthday dinner",
         "status": "LOST",
@@ -280677,20 +280710,20 @@
         "created_at": "4/13/2026 3:56 PM",
         "lead_time_days": null,
         "financials": {
-          "total": 1550.0,
-          "grand_total": 1810.0,
+          "total": 1050.0,
+          "grand_total": 1310.0,
           "food": 1000.0,
           "beverage": 0.0,
           "rental": 0.0,
-          "av": 500.0,
+          "av": 0.0,
           "other": 0.0,
           "tax": 60.0,
           "gratuity": 200.0,
           "service_charge": 50.0,
-          "actual_amount": 1500.0,
+          "actual_amount": 1000.0,
           "fb_minimum": 0.0
         },
-        "booked_revenue": 1500.0,
+        "booked_revenue": 1000.0,
         "revenue_share": 1.0
       },
       {
@@ -280861,9 +280894,9 @@
       {
         "event_id": 59250755,
         "name": "STOCKX Dinner",
-        "status": "PROSPECT",
+        "status": "TENTATIVE",
         "event_start": "5/13/2026 6:30 PM",
-        "event_end": "5/13/2026 9:00 PM",
+        "event_end": "5/13/2026 8:30 PM",
         "guest_count": 12,
         "event_type": "Dinner",
         "segment": "Social",
@@ -280875,8 +280908,8 @@
         "created_at": "4/27/2026 2:08 PM",
         "lead_time_days": null,
         "financials": {
-          "total": 0.0,
-          "grand_total": 0.0,
+          "total": 250.0,
+          "grand_total": 250.0,
           "food": 0.0,
           "beverage": 0.0,
           "rental": 0.0,
@@ -280885,10 +280918,10 @@
           "tax": 0.0,
           "gratuity": 0.0,
           "service_charge": 0.0,
-          "actual_amount": 0.0,
+          "actual_amount": 250.0,
           "fb_minimum": 0.0
         },
-        "booked_revenue": 0.0,
+        "booked_revenue": 250.0,
         "revenue_share": 1.0
       },
       {
@@ -281236,6 +281269,39 @@
           "Aladdin Sane"
         ],
         "created_at": "1/26/2026 11:47 AM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
+        "event_id": 59401766,
+        "name": "Etta - Urologist Event/Meeting",
+        "status": "PROSPECT",
+        "event_start": "6/18/2026 7:00 PM",
+        "event_end": "6/18/2026 10:00 PM",
+        "guest_count": 35,
+        "event_type": "Dinner",
+        "segment": "Social",
+        "location_id": 22266,
+        "booking_id": 56094377,
+        "rooms": [
+          "Hiroki-San Buyout"
+        ],
+        "created_at": "5/1/2026 3:17 PM",
         "lead_time_days": null,
         "financials": {
           "total": 0.0,
@@ -283103,10 +283169,10 @@
         "month": "5/13/20",
         "events": 1,
         "guests": 12,
-        "booked_revenue": 0.0,
+        "booked_revenue": 250.0,
         "fb_revenue": 0.0,
         "by_segment": {
-          "Social": 0.0
+          "Social": 250.0
         }
       },
       {
@@ -283166,12 +283232,13 @@
       },
       {
         "month": "5/2/202",
-        "events": 4,
-        "guests": 40,
+        "events": 5,
+        "guests": 62,
         "booked_revenue": 0.0,
         "fb_revenue": 0.0,
         "by_segment": {
-          "Other": 0.0
+          "Other": 0.0,
+          "Wedding": 0.0
         }
       },
       {
@@ -283292,10 +283359,10 @@
         "month": "5/7/202",
         "events": 2,
         "guests": 30,
-        "booked_revenue": 1500.0,
+        "booked_revenue": 1000.0,
         "fb_revenue": 1000.0,
         "by_segment": {
-          "Social": 1500.0
+          "Social": 1000.0
         }
       },
       {
@@ -283408,12 +283475,13 @@
       },
       {
         "month": "6/18/20",
-        "events": 1,
-        "guests": 50,
+        "events": 2,
+        "guests": 85,
         "booked_revenue": 0.0,
         "fb_revenue": 0.0,
         "by_segment": {
-          "Other": 0.0
+          "Other": 0.0,
+          "Social": 0.0
         }
       },
       {
@@ -284045,12 +284113,12 @@
       },
       {
         "segment": "Social",
-        "events": 86,
-        "booked_revenue": 68063.56
+        "events": 87,
+        "booked_revenue": 67813.56
       },
       {
         "segment": "Wedding",
-        "events": 98,
+        "events": 99,
         "booked_revenue": 104612.32
       }
     ]
