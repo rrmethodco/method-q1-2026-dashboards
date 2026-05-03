@@ -1,6 +1,6 @@
 {
   "outlet_id": "little_wing",
-  "generated_at": "2026-05-02T12:57:12+00:00",
+  "generated_at": "2026-05-03T12:57:21+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -4461,6 +4461,17 @@
           "ticket_time_count": 68
         },
         {
+          "date": "2026-04-30",
+          "orders": 7,
+          "guests": 7,
+          "amount": 74.95,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 156.2,
+          "ticket_time_count": 7
+        },
+        {
           "date": "2026-05-01",
           "orders": 71,
           "guests": 71,
@@ -4473,13 +4484,24 @@
         },
         {
           "date": "2026-05-02",
-          "orders": 12,
-          "guests": 12,
-          "amount": 103.31,
+          "orders": 79,
+          "guests": 79,
+          "amount": 970.52,
           "tip": 0.0,
           "gratuity": 0.0,
-          "discount": 1.12,
-          "ticket_time_sec_sum": 921.6,
+          "discount": 44.41,
+          "ticket_time_sec_sum": 9320.2,
+          "ticket_time_count": 79
+        },
+        {
+          "date": "2026-05-03",
+          "orders": 12,
+          "guests": 12,
+          "amount": 159.15,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 9.55,
+          "ticket_time_sec_sum": 2473.1,
           "ticket_time_count": 12
         }
       ],
@@ -4589,19 +4611,19 @@
           "month": "2026-03"
         },
         {
-          "orders": 73,
-          "guests": 73,
-          "amount": 592.73,
+          "orders": 7,
+          "guests": 7,
+          "amount": 74.95,
           "tip": 0.0,
-          "discount": 40.91,
+          "discount": 0.0,
           "month": "2026-04"
         },
         {
-          "orders": 83,
-          "guests": 83,
-          "amount": 858.38,
+          "orders": 162,
+          "guests": 162,
+          "amount": 1884.74,
           "tip": 0.0,
-          "discount": 75.95,
+          "discount": 128.79,
           "month": "2026-05"
         }
       ],
@@ -4762,6 +4784,13 @@
         },
         {
           "hour": 4,
+          "dow": "Sun",
+          "amount": 2.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "hour": 4,
           "dow": "Tue",
           "amount": 12.0,
           "orders": 1,
@@ -4833,9 +4862,9 @@
         {
           "hour": 6,
           "dow": "Sun",
-          "amount": 495.08,
-          "orders": 58,
-          "guests": 58
+          "amount": 504.28,
+          "orders": 59,
+          "guests": 59
         },
         {
           "hour": 6,
@@ -4882,16 +4911,16 @@
         {
           "hour": 7,
           "dow": "Sun",
-          "amount": 2665.04,
-          "orders": 256,
-          "guests": 256
+          "amount": 2743.59,
+          "orders": 262,
+          "guests": 262
         },
         {
           "hour": 7,
           "dow": "Thu",
-          "amount": 5172.19,
-          "orders": 553,
-          "guests": 553
+          "amount": 5197.14,
+          "orders": 556,
+          "guests": 556
         },
         {
           "hour": 7,
@@ -4924,23 +4953,23 @@
         {
           "hour": 8,
           "dow": "Sat",
-          "amount": 4952.86,
-          "orders": 426,
-          "guests": 426
+          "amount": 4971.36,
+          "orders": 428,
+          "guests": 428
         },
         {
           "hour": 8,
           "dow": "Sun",
-          "amount": 9952.2,
-          "orders": 408,
-          "guests": 408
+          "amount": 10021.35,
+          "orders": 412,
+          "guests": 412
         },
         {
           "hour": 8,
           "dow": "Thu",
-          "amount": 6934.6,
-          "orders": 636,
-          "guests": 636
+          "amount": 6941.1,
+          "orders": 637,
+          "guests": 637
         },
         {
           "hour": 8,
@@ -4973,9 +5002,9 @@
         {
           "hour": 9,
           "dow": "Sat",
-          "amount": 7093.28,
-          "orders": 577,
-          "guests": 577
+          "amount": 7138.9,
+          "orders": 584,
+          "guests": 584
         },
         {
           "hour": 9,
@@ -5022,9 +5051,9 @@
         {
           "hour": 10,
           "dow": "Sat",
-          "amount": 14584.15,
-          "orders": 564,
-          "guests": 564
+          "amount": 14709.62,
+          "orders": 574,
+          "guests": 574
         },
         {
           "hour": 10,
@@ -5071,9 +5100,9 @@
         {
           "hour": 11,
           "dow": "Sat",
-          "amount": 5895.14,
-          "orders": 475,
-          "guests": 475
+          "amount": 5981.84,
+          "orders": 483,
+          "guests": 483
         },
         {
           "hour": 11,
@@ -5120,9 +5149,9 @@
         {
           "hour": 12,
           "dow": "Sat",
-          "amount": 7152.4,
-          "orders": 357,
-          "guests": 357
+          "amount": 7217.8,
+          "orders": 364,
+          "guests": 364
         },
         {
           "hour": 12,
@@ -5134,9 +5163,9 @@
         {
           "hour": 12,
           "dow": "Thu",
-          "amount": 10213.82,
-          "orders": 302,
-          "guests": 302
+          "amount": 10226.82,
+          "orders": 303,
+          "guests": 303
         },
         {
           "hour": 12,
@@ -5169,9 +5198,9 @@
         {
           "hour": 13,
           "dow": "Sat",
-          "amount": 5877.49,
-          "orders": 289,
-          "guests": 289
+          "amount": 5939.76,
+          "orders": 295,
+          "guests": 295
         },
         {
           "hour": 13,
@@ -5218,9 +5247,9 @@
         {
           "hour": 14,
           "dow": "Sat",
-          "amount": 14839.39,
-          "orders": 254,
-          "guests": 254
+          "amount": 14858.39,
+          "orders": 256,
+          "guests": 256
         },
         {
           "hour": 14,
@@ -5267,9 +5296,9 @@
         {
           "hour": 15,
           "dow": "Sat",
-          "amount": 13837.1,
-          "orders": 271,
-          "guests": 271
+          "amount": 13844.85,
+          "orders": 272,
+          "guests": 272
         },
         {
           "hour": 15,
@@ -5316,9 +5345,9 @@
         {
           "hour": 16,
           "dow": "Sat",
-          "amount": 11752.1,
-          "orders": 176,
-          "guests": 177
+          "amount": 11965.03,
+          "orders": 183,
+          "guests": 184
         },
         {
           "hour": 16,
@@ -5365,9 +5394,9 @@
         {
           "hour": 17,
           "dow": "Sat",
-          "amount": 1843.92,
-          "orders": 166,
-          "guests": 168
+          "amount": 1890.47,
+          "orders": 173,
+          "guests": 175
         },
         {
           "hour": 17,
@@ -5414,9 +5443,9 @@
         {
           "hour": 18,
           "dow": "Sat",
-          "amount": 1763.85,
-          "orders": 74,
-          "guests": 94
+          "amount": 1824.6,
+          "orders": 78,
+          "guests": 98
         },
         {
           "hour": 18,
@@ -5463,9 +5492,9 @@
         {
           "hour": 19,
           "dow": "Sat",
-          "amount": 3216.6,
-          "orders": 92,
-          "guests": 183
+          "amount": 3236.87,
+          "orders": 95,
+          "guests": 186
         },
         {
           "hour": 19,
@@ -5512,9 +5541,9 @@
         {
           "hour": 20,
           "dow": "Sat",
-          "amount": 11269.75,
-          "orders": 112,
-          "guests": 154
+          "amount": 11281.75,
+          "orders": 113,
+          "guests": 155
         },
         {
           "hour": 20,
@@ -5526,9 +5555,9 @@
         {
           "hour": 20,
           "dow": "Thu",
-          "amount": 5275.35,
-          "orders": 158,
-          "guests": 188
+          "amount": 5281.85,
+          "orders": 159,
+          "guests": 189
         },
         {
           "hour": 20,
@@ -5659,9 +5688,9 @@
         {
           "hour": 23,
           "dow": "Sat",
-          "amount": 8971.9,
-          "orders": 32,
-          "guests": 131
+          "amount": 9055.9,
+          "orders": 34,
+          "guests": 133
         },
         {
           "hour": 23,
@@ -5673,9 +5702,9 @@
         {
           "hour": 23,
           "dow": "Thu",
-          "amount": 191.0,
-          "orders": 7,
-          "guests": 8
+          "amount": 215.0,
+          "orders": 8,
+          "guests": 9
         },
         {
           "hour": 23,
@@ -43537,10 +43566,24 @@
         },
         {
           "date": "2026-04-30",
+          "hour": 7,
+          "amount": 24.95,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2026-04-30",
           "hour": 8,
           "amount": 48.52,
           "orders": 8,
           "guests": 8
+        },
+        {
+          "date": "2026-04-30",
+          "hour": 8,
+          "amount": 6.5,
+          "orders": 1,
+          "guests": 1
         },
         {
           "date": "2026-04-30",
@@ -43569,6 +43612,13 @@
           "amount": 64.48,
           "orders": 10,
           "guests": 10
+        },
+        {
+          "date": "2026-04-30",
+          "hour": 12,
+          "amount": 13.0,
+          "orders": 1,
+          "guests": 1
         },
         {
           "date": "2026-04-30",
@@ -43623,6 +43673,20 @@
           "date": "2026-04-30",
           "hour": 20,
           "amount": 6.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-04-30",
+          "hour": 20,
+          "amount": 6.5,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-04-30",
+          "hour": 23,
+          "amount": 24.0,
           "orders": 1,
           "guests": 1
         },
@@ -43769,9 +43833,128 @@
         {
           "date": "2026-05-02",
           "hour": 8,
-          "amount": 63.86,
+          "amount": 82.36,
+          "orders": 9,
+          "guests": 9
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 9,
+          "amount": 45.62,
           "orders": 7,
           "guests": 7
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 10,
+          "amount": 125.47,
+          "orders": 10,
+          "guests": 10
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 11,
+          "amount": 86.7,
+          "orders": 8,
+          "guests": 8
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 12,
+          "amount": 65.4,
+          "orders": 7,
+          "guests": 7
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 13,
+          "amount": 62.27,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 14,
+          "amount": 19.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 15,
+          "amount": 7.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 16,
+          "amount": 212.93,
+          "orders": 7,
+          "guests": 7
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 17,
+          "amount": 46.55,
+          "orders": 7,
+          "guests": 7
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 18,
+          "amount": 60.75,
+          "orders": 4,
+          "guests": 4
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 19,
+          "amount": 20.27,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 20,
+          "amount": 12.0,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-05-02",
+          "hour": 23,
+          "amount": 84.0,
+          "orders": 2,
+          "guests": 2
+        },
+        {
+          "date": "2026-05-03",
+          "hour": 4,
+          "amount": 2.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-05-03",
+          "hour": 6,
+          "amount": 9.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-05-03",
+          "hour": 7,
+          "amount": 78.55,
+          "orders": 6,
+          "guests": 6
+        },
+        {
+          "date": "2026-05-03",
+          "hour": 8,
+          "amount": 69.15,
+          "orders": 4,
+          "guests": 4
         }
       ],
       "categories_daily": [
@@ -54426,6 +54609,24 @@
           "orders": 1
         },
         {
+          "date": "2026-04-30",
+          "category": "Bottled Beer",
+          "amount": 24.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-04-30",
+          "category": "Food",
+          "amount": 24.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-04-30",
+          "category": "NA Beverage",
+          "amount": 26.95,
+          "orders": 5
+        },
+        {
           "date": "2026-05-01",
           "category": "Bottled Beer",
           "amount": 28.0,
@@ -54451,21 +54652,51 @@
         },
         {
           "date": "2026-05-02",
+          "category": "Bottled Beer",
+          "amount": 54.0,
+          "orders": 4
+        },
+        {
+          "date": "2026-05-02",
           "category": "Food",
-          "amount": 32.97,
-          "orders": 7
+          "amount": 342.77,
+          "orders": 53
         },
         {
           "date": "2026-05-02",
           "category": "NA Beverage",
-          "amount": 67.35,
-          "orders": 12
+          "amount": 414.76,
+          "orders": 76
         },
         {
           "date": "2026-05-02",
           "category": "Retail",
           "amount": 2.99,
           "orders": 1
+        },
+        {
+          "date": "2026-05-02",
+          "category": "Wine",
+          "amount": 156.0,
+          "orders": 2
+        },
+        {
+          "date": "2026-05-03",
+          "category": "Food",
+          "amount": 53.57,
+          "orders": 9
+        },
+        {
+          "date": "2026-05-03",
+          "category": "Liquor",
+          "amount": 8.5,
+          "orders": 1
+        },
+        {
+          "date": "2026-05-03",
+          "category": "NA Beverage",
+          "amount": 97.08,
+          "orders": 18
         }
       ],
       "service_modes_daily": [
@@ -60553,6 +60784,20 @@
           "guests": 63
         },
         {
+          "date": "2026-04-30",
+          "mode": "Online Ordering - Takeout",
+          "amount": 44.45,
+          "orders": 5,
+          "guests": 5
+        },
+        {
+          "date": "2026-04-30",
+          "mode": "Unspecified",
+          "amount": 30.5,
+          "orders": 2,
+          "guests": 2
+        },
+        {
           "date": "2026-05-01",
           "mode": "Dine In",
           "amount": 35.75,
@@ -60575,25 +60820,53 @@
         },
         {
           "date": "2026-05-02",
+          "mode": "Online Ordering - Takeout",
+          "amount": 52.75,
+          "orders": 3,
+          "guests": 3
+        },
+        {
+          "date": "2026-05-02",
           "mode": "Unspecified",
-          "amount": 103.31,
-          "orders": 12,
-          "guests": 12
+          "amount": 917.77,
+          "orders": 76,
+          "guests": 76
+        },
+        {
+          "date": "2026-05-03",
+          "mode": "Dine In",
+          "amount": 21.75,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-05-03",
+          "mode": "Online Ordering - Takeout",
+          "amount": 9.2,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-05-03",
+          "mode": "Unspecified",
+          "amount": 128.2,
+          "orders": 10,
+          "guests": 10
         }
       ],
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 28842.0,
-        "guests": 29667.0,
-        "amount": 658738.6399999999,
+        "orders": 28928.0,
+        "guests": 29753.0,
+        "amount": 659839.9499999998,
         "tip": 0.0,
         "gratuity": 0.0,
-        "discount": 43651.17999999998,
-        "ticket_time_sec_sum": 10195120.300000008,
-        "ticket_time_count": 28692,
-        "avg_check": 22.83956175022536,
-        "avg_ticket_time_sec": 355.32971908545966
+        "discount": 43704.01999999998,
+        "ticket_time_sec_sum": 10206148.200000007,
+        "ticket_time_count": 28778,
+        "avg_check": 22.809732784845128,
+        "avg_ticket_time_sec": 354.651059837376
       }
     }
   },
@@ -60610,7 +60883,7 @@
         {
           "author": "Lauren Creamer",
           "rating": 5,
-          "text": "10’s across the board! Excellent service - everyone is friendly and knowledgeable. The baked goods are fresh daily from Kneads Bakery, which makes the bacon egg and cheese THAT much better. The donuts are amazing. This is a great place to take out-of-town guests for a cute morning treat or afternoon snack. Very instagramable area in general.",
+          "text": "10\u2019s across the board! Excellent service - everyone is friendly and knowledgeable. The baked goods are fresh daily from Kneads Bakery, which makes the bacon egg and cheese THAT much better. The donuts are amazing. This is a great place to take out-of-town guests for a cute morning treat or afternoon snack. Very instagramable area in general.",
           "relative": "4 months ago",
           "time": 1764949599,
           "is_local_guide": false
@@ -60626,7 +60899,7 @@
         {
           "author": "Tia Hendrix",
           "rating": 4,
-          "text": "The atmosphere in this beautiful coffee shop is wonderful . You can tell that they use very great quality coffee beans . I’ve been here a few times ! The only thing I’d ask for is to improve the taste of the syrups I wish they were a tad bit sweeter . I love their hours of operation !!!!",
+          "text": "The atmosphere in this beautiful coffee shop is wonderful . You can tell that they use very great quality coffee beans . I\u2019ve been here a few times ! The only thing I\u2019d ask for is to improve the taste of the syrups I wish they were a tad bit sweeter . I love their hours of operation !!!!",
           "relative": "10 months ago",
           "time": 1751381288,
           "is_local_guide": false
@@ -60634,7 +60907,7 @@
         {
           "author": "Laura Konstantinova",
           "rating": 2,
-          "text": "Disappointed Despite a Beautiful Space\n\nI visited Little Wing this morning, making a special trip from downtown Baltimore in search of quality specialty coffee. The interior is modern, welcoming, and nicely designed—it’s connected to a hotel with spacious seating and lovated next a lovely waterfront, which initially gave me high hopes. Also\n\nUnfortunately, the coffee was a letdown. It felt rushed. It was made without much care or attention, tasting more like something thrown together at home than a true specialty brew. The beans had a burnt aftertaste, and overall, it felt like the barista wasn’t really interested in the craft.\n\nI was excited to visit based on the reviews, and while I’m happy I saw the space, I left disappointed as the quality of the coffee was surprisingly poor.\n\nI really wanted to love this place, but I left feeling disappointed. Happy I came, but even sadder to leave unsatisfied. Two stars—solely for the beautiful setting.",
+          "text": "Disappointed Despite a Beautiful Space\n\nI visited Little Wing this morning, making a special trip from downtown Baltimore in search of quality specialty coffee. The interior is modern, welcoming, and nicely designed\u2014it\u2019s connected to a hotel with spacious seating and lovated next a lovely waterfront, which initially gave me high hopes. Also\n\nUnfortunately, the coffee was a letdown. It felt rushed. It was made without much care or attention, tasting more like something thrown together at home than a true specialty brew. The beans had a burnt aftertaste, and overall, it felt like the barista wasn\u2019t really interested in the craft.\n\nI was excited to visit based on the reviews, and while I\u2019m happy I saw the space, I left disappointed as the quality of the coffee was surprisingly poor.\n\nI really wanted to love this place, but I left feeling disappointed. Happy I came, but even sadder to leave unsatisfied. Two stars\u2014solely for the beautiful setting.",
           "relative": "9 months ago",
           "time": 1752933397,
           "is_local_guide": false
@@ -60642,7 +60915,7 @@
         {
           "author": "Far K",
           "rating": 5,
-          "text": "Checked out this cute cafe attached to the Roost hotel at Baltimore Peninsula. The vibe is super cozy, with extra seating available in the lobby. We popped in on a rainy Saturday to work on our laptops.\n\nDarius, our barista, was super friendly. I had the whipped ricotta toast with honey and their latte special, \"Kiss from a Rose\"—a strawberry rose latte, which was awesome. My boyfriend grabbed a warmed-up chocolate croissant (always a win when pastries are heated up). They even have a small shop with local goodies and items from brands like Fishwife and Patagonia. I’d definitely come back, and anyone staying at the Roost should swing by this hidden gem.",
+          "text": "Checked out this cute cafe attached to the Roost hotel at Baltimore Peninsula. The vibe is super cozy, with extra seating available in the lobby. We popped in on a rainy Saturday to work on our laptops.\n\nDarius, our barista, was super friendly. I had the whipped ricotta toast with honey and their latte special, \"Kiss from a Rose\"\u2014a strawberry rose latte, which was awesome. My boyfriend grabbed a warmed-up chocolate croissant (always a win when pastries are heated up). They even have a small shop with local goodies and items from brands like Fishwife and Patagonia. I\u2019d definitely come back, and anyone staying at the Roost should swing by this hidden gem.",
           "relative": "a year ago",
           "time": 1739642232,
           "is_local_guide": false
@@ -60660,13 +60933,13 @@
     "hours_source": "google_places_api",
     "hours_as_of": "2026-05-02",
     "weekly_text": [
-      "Monday: 6:30 AM – 8:00 PM",
-      "Tuesday: 6:30 AM – 8:00 PM",
-      "Wednesday: 6:30 AM – 8:00 PM",
-      "Thursday: 6:30 AM – 8:00 PM",
-      "Friday: 6:30 AM – 8:00 PM",
-      "Saturday: 6:30 AM – 8:00 PM",
-      "Sunday: 6:30 AM – 8:00 PM"
+      "Monday: 6:30\u202fAM\u2009\u2013\u20098:00\u202fPM",
+      "Tuesday: 6:30\u202fAM\u2009\u2013\u20098:00\u202fPM",
+      "Wednesday: 6:30\u202fAM\u2009\u2013\u20098:00\u202fPM",
+      "Thursday: 6:30\u202fAM\u2009\u2013\u20098:00\u202fPM",
+      "Friday: 6:30\u202fAM\u2009\u2013\u20098:00\u202fPM",
+      "Saturday: 6:30\u202fAM\u2009\u2013\u20098:00\u202fPM",
+      "Sunday: 6:30\u202fAM\u2009\u2013\u20098:00\u202fPM"
     ]
   },
   "labor": {
@@ -64290,13 +64563,22 @@
         "date": "2026-05-01"
       },
       {
+        "regular_hours": 31.35,
+        "overtime_hours": 0.0,
+        "regular_cost": 478.62,
+        "overtime_cost": 0.0,
+        "total_cost": 478.62,
+        "head_count": 4,
+        "date": "2026-05-02"
+      },
+      {
         "regular_hours": 0.0,
         "overtime_hours": 0.0,
         "regular_cost": 0.0,
         "overtime_cost": 0.0,
         "total_cost": 0.0,
-        "head_count": 3,
-        "date": "2026-05-02"
+        "head_count": 2,
+        "date": "2026-05-03"
       }
     ],
     "hour_daily": [
@@ -100047,6 +100329,102 @@
         "hour": 20,
         "hours": 0.22,
         "cost": 4.03
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 5,
+        "hours": 0.3,
+        "cost": 6.25
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 6,
+        "hours": 1.5,
+        "cost": 26.02
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 7,
+        "hours": 3.0,
+        "cost": 42.01
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 8,
+        "hours": 3.0,
+        "cost": 42.01
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 9,
+        "hours": 3.0,
+        "cost": 42.01
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 10,
+        "hours": 3.0,
+        "cost": 42.01
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 11,
+        "hours": 3.0,
+        "cost": 42.01
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 12,
+        "hours": 3.38,
+        "cost": 57.23
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 13,
+        "hours": 3.81,
+        "cost": 55.95
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 14,
+        "hours": 1.96,
+        "cost": 25.97
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 15,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 16,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 17,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 18,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 19,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-05-02",
+        "hour": 20,
+        "hours": 0.4,
+        "cost": 7.23
       }
     ],
     "by_job_daily": [
@@ -109476,20 +109854,41 @@
         "date": "2026-05-02",
         "job_guid": "cd62458d-03ee-415d-a07d-8f18b152d1bf",
         "title": "Shift Manager / Assistant Manager",
-        "hours": 0.0,
-        "cost": 0.0
-      },
-      {
-        "date": "2026-05-02",
-        "job_guid": "07207f65-569c-4b5b-903d-936101e14cad",
-        "title": "Barista",
-        "hours": 0.0,
-        "cost": 0.0
+        "hours": 8.11,
+        "cost": 170.31
       },
       {
         "date": "2026-05-02",
         "job_guid": "9d0edf66-432b-48c6-855d-0afe0eb53164",
         "title": "Cook",
+        "hours": 8.03,
+        "cost": 168.63
+      },
+      {
+        "date": "2026-05-02",
+        "job_guid": "07207f65-569c-4b5b-903d-936101e14cad",
+        "title": "Barista",
+        "hours": 13.27,
+        "cost": 139.68
+      },
+      {
+        "date": "2026-05-02",
+        "job_guid": "197bbd50-c1c7-4a24-8535-582d1a3dbb8e",
+        "title": "Chef",
+        "hours": 1.94,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-05-03",
+        "job_guid": "cd62458d-03ee-415d-a07d-8f18b152d1bf",
+        "title": "Shift Manager / Assistant Manager",
+        "hours": 0.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-05-03",
+        "job_guid": "197bbd50-c1c7-4a24-8535-582d1a3dbb8e",
+        "title": "Chef",
         "hours": 0.0,
         "cost": 0.0
       }
@@ -109696,8 +110095,8 @@
       {
         "hour": 5,
         "dow": "SAT",
-        "hours": 6.62,
-        "cost": 114.9
+        "hours": 6.92,
+        "cost": 121.15
       },
       {
         "hour": 5,
@@ -109738,8 +110137,8 @@
       {
         "hour": 6,
         "dow": "SAT",
-        "hours": 62.12,
-        "cost": 1137.29
+        "hours": 63.62,
+        "cost": 1163.31
       },
       {
         "hour": 6,
@@ -109780,8 +110179,8 @@
       {
         "hour": 7,
         "dow": "SAT",
-        "hours": 78.85,
-        "cost": 1396.7
+        "hours": 81.85,
+        "cost": 1438.71
       },
       {
         "hour": 7,
@@ -109822,8 +110221,8 @@
       {
         "hour": 8,
         "dow": "SAT",
-        "hours": 102.31,
-        "cost": 1737.45
+        "hours": 105.31,
+        "cost": 1779.46
       },
       {
         "hour": 8,
@@ -109864,8 +110263,8 @@
       {
         "hour": 9,
         "dow": "SAT",
-        "hours": 113.89,
-        "cost": 1933.19
+        "hours": 116.89,
+        "cost": 1975.2
       },
       {
         "hour": 9,
@@ -109906,8 +110305,8 @@
       {
         "hour": 10,
         "dow": "SAT",
-        "hours": 151.69,
-        "cost": 2583.93
+        "hours": 154.69,
+        "cost": 2625.94
       },
       {
         "hour": 10,
@@ -109948,8 +110347,8 @@
       {
         "hour": 11,
         "dow": "SAT",
-        "hours": 147.02,
-        "cost": 2483.71
+        "hours": 150.02,
+        "cost": 2525.72
       },
       {
         "hour": 11,
@@ -109990,8 +110389,8 @@
       {
         "hour": 12,
         "dow": "SAT",
-        "hours": 143.13,
-        "cost": 2330.66
+        "hours": 146.51,
+        "cost": 2387.89
       },
       {
         "hour": 12,
@@ -110032,8 +110431,8 @@
       {
         "hour": 13,
         "dow": "SAT",
-        "hours": 125.48,
-        "cost": 1807.27
+        "hours": 129.29,
+        "cost": 1863.22
       },
       {
         "hour": 13,
@@ -110074,8 +110473,8 @@
       {
         "hour": 14,
         "dow": "SAT",
-        "hours": 121.39,
-        "cost": 1691.91
+        "hours": 123.35,
+        "cost": 1717.88
       },
       {
         "hour": 14,
@@ -110116,8 +110515,8 @@
       {
         "hour": 15,
         "dow": "SAT",
-        "hours": 127.24,
-        "cost": 1941.88
+        "hours": 128.24,
+        "cost": 1959.87
       },
       {
         "hour": 15,
@@ -110158,8 +110557,8 @@
       {
         "hour": 16,
         "dow": "SAT",
-        "hours": 159.66,
-        "cost": 2514.95
+        "hours": 160.66,
+        "cost": 2532.94
       },
       {
         "hour": 16,
@@ -110200,8 +110599,8 @@
       {
         "hour": 17,
         "dow": "SAT",
-        "hours": 157.88,
-        "cost": 2496.59
+        "hours": 158.88,
+        "cost": 2514.58
       },
       {
         "hour": 17,
@@ -110242,8 +110641,8 @@
       {
         "hour": 18,
         "dow": "SAT",
-        "hours": 136.89,
-        "cost": 2168.85
+        "hours": 137.89,
+        "cost": 2186.84
       },
       {
         "hour": 18,
@@ -110284,8 +110683,8 @@
       {
         "hour": 19,
         "dow": "SAT",
-        "hours": 126.5,
-        "cost": 1989.04
+        "hours": 127.5,
+        "cost": 2007.03
       },
       {
         "hour": 19,
@@ -110326,8 +110725,8 @@
       {
         "hour": 20,
         "dow": "SAT",
-        "hours": 121.27,
-        "cost": 1891.97
+        "hours": 121.67,
+        "cost": 1899.2
       },
       {
         "hour": 20,
@@ -110464,11 +110863,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 11608.49,
+    "regular_hours": 11639.84,
     "overtime_hours": 197.2,
-    "regular_cost": 190215.12,
+    "regular_cost": 190693.74,
     "overtime_cost": 3473.46,
-    "total_cost": 193688.58
+    "total_cost": 194167.2
   },
   "cogs": {
     "as_of": "2026-05-01",
@@ -144812,7 +145211,7 @@
         "ai_confidence": 0.95
       }
     ],
-    "_note": "range 2026-03-23 → 2026-04-19 · 28 days · ai_suggested_revenue (NOT manager_revenue)"
+    "_note": "range 2026-03-23 \u2192 2026-04-19 \u00b7 28 days \u00b7 ai_suggested_revenue (NOT manager_revenue)"
   },
   "budget": {
     "as_of": "2026-05-02",
@@ -146985,7 +147384,7 @@
         "orders": null
       }
     ],
-    "_note": "range 2026-01-01 → 2026-12-27 · 361 days"
+    "_note": "range 2026-01-01 \u2192 2026-12-27 \u00b7 361 days"
   },
   "weather": {
     "as_of": "2026-05-02",
@@ -151501,6 +151900,6 @@
         "precipitation_pct": 38.7
       }
     ],
-    "_note": "range 2025-01-01 → 2026-05-16 · 501 days (15 forward)"
+    "_note": "range 2025-01-01 \u2192 2026-05-16 \u00b7 501 days (15 forward)"
   }
 }
