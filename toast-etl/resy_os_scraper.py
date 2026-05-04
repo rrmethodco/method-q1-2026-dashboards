@@ -62,7 +62,7 @@ import os
 import re
 import sys
 from datetime import date, datetime, timezone
-from pathlib import Path
+from pathlib import Path as _Path
 from typing import Any
 
 try:
@@ -72,6 +72,9 @@ except ImportError:
         "missing dependency: pip install playwright && playwright install chromium\n"
     )
     sys.exit(2)
+
+from schemas.resy_survey import ResySurvey
+from validation.runner import run_validation
 
 
 # ---------- config ----------
@@ -454,6 +457,16 @@ def transform_to_guest_block(
         # Legacy path — seed-shaped rows (NPS-export extractor used these)
         for row in extract_ratings(body):
             ratings.append(row)
+
+    _v = run_validation(
+        rows=surveys, model_cls=ResySurvey, source="resy_survey",
+        outlets_touched=[],
+        data_dir=_Path(__file__).resolve().parent.parent / "data",
+    )
+    sys.stdout.write(f"  resy_survey validation: "
+                     f"{_v['rows_valid']}/{_v['rows_in']} ok, "
+                     f"{_v['rows_invalid']} dropped, {_v['rows_warned']} warned\n")
+    surveys = _v['valid_rows']
 
     return ({
         "as_of": date.today().isoformat(),

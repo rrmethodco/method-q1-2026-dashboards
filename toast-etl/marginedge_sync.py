@@ -89,13 +89,16 @@ import sys
 import time
 from collections import defaultdict
 from datetime import date, datetime, timedelta
-from pathlib import Path
+from pathlib import Path as _Path
 
 try:
     import requests
 except ImportError:
     sys.stderr.write("missing dependency: pip install requests\n")
     sys.exit(2)
+
+from schemas.marginedge_invoice import MarginEdgeInvoice
+from validation.runner import run_validation
 
 
 # ---------- config ----------
@@ -561,6 +564,16 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
                     )
             else:
                 invoices = [transform_order(o, None, cat_lookup, cat_type_lookup) for o in orders]
+
+            _v = run_validation(
+                rows=invoices, model_cls=MarginEdgeInvoice, source="marginedge_invoice",
+                outlets_touched=[oid],
+                data_dir=_Path(__file__).resolve().parent.parent / "data",
+            )
+            sys.stdout.write(f"  marginedge_invoice validation [{oid}]: "
+                             f"{_v['rows_valid']}/{_v['rows_in']} ok, "
+                             f"{_v['rows_invalid']} dropped, {_v['rows_warned']} warned\n")
+            invoices = _v['valid_rows']
 
             payload = load_outlet(data_dir, oid)
             existing_cogs = (payload.get("cogs") or {})

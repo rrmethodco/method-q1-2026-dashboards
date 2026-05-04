@@ -51,7 +51,7 @@ import re
 import sys
 from collections import defaultdict
 from datetime import date
-from pathlib import Path
+from pathlib import Path as _Path
 from urllib.parse import urlencode
 
 try:
@@ -59,6 +59,9 @@ try:
 except ImportError:
     sys.stderr.write("missing dependency: pip install requests\n")
     sys.exit(2)
+
+from schemas.helixo2_forecast import Helixo2Forecast
+from validation.runner import run_validation
 
 
 # ---------- helixo-2 location UUID → Method outlet (mirror budget_sync.py) ----------
@@ -305,6 +308,15 @@ def cmd_sync(sb: Supabase, data_dir: Path, only_outlet: str = "") -> int:
     print(f"Writing forecast.daily to {len(targets)} outlet(s) — source: helixo-2 ai_suggested_revenue")
     for outlet in targets:
         daily = sorted(by_outlet.get(outlet, []), key=lambda r: r["date"])
+        _v = run_validation(
+            rows=daily, model_cls=Helixo2Forecast, source="helixo2_forecast",
+            outlets_touched=[outlet],
+            data_dir=_Path(__file__).resolve().parent.parent / "data",
+        )
+        sys.stdout.write(f"  helixo2_forecast validation [{outlet}]: "
+                         f"{_v['rows_valid']}/{_v['rows_in']} ok, "
+                         f"{_v['rows_invalid']} dropped, {_v['rows_warned']} warned\n")
+        daily = _v['valid_rows']
         if not daily:
             sys.stderr.write(f"  ! {outlet}: no AI forecast rows from helixo-2 — leaving forecast.daily empty\n")
             payload = load_outlet(data_dir, outlet)
