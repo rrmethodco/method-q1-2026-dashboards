@@ -1,0 +1,48 @@
+# Metric → failure-class map (Phase A.1).
+#
+# Drives the dashboard's "is this metric trustworthy?" decision and the
+# alert dispatcher's "should this trigger Slack?" routing. Aligns to the
+# spec section "Failure semantics (locked decision)".
+#
+# Three classes:
+#   hard_fail  — wrong number worse than no number; card hides on fail
+#   annotate   — show last-known with stale/confidence stamp
+#   auto_heal  — transient infra; agent retries silently
+
+financial:
+  class: hard_fail
+  metrics:
+    - net_sales
+    - cogs_dollars
+    - cogs_pct
+    - labor_dollars
+    - labor_pct
+    - prime_cost_pct
+    - budget_variance_pct
+    - revpash
+    - avg_guest_spend
+    - comps_discounts_pct
+
+soft_signal:
+  class: annotate
+  metrics:
+    - nps
+    - promoters_count
+    - detractors_count
+    - avg_food_score
+    - avg_service_score
+    - avg_atmos_score
+    - dwell_time_min
+    - reviews_count
+    - ai_confidence
+    - forecast_accuracy_wape
+
+transient_infra:
+  class: auto_heal
+  patterns:
+    - http_429
+    - http_5xx
+    - playwright_timeout
+    - resy_session_expired
+    - git_push_rejected_nonffwd
+    - workflow_cancelled_concurrency

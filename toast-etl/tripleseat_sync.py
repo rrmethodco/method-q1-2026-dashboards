@@ -84,6 +84,9 @@ except ImportError:
     sys.stderr.write("missing dependency: pip install requests\n")
     sys.exit(2)
 
+from schemas.tripleseat_event import TripleseatEvent
+from validation.runner import run_validation
+
 
 # ---------- config ----------
 
@@ -796,6 +799,15 @@ def cmd_sync(ck: str, cs: str, ts_to_outlet: dict[int, str],
     print(f"Partitioned into {len(by_outlet)} outlets with events:")
     for outlet_id in sorted(routed_outlets):
         oevents = by_outlet.get(outlet_id, [])
+        _v = run_validation(
+            rows=oevents, model_cls=TripleseatEvent, source="tripleseat_event",
+            outlets_touched=[outlet_id],
+            data_dir=Path(__file__).resolve().parent.parent / "data",
+        )
+        sys.stdout.write(f"  tripleseat_event validation [{outlet_id}]: "
+                         f"{_v['rows_valid']}/{_v['rows_in']} ok, "
+                         f"{_v['rows_invalid']} dropped, {_v['rows_warned']} warned\n")
+        oevents = _v['valid_rows']
         block = build_outlet_events_block(oevents)
         payload = load_outlet(data_dir, outlet_id)
         payload["events"] = block

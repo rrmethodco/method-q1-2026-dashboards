@@ -49,6 +49,9 @@ except ImportError:
     sys.stderr.write("missing dependency: pip install requests\n")
     sys.exit(2)
 
+from schemas.sage_budget import SageBudgetLine
+from validation.runner import run_validation
+
 
 # ---------- helixo-2 Supabase location UUID → Method outlet slug ----------
 
@@ -294,6 +297,15 @@ def cmd_sync(sb: Supabase, data_dir: Path, only_outlet: str = "") -> int:
     print(f"Writing budget.daily to {len(targets)} outlet(s):")
     for outlet in targets:
         daily = sorted(by_outlet.get(outlet, []), key=lambda r: r["date"])
+        _v = run_validation(
+            rows=daily, model_cls=SageBudgetLine, source="sage_budget",
+            outlets_touched=[outlet],
+            data_dir=Path(__file__).resolve().parent.parent / "data",
+        )
+        sys.stdout.write(f"  sage_budget validation [{outlet}]: "
+                         f"{_v['rows_valid']}/{_v['rows_in']} ok, "
+                         f"{_v['rows_invalid']} dropped, {_v['rows_warned']} warned\n")
+        daily = _v['valid_rows']
         if not daily:
             sys.stderr.write(f"  ! {outlet}: no budget rows in helixo-2 daily_budget — skipping\n")
             continue

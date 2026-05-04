@@ -85,6 +85,10 @@ except ImportError:  # pragma: no cover
     sys.stderr.write("missing dependency: pip install requests\n")
     sys.exit(2)
 
+from schemas.toast_order import ToastOrder
+from schemas.toast_time_entry import ToastTimeEntry
+from validation.runner import run_validation
+
 
 # ---------- config ----------
 
@@ -1089,6 +1093,15 @@ def sync_outlet(
         # first GUID's catalog — Toast's catalogs are restaurant-scoped
         # and the rc-specific overlap is consistent enough for our needs.
         first_guid = sources[0]["guid"] if sources else None
+        _v = run_validation(
+            rows=combined, model_cls=ToastOrder, source="toast_order",
+            outlets_touched=[outlet_id],
+            data_dir=Path(__file__).resolve().parent.parent / "data",
+        )
+        sys.stdout.write(f"  toast_order validation [{outlet_id}]: "
+                         f"{_v['rows_valid']}/{_v['rows_in']} ok, "
+                         f"{_v['rows_invalid']} dropped, {_v['rows_warned']} warned\n")
+        combined = _v['valid_rows']
         order_details[rc_key] = transform_orders(
             combined,
             sales_cat_lookup=sales_cat_cache.get(first_guid) or {},
@@ -1121,6 +1134,15 @@ def sync_outlet(
         except requests.HTTPError as e:
             sys.stderr.write(f"[{outlet_id}:labor] guid={rest_guid[:8]}... jobs lookup failed: {e}\n")
             jobs_lookup = {}
+        _v = run_validation(
+            rows=entries, model_cls=ToastTimeEntry, source="toast_time_entry",
+            outlets_touched=[outlet_id],
+            data_dir=Path(__file__).resolve().parent.parent / "data",
+        )
+        sys.stdout.write(f"  toast_time_entry validation [{outlet_id}]: "
+                         f"{_v['rows_valid']}/{_v['rows_in']} ok, "
+                         f"{_v['rows_invalid']} dropped, {_v['rows_warned']} warned\n")
+        entries = _v['valid_rows']
         rolled = transform_time_entries(entries, jobs_lookup)
         sys.stdout.write(
             f"[{outlet_id}:labor] guid={rest_guid[:8]}... {len(entries)} entries -> "
