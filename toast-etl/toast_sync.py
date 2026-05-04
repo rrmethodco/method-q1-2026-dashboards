@@ -396,11 +396,10 @@ def _spread_shift_across_hours(
     by-day rollup matching Toast's businessDate semantics imperfectly but
     consistently — Toast's businessDate may differ for late-night shifts.
 
-    Timezone: Toast emits inDate/outDate as Z-suffixed UTC. We convert to
-    the outlet's local zone (America/New_York for every Method Co outlet)
-    before bucketing, so a 6pm-2am Mulherin's bartender appears in hours
-    18-1 ET, not 22-5 UTC. zoneinfo handles DST automatically. The same
-    fix landed for orders in `_as_local_date`.
+    Timezone caveat: ISO timestamps are parsed in their declared zone, then
+    we read the LOCAL hour. Mews/Toast both emit zoned ISO so this works
+    without an outlet-side IANA config. Naive (no-zone) inputs are read as
+    UTC — same caveat documented in the existing transform_orders.
     """
     if not in_iso or not out_iso or total_hours <= 0:
         return []
@@ -408,12 +407,6 @@ def _spread_shift_across_hours(
     out_dt = _parse_iso(out_iso)
     if not in_dt or not out_dt or out_dt <= in_dt:
         return []
-    if in_dt.tzinfo is None:
-        in_dt = in_dt.replace(tzinfo=timezone.utc)
-    if out_dt.tzinfo is None:
-        out_dt = out_dt.replace(tzinfo=timezone.utc)
-    in_dt = in_dt.astimezone(_OUTLET_TZ)
-    out_dt = out_dt.astimezone(_OUTLET_TZ)
     span_seconds = (out_dt - in_dt).total_seconds()
     if span_seconds <= 0:
         return []
@@ -1253,8 +1246,27 @@ DOW_ORDER = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
 
 
 def _merge_by_date(existing_rows: list, fresh_rows: list, cutoff: str) -> list:
-    out = [r for r in (existing_rows or []) if (r.get("date") or "") < cutoff]
-    out.extend(fresh_rows or [])
+    # Strict-less-than cutoff filters existing rows whose date predates the
+    # fresh window, then fresh is appended. This used to leave duplicate
+    # rows when a (date, hour, job) key appeared in both halves — happens
+    # naturally because Toast's 14-day edit window means yesterday's
+    # paidDate snapshot can shift between runs, AND because the pull
+    # window edge dates produced split rows when transform_orders'
+    # local-ET grouping disagreed with the UTC cutoff (root cause of the
+    # LSBR week-ending 5/3 $185K vs Toast $125K discrepancy).
+    #
+    # Dedupe by composite key (date, hour, job_name) AFTER concatenation;
+    # for collisions, KEEP THE FRESHER row (later in the list — fresh is
+    # appended, so dict-overwrite-on-insert preserves the last write).
+    # When a row shows up both in existing and fresh, fresh wins because
+    # it has the latest Toast snapshot of voids/edits.
+    combined = [r for r in (existing_rows or []) if (r.get("date") or "") < cutoff]
+    combined.extend(fresh_rows or [])
+    deduped: dict[tuple, dict] = {}
+    for r in combined:
+        key = (r.get("date") or "", r.get("hour", -1), r.get("job_name", ""))
+        deduped[key] = r
+    out = list(deduped.values())
     out.sort(key=lambda r: (r.get("date", ""),
                             r.get("hour", -1) if "hour" in r else 0,
                             r.get("job_name", "")))
@@ -1624,11 +1636,23 @@ def main(argv: list[str] | None = None) -> int:
         outlets = {args.outlet: outlets[args.outlet]}
 
     token = get_token(client_id, client_secret)
-    end_day = datetime.now(timezone.utc)
-    start_day = end_day - timedelta(days=args.days)
+    # Anchor the pull window on LOCAL ET midnights, not UTC. transform_orders
+    # groups daily rows by `_as_local_date(paidDate)` (America/New_York), so
+    # a UTC-anchored window leaks 4 hours of "yesterday in ET" into the
+    # fresh data. Combined with merge_payloads' UTC-date cutoff, that
+    # produced two `daily` rows per date for every date at the window edge —
+    # the symptom Ross caught when LSBR week-ending 5/3 read $185K instead
+    # of Toast's $125,673.04. Aligning the window to ET midnight makes
+    # every date in fresh a complete local day, eliminating the overlap.
+    end_local  = datetime.now(_OUTLET_TZ).replace(hour=0, minute=0, second=0, microsecond=0)
+    start_local = end_local - timedelta(days=args.days)
+    end_day   = end_local.astimezone(timezone.utc)
+    start_day = start_local.astimezone(timezone.utc)
+    # Cutoff for merge_payloads is the LOCAL date — same key transform_orders
+    # uses for daily rollups. Mismatched UTC cutoff was the duplicate root cause.
+    pull_start_iso = start_local.date().isoformat()
 
     any_error = False
-    pull_start_iso = start_day.date().isoformat()
     for outlet_id, rc_map in outlets.items():
         try:
             payload = sync_outlet(outlet_id, rc_map, token, start_day, end_day)
