@@ -33,7 +33,7 @@ export async function listRecentRuns(workflowFile: string, limit = 5): Promise<W
   const r = await ghFetch(
     `/repos/${REPO}/actions/workflows/${workflowFile}/runs?per_page=${limit}`,
   );
-  if (!r.ok) throw new Error(`gh ${r.status}: ${await r.text()}`);
+  if (!r.ok) throw new Error(`gh ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const body = await r.json();
   return body.workflow_runs || [];
 }
@@ -51,5 +51,5 @@ export async function dispatchWorkflow(
       body: JSON.stringify({ ref, inputs }),
     },
   );
-  if (!r.ok) throw new Error(`dispatch ${r.status}: ${await r.text()}`);
+  if (!r.ok) throw new Error(`dispatch ${r.status}: ${(await r.text()).slice(0, 200)}`);
 }

@@ -3,4 +3,12 @@
 project_id = "mmwislzsgnjxjxssynwm"
 
 [functions.agent-worker]
-verify_jwt = false
+# Require a JWT on every invocation. The pg_cron job at
+# supabase/migrations/20260504000001_agent_cron.sql sends
+# `Authorization: Bearer <service_role_key>` so it authenticates
+# correctly. With this OFF (verify_jwt = false), the function URL is
+# public — anyone can hit it in a loop to drain Anthropic API credits
+# and trigger GitHub workflow dispatches via the retry/repair agent
+# (the project ref is in the public repo). See security review
+# 2026-05-04 BLOCK DEPLOY finding.
+verify_jwt = true
