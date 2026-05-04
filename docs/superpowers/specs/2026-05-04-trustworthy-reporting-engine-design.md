@@ -26,10 +26,9 @@ Across these incidents the common failure mode is: **the pipeline writes data wi
 1. **Wrong financial numbers do not display.** When validation fails on a P&L-line metric, the affected card hides the number and surfaces the reason.
 2. **Soft-signal staleness is always visible.** When NPS, reviews, or other non-financial metrics are stale or partially valid, the metric still displays with an inline freshness/confidence stamp.
 3. **Transient infrastructure failures self-heal without operator action.** Push races, rate limits, expected schema renames, and timeout-class errors are retried by an agent loop with bounded retry budgets.
-4. **One daily 8am ET email summarizes everything that hard-failed yesterday + everything that auto-healed.** Sent to rr@methodco.com.
-5. **Real-time Slack alerts on hard-fails only.** No alert noise for transient infra; only events the operator must act on.
-6. **At-a-glance trust signal on every outlet view.** A small persistent panel shows "all sources current" or lists what's stale/failed/annotated with timestamps.
-7. **Every agent decision is recorded** in an append-only audit log so operators can inspect *why* a number is what it is — and so future agents (A.3 investigation) have a training corpus.
+4. **Real-time Slack alerts on hard-fails only.** No alert noise for transient infra; only events the operator must act on. Slack channel: `C0B1N51L9TN` (Method Co `#dashboard-alerts` or equivalent — channel ID rather than name to survive renames).
+5. **At-a-glance trust signal on every outlet view.** A small persistent panel shows "all sources current" or lists what's stale/failed/annotated with timestamps.
+6. **Every agent decision is recorded** in an append-only audit log so operators can inspect *why* a number is what it is — and so future agents (A.3 investigation) have a training corpus.
 
 ## Non-goals (this phase)
 
@@ -39,6 +38,7 @@ Across these incidents the common failure mode is: **the pipeline writes data wi
 - Multi-tenant SaaS productization (Project B)
 - Migration off GitHub Actions for the syncs themselves
 - Backfilling historical "what was the value of X on day Y *if* validation had been in place" — agents apply going-forward only
+- **Daily email digest** — deferred per Ross 2026-05-04. Slack alone for Phase A.1. Re-evaluate after the channel has been live for 2 weeks; add email if Slack fatigue or off-hours coverage gap emerges.
 
 ## Failure semantics (locked decision)
 
@@ -54,19 +54,25 @@ Classification table is config-as-code, owned per-metric in a single file (`conf
 
 ## Alerting (locked decision)
 
-Tiered:
+Tiered. Email digest deferred per Ross 2026-05-04 — Slack-only for Phase A.1.
 
 | Tier | Channel | When |
 |---|---|---|
 | 1 | Dashboard banner (per-outlet, top of page) | Always — current trust state of that outlet's sources |
-| 2 | Slack push to `#dashboard-alerts` | Real-time on hard-fail or unrecoverable auto-heal |
-| 3 | Email digest to rr@methodco.com | Daily at 8am ET — yesterday's hard-fails + auto-heals + annotation summary |
+| 2 | Slack push to channel ID `C0B1N51L9TN` | Real-time on hard-fail or unrecoverable auto-heal |
+| 3 (deferred) | Email digest to rr@methodco.com | Phase A.1.5 if needed — re-evaluate after 2 weeks of Slack-only operation |
 
-Slack channel name configurable. Email recipient configurable.
+Slack channel ID is config-as-code (env var `SLACK_DASHBOARD_ALERTS_CHANNEL`) so it can be re-pointed without code change.
 
 ## Architecture (Phase A.1) — locked: Approach 3 (Hybrid)
 
-The existing GitHub Actions sync workflows continue to handle data ingestion. Pydantic validation gates are added inline to each sync script. A new dedicated agent worker, deployed as a Supabase Edge Function (or alternatively a $20/mo VPS), polls validation status + recent commits and runs the agent loops (drift detector, anomaly detector, retry/repair, alert dispatcher).
+The existing GitHub Actions sync workflows continue to handle data ingestion. Pydantic validation gates are added inline to each sync script. A new dedicated agent worker, deployed as a **Supabase Edge Function** (Method already has Supabase per Ross 2026-05-04), polls validation status + recent commits and runs the agent loops (drift detector, anomaly detector, retry/repair, alert dispatcher).
+
+Why Edge Function over VPS:
+- Method already pays for Supabase — zero new infra spend
+- Deploys via Supabase CLI / GitHub Actions — same auth surface Method already operates
+- Cron triggers built-in (`pg_cron` + Edge Function invocation) — no separate scheduler
+- Limitations vs VPS that we're explicitly accepting: per-invocation runtime cap (~150s), no Playwright (so the schema-drift LLM step uses Anthropic API only, not headless-browser scraping), bounded memory per call. None of these limit Phase A.1 — drift detector samples small row counts, anomaly detector is pure math, retry/repair invokes GitHub Actions via API.
 
 ### Why this over alternatives
 
@@ -159,9 +165,9 @@ Action history logged to `data/_audit/<source>_<date>.jsonl`.
 
 Single component that consumes events from the other agents and routes per the alerting policy. Implements:
 
-- Slack webhook POST (configurable channel)
-- Email send (Sendgrid or AWS SES; recipient configurable)
-- Banner state writer (writes `data/_banner/<outlet>.json` consumed by the dashboard)
+- **Slack** `chat.postMessage` POST to channel ID `C0B1N51L9TN` (configurable via `SLACK_DASHBOARD_ALERTS_CHANNEL` env var). Bot token stored as Supabase secret + GitHub Actions secret (`SLACK_BOT_TOKEN`).
+- **Banner state writer** — writes `data/_banner/<outlet>.json` consumed by the dashboard.
+- **Email digest** — deferred (see Alerting section). When added (Phase A.1.5), this component gains a `send_email()` method; no architectural change needed.
 
 Deduplication: identical event within 60 min is suppressed.
 
@@ -206,8 +212,8 @@ The dashboard reads these but never writes them.
 
 ### Agent worker outputs (operator-facing)
 
-1. Slack messages to `#dashboard-alerts` (configurable)
-2. Daily email to rr@methodco.com (configurable)
+1. Slack messages to channel ID `C0B1N51L9TN` (configurable via `SLACK_DASHBOARD_ALERTS_CHANNEL`)
+2. Email digest — deferred per Ross 2026-05-04 (not implemented in Phase A.1)
 
 ## Operational requirements
 
@@ -218,14 +224,16 @@ The dashboard reads these but never writes them.
 | Audit log retention | 90 days minimum, indefinite preferred. Stored in repo so git history preserves it. |
 | Validation file retention | Last 30 days, auto-pruned by the agent worker |
 | PII | Validation error samples are redacted before write — no `user.email`, no `user.full_name`, no `reservation.contact_phone` |
-| Secrets | Slack webhook URL + Sendgrid/SES API key stored as GitHub Actions secrets and Supabase Edge Function env vars; never written to repo |
+| Secrets | `SLACK_BOT_TOKEN` + `ANTHROPIC_API_KEY` + `SUPABASE_SERVICE_ROLE_KEY` stored as GitHub Actions secrets and Supabase Edge Function env vars; never written to repo |
 
-## Open decisions (need Ross input before implementation)
+## Open decisions — RESOLVED 2026-05-04
 
-1. **Worker host:** Supabase Edge Function vs $20/mo VPS (Hetzner / DigitalOcean). Both work; Edge Function is simpler ops, VPS is more flexible for long-running agent loops + Playwright reuse.
-2. **Slack channel name:** `#dashboard-alerts` proposed; confirm or rename
-3. **Email service:** Sendgrid (Method may already have an account) vs AWS SES (cheaper, more setup)
-4. **Anomaly threshold:** ±3σ proposed — fine for stable outlets, may over-flag new outlets without 8 weeks of history. Acceptable to start, will need tuning.
+| # | Decision | Locked answer |
+|---|---|---|
+| 1 | Worker host | **Supabase Edge Function** (Method already has Supabase) |
+| 2 | Slack channel | **Channel ID `C0B1N51L9TN`** (configurable via env) |
+| 3 | Email service | **Deferred** — Slack-only for Phase A.1; revisit after 2 weeks |
+| 4 | Anomaly threshold | **±3σ in shadow mode for first 2 weeks**, then enable Slack alerts |
 
 ## Risks
 
