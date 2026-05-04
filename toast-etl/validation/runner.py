@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Type
 
+from .pii_redact import redact_pii
+
 
 def run_validation(
     rows: list[dict],
@@ -53,6 +55,7 @@ def run_validation(
                 "code": "model_validation_error",
                 "message": str(e)[:500],
                 "row_keys": sorted(row.keys()) if isinstance(row, dict) else [],
+                "row_redacted": redact_pii(row) if isinstance(row, dict) else None,
             })
             continue
         rule_errs = m.validate_business_rules()
