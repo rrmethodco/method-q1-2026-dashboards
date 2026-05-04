@@ -497,17 +497,41 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
             # allocation category — when split, the dominant category
             # determines which COGS bucket the spend lands in.
             product_cat_lookup = {}
+            product_type_lookup = {}    # pid → product-level type (Beer/Food/Liquor/Wine/N/A Bev/Other)
+            # Debug: dump first product's full schema so we can lock in the
+            # exact field name for product-level type. MarginEdge's
+            # Purchase Report classifies by a product-Type column distinct
+            # from GL categoryType — verifying which field on /products
+            # carries that value (productType / type / productCategoryType).
+            if products:
+                print(f"  [schema] first product keys: {sorted(products[0].keys())}")
+                # Print up to 3 candidate type-ish field values
+                for k in ("productType", "type", "productCategoryType",
+                          "productCategory", "category", "productClass"):
+                    if k in products[0]:
+                        print(f"    {k!r}: {products[0].get(k)!r}")
             for p in products:
                 pid = p.get("companyConceptProductId") or p.get("centralProductId")
                 cats = p.get("categories") or []
-                if not pid or not cats:
+                if not pid:
                     continue
-                # Pick highest-allocation category
-                best = max(cats, key=lambda c: c.get("percentAllocation") or 0)
-                cid = best.get("categoryId")
-                if cid:
-                    product_cat_lookup[pid] = cid
+                if cats:
+                    # Pick highest-allocation category
+                    best = max(cats, key=lambda c: c.get("percentAllocation") or 0)
+                    cid = best.get("categoryId")
+                    if cid:
+                        product_cat_lookup[pid] = cid
+                # Capture product-level type defensively under common field names
+                ptype = (p.get("productType") or p.get("type")
+                         or p.get("productCategoryType") or p.get("productClass"))
+                if ptype:
+                    product_type_lookup[pid] = ptype
             print(f"  product→category mappings built: {len(product_cat_lookup)} of {len(products)}")
+            print(f"  product→type mappings built:     {len(product_type_lookup)} of {len(products)}")
+            if product_type_lookup:
+                from collections import Counter as _Counter
+                _tcounts = _Counter(product_type_lookup.values())
+                print(f"    product type distribution: {dict(_tcounts)}")
 
             # Line item fetch — adds ~1 API call per order (~10 min for
             # all outlets) but unlocks per-category COGS rollup
