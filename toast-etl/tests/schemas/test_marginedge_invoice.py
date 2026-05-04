@@ -4,7 +4,6 @@ Field names mirror marginedge_sync.py transform_order output —
 see schemas/marginedge_invoice.py for the canonical reference.
 """
 import pytest
-from pydantic import ValidationError
 from schemas.marginedge_invoice import MarginEdgeInvoice
 
 
@@ -53,12 +52,16 @@ def test_line_item_sum_mismatch_business_rule():
     assert any("line_items_sum_mismatch" in e for e in errs)
 
 
-def test_negative_total_fails():
-    with pytest.raises(ValidationError):
-        MarginEdgeInvoice.model_validate({
-            "invoice_id": "neg", "date": "2026-05-04", "vendor_name": "v",
-            "total": -10, "line_items": [],
-        })
+def test_negative_total_warns():
+    """MarginEdge emits negative totals for credits/refunds — schema accepts,
+    business rule flags."""
+    raw = {
+        "invoice_id": "credit-1", "date": "2026-05-04", "vendor_name": "v",
+        "total": -25.50, "line_items": [],
+    }
+    inv = MarginEdgeInvoice.model_validate(raw)  # No exception
+    errs = inv.validate_business_rules()
+    assert any("negative_total" in e for e in errs)
 
 
 def test_invalid_cogs_bucket_warned():

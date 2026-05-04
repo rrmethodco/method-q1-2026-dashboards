@@ -45,12 +45,14 @@ class MarginEdgeInvoice(SourceRow):
     date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
     vendor_id: Optional[str] = None
     vendor_name: Optional[str] = None
-    total: float = Field(ge=0)
+    total: float  # MarginEdge emits negative totals for credits/refunds; flagged via business rule
     status: Optional[str] = None
     line_items: list[MarginEdgeLineItem] = Field(default_factory=list)
 
     def validate_business_rules(self) -> list[str]:
         errors: list[str] = []
+        if self.total < 0:
+            errors.append(f"negative_total: probable credit/refund (total={self.total:.2f})")
         # Line items sum should equal the invoice total within 1% — when
         # they diverge by more, MarginEdge has either dropped a line item
         # or mis-reported a unit cost. Skip when no line items (the
@@ -60,8 +62,10 @@ class MarginEdgeInvoice(SourceRow):
             extendeds = [li.extended for li in self.line_items if li.extended is not None]
             if extendeds:
                 li_sum = sum(extendeds)
-                if self.total > 0:
-                    drift = abs(li_sum - self.total) / self.total
+                # Use abs(total) so credits/refunds (negative totals) still get
+                # checked. Skip when total is exactly 0 (PREPROCESSING placeholders).
+                if self.total != 0:
+                    drift = abs(li_sum - self.total) / abs(self.total)
                     if drift > 0.01:
                         errors.append(f"line_items_sum_mismatch: "
                                       f"total={self.total:.2f} li_sum={li_sum:.2f} "
