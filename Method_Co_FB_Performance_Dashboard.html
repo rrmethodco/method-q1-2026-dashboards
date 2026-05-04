@@ -1079,13 +1079,33 @@ async function refreshValidationPanel() {
       + `${v.rows_valid}/${v.rows_in} ok, ${ageHrs.toFixed(1)}h ago</div>`);
   }
 
+  // Optionally fetch the banner state written by the agent worker.
+  // If absent (Sprint 1 only — Sprint 2 hasn't deployed yet), the panel
+  // falls back to the per-source rows. If present, the agent's
+  // narrative line is shown below the per-source list.
+  let agentLine = '';
+  try {
+    const SUPABASE_BANNER_URL =
+      'https://mmwislzsgnjxjxssynwm.supabase.co/storage/v1/object/public/banner';
+    const r = await fetch(`${SUPABASE_BANNER_URL}/${STATE.outlet}.json`, {cache: 'no-cache'});
+    if (r.ok) {
+      const banner = await r.json();
+      if (banner.message) {
+        agentLine = `<div class="val-panel-row" style="font-style:italic;color:var(--royal);">agent: ${banner.message}</div>`;
+      }
+      // Override class if agent's banner is more severe
+      if (banner.worst_class === 'err' && worstClass !== 'err') worstClass = 'err';
+      else if (banner.worst_class === 'warn' && worstClass === 'ok') worstClass = 'warn';
+    }
+  } catch (e) { /* tolerate missing banner */ }
+
   panel.classList.remove('ok', 'warn', 'err');
   panel.classList.add(worstClass);
   const summaryText = (worstClass === 'ok') ? '✓ All sources current'
                     : (worstClass === 'warn') ? '⚠ Some sources stale or warned'
                     : '🛑 Validation failures — see card details';
   summary.textContent = summaryText;
-  detail.innerHTML = lines.join('');
+  detail.innerHTML = lines.join('') + agentLine;
 }
 
 // Refresh on outlet/section change + every 5min while the page is open.

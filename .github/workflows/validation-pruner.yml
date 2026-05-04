@@ -1,0 +1,42 @@
+name: Validation file pruner
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # 05:00 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-sync
+  cancel-in-progress: false
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run pruner
+        working-directory: toast-etl
+        run: python3 validation/retention.py --data-dir ../data --keep-days 30
+
+      - name: Commit (if anything pruned)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/_validation/ data/_validation_errors/ || true
+          if git diff --staged --quiet; then
+            echo "no files to prune"
+            exit 0
+          fi
+          git commit -m "chore(validation): prune files older than 30 days"
+          git push

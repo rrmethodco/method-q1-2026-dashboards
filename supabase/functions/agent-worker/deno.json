@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-all --watch index.ts",
+    "test": "deno test --allow-all"
+  },
+  "imports": {
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2",
+    "@anthropic-ai/sdk": "npm:@anthropic-ai/sdk@^0.30",
+    "@slack/web-api": "npm:@slack/web-api@^7"
+  }
+}
