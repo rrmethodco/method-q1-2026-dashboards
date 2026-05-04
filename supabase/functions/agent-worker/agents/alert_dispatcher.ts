@@ -3,7 +3,15 @@
 // Consumes alert events from drift / anomaly / retry agents, dedups
 // (identical event within 60min suppressed), routes to Slack channel
 // from SLACK_DASHBOARD_ALERTS_CHANNEL (default C0B1N51L9TN).
+//
+// Dedup state is persisted to Supabase Storage (`validation/_state/
+// alert_dispatcher.json`). Pre-fix the dedup map was in-memory and
+// reset on every Edge Function cold start, which made every
+// persistent drift alert fire to Slack on every 5-min tick instead
+// of once per 60min window (integration review 2026-05-04).
+import { SupabaseClient } from "@supabase/supabase-js";
 import { postAlert } from "../lib/slack.ts";
+import { readState, writeState, pruneStale } from "../lib/state.ts";
 import type { AuditDecision } from "../lib/types.ts";
 
 export interface AlertEvent {
@@ -12,17 +20,31 @@ export interface AlertEvent {
   text: string;
 }
 
-const recentAlerts = new Map<string, number>();
-const DEDUP_MS = 60 * 60 * 1000;
+interface DispatcherState {
+  recent_alerts: Record<string, number>; // dedup-key → last-posted-ms
+}
 
-export async function dispatchAlerts(events: AlertEvent[]): Promise<AuditDecision[]> {
+const DEDUP_MS = 60 * 60 * 1000;
+const AGENT = "alert_dispatcher";
+
+export async function dispatchAlerts(
+  supabase: SupabaseClient,
+  events: AlertEvent[],
+): Promise<AuditDecision[]> {
   const channel = Deno.env.get("SLACK_DASHBOARD_ALERTS_CHANNEL") || "C0B1N51L9TN";
   const ts = new Date().toISOString();
   const audits: AuditDecision[] = [];
 
+  // Read persistent dedup state. Prune entries older than DEDUP_MS so
+  // the file stays small (typically <2KB).
+  const state = await readState<DispatcherState>(supabase, AGENT, {
+    recent_alerts: {},
+  });
+  const recent = pruneStale(state.recent_alerts, DEDUP_MS);
+
   for (const ev of events) {
     const key = `${ev.kind}:${ev.source}:${ev.text.slice(0, 80)}`;
-    const last = recentAlerts.get(key);
+    const last = recent[key];
     if (last && Date.now() - last < DEDUP_MS) {
       audits.push({
         ts, agent: "alert_dispatcher", source: ev.source,
@@ -34,7 +56,7 @@ export async function dispatchAlerts(events: AlertEvent[]): Promise<AuditDecisio
     }
     try {
       await postAlert(channel, `[${ev.kind}] ${ev.source}: ${ev.text}`);
-      recentAlerts.set(key, Date.now());
+      recent[key] = Date.now();
       audits.push({
         ts, agent: "alert_dispatcher", source: ev.source,
         decision: "slack_posted",
@@ -50,5 +72,9 @@ export async function dispatchAlerts(events: AlertEvent[]): Promise<AuditDecisio
       });
     }
   }
+
+  // Persist updated dedup state for the next cron tick.
+  await writeState(supabase, AGENT, { recent_alerts: recent });
+
   return audits;
 }
