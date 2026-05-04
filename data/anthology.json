@@ -1,6 +1,6 @@
 {
   "outlet_id": "anthology",
-  "generated_at": "2026-05-03T12:57:18+00:00",
+  "generated_at": "2026-05-04T13:30:32+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -2338,6 +2338,17 @@
           "ticket_time_count": 1
         },
         {
+          "date": "2026-05-01",
+          "orders": 1,
+          "guests": 3,
+          "amount": 33265.74,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 11555.8,
+          "ticket_time_count": 1
+        },
+        {
           "date": "2026-05-03",
           "orders": 1,
           "guests": 2,
@@ -3063,9 +3074,9 @@
         {
           "hour": 23,
           "dow": "Fri",
-          "amount": 292641.94,
-          "orders": 11,
-          "guests": 14
+          "amount": 325907.68,
+          "orders": 12,
+          "guests": 17
         },
         {
           "hour": 23,
@@ -5070,6 +5081,13 @@
           "amount": 142827.96,
           "orders": 5,
           "guests": 12
+        },
+        {
+          "date": "2026-05-01",
+          "hour": 23,
+          "amount": 33265.74,
+          "orders": 1,
+          "guests": 3
         },
         {
           "date": "2026-05-01",
@@ -11394,6 +11412,42 @@
           "orders": 10
         },
         {
+          "date": "2026-05-01",
+          "category": "Bottled Beer",
+          "amount": 1411.46,
+          "orders": 61
+        },
+        {
+          "date": "2026-05-01",
+          "category": "Food",
+          "amount": 14202.0,
+          "orders": 7
+        },
+        {
+          "date": "2026-05-01",
+          "category": "Liquor",
+          "amount": 3815.46,
+          "orders": 160
+        },
+        {
+          "date": "2026-05-01",
+          "category": "NA Beverage",
+          "amount": 1046.46,
+          "orders": 6
+        },
+        {
+          "date": "2026-05-01",
+          "category": "Room Rental",
+          "amount": 2000.0,
+          "orders": 1
+        },
+        {
+          "date": "2026-05-01",
+          "category": "Wine",
+          "amount": 3479.0,
+          "orders": 10
+        },
+        {
           "date": "2026-05-03",
           "category": "Bottled Beer",
           "amount": 1212.0,
@@ -12916,6 +12970,13 @@
           "guests": 3
         },
         {
+          "date": "2026-05-01",
+          "mode": "Unspecified",
+          "amount": 33265.74,
+          "orders": 1,
+          "guests": 3
+        },
+        {
           "date": "2026-05-03",
           "mode": "Unspecified",
           "amount": 35342.05,
@@ -12926,16 +12987,16 @@
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 510.0,
-        "guests": 819.0,
-        "amount": 4495302.54,
+        "orders": 511.0,
+        "guests": 822.0,
+        "amount": 4528568.28,
         "tip": 0.0,
         "gratuity": 0.0,
         "discount": 10611.2,
-        "ticket_time_sec_sum": 1072025.4,
-        "ticket_time_count": 445,
-        "avg_check": 8814.318705882353,
-        "avg_ticket_time_sec": 2409.045842696629
+        "ticket_time_sec_sum": 1083581.2,
+        "ticket_time_count": 446,
+        "avg_check": 8862.168845401175,
+        "avg_ticket_time_sec": 2429.554260089686
       }
     }
   },
@@ -12960,7 +13021,7 @@
         {
           "author": "Peyton Bias",
           "rating": 5,
-          "text": "We got married at Book Tower on 12/29/24 and it was truly the perfect day. I knew when we toured the venue back while it was still under construction that it was going to be special, and I was thrilled to be totally correct! We had such a great experience with the Anthology Events team, Lauren was always super responsive and collaborative throughout the planning process and Maggie ensured everything was flawless on wedding day. The food is excellent, drinks were on point, the staff was friendly and attentive. They really went the extra mile to make sure we had a beautiful day, they even provided sweetheart tray of our cocktail hour bites for us to enjoy privately in the bridal suite and those first few moments alone together as husband and wife were so appreciated. I highly recommend Book Tower, you really couldn’t ask for a more beautiful, modern Detroit venue or a better staff.",
+          "text": "We got married at Book Tower on 12/29/24 and it was truly the perfect day. I knew when we toured the venue back while it was still under construction that it was going to be special, and I was thrilled to be totally correct! We had such a great experience with the Anthology Events team, Lauren was always super responsive and collaborative throughout the planning process and Maggie ensured everything was flawless on wedding day. The food is excellent, drinks were on point, the staff was friendly and attentive. They really went the extra mile to make sure we had a beautiful day, they even provided sweetheart tray of our cocktail hour bites for us to enjoy privately in the bridal suite and those first few moments alone together as husband and wife were so appreciated. I highly recommend Book Tower, you really couldn\u2019t ask for a more beautiful, modern Detroit venue or a better staff.",
           "relative": "a year ago",
           "time": 1736966635,
           "is_local_guide": false
@@ -16346,13 +16407,31 @@
         "date": "2026-05-01"
       },
       {
-        "regular_hours": 173.28,
+        "regular_hours": 0.35,
         "overtime_hours": 0.0,
-        "regular_cost": 3938.63,
+        "regular_cost": 0.0,
         "overtime_cost": 0.0,
-        "total_cost": 3938.63,
+        "total_cost": 0.0,
+        "head_count": 1,
+        "date": "2026-05-01"
+      },
+      {
+        "regular_hours": 166.78,
+        "overtime_hours": 0.0,
+        "regular_cost": 3828.13,
+        "overtime_cost": 0.0,
+        "total_cost": 3828.13,
         "head_count": 21,
         "date": "2026-05-02"
+      },
+      {
+        "regular_hours": 12.56,
+        "overtime_hours": 5.42,
+        "regular_cost": 289.51,
+        "overtime_cost": 243.9,
+        "total_cost": 533.41,
+        "head_count": 2,
+        "date": "2026-05-03"
       },
       {
         "regular_hours": 0.0,
@@ -16360,8 +16439,8 @@
         "regular_cost": 0.0,
         "overtime_cost": 0.0,
         "total_cost": 0.0,
-        "head_count": 1,
-        "date": "2026-05-03"
+        "head_count": 3,
+        "date": "2026-05-04"
       }
     ],
     "hour_daily": [
@@ -48346,10 +48425,10 @@
         "cost": 167.55
       },
       {
-        "date": "2026-05-02",
-        "hour": 0,
-        "hours": 0.74,
-        "cost": 13.47
+        "date": "2026-05-01",
+        "hour": 23,
+        "hours": 0.35,
+        "cost": 0.0
       },
       {
         "date": "2026-05-02",
@@ -48391,37 +48470,37 @@
         "date": "2026-05-02",
         "hour": 14,
         "hours": 5.15,
-        "cost": 130.8
+        "cost": 130.79
       },
       {
         "date": "2026-05-02",
         "hour": 15,
         "hours": 11.45,
-        "cost": 271.02
+        "cost": 271.01
       },
       {
         "date": "2026-05-02",
         "hour": 16,
         "hours": 15.76,
-        "cost": 370.05
+        "cost": 370.04
       },
       {
         "date": "2026-05-02",
         "hour": 17,
         "hours": 18.0,
-        "cost": 419.99
+        "cost": 419.98
       },
       {
         "date": "2026-05-02",
         "hour": 18,
         "hours": 18.0,
-        "cost": 419.99
+        "cost": 419.98
       },
       {
         "date": "2026-05-02",
         "hour": 19,
         "hours": 18.0,
-        "cost": 419.99
+        "cost": 419.98
       },
       {
         "date": "2026-05-02",
@@ -48432,44 +48511,134 @@
       {
         "date": "2026-05-02",
         "hour": 21,
-        "hours": 15.23,
-        "cost": 351.93
+        "hours": 14.73,
+        "cost": 343.46
       },
       {
         "date": "2026-05-02",
         "hour": 22,
-        "hours": 12.73,
-        "cost": 293.08
+        "hours": 11.73,
+        "cost": 276.08
       },
       {
         "date": "2026-05-02",
         "hour": 23,
-        "hours": 10.41,
-        "cost": 234.65
+        "hours": 9.41,
+        "cost": 217.65
       },
       {
         "date": "2026-05-03",
         "hour": 0,
-        "hours": 6.94,
-        "cost": 135.87
+        "hours": 5.94,
+        "cost": 118.87
       },
       {
         "date": "2026-05-03",
         "hour": 1,
-        "hours": 2.0,
-        "cost": 17.0
+        "hours": 1.0,
+        "cost": 0.0
       },
       {
         "date": "2026-05-03",
         "hour": 2,
-        "hours": 2.0,
-        "cost": 17.0
+        "hours": 1.0,
+        "cost": 0.0
       },
       {
         "date": "2026-05-03",
         "hour": 3,
+        "hours": 1.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 8,
+        "hours": 0.23,
+        "cost": 8.83
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 9,
+        "hours": 1.0,
+        "cost": 37.83
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 10,
+        "hours": 1.0,
+        "cost": 37.83
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 11,
+        "hours": 1.0,
+        "cost": 37.83
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 12,
+        "hours": 1.0,
+        "cost": 37.83
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 13,
+        "hours": 1.0,
+        "cost": 37.83
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 14,
+        "hours": 1.0,
+        "cost": 37.83
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 15,
+        "hours": 1.97,
+        "cost": 55.7
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 16,
         "hours": 2.0,
-        "cost": 17.0
+        "cost": 56.33
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 17,
+        "hours": 2.0,
+        "cost": 56.33
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 18,
+        "hours": 2.0,
+        "cost": 56.33
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 19,
+        "hours": 1.16,
+        "cost": 24.37
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 20,
+        "hours": 1.0,
+        "cost": 18.5
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 21,
+        "hours": 1.0,
+        "cost": 18.5
+      },
+      {
+        "date": "2026-05-03",
+        "hour": 22,
+        "hours": 0.62,
+        "cost": 11.51
       }
     ],
     "by_job_daily": [
@@ -60486,6 +60655,13 @@
         "cost": 0.0
       },
       {
+        "date": "2026-05-01",
+        "job_guid": "0ce62220-c2d1-43b1-8cd4-44171bcc5ba2",
+        "title": "General Manager",
+        "hours": 0.35,
+        "cost": 0.0
+      },
+      {
         "date": "2026-05-02",
         "job_guid": "e670fc6e-c90a-41a4-beb2-08dc00c5e205",
         "title": "Server",
@@ -60517,8 +60693,8 @@
         "date": "2026-05-02",
         "job_guid": "831e09fc-3985-4820-bdbe-aa0067bf8892",
         "title": "Dishwasher",
-        "hours": 15.86,
-        "cost": 266.89
+        "hours": 9.36,
+        "cost": 156.39
       },
       {
         "date": "2026-05-02",
@@ -60538,6 +60714,34 @@
         "date": "2026-05-03",
         "job_guid": "d6c3f2dd-4f0b-4ba2-b396-9cfb84caf2f2",
         "title": "Captain",
+        "hours": 10.39,
+        "cost": 393.0
+      },
+      {
+        "date": "2026-05-03",
+        "job_guid": "831e09fc-3985-4820-bdbe-aa0067bf8892",
+        "title": "Dishwasher",
+        "hours": 7.59,
+        "cost": 140.41
+      },
+      {
+        "date": "2026-05-04",
+        "job_guid": "d6c3f2dd-4f0b-4ba2-b396-9cfb84caf2f2",
+        "title": "Captain",
+        "hours": 0.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-05-04",
+        "job_guid": "b1512743-6e6a-4139-b7bf-992b8cd12290",
+        "title": "Cook",
+        "hours": 0.0,
+        "cost": 0.0
+      },
+      {
+        "date": "2026-05-04",
+        "job_guid": "5216a90f-a5a1-43f8-90b8-6e3a5a6ac1bd",
+        "title": "Sales Coordinator",
         "hours": 0.0,
         "cost": 0.0
       }
@@ -60576,14 +60780,14 @@
       {
         "hour": 0,
         "dow": "SAT",
-        "hours": 71.64,
-        "cost": 1412.63
+        "hours": 70.9,
+        "cost": 1399.16
       },
       {
         "hour": 0,
         "dow": "SUN",
-        "hours": 135.96,
-        "cost": 3063.99
+        "hours": 134.96,
+        "cost": 3046.99
       },
       {
         "hour": 1,
@@ -60624,8 +60828,8 @@
       {
         "hour": 1,
         "dow": "SUN",
-        "hours": 29.93,
-        "cost": 624.12
+        "hours": 28.93,
+        "cost": 607.12
       },
       {
         "hour": 2,
@@ -60666,8 +60870,8 @@
       {
         "hour": 2,
         "dow": "SUN",
-        "hours": 17.91,
-        "cost": 378.25
+        "hours": 16.91,
+        "cost": 361.25
       },
       {
         "hour": 3,
@@ -60708,8 +60912,8 @@
       {
         "hour": 3,
         "dow": "SUN",
-        "hours": 17.0,
-        "cost": 362.53
+        "hours": 16.0,
+        "cost": 345.53
       },
       {
         "hour": 4,
@@ -60882,8 +61086,8 @@
       {
         "hour": 8,
         "dow": "SUN",
-        "hours": 24.22,
-        "cost": 649.93
+        "hours": 24.45,
+        "cost": 658.76
       },
       {
         "hour": 9,
@@ -60924,8 +61128,8 @@
       {
         "hour": 9,
         "dow": "SUN",
-        "hours": 38.18,
-        "cost": 1032.94
+        "hours": 39.18,
+        "cost": 1070.77
       },
       {
         "hour": 10,
@@ -60966,8 +61170,8 @@
       {
         "hour": 10,
         "dow": "SUN",
-        "hours": 72.23,
-        "cost": 2030.67
+        "hours": 73.23,
+        "cost": 2068.5
       },
       {
         "hour": 11,
@@ -61008,8 +61212,8 @@
       {
         "hour": 11,
         "dow": "SUN",
-        "hours": 91.34,
-        "cost": 2544.14
+        "hours": 92.34,
+        "cost": 2581.97
       },
       {
         "hour": 12,
@@ -61050,8 +61254,8 @@
       {
         "hour": 12,
         "dow": "SUN",
-        "hours": 111.65,
-        "cost": 3063.39
+        "hours": 112.65,
+        "cost": 3101.22
       },
       {
         "hour": 13,
@@ -61092,8 +61296,8 @@
       {
         "hour": 13,
         "dow": "SUN",
-        "hours": 144.34,
-        "cost": 3796.11
+        "hours": 145.34,
+        "cost": 3833.94
       },
       {
         "hour": 14,
@@ -61129,13 +61333,13 @@
         "hour": 14,
         "dow": "SAT",
         "hours": 435.12,
-        "cost": 10553.26
+        "cost": 10553.25
       },
       {
         "hour": 14,
         "dow": "SUN",
-        "hours": 242.56,
-        "cost": 6055.46
+        "hours": 243.56,
+        "cost": 6093.29
       },
       {
         "hour": 15,
@@ -61171,13 +61375,13 @@
         "hour": 15,
         "dow": "SAT",
         "hours": 625.68,
-        "cost": 14993.64
+        "cost": 14993.63
       },
       {
         "hour": 15,
         "dow": "SUN",
-        "hours": 300.95,
-        "cost": 7403.37
+        "hours": 302.92,
+        "cost": 7459.07
       },
       {
         "hour": 16,
@@ -61213,13 +61417,13 @@
         "hour": 16,
         "dow": "SAT",
         "hours": 807.4,
-        "cost": 19186.01
+        "cost": 19186.0
       },
       {
         "hour": 16,
         "dow": "SUN",
-        "hours": 349.78,
-        "cost": 8497.68
+        "hours": 351.78,
+        "cost": 8554.01
       },
       {
         "hour": 17,
@@ -61255,13 +61459,13 @@
         "hour": 17,
         "dow": "SAT",
         "hours": 872.65,
-        "cost": 20626.85
+        "cost": 20626.84
       },
       {
         "hour": 17,
         "dow": "SUN",
-        "hours": 367.79,
-        "cost": 8867.31
+        "hours": 369.79,
+        "cost": 8923.64
       },
       {
         "hour": 18,
@@ -61297,13 +61501,13 @@
         "hour": 18,
         "dow": "SAT",
         "hours": 874.74,
-        "cost": 20683.33
+        "cost": 20683.32
       },
       {
         "hour": 18,
         "dow": "SUN",
-        "hours": 361.34,
-        "cost": 8689.65
+        "hours": 363.34,
+        "cost": 8745.98
       },
       {
         "hour": 19,
@@ -61339,13 +61543,13 @@
         "hour": 19,
         "dow": "SAT",
         "hours": 859.85,
-        "cost": 20325.43
+        "cost": 20325.42
       },
       {
         "hour": 19,
         "dow": "SUN",
-        "hours": 342.77,
-        "cost": 8243.99
+        "hours": 343.93,
+        "cost": 8268.36
       },
       {
         "hour": 20,
@@ -61386,8 +61590,8 @@
       {
         "hour": 20,
         "dow": "SUN",
-        "hours": 293.33,
-        "cost": 7063.75
+        "hours": 294.33,
+        "cost": 7082.25
       },
       {
         "hour": 21,
@@ -61422,14 +61626,14 @@
       {
         "hour": 21,
         "dow": "SAT",
-        "hours": 639.0,
-        "cost": 15027.63
+        "hours": 638.5,
+        "cost": 15019.16
       },
       {
         "hour": 21,
         "dow": "SUN",
-        "hours": 244.21,
-        "cost": 5808.45
+        "hours": 245.21,
+        "cost": 5826.95
       },
       {
         "hour": 22,
@@ -61464,14 +61668,14 @@
       {
         "hour": 22,
         "dow": "SAT",
-        "hours": 544.16,
-        "cost": 12747.46
+        "hours": 543.16,
+        "cost": 12730.46
       },
       {
         "hour": 22,
         "dow": "SUN",
-        "hours": 189.47,
-        "cost": 4500.82
+        "hours": 190.09,
+        "cost": 4512.33
       },
       {
         "hour": 23,
@@ -61500,14 +61704,14 @@
       {
         "hour": 23,
         "dow": "FRI",
-        "hours": 312.53,
+        "hours": 312.88,
         "cost": 6993.16
       },
       {
         "hour": 23,
         "dow": "SAT",
-        "hours": 417.79,
-        "cost": 9740.97
+        "hours": 416.79,
+        "cost": 9723.97
       },
       {
         "hour": 23,
@@ -61518,11 +61722,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 28930.18,
-    "overtime_hours": 948.73,
-    "regular_cost": 666943.48,
-    "overtime_cost": 37006.15,
-    "total_cost": 703949.56
+    "regular_hours": 28936.59,
+    "overtime_hours": 954.15,
+    "regular_cost": 667122.49,
+    "overtime_cost": 37250.05,
+    "total_cost": 704372.47
   },
   "cogs": {
     "as_of": "2026-05-01",
@@ -69134,7 +69338,7 @@
         "line_items": [
           {
             "product_id": "640721416",
-            "product_name": "Joseph Drouhin Mâcon-Villages BTG",
+            "product_name": "Joseph Drouhin M\u00e2con-Villages BTG",
             "category": "Wine",
             "category_id": "1088",
             "category_type": "WINE",
@@ -89610,7 +89814,7 @@
         "rooms": [
           "Kampers Rooftop Bar\r\n",
           "Conservatory Ballroom",
-          "Le Suprême Buyout"
+          "Le Supr\u00eame Buyout"
         ],
         "created_at": "2/21/2023 5:34 PM",
         "lead_time_days": null,
@@ -90573,7 +90777,7 @@
         "location_id": 22266,
         "booking_id": 31846642,
         "rooms": [
-          "Le Suprême Buyout",
+          "Le Supr\u00eame Buyout",
           "13th Floor - Event Space "
         ],
         "created_at": "6/22/2023 3:49 PM",
@@ -94385,7 +94589,7 @@
         "location_id": 22266,
         "booking_id": 30772022,
         "rooms": [
-          "Le Suprême Section C",
+          "Le Supr\u00eame Section C",
           "Linden Room"
         ],
         "created_at": "4/21/2023 1:58 PM",
@@ -98905,7 +99109,7 @@
       },
       {
         "event_id": 35660459,
-        "name": "Kema’s BabyShower/Birthday Party",
+        "name": "Kema\u2019s BabyShower/Birthday Party",
         "status": "LOST",
         "event_start": "1/14/2024 2:00 PM",
         "event_end": "1/14/2024 6:00 PM",
@@ -99477,7 +99681,7 @@
         "location_id": 22266,
         "booking_id": 35220987,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "Linden Room"
         ],
         "created_at": "12/19/2023 10:09 AM",
@@ -108508,7 +108712,7 @@
         "location_id": 22266,
         "booking_id": 35400720,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "13th Floor - Event Space "
         ],
         "created_at": "12/28/2023 5:20 PM",
@@ -112218,7 +112422,7 @@
         "location_id": 22266,
         "booking_id": 36428625,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "Linden Room"
         ],
         "created_at": "2/14/2024 2:51 PM",
@@ -114342,7 +114546,7 @@
         "booking_id": 38631835,
         "rooms": [
           "Graystone Lane ",
-          "Le Suprême Private Dining Room \r\n"
+          "Le Supr\u00eame Private Dining Room \r\n"
         ],
         "created_at": "5/23/2024 4:43 PM",
         "lead_time_days": null,
@@ -119737,7 +119941,7 @@
         "location_id": 22266,
         "booking_id": 37555862,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "Linden Room"
         ],
         "created_at": "4/4/2024 12:02 PM",
@@ -124411,7 +124615,7 @@
         "location_id": 22266,
         "booking_id": 40050568,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "Linden Room"
         ],
         "created_at": "8/5/2024 8:46 PM",
@@ -133000,7 +133204,7 @@
       },
       {
         "event_id": 41463949,
-        "name": "CANCELATION: Ford’s Blue Table Meeting",
+        "name": "CANCELATION: Ford\u2019s Blue Table Meeting",
         "status": "CLOSED",
         "event_start": "9/23/2024 10:00 AM",
         "event_end": "9/23/2024 8:00 PM",
@@ -133165,7 +133369,7 @@
       },
       {
         "event_id": 41463953,
-        "name": "CANCELATION: Ford’s Blue Table Meeting",
+        "name": "CANCELATION: Ford\u2019s Blue Table Meeting",
         "status": "CLOSED",
         "event_start": "9/24/2024 9:00 AM",
         "event_end": "9/24/2024 5:00 PM",
@@ -134931,7 +135135,7 @@
         "location_id": 22266,
         "booking_id": 41388801,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "13th Floor - Event Space "
         ],
         "created_at": "9/24/2024 12:38 PM",
@@ -138738,7 +138942,7 @@
         "location_id": 22266,
         "booking_id": 41607245,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "13th Floor - Event Space "
         ],
         "created_at": "10/2/2024 1:01 PM",
@@ -140522,7 +140726,7 @@
         "location_id": 22266,
         "booking_id": 36988262,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "13th Floor - Event Space "
         ],
         "created_at": "3/11/2024 3:52 PM",
@@ -146671,7 +146875,7 @@
         "location_id": 22266,
         "booking_id": 39885126,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "Linden Room"
         ],
         "created_at": "7/29/2024 11:01 AM",
@@ -149052,7 +149256,7 @@
         "location_id": 22266,
         "booking_id": 36268810,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "Linden Room"
         ],
         "created_at": "2/6/2024 5:15 PM",
@@ -155525,7 +155729,7 @@
         "location_id": 22266,
         "booking_id": 41389375,
         "rooms": [
-          "Le Suprême Private Dining Room \r\n",
+          "Le Supr\u00eame Private Dining Room \r\n",
           "Linden Room"
         ],
         "created_at": "9/24/2024 12:44 PM",
@@ -155725,7 +155929,7 @@
         "booking_id": 42133996,
         "rooms": [
           "13th Floor - Event Space ",
-          "Le Suprême Private Dining Room \r\n"
+          "Le Supr\u00eame Private Dining Room \r\n"
         ],
         "created_at": "10/22/2024 5:06 PM",
         "lead_time_days": null,
@@ -158986,7 +159190,7 @@
       },
       {
         "event_id": 44818475,
-        "name": "Cc’s bridal shower",
+        "name": "Cc\u2019s bridal shower",
         "status": "LOST",
         "event_start": "2/8/2025 1:00 PM",
         "event_end": "2/8/2025 4:00 PM",
@@ -164498,7 +164702,7 @@
       },
       {
         "event_id": 46538365,
-        "name": "Mother’s Surprise 50th Birthday Party",
+        "name": "Mother\u2019s Surprise 50th Birthday Party",
         "status": "LOST",
         "event_start": "3/22/2025 3:00 PM",
         "event_end": "3/22/2025 6:00 PM",
@@ -165136,7 +165340,7 @@
         "booking_id": 42918735,
         "rooms": [
           "Linden Room",
-          "Le Suprême Private Dining Room \r\n"
+          "Le Supr\u00eame Private Dining Room \r\n"
         ],
         "created_at": "11/22/2024 2:51 PM",
         "lead_time_days": null,
@@ -168000,7 +168204,7 @@
       },
       {
         "event_id": 47787931,
-        "name": "Mom’s 70th Birthday",
+        "name": "Mom\u2019s 70th Birthday",
         "status": "LOST",
         "event_start": "4/13/2025 11:30 AM",
         "event_end": "4/13/2025 2:30 PM",
@@ -169983,7 +170187,7 @@
       },
       {
         "event_id": 46491391,
-        "name": "TASTING: Maria Buczkowski & Harrison O’Gorman",
+        "name": "TASTING: Maria Buczkowski & Harrison O\u2019Gorman",
         "status": "CLOSED",
         "event_start": "4/21/2025 4:00 PM",
         "event_end": "4/21/2025 5:00 PM",
@@ -177992,7 +178196,7 @@
         "booking_id": 43834976,
         "rooms": [
           "13th Floor - Event Space ",
-          "Le Suprême Buyout"
+          "Le Supr\u00eame Buyout"
         ],
         "created_at": "1/9/2025 5:04 PM",
         "lead_time_days": null,
@@ -189367,7 +189571,7 @@
         "booking_id": 42007976,
         "rooms": [
           "13th Floor - Event Space ",
-          "Le Suprême Buyout"
+          "Le Supr\u00eame Buyout"
         ],
         "created_at": "10/17/2024 2:36 PM",
         "lead_time_days": null,
@@ -205096,7 +205300,7 @@
       },
       {
         "event_id": 33471045,
-        "name": "Maria Buczkowski & Harrison O’Gorman Wedding",
+        "name": "Maria Buczkowski & Harrison O\u2019Gorman Wedding",
         "status": "CLOSED",
         "event_start": "8/1/2025 5:00 PM",
         "event_end": "8/1/2025 11:00 PM",
@@ -213333,7 +213537,7 @@
       },
       {
         "event_id": 48417570,
-        "name": "Bri’s baby shower",
+        "name": "Bri\u2019s baby shower",
         "status": "LOST",
         "event_start": "8/25/2025 12:00 PM",
         "event_end": "8/25/2025 3:00 PM",
@@ -235006,7 +235210,7 @@
       },
       {
         "event_id": 46359784,
-        "name": "LaFontaine Automotive Group - Women’s Event",
+        "name": "LaFontaine Automotive Group - Women\u2019s Event",
         "status": "CLOSED",
         "event_start": "10/16/2025 11:00 AM",
         "event_end": "10/16/2025 3:00 PM",
@@ -252417,7 +252621,7 @@
       },
       {
         "event_id": 50047336,
-        "name": "López Wedding",
+        "name": "L\u00f3pez Wedding",
         "status": "LOST",
         "event_start": "12/14/2025 6:00 PM",
         "event_end": "12/14/2025 10:00 PM",
@@ -268082,7 +268286,7 @@
       },
       {
         "event_id": 45808260,
-        "name": "Sophie O’Hara Wedding",
+        "name": "Sophie O\u2019Hara Wedding",
         "status": "LOST",
         "event_start": "4/4/2026 6:00 PM",
         "event_end": "4/4/2026 10:00 PM",
@@ -270926,7 +271130,7 @@
       },
       {
         "event_id": 57717904,
-        "name": "PS; Quinceañera - JZ Photography",
+        "name": "PS; Quincea\u00f1era - JZ Photography",
         "status": "LOST",
         "event_start": "4/18/2026 3:00 PM",
         "event_end": "4/18/2026 5:00 PM",
@@ -289232,7 +289436,7 @@
       },
       {
         "event_id": 58964912,
-        "name": "Professional Women’s Hockey League - Awards Ceremony",
+        "name": "Professional Women\u2019s Hockey League - Awards Ceremony",
         "status": "LOST",
         "event_start": "6/16/2026 3:00 PM",
         "event_end": "6/16/2026 8:00 PM",
@@ -291578,7 +291782,7 @@
       },
       {
         "event_id": 48770716,
-        "name": "D’Andrea Wedding",
+        "name": "D\u2019Andrea Wedding",
         "status": "LOST",
         "event_start": "6/21/2026 6:00 PM",
         "event_end": "6/21/2026 10:00 PM",
@@ -294957,7 +295161,7 @@
         "booking_id": 45009472,
         "rooms": [
           "13th Floor - Event Space ",
-          "Le Suprême Private Dining Room \r\n"
+          "Le Supr\u00eame Private Dining Room \r\n"
         ],
         "created_at": "2/24/2025 3:09 PM",
         "lead_time_days": null,
@@ -303504,7 +303708,7 @@
       },
       {
         "event_id": 48025857,
-        "name": "President’s Dinner",
+        "name": "President\u2019s Dinner",
         "status": "DEFINITE",
         "event_start": "8/14/2026 6:30 PM",
         "event_end": "8/14/2026 10:00 PM",
@@ -318604,7 +318808,7 @@
       },
       {
         "event_id": 49411866,
-        "name": "Molly O’Malley & Ben Williams Wedding",
+        "name": "Molly O\u2019Malley & Ben Williams Wedding",
         "status": "LOST",
         "event_start": "10/2/2026 6:00 PM",
         "event_end": "10/2/2026 10:00 PM",
@@ -321677,7 +321881,7 @@
       },
       {
         "event_id": 54623069,
-        "name": "LaFontaine Automotive Group - She Is You - Women’s Event",
+        "name": "LaFontaine Automotive Group - She Is You - Women\u2019s Event",
         "status": "DEFINITE",
         "event_start": "10/13/2026 11:00 AM",
         "event_end": "10/13/2026 3:00 PM",
@@ -322338,7 +322542,7 @@
       },
       {
         "event_id": 48101042,
-        "name": "Taylor McClendon & Denzel Palm Reception Dinner",
+        "name": "Taylor McClendon & Denzel Palm\u00a0Reception Dinner",
         "status": "DEFINITE",
         "event_start": "10/16/2026 6:00 PM",
         "event_end": "10/16/2026 10:00 PM",
@@ -332857,7 +333061,7 @@
         "booking_id": 55760559,
         "rooms": [
           "13th Floor - Event Space ",
-          "Le Suprême Buyout"
+          "Le Supr\u00eame Buyout"
         ],
         "created_at": "4/20/2026 1:19 PM",
         "lead_time_days": null,
@@ -336084,7 +336288,7 @@
       },
       {
         "event_id": 55813066,
-        "name": "Jake and Ashley’s Wedding",
+        "name": "Jake and Ashley\u2019s Wedding",
         "status": "LOST",
         "event_start": "2/20/2027 6:00 PM",
         "event_end": "2/20/2027 11:00 PM",
@@ -345268,7 +345472,7 @@
       },
       {
         "event_id": 50118142,
-        "name": "D’Orazio Wedding",
+        "name": "D\u2019Orazio Wedding",
         "status": "LOST",
         "event_start": "6/10/2027 6:00 PM",
         "event_end": "6/10/2027 10:00 PM",
@@ -366048,7 +366252,7 @@
         "ai_confidence": 0.8
       }
     ],
-    "_note": "range 2026-03-23 → 2026-05-17 · 56 days · ai_suggested_revenue (NOT manager_revenue)"
+    "_note": "range 2026-03-23 \u2192 2026-05-17 \u00b7 56 days \u00b7 ai_suggested_revenue (NOT manager_revenue)"
   },
   "budget": {
     "as_of": "2026-05-03",
@@ -367213,7 +367417,7 @@
         "orders": null
       }
     ],
-    "_note": "range 2026-01-01 → 2026-12-23 · 193 days"
+    "_note": "range 2026-01-01 \u2192 2026-12-23 \u00b7 193 days"
   },
   "weather": {
     "as_of": "2026-05-03",
@@ -371738,6 +371942,6 @@
         "precipitation_pct": 41.9
       }
     ],
-    "_note": "range 2025-01-01 → 2026-05-17 · 502 days (15 forward)"
+    "_note": "range 2025-01-01 \u2192 2026-05-17 \u00b7 502 days (15 forward)"
   }
 }
