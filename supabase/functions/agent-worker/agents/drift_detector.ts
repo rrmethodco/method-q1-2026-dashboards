@@ -78,8 +78,17 @@ export async function runDriftDetector(
     const observed = [...sampleKeys].sort();
     const added = observed.filter((k) => !storedKeys.includes(k));
     const removed = storedKeys.filter((k) => !observed.includes(k));
-    if (added.length === 0 && removed.length === 0 && summary.rows_warned === 0) {
-      continue; // stable
+    // Fast-path: invoke the LLM ONLY when the field-key set has actually
+    // changed. Earlier this also tripped on rows_warned > 0, but that
+    // turns out to be the steady state for Resy (~68-100% of surveys
+    // trip the all_score_buckets_null business rule), which made every
+    // 5-min cron tick burn ~$0.03 of Sonnet tokens for the same drift
+    // we'd already classified — projected to ~$260/mo just for resy_survey
+    // (correctness review 2026-05-04). Business-rule warnings are still
+    // surfaced via the validation panel + audit log; they don't require
+    // re-classification on every tick.
+    if (added.length === 0 && removed.length === 0) {
+      continue; // schema is stable; warnings (if any) are visible elsewhere
     }
 
     // LLM classification

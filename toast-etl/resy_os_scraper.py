@@ -336,7 +336,8 @@ def transform_resy_survey_row(raw: dict) -> dict | None:
 
 
 def transform_to_guest_block(
-    captured: list[dict], existing_guest: dict | None
+    captured: list[dict], existing_guest: dict | None,
+    outlet_id: str | None = None,
 ) -> tuple[dict, dict]:
     """Take a list of {url, json} responses and emit a `guest` block in the
     same shape renderGuestSection() consumes.
@@ -458,9 +459,17 @@ def transform_to_guest_block(
         for row in extract_ratings(body):
             ratings.append(row)
 
+    # outlets_touched threading: caller passes the venue's outlet_id so
+    # the validation summary's outlets_touched list reflects WHICH outlet
+    # this scrape was for. The agent worker's banner_writer filters by
+    # outlets_touched.includes(outlet); pre-fix this was always [], which
+    # made Resy validation invisible to every outlet's banner — so a
+    # silent Resy break left every outlet showing green
+    # (correctness review 2026-05-04). When outlet_id is None
+    # (test/dry-run), we keep the empty list.
     _v = run_validation(
         rows=surveys, model_cls=ResySurvey, source="resy_survey",
-        outlets_touched=[],
+        outlets_touched=[outlet_id] if outlet_id else [],
         data_dir=Path(__file__).resolve().parent.parent / "data",
     )
     sys.stdout.write(f"  resy_survey validation: "
@@ -896,7 +905,7 @@ def cmd_run(storage_state: dict, venues: dict[str, str], data_dir: Path,
             # Transform + merge
             payload = load_outlet(data_dir, oid)
             existing_guest = payload.get("guest") or {}
-            new_guest, mstats = transform_to_guest_block(captured, existing_guest)
+            new_guest, mstats = transform_to_guest_block(captured, existing_guest, outlet_id=oid)
             n_surveys = len(new_guest.get("surveys") or [])
             n_existing = len(existing_guest.get("surveys") or [])
             added = mstats["added"]

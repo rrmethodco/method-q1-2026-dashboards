@@ -19,19 +19,63 @@ runs:
         # Upload each file in data/_validation/ as <source>/<filename>
         # in the validation bucket. Overwrites are fine — agent-worker
         # picks the latest by mtime.
+        #
+        # Loud-failure semantics (per ops-readiness review 2026-05-04):
+        # if SUPABASE_URL or SUPABASE_KEY is missing/wrong, this step
+        # MUST exit non-zero so the GH Actions UI shows red. Silent
+        # failure → empty bucket → agent worker reads nothing → entire
+        # observability layer dark. Don't swallow.
+
+        if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
+          echo "::error::SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY secret missing — set them at:"
+          echo "  https://github.com/rrmethodco/method-q1-2026-dashboards/settings/secrets/actions"
+          exit 1
+        fi
+
         if ! ls data/_validation/*.json >/dev/null 2>&1; then
-          echo "no _validation files to upload — skipping"
+          echo "no _validation files to upload — skipping (this is normal if the sync wrote no rows)"
           exit 0
         fi
+
+        uploaded=0
+        failed=0
+        failed_names=()
         for f in data/_validation/*.json; do
           name="$(basename "$f")"
           source="${name%_*}"
-          curl -sf -X POST \
+          # -sS = silent but show errors. -f = fail on HTTP >=400 (sets exit nonzero).
+          # -w "%{http_code}" = print status code. We capture the code so we can
+          # log it on failure (helps distinguish 401 vs 404 vs 5xx).
+          status_code=$(curl -sS -o /tmp/upload_resp.txt -w "%{http_code}" -X POST \
             "$SUPABASE_URL/storage/v1/object/validation/$source/$name" \
             -H "Authorization: Bearer $SUPABASE_KEY" \
             -H "Content-Type: application/json" \
             -H "x-upsert: true" \
-            --data-binary "@$f" >/dev/null \
-            && echo "uploaded $source/$name" \
-            || echo "  failed to upload $source/$name"
+            --data-binary "@$f" 2>&1) || status_code="curl_error"
+          if [ "$status_code" = "200" ] || [ "$status_code" = "201" ] || [ "$status_code" = "204" ]; then
+            echo "uploaded $source/$name (HTTP $status_code)"
+            uploaded=$((uploaded + 1))
+          else
+            echo "::warning::failed to upload $source/$name (HTTP $status_code)"
+            head -c 300 /tmp/upload_resp.txt 2>/dev/null
+            echo
+            failed=$((failed + 1))
+            failed_names+=("$source/$name")
+          fi
         done
+
+        echo
+        echo "summary: $uploaded uploaded, $failed failed"
+
+        # If everything failed, the secrets are likely wrong (auth) or the
+        # bucket doesn't exist (deploy missing). Fail the job so it's
+        # visible.
+        if [ "$failed" -gt 0 ] && [ "$uploaded" -eq 0 ]; then
+          echo "::error::ALL uploads failed — likely auth or missing bucket. Verify SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY secrets and that 'validation' bucket exists in the Supabase project."
+          exit 1
+        fi
+        # Partial failure: warn but don't fail (one transient failure
+        # shouldn't block the sync workflow when others succeeded).
+        if [ "$failed" -gt 0 ]; then
+          echo "::warning::$failed uploads failed: ${failed_names[*]}"
+        fi
