@@ -30,9 +30,14 @@ class MarginEdgeLineItem(SourceRow):
     category_id: Optional[str] = None
     category_type: Optional[str] = None
     cogs_bucket: Optional[str] = None
-    quantity: Optional[float] = Field(default=None, ge=0)
-    unit_price: Optional[float] = Field(default=None, ge=0)
-    extended: Optional[float] = Field(default=None, ge=0)
+    # Negative values allowed: returns and credits at the line-item level
+    # (mirrors the negative-total acceptance on MarginEdgeInvoice). The
+    # business rule on the parent invoice flags net-negative invoices via
+    # `negative_total`; for individual line items the schema-drift agent
+    # is the appropriate place to surface anomalies.
+    quantity: Optional[float] = None
+    unit_price: Optional[float] = None
+    extended: Optional[float] = None
 
 
 class MarginEdgeInvoice(SourceRow):
