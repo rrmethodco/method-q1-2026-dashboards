@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.methodco.resy-sync.plist
+  Daily Resy survey CSV scrape on Ross's Mac mini.
+
+  Schedule: 06:00 local time, every day.
+
+  install-resy-sync.sh templates the absolute paths for WorkingDirectory
+  and ProgramArguments, then symlinks this file into ~/Library/LaunchAgents/.
+
+  Manage manually:
+    launchctl unload ~/Library/LaunchAgents/com.methodco.resy-sync.plist
+    launchctl load   ~/Library/LaunchAgents/com.methodco.resy-sync.plist
+    launchctl start  com.methodco.resy-sync               # run now
+    launchctl list | grep resy-sync                       # status
+
+  Logs:
+    tail -F ~/Library/Logs/method-resy-sync.log
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.methodco.resy-sync</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>__REPO_DIR__/tools/resy-sync-wrapper.sh</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>__REPO_DIR__</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>REPO_DIR</key>
+    <string>__REPO_DIR__</string>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>HOME</key>
+    <string>__HOME__</string>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>__HOME__/Library/Logs/method-resy-sync.log</string>
+  <key>StandardErrorPath</key>
+  <string>__HOME__/Library/Logs/method-resy-sync.log</string>
+
+  <!-- 06:00 every day. macOS will run on next wake if the Mac was
+       asleep at the scheduled time. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key><integer>6</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <!-- Cap memory + CPU pressure so the daily scrape can't starve other
+       processes if Playwright misbehaves. -->
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>Nice</key>
+  <integer>10</integer>
+</dict>
+</plist>
