@@ -5,7 +5,7 @@ toast_sync.py:730-810. Goal: every row CURRENTLY produced by a
 healthy sync MUST validate. Strictness comes later via business rules.
 """
 import pytest
-from datetime import datetime
+from pydantic import ValidationError
 from schemas.toast_order import ToastOrder, ToastCheck
 
 
@@ -73,7 +73,7 @@ def test_negative_amount_fails():
         "checks": [{"guid": "c", "voided": False, "amount": -10,
                     "tipAmount": 0, "openedDate": "2026-04-22T19:00:00.000Z"}],
     }
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         ToastOrder.model_validate(raw)
 
 
@@ -83,5 +83,5 @@ def test_missing_required_check_fields_fails():
         "openedDate": "2026-04-22T19:00:00.000Z",
         "checks": [{}],  # missing amount, tipAmount, etc.
     }
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         ToastOrder.model_validate(raw)

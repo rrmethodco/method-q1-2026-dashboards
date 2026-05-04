@@ -19,12 +19,19 @@ from ._base import SourceRow
 
 
 class ToastSelection(SourceRow):
-    """A line item on a check. Permissive — Toast adds new fields here often."""
+    """A line item on a check.
+
+    Toast adds new fields to selections frequently. We declare only the
+    fields we read; `extra="allow"` (from SourceRow) accepts the rest.
+    Schema-drift detector (Phase A.1) flags any field set we'd need to
+    promote to required here.
+    """
     guid: Optional[str] = None
     appliedDiscounts: list[dict] = Field(default_factory=list)
 
 
 class ToastCheck(SourceRow):
+    """A single check on a Toast order. Carries amount, tip, discounts, selections."""
     guid: str
     voided: bool = False
     deleted: bool = False
@@ -48,6 +55,7 @@ class ToastCheck(SourceRow):
 
 
 class ToastOrder(SourceRow):
+    """A Toast /ordersBulk row. One or more checks per order; voided/deleted rows skip business-rule checks."""
     _source_name = "toast_order"
 
     guid: str
@@ -64,13 +72,16 @@ class ToastOrder(SourceRow):
         # leaves zeroed-out fields on these.
         if self.voided or self.deleted:
             return errors
+        # Order-level invariant: order can't close before it opened.
+        # Only fires once per order (NOT once per check).
+        if self.closedDate and self.closedDate < self.openedDate:
+            errors.append(f"order: closed_before_opened "
+                          f"(closed={self.closedDate.isoformat()}, "
+                          f"opened={self.openedDate.isoformat()})")
+        # Per-check invariant: paid before opened.
         for i, c in enumerate(self.checks):
             if c.paidDate and c.paidDate < c.openedDate:
                 errors.append(f"check[{i}]: paid_before_opened "
                               f"(paid={c.paidDate.isoformat()}, "
                               f"opened={c.openedDate.isoformat()})")
-            if self.closedDate and self.closedDate < self.openedDate:
-                errors.append(f"order: closed_before_opened "
-                              f"(closed={self.closedDate.isoformat()}, "
-                              f"opened={self.openedDate.isoformat()})")
         return errors
