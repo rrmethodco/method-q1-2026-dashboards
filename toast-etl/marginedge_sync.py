@@ -518,9 +518,26 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
                 # Track a few stats so we can see if the product-fallback
                 # is actually rescuing line items or if data is just gappy.
                 li_total = li_with_li_cat = li_via_product = li_unresolved = 0
+                # 404-on-detail tracking. MarginEdge occasionally returns an
+                # order in the LIST endpoint but 404s on the DETAIL endpoint —
+                # likely a delete/archive that propagated between calls.
+                # Pre-fix this would crash the entire run after every other
+                # outlet had succeeded (observed 2026-05-04 run 25324547370,
+                # hiroki_det orderId=94719404). Skip-and-continue here: the
+                # order still gets recorded with no line items, the
+                # invoice-level $/date/vendor totals are unaffected, and the
+                # outlet doesn't lose the rest of its line-item detail.
+                detail_404s: list[str] = []
                 for i, o in enumerate(orders):
-                    detail = client.get_order_detail(o.get("orderId"), unit_id)
-                    raw_lis = detail.get("lineItems") or []
+                    try:
+                        detail = client.get_order_detail(o.get("orderId"), unit_id)
+                        raw_lis = detail.get("lineItems") or []
+                    except requests.HTTPError as e:
+                        if getattr(e.response, "status_code", None) == 404:
+                            detail_404s.append(str(o.get("orderId")))
+                            raw_lis = []
+                        else:
+                            raise
                     for li in raw_lis:
                         li_total += 1
                         if li.get("categoryId"):
@@ -536,6 +553,12 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
                 print(f"  line items: total={li_total}, "
                       f"direct-cat={li_with_li_cat}, via-product={li_via_product}, "
                       f"unresolved={li_unresolved}")
+                if detail_404s:
+                    sys.stderr.write(
+                        f"  ! {len(detail_404s)} order(s) 404'd on detail fetch — "
+                        f"recorded with no line items: {detail_404s[:5]}"
+                        f"{'...' if len(detail_404s) > 5 else ''}\n"
+                    )
             else:
                 invoices = [transform_order(o, None, cat_lookup, cat_type_lookup) for o in orders]
 
