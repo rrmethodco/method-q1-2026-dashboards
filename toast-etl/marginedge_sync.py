@@ -89,7 +89,7 @@ import sys
 import time
 from collections import defaultdict
 from datetime import date, datetime, timedelta
-from pathlib import Path as _Path
+from pathlib import Path
 
 try:
     import requests
@@ -568,7 +568,7 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
             _v = run_validation(
                 rows=invoices, model_cls=MarginEdgeInvoice, source="marginedge_invoice",
                 outlets_touched=[oid],
-                data_dir=_Path(__file__).resolve().parent.parent / "data",
+                data_dir=Path(__file__).resolve().parent.parent / "data",
             )
             sys.stdout.write(f"  marginedge_invoice validation [{oid}]: "
                              f"{_v['rows_valid']}/{_v['rows_in']} ok, "

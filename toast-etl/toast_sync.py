@@ -76,7 +76,7 @@ import sys
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
-from pathlib import Path as _Path
+from pathlib import Path
 from typing import Any
 
 try:
@@ -1096,7 +1096,7 @@ def sync_outlet(
         _v = run_validation(
             rows=combined, model_cls=ToastOrder, source="toast_order",
             outlets_touched=[outlet_id],
-            data_dir=_Path(__file__).resolve().parent.parent / "data",
+            data_dir=Path(__file__).resolve().parent.parent / "data",
         )
         sys.stdout.write(f"  toast_order validation [{outlet_id}]: "
                          f"{_v['rows_valid']}/{_v['rows_in']} ok, "
@@ -1137,7 +1137,7 @@ def sync_outlet(
         _v = run_validation(
             rows=entries, model_cls=ToastTimeEntry, source="toast_time_entry",
             outlets_touched=[outlet_id],
-            data_dir=_Path(__file__).resolve().parent.parent / "data",
+            data_dir=Path(__file__).resolve().parent.parent / "data",
         )
         sys.stdout.write(f"  toast_time_entry validation [{outlet_id}]: "
                          f"{_v['rows_valid']}/{_v['rows_in']} ok, "

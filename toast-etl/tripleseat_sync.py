@@ -75,7 +75,7 @@ import sys
 import time
 from collections import defaultdict
 from datetime import date, datetime, timedelta
-from pathlib import Path as _Path
+from pathlib import Path
 from urllib.parse import quote, urlencode
 
 try:
@@ -802,7 +802,7 @@ def cmd_sync(ck: str, cs: str, ts_to_outlet: dict[int, str],
         _v = run_validation(
             rows=oevents, model_cls=TripleseatEvent, source="tripleseat_event",
             outlets_touched=[outlet_id],
-            data_dir=_Path(__file__).resolve().parent.parent / "data",
+            data_dir=Path(__file__).resolve().parent.parent / "data",
         )
         sys.stdout.write(f"  tripleseat_event validation [{outlet_id}]: "
                          f"{_v['rows_valid']}/{_v['rows_in']} ok, "

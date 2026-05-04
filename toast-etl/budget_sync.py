@@ -40,7 +40,7 @@ import re
 import sys
 from collections import defaultdict
 from datetime import date
-from pathlib import Path as _Path
+from pathlib import Path
 from urllib.parse import urlencode
 
 try:
@@ -300,7 +300,7 @@ def cmd_sync(sb: Supabase, data_dir: Path, only_outlet: str = "") -> int:
         _v = run_validation(
             rows=daily, model_cls=SageBudgetLine, source="sage_budget",
             outlets_touched=[outlet],
-            data_dir=_Path(__file__).resolve().parent.parent / "data",
+            data_dir=Path(__file__).resolve().parent.parent / "data",
         )
         sys.stdout.write(f"  sage_budget validation [{outlet}]: "
                          f"{_v['rows_valid']}/{_v['rows_in']} ok, "

@@ -62,7 +62,7 @@ import os
 import re
 import sys
 from datetime import date, datetime, timezone
-from pathlib import Path as _Path
+from pathlib import Path
 from typing import Any
 
 try:
@@ -461,7 +461,7 @@ def transform_to_guest_block(
     _v = run_validation(
         rows=surveys, model_cls=ResySurvey, source="resy_survey",
         outlets_touched=[],
-        data_dir=_Path(__file__).resolve().parent.parent / "data",
+        data_dir=Path(__file__).resolve().parent.parent / "data",
     )
     sys.stdout.write(f"  resy_survey validation: "
                      f"{_v['rows_valid']}/{_v['rows_in']} ok, "
