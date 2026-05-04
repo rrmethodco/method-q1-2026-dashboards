@@ -1,0 +1,37 @@
+name: Upload validation files to Supabase Storage
+description: Pushes the latest data/_validation/*.json files to the agent-worker bucket
+inputs:
+  supabase-url:
+    description: Supabase project URL
+    required: true
+  supabase-service-role-key:
+    description: Supabase service role key
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Upload latest _validation files
+      shell: bash
+      env:
+        SUPABASE_URL: ${{ inputs.supabase-url }}
+        SUPABASE_KEY: ${{ inputs.supabase-service-role-key }}
+      run: |
+        # Upload each file in data/_validation/ as <source>/<filename>
+        # in the validation bucket. Overwrites are fine — agent-worker
+        # picks the latest by mtime.
+        if ! ls data/_validation/*.json >/dev/null 2>&1; then
+          echo "no _validation files to upload — skipping"
+          exit 0
+        fi
+        for f in data/_validation/*.json; do
+          name="$(basename "$f")"
+          source="${name%_*}"
+          curl -sf -X POST \
+            "$SUPABASE_URL/storage/v1/object/validation/$source/$name" \
+            -H "Authorization: Bearer $SUPABASE_KEY" \
+            -H "Content-Type: application/json" \
+            -H "x-upsert: true" \
+            --data-binary "@$f" >/dev/null \
+            && echo "uploaded $source/$name" \
+            || echo "  failed to upload $source/$name"
+        done

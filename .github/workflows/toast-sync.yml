@@ -117,3 +117,10 @@ jobs:
           done
           echo "push failed after 3 attempts"
           exit 1
+
+      - name: Upload validation files to Supabase
+        if: success()
+        uses: ./.github/actions/upload-validation
+        with:
+          supabase-url: ${{ secrets.SUPABASE_URL }}
+          supabase-service-role-key: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

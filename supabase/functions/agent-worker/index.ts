@@ -1,0 +1,55 @@
+// agent-worker — Edge Function entry point.
+//
+// Triggered by pg_cron every 5 minutes. Each invocation:
+//   1. Reads the latest data/_validation/*.json files (synced to a
+//      Supabase Storage bucket by the GH Actions workflows)
+//   2. Routes through the agent loops (drift, anomaly, retry, alert)
+//   3. Writes back banner state + appends to audit log
+//
+// Phase A.1 — agents added incrementally in Tasks 20-25.
+import { createClient } from "@supabase/supabase-js";
+
+interface AgentWorkerResult {
+  status: "ok" | "error";
+  ran_at: string;
+  agents_invoked: string[];
+  errors: string[];
+}
+
+Deno.serve(async (_req: Request): Promise<Response> => {
+  const ranAt = new Date().toISOString();
+  const result: AgentWorkerResult = {
+    status: "ok",
+    ran_at: ranAt,
+    agents_invoked: [],
+    errors: [],
+  };
+
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!supabaseUrl || !supabaseKey) {
+    result.status = "error";
+    result.errors.push("missing supabase env (URL or SERVICE_ROLE_KEY)");
+    return new Response(JSON.stringify(result), { status: 500 });
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // Smoke check: list the validation bucket.
+  const { data: files, error } = await supabase.storage
+    .from("validation")
+    .list("", { limit: 5 });
+  if (error) {
+    result.errors.push(`storage list error: ${error.message}`);
+    result.status = "error";
+  } else {
+    result.agents_invoked.push(
+      `storage_smoke: ${files?.length ?? 0} top-level entries`,
+    );
+  }
+
+  return new Response(JSON.stringify(result, null, 2), {
+    status: result.status === "ok" ? 200 : 500,
+    headers: { "content-type": "application/json" },
+  });
+});
