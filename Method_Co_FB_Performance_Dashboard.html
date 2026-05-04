@@ -1249,8 +1249,19 @@ function renderCogsSection() {
   // section headers don't render "undefined" when the user hasn't picked a week.
   const periodLabel = currentPeriodLabel();
 
-  // Filter invoices to the period
-  const invCur = c.invoices.filter(inv => inRange(inv.date || ''));
+  // Filter invoices to period AND status=CLOSED. MarginEdge's Purchase
+  // Report only counts finalized invoices; in-flight statuses
+  // (FINAL_REVIEW, COMPLETED, SENT, INITIAL_REVIEW, PREPROCESSING,
+  // PENDING_RECONCILIATION) are excluded. Validated 2026-05-04 against
+  // a Purchase Report export for LSBR week ending 5/3 — CLOSED-only
+  // brought our buckets within $348 of the report on a $24K base.
+  // Internal Transfers (vendor "Method Hospitality- Internal Transfers")
+  // are kept — they're real inter-property cost movements that ME's
+  // report also includes. Older payloads pre-2026-04 may not have a
+  // status field; default missing status to CLOSED so we don't
+  // regress old data.
+  const isClosed = (inv) => (inv.status || 'CLOSED') === 'CLOSED';
+  const invCur = c.invoices.filter(inv => inRange(inv.date || '') && isClosed(inv));
   const invTotal = invCur.reduce((sum, inv) => sum + (inv.total || 0), 0);
 
   // Net sales for COGS % from combinedDailySales
@@ -2810,7 +2821,10 @@ function snapshotSumCogs(o, start, end) {
   const byType = { food: 0, liquor: 0, beer: 0, wine: 0, na_beverages: 0 };
   o.cogs.invoices.forEach(inv => {
     const d = inv.date || '';
-    if (d >= start && d <= end) {
+    // Match MarginEdge Purchase Report — CLOSED status only. See
+    // renderCogsSection for the validation rationale.
+    const status = inv.status || 'CLOSED';
+    if (d >= start && d <= end && status === 'CLOSED') {
       total += inv.total || 0;
       n++;
       (inv.line_items || []).forEach(li => {

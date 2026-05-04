@@ -343,7 +343,15 @@ def build_rollups(invoices: list[dict], net_sales_by_week: dict, net_sales_by_mo
         b["total_cogs"] += float(inv.get("total") or 0)
         b["by_vendor"][inv.get("vendor_name") or "Unknown vendor"] += float(inv.get("total") or 0)
 
+    # Match MarginEdge Purchase Report — only CLOSED invoices count toward
+    # rollups. In-flight statuses (FINAL_REVIEW, COMPLETED, SENT,
+    # INITIAL_REVIEW, PREPROCESSING, PENDING_RECONCILIATION) are stored
+    # raw on `invoices` for completeness but excluded from monthly/weekly
+    # totals. Validated 2026-05-04 against an LSBR Purchase Report
+    # export — CLOSED-only matched within $348 on a $24K base.
     for inv in invoices:
+        if (inv.get("status") or "CLOSED") != "CLOSED":
+            continue
         d = inv.get("date") or ""
         _bucket(by_week, _week_start(d), inv)
         _bucket(by_month, _ym(d), inv)
@@ -496,42 +504,28 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
             # 60% food / 40% bev). For bucketing we pick the highest-
             # allocation category — when split, the dominant category
             # determines which COGS bucket the spend lands in.
+            # /products schema (verified 2026-05-04):
+            #   ['categories', 'centralProductId', 'companyConceptProductId',
+            #    'itemCount', 'latestPrice', 'productName', 'reportByUnit',
+            #    'taxExempt']
+            # NOTE: there is no separate product-level "Type" field on the
+            # Public API. MarginEdge's UI Purchase Report shows a Type
+            # column (Beer/Food/Liquor/Wine/N/A Bev/Other) that maps 1:1
+            # to the line item's GL-category categoryType — same source
+            # we already use for cogs_bucket. The Purchase Report also
+            # filters to status=CLOSED invoices (see build_rollups).
             product_cat_lookup = {}
-            product_type_lookup = {}    # pid → product-level type (Beer/Food/Liquor/Wine/N/A Bev/Other)
-            # Debug: dump first product's full schema so we can lock in the
-            # exact field name for product-level type. MarginEdge's
-            # Purchase Report classifies by a product-Type column distinct
-            # from GL categoryType — verifying which field on /products
-            # carries that value (productType / type / productCategoryType).
-            if products:
-                print(f"  [schema] first product keys: {sorted(products[0].keys())}")
-                # Print up to 3 candidate type-ish field values
-                for k in ("productType", "type", "productCategoryType",
-                          "productCategory", "category", "productClass"):
-                    if k in products[0]:
-                        print(f"    {k!r}: {products[0].get(k)!r}")
             for p in products:
                 pid = p.get("companyConceptProductId") or p.get("centralProductId")
                 cats = p.get("categories") or []
-                if not pid:
+                if not pid or not cats:
                     continue
-                if cats:
-                    # Pick highest-allocation category
-                    best = max(cats, key=lambda c: c.get("percentAllocation") or 0)
-                    cid = best.get("categoryId")
-                    if cid:
-                        product_cat_lookup[pid] = cid
-                # Capture product-level type defensively under common field names
-                ptype = (p.get("productType") or p.get("type")
-                         or p.get("productCategoryType") or p.get("productClass"))
-                if ptype:
-                    product_type_lookup[pid] = ptype
+                # Pick highest-allocation category
+                best = max(cats, key=lambda c: c.get("percentAllocation") or 0)
+                cid = best.get("categoryId")
+                if cid:
+                    product_cat_lookup[pid] = cid
             print(f"  product→category mappings built: {len(product_cat_lookup)} of {len(products)}")
-            print(f"  product→type mappings built:     {len(product_type_lookup)} of {len(products)}")
-            if product_type_lookup:
-                from collections import Counter as _Counter
-                _tcounts = _Counter(product_type_lookup.values())
-                print(f"    product type distribution: {dict(_tcounts)}")
 
             # Line item fetch — adds ~1 API call per order (~10 min for
             # all outlets) but unlocks per-category COGS rollup
