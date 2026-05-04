@@ -334,10 +334,33 @@ footer.foot b { color: var(--slate); }
   .snap-section, .snap-card { break-inside: avoid; page-break-inside: avoid; }
   .snap-section + .snap-section { margin-top: 0 !important; }
 }
+
+/* === Validation panel === */
+.val-panel {
+  position: fixed; top: 8px; right: 8px;
+  background: #fff; border: 1px solid var(--grey);
+  padding: 6px 10px; font-family: var(--font-stack);
+  font-size: 11px; color: var(--royal); z-index: 100;
+  cursor: pointer; max-width: 320px; border-radius: 2px;
+}
+.val-panel.ok    { border-left: 4px solid #1a8754; }
+.val-panel.warn  { border-left: 4px solid #c79a00; }
+.val-panel.err   { border-left: 4px solid #b03030; }
+.val-panel-summary { font-weight: 600; letter-spacing: 0.04em; }
+.val-panel-detail  { display: none; margin-top: 6px; font-size: 10.5px; line-height: 1.3; }
+.val-panel.expanded .val-panel-detail { display: block; }
+.val-panel-row { padding: 2px 0; border-top: 1px dashed var(--grey); }
+.val-panel-row:first-child { border-top: 0; }
+@media print { .val-panel { display: none !important; } }
 </style>
 </head>
 <body>
 <div class="app">
+
+<div class="val-panel" id="valPanel" onclick="this.classList.toggle('expanded')">
+  <div class="val-panel-summary" id="valPanelSummary">Checking…</div>
+  <div class="val-panel-detail" id="valPanelDetail"></div>
+</div>
 
 <!-- =============== SIDEBAR =============== -->
 <aside class="nav">
@@ -1017,6 +1040,58 @@ function renderOutlet() {
   if (STATE.section === 'forecast')     return renderForecastSection();
   if (STATE.section === 'snapshot')     return renderSnapshotSection();
 }
+
+// === Validation panel ===
+// Reads the per-outlet `_validation_index` (written by toast-etl/validation/
+// runner.py) and surfaces the trust state of each data source. Sprint 2's
+// agent worker will additionally populate a banner state file the panel
+// also reads.
+async function refreshValidationPanel() {
+  const panel = document.getElementById('valPanel');
+  const summary = document.getElementById('valPanelSummary');
+  const detail = document.getElementById('valPanelDetail');
+  if (!panel || !summary) return;
+
+  const sources = ['toast_order', 'toast_time_entry', 'resy_survey',
+                   'marginedge_invoice', 'tripleseat_event',
+                   'helixo2_forecast', 'sage_budget'];
+  const o = DATA && DATA.outlets ? DATA.outlets[STATE.outlet] : null;
+  const idx = (o && o._validation_index) || {};
+
+  const now = Date.now();
+  const lines = [];
+  let worstClass = 'ok';
+  for (const src of sources) {
+    const v = idx[src];
+    if (!v) {
+      lines.push(`<div class="val-panel-row">⚪ ${src}: not synced</div>`);
+      if (worstClass === 'ok') worstClass = 'warn';
+      continue;
+    }
+    const ageHrs = (now - new Date(v.ran_at).getTime()) / 3600_000;
+    let status, cls;
+    if (v.rows_invalid > 0)              { status = '🔴'; cls = 'err'; }
+    else if (ageHrs > 26)                { status = '🟡'; cls = 'warn'; }
+    else if (v.rows_warned > 0)          { status = '🟡'; cls = 'warn'; }
+    else                                 { status = '✓'; cls = 'ok'; }
+    if (cls === 'err' || (cls === 'warn' && worstClass !== 'err')) worstClass = cls;
+    lines.push(`<div class="val-panel-row">${status} ${src}: `
+      + `${v.rows_valid}/${v.rows_in} ok, ${ageHrs.toFixed(1)}h ago</div>`);
+  }
+
+  panel.classList.remove('ok', 'warn', 'err');
+  panel.classList.add(worstClass);
+  const summaryText = (worstClass === 'ok') ? '✓ All sources current'
+                    : (worstClass === 'warn') ? '⚠ Some sources stale or warned'
+                    : '🛑 Validation failures — see card details';
+  summary.textContent = summaryText;
+  detail.innerHTML = lines.join('');
+}
+
+// Refresh on outlet/section change + every 5min while the page is open.
+const _origRender = renderOutlet;
+renderOutlet = function() { _origRender.apply(this, arguments); refreshValidationPanel(); };
+setInterval(refreshValidationPanel, 5 * 60 * 1000);
 
 // Renders the body for sections with no data yet
 function renderPlaceholderSection(title, body, requiredSources) {
