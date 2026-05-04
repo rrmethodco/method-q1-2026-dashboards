@@ -109427,7 +109427,7 @@
     ]
   },
   "events": {
-    "as_of": "2026-05-02",
+    "as_of": "2026-05-04",
     "source": "tripleseat_api",
     "events": [
       {
@@ -118269,26 +118269,26 @@
         "created_at": "3/30/2026 3:39 PM",
         "lead_time_days": null,
         "financials": {
-          "total": 1279.0,
-          "grand_total": 1588.19,
+          "total": 1620.25,
+          "grand_total": 2031.98,
           "food": 525.0,
-          "beverage": 455.0,
+          "beverage": 780.0,
           "rental": 0.0,
           "av": 0.0,
           "other": 0.0,
-          "tax": 113.19,
-          "gratuity": 196.0,
+          "tax": 150.73,
+          "gratuity": 261.0,
           "service_charge": 0.0,
-          "actual_amount": 1230.0,
+          "actual_amount": 1555.0,
           "fb_minimum": 750.0
         },
-        "booked_revenue": 1230.0,
+        "booked_revenue": 1555.0,
         "revenue_share": 1.0
       },
       {
         "event_id": 57920310,
         "name": "Shampoo Hotel Event",
-        "status": "DEFINITE",
+        "status": "CLOSED",
         "event_start": "4/29/2026 5:00 PM",
         "event_end": "4/29/2026 8:00 PM",
         "guest_count": 60,
@@ -118750,7 +118750,7 @@
       {
         "event_id": 58888848,
         "name": "Gasparilla Group",
-        "status": "DEFINITE",
+        "status": "CLOSED",
         "event_start": "5/1/2026 10:00 PM",
         "event_end": "5/2/2026 12:00 AM",
         "guest_count": 20,
@@ -118764,20 +118764,20 @@
         "created_at": "4/14/2026 4:00 PM",
         "lead_time_days": null,
         "financials": {
-          "total": 1050.0,
-          "grand_total": 1365.5,
+          "total": 1054.73,
+          "grand_total": 1392.42,
           "food": 0.0,
-          "beverage": 0.0,
+          "beverage": 1004.5,
           "rental": 0.0,
           "av": 0.0,
           "other": 0.0,
-          "tax": 115.5,
-          "gratuity": 200.0,
+          "tax": 136.79,
+          "gratuity": 200.9,
           "service_charge": 0.0,
-          "actual_amount": 0.0,
+          "actual_amount": 1004.5,
           "fb_minimum": 1000.0
         },
-        "booked_revenue": 1000.0,
+        "booked_revenue": 1004.5,
         "revenue_share": 1.0
       },
       {
@@ -118849,7 +118849,7 @@
       {
         "event_id": 57478331,
         "name": "Ansleigh Pingree",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "5/5/2026 5:30 PM",
         "event_end": "5/5/2026 7:30 PM",
         "guest_count": 10,
@@ -118948,7 +118948,7 @@
       {
         "event_id": 59295060,
         "name": "Stacey Brumbaugh",
-        "status": "PROSPECT",
+        "status": "TENTATIVE",
         "event_start": "5/7/2026 5:00 PM",
         "event_end": "5/7/2026 8:00 PM",
         "guest_count": 30,
@@ -118973,7 +118973,7 @@
           "gratuity": 630.0,
           "service_charge": 0.0,
           "actual_amount": 3150.0,
-          "fb_minimum": 2500.0
+          "fb_minimum": 1750.0
         },
         "booked_revenue": 3150.0,
         "revenue_share": 1.0
@@ -120334,7 +120334,7 @@
       {
         "event_id": 58980814,
         "name": "Engagement Party",
-        "status": "TENTATIVE",
+        "status": "DEFINITE",
         "event_start": "5/23/2026 4:00 PM",
         "event_end": "5/23/2026 9:00 PM",
         "guest_count": 25,
@@ -121732,6 +121732,39 @@
           "The Nickel Hotel"
         ],
         "created_at": "6/23/2025 11:25 AM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
+        "event_id": 59430176,
+        "name": "Parlour Room Dinner Meeting",
+        "status": "PROSPECT",
+        "event_start": "7/7/2026 6:30 PM",
+        "event_end": "7/7/2026 7:30 PM",
+        "guest_count": 10,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 31924,
+        "booking_id": 56120045,
+        "rooms": [
+          "Parlour Room"
+        ],
+        "created_at": "5/4/2026 9:13 AM",
         "lead_time_days": null,
         "financials": {
           "total": 0.0,
@@ -127174,10 +127207,10 @@
         "month": "4/29/20",
         "events": 6,
         "guests": 369,
-        "booked_revenue": 113730.0,
-        "fb_revenue": 17755.0,
+        "booked_revenue": 114055.0,
+        "fb_revenue": 18080.0,
         "by_segment": {
-          "Corporate": 1230.0,
+          "Corporate": 1555.0,
           "Wedding": 112500.0
         }
       },
@@ -127235,10 +127268,10 @@
         "month": "5/1/202",
         "events": 13,
         "guests": 594,
-        "booked_revenue": 151655.0,
-        "fb_revenue": 0.0,
+        "booked_revenue": 151659.5,
+        "fb_revenue": 1004.5,
         "by_segment": {
-          "Wedding": 151655.0
+          "Wedding": 151659.5
         }
       },
       {
@@ -127715,8 +127748,8 @@
       },
       {
         "month": "7/7/202",
-        "events": 1,
-        "guests": 130,
+        "events": 2,
+        "guests": 140,
         "booked_revenue": 28000.0,
         "fb_revenue": 0.0,
         "by_segment": {
@@ -127918,7 +127951,7 @@
       {
         "segment": "Corporate",
         "events": 12,
-        "booked_revenue": 29692.5
+        "booked_revenue": 30017.5
       },
       {
         "segment": "Other",
@@ -127932,8 +127965,8 @@
       },
       {
         "segment": "Wedding",
-        "events": 479,
-        "booked_revenue": 4743067.25
+        "events": 480,
+        "booked_revenue": 4743071.75
       }
     ]
   },

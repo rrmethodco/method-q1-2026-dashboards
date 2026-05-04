@@ -431802,7 +431802,7 @@
     ]
   },
   "events": {
-    "as_of": "2026-05-02",
+    "as_of": "2026-05-04",
     "source": "tripleseat_api",
     "events": [
       {
@@ -512507,20 +512507,20 @@
         "created_at": "3/31/2026 1:24 PM",
         "lead_time_days": null,
         "financials": {
-          "total": 2245.0,
-          "grand_total": 2739.0,
+          "total": 3333.85,
+          "grand_total": 4097.47,
           "food": 1900.0,
-          "beverage": 0.0,
+          "beverage": 1037.0,
           "rental": 0.0,
           "av": 0.0,
           "other": 0.0,
-          "tax": 114.0,
-          "gratuity": 380.0,
-          "service_charge": 95.0,
-          "actual_amount": 2150.0,
+          "tax": 176.22,
+          "gratuity": 587.4,
+          "service_charge": 146.85,
+          "actual_amount": 3187.0,
           "fb_minimum": 0.0
         },
-        "booked_revenue": 2150.0,
+        "booked_revenue": 3187.0,
         "revenue_share": 1.0
       },
       {
@@ -512738,20 +512738,20 @@
         "created_at": "4/24/2026 8:40 AM",
         "lead_time_days": null,
         "financials": {
-          "total": 4534.3,
-          "grand_total": 5409.46,
-          "food": 3366.0,
-          "beverage": 0.0,
+          "total": 6288.33,
+          "grand_total": 7545.82,
+          "food": 3695.5,
+          "beverage": 1141.0,
           "rental": 0.0,
           "av": 0.0,
-          "other": 0.0,
-          "tax": 201.96,
-          "gratuity": 673.2,
-          "service_charge": 168.3,
-          "actual_amount": 4366.0,
+          "other": 210.0,
+          "tax": 290.19,
+          "gratuity": 967.3,
+          "service_charge": 241.83,
+          "actual_amount": 6046.5,
           "fb_minimum": 0.0
         },
-        "booked_revenue": 4366.0,
+        "booked_revenue": 6046.5,
         "revenue_share": 1.0
       },
       {
@@ -513214,6 +513214,39 @@
           "fb_minimum": 0.0
         },
         "booked_revenue": 2150.0,
+        "revenue_share": 1.0
+      },
+      {
+        "event_id": 59430463,
+        "name": "Rios - Dinner",
+        "status": "PROSPECT",
+        "event_start": "5/6/2026 7:30 PM",
+        "event_end": "5/6/2026 9:30 PM",
+        "guest_count": 14,
+        "event_type": "Dinner",
+        "segment": "Social",
+        "location_id": 22266,
+        "booking_id": 56120315,
+        "rooms": [
+          "Le Suprême Private Dining Room \r\n"
+        ],
+        "created_at": "5/4/2026 9:25 AM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
         "revenue_share": 1.0
       },
       {
@@ -523672,10 +523705,10 @@
         "month": "5/1/202",
         "events": 14,
         "guests": 350,
-        "booked_revenue": 2150.0,
-        "fb_revenue": 1900.0,
+        "booked_revenue": 3187.0,
+        "fb_revenue": 2937.0,
         "by_segment": {
-          "Social": 2150.0,
+          "Social": 3187.0,
           "Wedding": 0.0,
           "Other": 0.0
         }
@@ -523809,13 +523842,13 @@
         "month": "5/2/202",
         "events": 11,
         "guests": 420,
-        "booked_revenue": 8211.0,
-        "fb_revenue": 6961.0,
+        "booked_revenue": 9891.5,
+        "fb_revenue": 8431.5,
         "by_segment": {
           "Corporate": 0.0,
           "Social": 0.0,
           "Wedding": 0.0,
-          "Other": 8211.0
+          "Other": 9891.5
         }
       },
       {
@@ -523995,8 +524028,8 @@
       },
       {
         "month": "5/6/202",
-        "events": 10,
-        "guests": 242,
+        "events": 11,
+        "guests": 256,
         "booked_revenue": 8902.75,
         "fb_revenue": 6652.75,
         "by_segment": {
@@ -525420,12 +525453,12 @@
       {
         "segment": "Other",
         "events": 1309,
-        "booked_revenue": 510757.83
+        "booked_revenue": 512438.33
       },
       {
         "segment": "Social",
-        "events": 501,
-        "booked_revenue": 425194.76
+        "events": 502,
+        "booked_revenue": 426231.76
       },
       {
         "segment": "Wedding",

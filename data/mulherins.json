@@ -317273,7 +317273,7 @@
     ]
   },
   "events": {
-    "as_of": "2026-05-02",
+    "as_of": "2026-05-04",
     "source": "tripleseat_api",
     "events": [
       {
@@ -353594,7 +353594,7 @@
       {
         "event_id": 58809392,
         "name": "birthday",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/24/2026 5:00 PM",
         "event_end": "4/24/2026 8:00 PM",
         "guest_count": 35,
@@ -353660,7 +353660,7 @@
       {
         "event_id": 53493193,
         "name": "Bridal Shower",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/25/2026 5:00 PM",
         "event_end": "4/25/2026 8:00 PM",
         "guest_count": 31,
@@ -353693,7 +353693,7 @@
       {
         "event_id": 53647429,
         "name": "Executive MBA prom",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/25/2026 5:00 PM",
         "event_end": "4/25/2026 10:00 PM",
         "guest_count": 150,
@@ -353726,7 +353726,7 @@
       {
         "event_id": 58576108,
         "name": "30th Birthday",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/25/2026 6:00 PM",
         "event_end": "4/25/2026 9:00 PM",
         "guest_count": 30,
@@ -353759,7 +353759,7 @@
       {
         "event_id": 58728378,
         "name": "30th birthday",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/25/2026 7:00 PM",
         "event_end": "4/25/2026 10:00 PM",
         "guest_count": 50,
@@ -353825,7 +353825,7 @@
       {
         "event_id": 56855214,
         "name": "Inquirer Sales Dinner",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/28/2026 6:00 PM",
         "event_end": "4/28/2026 9:00 PM",
         "guest_count": 32,
@@ -353858,7 +353858,7 @@
       {
         "event_id": 59175739,
         "name": "Business Dinner",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/28/2026 6:30 PM",
         "event_end": "4/28/2026 9:30 PM",
         "guest_count": 15,
@@ -353891,7 +353891,7 @@
       {
         "event_id": 56407426,
         "name": "Business Dinner",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/28/2026 7:00 PM",
         "event_end": "4/28/2026 11:00 PM",
         "guest_count": 65,
@@ -353924,7 +353924,7 @@
       {
         "event_id": 52201600,
         "name": "Wedding Rehearsal Dinner",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/30/2026 5:00 PM",
         "event_end": "4/30/2026 8:00 PM",
         "guest_count": 30,
@@ -353957,7 +353957,7 @@
       {
         "event_id": 56751892,
         "name": "Rehearsal Dinner",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/30/2026 6:00 PM",
         "event_end": "4/30/2026 9:00 PM",
         "guest_count": 50,
@@ -353990,7 +353990,7 @@
       {
         "event_id": 59054983,
         "name": "KA Formal",
-        "status": "PROSPECT",
+        "status": "LOST",
         "event_start": "4/30/2026 7:00 PM",
         "event_end": "4/30/2026 9:00 PM",
         "guest_count": 29,
@@ -354879,6 +354879,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 59417675,
+        "name": "Retirement Dinner",
+        "status": "PROSPECT",
+        "event_start": "5/12/2026 7:00 PM",
+        "event_end": "5/12/2026 10:00 PM",
+        "guest_count": 18,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 17784,
+        "booking_id": 56108477,
+        "rooms": [
+          "Wood Oven Room"
+        ],
+        "created_at": "5/2/2026 3:06 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 59288391,
         "name": "Business Dinner",
         "status": "PROSPECT",
@@ -355029,15 +355062,15 @@
         "financials": {
           "total": 3990.0,
           "grand_total": 5054.0,
-          "food": 0.0,
-          "beverage": 0.0,
+          "food": 1960.0,
+          "beverage": 1820.0,
           "rental": 0.0,
           "av": 0.0,
           "other": 0.0,
           "tax": 304.0,
           "gratuity": 760.0,
           "service_charge": 0.0,
-          "actual_amount": 0.0,
+          "actual_amount": 3780.0,
           "fb_minimum": 3800.0
         },
         "booked_revenue": 3800.0,
@@ -355091,6 +355124,39 @@
           "Wood Oven Room"
         ],
         "created_at": "3/4/2026 5:22 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
+        "event_id": 59417635,
+        "name": "Penn 35th reunion",
+        "status": "PROSPECT",
+        "event_start": "5/15/2026 5:30 PM",
+        "event_end": "5/15/2026 9:00 PM",
+        "guest_count": 15,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 17784,
+        "booking_id": 56108438,
+        "rooms": [
+          "Garden"
+        ],
+        "created_at": "5/2/2026 3:03 PM",
         "lead_time_days": null,
         "financials": {
           "total": 0.0,
@@ -355239,6 +355305,39 @@
           "fb_minimum": 4000.0
         },
         "booked_revenue": 4000.0,
+        "revenue_share": 1.0
+      },
+      {
+        "event_id": 59417729,
+        "name": "Birthday Party",
+        "status": "PROSPECT",
+        "event_start": "5/16/2026 12:30 PM",
+        "event_end": "5/16/2026 2:30 PM",
+        "guest_count": 20,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 17784,
+        "booking_id": 56108528,
+        "rooms": [
+          "Garden"
+        ],
+        "created_at": "5/2/2026 3:10 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
         "revenue_share": 1.0
       },
       {
@@ -356567,7 +356666,7 @@
         "status": "DEFINITE",
         "event_start": "6/6/2026 10:00 AM",
         "event_end": "6/6/2026 12:00 PM",
-        "guest_count": 40,
+        "guest_count": 33,
         "event_type": null,
         "segment": "Wedding",
         "location_id": 17784,
@@ -356609,6 +356708,39 @@
           "Main Dining Room Buyout"
         ],
         "created_at": "4/14/2026 5:07 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
+        "event_id": 59417649,
+        "name": "Proposal Dinner Celebration",
+        "status": "PROSPECT",
+        "event_start": "6/6/2026 4:00 PM",
+        "event_end": "6/6/2026 6:00 PM",
+        "guest_count": 18,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 17784,
+        "booking_id": 56108451,
+        "rooms": [
+          "Wood Oven Room"
+        ],
+        "created_at": "5/2/2026 3:04 PM",
         "lead_time_days": null,
         "financials": {
           "total": 0.0,
@@ -357421,6 +357553,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 59417662,
+        "name": "Engagement Party",
+        "status": "PROSPECT",
+        "event_start": "6/27/2026 5:00 PM",
+        "event_end": "6/27/2026 8:00 PM",
+        "guest_count": 35,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 17784,
+        "booking_id": 56108464,
+        "rooms": [
+          "Main Dining Room Buyout"
+        ],
+        "created_at": "5/2/2026 3:05 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 46791457,
         "name": "Wedding Reception",
         "status": "LOST",
@@ -357864,6 +358029,39 @@
           "Main Dining Room Buyout"
         ],
         "created_at": "2/24/2026 6:25 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
+        "event_id": 59417736,
+        "name": "Julia’s 30th Birthday",
+        "status": "PROSPECT",
+        "event_start": "7/25/2026 7:00 PM",
+        "event_end": "7/25/2026 10:00 PM",
+        "guest_count": 15,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 17784,
+        "booking_id": 56108535,
+        "rooms": [
+          "Wood Oven Room"
+        ],
+        "created_at": "5/2/2026 3:11 PM",
         "lead_time_days": null,
         "financials": {
           "total": 0.0,
@@ -359604,31 +359802,31 @@
         "status": "PROSPECT",
         "event_start": "10/10/2026 5:00 PM",
         "event_end": "10/10/2026 8:00 PM",
-        "guest_count": 75,
+        "guest_count": 65,
         "event_type": null,
         "segment": "Wedding",
         "location_id": 17784,
         "booking_id": 53763676,
         "rooms": [
-          "Buyout"
+          "Main Dining Room Buyout"
         ],
         "created_at": "2/6/2026 12:39 PM",
         "lead_time_days": null,
         "financials": {
-          "total": 0.0,
-          "grand_total": 0.0,
-          "food": 0.0,
-          "beverage": 0.0,
+          "total": 6483.75,
+          "grand_total": 8212.75,
+          "food": 2925.0,
+          "beverage": 3250.0,
           "rental": 0.0,
           "av": 0.0,
           "other": 0.0,
-          "tax": 0.0,
-          "gratuity": 0.0,
+          "tax": 494.0,
+          "gratuity": 1235.0,
           "service_charge": 0.0,
-          "actual_amount": 0.0,
+          "actual_amount": 6175.0,
           "fb_minimum": 0.0
         },
-        "booked_revenue": 0.0,
+        "booked_revenue": 6175.0,
         "revenue_share": 1.0
       },
       {
@@ -361117,6 +361315,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 59417540,
+        "name": "Post elopement dinner",
+        "status": "PROSPECT",
+        "event_start": "4/24/2027 4:30 PM",
+        "event_end": "4/24/2027 7:30 PM",
+        "guest_count": 60,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 17784,
+        "booking_id": 56108343,
+        "rooms": [
+          "Main Dining Room Buyout"
+        ],
+        "created_at": "5/2/2026 2:55 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 0.0,
+          "grand_total": 0.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 0.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 0.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 59101949,
         "name": "PwC OGC Dinner",
         "status": "PROSPECT",
@@ -361723,12 +361954,12 @@
       {
         "month": "10/10/2",
         "events": 15,
-        "guests": 1000,
-        "booked_revenue": 55971.0,
-        "fb_revenue": 25221.0,
+        "guests": 990,
+        "booked_revenue": 62146.0,
+        "fb_revenue": 31396.0,
         "by_segment": {
           "Other": 1500.0,
-          "Wedding": 54471.0
+          "Wedding": 60646.0
         }
       },
       {
@@ -363267,8 +363498,8 @@
       },
       {
         "month": "4/24/20",
-        "events": 4,
-        "guests": 89,
+        "events": 5,
+        "guests": 149,
         "booked_revenue": 3000.0,
         "fb_revenue": 3000.0,
         "by_segment": {
@@ -363449,8 +363680,8 @@
       },
       {
         "month": "5/12/20",
-        "events": 4,
-        "guests": 73,
+        "events": 5,
+        "guests": 91,
         "booked_revenue": 800.0,
         "fb_revenue": 660.0,
         "by_segment": {
@@ -363473,15 +363704,15 @@
         "events": 6,
         "guests": 210,
         "booked_revenue": 7300.0,
-        "fb_revenue": 3000.0,
+        "fb_revenue": 6780.0,
         "by_segment": {
           "Wedding": 7300.0
         }
       },
       {
         "month": "5/15/20",
-        "events": 9,
-        "guests": 330,
+        "events": 10,
+        "guests": 345,
         "booked_revenue": 2528.0,
         "fb_revenue": 2528.0,
         "by_segment": {
@@ -363491,8 +363722,8 @@
       },
       {
         "month": "5/16/20",
-        "events": 15,
-        "guests": 348,
+        "events": 16,
+        "guests": 368,
         "booked_revenue": 6815.0,
         "fb_revenue": 1415.0,
         "by_segment": {
@@ -363890,8 +364121,8 @@
       },
       {
         "month": "6/27/20",
-        "events": 4,
-        "guests": 280,
+        "events": 5,
+        "guests": 315,
         "booked_revenue": 32800.0,
         "fb_revenue": 22800.0,
         "by_segment": {
@@ -363963,8 +364194,8 @@
       },
       {
         "month": "6/6/202",
-        "events": 5,
-        "guests": 280,
+        "events": 6,
+        "guests": 291,
         "booked_revenue": 2350.0,
         "fb_revenue": 2350.0,
         "by_segment": {
@@ -364157,8 +364388,8 @@
       },
       {
         "month": "7/25/20",
-        "events": 4,
-        "guests": 198,
+        "events": 5,
+        "guests": 213,
         "booked_revenue": 0.0,
         "fb_revenue": 0.0,
         "by_segment": {
@@ -364795,8 +365026,8 @@
       },
       {
         "segment": "Wedding",
-        "events": 1203,
-        "booked_revenue": 1588494.48
+        "events": 1210,
+        "booked_revenue": 1594669.48
       }
     ]
   },

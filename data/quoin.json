@@ -219463,7 +219463,7 @@
     ]
   },
   "events": {
-    "as_of": "2026-05-02",
+    "as_of": "2026-05-04",
     "source": "tripleseat_api",
     "events": [
       {
@@ -281747,7 +281747,7 @@
       {
         "event_id": 51557916,
         "name": "Donor Gratitude Event (SALESIANUM SCHOOL)",
-        "status": "DEFINITE",
+        "status": "CLOSED",
         "event_start": "4/30/2026 6:00 PM",
         "event_end": "4/30/2026 9:00 PM",
         "guest_count": 40,
@@ -281780,7 +281780,7 @@
       {
         "event_id": 57592226,
         "name": "IHO: Vaughn + DiPrima Elopement Reception",
-        "status": "DEFINITE",
+        "status": "CLOSED",
         "event_start": "5/1/2026 4:00 PM",
         "event_end": "5/1/2026 6:00 PM",
         "guest_count": 38,
@@ -282309,7 +282309,7 @@
       {
         "event_id": 58521108,
         "name": "Prom Send Off",
-        "status": "TENTATIVE",
+        "status": "DEFINITE",
         "event_start": "5/14/2026 4:30 PM",
         "event_end": "5/14/2026 7:30 PM",
         "guest_count": 50,
@@ -283307,7 +283307,7 @@
       {
         "event_id": 59152570,
         "name": "Corporate Networking Happy Hour",
-        "status": "PROSPECT",
+        "status": "TENTATIVE",
         "event_start": "6/4/2026 6:00 PM",
         "event_end": "6/4/2026 8:00 PM",
         "guest_count": 50,
@@ -283332,7 +283332,7 @@
           "gratuity": 830.0,
           "service_charge": 0.0,
           "actual_amount": 4150.0,
-          "fb_minimum": 0.0
+          "fb_minimum": 4000.0
         },
         "booked_revenue": 4150.0,
         "revenue_share": 1.0
@@ -283369,39 +283369,6 @@
           "fb_minimum": 0.0
         },
         "booked_revenue": 0.0,
-        "revenue_share": 1.0
-      },
-      {
-        "event_id": 56858140,
-        "name": "IHO: Little + Brown-Conaway Tasting",
-        "status": "TENTATIVE",
-        "event_start": "6/5/2026 5:00 PM",
-        "event_end": "6/5/2026 6:00 PM",
-        "guest_count": 4,
-        "event_type": null,
-        "segment": "Wedding",
-        "location_id": 21825,
-        "booking_id": 53753214,
-        "rooms": [
-          "Non Private Group Dining"
-        ],
-        "created_at": "2/5/2026 11:19 PM",
-        "lead_time_days": null,
-        "financials": {
-          "total": 147.0,
-          "grand_total": 175.0,
-          "food": 140.0,
-          "beverage": 0.0,
-          "rental": 0.0,
-          "av": 0.0,
-          "other": 0.0,
-          "tax": 0.0,
-          "gratuity": 28.0,
-          "service_charge": 0.0,
-          "actual_amount": 140.0,
-          "fb_minimum": 0.0
-        },
-        "booked_revenue": 140.0,
         "revenue_share": 1.0
       },
       {
@@ -284762,6 +284729,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 56858140,
+        "name": "IHO: Little + Brown-Conaway Tasting",
+        "status": "TENTATIVE",
+        "event_start": "7/3/2026 5:00 PM",
+        "event_end": "7/3/2026 6:00 PM",
+        "guest_count": 4,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 21825,
+        "booking_id": 53753214,
+        "rooms": [
+          "Non Private Group Dining"
+        ],
+        "created_at": "2/5/2026 11:19 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 147.0,
+          "grand_total": 175.0,
+          "food": 140.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 28.0,
+          "service_charge": 0.0,
+          "actual_amount": 140.0,
+          "fb_minimum": 0.0
+        },
+        "booked_revenue": 140.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 51031266,
         "name": "Wedding at The Quoin",
         "status": "LOST",
@@ -286023,6 +286023,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 59432303,
+        "name": "IHO: Michael Gitlin + Meghan Buckley Rehearsal Dinner",
+        "status": "TENTATIVE",
+        "event_start": "10/1/2026 6:00 PM",
+        "event_end": "10/1/2026 9:00 PM",
+        "guest_count": 50,
+        "event_type": "Rehearsal Dinner",
+        "segment": "Other",
+        "location_id": 21825,
+        "booking_id": 56122531,
+        "rooms": [
+          "Rooftop Full Buyout (inside and outside)"
+        ],
+        "created_at": "5/4/2026 10:23 AM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 4200.0,
+          "grand_total": 5000.0,
+          "food": 0.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 800.0,
+          "service_charge": 0.0,
+          "actual_amount": 0.0,
+          "fb_minimum": 4000.0
+        },
+        "booked_revenue": 4000.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 49725656,
         "name": "Possible rehearsal dinner and wedding afterparty",
         "status": "PROSPECT",
@@ -287182,6 +287215,39 @@
         "revenue_share": 1.0
       },
       {
+        "event_id": 59415412,
+        "name": "Brawley Welcome Reception",
+        "status": "PROSPECT",
+        "event_start": "12/12/2026 6:00 PM",
+        "event_end": "12/13/2026 12:00 AM",
+        "guest_count": 60,
+        "event_type": null,
+        "segment": "Wedding",
+        "location_id": 21825,
+        "booking_id": 56106432,
+        "rooms": [
+          "Rooftop Full Buyout (inside and outside)"
+        ],
+        "created_at": "5/2/2026 12:01 PM",
+        "lead_time_days": null,
+        "financials": {
+          "total": 4141.0,
+          "grand_total": 4941.0,
+          "food": 2820.0,
+          "beverage": 0.0,
+          "rental": 0.0,
+          "av": 0.0,
+          "other": 0.0,
+          "tax": 0.0,
+          "gratuity": 800.0,
+          "service_charge": 0.0,
+          "actual_amount": 2820.0,
+          "fb_minimum": 4000.0
+        },
+        "booked_revenue": 4000.0,
+        "revenue_share": 1.0
+      },
+      {
         "event_id": 45890401,
         "name": "Wedding",
         "status": "LOST",
@@ -287677,12 +287743,13 @@
       },
       {
         "month": "10/1/20",
-        "events": 5,
-        "guests": 164,
-        "booked_revenue": 7503.0,
+        "events": 6,
+        "guests": 214,
+        "booked_revenue": 11503.0,
         "fb_revenue": 5503.0,
         "by_segment": {
-          "Wedding": 7503.0
+          "Wedding": 7503.0,
+          "Other": 4000.0
         }
       },
       {
@@ -288404,14 +288471,14 @@
       },
       {
         "month": "12/12/2",
-        "events": 16,
-        "guests": 374,
-        "booked_revenue": 41894.0,
-        "fb_revenue": 38303.0,
+        "events": 17,
+        "guests": 434,
+        "booked_revenue": 45894.0,
+        "fb_revenue": 41123.0,
         "by_segment": {
           "Corporate": 0.0,
           "Social": 8041.0,
-          "Wedding": 31214.0,
+          "Wedding": 35214.0,
           "Other": 2639.0
         }
       },
@@ -290349,13 +290416,13 @@
       },
       {
         "month": "6/5/202",
-        "events": 12,
-        "guests": 296,
-        "booked_revenue": 15443.0,
-        "fb_revenue": 14642.0,
+        "events": 11,
+        "guests": 292,
+        "booked_revenue": 15303.0,
+        "fb_revenue": 14502.0,
         "by_segment": {
           "Corporate": 12303.0,
-          "Wedding": 3140.0
+          "Wedding": 3000.0
         }
       },
       {
@@ -290633,13 +290700,13 @@
       },
       {
         "month": "7/3/202",
-        "events": 3,
-        "guests": 20,
-        "booked_revenue": 1758.0,
-        "fb_revenue": 1758.0,
+        "events": 4,
+        "guests": 24,
+        "booked_revenue": 1898.0,
+        "fb_revenue": 1898.0,
         "by_segment": {
           "Corporate": 1758.0,
-          "Wedding": 0.0
+          "Wedding": 140.0
         }
       },
       {
@@ -291388,8 +291455,8 @@
       },
       {
         "segment": "Other",
-        "events": 374,
-        "booked_revenue": 1197428.06
+        "events": 375,
+        "booked_revenue": 1201428.06
       },
       {
         "segment": "Social",
@@ -291398,8 +291465,8 @@
       },
       {
         "segment": "Wedding",
-        "events": 1151,
-        "booked_revenue": 1954630.5
+        "events": 1152,
+        "booked_revenue": 1958630.5
       }
     ]
   },
