@@ -51,9 +51,34 @@ export async function runAnomalyDetector(): Promise<AnomalyResult> {
       continue;
     }
 
-    // deno-lint-ignore no-explicit-any
-    const od = (payload as any).order_details?.main?.daily;
-    if (!Array.isArray(od) || od.length < 60) continue; // need 8w of data
+    // Aggregate daily across ALL revenue centers in order_details.
+    // Single-RC outlets (mulherins, vessel, kampers, etc.) use the
+    // "main" key; multi-RC outlets (lsbr → {bar_rotunda, le_supreme},
+    // hiroki_det → {aladdin_sane, hiroki_san, sakazuki}, quoin →
+    // {quoin_restaurant, quoin_rooftop, simmer_down}) use named keys.
+    // Pre-fix this hardcoded `.main` and silently produced zero output
+    // for the 3 multi-RC outlets (integration review 2026-05-04).
+    // Now we sum amount + guests per date across all RC keys so the
+    // per-outlet anomaly view reflects full-outlet revenue/covers.
+    const orderDetails = (payload as any).order_details;
+    if (!orderDetails || typeof orderDetails !== "object") continue;
+    const byDate: Record<string, { amount: number; guests: number }> = {};
+    for (const rcKey of Object.keys(orderDetails)) {
+      const rcDaily = orderDetails[rcKey]?.daily;
+      if (!Array.isArray(rcDaily)) continue;
+      for (const row of rcDaily) {
+        if (!row || typeof row.date !== "string") continue;
+        const slot = byDate[row.date] ?? { amount: 0, guests: 0 };
+        if (Number.isFinite(Number(row.amount))) slot.amount += Number(row.amount);
+        if (Number.isFinite(Number(row.guests))) slot.guests += Number(row.guests);
+        byDate[row.date] = slot;
+      }
+    }
+    const dates = Object.keys(byDate).sort();
+    const od = dates.map((d) => ({
+      date: d, amount: byDate[d].amount, guests: byDate[d].guests,
+    }));
+    if (od.length < 60) continue; // need 8w of data
 
     for (const metric of METRICS) {
       const byDow: Record<number, number[]> = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };

@@ -1,10 +1,19 @@
 // Self-healing retry/repair agent.
 //
 // Polls recent workflow runs. For each that is `cancelled` or `failure`:
-//   - If pattern is auto-healable AND we haven't retried it more than
-//     3 times in the past 30 min, dispatch a retry.
+//   - If we haven't retried it more than 3 times in the past 30 min,
+//     dispatch a retry.
 //   - Otherwise, queue an alert event.
+//
+// Retry-budget state is persisted to Supabase Storage
+// (`validation/_state/retry_repair.json`). Pre-fix the budget map was
+// in-memory and reset on every Edge Function cold start, which meant
+// a persistently-failing workflow would be re-dispatched on every
+// 5-min tick instead of capping at 3 per 30min (integration review
+// 2026-05-04).
+import { SupabaseClient } from "@supabase/supabase-js";
 import { listRecentRuns, dispatchWorkflow } from "../lib/github.ts";
+import { readState, writeState } from "../lib/state.ts";
 import type { AuditDecision } from "../lib/types.ts";
 
 const WORKFLOWS = [
@@ -13,10 +22,15 @@ const WORKFLOWS = [
 ];
 const RETRY_WINDOW_MS = 30 * 60 * 1000;
 const MAX_RETRIES_PER_WINDOW = 3;
-// Edge Functions are stateless across cold starts; this in-memory map
-// is best-effort. Worst case: an extra retry. For hardened tracking,
-// switch to a Postgres table in Phase B.
-const recentRetries = new Map<string, number[]>();
+const AGENT = "retry_repair";
+
+interface RetryState {
+  // workflow file → list of dispatch timestamps (ms-since-epoch)
+  recent_retries: Record<string, number[]>;
+  // workflow file → last run id we acted on (so we don't re-dispatch
+  // for the same already-handled failed run on subsequent ticks)
+  last_handled_run: Record<string, number>;
+}
 
 interface RetryAlert {
   workflow: string;
@@ -29,10 +43,23 @@ export interface RetryResult {
   alerts: RetryAlert[];
 }
 
-export async function runRetryRepair(): Promise<RetryResult> {
+export async function runRetryRepair(supabase: SupabaseClient): Promise<RetryResult> {
   const audits: AuditDecision[] = [];
   const alerts: RetryAlert[] = [];
   const ts = new Date().toISOString();
+
+  // Load persistent state. Prune retry timestamps older than the window.
+  const state = await readState<RetryState>(supabase, AGENT, {
+    recent_retries: {},
+    last_handled_run: {},
+  });
+  const cutoff = Date.now() - RETRY_WINDOW_MS;
+  const recentRetries: Record<string, number[]> = {};
+  for (const [wf, ts_list] of Object.entries(state.recent_retries)) {
+    const fresh = (ts_list || []).filter((t) => t >= cutoff);
+    if (fresh.length > 0) recentRetries[wf] = fresh;
+  }
+  const lastHandled = { ...state.last_handled_run };
 
   for (const wf of WORKFLOWS) {
     let runs;
@@ -51,13 +78,14 @@ export async function runRetryRepair(): Promise<RetryResult> {
     if (!latest) continue;
     if (latest.conclusion !== "cancelled" && latest.conclusion !== "failure") continue;
 
+    // Idempotency: don't re-act on a run we already retried before.
+    if (lastHandled[wf] === latest.id) continue;
+
     // Only act on terminal-failed runs that completed in the last hour
     const ageMs = Date.now() - new Date(latest.created_at).getTime();
     if (ageMs > 60 * 60 * 1000) continue;
 
-    const retries = (recentRetries.get(wf) || []).filter(
-      (t) => Date.now() - t < RETRY_WINDOW_MS,
-    );
+    const retries = recentRetries[wf] || [];
     if (retries.length >= MAX_RETRIES_PER_WINDOW) {
       alerts.push({
         workflow: wf,
@@ -70,12 +98,14 @@ export async function runRetryRepair(): Promise<RetryResult> {
         details: { retries: retries.length, conclusion: latest.conclusion },
         action_taken: "alert dispatched, no auto-heal",
       });
+      lastHandled[wf] = latest.id;  // mark handled so we don't retry-alert next cycle
       continue;
     }
 
     try {
       await dispatchWorkflow(wf);
-      recentRetries.set(wf, [...retries, Date.now()]);
+      recentRetries[wf] = [...retries, Date.now()];
+      lastHandled[wf] = latest.id;
       audits.push({
         ts, agent: "retry_repair", source: wf,
         decision: "auto_retry_dispatched",
@@ -92,6 +122,12 @@ export async function runRetryRepair(): Promise<RetryResult> {
       });
     }
   }
+
+  // Persist updated state.
+  await writeState(supabase, AGENT, {
+    recent_retries: recentRetries,
+    last_handled_run: lastHandled,
+  });
 
   return { audits, alerts };
 }

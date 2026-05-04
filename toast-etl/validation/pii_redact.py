@@ -16,6 +16,17 @@ PII_FIELDS = {
     "first_name": "name",
     "last_name": "name",
     "guest_name": "name",
+    # Names that show up in our actual data sources (Resy surveys → server;
+    # Google reviews → author/reviewer_name; Tripleseat → booking_contact /
+    # account_name). Staff names are technically employment data, not
+    # consumer PII, but redaction keeps validation error samples clean.
+    "server": "name",
+    "author": "name",
+    "author_name": "name",
+    "customer_name": "name",
+    "display_name": "name",
+    "reviewer_name": "name",
+    "booking_contact": "name",
     "address": "address",
     "street": "address",
     "credit_card": "cc",

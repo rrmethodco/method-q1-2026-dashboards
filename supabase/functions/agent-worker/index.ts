@@ -76,9 +76,9 @@ Deno.serve(async (_req: Request): Promise<Response> => {
     result.errors.push(`anomaly_detector: ${String(e)}`);
   }
 
-  // 3. Retry/repair
+  // 3. Retry/repair (state persisted to validation/_state/retry_repair.json)
   try {
-    const retry = await runRetryRepair();
+    const retry = await runRetryRepair(supabase);
     allAudits.push(...retry.audits);
     for (const a of retry.alerts) {
       events.push({ kind: "retry_exhausted", source: a.workflow, text: a.reason });
@@ -88,10 +88,10 @@ Deno.serve(async (_req: Request): Promise<Response> => {
     result.errors.push(`retry_repair: ${String(e)}`);
   }
 
-  // 4. Alert dispatcher
+  // 4. Alert dispatcher (dedup state persisted to validation/_state/alert_dispatcher.json)
   if (events.length > 0) {
     try {
-      const dispAudits = await dispatchAlerts(events);
+      const dispAudits = await dispatchAlerts(supabase, events);
       allAudits.push(...dispAudits);
       result.agents_invoked.push(`alert_dispatcher: ${dispAudits.length} routed`);
     } catch (e) {
