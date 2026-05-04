@@ -323372,9 +323372,9 @@
     "total_cost": 1472971.28
   },
   "cogs": {
-    "as_of": "2026-04-30",
+    "as_of": "2026-05-04",
     "source": "marginedge_api",
-    "lookback_days": 120,
+    "lookback_days": 14,
     "with_line_items": true,
     "invoices": [
       {
@@ -403566,7 +403566,7 @@
         "vendor_id": "137917",
         "vendor_name": "World Beverage Systems",
         "total": 15.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1188358624",
@@ -417662,6 +417662,28 @@
         ]
       },
       {
+        "invoice_id": "219005584",
+        "invoice_number": "METT_20260503_TE6i7pL",
+        "date": "2026-04-16",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -406.8,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "645260527",
+            "product_name": "Hess Select Cabernet Sauvignon North Coast",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -36.0,
+            "unit_price": 11.3,
+            "extended": -406.8
+          }
+        ]
+      },
+      {
         "invoice_id": "216616137",
         "invoice_number": "METT_20260417_d46SvgU",
         "date": "2026-04-17",
@@ -420350,7 +420372,7 @@
         "vendor_id": "11776",
         "vendor_name": "Eastown Distributors Co",
         "total": 258.52,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -426183,7 +426205,7 @@
         "vendor_id": "173219",
         "vendor_name": "Leonard's Syrups",
         "total": 300.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1189789885",
@@ -426227,7 +426249,7 @@
         "vendor_id": "173219",
         "vendor_name": "Leonard's Syrups",
         "total": 0.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "866446526",
@@ -427248,7 +427270,7 @@
         "vendor_id": "11776",
         "vendor_name": "Eastown Distributors Co",
         "total": 226.6,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -427288,7 +427310,7 @@
         "vendor_id": "32746",
         "vendor_name": "Rave Associates",
         "total": 492.0,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -427298,7 +427320,7 @@
         "vendor_id": "117266",
         "vendor_name": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
         "total": 400.0,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -427922,7 +427944,7 @@
         "vendor_id": "152441",
         "vendor_name": "Rocket One Stop Office",
         "total": 107.57,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1188313331",
@@ -427944,7 +427966,7 @@
         "vendor_id": "152441",
         "vendor_name": "Rocket One Stop Office",
         "total": 58.3,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1189789898",
@@ -427966,7 +427988,7 @@
         "vendor_id": "15903",
         "vendor_name": "Great Lakes Wine & Spirits",
         "total": 1515.96,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "640718752",
@@ -428120,7 +428142,7 @@
         "vendor_id": "152853519",
         "vendor_name": "A.H.D. Vintners",
         "total": 96.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "904854653",
@@ -428142,7 +428164,7 @@
         "vendor_id": "200979793",
         "vendor_name": "Del Bene Produce, Inc.",
         "total": 521.85,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "641878345",
@@ -428307,7 +428329,7 @@
         "vendor_id": "200979793",
         "vendor_name": "Del Bene Produce, Inc.",
         "total": 54.0,
-        "status": "AM_REVIEW",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "640734851",
@@ -428329,7 +428351,7 @@
         "vendor_id": "11902",
         "vendor_name": "Motor City Seafood LLC",
         "total": 665.36,
-        "status": "AM_REVIEW",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "639813159",
@@ -428365,12 +428387,12 @@
             "extended": 165.6
           },
           {
-            "product_id": "TRO-ECT05",
+            "product_id": "790239522",
             "product_name": "Eagle Creek Trout - 1.25# Whole",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
-            "cogs_bucket": null,
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
             "quantity": 28.68,
             "unit_price": 8.32,
             "extended": 238.62
@@ -428384,7 +428406,7 @@
         "vendor_id": "11939",
         "vendor_name": "RSA Foundation",
         "total": 105.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "663730965",
@@ -428406,7 +428428,7 @@
         "vendor_id": "11941",
         "vendor_name": "Fortune Fish & Gourmet",
         "total": 277.4,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "765402337",
@@ -428439,7 +428461,7 @@
         "vendor_id": "146825",
         "vendor_name": "Ecolab Inc.",
         "total": 415.55,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1169228029",
@@ -428461,25 +428483,25 @@
         "vendor_id": "173219",
         "vendor_name": "Leonard's Syrups",
         "total": 0.0,
-        "status": "AM_REVIEW",
+        "status": "CLOSED",
         "line_items": [
           {
-            "product_id": "",
+            "product_id": "1191846642",
             "product_name": "Service Call - Leonard's Syrups",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
+            "category": "Equipment/Other Rentals",
+            "category_id": "1054",
+            "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 1.0,
             "unit_price": 0.0,
             "extended": 0.0
           },
           {
-            "product_id": "",
+            "product_id": "1189789892",
             "product_name": "Trip Charge Soda",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
+            "category": "Cleaning Equipment",
+            "category_id": "1038",
+            "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 1.0,
             "unit_price": 0.0,
@@ -428494,7 +428516,7 @@
         "vendor_id": "11445",
         "vendor_name": "Veritas Distributors, Inc.",
         "total": 324.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "643472462",
@@ -428521,6 +428543,50 @@
         ]
       },
       {
+        "invoice_id": "219015601",
+        "invoice_number": "METT_20260503_KVtxIOD",
+        "date": "2026-04-28",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -306.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "668958022",
+            "product_name": "Granbazan Albarino Verde BTG",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -17.0,
+            "unit_price": 18.0,
+            "extended": -306.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "219285877",
+        "invoice_number": "METF_20260503_HypGbOl",
+        "date": "2026-04-28",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": 549.36,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "699688256",
+            "product_name": "Torres 10 Gran Reserva Brandy",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 24.0,
+            "unit_price": 22.89,
+            "extended": 549.36
+          }
+        ]
+      },
+      {
         "invoice_id": "216649811",
         "invoice_number": null,
         "date": "2026-04-29",
@@ -428537,7 +428603,7 @@
         "vendor_id": "57478",
         "vendor_name": "Gordon Food Service",
         "total": 107.18,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "831068072",
@@ -428559,7 +428625,7 @@
         "vendor_id": "11941",
         "vendor_name": "Fortune Fish & Gourmet",
         "total": 692.87,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "641886140",
@@ -428636,7 +428702,7 @@
         "vendor_id": "11450",
         "vendor_name": "Fabiano Brothers Inc.",
         "total": 286.8,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "639805182",
@@ -428702,7 +428768,7 @@
         "vendor_id": "11419",
         "vendor_name": "Vintage Wine Company",
         "total": 392.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "639801153",
@@ -428735,7 +428801,7 @@
         "vendor_id": "41805",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": -126.02,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "657992547",
@@ -428768,7 +428834,7 @@
         "vendor_id": "1466360",
         "vendor_name": "Northern Haserot",
         "total": 2769.01,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "678351242",
@@ -428867,7 +428933,7 @@
         "vendor_id": "1466360",
         "vendor_name": "Northern Haserot",
         "total": 681.06,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "646757285",
@@ -428977,7 +429043,7 @@
         "vendor_id": "164538",
         "vendor_name": "Sohn Linen Service, INC.",
         "total": 290.99,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "906923182",
@@ -429065,7 +429131,7 @@
         "vendor_id": "164538",
         "vendor_name": "Sohn Linen Service, INC.",
         "total": -46.9,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "697188533",
@@ -429092,13 +429158,695 @@
         ]
       },
       {
+        "invoice_id": "216979944",
+        "invoice_number": "01788241",
+        "date": "2026-04-29",
+        "vendor_id": "200979793",
+        "vendor_name": "Del Bene Produce, Inc.",
+        "total": 193.39,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "655320918",
+            "product_name": "Pineapple",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 23.49,
+            "extended": 23.49
+          },
+          {
+            "product_id": "641919150",
+            "product_name": "Bean French",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 23.5,
+            "extended": 23.5
+          },
+          {
+            "product_id": "641919150",
+            "product_name": "Bean French",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 9.85,
+            "extended": 19.7
+          },
+          {
+            "product_id": "640732783",
+            "product_name": "Fennel Anise 1CT",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 3.45,
+            "extended": 10.35
+          },
+          {
+            "product_id": "641919397",
+            "product_name": "Onion Spanish 6Ct",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 5.95,
+            "extended": 5.95
+          },
+          {
+            "product_id": "639841349",
+            "product_name": "Spinach Gourmet",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 24.654,
+            "extended": 24.65
+          },
+          {
+            "product_id": "826548312",
+            "product_name": "Greens Swiss Chard Rainbow",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 5.15,
+            "extended": 15.45
+          },
+          {
+            "product_id": "641858429",
+            "product_name": "Tomato Cherry Red",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 4.2,
+            "extended": 12.6
+          },
+          {
+            "product_id": "673879699",
+            "product_name": "Banana 10LB Green Trip Stage",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.7,
+            "extended": 11.7
+          },
+          {
+            "product_id": "641858429",
+            "product_name": "Tomato Cheery Mixed",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 35.0,
+            "extended": 35.0
+          },
+          {
+            "product_id": "645054954",
+            "product_name": "Melon Cantaloupe",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 5.5,
+            "extended": 11.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "216979950",
+        "invoice_number": "01788531",
+        "date": "2026-04-29",
+        "vendor_id": "200979793",
+        "vendor_name": "Del Bene Produce, Inc.",
+        "total": 33.97,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "641919397",
+            "product_name": "Onion Spanish",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 33.97,
+            "extended": 33.97
+          }
+        ]
+      },
+      {
+        "invoice_id": "216980020",
+        "invoice_number": "72174559",
+        "date": "2026-04-29",
+        "vendor_id": "11958",
+        "vendor_name": "Chefs Warehouse",
+        "total": 558.29,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "639818913",
+            "product_name": "Chs Cream Cheese Loaf",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 75.24,
+            "extended": 75.24
+          },
+          {
+            "product_id": "728196521",
+            "product_name": "Parchment Paper Full Sheet",
+            "category": "Paper Costs",
+            "category_id": "1126",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 61.98,
+            "extended": 61.98
+          },
+          {
+            "product_id": "1022850083",
+            "product_name": "Berries Mixed Iqf",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 36.78,
+            "extended": 36.78
+          },
+          {
+            "product_id": "648033418",
+            "product_name": "Vegalene Pan Coating Spray",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 36.93,
+            "extended": 36.93
+          },
+          {
+            "product_id": "642643820",
+            "product_name": "Rtb Large Croissant",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 60.91,
+            "extended": 60.91
+          },
+          {
+            "product_id": "655640317",
+            "product_name": "Canola Oil 6/1 Gallon",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 61.67,
+            "extended": 61.67
+          },
+          {
+            "product_id": "658997647",
+            "product_name": "Grapeseed Oil Spoleto",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 13.105,
+            "extended": 26.21
+          },
+          {
+            "product_id": "639823830",
+            "product_name": "Evoo Spoleto",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 117.38,
+            "extended": 117.38
+          },
+          {
+            "product_id": "646765732",
+            "product_name": "Olive Ptd Castelvetrano",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 77.47,
+            "extended": 77.47
+          }
+        ]
+      },
+      {
+        "invoice_id": "216980065",
+        "invoice_number": "INV840244",
+        "date": "2026-04-29",
+        "vendor_id": "11806",
+        "vendor_name": "Fairway Packing Co.",
+        "total": 276.41,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "644354849",
+            "product_name": "Beef Shank Cut 4\"",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 47.74,
+            "unit_price": 5.79,
+            "extended": 276.41
+          }
+        ]
+      },
+      {
+        "invoice_id": "217687485",
+        "invoice_number": "METT_20260501_hRTlmRa",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -4390.68,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "643472462",
+            "product_name": "Domaine Salvard Le Petit Salvard Sauvignon Blanc BTG",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -36.0,
+            "unit_price": 12.5,
+            "extended": -450.0
+          },
+          {
+            "product_id": "645260527",
+            "product_name": "Hess Select Cabernet Sauvignon North Coast",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -120.0,
+            "unit_price": 11.3,
+            "extended": -1356.0
+          },
+          {
+            "product_id": "950883809",
+            "product_name": "Koha Sauvignon Blanc 2024",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -120.0,
+            "unit_price": 8.75,
+            "extended": -1050.0
+          },
+          {
+            "product_id": "669537490",
+            "product_name": "Cherries, Luxardo Maraschino",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 85.54,
+            "extended": -513.24
+          },
+          {
+            "product_id": "646032367",
+            "product_name": "Keg Deposit - At Purchase $30",
+            "category": "Draft Beer",
+            "category_id": "1046",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": -2.0,
+            "unit_price": 30.0,
+            "extended": -60.0
+          },
+          {
+            "product_id": "646033878",
+            "product_name": "Bell's Two Hearted Ale 12oz Bottle",
+            "category": "Bottle Beer",
+            "category_id": "1036",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": -48.0,
+            "unit_price": 1.375,
+            "extended": -66.0
+          },
+          {
+            "product_id": "679973836",
+            "product_name": "Juice, Lemon",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -24.0,
+            "unit_price": 20.06,
+            "extended": -481.44
+          },
+          {
+            "product_id": "810860308",
+            "product_name": "Lime Juice",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -24.0,
+            "unit_price": 17.25,
+            "extended": -414.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "217690864",
+        "invoice_number": "METF_20260501_l8cMIeo",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": 588.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "646037578",
+            "product_name": "Pierre Gimonnet 1er Cru Cuis Blanc de Blancs Brut NV",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 12.0,
+            "unit_price": 49.0,
+            "extended": 588.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "218797091",
+        "invoice_number": "METT_20260503_z6ArOGA",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -549.36,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "699688256",
+            "product_name": "Torres 10 Gran Reserva Brandy",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -24.0,
+            "unit_price": 22.89,
+            "extended": -549.36
+          }
+        ]
+      },
+      {
+        "invoice_id": "218797099",
+        "invoice_number": "METT_20260503_grxsOjl",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -432.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "655381077",
+            "product_name": "Torres Gran Coronas  BTG",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -24.0,
+            "unit_price": 18.0,
+            "extended": -432.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "218797110",
+        "invoice_number": "METT_20260503_Pk6Gido",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -220.5,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "698912554",
+            "product_name": "Hitachino Anbai Plum Wheat Ale 11.2oz-fl Bottle",
+            "category": "Bottle Beer",
+            "category_id": "1036",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": -24.0,
+            "unit_price": 3.7083,
+            "extended": -88.9992
+          },
+          {
+            "product_id": "685922321",
+            "product_name": "Hitachino Nest Japanese Classic Ale 11.2oz Bottle",
+            "category": "Bottle Beer",
+            "category_id": "1036",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": -24.0,
+            "unit_price": 3.7292,
+            "extended": -89.5008
+          },
+          {
+            "product_id": "692629384",
+            "product_name": "Narragansett Lager 12oz Can",
+            "category": "Bottle Beer",
+            "category_id": "1036",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": -48.0,
+            "unit_price": 0.875,
+            "extended": -42.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "219015608",
+        "invoice_number": "METT_20260503_KEGYYOv",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -139.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "699769641",
+            "product_name": "Paolo Bea Pagliaro Sagrantino de Montefalco",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -1.0,
+            "unit_price": 90.0,
+            "extended": -90.0
+          },
+          {
+            "product_id": "698359675",
+            "product_name": "Paolo Bea Sangiovese San Valentino 2018",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -1.0,
+            "unit_price": 49.0,
+            "extended": -49.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "219062331",
+        "invoice_number": "METT_20260503_9dcoUhp",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -325.44,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "724497844",
+            "product_name": "Charles De Fere Jean-Louis Blanc de Blancs Sparkling",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -36.0,
+            "unit_price": 9.04,
+            "extended": -325.44
+          }
+        ]
+      },
+      {
+        "invoice_id": "219486204",
+        "invoice_number": "1248979",
+        "date": "2026-04-29",
+        "vendor_id": "1074854",
+        "vendor_name": "Aero Filter",
+        "total": 1445.0,
+        "status": "FINAL_REVIEW",
+        "line_items": [
+          {
+            "product_id": "938540045",
+            "product_name": "Labor Equipment Supervision-Aero Filter",
+            "category": "Repairs and Maintenance",
+            "category_id": "1138",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 1445.0,
+            "extended": 1445.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "219500144",
+        "invoice_number": "METT_20260504_5sohJaO",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -1261.76,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "679973836",
+            "product_name": "Juice, Lemon",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -21.0,
+            "unit_price": 20.06,
+            "extended": -421.26
+          },
+          {
+            "product_id": "810860308",
+            "product_name": "Lime Juice",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -18.0,
+            "unit_price": 17.25,
+            "extended": -310.5
+          },
+          {
+            "product_id": "810861445",
+            "product_name": "*DNU* Orange Juice",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -8.0,
+            "unit_price": 17.25,
+            "extended": -138.0
+          },
+          {
+            "product_id": "692635144",
+            "product_name": "2\" Cube",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -28.0,
+            "unit_price": 14.0,
+            "extended": -392.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "219500163",
+        "invoice_number": "METT_20260504_Zk0g28L",
+        "date": "2026-04-29",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -1609.3,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "679973836",
+            "product_name": "Juice, Lemon",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -30.0,
+            "unit_price": 20.06,
+            "extended": -601.8
+          },
+          {
+            "product_id": "810860308",
+            "product_name": "Lime Juice",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -22.0,
+            "unit_price": 17.25,
+            "extended": -379.5
+          },
+          {
+            "product_id": "810861445",
+            "product_name": "*DNU* Orange Juice",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -8.0,
+            "unit_price": 17.25,
+            "extended": -138.0
+          },
+          {
+            "product_id": "692635144",
+            "product_name": "2\" Cube",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -35.0,
+            "unit_price": 14.0,
+            "extended": -490.0
+          }
+        ]
+      },
+      {
         "invoice_id": "216653961",
         "invoice_number": "157078",
         "date": "2026-04-30",
         "vendor_id": "16120",
         "vendor_name": "Stoney Creek Mushrooms",
         "total": 156.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "639840437",
@@ -429120,15 +429868,15 @@
         "vendor_id": "16410",
         "vendor_name": "Eagle Eye",
         "total": 324.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1138013713",
             "product_name": "Ch Paveil De Luze Rouge 20 Margaux",
-            "category": "Wine",
-            "category_id": "1148",
-            "category_type": "WINE",
-            "cogs_bucket": "wine",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
             "quantity": 12.0,
             "unit_price": 27.0,
             "extended": 324.0
@@ -429152,7 +429900,7 @@
         "vendor_id": "41805",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": -51.25,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "692635538",
@@ -429169,12 +429917,4002 @@
       },
       {
         "invoice_id": "216841082",
-        "invoice_number": null,
+        "invoice_number": "830812",
         "date": "2026-04-30",
+        "vendor_id": "450987",
+        "vendor_name": "R. Hirt Jr, Company",
+        "total": 473.35,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "646757285",
+            "product_name": "Belgioioso Ricotta 5LB",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 12.45,
+            "extended": 12.45
+          },
+          {
+            "product_id": "678220778",
+            "product_name": "Kingston Amish Blue Crumblend",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 4.09,
+            "extended": 40.9
+          },
+          {
+            "product_id": "647646808",
+            "product_name": "Michigan Maple Syrup Gallon",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 46.0,
+            "extended": 184.0
+          },
+          {
+            "product_id": "660951662",
+            "product_name": "Mitica Marcona Almonds Salted",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 175.0,
+            "extended": 175.0
+          },
+          {
+            "product_id": "661015255",
+            "product_name": "Rustichella Bulk Cavatelli",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 61.0,
+            "extended": 61.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "216979876",
+        "invoice_number": "151477",
+        "date": "2026-04-30",
+        "vendor_id": "152853519",
+        "vendor_name": "A.H.D. Vintners",
+        "total": 96.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "904854653",
+            "product_name": "Ch Cissac 22 Haut Medoc W 6 Pack 750 Ml Bottles",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 96.0,
+            "extended": 96.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "216979953",
+        "invoice_number": "01788884",
+        "date": "2026-04-30",
+        "vendor_id": "200979793",
+        "vendor_name": "Del Bene Produce, Inc.",
+        "total": 53.85,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "729670005",
+            "product_name": "Tortilla Flour 12IN  Flavor Peak",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 53.85,
+            "extended": 53.85
+          }
+        ]
+      },
+      {
+        "invoice_id": "216979956",
+        "invoice_number": "01788908",
+        "date": "2026-04-30",
+        "vendor_id": "200979793",
+        "vendor_name": "Del Bene Produce, Inc.",
+        "total": 24.9,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "640732783",
+            "product_name": "Fennel Anise 1CT",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.0,
+            "unit_price": 4.15,
+            "extended": 24.9
+          }
+        ]
+      },
+      {
+        "invoice_id": "217236356",
+        "invoice_number": "METT_20260501_XAROTVX",
+        "date": "2026-04-30",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -126.4,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "975195253",
+            "product_name": "COMMISSARY - Banana Ice Cream - HS",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -0.5,
+            "unit_price": 38.54,
+            "extended": -19.27
+          },
+          {
+            "product_id": "1176913729",
+            "product_name": "Toasted Rice Ice Cream",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -0.33,
+            "unit_price": 71.84,
+            "extended": -23.7072
+          },
+          {
+            "product_id": "1109277927",
+            "product_name": "Hojicha Chocolate Semifreddo",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -24.0,
+            "unit_price": 1.95,
+            "extended": -46.8
+          },
+          {
+            "product_id": "1186089672",
+            "product_name": "Set whipped cream",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 2.16,
+            "extended": -2.16
+          },
+          {
+            "product_id": "1130261498",
+            "product_name": "S & D tart",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -45.0,
+            "unit_price": 0.47,
+            "extended": -21.15
+          },
+          {
+            "product_id": "643473619",
+            "product_name": "Oranges, Fresh",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -12.0,
+            "unit_price": 0.4446,
+            "extended": -5.3352
+          },
+          {
+            "product_id": "643278822",
+            "product_name": "Strawberries, Fresh",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -2.0,
+            "unit_price": 3.26,
+            "extended": -6.52
+          },
+          {
+            "product_id": "1091243389",
+            "product_name": "Pink Peppercorn Mallow",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 1.45,
+            "extended": -1.45
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485663",
+        "invoice_number": "0018105",
+        "date": "2026-04-30",
+        "vendor_id": "116409852",
+        "vendor_name": "Grosse Pointe Moving & Storage",
+        "total": 1380.5,
+        "status": "FINAL_REVIEW",
+        "line_items": [
+          {
+            "product_id": "",
+            "product_name": "Moving & Transportation M3",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 435.0,
+            "extended": 435.0
+          },
+          {
+            "product_id": "1108835615",
+            "product_name": "Bulk Storage Method Co.",
+            "category": "Dues & Subscriptions",
+            "category_id": "1067",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 770.0,
+            "extended": 770.0
+          },
+          {
+            "product_id": "1108835613",
+            "product_name": "Moving & Transportation T1",
+            "category": "Dues & Subscriptions",
+            "category_id": "1067",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 117.5,
+            "extended": 117.5
+          },
+          {
+            "product_id": "1053691984",
+            "product_name": "Labor Charge",
+            "category": "Dues & Subscriptions",
+            "category_id": "1067",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 58.0,
+            "extended": 58.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "219486248",
+        "invoice_number": "739066",
+        "date": "2026-04-30",
+        "vendor_id": "12253",
+        "vendor_name": "(Preferred Produce) Frog Holler Produce",
+        "total": 225.85,
+        "status": "FINAL_REVIEW",
+        "line_items": [
+          {
+            "product_id": "639839023",
+            "product_name": "Berries Blackberries",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 15.85,
+            "extended": 15.85
+          },
+          {
+            "product_id": "OGMAN15",
+            "product_name": "Org Orange Mandarin 15/2",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 82.5,
+            "extended": 82.5
+          },
+          {
+            "product_id": "639839023",
+            "product_name": "Berries Blue Driscoll 12ct pint",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 55.43,
+            "extended": 55.43
+          },
+          {
+            "product_id": "641319651",
+            "product_name": "Berries Raspberries 12 1/2PT",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 35.62,
+            "extended": 35.62
+          },
+          {
+            "product_id": "643278822",
+            "product_name": "Berries Strawberries Cali",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 15.0,
+            "extended": 15.0
+          },
+          {
+            "product_id": "724898077",
+            "product_name": "Oranges Clemintines",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 8.1,
+            "extended": 16.2
+          }
+        ]
+      },
+      {
+        "invoice_id": "217212516",
+        "invoice_number": "2056436",
+        "date": "2026-05-01",
+        "vendor_id": "11776",
+        "vendor_name": "Eastown Distributors Co",
+        "total": 169.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "639809000",
+            "product_name": "Modelo Esp Lse Btl",
+            "category": "Bottle Beer",
+            "category_id": "1036",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 30.1,
+            "extended": 30.1
+          },
+          {
+            "product_id": "640724558",
+            "product_name": "Fever Tree Club Soda",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 17.25,
+            "extended": 103.5
+          },
+          {
+            "product_id": "640723885",
+            "product_name": "Fever Tree Premium Tonic 3/8PK 150ML",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 4.0,
+            "unit_price": 17.25,
+            "extended": 69.0
+          },
+          {
+            "product_id": "677594677",
+            "product_name": "Can Deposit - At Purchase (2.40)",
+            "category": "Keg Deposit/Refund",
+            "category_id": "1097",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 10.0,
+            "unit_price": 2.4,
+            "extended": 24.0
+          },
+          {
+            "product_id": "851343996",
+            "product_name": "Bottle Deposit - At Purchase (2.40)",
+            "category": "Bottle Beer",
+            "category_id": "1036",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 2.4,
+            "extended": 2.4
+          },
+          {
+            "product_id": "646032111",
+            "product_name": "Keg Deposit - At Return $30",
+            "category": "Keg Deposit/Refund",
+            "category_id": "1097",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": -2.0,
+            "unit_price": 30.0,
+            "extended": -60.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "217212570",
+        "invoice_number": "06717284",
+        "date": "2026-05-01",
+        "vendor_id": "117266",
+        "vendor_name": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
+        "total": 400.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "644362276",
+            "product_name": "Vasse Felix Filius cab",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 2.0,
+            "unit_price": 100.0,
+            "extended": 200.0
+          },
+          {
+            "product_id": "652684746",
+            "product_name": "Vasse Felix Filius Chard",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 2.0,
+            "unit_price": 100.0,
+            "extended": 200.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "217212607",
+        "invoice_number": null,
+        "date": "2026-05-01",
+        "vendor_id": "117266",
+        "vendor_name": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
+        "total": 5701.93,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "655377118",
+            "product_name": "Suze Savuer Aperitif",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 25.33,
+            "extended": 75.99
+          },
+          {
+            "product_id": "688071098",
+            "product_name": "Lagavulin-8Yr",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 67.85,
+            "extended": 67.85
+          },
+          {
+            "product_id": "655374520",
+            "product_name": "Caffo maraschino",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 19.61,
+            "extended": 58.83
+          },
+          {
+            "product_id": "699689716",
+            "product_name": "Giffard Creme Peache De Vi",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 24.56,
+            "extended": 73.68
+          },
+          {
+            "product_id": "652323864",
+            "product_name": "Pernod Absinthe Superieup",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 50.88,
+            "extended": 50.88
+          },
+          {
+            "product_id": "848821789",
+            "product_name": "Tempus Fugit Creme De Noy",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 33.92,
+            "extended": 101.76
+          },
+          {
+            "product_id": "652320140",
+            "product_name": "Glenlivet",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 59.37,
+            "extended": 59.37
+          },
+          {
+            "product_id": "652321514",
+            "product_name": "Jameson",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 33.92,
+            "extended": 101.76
+          },
+          {
+            "product_id": "652324791",
+            "product_name": "Tullamore Dew",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 31.37,
+            "extended": 94.11
+          },
+          {
+            "product_id": "654107737",
+            "product_name": "Fernet Branca",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 33.92,
+            "extended": 33.92
+          },
+          {
+            "product_id": "688069907",
+            "product_name": "Glenlivet French Oak 15Y",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 76.33,
+            "extended": 76.33
+          },
+          {
+            "product_id": "652321775",
+            "product_name": "Macallan - 12 Yr Double Cas",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 72.06,
+            "extended": 72.06
+          },
+          {
+            "product_id": "652322656",
+            "product_name": "Oban Scotch",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 72.06,
+            "extended": 72.06
+          },
+          {
+            "product_id": "652321541",
+            "product_name": "Johnnie Walker Blk Label",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 43.25,
+            "extended": 43.25
+          },
+          {
+            "product_id": "641913932",
+            "product_name": "Woodford Reserve BBN",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 40.7,
+            "extended": 122.1
+          },
+          {
+            "product_id": "652319806",
+            "product_name": "Chambord Black Rasp Berry",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 31.37,
+            "extended": 94.11
+          },
+          {
+            "product_id": "652319752",
+            "product_name": "Casamigos Blanco",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 46.64,
+            "extended": 139.92
+          },
+          {
+            "product_id": "652184135",
+            "product_name": "Hendrick's Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 37.31,
+            "extended": 111.93
+          },
+          {
+            "product_id": "655376282",
+            "product_name": "Hennessy V S",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 46.64,
+            "extended": 279.84
+          },
+          {
+            "product_id": "657992811",
+            "product_name": "Valentine Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 25.44,
+            "extended": 152.64
+          },
+          {
+            "product_id": "652319771",
+            "product_name": "Casamigos Reposado",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 305.28,
+            "extended": 305.28
+          },
+          {
+            "product_id": "641913732",
+            "product_name": "Ketel One Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 274.68,
+            "extended": 824.04
+          },
+          {
+            "product_id": "657992547",
+            "product_name": "Old Forester 86",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 294.72,
+            "extended": 884.16
+          },
+          {
+            "product_id": "654136298",
+            "product_name": "Plymouth Gin 6B",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 203.52,
+            "extended": 203.52
+          },
+          {
+            "product_id": "641913896",
+            "product_name": "Tito's Handmade Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 284.88,
+            "extended": 854.64
+          },
+          {
+            "product_id": "652321828",
+            "product_name": "Mahon Spanish Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 203.52,
+            "extended": 203.52
+          },
+          {
+            "product_id": "714438533",
+            "product_name": "Giffard Banane Du Bresil",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 178.08,
+            "extended": 178.08
+          },
+          {
+            "product_id": "668150991",
+            "product_name": "Giffard Wild Elder Flower",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 178.08,
+            "extended": 178.08
+          },
+          {
+            "product_id": "1158915663",
+            "product_name": "St. George Valley Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 188.22,
+            "extended": 188.22
+          }
+        ]
+      },
+      {
+        "invoice_id": "217212657",
+        "invoice_number": "METF_20260501_iadBJVY",
+        "date": "2026-05-01",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": 59.36,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "714438533",
+            "product_name": "Giffard Banane Du Bresil",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 2.0,
+            "unit_price": 29.68,
+            "extended": 59.36
+          }
+        ]
+      },
+      {
+        "invoice_id": "217229403",
+        "invoice_number": "830900",
+        "date": "2026-05-01",
+        "vendor_id": "450987",
+        "vendor_name": "R. Hirt Jr, Company",
+        "total": 56.1,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1156718974",
+            "product_name": "Germain Cremeaux Truffle",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 56.1,
+            "extended": 56.1
+          }
+        ]
+      },
+      {
+        "invoice_id": "217236301",
+        "invoice_number": "5556745",
+        "date": "2026-05-01",
+        "vendor_id": "11417",
+        "vendor_name": "State of Michigan",
+        "total": 5181.01,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "641916005",
+            "product_name": "Aperol Aperitivo",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 167.88,
+            "extended": 167.88
+          },
+          {
+            "product_id": "641916837",
+            "product_name": "Citadelle GIn",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 2.0,
+            "unit_price": 132.3,
+            "extended": 264.6
+          },
+          {
+            "product_id": "818249711",
+            "product_name": "Convite Mezcal Esencial",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 152.64,
+            "extended": 152.64
+          },
+          {
+            "product_id": "729780333",
+            "product_name": "Corazon De Agave Reposado",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 2.0,
+            "unit_price": 132.3,
+            "extended": 264.6
+          },
+          {
+            "product_id": "652320243",
+            "product_name": "Grind Espresso Shot",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 152.28,
+            "extended": 152.28
+          },
+          {
+            "product_id": "641917833",
+            "product_name": "Haku Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 152.64,
+            "extended": 152.64
+          },
+          {
+            "product_id": "1172255838",
+            "product_name": "Libelula Blanco Tequila",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 4.0,
+            "unit_price": 283.92,
+            "extended": 1135.68
+          },
+          {
+            "product_id": "668150708",
+            "product_name": "Liquore Strega",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 356.16,
+            "extended": 356.16
+          },
+          {
+            "product_id": "639800457",
+            "product_name": "Toki Japanese Whisky",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 2.0,
+            "unit_price": 254.22,
+            "extended": 508.44
+          },
+          {
+            "product_id": "641919019",
+            "product_name": "Wheatley Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 203.4,
+            "extended": 203.4
+          },
+          {
+            "product_id": "641916176",
+            "product_name": "Basil Hayden's  Bourbon",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 50.88,
+            "extended": 152.64
+          },
+          {
+            "product_id": "652319869",
+            "product_name": "El Tesoro Reposado",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 61.06,
+            "extended": 183.18
+          },
+          {
+            "product_id": "641918047",
+            "product_name": "Maker's Mark Bbn",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 33.92,
+            "extended": 101.76
+          },
+          {
+            "product_id": "639800087",
+            "product_name": "Roku Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 30.5,
+            "extended": 91.5
+          },
+          {
+            "product_id": "666965681",
+            "product_name": "Knob Creek Bbn",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 38.16,
+            "extended": 114.48
+          },
+          {
+            "product_id": "652319702",
+            "product_name": "cardenal Mendoza Brandy",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 52.58,
+            "extended": 157.74
+          },
+          {
+            "product_id": "740136153",
+            "product_name": "Chareau Aloe Vera Liqueur",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 33.07,
+            "extended": 99.21
+          },
+          {
+            "product_id": "652322476",
+            "product_name": "Mathilde Cassis Imported Cordial",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 19.5,
+            "extended": 58.5
+          },
+          {
+            "product_id": "652325221",
+            "product_name": "Wild Turkey 101 Rye",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 32.23,
+            "extended": 96.69
+          },
+          {
+            "product_id": "680594891",
+            "product_name": "Buffalo Trace Bourbon Cream",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 16.95,
+            "extended": 50.85
+          },
+          {
+            "product_id": "639797539",
+            "product_name": "Christian Brothers (Round)",
+            "category": "Kitchen Utensils & Supplies",
+            "category_id": "1070",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 3.0,
+            "unit_price": 12.69,
+            "extended": 38.07
+          },
+          {
+            "product_id": "641918013",
+            "product_name": "High West Double Rye",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 29.68,
+            "extended": 29.68
+          },
+          {
+            "product_id": "688217195",
+            "product_name": "Laphroaig-10 Yr",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 50.88,
+            "extended": 50.88
+          },
+          {
+            "product_id": "654116554",
+            "product_name": "Pikesville Rye",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 46.64,
+            "extended": 46.64
+          },
+          {
+            "product_id": "654116535",
+            "product_name": "Tequila Ocho Plata",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 42.37,
+            "extended": 127.11
+          },
+          {
+            "product_id": "641916402",
+            "product_name": "Campari",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 33.92,
+            "extended": 101.76
+          },
+          {
+            "product_id": "652320163",
+            "product_name": "Grey Goose Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 29.68,
+            "extended": 89.04
+          },
+          {
+            "product_id": "641918425",
+            "product_name": "Planteray 3 Stars Rum",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 18.62,
+            "extended": 55.86
+          },
+          {
+            "product_id": "641918517",
+            "product_name": "Rittenhouse Rye",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 26.29,
+            "extended": 78.87
+          },
+          {
+            "product_id": "657992891",
+            "product_name": "Angels Envy Bourbon",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 42.37,
+            "extended": 42.37
+          },
+          {
+            "product_id": "814729739",
+            "product_name": "Myers's Original Dark (Jam)",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 18.62,
+            "extended": 55.86
+          }
+        ]
+      },
+      {
+        "invoice_id": "217236372",
+        "invoice_number": "METT_20260501_C4liy4C",
+        "date": "2026-05-01",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -156.63,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "739774849",
+            "product_name": "Cheesecake, Mini",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -100.0,
+            "unit_price": 1.2732,
+            "extended": -127.32
+          },
+          {
+            "product_id": "975208801",
+            "product_name": "Sorbet Base - White Peach",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -4.0,
+            "unit_price": 5.14,
+            "extended": -20.56
+          },
+          {
+            "product_id": "975188383",
+            "product_name": "COMMISSARY - Parker House Rolls - Anthology",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -125.0,
+            "unit_price": 0.07,
+            "extended": -8.75
+          }
+        ]
+      },
+      {
+        "invoice_id": "217677220",
+        "invoice_number": "METT_20260501_9pqDCK5",
+        "date": "2026-05-01",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -1306.97,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1172255838",
+            "product_name": "Libelula Tequila",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -12.0,
+            "unit_price": 23.66,
+            "extended": -283.92
+          },
+          {
+            "product_id": "639800457",
+            "product_name": "Suntory Toki Whiskey",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -12.0,
+            "unit_price": 42.37,
+            "extended": -508.44
+          },
+          {
+            "product_id": "641913896",
+            "product_name": "Tito's Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 23.74,
+            "extended": -142.44
+          },
+          {
+            "product_id": "641917833",
+            "product_name": "Haku Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 4.24,
+            "extended": -25.44
+          },
+          {
+            "product_id": "641916837",
+            "product_name": "Citadelle Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 28.2667,
+            "extended": -84.8001
+          },
+          {
+            "product_id": "641918425",
+            "product_name": "Plantation 3 Star Rum",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 18.62,
+            "extended": -55.86
+          },
+          {
+            "product_id": "652319869",
+            "product_name": "El Tesoro Reposado Tequila",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 61.06,
+            "extended": -183.18
+          },
+          {
+            "product_id": "641913732",
+            "product_name": "Ketel One Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 22.89,
+            "extended": -22.89
+          }
+        ]
+      },
+      {
+        "invoice_id": "217677240",
+        "invoice_number": "METT_20260501_d6Lk2l1",
+        "date": "2026-05-01",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -5118.32,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "666965681",
+            "product_name": "Knob Creek Bourbon",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 38.16,
+            "extended": -38.16
+          },
+          {
+            "product_id": "1172255838",
+            "product_name": "Libelula Tequila",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -24.0,
+            "unit_price": 23.66,
+            "extended": -567.84
+          },
+          {
+            "product_id": "641913732",
+            "product_name": "Ketel One Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -18.0,
+            "unit_price": 22.89,
+            "extended": -412.02
+          },
+          {
+            "product_id": "657992547",
+            "product_name": "Old Forester Bourbon",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -18.0,
+            "unit_price": 24.56,
+            "extended": -442.08
+          },
+          {
+            "product_id": "641913896",
+            "product_name": "Tito's Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -12.0,
+            "unit_price": 23.74,
+            "extended": -284.88
+          },
+          {
+            "product_id": "652320243",
+            "product_name": "Grind Espresso Liqueur",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -12.0,
+            "unit_price": 12.69,
+            "extended": -152.28
+          },
+          {
+            "product_id": "729780333",
+            "product_name": "Corazon Reposado Tequila",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 22.05,
+            "extended": -132.3
+          },
+          {
+            "product_id": "1158915663",
+            "product_name": "St George Valley Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 31.37,
+            "extended": -188.22
+          },
+          {
+            "product_id": "652321828",
+            "product_name": "Mahon Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 33.92,
+            "extended": -203.52
+          },
+          {
+            "product_id": "818249711",
+            "product_name": "Convite Mezcal Esencial",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 25.44,
+            "extended": -152.64
+          },
+          {
+            "product_id": "668150991",
+            "product_name": "Giffard Elderflower Liqueur",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 29.68,
+            "extended": -178.08
+          },
+          {
+            "product_id": "668150708",
+            "product_name": "Strega Liqueur",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 29.68,
+            "extended": -178.08
+          },
+          {
+            "product_id": "714438533",
+            "product_name": "Giffard Banane Du Bresil",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 29.68,
+            "extended": -178.08
+          },
+          {
+            "product_id": "641916005",
+            "product_name": "Aperol Aperitivo",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 27.98,
+            "extended": -167.88
+          },
+          {
+            "product_id": "654136298",
+            "product_name": "Plymouth Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 33.92,
+            "extended": -101.76
+          },
+          {
+            "product_id": "657992811",
+            "product_name": "Valentine Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 25.44,
+            "extended": -76.32
+          },
+          {
+            "product_id": "655376282",
+            "product_name": "Hennessy VS Cognac",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 46.64,
+            "extended": -139.92
+          },
+          {
+            "product_id": "652319702",
+            "product_name": "Cardenal Mendoza Brandy",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 52.58,
+            "extended": -157.74
+          },
+          {
+            "product_id": "740136153",
+            "product_name": "Chareau Aloe Liqueur",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 33.07,
+            "extended": -99.21
+          },
+          {
+            "product_id": "652325221",
+            "product_name": "Wild Turkey 101 Proof Rye",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 32.23,
+            "extended": -96.69
+          },
+          {
+            "product_id": "699689716",
+            "product_name": "Giffard Creme de Peche",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 24.56,
+            "extended": -73.68
+          },
+          {
+            "product_id": "639800087",
+            "product_name": "Roku Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 30.5,
+            "extended": -91.5
+          },
+          {
+            "product_id": "652320163",
+            "product_name": "Grey Goose Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 29.68,
+            "extended": -89.04
+          },
+          {
+            "product_id": "641918047",
+            "product_name": "Maker's Mark Bourbon",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 33.92,
+            "extended": -101.76
+          },
+          {
+            "product_id": "814729739",
+            "product_name": "Myers's Dark Rum",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 18.62,
+            "extended": -55.86
+          },
+          {
+            "product_id": "652324791",
+            "product_name": "Tullamore Dew Irish Whiskey",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 31.37,
+            "extended": -94.11
+          },
+          {
+            "product_id": "641916402",
+            "product_name": "Campari",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -2.0,
+            "unit_price": 33.92,
+            "extended": -67.84
+          },
+          {
+            "product_id": "639797539",
+            "product_name": "Christian Brothers Brandy",
+            "category": "Kitchen Utensils & Supplies",
+            "category_id": "1070",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": -2.0,
+            "unit_price": 22.3941,
+            "extended": -44.7882
+          },
+          {
+            "product_id": "641918013",
+            "product_name": "High West Double Rye",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 29.68,
+            "extended": -29.68
+          },
+          {
+            "product_id": "652320140",
+            "product_name": "Glenlivet 12yr Scotch",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 59.37,
+            "extended": -59.37
+          },
+          {
+            "product_id": "688071098",
+            "product_name": "Lagavulin 8yr Single Malt Scotch",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 67.85,
+            "extended": -67.85
+          },
+          {
+            "product_id": "652321775",
+            "product_name": "Macallan 12yr Double Cask Scotch",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 72.06,
+            "extended": -72.06
+          },
+          {
+            "product_id": "652321541",
+            "product_name": "Johnnie Walker Black Scotch",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 43.25,
+            "extended": -43.25
+          },
+          {
+            "product_id": "652322656",
+            "product_name": "Oban 14yr Scotch",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 72.06,
+            "extended": -72.06
+          },
+          {
+            "product_id": "654107737",
+            "product_name": "Fernet Branca",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 33.92,
+            "extended": -33.92
+          },
+          {
+            "product_id": "688217195",
+            "product_name": "Laphroaig 10yr Single Malt Scotch",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 50.88,
+            "extended": -50.88
+          },
+          {
+            "product_id": "688069907",
+            "product_name": "Glenlivet 15yr French Oak Scotch",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 76.33,
+            "extended": -76.33
+          },
+          {
+            "product_id": "654116554",
+            "product_name": "Pikesville Rye",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 46.64,
+            "extended": -46.64
+          }
+        ]
+      },
+      {
+        "invoice_id": "217677291",
+        "invoice_number": "METT_20260501_gs4Ocxo",
+        "date": "2026-05-01",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -807.23,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "641913732",
+            "product_name": "Ketel One Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 22.89,
+            "extended": -137.34
+          },
+          {
+            "product_id": "641913896",
+            "product_name": "Tito's Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 23.74,
+            "extended": -142.44
+          },
+          {
+            "product_id": "652319771",
+            "product_name": "Casamigos Reposado Tequila",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 50.88,
+            "extended": -305.28
+          },
+          {
+            "product_id": "657992811",
+            "product_name": "Valentine Vodka",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 25.44,
+            "extended": -76.32
+          },
+          {
+            "product_id": "652184135",
+            "product_name": "Hendrick's Gin",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -3.0,
+            "unit_price": 37.31,
+            "extended": -111.93
+          },
+          {
+            "product_id": "641916402",
+            "product_name": "Campari",
+            "category": "Liquor",
+            "category_id": "1076",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 33.92,
+            "extended": -33.92
+          }
+        ]
+      },
+      {
+        "invoice_id": "217942974",
+        "invoice_number": "6358980087",
+        "date": "2026-05-01",
+        "vendor_id": "146825",
+        "vendor_name": "Ecolab Inc.",
+        "total": 222.65,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1020883620",
+            "product_name": "Rental- Ecolab Inc.",
+            "category": "Equipment/Other Rentals",
+            "category_id": "1054",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 206.63,
+            "extended": 206.63
+          }
+        ]
+      },
+      {
+        "invoice_id": "217942989",
+        "invoice_number": "6358980085",
+        "date": "2026-05-01",
+        "vendor_id": "146825",
+        "vendor_name": "Ecolab Inc.",
+        "total": 345.3,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "969230051",
+            "product_name": "Rental - Ecolab Inc.",
+            "category": "Equipment/Other Rentals",
+            "category_id": "1054",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 323.91,
+            "extended": 323.91
+          }
+        ]
+      },
+      {
+        "invoice_id": "217947484",
+        "invoice_number": "6358980086",
+        "date": "2026-05-01",
+        "vendor_id": "146825",
+        "vendor_name": "Ecolab Inc.",
+        "total": 190.88,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "927118700",
+            "product_name": "Rental Charge",
+            "category": "Equipment/Other Rentals",
+            "category_id": "1054",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 179.32,
+            "extended": 179.32
+          }
+        ]
+      },
+      {
+        "invoice_id": "218194987",
+        "invoice_number": "72205111",
+        "date": "2026-05-01",
+        "vendor_id": "11958",
+        "vendor_name": "Chefs Warehouse",
+        "total": 949.63,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "646761769",
+            "product_name": "Cocoa Powder Noir Intense",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 45.24,
+            "extended": 45.24
+          },
+          {
+            "product_id": "644366430",
+            "product_name": "Pastry Bag Disposable 21 In",
+            "category": "Kitchen Utensils & Supplies",
+            "category_id": "1070",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 34.94,
+            "extended": 34.94
+          },
+          {
+            "product_id": "656129444",
+            "product_name": "Puff Pastry Half Sheet Le Coq",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 85.64,
+            "extended": 85.64
+          },
+          {
+            "product_id": "1133512158",
+            "product_name": "Cookie Dough Chocolate Chip",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 78.47,
+            "extended": 78.47
+          },
+          {
+            "product_id": "639833295",
+            "product_name": "Rtb Large Chocolate Croissant",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 84.12,
+            "extended": 252.36
+          },
+          {
+            "product_id": "652168653",
+            "product_name": "Milk Powdered Non Fat Instant",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 41.815,
+            "extended": 167.26
+          },
+          {
+            "product_id": "644347370",
+            "product_name": "Almond Flour Fine Blanched",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 134.16,
+            "extended": 134.16
+          },
+          {
+            "product_id": "660927309",
+            "product_name": "Baking Soda",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 37.03,
+            "extended": 37.03
+          },
+          {
+            "product_id": "641319154",
+            "product_name": "Sugar Light Brown Domino",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 42.65,
+            "extended": 42.65
+          },
+          {
+            "product_id": "656125633",
+            "product_name": "Sugar In The Raw",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 69.78,
+            "extended": 69.78
+          }
+        ]
+      },
+      {
+        "invoice_id": "218194994",
+        "invoice_number": "DA2615723",
+        "date": "2026-05-01",
+        "vendor_id": "11902",
+        "vendor_name": "Motor City Seafood LLC",
+        "total": 1289.61,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "650197659",
+            "product_name": "Dover Sole - (W)",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 24.4,
+            "unit_price": 21.34,
+            "extended": 520.7
+          },
+          {
+            "product_id": "647646772",
+            "product_name": "Escargot - Burgundy XL 800g",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 12.0,
+            "unit_price": 28.11,
+            "extended": 337.32
+          },
+          {
+            "product_id": "639813248",
+            "product_name": "Mussels-Hollander & Dekonining",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 30.0,
+            "unit_price": 4.26,
+            "extended": 127.8
+          },
+          {
+            "product_id": "1105009623",
+            "product_name": "Oy- Bluenose Oyster",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 100.0,
+            "unit_price": 1.09,
+            "extended": 109.0
+          },
+          {
+            "product_id": "642651676",
+            "product_name": "Oy -Westcott Bay",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 120.0,
+            "unit_price": 1.59,
+            "extended": 190.8
+          }
+        ]
+      },
+      {
+        "invoice_id": "218194997",
+        "invoice_number": "432956-26-01",
+        "date": "2026-05-01",
+        "vendor_id": "11941",
+        "vendor_name": "Fortune Fish & Gourmet",
+        "total": 1022.31,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "765402337",
+            "product_name": "P&D T/On Tigers 13-15",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 11.74,
+            "extended": 117.4
+          },
+          {
+            "product_id": "642397522",
+            "product_name": "Loch Duart Salmon Fillets",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.52,
+            "unit_price": 15.61,
+            "extended": 54.95
+          },
+          {
+            "product_id": "641855662",
+            "product_name": "River Rainbow Trout PBO 9-11OZ",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 8.81,
+            "extended": 88.1
+          },
+          {
+            "product_id": "639813159",
+            "product_name": "Bronzini  Fil 180/220gr",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 8.82,
+            "unit_price": 16.79,
+            "extended": 148.09
+          },
+          {
+            "product_id": "1137497480",
+            "product_name": "IQF Potato Pellets 4/5.5lb",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 46.93,
+            "extended": 93.86
+          },
+          {
+            "product_id": "641307315",
+            "product_name": "Winter Harbour Smk Salmon Side",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.4,
+            "unit_price": 16.74,
+            "extended": 40.18
+          },
+          {
+            "product_id": "639814179",
+            "product_name": "Smk Rainbow Trout Caviar 8OZ",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 47.97,
+            "extended": 47.97
+          },
+          {
+            "product_id": "642644229",
+            "product_name": "Quail Eggs",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 2.96,
+            "extended": 11.84
+          },
+          {
+            "product_id": "640757133",
+            "product_name": "Dart Chx Gc Whole 3.5-4 LB Avg",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 37.08,
+            "unit_price": 2.99,
+            "extended": 110.87
+          },
+          {
+            "product_id": "640493970",
+            "product_name": "Labelle Foie Gras B",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 8.15,
+            "unit_price": 37.92,
+            "extended": 309.05
+          }
+        ]
+      },
+      {
+        "invoice_id": "218195000",
+        "invoice_number": "INV840731",
+        "date": "2026-05-01",
+        "vendor_id": "11806",
+        "vendor_name": "Fairway Packing Co.",
+        "total": 643.79,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "641316259",
+            "product_name": "Creekstone Teres Major",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 26.78,
+            "unit_price": 12.89,
+            "extended": 345.19
+          },
+          {
+            "product_id": "717042312",
+            "product_name": "Chicken Breakfast 1OZ Link-Detroit Sausage",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 20.0,
+            "unit_price": 4.99,
+            "extended": 99.8
+          },
+          {
+            "product_id": "650358772",
+            "product_name": "Sausage Detroit  Breakfast  Links  2OZ (DET)",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 20.0,
+            "unit_price": 3.99,
+            "extended": 79.8
+          },
+          {
+            "product_id": "639812198",
+            "product_name": "Ground Beef Chop House Blend",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 20.0,
+            "unit_price": 5.95,
+            "extended": 119.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "218195003",
+        "invoice_number": "01789524",
+        "date": "2026-05-01",
+        "vendor_id": "200979793",
+        "vendor_name": "Del Bene Produce, Inc.",
+        "total": 17.1,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1192424006",
+            "product_name": "Seed Hemp",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 8.55,
+            "extended": 17.1
+          }
+        ]
+      },
+      {
+        "invoice_id": "218195006",
+        "invoice_number": "01789297",
+        "date": "2026-05-01",
+        "vendor_id": "200979793",
+        "vendor_name": "Del Bene Produce, Inc.",
+        "total": 554.93,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "639839136",
+            "product_name": "Carrot Bulk 50LB",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 39.5,
+            "extended": 39.5
+          },
+          {
+            "product_id": "640734402",
+            "product_name": "Eggplant",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 4.2,
+            "extended": 12.6
+          },
+          {
+            "product_id": "642644861",
+            "product_name": "Dill",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 31.0,
+            "extended": 31.0
+          },
+          {
+            "product_id": "639841716",
+            "product_name": "Herb Tarragon",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 13.25,
+            "extended": 26.5
+          },
+          {
+            "product_id": "660595021",
+            "product_name": "Lettuce Romaine Heart",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 46.89,
+            "extended": 46.89
+          },
+          {
+            "product_id": "640756925",
+            "product_name": "Watercress B & W",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 14.8,
+            "extended": 14.8
+          },
+          {
+            "product_id": "641319695",
+            "product_name": "Potato Yukon Size B",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 27.5,
+            "extended": 27.5
+          },
+          {
+            "product_id": "640536377",
+            "product_name": "Squash Yellow Medium 5 LB",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 8.55,
+            "extended": 17.1
+          },
+          {
+            "product_id": "644174345",
+            "product_name": "Squash Butternut",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 7.0,
+            "unit_price": 4.5,
+            "extended": 31.5
+          },
+          {
+            "product_id": "641858429",
+            "product_name": "Tomato Cherry Red",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 26.5,
+            "extended": 26.5
+          },
+          {
+            "product_id": "641919150",
+            "product_name": "Bean Green Clean Trim",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 26.3,
+            "extended": 52.6
+          },
+          {
+            "product_id": "640734311",
+            "product_name": "Herb Chives",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 19.24,
+            "extended": 38.48
+          },
+          {
+            "product_id": "641319663",
+            "product_name": "Lettuce Spring Mix Regular",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 13.32,
+            "extended": 26.64
+          },
+          {
+            "product_id": "639841038",
+            "product_name": "Shallot Peeled",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 17.75,
+            "extended": 35.5
+          },
+          {
+            "product_id": "641919397",
+            "product_name": "Onion Spanish",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 33.97,
+            "extended": 33.97
+          },
+          {
+            "product_id": "641919586",
+            "product_name": "Radish Red Cello",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 7.0,
+            "unit_price": 3.55,
+            "extended": 24.85
+          },
+          {
+            "product_id": "639841984",
+            "product_name": "Tomato Roma Red",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 69.0,
+            "extended": 69.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "218195009",
+        "invoice_number": "739674",
+        "date": "2026-05-01",
+        "vendor_id": "12253",
+        "vendor_name": "(Preferred Produce) Frog Holler Produce",
+        "total": 122.9,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "639839023",
+            "product_name": "Berries Blue Driscoll 12ct pint",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 30.25,
+            "extended": 30.25
+          },
+          {
+            "product_id": "641319651",
+            "product_name": "Berries Raspberries 12 1/2PT",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 35.62,
+            "extended": 35.62
+          },
+          {
+            "product_id": "639839023",
+            "product_name": "Berries Blackberries Dris 12",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 26.82,
+            "extended": 26.82
+          },
+          {
+            "product_id": "643278822",
+            "product_name": "Berries Strawberries Cali",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 24.96,
+            "extended": 24.96
+          }
+        ]
+      },
+      {
+        "invoice_id": "218209644",
+        "invoice_number": "1667030",
+        "date": "2026-05-01",
+        "vendor_id": "32746",
+        "vendor_name": "Rave Associates",
+        "total": 552.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "699528714",
+            "product_name": "Bavik Super Pils 1/2 Bbl",
+            "category": "Draft Beer",
+            "category_id": "1046",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 199.0,
+            "extended": 199.0
+          },
+          {
+            "product_id": "646033462",
+            "product_name": "Bell's 2 Hearted 1/2 BBL",
+            "category": "Draft Beer",
+            "category_id": "1046",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 159.0,
+            "extended": 159.0
+          },
+          {
+            "product_id": "1054441323",
+            "product_name": "Unibroue la Fin du monde 1/6bbl",
+            "category": "Draft Beer",
+            "category_id": "1046",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 134.0,
+            "extended": 134.0
+          },
+          {
+            "product_id": "646032111",
+            "product_name": "Keg Deposit - At Return $30",
+            "category": "Keg Deposit/Refund",
+            "category_id": "1097",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 0.0,
+            "unit_price": 0.0,
+            "extended": 0.0
+          },
+          {
+            "product_id": "646032111",
+            "product_name": "Keg Deposit - At Return $30",
+            "category": "Keg Deposit/Refund",
+            "category_id": "1097",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": -1.0,
+            "unit_price": 30.0,
+            "extended": -30.0
+          },
+          {
+            "product_id": "646032367",
+            "product_name": "Keg Deposit - At Purchase $30",
+            "category": "Draft Beer",
+            "category_id": "1046",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 3.0,
+            "unit_price": 30.0,
+            "extended": 90.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485635",
+        "invoice_number": "35151742",
+        "date": "2026-05-01",
+        "vendor_id": "11847",
+        "vendor_name": "Edward Don & Company",
+        "total": 1315.34,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "962092739",
+            "product_name": "Glass Old Fshnd 12-1/2 OZ C Knox",
+            "category": "Glassware",
+            "category_id": "1084",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 3.0,
+            "unit_price": 385.53,
+            "extended": 1156.59
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485704",
+        "invoice_number": "506531",
+        "date": "2026-05-01",
+        "vendor_id": "1466360",
+        "vendor_name": "Northern Haserot",
+        "total": 1090.91,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "639842435",
+            "product_name": "PC.U.S  oz Choice Hanging Tender Steak Portion 8oz",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 40.62,
+            "unit_price": 16.87,
+            "extended": 685.26
+          },
+          {
+            "product_id": "639842526",
+            "product_name": "Box\" 15# Cntry Manor Applewood Dbl Sm Slab Bacon",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 12.7,
+            "unit_price": 4.95,
+            "extended": 62.87
+          },
+          {
+            "product_id": "639842526",
+            "product_name": "Box 15# Cntry Mnr Hardwd/SMK layout Bacon 10-12",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 69.23,
+            "extended": 138.46
+          },
+          {
+            "product_id": "678351242",
+            "product_name": "Pc.Nsdo Smoked Turkey Breast 2/7.25#",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 31.29,
+            "unit_price": 6.53,
+            "extended": 204.32
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485763",
+        "invoice_number": "511036",
+        "date": "2026-05-01",
+        "vendor_id": "1466360",
+        "vendor_name": "Northern Haserot",
+        "total": 1019.79,
+        "status": "FINAL_REVIEW",
+        "line_items": [
+          {
+            "product_id": "035882_GAL",
+            "product_name": "1/1 Gal Lea & Perrins Worcestershire Sauce-Zt",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 23.53,
+            "extended": 23.53
+          },
+          {
+            "product_id": "1048269444",
+            "product_name": "1/81 Gal Heinz Malt Vinegar-Plastic-Zt",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 12.24,
+            "extended": 12.24
+          },
+          {
+            "product_id": "061582",
+            "product_name": "Eurodib Vacuum Bags 10x14\"3.5 mil",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 25.29,
+            "extended": 25.29
+          },
+          {
+            "product_id": "067149",
+            "product_name": "Fresh Premium Grade Tuna Loin Skls No Blood",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 19.4,
+            "unit_price": 13.8299,
+            "extended": 268.3
+          },
+          {
+            "product_id": "652168663",
+            "product_name": "Deb El Egg Whites Frzn",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 42.77,
+            "extended": 42.77
+          },
+          {
+            "product_id": "641914783",
+            "product_name": "6/12 Ct Thomas Original English Muffins",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 30.02,
+            "extended": 30.02
+          },
+          {
+            "product_id": "639815656",
+            "product_name": "36/1# \"Unsalted\" Butter",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 90.83,
+            "extended": 90.83
+          },
+          {
+            "product_id": "640702451",
+            "product_name": "4/5# Whipped Butter (Salted)",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 55.5,
+            "extended": 111.0
+          },
+          {
+            "product_id": "639826261",
+            "product_name": "15/1# Deb El Liquid Egg Yolks",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 34.02,
+            "extended": 34.02
+          },
+          {
+            "product_id": "640735045",
+            "product_name": "4/1 Gal Whole Homogonized Milk-Zt",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 21.27,
+            "extended": 21.27
+          },
+          {
+            "product_id": "641915463",
+            "product_name": "Half & Half Cream Uht",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 27.06,
+            "extended": 27.06
+          },
+          {
+            "product_id": "639839458",
+            "product_name": "12/32 Oz. Heavy Whipping Cream 36% Uht",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 47.17,
+            "extended": 47.17
+          },
+          {
+            "product_id": "678350249",
+            "product_name": "Alouette Creme Fraiche",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 26.42,
+            "extended": 26.42
+          },
+          {
+            "product_id": "639815338",
+            "product_name": "Diamond Crystal Pure Kosher Salt",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 70.41,
+            "extended": 70.41
+          },
+          {
+            "product_id": "935683168",
+            "product_name": "Betterbody Organic Refined Coconut Oil",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 44.52,
+            "extended": 89.04
+          },
+          {
+            "product_id": "644152941",
+            "product_name": "6/10 Heinz Ketchup Plas Jug/Pump-Pour-Store-Zt",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 81.29,
+            "extended": 81.29
+          },
+          {
+            "product_id": "1023157055",
+            "product_name": "100 Ct Eurodib Vacuum Bags 8X12\" 3.6Mil",
+            "category": "Paper Costs",
+            "category_id": "1126",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 16.61,
+            "extended": 16.61
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485852",
+        "invoice_number": "0444678",
+        "date": "2026-05-01",
+        "vendor_id": "164538",
+        "vendor_name": "Sohn Linen Service, INC.",
+        "total": 213.68,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "709891310",
+            "product_name": "Kit Shirt XL K2",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 30.0,
+            "unit_price": 0.753,
+            "extended": 22.59
+          },
+          {
+            "product_id": "697190229",
+            "product_name": "Wet Mop Xl",
+            "category": "Cleaning Equipment",
+            "category_id": "1038",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 20.0,
+            "unit_price": 2.205,
+            "extended": 44.1
+          },
+          {
+            "product_id": "905040125",
+            "product_name": "Linen Storage Container 72P",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 8.0,
+            "extended": 8.0
+          },
+          {
+            "product_id": "697200241",
+            "product_name": "Kit Shirt Lg",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 19.0,
+            "unit_price": 0.683,
+            "extended": 12.98
+          },
+          {
+            "product_id": "697200241",
+            "product_name": "Kit Shirt Lg",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 61.0,
+            "unit_price": 0.683,
+            "extended": 41.66
+          },
+          {
+            "product_id": "697200241",
+            "product_name": "Kit Shirt Lg",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 70.0,
+            "unit_price": 0.683,
+            "extended": 47.81
+          },
+          {
+            "product_id": "697190221",
+            "product_name": "Kit Shirt 2X",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 35.0,
+            "unit_price": 0.753,
+            "extended": 26.36
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485886",
+        "invoice_number": "0444677",
+        "date": "2026-05-01",
+        "vendor_id": "164538",
+        "vendor_name": "Sohn Linen Service, INC.",
+        "total": 330.41,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "697188533",
+            "product_name": "Microfiber Glass Blue",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 25.0,
+            "unit_price": 0.45,
+            "extended": 11.25
+          },
+          {
+            "product_id": "697188539",
+            "product_name": "Bar Towel SM",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 550.0,
+            "unit_price": 0.198,
+            "extended": 108.9
+          },
+          {
+            "product_id": "697188549",
+            "product_name": "Dish Towel",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 100.0,
+            "unit_price": 0.198,
+            "extended": 19.8
+          },
+          {
+            "product_id": "697188544",
+            "product_name": "Napkin White Sig",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1200.0,
+            "unit_price": 0.1,
+            "extended": 120.0
+          },
+          {
+            "product_id": "697200255",
+            "product_name": "Napkin Burgundy Sig",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 200.0,
+            "unit_price": 0.122,
+            "extended": 24.4
+          },
+          {
+            "product_id": "697188581",
+            "product_name": "Pink Wipes Lg Bag Per Lb",
+            "category": "Linen & Linen Rental",
+            "category_id": "1091",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 25.0,
+            "unit_price": 1.213,
+            "extended": 30.33
+          }
+        ]
+      },
+      {
+        "invoice_id": "219486050",
+        "invoice_number": "9035118955",
+        "date": "2026-05-01",
+        "vendor_id": "57478",
+        "vendor_name": "Gordon Food Service",
+        "total": 69.46,
+        "status": "FINAL_REVIEW",
+        "line_items": [
+          {
+            "product_id": "663225991",
+            "product_name": "Giardiniera Gls",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 2.0,
+            "unit_price": 34.73,
+            "extended": 69.46
+          }
+        ]
+      },
+      {
+        "invoice_id": "218194956",
+        "invoice_number": "26807",
+        "date": "2026-05-02",
+        "vendor_id": "152916",
+        "vendor_name": "Michigan Clear Ice",
+        "total": 812.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "692635144",
+            "product_name": "2\" Cube",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 58.0,
+            "unit_price": 14.0,
+            "extended": 812.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "218195053",
+        "invoice_number": "01789881",
+        "date": "2026-05-02",
+        "vendor_id": "200979793",
+        "vendor_name": "Del Bene Produce, Inc.",
+        "total": 339.02,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "641878270",
+            "product_name": "Celery Root",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 5.0,
+            "unit_price": 3.6,
+            "extended": 18.0
+          },
+          {
+            "product_id": "639823660",
+            "product_name": "Egg Extra Large Michigan",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 26.35,
+            "extended": 105.4
+          },
+          {
+            "product_id": "640536343",
+            "product_name": "Lettuce Endive Belgian",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 53.0,
+            "extended": 53.0
+          },
+          {
+            "product_id": "641878347",
+            "product_name": "Garlic Peeled",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 20.75,
+            "extended": 20.75
+          },
+          {
+            "product_id": "643473013",
+            "product_name": "Herb Basil",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 9.55,
+            "extended": 19.1
+          },
+          {
+            "product_id": "640757021",
+            "product_name": "Herb Thyme",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 15.7,
+            "extended": 15.7
+          },
+          {
+            "product_id": "639839896",
+            "product_name": "Lettuce Bibb Hydro",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 28.25,
+            "extended": 28.25
+          },
+          {
+            "product_id": "641319663",
+            "product_name": "Lettuce Spring Mix Regular",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 13.32,
+            "extended": 13.32
+          },
+          {
+            "product_id": "639840751",
+            "product_name": "Parsley Italian Flat Leaf",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 12.0,
+            "unit_price": 2.5,
+            "extended": 30.0
+          },
+          {
+            "product_id": "639841038",
+            "product_name": "Shallot Peeled",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 17.75,
+            "extended": 35.5
+          }
+        ]
+      },
+      {
+        "invoice_id": "218195056",
+        "invoice_number": "9035114792",
+        "date": "2026-05-02",
+        "vendor_id": "57478",
+        "vendor_name": "Gordon Food Service",
+        "total": 0.0,
+        "status": "PENDING_RECONCILIATION",
+        "line_items": []
+      },
+      {
+        "invoice_id": "218195072",
+        "invoice_number": "31656",
+        "date": "2026-05-02",
+        "vendor_id": "11939",
+        "vendor_name": "RSA Foundation",
+        "total": 157.5,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "663730965",
+            "product_name": "Cut Fries",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 150.0,
+            "unit_price": 1.05,
+            "extended": 157.5
+          }
+        ]
+      },
+      {
+        "invoice_id": "218195102",
+        "invoice_number": "975096352",
+        "date": "2026-05-02",
+        "vendor_id": "57478",
+        "vendor_name": "Gordon Food Service",
+        "total": 170.26,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1154858786",
+            "product_name": "Register Roll 3-1/8\" Thrml 3-10CT",
+            "category": "Paper Costs",
+            "category_id": "1126",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 84.74,
+            "extended": 84.74
+          },
+          {
+            "product_id": "922174690",
+            "product_name": "Register Roll 3-1/8\" Thrml",
+            "category": "Paper Costs",
+            "category_id": "1126",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 75.88,
+            "extended": 75.88
+          }
+        ]
+      },
+      {
+        "invoice_id": "218790399",
+        "invoice_number": "METT_20260502_gM5X4OQ",
+        "date": "2026-05-02",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -10.66,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "700147529",
+            "product_name": "COMMISSARY - Bao Buns",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 9.21,
+            "extended": -9.21
+          },
+          {
+            "product_id": "1091243389",
+            "product_name": "Pink Peppercorn Mallow",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 1.45,
+            "extended": -1.45
+          }
+        ]
+      },
+      {
+        "invoice_id": "218790407",
+        "invoice_number": "METT_20260502_sEm1i0x",
+        "date": "2026-05-02",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -150.84,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "975188383",
+            "product_name": "COMMISSARY - Parker House Rolls - Anthology",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -195.0,
+            "unit_price": 0.07,
+            "extended": -13.65
+          },
+          {
+            "product_id": "739774849",
+            "product_name": "Cheesecake, Mini",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -63.0,
+            "unit_price": 1.2732,
+            "extended": -80.2116
+          },
+          {
+            "product_id": "769561459",
+            "product_name": "Commissary - Chocolate Gateau 2024",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -64.0,
+            "unit_price": 0.81,
+            "extended": -51.84
+          },
+          {
+            "product_id": "975208801",
+            "product_name": "Sorbet Base - White Peach",
+            "category": "Drink Supplies",
+            "category_id": "1058",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -1.0,
+            "unit_price": 5.14,
+            "extended": -5.14
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485590",
+        "invoice_number": "435033-26-01",
+        "date": "2026-05-02",
+        "vendor_id": "11941",
+        "vendor_name": "Fortune Fish & Gourmet",
+        "total": 0.0,
+        "status": "CLOSED",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219289270",
+        "invoice_number": "METF_20260503_NbYpXJH",
+        "date": "2026-05-03",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": 14.88,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1138014341",
+            "product_name": "Saratoga Still 28oz Bottle",
+            "category": "Soft Beverage",
+            "category_id": "1132",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 7.0,
+            "unit_price": 2.125,
+            "extended": 14.875
+          }
+        ]
+      },
+      {
+        "invoice_id": "219477972",
+        "invoice_number": "METT_20260503_AblGqhf",
+        "date": "2026-05-03",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -135.9,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "640722968",
+            "product_name": "Michel Vattan O-P Loire Sancerre BTG",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -5.0,
+            "unit_price": 27.18,
+            "extended": -135.9
+          }
+        ]
+      },
+      {
+        "invoice_id": "219477977",
+        "invoice_number": "METT_20260503_b4cefJi",
+        "date": "2026-05-03",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -87.46,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "753683998",
+            "product_name": "Krug Grande Cuvee Champagne Brut 375ML",
+            "category": "Wine",
+            "category_id": "1148",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -1.0,
+            "unit_price": 87.46,
+            "extended": -87.46
+          }
+        ]
+      },
+      {
+        "invoice_id": "219477982",
+        "invoice_number": "METT_20260503_2CFa2Kr",
+        "date": "2026-05-03",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -53.64,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "831067568",
+            "product_name": "Super Trump 12740",
+            "category": "Kitchen Utensils & Supplies",
+            "category_id": "1070",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": -1.0,
+            "unit_price": 53.64,
+            "extended": -53.64
+          }
+        ]
+      },
+      {
+        "invoice_id": "219481637",
+        "invoice_number": "METT_20260503_xIR5Lje",
+        "date": "2026-05-03",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -63.06,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1109277927",
+            "product_name": "Hojicha Chocolate Semifreddo",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -24.0,
+            "unit_price": 1.95,
+            "extended": -46.8
+          },
+          {
+            "product_id": "1186089672",
+            "product_name": "Set whipped cream",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 2.16,
+            "extended": -2.16
+          },
+          {
+            "product_id": "1130261498",
+            "product_name": "S & D tart",
+            "category": "Pastry",
+            "category_id": "1110",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -30.0,
+            "unit_price": 0.47,
+            "extended": -14.1
+          }
+        ]
+      },
+      {
+        "invoice_id": "219481655",
+        "invoice_number": "METT_20260503_u2mPiAs",
+        "date": "2026-05-03",
+        "vendor_id": "41805",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -35.26,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "772226243",
+            "product_name": "Jam, Strawberry",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 7.8879,
+            "extended": -7.8879
+          },
+          {
+            "product_id": "769915664",
+            "product_name": "Granola",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 9.96,
+            "extended": -9.96
+          },
+          {
+            "product_id": "643278822",
+            "product_name": "Strawberries, Fresh",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 3.26,
+            "extended": -3.26
+          },
+          {
+            "product_id": "639839023",
+            "product_name": "Blackberries, Fresh",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -5.0,
+            "unit_price": 2.235,
+            "extended": -11.175
+          },
+          {
+            "product_id": "641319651",
+            "product_name": "Raspberries, Fresh",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": -1.0,
+            "unit_price": 2.9683,
+            "extended": -2.9683
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485012",
+        "invoice_number": "437047-26-01",
+        "date": "2026-05-04",
+        "vendor_id": "11941",
+        "vendor_name": "Fortune Fish & Gourmet",
+        "total": 1518.98,
+        "status": "FINAL_REVIEW",
+        "line_items": [
+          {
+            "product_id": "655300299",
+            "product_name": "Atlantic Sea Scallops U-10",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 322.77,
+            "extended": 322.77
+          },
+          {
+            "product_id": "641886140",
+            "product_name": "Live Lobsters 1.25LB Quarters",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.8,
+            "unit_price": 11.99,
+            "extended": 45.56
+          },
+          {
+            "product_id": "10008205",
+            "product_name": "Cherrystone Clam, Piece",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 25.0,
+            "unit_price": 0.91,
+            "extended": 22.75
+          },
+          {
+            "product_id": "641855662",
+            "product_name": "River Rainbow Trout PBO 9-11OZ",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 20.0,
+            "unit_price": 8.81,
+            "extended": 176.2
+          },
+          {
+            "product_id": "639813159",
+            "product_name": "Bronzini  Fil 180/220gr",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 9.02,
+            "unit_price": 16.77,
+            "extended": 151.27
+          },
+          {
+            "product_id": "644144766",
+            "product_name": "Reggiano +18 Months",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 21.7,
+            "unit_price": 13.16,
+            "extended": 285.57
+          },
+          {
+            "product_id": "765402337",
+            "product_name": "P&D T/On Tigers 13-15",
+            "category": "Seafood",
+            "category_id": "1128",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 11.74,
+            "extended": 117.4
+          },
+          {
+            "product_id": "1137497480",
+            "product_name": "IQF Potato Pellets 4/5.5Lb *White Toque %53204 FROZEN",
+            "category": "Produce",
+            "category_id": "1120",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 46.93,
+            "extended": 46.93
+          },
+          {
+            "product_id": "642644229",
+            "product_name": "Quail Eggs",
+            "category": "Dairy",
+            "category_id": "1034",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 2.9,
+            "extended": 11.6
+          },
+          {
+            "product_id": "640757133",
+            "product_name": "Dart Chx Gc Whole 3.5-4 LB Avg",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 75.16,
+            "unit_price": 2.99,
+            "extended": 224.73
+          },
+          {
+            "product_id": "640493970",
+            "product_name": "Foie Gras Ends And Pieces",
+            "category": "Meat & Poultry",
+            "category_id": "1105",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 5.0,
+            "unit_price": 22.84,
+            "extended": 114.2
+          }
+        ]
+      },
+      {
+        "invoice_id": "219485081",
+        "invoice_number": null,
+        "date": "2026-05-04",
         "vendor_id": "0",
         "vendor_name": null,
         "total": 0.0,
-        "status": "PREPROCESSING",
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219485124",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "57478",
+        "vendor_name": "Gordon Food Service",
+        "total": 0.0,
+        "status": "PENDING_RECONCILIATION",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219485154",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "0",
+        "vendor_name": null,
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219485196",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "57478",
+        "vendor_name": "Gordon Food Service",
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219485478",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "116409852",
+        "vendor_name": "Grosse Pointe Moving & Storage",
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219485516",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "0",
+        "vendor_name": null,
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219485714",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "116409852",
+        "vendor_name": "Grosse Pointe Moving & Storage",
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219485823",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "12253",
+        "vendor_name": "(Preferred Produce) Frog Holler Produce",
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219485922",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "0",
+        "vendor_name": null,
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219486079",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "57478",
+        "vendor_name": "Gordon Food Service",
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219486137",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "11941",
+        "vendor_name": "Fortune Fish & Gourmet",
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219486632",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "116409852",
+        "vendor_name": "Grosse Pointe Moving & Storage",
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219486672",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "116409852",
+        "vendor_name": "Grosse Pointe Moving & Storage",
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219493420",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "0",
+        "vendor_name": null,
+        "total": 0.0,
+        "status": "INITIAL_REVIEW",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219510194",
+        "invoice_number": "9400497750",
+        "date": "2026-05-04",
+        "vendor_id": "130922",
+        "vendor_name": "La Colombe Coffee Workshop",
+        "total": 666.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "681308591",
+            "product_name": "5 LB Nizza - WB - 4 Ct Case",
+            "category": "Soft Beverage",
+            "category_id": "1132",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 1.0,
+            "unit_price": 222.0,
+            "extended": 222.0
+          },
+          {
+            "product_id": "681308554",
+            "product_name": "1.5 Gal Monaco - Frac - 30 Ct Case",
+            "category": "Soft Beverage",
+            "category_id": "1132",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 2.0,
+            "unit_price": 222.0,
+            "extended": 444.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "219513686",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "27575",
+        "vendor_name": "AHD Vintners.com",
+        "total": 1428.0,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513700",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "16410",
+        "vendor_name": "Eagle Eye",
+        "total": 651.0,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513714",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "11776",
+        "vendor_name": "Eastown Distributors Co",
+        "total": 396.42,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513744",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "11450",
+        "vendor_name": "Fabiano Brothers Inc.",
+        "total": 335.0,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513778",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "15903",
+        "vendor_name": "Great Lakes Wine & Spirits",
+        "total": 1895.02,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513789",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "32600",
+        "vendor_name": "Imperial Beverage",
+        "total": 112.0,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513793",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "1466360",
+        "vendor_name": "Northern Haserot",
+        "total": 899.84,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513799",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "32746",
+        "vendor_name": "Rave Associates",
+        "total": 275.55,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513806",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "32600",
+        "vendor_name": "Imperial Beverage",
+        "total": 300.0,
+        "status": "SENT",
+        "line_items": []
+      },
+      {
+        "invoice_id": "219513810",
+        "invoice_number": null,
+        "date": "2026-05-04",
+        "vendor_id": "117266",
+        "vendor_name": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
+        "total": 432.0,
+        "status": "SENT",
         "line_items": []
       }
     ],
@@ -430253,8 +434991,8 @@
             "total": -1540.31
           }
         ],
-        "cogs_pct_revenue": -0.0096,
-        "cogs_only_pct_revenue": -0.0096
+        "cogs_pct_revenue": -0.0097,
+        "cogs_only_pct_revenue": -0.0097
       },
       {
         "week_start": "2025-12-15",
@@ -430276,8 +435014,8 @@
             "total": -3963.28
           }
         ],
-        "cogs_pct_revenue": -0.0203,
-        "cogs_only_pct_revenue": -0.0203
+        "cogs_pct_revenue": -0.0197,
+        "cogs_only_pct_revenue": -0.0197
       },
       {
         "week_start": "2025-12-22",
@@ -430299,8 +435037,8 @@
             "total": -1200.49
           }
         ],
-        "cogs_pct_revenue": -0.0074,
-        "cogs_only_pct_revenue": -0.0074
+        "cogs_pct_revenue": -0.0075,
+        "cogs_only_pct_revenue": -0.0075
       },
       {
         "week_start": "2025-12-29",
@@ -430366,8 +435104,8 @@
             "total": 5660.0
           }
         ],
-        "cogs_pct_revenue": 2.6402,
-        "cogs_only_pct_revenue": 0.1808
+        "cogs_pct_revenue": 2.7779,
+        "cogs_only_pct_revenue": 0.1902
       },
       {
         "week_start": "2026-01-05",
@@ -430428,8 +435166,8 @@
             "total": 4523.01
           }
         ],
-        "cogs_pct_revenue": 0.6429,
-        "cogs_only_pct_revenue": 0.3397
+        "cogs_pct_revenue": 0.6237,
+        "cogs_only_pct_revenue": 0.3296
       },
       {
         "week_start": "2026-01-12",
@@ -430492,8 +435230,8 @@
             "total": 4090.08
           }
         ],
-        "cogs_pct_revenue": 1.3496,
-        "cogs_only_pct_revenue": 0.2908
+        "cogs_pct_revenue": 1.3149,
+        "cogs_only_pct_revenue": 0.2833
       },
       {
         "week_start": "2026-01-19",
@@ -430556,8 +435294,8 @@
             "total": 4981.68
           }
         ],
-        "cogs_pct_revenue": 0.5883,
-        "cogs_only_pct_revenue": 0.3616
+        "cogs_pct_revenue": 0.6377,
+        "cogs_only_pct_revenue": 0.3919
       },
       {
         "week_start": "2026-01-26",
@@ -430624,8 +435362,8 @@
             "total": 5875.0
           }
         ],
-        "cogs_pct_revenue": 1.1959,
-        "cogs_only_pct_revenue": 0.3304
+        "cogs_pct_revenue": 1.1579,
+        "cogs_only_pct_revenue": 0.3199
       },
       {
         "week_start": "2026-02-02",
@@ -430686,8 +435424,8 @@
             "total": 3141.37
           }
         ],
-        "cogs_pct_revenue": 0.4169,
-        "cogs_only_pct_revenue": 0.3181
+        "cogs_pct_revenue": 0.4221,
+        "cogs_only_pct_revenue": 0.3221
       },
       {
         "week_start": "2026-02-09",
@@ -430751,8 +435489,8 @@
             "total": 4750.0
           }
         ],
-        "cogs_pct_revenue": 0.6119,
-        "cogs_only_pct_revenue": 0.3818
+        "cogs_pct_revenue": 0.574,
+        "cogs_only_pct_revenue": 0.3581
       },
       {
         "week_start": "2026-02-16",
@@ -430810,8 +435548,8 @@
             "total": 4220.63
           }
         ],
-        "cogs_pct_revenue": 0.4406,
-        "cogs_only_pct_revenue": 0.3036
+        "cogs_pct_revenue": 0.4732,
+        "cogs_only_pct_revenue": 0.3261
       },
       {
         "week_start": "2026-02-23",
@@ -430876,8 +435614,8 @@
             "total": 3509.72
           }
         ],
-        "cogs_pct_revenue": 0.4905,
-        "cogs_only_pct_revenue": 0.2182
+        "cogs_pct_revenue": 0.4865,
+        "cogs_only_pct_revenue": 0.2164
       },
       {
         "week_start": "2026-03-02",
@@ -430940,8 +435678,8 @@
             "total": 4700.0
           }
         ],
-        "cogs_pct_revenue": 0.747,
-        "cogs_only_pct_revenue": 0.3019
+        "cogs_pct_revenue": 0.7696,
+        "cogs_only_pct_revenue": 0.3111
       },
       {
         "week_start": "2026-03-09",
@@ -431001,8 +435739,8 @@
             "total": 3487.2
           }
         ],
-        "cogs_pct_revenue": 0.4506,
-        "cogs_only_pct_revenue": 0.3004
+        "cogs_pct_revenue": 0.4495,
+        "cogs_only_pct_revenue": 0.2996
       },
       {
         "week_start": "2026-03-16",
@@ -431064,8 +435802,8 @@
             "total": 3817.43
           }
         ],
-        "cogs_pct_revenue": 0.4678,
-        "cogs_only_pct_revenue": 0.2891
+        "cogs_pct_revenue": 0.4722,
+        "cogs_only_pct_revenue": 0.2918
       },
       {
         "week_start": "2026-03-23",
@@ -431125,8 +435863,8 @@
             "total": 2695.69
           }
         ],
-        "cogs_pct_revenue": 0.2801,
-        "cogs_only_pct_revenue": 0.204
+        "cogs_pct_revenue": 0.2825,
+        "cogs_only_pct_revenue": 0.2058
       },
       {
         "week_start": "2026-03-30",
@@ -431195,8 +435933,8 @@
             "total": 3775.39
           }
         ],
-        "cogs_pct_revenue": 0.5058,
-        "cogs_only_pct_revenue": 0.2655
+        "cogs_pct_revenue": 0.5022,
+        "cogs_only_pct_revenue": 0.2636
       },
       {
         "week_start": "2026-04-06",
@@ -431258,13 +435996,13 @@
             "total": 4302.66
           }
         ],
-        "cogs_pct_revenue": 0.423,
-        "cogs_only_pct_revenue": 0.3196
+        "cogs_pct_revenue": 0.4198,
+        "cogs_only_pct_revenue": 0.3172
       },
       {
         "week_start": "2026-04-13",
-        "total_cogs": 66641.25,
-        "cogs_only_total": 49651.83,
+        "total_cogs": 66234.45,
+        "cogs_only_total": 49245.03,
         "by_category": {
           "Soft Beverage": 6098.83,
           "Drink Supplies": 4163.99,
@@ -431282,7 +436020,7 @@
           "Repairs and Maintenance": 823.0,
           "Pastry": 914.27,
           "Paper Costs": 116.41,
-          "Wine": 7748.66,
+          "Wine": 7341.86,
           "Draft Beer": 105.0,
           "Kitchen Utensils & Supplies": 425.92,
           "Flowers & Decorations": 57.32,
@@ -431297,7 +436035,7 @@
           "na_beverages": 6098.83,
           "liquor": 12534.95,
           "food": 23010.29,
-          "wine": 7748.66,
+          "wine": 7341.86,
           "beer": 259.1
         },
         "by_vendor_top5": [
@@ -431322,8 +436060,8 @@
             "total": 3934.4
           }
         ],
-        "cogs_pct_revenue": 0.4992,
-        "cogs_only_pct_revenue": 0.3719
+        "cogs_pct_revenue": 0.4988,
+        "cogs_only_pct_revenue": 0.3708
       },
       {
         "week_start": "2026-04-20",
@@ -431388,65 +436126,113 @@
             "total": 5794.41
           }
         ],
-        "cogs_pct_revenue": 0.6631,
-        "cogs_only_pct_revenue": 0.2993
+        "cogs_pct_revenue": 0.6486,
+        "cogs_only_pct_revenue": 0.2928
       },
       {
         "week_start": "2026-04-27",
-        "total_cogs": 22725.02,
-        "cogs_only_total": 13336.09,
+        "total_cogs": 34349.23,
+        "cogs_only_total": 18851.29,
         "by_category": {
-          "Glassware": 717.4,
-          "Seafood": 1546.71,
-          "Produce": 1054.84,
-          "Meat & Poultry": 4875.63,
-          "Dairy": 1686.7,
-          "Grocery & Dry Goods": 1354.61,
+          "Glassware": 1873.99,
+          "Seafood": 3230.32,
+          "Produce": 2397.85,
+          "Meat & Poultry": 7643.98,
+          "Dairy": 2341.87,
+          "Grocery & Dry Goods": 3168.1,
           "Contract Cleaning": 1120.0,
           "Trash Liners": 71.24,
-          "Linen & Linen Rental": 498.16,
-          "Equipment/Other Rentals": 423.34,
-          "Pastry": 60.91,
+          "Linen & Linen Rental": 972.24,
+          "Equipment/Other Rentals": 1133.2,
+          "Pastry": 68.23,
           "Office Supplies": 156.48,
-          "Wine": 2600.71,
-          "Dues & Subscriptions": 452.5,
-          "Uncategorized": 238.62,
+          "Wine": -921.09,
+          "Dues & Subscriptions": 1398.0,
+          "Cleaning Equipment": 44.1,
+          "Liquor": 3590.48,
           "Cleaning Chemicals & Soaps": 86.24,
-          "Bottle Beer": 74.05,
-          "Draft Beer": 207.95,
-          "Keg Deposit/Refund": 4.8,
-          "Liquor": -126.02
+          "Bottle Beer": -179.95,
+          "Draft Beer": 729.95,
+          "Keg Deposit/Refund": -61.2,
+          "Drink Supplies": -3233.33,
+          "Paper Costs": 239.21,
+          "Repairs and Maintenance": 1445.0,
+          "Uncategorized": 1158.62,
+          "Kitchen Utensils & Supplies": -25.42,
+          "Soft Beverage": 14.88
         },
         "by_cogs_type": {
-          "food": 10579.4,
-          "wine": 2600.71,
-          "beer": 282.0,
-          "liquor": -126.02
+          "food": 18850.35,
+          "wine": -921.09,
+          "liquor": 357.15,
+          "beer": 550.0,
+          "na_beverages": 14.88
         },
         "by_vendor_top5": [
           {
             "vendor": "Northern Haserot",
-            "total": 5462.19
+            "total": 7572.89
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 2380.92
+            "vendor": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
+            "total": 6501.93
+          },
+          {
+            "vendor": "State of Michigan",
+            "total": 5181.01
+          },
+          {
+            "vendor": "Chefs Warehouse",
+            "total": 2597.48
           },
           {
             "vendor": "Fortune Fish & Gourmet",
-            "total": 1444.5
-          },
-          {
-            "vendor": "Veritas Distributors, Inc.",
-            "total": 1278.0
-          },
-          {
-            "vendor": "Imperial Beverage",
-            "total": 1244.5
+            "total": 2466.81
           }
         ],
-        "cogs_pct_revenue": 0.448,
-        "cogs_only_pct_revenue": 0.2629
+        "cogs_pct_revenue": 0.1858,
+        "cogs_only_pct_revenue": 0.102
+      },
+      {
+        "week_start": "2026-05-04",
+        "total_cogs": 8909.81,
+        "cogs_only_total": 2162.23,
+        "by_category": {
+          "Seafood": 813.2,
+          "Uncategorized": 22.75,
+          "Dairy": 297.17,
+          "Produce": 46.93,
+          "Meat & Poultry": 338.93,
+          "Soft Beverage": 666.0
+        },
+        "by_cogs_type": {
+          "food": 1496.23,
+          "na_beverages": 666.0
+        },
+        "by_vendor_top5": [
+          {
+            "vendor": "Great Lakes Wine & Spirits",
+            "total": 1895.02
+          },
+          {
+            "vendor": "Fortune Fish & Gourmet",
+            "total": 1518.98
+          },
+          {
+            "vendor": "AHD Vintners.com",
+            "total": 1428.0
+          },
+          {
+            "vendor": "Northern Haserot",
+            "total": 899.84
+          },
+          {
+            "vendor": "La Colombe Coffee Workshop",
+            "total": 666.0
+          }
+        ],
+        "cogs_pct_revenue": 68.8016,
+        "cogs_only_pct_revenue": 16.6968
       }
     ],
     "monthly_rollup": [
@@ -431509,8 +436295,8 @@
             "total": 1692.35
           }
         ],
-        "cogs_pct_revenue": 0.0295,
-        "cogs_only_pct_revenue": 0.01
+        "cogs_pct_revenue": 0.0285,
+        "cogs_only_pct_revenue": 0.0097
       },
       {
         "month": "2026-01",
@@ -431579,8 +436365,8 @@
             "total": 15957.13
           }
         ],
-        "cogs_pct_revenue": 1.5193,
-        "cogs_only_pct_revenue": 0.2977
+        "cogs_pct_revenue": 1.5456,
+        "cogs_only_pct_revenue": 0.3029
       },
       {
         "month": "2026-02",
@@ -431652,8 +436438,8 @@
             "total": 15316.22
           }
         ],
-        "cogs_pct_revenue": 0.6029,
-        "cogs_only_pct_revenue": 0.3179
+        "cogs_pct_revenue": 0.6027,
+        "cogs_only_pct_revenue": 0.3178
       },
       {
         "month": "2026-03",
@@ -431722,57 +436508,57 @@
             "total": 13775.4
           }
         ],
-        "cogs_pct_revenue": 0.5093,
-        "cogs_only_pct_revenue": 0.2557
+        "cogs_pct_revenue": 0.527,
+        "cogs_only_pct_revenue": 0.2646
       },
       {
         "month": "2026-04",
-        "total_cogs": 260199.63,
-        "cogs_only_total": 160607.0,
+        "total_cogs": 256331.26,
+        "cogs_only_total": 153674.31,
         "by_category": {
           "Equipment/Other Rentals": 2470.23,
           "Tableware & Smallware": 836.0,
-          "Wine": 26050.69,
+          "Wine": 21945.45,
           "Soft Beverage": 8800.4,
-          "Drink Supplies": 7567.29,
+          "Drink Supplies": 3305.7,
           "Liquor": 18360.89,
-          "Meat & Poultry": 40018.91,
-          "Dairy": 13763.88,
-          "Grocery & Dry Goods": 11058.18,
-          "Produce": 14470.29,
-          "Pastry": 1923.8,
-          "Paper Costs": 2134.23,
+          "Meat & Poultry": 40295.32,
+          "Dairy": 13847.33,
+          "Grocery & Dry Goods": 11887.02,
+          "Produce": 14830.64,
+          "Pastry": 1916.76,
+          "Paper Costs": 2196.21,
           "Cleaning Chemicals & Soaps": 2176.84,
           "Kitchen Utensils & Supplies": 3375.5,
-          "Seafood": 15571.78,
+          "Seafood": 15810.4,
           "Glassware": 3024.29,
           "Contract Cleaning": 11740.0,
           "Linen & Linen Rental": 3305.52,
           "Advertising": 20400.0,
-          "Repairs and Maintenance": 10460.14,
+          "Repairs and Maintenance": 11905.14,
           "Printer Supplies": 94.65,
           "Office Supplies": 2299.39,
           "Candles": 395.2,
           "Pizza Boxes/ To-Go Containers": 654.9,
           "Bar Utensils & Supplies": 903.21,
           "Music & Entertainment": 3450.0,
-          "Bottle Beer": 1234.95,
+          "Bottle Beer": 948.45,
           "Keg Deposit/Refund": -44.4,
           "Cleaning Equipment": 1090.68,
           "Trash Liners": 425.9,
-          "Draft Beer": 959.95,
+          "Draft Beer": 899.95,
           "Flowers & Decorations": 57.32,
           "Uniforms": 175.11,
           "Sake": 826.0,
-          "Dues & Subscriptions": 702.5,
-          "Uncategorized": 238.62
+          "Dues & Subscriptions": 1648.0,
+          "Uncategorized": 841.5
         },
         "by_cogs_type": {
-          "wine": 26876.69,
+          "wine": 22771.45,
           "na_beverages": 8800.4,
-          "liquor": 25928.17,
-          "food": 96806.84,
-          "beer": 2194.9
+          "liquor": 21666.59,
+          "food": 98587.48,
+          "beer": 1848.4
         },
         "by_vendor_top5": [
           {
@@ -431796,8 +436582,66 @@
             "total": 17460.45
           }
         ],
-        "cogs_pct_revenue": 0.5001,
-        "cogs_only_pct_revenue": 0.3087
+        "cogs_pct_revenue": 0.4685,
+        "cogs_only_pct_revenue": 0.2809
+      },
+      {
+        "month": "2026-05",
+        "total_cogs": 23995.59,
+        "cogs_only_total": 14203.32,
+        "by_category": {
+          "Bottle Beer": 32.5,
+          "Drink Supplies": 1028.26,
+          "Keg Deposit/Refund": -66.0,
+          "Wine": 176.64,
+          "Liquor": 3716.5,
+          "Dairy": 868.89,
+          "Kitchen Utensils & Supplies": -25.42,
+          "Pastry": 14.36,
+          "Grocery & Dry Goods": 984.65,
+          "Equipment/Other Rentals": 709.86,
+          "Seafood": 2258.19,
+          "Meat & Poultry": 2830.87,
+          "Produce": 1029.59,
+          "Draft Beer": 582.0,
+          "Glassware": 1156.59,
+          "Uncategorized": 339.87,
+          "Paper Costs": 177.23,
+          "Linen & Linen Rental": 474.08,
+          "Cleaning Equipment": 44.1,
+          "Soft Beverage": 680.88
+        },
+        "by_cogs_type": {
+          "beer": 614.5,
+          "liquor": 4744.76,
+          "wine": 176.64,
+          "food": 7986.55,
+          "na_beverages": 680.88
+        },
+        "by_vendor_top5": [
+          {
+            "vendor": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
+            "total": 6533.93
+          },
+          {
+            "vendor": "State of Michigan",
+            "total": 5181.01
+          },
+          {
+            "vendor": "Northern Haserot",
+            "total": 3010.54
+          },
+          {
+            "vendor": "Fortune Fish & Gourmet",
+            "total": 2541.29
+          },
+          {
+            "vendor": "Great Lakes Wine & Spirits",
+            "total": 1895.02
+          }
+        ],
+        "cogs_pct_revenue": 0.2245,
+        "cogs_only_pct_revenue": 0.1329
       }
     ]
   },

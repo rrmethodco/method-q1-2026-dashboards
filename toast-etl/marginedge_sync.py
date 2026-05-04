@@ -343,7 +343,15 @@ def build_rollups(invoices: list[dict], net_sales_by_week: dict, net_sales_by_mo
         b["total_cogs"] += float(inv.get("total") or 0)
         b["by_vendor"][inv.get("vendor_name") or "Unknown vendor"] += float(inv.get("total") or 0)
 
+    # Match MarginEdge Purchase Report — only CLOSED invoices count toward
+    # rollups. In-flight statuses (FINAL_REVIEW, COMPLETED, SENT,
+    # INITIAL_REVIEW, PREPROCESSING, PENDING_RECONCILIATION) are stored
+    # raw on `invoices` for completeness but excluded from monthly/weekly
+    # totals. Validated 2026-05-04 against an LSBR Purchase Report
+    # export — CLOSED-only matched within $348 on a $24K base.
     for inv in invoices:
+        if (inv.get("status") or "CLOSED") != "CLOSED":
+            continue
         d = inv.get("date") or ""
         _bucket(by_week, _week_start(d), inv)
         _bucket(by_month, _ym(d), inv)
@@ -496,6 +504,16 @@ def cmd_sync(api_key: str, data_dir: Path, only: str | None,
             # 60% food / 40% bev). For bucketing we pick the highest-
             # allocation category — when split, the dominant category
             # determines which COGS bucket the spend lands in.
+            # /products schema (verified 2026-05-04):
+            #   ['categories', 'centralProductId', 'companyConceptProductId',
+            #    'itemCount', 'latestPrice', 'productName', 'reportByUnit',
+            #    'taxExempt']
+            # NOTE: there is no separate product-level "Type" field on the
+            # Public API. MarginEdge's UI Purchase Report shows a Type
+            # column (Beer/Food/Liquor/Wine/N/A Bev/Other) that maps 1:1
+            # to the line item's GL-category categoryType — same source
+            # we already use for cogs_bucket. The Purchase Report also
+            # filters to status=CLOSED invoices (see build_rollups).
             product_cat_lookup = {}
             for p in products:
                 pid = p.get("companyConceptProductId") or p.get("centralProductId")
