@@ -43,11 +43,18 @@ permissions:
   contents: write
 
 concurrency:
-  # Shared with the other data/<outlet>.json writers (toast-sync,
-  # budget-sync, guest-sync, marginedge-sync, tripleseat-sync) so
-  # cross-workflow runs serialize on git push instead of racing into
-  # rebase conflicts. See toast-sync.yml for the full rationale.
-  group: data-sync
+  # Decoupled from the shared `data-sync` queue (PR #64) because the
+  # GitHub Actions queue keeps only ONE run waiting at a time —
+  # late-entrant workflows like forecast get cancelled when a third
+  # sync joins the queue. Result: 3+ days of stale helixo-2 forecast
+  # data on 2026-05-01..03 even though the schedule fired correctly.
+  #
+  # Trade-off: re-introduces a small push-race window if forecast
+  # commits at the same instant as another writer. Mitigations:
+  # (1) forecast writes only `forecast.daily` per outlet and rebase
+  # auto-merger handles distinct-key conflicts cleanly, and
+  # (2) forecast sync is fast (<5 min) so the overlap window is small.
+  group: forecast-sync
   cancel-in-progress: false
 
 jobs:

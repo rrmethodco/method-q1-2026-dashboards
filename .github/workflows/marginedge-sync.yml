@@ -32,11 +32,19 @@ permissions:
   contents: write
 
 concurrency:
-  # Shared with the other data/<outlet>.json writers (toast-sync,
-  # budget-sync, forecast-sync, guest-sync, tripleseat-sync) so
-  # cross-workflow runs serialize on git push instead of racing into
-  # rebase conflicts. See toast-sync.yml for the full rationale.
-  group: data-sync
+  # Decoupled from the shared `data-sync` queue (PR #64) because the
+  # GitHub Actions queue keeps only ONE run waiting at a time —
+  # late-entrant workflows like marginedge get cancelled when a
+  # third sync joins the queue. Result: 3+ days of stale COGS data on
+  # 2026-05-01..03 even though the schedule fired correctly.
+  #
+  # Trade-off: re-introduces a small push-race window if marginedge
+  # commits at the same instant as another writer. Mitigations:
+  # (1) marginedge writes a narrow surface (cogs.invoices,
+  # cogs.line_items) and the rebase auto-merger handles file-level
+  # diffs cleanly when distinct keys are touched, and (2) marginedge
+  # incremental runs are <10 min, so the overlap window is small.
+  group: marginedge-sync
   cancel-in-progress: false
 
 jobs:
