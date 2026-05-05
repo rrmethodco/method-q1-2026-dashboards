@@ -1,6 +1,6 @@
 {
   "outlet_id": "vessel",
-  "generated_at": "2026-05-05T18:20:58+00:00",
+  "generated_at": "2026-05-05T20:54:18+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -5579,7 +5579,7 @@
         "regular_cost": 144.0,
         "overtime_cost": 0.0,
         "total_cost": 144.0,
-        "head_count": 3,
+        "head_count": 5,
         "date": "2026-05-05"
       }
     ],
@@ -41352,6 +41352,12 @@
       },
       {
         "date": "2026-05-03",
+        "hour": 0,
+        "hours": 0.4,
+        "cost": 7.23
+      },
+      {
+        "date": "2026-05-03",
         "hour": 9,
         "hours": 0.21,
         "cost": 4.66
@@ -44469,8 +44475,8 @@
       {
         "hour": 0,
         "dow": "SUN",
-        "hours": 120.93,
-        "cost": 1905.51
+        "hours": 121.33,
+        "cost": 1912.74
       },
       {
         "hour": 1,
@@ -106738,17 +106744,17 @@
       "rows_warned": 0
     },
     "toast_order": {
-      "ran_at": "2026-05-05T18:20:57+00:00",
+      "ran_at": "2026-05-05T20:54:17+00:00",
       "rows_in": 0,
       "rows_valid": 0,
       "rows_invalid": 0,
       "rows_warned": 0
     },
     "toast_time_entry": {
-      "ran_at": "2026-05-05T18:20:58+00:00",
-      "rows_in": 10,
-      "rows_valid": 8,
-      "rows_invalid": 2,
+      "ran_at": "2026-05-05T20:54:18+00:00",
+      "rows_in": 63,
+      "rows_valid": 48,
+      "rows_invalid": 15,
       "rows_warned": 0
     }
   }
