@@ -704,7 +704,8 @@ def transform_orders(
     dining_opt_lookup = dining_opt_lookup or {}
     daily: dict[str, dict[str, float]] = {}
     monthly: dict[str, dict[str, float]] = defaultdict(
-        lambda: {"orders": 0, "guests": 0, "amount": 0.0, "tip": 0.0, "discount": 0.0}
+        lambda: {"orders": 0, "guests": 0, "amount": 0.0, "net_sales": 0.0,
+                 "tip": 0.0, "discount": 0.0}
     )
     # hour_dow cell tracks revenue + order + guest counts so the dashboard heatmap
     # can toggle between $, order volume, and guest concentration views.
@@ -741,7 +742,17 @@ def transform_orders(
             date_str, hour, dow = parsed
             month = date_str[:7]
 
-            amount = float(check.get("amount") or 0.0)  # pre-tax subtotal
+            # NOTE: `check.amount` from /ordersBulk is NOT Toast's "Net sales".
+            # Empirical comparison against the Sales Summary CSV export shows
+            # check.amount runs ~20-30% above Net sales (LSBR audit 2026-05-05:
+            # 30-day overage +28.34%, lifetime Tips+Grat ratio = 20.0%).
+            # `check.amount` includes tips, non-gratuity service charges, and
+            # other line items that Toast excludes from its Net sales line.
+            # Keep `amount` for back-compat / per-server attribution (it's the
+            # gross "tickets value" on the check) but compute true `net_sales`
+            # below by walking selections — that matches Toast's official
+            # Net sales line on the Sales Summary report.
+            amount = float(check.get("amount") or 0.0)
             tip = float(check.get("tipAmount") or 0.0)
             gratuity = float(
                 sum(float(sc.get("amount") or 0.0) for sc in (check.get("appliedServiceCharges") or []))
@@ -758,6 +769,31 @@ def transform_orders(
                 for ad in (sel.get("appliedDiscounts") or []):
                     sel_disc += float(ad.get("discountAmount") or 0.0)
             discount = float(check_disc + sel_disc)
+
+            # Toast Net sales (matches Sales Summary report's "Net sales" line):
+            #   For each non-voided / non-deleted / non-deferred selection:
+            #     contribute (preDiscountPrice or price) minus that selection's
+            #     own appliedDiscounts.discountAmount.
+            #   Then subtract check-level appliedDiscounts (whole-check %-off, etc.).
+            # This excludes tips, service charges, tax, and gift card sales —
+            # exactly what Toast does on the Sales Summary report.
+            net_sales = 0.0
+            for sel in (check.get("selections") or []):
+                if sel.get("voided") or sel.get("deleted"):
+                    continue
+                if sel.get("deferred"):
+                    # Gift card sales / deferred revenue — Toast excludes from Net sales.
+                    continue
+                pdp = float(sel.get("preDiscountPrice") or sel.get("price") or 0.0)
+                this_sel_disc = sum(
+                    float(ad.get("discountAmount") or 0.0)
+                    for ad in (sel.get("appliedDiscounts") or [])
+                )
+                net_sales += (pdp - this_sel_disc)
+            # Subtract check-level discounts (these don't apply to a single selection,
+            # so they're not netted into selection.preDiscountPrice). Selection-level
+            # discounts are already netted out above via this_sel_disc.
+            net_sales -= check_disc
             # `check.get("customer", {})` returns None (not {}) when Toast sends
             # `"customer": null` explicitly — use `or {}` fallback.
             guests = int(order.get("numberOfGuests") or (check.get("customer") or {}).get("guestCount") or 0)
@@ -775,13 +811,15 @@ def transform_orders(
             # daily
             d = daily.setdefault(
                 date_str,
-                {"date": date_str, "orders": 0, "guests": 0, "amount": 0.0, "tip": 0.0,
+                {"date": date_str, "orders": 0, "guests": 0, "amount": 0.0,
+                 "net_sales": 0.0, "tip": 0.0,
                  "gratuity": 0.0, "discount": 0.0,
                  "ticket_time_sec_sum": 0.0, "ticket_time_count": 0},
             )
             d["orders"] += 1
             d["guests"] += guests
             d["amount"] += amount
+            d["net_sales"] += net_sales
             d["tip"] += tip
             d["gratuity"] += gratuity
             d["discount"] += discount
@@ -789,13 +827,15 @@ def transform_orders(
                 d["ticket_time_sec_sum"] += ticket_sec
                 d["ticket_time_count"] += 1
 
-            # monthly — full shape (orders/guests/amount/tip/discount) so the HTML's
-            # Monthly Comparison + Weekly Discount Trend can drive off this slice.
+            # monthly — full shape (orders/guests/amount/net_sales/tip/discount)
+            # so the HTML's Monthly Comparison + Weekly Discount Trend can drive
+            # off this slice.
             m = monthly[month]
             m["month"] = month  # idempotent
             m["orders"] += 1
             m["guests"] += guests
             m["amount"] += amount
+            m["net_sales"] += net_sales
             m["tip"] += tip
             m["discount"] += discount
 
@@ -877,6 +917,7 @@ def transform_orders(
     totals_orders = sum(int(r["orders"]) for r in daily_rows)
     totals_guests = sum(int(r["guests"]) for r in daily_rows)
     totals_amount = sum(float(r["amount"]) for r in daily_rows)
+    totals_net_sales = sum(float(r.get("net_sales", 0.0)) for r in daily_rows)
     totals_tip = sum(float(r["tip"]) for r in daily_rows)
     totals_discount = sum(float(r["discount"]) for r in daily_rows)
     totals_min_date = daily_rows[0]["date"] if daily_rows else None
@@ -918,6 +959,7 @@ def transform_orders(
             "orders": totals_orders,
             "guests": totals_guests,
             "amount": round(totals_amount, 2),
+            "net_sales": round(totals_net_sales, 2),
             "tip": round(totals_tip, 2),
             "discount": round(totals_discount, 2),
             "min_date": totals_min_date,
@@ -928,11 +970,11 @@ def transform_orders(
 
     # round money fields for cleaner JSON
     for row in out["daily"]:
-        for k in ("amount", "tip", "gratuity", "discount"):
+        for k in ("amount", "net_sales", "tip", "gratuity", "discount"):
             row[k] = round(row[k], 2)
         row["ticket_time_sec_sum"] = round(row["ticket_time_sec_sum"], 1)
     for row in out["monthly"]:
-        for k in ("amount", "tip", "discount"):
+        for k in ("amount", "net_sales", "tip", "discount"):
             row[k] = round(row[k], 2)
     for row in out["servers"]:
         row["amount"] = round(row["amount"], 2)
@@ -1386,7 +1428,13 @@ def _recompute_by_job(by_job_daily: list) -> list:
 
 def _recompute_rc_totals(daily: list) -> dict:
     """Aggregate per-rc daily into a totals dict mirroring the legacy shape."""
-    keys = ("orders", "guests", "amount", "tip", "gratuity", "discount")
+    # `net_sales` is the post-2026-05-05 truthful Net Sales line (sum of
+    # non-voided non-deferred selection prices minus discounts). Old daily
+    # rows from before that fix lack this field — `r.get(k) or 0` keeps the
+    # totals consistent across the boundary; rows synced after the fix will
+    # contribute their accurate net_sales while pre-fix rows contribute 0
+    # (the dashboard handles this gracefully with a "pending refresh" banner).
+    keys = ("orders", "guests", "amount", "net_sales", "tip", "gratuity", "discount")
     out = {k: 0.0 for k in keys}
     out["ticket_time_sec_sum"] = 0.0
     out["ticket_time_count"] = 0
