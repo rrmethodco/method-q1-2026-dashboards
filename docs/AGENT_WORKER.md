@@ -55,10 +55,15 @@ Each cron tick produces ~8-15 audit decisions logged to `audit/agent_decisions.j
 - [ ] Slack bot invited to channel `C0B1N51L9TN`: `/invite @<botname>`
 - [ ] Bot OAuth token (`xoxb-...`) → `SLACK_BOT_TOKEN` set as Supabase secret
 - [ ] `SLACK_DASHBOARD_ALERTS_CHANNEL=C0B1N51L9TN` set as Supabase secret
-- [ ] Service role key → set as Postgres setting via SQL editor:
+- [ ] Service role key → store in Supabase Vault via SQL editor (Supabase doesn't allow `ALTER DATABASE postgres SET ...` — error 42501; Vault is the canonical replacement):
   ```sql
-  alter database postgres set "app.settings.service_role_key" = '<KEY>';
+  select vault.create_secret(
+    '<SERVICE_ROLE_KEY>',
+    'agent_worker_service_role_key',
+    'Used by pg_cron to invoke the agent-worker Edge Function'
+  );
   ```
+  The pg_cron migration (`20260504000001_agent_cron.sql`) reads from `vault.decrypted_secrets where name = 'agent_worker_service_role_key'`, so the secret name is fixed.
 - [ ] Same service role key → set as `SUPABASE_SERVICE_ROLE_KEY` GitHub Actions secret
 - [ ] `SUPABASE_URL=https://mmwislzsgnjxjxssynwm.supabase.co` set as GitHub Actions secret
 
