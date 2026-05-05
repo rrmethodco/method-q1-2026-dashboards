@@ -1,18 +1,19 @@
 # Agent Worker — Operator Runbook
 
-> **Status:** code complete (Phase A.1 — PRs #90 + #91 merged 2026-05-04). NOT yet deployed to Supabase. See "Initial Deploy" below.
+> **Status:** Phase A.1 deployed 2026-05-05 (PRs #90/#91/#92/#93/#94 merged). Cross-source reconciler added 2026-05-05 (PR #96).
 
-The agent worker is a Supabase Edge Function (`supabase/functions/agent-worker/`) that runs every 5 minutes via `pg_cron`. It implements 5 agents that monitor the data validation pipeline:
+The agent worker is a Supabase Edge Function (`supabase/functions/agent-worker/`) that runs every 5 minutes via `pg_cron`. It implements **6 agents** that monitor the data validation pipeline:
 
 | Agent | What it does |
 |---|---|
 | **drift_detector** | Diffs latest sample row keys vs stored schema. LLM-classifies as `stable` / `additive_non_breaking` / `breaking`. Auto-applies additive changes; alerts on breaking. |
 | **anomaly_detector** | Per-outlet × metric × DOW rolling ±3σ on net sales + covers. **Shadow mode until 2026-05-18** (logs to audit only). |
 | **retry_repair** | Polls cancelled/failed sync workflow runs. Auto-dispatches retries (max 3 per 30-min window). Alerts on exhausted budget. |
-| **alert_dispatcher** | Routes events from drift / anomaly / retry to Slack channel `C0B1N51L9TN`. 60-min dedup. |
+| **cross_source_reconciler** | Internal: `order_details.amount/net_sales` ratio sanity bounds [0.90, 1.50]. External: `order_details.net_sales` vs `sales_summary.net_sales` drift threshold ±5%. Catches the +20-30% Net Sales inflation Ross spotted manually 2026-05-05 — that class of bug now triggers a Slack alert automatically. |
+| **alert_dispatcher** | Routes events from drift / anomaly / retry / reconciler to Slack channel `C0B1N51L9TN`. 60-min dedup. |
 | **banner_writer** | Computes per-outlet `worst_class` (ok/warn/err) from validation summaries. Writes to public `banner` bucket; dashboard fetches. |
 
-Each cron tick produces ~8-15 audit decisions logged to `audit/agent_decisions.jsonl` in Supabase Storage.
+Each cron tick produces ~10-25 audit decisions logged to `audit/agent_decisions.jsonl` in Supabase Storage.
 
 ---
 
@@ -31,12 +32,13 @@ Each cron tick produces ~8-15 audit decisions logged to `audit/agent_decisions.j
   └─ HTTP GET https://...supabase.co/functions/v1/agent-worker
                           ↓
 [Edge Function: agent-worker]
-  ├─ drift_detector  — Anthropic Sonnet classifies diffs
-  ├─ anomaly_detector — pure stats, fetches GH Pages JSON
-  ├─ retry_repair    — GitHub API dispatches retries
-  ├─ alert_dispatcher — Slack chat.postMessage
-  ├─ banner_writer   — writes per-outlet to `banner` bucket
-  └─ appendAudit     — writes to `audit/agent_decisions.jsonl`
+  ├─ drift_detector            — Anthropic Sonnet classifies diffs
+  ├─ anomaly_detector          — pure stats, fetches GH Pages JSON
+  ├─ retry_repair              — GitHub API dispatches retries
+  ├─ cross_source_reconciler   — amount/net_sales ratio + sales_summary drift
+  ├─ alert_dispatcher          — Slack chat.postMessage
+  ├─ banner_writer             — writes per-outlet to `banner` bucket
+  └─ appendAudit               — writes to `audit/agent_decisions.jsonl`
                           ↓
 [Method Co dashboard] (GH Pages) fetches:
   - Outlet payload's _validation_index (committed by runner)
