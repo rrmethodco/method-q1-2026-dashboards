@@ -1,6 +1,6 @@
 {
   "outlet_id": "anthology",
-  "generated_at": "2026-05-05T18:13:30+00:00",
+  "generated_at": "2026-05-05T18:20:52+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -2465,10 +2465,10 @@
           "month": "2026-04"
         },
         {
-          "orders": 4,
-          "guests": 8,
-          "amount": 109030.78,
-          "net_sales": 87334.17,
+          "orders": 3,
+          "guests": 5,
+          "amount": 75765.04,
+          "net_sales": 61379.79,
           "tip": 0.0,
           "discount": 0.0,
           "month": "2026-05"
@@ -11288,12 +11288,12 @@
         "date": "2026-05-01"
       },
       {
-        "regular_hours": 163.05,
+        "regular_hours": 0.0,
         "overtime_hours": 0.0,
-        "regular_cost": 3828.13,
+        "regular_cost": 0.0,
         "overtime_cost": 0.0,
-        "total_cost": 3828.13,
-        "head_count": 20,
+        "total_cost": 0.0,
+        "head_count": 1,
         "date": "2026-05-02"
       },
       {
@@ -11320,7 +11320,7 @@
         "regular_cost": 80.64,
         "overtime_cost": 0.0,
         "total_cost": 80.64,
-        "head_count": 12,
+        "head_count": 13,
         "date": "2026-05-05"
       }
     ],
@@ -43379,36 +43379,6 @@
       },
       {
         "date": "2026-05-03",
-        "hour": 0,
-        "hours": 16.86,
-        "cost": 393.73
-      },
-      {
-        "date": "2026-05-03",
-        "hour": 1,
-        "hours": 14.73,
-        "cost": 343.46
-      },
-      {
-        "date": "2026-05-03",
-        "hour": 2,
-        "hours": 11.73,
-        "cost": 276.08
-      },
-      {
-        "date": "2026-05-03",
-        "hour": 3,
-        "hours": 9.41,
-        "cost": 217.65
-      },
-      {
-        "date": "2026-05-03",
-        "hour": 4,
-        "hours": 5.21,
-        "cost": 118.87
-      },
-      {
-        "date": "2026-05-03",
         "hour": 12,
         "hours": 0.23,
         "cost": 8.83
@@ -46328,8 +46298,8 @@
       {
         "hour": 0,
         "dow": "SUN",
-        "hours": 801.87,
-        "cost": 18959.89
+        "hours": 785.01,
+        "cost": 18566.16
       },
       {
         "hour": 1,
@@ -46370,8 +46340,8 @@
       {
         "hour": 1,
         "dow": "SUN",
-        "hours": 675.19,
-        "cost": 15946.93
+        "hours": 660.46,
+        "cost": 15603.47
       },
       {
         "hour": 2,
@@ -46412,8 +46382,8 @@
       {
         "hour": 2,
         "dow": "SUN",
-        "hours": 571.19,
-        "cost": 13443.76
+        "hours": 559.46,
+        "cost": 13167.68
       },
       {
         "hour": 3,
@@ -46454,8 +46424,8 @@
       {
         "hour": 3,
         "dow": "SUN",
-        "hours": 450.64,
-        "cost": 10523.36
+        "hours": 441.23,
+        "cost": 10305.71
       },
       {
         "hour": 4,
@@ -46496,8 +46466,8 @@
       {
         "hour": 4,
         "dow": "SUN",
-        "hours": 193.08,
-        "cost": 4429.05
+        "hours": 187.87,
+        "cost": 4310.18
       },
       {
         "hour": 5,
@@ -47282,11 +47252,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 29043.3,
+    "regular_hours": 28880.25,
     "overtime_hours": 954.15,
-    "regular_cost": 669824.38,
+    "regular_cost": 665996.25,
     "overtime_cost": 37250.05,
-    "total_cost": 707074.36
+    "total_cost": 703246.23
   },
   "cogs": {
     "as_of": "2026-05-01",
@@ -357918,17 +357888,17 @@
       "rows_warned": 0
     },
     "toast_order": {
-      "ran_at": "2026-05-05T18:13:29+00:00",
-      "rows_in": 29,
-      "rows_valid": 28,
-      "rows_invalid": 1,
+      "ran_at": "2026-05-05T18:20:50+00:00",
+      "rows_in": 4,
+      "rows_valid": 4,
+      "rows_invalid": 0,
       "rows_warned": 0
     },
     "toast_time_entry": {
-      "ran_at": "2026-05-05T18:13:30+00:00",
-      "rows_in": 151,
-      "rows_valid": 147,
-      "rows_invalid": 4,
+      "ran_at": "2026-05-05T18:20:51+00:00",
+      "rows_in": 31,
+      "rows_valid": 30,
+      "rows_invalid": 1,
       "rows_warned": 0
     }
   }
