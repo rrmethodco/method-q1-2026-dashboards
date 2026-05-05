@@ -65,7 +65,18 @@ def run_validation(
                 "rules": rule_errs,
                 "row_keys": sorted(row.keys()) if isinstance(row, dict) else [],
             })
-        valid_rows.append(m.model_dump())
+        # mode="json" serializes datetime fields back to ISO strings (matching
+        # the raw shape from the source API). The default model_dump() returns
+        # native datetime objects, which the downstream consumers in
+        # toast_sync.py / marginedge_sync.py / tripleseat_sync.py /
+        # resy_os_scraper.py / forecast_engine.py / budget_sync.py all break on:
+        # they call .replace("Z", "+00:00") and fromisoformat(...) on what they
+        # expect to be ISO strings. Python 3.12 reports the datetime.replace()
+        # signature mismatch as "'str' object cannot be interpreted as an
+        # integer" (because datetime.replace expects an int year as positional
+        # arg #1), which silently broke the toast-sync nightly from PR #91
+        # merge (2026-05-04) until Ross caught downstream symptoms 2026-05-05.
+        valid_rows.append(m.model_dump(mode="json"))
 
     ran_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     ts = ran_at.replace(":", "").replace("-", "").replace("+0000", "Z")
