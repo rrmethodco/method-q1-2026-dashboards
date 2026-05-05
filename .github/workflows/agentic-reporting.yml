@@ -1,0 +1,129 @@
+name: Agentic Reporting
+
+# Runs the agentic reporting layer every morning AFTER the four data-sync
+# nightlies (Toast 12:00, Guest 12:15, MarginEdge 12:30, Tripleseat 12:45 UTC):
+#
+#   1. cross_source_reconciler.py — internal/external/stale checks per outlet
+#   2. reporting_agent.py — Anthropic Sonnet generates per-outlet briefings
+#   3. morning_briefing.py — aggregates into single HTML digest, emails Ross
+#
+# Commits all output to data/_snapshots/* + data/_validation/_reconciliation.json
+# so the dashboard auto-refreshes with fresh insights.
+#
+# This is the "agentic delivery" layer per Phase A.2 — replaces the dashboard's
+# rule-based Wins/Concerns/Action Items with LLM-narrated equivalents AND
+# pushes a daily digest to Ross's inbox without requiring the dashboard view.
+
+on:
+  schedule:
+    # 11:30 UTC = 06:30 ET (EST) / 07:30 EDT.
+    # Triggers AFTER Tripleseat (12:45 UTC) so we have today's full data.
+    # Wait — that's 13:00 UTC. Setting 13:30 UTC (08:30 ET EST / 09:30 EDT).
+    - cron: '30 13 * * *'
+  workflow_dispatch:
+    inputs:
+      week_end:
+        description: 'Week ending date (YYYY-MM-DD Sunday). Default = latest completed week.'
+        required: false
+        default: ''
+      outlet:
+        description: 'Generate just this outlet (default = all).'
+        required: false
+        default: ''
+      skip_email:
+        description: 'Skip email send (commit digest HTML only).'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  # Shared with the data-sync writers so we serialize on git push.
+  # If a sync workflow is still running when this fires, we wait for it
+  # to land — that way we always brief on the freshest data.
+  group: data-sync
+  cancel-in-progress: false
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: toast-etl/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r toast-etl/requirements.txt
+
+      - name: Run cross-source reconciler
+        # Loud-failure semantics intentional: if reconciliation throws,
+        # the briefing should NOT proceed — surfacing stale or
+        # mismatched data with confident LLM narration is worse than
+        # showing nothing.
+        run: |
+          cd toast-etl
+          python3 cross_source_reconciler.py
+
+      - name: Generate per-outlet snapshots (LLM)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          cd toast-etl
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::warning::ANTHROPIC_API_KEY not set — skipping LLM snapshot generation"
+            echo "Dashboard will fall back to rule-based snapshot for this run."
+            exit 0
+          fi
+          ARGS=""
+          if [ -n "${{ github.event.inputs.week_end }}" ]; then
+            ARGS="$ARGS --week-end ${{ github.event.inputs.week_end }}"
+          fi
+          if [ -n "${{ github.event.inputs.outlet }}" ]; then
+            ARGS="$ARGS --outlet ${{ github.event.inputs.outlet }}"
+          fi
+          python3 reporting_agent.py $ARGS
+
+      - name: Compose + send morning briefing
+        if: ${{ github.event.inputs.skip_email != 'true' }}
+        env:
+          GMAIL_USER:     ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+          BRIEFING_TO:    ${{ secrets.BRIEFING_TO }}
+          BRIEFING_CC:    ${{ secrets.BRIEFING_CC }}
+        run: |
+          cd toast-etl
+          python3 morning_briefing.py
+
+      - name: Commit snapshots + reconciliation
+        run: |
+          # Always include the digest HTML, snapshots, and reconciliation
+          # report. Skip if no diff (e.g., on a re-run with no new data).
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/_snapshots/ data/_validation/_reconciliation.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "no changes to commit — agentic reporting produced no diff this run"
+            exit 0
+          fi
+          today=$(date -u +%Y-%m-%dT%H%MZ)
+          git commit -m "chore(agentic): morning briefing $today"
+          # Retry push to absorb a race with a same-second sync commit
+          for i in 1 2 3; do
+            if git push; then
+              break
+            fi
+            git pull --rebase --autostash
+            sleep $((i * 2))
+          done

@@ -2,3 +2,8 @@ requests>=2.31.0
 pydantic>=2.5,<3
 pytest>=8.0,<9
 pyyaml>=6.0
+# Anthropic SDK for the agentic reporting layer (PR #101).
+# reporting_agent.py calls Sonnet to generate per-outlet Wins/Concerns/
+# Action Items narratives. cross_source_reconciler.py Python port runs
+# the reconciliation logic via GH Actions (independent of Edge Function deploy).
+anthropic>=0.40,<1
