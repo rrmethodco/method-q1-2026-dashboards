@@ -144,6 +144,30 @@ def _outlet_week_metrics(payload: dict[str, Any], wb_start: str, wb_end: str) ->
                   if s.get("nps") is not None and str(s.get("nps")).lstrip("-").isdigit()]
     nps = (sum(nps_scores) / len(nps_scores)) if nps_scores else None
 
+    # Tripleseat events (private events booked or completed in the window).
+    # Toast date format: 'M/D/YYYY h:MM AM/PM' — different from ISO. Parse
+    # event_start to ISO for window comparison. Statuses: CLOSED = past
+    # event completed; DEFINITE = booked future event; both contribute to
+    # the period's events revenue.
+    events_block = (payload.get("events") or {}).get("events") or []
+    cur_events: list[dict] = []
+    for e in events_block:
+        try:
+            ed = datetime.strptime((e.get("event_start") or ""),
+                                   "%m/%d/%Y %I:%M %p").date().isoformat()
+        except (ValueError, TypeError):
+            continue
+        if not (wb_start <= ed <= wb_end): continue
+        status = (e.get("status") or "").upper()
+        if status not in ("CLOSED", "DEFINITE", "CONFIRMED"):
+            continue
+        cur_events.append(e)
+    events_revenue = sum(float(e.get("booked_revenue") or 0) for e in cur_events)
+    events_grand = sum(float((e.get("financials") or {}).get("grand_total")
+                              or (e.get("financials") or {}).get("total") or 0)
+                       for e in cur_events)
+    events_guests = sum(int(e.get("guest_count") or 0) for e in cur_events)
+
     return {
         "current_week": {
             "net_sales": round(cur["net_sales"], 2),
@@ -175,6 +199,12 @@ def _outlet_week_metrics(payload: dict[str, Any], wb_start: str, wb_end: str) ->
         "year_over_year": {
             "net_sales": round(yoy["net_sales"], 2),
             "guests": int(yoy["guests"]),
+        },
+        "events": {
+            "count": len(cur_events),
+            "booked_revenue": round(events_revenue, 2),
+            "grand_total": round(events_grand, 2),
+            "guests_at_events": events_guests,
         },
     }
 
