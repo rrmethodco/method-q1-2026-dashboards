@@ -15,7 +15,11 @@ import { readState, writeState, pruneStale } from "../lib/state.ts";
 import type { AuditDecision } from "../lib/types.ts";
 
 export interface AlertEvent {
-  kind: "drift_breaking" | "anomaly" | "retry_exhausted";
+  kind:
+    | "drift_breaking"
+    | "anomaly"
+    | "retry_exhausted"
+    | "cross_source_reconciliation";
   source: string;
   text: string;
 }

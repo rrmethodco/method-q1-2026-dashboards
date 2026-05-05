@@ -38,7 +38,8 @@ export type AuditAgent =
   | "anomaly_detector"
   | "retry_repair"
   | "alert_dispatcher"
-  | "banner_writer";
+  | "banner_writer"
+  | "cross_source_reconciler";
 
 export interface AuditDecision {
   ts: string;

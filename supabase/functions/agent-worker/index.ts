@@ -3,11 +3,14 @@
 // Triggered by pg_cron every 5 minutes. Each invocation:
 //   1. Reads the latest data/_validation/*.json files (synced to a
 //      Supabase Storage bucket by the GH Actions workflows)
-//   2. Routes through the agent loops (drift, anomaly, retry, alert)
+//   2. Routes through 6 agents in order: drift → anomaly → retry →
+//      cross_source_reconciler → alert_dispatcher → banner_writer
 //   3. Writes back banner state + appends to audit log
 //
-// Phase A.1 — drift detector + anomaly detector wired (Tasks 20-22).
-// retry/repair + alert dispatcher + banner writer added in Tasks 23-25.
+// Phase A.1 — drift + anomaly + retry + alert + banner wired in Tasks 20-25.
+// cross_source_reconciler added 2026-05-05 (PR #96) after Ross caught a
+// systemic +20-30% Net Sales inflation manually — agent now catches the
+// same class of bug automatically going forward.
 import { createClient } from "@supabase/supabase-js";
 import { appendAudit } from "./lib/audit.ts";
 import { runDriftDetector } from "./agents/drift_detector.ts";
@@ -15,6 +18,7 @@ import { runAnomalyDetector } from "./agents/anomaly_detector.ts";
 import { runRetryRepair } from "./agents/retry_repair.ts";
 import { dispatchAlerts, type AlertEvent } from "./agents/alert_dispatcher.ts";
 import { writeBannerStates } from "./agents/banner_writer.ts";
+import { runCrossSourceReconciler } from "./agents/cross_source_reconciler.ts";
 import type { AuditDecision } from "./lib/types.ts";
 
 interface AgentWorkerResult {
@@ -116,7 +120,26 @@ Deno.serve(async (req: Request): Promise<Response> => {
     result.errors.push(`retry_repair: ${String(e)}`);
   }
 
-  // 4. Alert dispatcher (dedup state persisted to validation/_state/alert_dispatcher.json)
+  // 4. Cross-source reconciler — catches the class of bug Ross caught
+  // manually 2026-05-05 (LSBR Net Sales inflated $143K vs Toast $125K).
+  // Compares order_details.amount/net_sales ratio (internal) and
+  // order_details vs sales_summary (external) for every outlet.
+  try {
+    const recon = await runCrossSourceReconciler();
+    allAudits.push(...recon.audits);
+    for (const a of recon.alerts) {
+      events.push({
+        kind: "cross_source_reconciliation",
+        source: a.outlet,
+        text: `[${a.kind}] ${a.text}`,
+      });
+    }
+    result.agents_invoked.push(`cross_source_reconciler: ${recon.audits.length} audits, ${recon.alerts.length} alerts`);
+  } catch (e) {
+    result.errors.push(`cross_source_reconciler: ${String(e)}`);
+  }
+
+  // 5. Alert dispatcher (dedup state persisted to validation/_state/alert_dispatcher.json)
   if (events.length > 0) {
     try {
       const dispAudits = await dispatchAlerts(supabase, events);
@@ -127,7 +150,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     }
   }
 
-  // 5. Banner state writer
+  // 6. Banner state writer
   try {
     const bannerCount = await writeBannerStates(supabase);
     result.agents_invoked.push(`banner_writer: ${bannerCount} outlets`);
