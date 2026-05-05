@@ -3,12 +3,15 @@
 project_id = "mmwislzsgnjxjxssynwm"
 
 [functions.agent-worker]
-# Require a JWT on every invocation. The pg_cron job at
-# supabase/migrations/20260504000001_agent_cron.sql sends
-# `Authorization: Bearer <service_role_key>` so it authenticates
-# correctly. With this OFF (verify_jwt = false), the function URL is
-# public — anyone can hit it in a loop to drain Anthropic API credits
-# and trigger GitHub workflow dispatches via the retry/repair agent
-# (the project ref is in the public repo). See security review
-# 2026-05-04 BLOCK DEPLOY finding.
-verify_jwt = true
+# verify_jwt = false because Supabase's late-2024 API key migration
+# replaced legacy JWT keys (eyJ...) with opaque sb_secret_<...> tokens
+# that are NOT JWTs. With verify_jwt = true, those rejected with
+# UNAUTHORIZED_INVALID_JWT_FORMAT. Legacy JWT keys are no longer
+# exposed in the dashboard for newer projects.
+#
+# In place of Supabase's JWT check, the function (index.ts) has a
+# custom Bearer shared-secret check against AGENT_WORKER_AUTH_SECRET.
+# pg_cron stores the same value in Vault and sends it each tick.
+# This addresses the BLOCK DEPLOY security finding (2026-05-04) without
+# coupling our auth model to Supabase's evolving key formats.
+verify_jwt = false

@@ -24,7 +24,35 @@ interface AgentWorkerResult {
   errors: string[];
 }
 
-Deno.serve(async (_req: Request): Promise<Response> => {
+Deno.serve(async (req: Request): Promise<Response> => {
+  // Custom shared-secret auth check.
+  //
+  // Why not Supabase's verify_jwt = true? Supabase's late-2024 API key
+  // migration introduced sb_secret_<...> opaque keys that are NOT JWTs.
+  // verify_jwt = true rejects them with UNAUTHORIZED_INVALID_JWT_FORMAT
+  // even when the key is the correct project service-role key. Legacy
+  // JWT-format keys (eyJ...) are no longer exposed for newer projects.
+  //
+  // To stay decoupled from Supabase's evolving key formats AND keep the
+  // function URL non-public (it's in the GitHub repo via supabase/),
+  // we check a shared secret presented as `Authorization: Bearer <X>`.
+  // The same secret is stored in Vault and read by pg_cron each tick.
+  // Set as `AGENT_WORKER_AUTH_SECRET` Edge Function secret.
+  const expectedAuth = Deno.env.get("AGENT_WORKER_AUTH_SECRET");
+  if (!expectedAuth) {
+    return new Response(JSON.stringify({
+      code: "MISCONFIGURED",
+      message: "AGENT_WORKER_AUTH_SECRET not set as an Edge Function secret",
+    }), { status: 500, headers: { "content-type": "application/json" } });
+  }
+  const presented = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
+  if (presented !== expectedAuth) {
+    return new Response(JSON.stringify({
+      code: "UNAUTHORIZED",
+      message: "Missing or invalid agent-worker shared secret",
+    }), { status: 401, headers: { "content-type": "application/json" } });
+  }
+
   const ranAt = new Date().toISOString();
   const result: AgentWorkerResult = {
     status: "ok",
