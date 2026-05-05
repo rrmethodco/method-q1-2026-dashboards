@@ -770,48 +770,38 @@ def transform_orders(
                     sel_disc += float(ad.get("discountAmount") or 0.0)
             discount = float(check_disc + sel_disc)
 
-            # Toast Net Sales — exact 5-step formula per
+            # Toast Net Sales — calibrated to match Toast Web's Sales Summary
+            # report "Net Sales" column (which is what operators query when
+            # reconciling P&L). This DIVERGES from Toast's API spec at:
             # https://doc.toasttab.com/doc/devguide/apiOrdersNetSalesCalculation.html
             #
-            #   1. For each menu item selection (excluding voided + Gift Card):
-            #        sel_net = preDiscountPrice
-            #                 − sum(appliedDiscounts.nonTaxableDiscountAmount)
-            #                 − refundDetails.refundAmount
-            #   2. Sum sel_net across selections = check_net
-            #   3. Add non-gratuity service charges:
-            #        check_net += sum(appliedServiceCharges.chargeAmount
-            #                         where !gratuity)
-            #                  − sum(appliedServiceCharges.refundDetails.refundAmount
-            #                        where !gratuity)
-            #   4. Subtract check-level discounts:
-            #        check_net −= sum(check.appliedDiscounts.nonTaxableDiscountAmount)
-            #   5. Sum check_net across the order's checks.
+            # Empirical Ross-vs-API reconciliation 2026-05-05 LSBR week ending 5/3:
             #
-            # Critical Toast specifics that the prior naive implementation missed:
-            #   - Use `nonTaxableDiscountAmount`, NOT `discountAmount`. The taxable
-            #     portion of a discount doesn't reduce Net Sales (it reduces tax).
-            #   - Filter Gift Cards by `displayName == "Gift Card"`, per Toast's
-            #     spec. The `deferred` flag is a belt-and-suspenders check.
-            #   - Combo discounts have `discountAmount = null` on appliedDiscounts —
-            #     they're reflected in `selection.price` vs `preDiscountPrice` delta.
-            #     Using preDiscountPrice + nonTaxableDiscountAmount correctly handles
-            #     this because the combo discount is registered at check level with
-            #     an explicit nonTaxableDiscountAmount value there.
-            #   - Non-gratuity SCs (delivery fee, mandatory service charge configured
-            #     as non-gratuity, etc.) ARE part of Net Sales per Toast — guests pay
-            #     them and the restaurant keeps them. Auto-grat configured with
-            #     `gratuity: true` is excluded (it's a tip pool distribution).
-            #   - Refunds reduce Net Sales (per Toast: "on the day of the refund",
-            #     but we attribute them to the original sale day for now — date-
-            #     shifting requires payment-level refund timestamps that aren't
-            #     materialized in our daily aggregation; documented as a known
-            #     simplification in docs/NET_SALES_RECONCILIATION.md).
+            #   Approach                                | NS         | Δ Toast UI
+            #   ----------------------------------------|------------|------------
+            #   API spec (PR #99): nonTaxableDiscount + |            |
+            #   non-grat SCs + refunds                  | $130,861   | +4.13%
+            #   Operator UI (this): full discountAmount,|            |
+            #   no SC addition, refunds                 | $129,670   | +3.18%
+            #
+            # The "operator UI" formula is closer to what Toast Web shows in
+            # the Sales Summary screen, which is the source of truth Ross
+            # uses for P&L reconciliation. The remaining +3% gap appears to be
+            # business-day-rollover (Toast's fiscal-day cutoff at 4 AM ET vs
+            # our calendar-day cutoff at midnight) — investigated in a separate
+            # follow-up; gap is bounded by late-night order volume.
+            #
+            #   1. For each non-voided non-Gift-Card selection:
+            #        sel_net = preDiscountPrice
+            #                 − sum(appliedDiscounts.discountAmount)
+            #                 − refundDetails.refundAmount
+            #   2. Sum sel_net across selections.
+            #   3. Subtract check-level discountAmount.
+            #   4. Do NOT add non-gratuity SCs — Toast UI Sales Summary excludes them
+            #      (they appear under a separate "Service Charges" line in the
+            #      P&L breakdown).
             net_sales = 0.0
             for sel in (check.get("selections") or []):
-                # Toast docs: exclude voided and Gift Card displayName.
-                # We also defensively exclude deleted + deferred (gift card sales
-                # via legacy schema) — neither should change behavior on current
-                # data but guards against schema drift.
                 if sel.get("voided") or sel.get("deleted"):
                     continue
                 if sel.get("displayName") == "Gift Card":
@@ -819,46 +809,24 @@ def transform_orders(
                 if sel.get("deferred"):
                     continue
                 pdp = float(sel.get("preDiscountPrice") or sel.get("price") or 0.0)
-                # Use nonTaxableDiscountAmount per Toast's documented formula.
-                # Falls back to discountAmount if nonTaxableDiscountAmount is null
-                # (older Toast POS versions emit only discountAmount).
-                sel_nontax_disc = sum(
-                    float(ad.get("nonTaxableDiscountAmount")
-                          if ad.get("nonTaxableDiscountAmount") is not None
-                          else (ad.get("discountAmount") or 0.0))
+                # Use FULL discountAmount (not nonTaxableDiscountAmount) — Toast UI
+                # subtracts the full discount value, not just the non-taxable
+                # portion. This matches operator-facing reports.
+                sel_disc_subtract = sum(
+                    float(ad.get("discountAmount") or 0.0)
                     for ad in (sel.get("appliedDiscounts") or [])
                 )
-                # Refunds processed on this selection (Toast POS 2.46+).
-                # `selection.refundDetails.refundAmount` per the 2021 changelog.
                 sel_refund = float(
                     (sel.get("refundDetails") or {}).get("refundAmount") or 0.0
                 )
-                net_sales += (pdp - sel_nontax_disc - sel_refund)
+                net_sales += (pdp - sel_disc_subtract - sel_refund)
 
-            # Add non-gratuity service charges (per Toast step 3).
-            # `chargeAmount` is the documented field; fall back to `amount` for
-            # older Toast POS schemas that emit only `amount`.
-            for sc in (check.get("appliedServiceCharges") or []):
-                if sc.get("gratuity"):
-                    continue
-                sc_amt = float(
-                    sc.get("chargeAmount") if sc.get("chargeAmount") is not None
-                    else (sc.get("amount") or 0.0)
-                )
-                sc_refund = float(
-                    (sc.get("refundDetails") or {}).get("refundAmount") or 0.0
-                )
-                net_sales += (sc_amt - sc_refund)
-
-            # Subtract check-level discounts (per Toast step 4).
-            # nonTaxableDiscountAmount preferred; falls back to discountAmount.
-            check_nontax_disc = sum(
-                float(ad.get("nonTaxableDiscountAmount")
-                      if ad.get("nonTaxableDiscountAmount") is not None
-                      else (ad.get("discountAmount") or 0.0))
+            # Subtract check-level discounts (full discountAmount).
+            check_disc_subtract = sum(
+                float(ad.get("discountAmount") or 0.0)
                 for ad in (check.get("appliedDiscounts") or [])
             )
-            net_sales -= check_nontax_disc
+            net_sales -= check_disc_subtract
             # `check.get("customer", {})` returns None (not {}) when Toast sends
             # `"customer": null` explicitly — use `or {}` fallback.
             guests = int(order.get("numberOfGuests") or (check.get("customer") or {}).get("guestCount") or 0)
