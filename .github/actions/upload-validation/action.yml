@@ -46,8 +46,17 @@ runs:
           # -sS = silent but show errors. -f = fail on HTTP >=400 (sets exit nonzero).
           # -w "%{http_code}" = print status code. We capture the code so we can
           # log it on failure (helps distinguish 401 vs 404 vs 5xx).
+          #
+          # Auth headers: Supabase's late-2024 API key migration replaced legacy
+          # JWT keys (eyJ...) with opaque sb_secret_<...> tokens. Storage's
+          # REST API rejects opaque tokens on `Authorization: Bearer` alone
+          # with "Invalid Compact JWS" (HTTP 403 wrapped as 400 by gateway).
+          # Sending the key on BOTH `apikey:` and `Authorization: Bearer:`
+          # works for both legacy JWT and opaque sb_secret formats — Storage
+          # accepts whichever validates against the project's auth config.
           status_code=$(curl -sS -o /tmp/upload_resp.txt -w "%{http_code}" -X POST \
             "$SUPABASE_URL/storage/v1/object/validation/$source/$name" \
+            -H "apikey: $SUPABASE_KEY" \
             -H "Authorization: Bearer $SUPABASE_KEY" \
             -H "Content-Type: application/json" \
             -H "x-upsert: true" \
