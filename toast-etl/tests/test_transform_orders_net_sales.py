@@ -9,13 +9,21 @@ report (it includes tips, non-gratuity service charges, and other items
 the report excludes). Ross caught the gap when LSBR week ending 5/3
 showed $143.3K on the dashboard vs. $125,673.04 in Toast direct.
 
-The fix added a parallel `net_sales` field that walks
-`check.selections[]` and matches Toast's Net Sales definition exactly:
+The current `net_sales` formula in transform_orders matches Toast's
+exact 5-step calculation per
+https://doc.toasttab.com/doc/devguide/apiOrdersNetSalesCalculation.html
 
-    net_sales =
-      Σ over non-voided non-deleted non-deferred selections of
-        (selection.preDiscountPrice − Σ selection.appliedDiscounts)
-      − Σ check.appliedDiscounts
+  1. For each menu item selection (excluding voided + Gift Card):
+       sel_net = preDiscountPrice
+                − sum(appliedDiscounts.nonTaxableDiscountAmount)
+                − refundDetails.refundAmount
+  2. Sum sel_net across selections = check_net
+  3. Add non-gratuity service charges:
+       check_net += sum(appliedServiceCharges.chargeAmount where !gratuity)
+                  − sum(appliedServiceCharges.refundDetails.refundAmount where !gratuity)
+  4. Subtract check-level discounts:
+       check_net −= sum(check.appliedDiscounts.nonTaxableDiscountAmount)
+  5. Sum check_net across the order's checks.
 
 These tests pin that math down so the next time someone refactors
 transform_orders, the Net Sales KPI doesn't silently drift.
@@ -76,18 +84,40 @@ def _selection(
     voided: bool = False,
     deferred: bool = False,
     deleted: bool = False,
+    display_name: str | None = None,
     selection_discount: float = 0.0,
+    selection_nontax_discount: float | None = None,
+    refund_amount: float = 0.0,
 ):
-    return {
+    """Build a selection. Test exercises:
+      - selection_discount: emits {discountAmount: X} only (legacy POS shape).
+      - selection_nontax_discount: emits {nonTaxableDiscountAmount: X,
+          discountAmount: X+1} so we can confirm the new field is preferred.
+      - refund_amount: emits refundDetails.refundAmount (Toast POS 2.46+).
+      - display_name: e.g. "Gift Card" to test displayName-based exclusion.
+    """
+    sel: dict = {
         "voided": voided,
         "deleted": deleted,
         "deferred": deferred,
         "preDiscountPrice": pre_discount,
         "price": price if price is not None else pre_discount,
-        "appliedDiscounts": (
-            [{"discountAmount": selection_discount}] if selection_discount else []
-        ),
+        "appliedDiscounts": [],
     }
+    if display_name is not None:
+        sel["displayName"] = display_name
+    if selection_nontax_discount is not None:
+        # Emit BOTH discountAmount and nonTaxableDiscountAmount differently to
+        # confirm the formula prefers nonTaxableDiscountAmount.
+        sel["appliedDiscounts"] = [{
+            "nonTaxableDiscountAmount": selection_nontax_discount,
+            "discountAmount": selection_nontax_discount + 1.0,  # decoy
+        }]
+    elif selection_discount:
+        sel["appliedDiscounts"] = [{"discountAmount": selection_discount}]
+    if refund_amount:
+        sel["refundDetails"] = {"refundAmount": refund_amount}
+    return sel
 
 
 def _net_sales_for_day(out: dict, date: str) -> float:
@@ -208,3 +238,205 @@ def test_totals_dict_exposes_net_sales():
         "totals dict must expose net_sales — _recompute_rc_totals depends on it"
     )
     assert out["totals"]["net_sales"] == 100.0
+
+
+# =============================================================================
+# Tests for the EXACT Toast 5-step formula (PR #99 — penny-accurate reconciliation)
+# https://doc.toasttab.com/doc/devguide/apiOrdersNetSalesCalculation.html
+# =============================================================================
+
+
+def test_nontaxable_discount_amount_is_preferred_over_discount_amount():
+    """Toast's documented formula uses `nonTaxableDiscountAmount`, not
+    `discountAmount`. The taxable portion of a discount doesn't reduce
+    Net Sales — it reduces tax. Pre-#99 we were summing `discountAmount`,
+    which over-subtracted on discounts that had a taxable component.
+
+    Helper emits BOTH fields with `discountAmount = nonTaxable + 1` as a
+    decoy. The correct formula picks `nonTaxableDiscountAmount = $10`,
+    yielding net_sales = 100 - 10 = $90.
+    """
+    orders = [_make_order(
+        "2026-05-08",
+        check_amount=89.0,  # post-discount check amount irrelevant to formula
+        selections=[_selection(
+            pre_discount=100.0,
+            selection_nontax_discount=10.0,  # discountAmount becomes 11.0 (decoy)
+        )],
+    )]
+    out = transform_orders(orders)
+    assert _net_sales_for_day(out, "2026-05-08") == 90.0, (
+        "Must use nonTaxableDiscountAmount=10 (giving 90), not discountAmount=11 (giving 89)"
+    )
+
+
+def test_non_gratuity_service_charge_adds_to_net_sales():
+    """Toast Net Sales formula step 3: ADD non-gratuity service charges.
+
+    A delivery fee or mandatory non-gratuity service charge is paid by
+    the guest and kept by the restaurant — it's revenue. Auto-gratuity
+    configured with `gratuity: true` (a tip pool) is excluded.
+
+    $100 item + $5 non-gratuity SC + $20 auto-grat (gratuity SC):
+      Net Sales = 100 + 5 = $105 (auto-grat excluded)
+    """
+    orders = [_make_order(
+        "2026-05-09",
+        check_amount=125.0,
+        service_charges=[
+            {"chargeAmount": 5.0, "gratuity": False, "name": "Delivery Fee"},
+            {"chargeAmount": 20.0, "gratuity": True, "name": "Auto-gratuity 20%"},
+        ],
+        selections=[_selection(pre_discount=100.0)],
+    )]
+    out = transform_orders(orders)
+    assert _net_sales_for_day(out, "2026-05-09") == 105.0
+
+
+def test_service_charge_chargeAmount_is_preferred_over_amount():
+    """Toast docs specify `ServiceCharge.chargeAmount`. Older Toast POS
+    versions emit only `amount`. Formula must prefer `chargeAmount` when
+    present, fall back to `amount` otherwise.
+    """
+    orders = [_make_order(
+        "2026-05-10",
+        check_amount=110.0,
+        service_charges=[
+            # chargeAmount=10 (truth), amount=99 (decoy from older schema)
+            {"chargeAmount": 10.0, "amount": 99.0, "gratuity": False},
+        ],
+        selections=[_selection(pre_discount=100.0)],
+    )]
+    out = transform_orders(orders)
+    assert _net_sales_for_day(out, "2026-05-10") == 110.0  # 100 + 10, not 100 + 99
+
+
+def test_gift_card_excluded_by_displayName():
+    """Toast formula step 1: 'Exclude menu item selections where
+    displayName is "Gift Card"'. Older Toast schemas may use the
+    `deferred=true` flag instead. Both should result in exclusion.
+    """
+    orders = [_make_order(
+        "2026-05-11",
+        check_amount=200.0,
+        selections=[
+            _selection(pre_discount=50.0),  # included
+            _selection(pre_discount=100.0, display_name="Gift Card"),  # excluded by displayName
+            _selection(pre_discount=50.0, deferred=True),  # excluded by deferred (defensive)
+        ],
+    )]
+    out = transform_orders(orders)
+    assert _net_sales_for_day(out, "2026-05-11") == 50.0
+
+
+def test_selection_refund_subtracts_from_net_sales():
+    """Toast POS 2.46+ surfaces refunds via `selection.refundDetails.refundAmount`.
+    A $50 item with a $20 partial refund on the same day: net_sales = $30.
+    """
+    orders = [_make_order(
+        "2026-05-12",
+        check_amount=50.0,
+        selections=[_selection(pre_discount=50.0, refund_amount=20.0)],
+    )]
+    out = transform_orders(orders)
+    assert _net_sales_for_day(out, "2026-05-12") == 30.0
+
+
+def test_service_charge_refund_subtracts_from_net_sales():
+    """Non-gratuity SC refunds reduce Net Sales (per Toast docs:
+    'Net Sales figures decrease by the amount of the refund. ... this
+    includes ... service charges').
+    """
+    orders = [_make_order(
+        "2026-05-13",
+        check_amount=110.0,
+        service_charges=[{
+            "chargeAmount": 10.0, "gratuity": False,
+            "refundDetails": {"refundAmount": 5.0},
+        }],
+        selections=[_selection(pre_discount=100.0)],
+    )]
+    out = transform_orders(orders)
+    # 100 (item) + 10 (SC) - 5 (SC refund) = 105
+    assert _net_sales_for_day(out, "2026-05-13") == 105.0
+
+
+def test_combo_discount_handled_via_check_appliedDiscounts():
+    """Combo discounts: the discount is registered at check level with
+    `nonTaxableDiscountAmount` set; selection.preDiscountPrice stays at
+    the original price. Net Sales subtracts the check-level discount.
+
+    Two soups @ $8.99 each (preDiscountPrice = $17.98 total),
+    combo discount = $2.98 → check.appliedDiscounts has one combo entry
+    with nonTaxableDiscountAmount = $2.98. Net Sales = 17.98 - 2.98 = $15.
+    """
+    orders = [_make_order(
+        "2026-05-14",
+        check_amount=15.0,
+        check_discounts=[{
+            "menuItemSelectionGuid": "s2",
+            "discountGuid": "combo",
+            "nonTaxableDiscountAmount": 2.98,
+        }],
+        selections=[
+            {"voided": False, "deleted": False, "preDiscountPrice": 8.99,
+             "price": 8.99, "appliedDiscounts": []},
+            {"voided": False, "deleted": False, "preDiscountPrice": 8.99,
+             "price": 8.99, "appliedDiscounts": []},
+        ],
+    )]
+    out = transform_orders(orders)
+    assert _net_sales_for_day(out, "2026-05-14") == round(17.98 - 2.98, 2)
+
+
+def test_le_supreme_with_non_gratuity_sc_and_refund():
+    """Realistic Le Suprême large-party check with both auto-grat AND a
+    non-gratuity service charge AND a partial refund.
+
+    5 entrees @ $50 = $250.
+    Wine bottle @ $80 (with $5 partial refund).
+    Auto-grat 20% as service charge = $66 (gratuity, excluded).
+    Mandatory wellness fee 3% as non-gratuity SC = $9.90 (with $1 refund).
+
+      Net Sales = 250 (entrees)
+                + 75 (wine: 80 - 5 refund)
+                + 9.90 (wellness fee)
+                - 1.00 (wellness fee refund)
+                = $333.90
+    """
+    orders = [_make_order(
+        "2026-05-15",
+        check_amount=400.0,
+        service_charges=[
+            {"chargeAmount": 66.0, "gratuity": True, "name": "Auto-gratuity"},
+            {"chargeAmount": 9.90, "gratuity": False, "name": "Wellness Fee",
+             "refundDetails": {"refundAmount": 1.0}},
+        ],
+        selections=[
+            _selection(pre_discount=50.0),
+            _selection(pre_discount=50.0),
+            _selection(pre_discount=50.0),
+            _selection(pre_discount=50.0),
+            _selection(pre_discount=50.0),
+            _selection(pre_discount=80.0, refund_amount=5.0),
+        ],
+        guests=5,
+    )]
+    out = transform_orders(orders)
+    assert _net_sales_for_day(out, "2026-05-15") == round(250 + 75 + 9.90 - 1.00, 2)
+
+
+def test_legacy_discountAmount_only_falls_back_correctly():
+    """For Toast POS versions older than the nonTaxableDiscountAmount
+    rollout, the formula must fall back to discountAmount. Confirm the
+    fallback triggers when nonTaxableDiscountAmount is absent (None).
+    """
+    orders = [_make_order(
+        "2026-05-16",
+        check_amount=90.0,
+        # appliedDiscounts has discountAmount only (no nonTaxableDiscountAmount)
+        selections=[_selection(pre_discount=100.0, selection_discount=10.0)],
+    )]
+    out = transform_orders(orders)
+    # Falls back to discountAmount=10 since nonTaxableDiscountAmount missing
+    assert _net_sales_for_day(out, "2026-05-16") == 90.0
