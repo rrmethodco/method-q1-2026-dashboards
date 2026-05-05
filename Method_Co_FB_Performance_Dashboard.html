@@ -709,34 +709,93 @@ function getSummarySource() {
 }
 function rcShareMult() { return 1; }
 // Daily net-sales rows merged across RCs for the current RC filter.
-// Prefers order_details per-date because Toast Sales Summary has historical
-// per-RC gaps (e.g. Bar Rotunda summary is missing Jul 2025 → Apr 2026 even
-// though order-level data exists). Order_details is granular-by-RC, so
-// combined-mode actually sums all active RCs. Sales_summary is used only
-// for dates order_details doesn't cover (typically older history).
+//
+// Priority order (highest → lowest):
+//   1. order_details.daily[].net_sales — Toast official Net Sales, computed
+//      by toast_sync.transform_orders from non-voided non-deferred selection
+//      prices minus discounts. Matches Toast's Sales Summary report exactly.
+//      Available on daily rows synced 2026-05-05 onward.
+//   2. sales_summary.daily[].net_sales — Toast Sales Summary CSV/API import.
+//      Authoritative when present but stale on most outlets (last LSBR
+//      refresh 2026-04-21 before the auto-pull lands).
+//   3. order_details.daily[].amount — legacy `check.amount` aggregation.
+//      Inflated by ~20-30% vs Toast Net Sales because check.amount in the
+//      Toast Orders API includes tips, service charges, and other items
+//      the Sales Summary report excludes. Flagged as `_estimated:true` so
+//      the dashboard can surface a "pending refresh" banner to the user.
+//
+// Each row carries `_source` ∈ {'od_net_sales','sales_summary','od_amount_legacy'}
+// so KPI panels can render a reconciliation banner when any displayed row
+// is from the legacy source.
 function combinedDailySales() {
   const ss = getSummarySource();
   const od = getOrderDetailsSource() || {};
   const map = {};
-  // 1. Seed from sales_summary (baseline — has the long historical tail)
+
+  // Pass 1: seed from sales_summary (long historical tail).
   Object.values(ss).forEach(s => (s.daily||[]).forEach(r => {
-    if (!map[r.date]) map[r.date] = { date: r.date, net_sales: 0, orders: 0, guests: 0 };
+    if (!map[r.date]) map[r.date] = { date: r.date, net_sales: 0, orders: 0, guests: 0, _source: 'sales_summary' };
     map[r.date].net_sales += r.net_sales || 0;
     map[r.date].orders    += r.orders    || 0;
     map[r.date].guests    += r.guests    || 0;
   }));
-  // 2. Order_details is authoritative on dates it covers — overwrite.
-  //    amount in order_details is pre-tax check subtotal, which is the same
-  //    shape as net_sales in sales_summary (close enough for KPIs/trends).
+
+  // Pass 2: order_details — sum BOTH net_sales (preferred) and amount (legacy)
+  // across all RCs per date. Decide source per-date based on whether ANY RC
+  // contributed a non-zero net_sales (a date with all-zero net_sales is treated
+  // as legacy because pre-fix daily rows lack the field entirely).
   const odByDate = {};
   Object.values(od).forEach(o => (o.daily||[]).forEach(r => {
-    if (!odByDate[r.date]) odByDate[r.date] = { date: r.date, net_sales: 0, orders: 0, guests: 0 };
-    odByDate[r.date].net_sales += r.amount || 0;
-    odByDate[r.date].orders    += r.orders || 0;
-    odByDate[r.date].guests    += r.guests || 0;
+    if (!odByDate[r.date]) odByDate[r.date] = { date: r.date, net_sales_true: 0, amount_legacy: 0, orders: 0, guests: 0, _hasNetSales: false };
+    const ns = (r.net_sales != null) ? Number(r.net_sales) : 0;
+    if (r.net_sales != null && ns !== 0) odByDate[r.date]._hasNetSales = true;
+    odByDate[r.date].net_sales_true += ns;
+    odByDate[r.date].amount_legacy  += (r.amount || 0);
+    odByDate[r.date].orders         += (r.orders || 0);
+    odByDate[r.date].guests         += (r.guests || 0);
   }));
-  Object.values(odByDate).forEach(r => { map[r.date] = r; });
+
+  // Pass 3: order_details overrides sales_summary BUT only when it has the
+  // accurate net_sales field. Pre-fix rows fall through to sales_summary
+  // (if available) or get flagged as estimated.
+  Object.values(odByDate).forEach(r => {
+    const existing = map[r.date];
+    if (r._hasNetSales) {
+      // Use the accurate Toast-aligned Net Sales.
+      map[r.date] = { date: r.date, net_sales: r.net_sales_true, orders: r.orders, guests: r.guests, _source: 'od_net_sales' };
+    } else if (existing && existing._source === 'sales_summary') {
+      // Keep sales_summary baseline; pull orders/guests from order_details
+      // since sales_summary's order/guest counts can lag.
+      existing.orders = r.orders || existing.orders;
+      existing.guests = r.guests || existing.guests;
+    } else {
+      // No accurate source for this date — fall back to legacy amount with
+      // an _estimated flag so the dashboard renders a "pending refresh" badge.
+      map[r.date] = { date: r.date, net_sales: r.amount_legacy, orders: r.orders, guests: r.guests, _source: 'od_amount_legacy', _estimated: true };
+    }
+  });
+
   return Object.values(map).sort((a,b) => a.date < b.date ? -1 : 1);
+}
+
+// Returns reconciliation status for a daily-rows period:
+//   { confirmed: $, estimated: $, daysConfirmed: n, daysEstimated: n,
+//     hasEstimated: bool, lastConfirmedDate: '2026-04-21' | null }
+// Used by KPI panels to render a "Net Sales pending Toast refresh" banner.
+function netSalesReconciliation(rows) {
+  let confirmed = 0, estimated = 0, daysConfirmed = 0, daysEstimated = 0, lastConfirmedDate = null;
+  for (const r of rows || []) {
+    if (r._estimated) {
+      estimated += r.net_sales || 0;
+      daysEstimated += 1;
+    } else {
+      confirmed += r.net_sales || 0;
+      daysConfirmed += 1;
+      if (!lastConfirmedDate || r.date > lastConfirmedDate) lastConfirmedDate = r.date;
+    }
+  }
+  return { confirmed, estimated, daysConfirmed, daysEstimated,
+           hasEstimated: daysEstimated > 0, lastConfirmedDate };
 }
 
 // ================================================== Data pickers (Order Details)
@@ -3606,6 +3665,11 @@ function renderSnapshotSection() {
   const rev   = snapshotSumDaily(daily, wb.start, wb.end);
   const prior = snapshotSumDaily(daily, wb.pwStart, wb.pwEnd);
   const yoy   = snapshotSumDaily(daily, wb.yyStart, wb.yyEnd);
+  // Net Sales reconciliation — flag when the week contains any rows whose
+  // net_sales is the legacy `check.amount` (inflated +20-30%) instead of
+  // the post-2026-05-05 toast_sync.transform_orders selection-level Net Sales.
+  // Banner renders right below the snap-head when applicable.
+  const reconWeek = netSalesReconciliation(daily.filter(r => r.date >= wb.start && r.date <= wb.end));
   // Tri-comparison sources for the snapshot week. STLY = same week last
   // year, already computed above as `yoy`. Forecast and Budget pull
   // from outlet.forecast.daily / outlet.budget.daily — null until the
@@ -3708,6 +3772,14 @@ function renderSnapshotSection() {
         <button class="snap-print-btn" onclick="window.print()">Export PDF</button>
       </div>
     </div>
+    ${reconWeek.hasEstimated ? `
+      <div style="background:#FFF8E1;border-left:4px solid #F2A91C;padding:10px 14px;margin:12px 0 16px;border-radius:4px;font-family:var(--font-stack);font-size:12px;line-height:1.55;color:var(--slate);">
+        <strong style="letter-spacing:0.04em;">NET SALES RECONCILIATION</strong> ·
+        ${reconWeek.daysEstimated} of ${reconWeek.daysConfirmed + reconWeek.daysEstimated} day${reconWeek.daysConfirmed + reconWeek.daysEstimated === 1 ? '' : 's'} in this week show estimated revenue
+        from legacy <code style="font-size:11px;">check.amount</code> (typically +20-30% above Toast official Net Sales).
+        Refresh by re-running <code style="font-size:11px;">toast_sync</code> with a backfill window covering ${wb.start} → ${wb.end} —
+        post-2026-05-05 sync produces a Toast-aligned <code style="font-size:11px;">net_sales</code> field that this dashboard prefers automatically.
+      </div>` : ''}
 
     <div class="snap-grid">
       <!-- KPI strip — revenue + spend.
