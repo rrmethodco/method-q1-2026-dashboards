@@ -14,9 +14,18 @@ const PAGES_BASE = "https://rrmethodco.github.io/method-q1-2026-dashboards/data"
 const OUTLETS = ["lsbr", "mulherins", "kampers", "lowland", "vessel",
   "anthology", "rosemary_rose", "hiroki_det", "hiroki_phl", "little_wing", "quoin"];
 const METRICS = ["amount", "guests"] as const;
-// 14-day shadow window: until 2026-05-18, anomalies only log to audit;
-// no Slack push. Tune via env if needed.
-const SHADOW_UNTIL_ISO = Deno.env.get("ANOMALY_SHADOW_UNTIL") ?? "2026-05-18T00:00:00Z";
+// Shadow window: anomalies only log to audit, no Slack push.
+//
+// Originally 14d shadow until 2026-05-18 to let the per-outlet × DOW
+// rolling-stat baselines build up. With the YTD backfill landing
+// 2026-05-05 (PRs #95–#101 + the 130-day Toast Sync run), every outlet
+// now has 130+ days of validated daily revenue/covers data — far more
+// than the 8-week minimum the algorithm requires. Defaulting to today's
+// date so this agent goes live the moment the next Edge Function deploy
+// fires (no separate env-flip step needed for Ross). The
+// ANOMALY_SHADOW_UNTIL env override stays available as a circuit
+// breaker if the live alerts produce too much noise.
+const SHADOW_UNTIL_ISO = Deno.env.get("ANOMALY_SHADOW_UNTIL") ?? "2026-05-06T00:00:00Z";
 
 interface AnomalyAlert {
   outlet: string;
