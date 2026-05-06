@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROOST Laundry Cost Analysis | Method Co</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Method Co. brand */
+  --turquoise:#2BA6BB;
+  --turquoise-soft:#E6F4F6;
+  --turquoise-mid:#7FC9D4;
+  --royal:#405766;
+  --slate:#212931;
+  --seafoam:#BCC8BE;
+  --seafoam-soft:#E5EAE5;
+  --tan:#D8CFC4;
+  --tan-soft:#EFEAE3;
+  --white:#FFFFFF;
+  --black:#231F20;
+  --grey:#E2DEDE;
+  --grey-soft:#F5F2F2;
+  --bg:#F7F5F2;
+  --good:#5A8C6E;
+  --good-bg:#E8EFEA;
+  --warn:#C49156;
+  --warn-bg:#F6ECDD;
+  --bad:#B5503F;
+  --bad-bg:#F4E0DB;
+  --shadow:0 1px 3px rgba(33,41,49,.06),0 1px 2px rgba(33,41,49,.04);
+  --shadow-md:0 4px 12px rgba(33,41,49,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{
+  background:var(--bg);
+  color:var(--slate);
+  font-family:'Montserrat','Helvetica Neue',Arial,sans-serif;
+  font-size:13px;
+  line-height:1.5;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ============== SIDEBAR ============== */
+.sidebar{
+  width:230px;
+  background:var(--slate);
+  padding:1.75rem 0 1.25rem;
+  flex-shrink:0;
+  position:fixed;
+  top:0;left:0;
+  height:100vh;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+.sidebar-logo{
+  padding:0 1.5rem 1.5rem;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  margin-bottom:1.25rem;
+}
+.sidebar-logo .brand{
+  font-size:.65rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--turquoise);
+  font-weight:600;
+  margin-bottom:.4rem;
+}
+.sidebar-logo .title{
+  font-size:1rem;
+  font-weight:600;
+  color:var(--white);
+  letter-spacing:.02em;
+  line-height:1.3;
+}
+.sidebar-section{padding:0 .75rem;margin-bottom:1rem}
+.sidebar-section-label{
+  font-size:.62rem;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:rgba(255,255,255,.4);
+  padding:.4rem .8rem;
+  margin-bottom:.3rem;
+  font-weight:600;
+}
+.sidebar-item{
+  display:flex;
+  align-items:center;
+  gap:.65rem;
+  padding:.6rem .85rem;
+  border-radius:6px;
+  font-size:.78rem;
+  color:rgba(255,255,255,.7);
+  cursor:pointer;
+  transition:all .15s;
+  user-select:none;
+  font-weight:500;
+  letter-spacing:.02em;
+}
+.sidebar-item:hover{background:rgba(255,255,255,.05);color:var(--white)}
+.sidebar-item.active{
+  background:rgba(43,166,187,.15);
+  color:var(--turquoise);
+  font-weight:600;
+}
+.sidebar-item svg{width:15px;height:15px;opacity:.7;flex-shrink:0}
+.sidebar-item.active svg{opacity:1}
+.prop-dot{
+  width:9px;height:9px;border-radius:50%;
+  flex-shrink:0;display:inline-block;
+  box-shadow:0 0 0 2px rgba(255,255,255,.08);
+}
+.sidebar-footer{
+  margin-top:auto;
+  padding:1.5rem 1.5rem 0;
+  font-size:.55rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.25);
+  font-weight:600;
+}
+
+/* ============== MAIN ============== */
+.main{
+  margin-left:230px;
+  width:calc(100% - 230px);
+  padding:2rem 2.25rem 2.5rem;
+  min-width:0;
+}
+.main > * { max-width:1280px; margin-left:auto; margin-right:auto; }
+
+.page-header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom:1.75rem;
+  padding-bottom:1.25rem;
+  border-bottom:1px solid var(--grey);
+}
+.page-header .eyebrow{
+  font-size:.62rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--turquoise);
+  font-weight:600;
+  margin-bottom:.45rem;
+}
+.page-header h1{
+  font-size:1.5rem;
+  font-weight:600;
+  color:var(--slate);
+  letter-spacing:-.01em;
+}
+.page-header .meta{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+}
+.period-badge{
+  background:var(--white);
+  border:1px solid var(--grey);
+  border-radius:4px;
+  padding:.4rem .75rem;
+  font-size:.7rem;
+  color:var(--royal);
+  font-weight:500;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+/* ============== KPI ROW ============== */
+.kpi-row{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:.85rem;
+  margin-bottom:1.5rem;
+}
+.kpi{
+  background:var(--white);
+  border:1px solid var(--grey);
+  border-radius:6px;
+  padding:1.1rem 1.15rem 1.05rem;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.kpi::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:2px;
+  background:var(--turquoise);
+}
+.kpi-label{
+  font-size:.6rem;
+  font-weight:600;
+  color:var(--royal);
+  margin-bottom:.55rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.kpi-value{
+  font-size:1.6rem;
+  font-weight:700;
+  color:var(--slate);
+  line-height:1.05;
+  letter-spacing:-.01em;
+}
+.kpi-sub{
+  margin-top:.5rem;
+  font-size:.7rem;
+  color:var(--royal);
+  font-weight:500;
+}
+.kpi.opportunity::before{background:var(--turquoise)}
+.kpi.opportunity{background:linear-gradient(135deg,var(--slate) 0%, var(--royal) 100%);border-color:var(--slate)}
+.kpi.opportunity .kpi-label{color:var(--turquoise)}
+.kpi.opportunity .kpi-value{color:var(--white)}
+.kpi.opportunity .kpi-sub{color:rgba(255,255,255,.75)}
+
+/* ============== SECTION HEADER ============== */
+.section-header{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  margin:2rem auto 1rem;
+  padding-bottom:.75rem;
+  border-bottom:1px solid var(--grey);
+}
+.section-header h2{
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--slate);
+  text-transform:uppercase;
+  letter-spacing:.18em;
+}
+.section-header .count{
+  background:var(--turquoise-soft);
+  color:var(--turquoise);
+  font-size:.62rem;
+  padding:.2rem .55rem;
+  border-radius:10px;
+  font-weight:600;
+  letter-spacing:.05em;
+}
+
+/* ============== CARDS ============== */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.grid-3{display:grid;grid-template-columns:1.5fr 1fr;gap:1rem;margin-bottom:1rem}
+.grid-1{display:block;margin-bottom:1rem}
+
+.card{
+  background:var(--white);
+  border:1px solid var(--grey);
+  border-radius:6px;
+  padding:1.25rem 1.4rem;
+  box-shadow:var(--shadow);
+}
+.card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:1rem;
+  padding-bottom:.85rem;
+  border-bottom:1px solid var(--grey-soft);
+}
+.card-title{
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--slate);
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+.card-badge{
+  font-size:.6rem;
+  background:var(--turquoise-soft);
+  color:var(--turquoise);
+  padding:.25rem .6rem;
+  border-radius:4px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.chart-container{position:relative;height:300px}
+.chart-container.tall{height:360px}
+
+/* ============== TABLES ============== */
+.data-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.8rem;
+  table-layout:auto;
+}
+.card { overflow-x:auto; }
+.card > .data-table, .card > table.matrix { min-width:auto; }
+
+/* Numeric columns — header + cells aligned flush right with same padding */
+.data-table th.num,
+.data-table td.num,
+.matrix th.num,
+.matrix td.num {
+  text-align:right !important;
+  padding-right:.85rem;
+  padding-left:.5rem;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+/* Sub-text inside numeric headers inherits right alignment naturally via the th */
+
+.data-table th.center,
+.data-table td.center { text-align:center; }
+
+/* First column always left-aligned with consistent left padding */
+.data-table thead th:first-child,
+.data-table tbody td:first-child,
+.data-table tfoot td:first-child { padding-left:.25rem; }
+
+/* Final column padding cleanup */
+.data-table thead th:last-child,
+.data-table tbody td:last-child { padding-right:.25rem; }
+.data-table thead th.num:last-child,
+.data-table tbody td.num:last-child { padding-right:.25rem; }
+.data-table thead th{
+  text-align:left;
+  font-size:.62rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--royal);
+  font-weight:700;
+  padding:.7rem .55rem .7rem 0;
+  border-bottom:2px solid var(--grey);
+  cursor:pointer;
+  user-select:none;
+}
+.data-table thead th:hover{color:var(--turquoise)}
+.data-table thead th.sortable::after{
+  content:' ↕';
+  font-size:.6rem;
+  opacity:.4;
+}
+.data-table thead th.sort-asc::after{content:' ↑';opacity:1;color:var(--turquoise)}
+.data-table thead th.sort-desc::after{content:' ↓';opacity:1;color:var(--turquoise)}
+.data-table tbody td{
+  padding:.75rem .55rem;
+  border-bottom:1px solid var(--grey-soft);
+  vertical-align:middle;
+}
+.data-table tbody tr:hover{background:var(--grey-soft)}
+.data-table tbody tr:last-child td{border-bottom:none}
+.data-table tfoot td{
+  padding:.85rem .55rem;
+  font-weight:700;
+  background:var(--seafoam-soft);
+  border-top:2px solid var(--seafoam);
+}
+td.center,th.center{text-align:center}
+
+.pill{
+  display:inline-block;
+  padding:.2rem .6rem;
+  border-radius:11px;
+  font-size:.65rem;
+  font-weight:600;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.pill.good{background:var(--good-bg);color:var(--good)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.neutral{background:var(--tan-soft);color:var(--royal)}
+
+/* Bar in cell */
+.bar-cell{position:relative;width:140px;padding-right:0!important}
+.bar-cell .bar-track{
+  position:relative;
+  height:22px;
+  background:var(--grey-soft);
+  border-radius:3px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+}
+.bar-cell .bar-fill{
+  position:absolute;left:0;top:0;bottom:0;
+  background:var(--turquoise-mid);
+  border-radius:3px;
+  opacity:.7;
+}
+.bar-cell .bar-fill.bad{background:var(--bad);opacity:.45}
+.bar-cell .bar-fill.good{background:var(--good);opacity:.55}
+.bar-cell .bar-label{
+  position:relative;z-index:1;
+  padding:0 .55rem;
+  font-variant-numeric:tabular-nums;
+  font-weight:600;
+  color:var(--slate);
+  margin-left:auto;
+}
+
+/* ============== MATRIX ============== */
+.matrix{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.75rem;
+}
+.matrix th,.matrix td{
+  border:1px solid var(--grey-soft);
+  padding:.7rem .55rem;
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.matrix th{
+  background:var(--seafoam-soft);
+  font-size:.6rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--royal);
+  line-height:1.3;
+}
+.matrix td.label{
+  text-align:left;
+  font-weight:600;
+  background:var(--grey-soft);
+  font-size:.78rem;
+  color:var(--slate);
+}
+.matrix td.best{background:var(--good-bg);color:var(--good);font-weight:700}
+.matrix td.worst{background:var(--bad-bg);color:var(--bad);font-weight:700}
+.matrix td.na{color:#B0AAA1;font-style:italic;font-size:.7rem}
+
+/* ============== CALLOUT / FILTERS ============== */
+.callout{
+  background:var(--turquoise-soft);
+  border-left:3px solid var(--turquoise);
+  padding:.95rem 1.15rem;
+  margin-bottom:1rem;
+  font-size:.8rem;
+  line-height:1.6;
+  border-radius:0 4px 4px 0;
+  color:var(--royal);
+}
+.callout strong{color:var(--slate)}
+.callout.tan{background:var(--tan-soft);border-left-color:var(--tan)}
+
+.filters{
+  display:flex;
+  gap:.5rem;
+  margin-bottom:1rem;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.filters-label{
+  font-size:.6rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--royal);
+  font-weight:600;
+  margin-right:.4rem;
+}
+.filter-chip{
+  background:var(--white);
+  border:1px solid var(--grey);
+  padding:.35rem .85rem;
+  border-radius:14px;
+  font-size:.7rem;
+  cursor:pointer;
+  transition:all .15s;
+  color:var(--royal);
+  font-weight:500;
+  letter-spacing:.03em;
+}
+.filter-chip:hover{border-color:var(--turquoise);color:var(--turquoise)}
+.filter-chip.active{
+  background:var(--turquoise);
+  color:var(--white);
+  border-color:var(--turquoise);
+}
+
+/* ============== RECS ============== */
+.recs{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.rec{
+  background:var(--white);
+  border:1px solid var(--grey);
+  border-radius:6px;
+  padding:1.4rem 1.5rem 1.3rem;
+  box-shadow:var(--shadow);
+  position:relative;
+  border-top:3px solid var(--turquoise);
+}
+.rec-num{
+  position:absolute;
+  top:1rem;right:1.4rem;
+  font-size:1.8rem;
+  color:var(--grey);
+  font-weight:300;
+  letter-spacing:-.05em;
+}
+.rec-tag{
+  font-size:.6rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--turquoise);
+  margin-bottom:.5rem;
+}
+.rec h4{
+  margin:0 0 .65rem;
+  font-size:.95rem;
+  font-weight:600;
+  padding-right:2.5rem;
+  color:var(--slate);
+  line-height:1.35;
+}
+.rec p{
+  font-size:.78rem;
+  line-height:1.6;
+  color:var(--royal);
+  margin:0 0 .85rem;
+}
+.rec-savings{
+  display:inline-block;
+  background:var(--good-bg);
+  color:var(--good);
+  padding:.4rem .75rem;
+  border-radius:4px;
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+
+.notes{
+  font-size:.7rem;
+  color:var(--royal);
+  margin-top:.75rem;
+  line-height:1.55;
+  font-style:italic;
+}
+
+footer{
+  margin-top:3rem;
+  padding-top:1.25rem;
+  border-top:1px solid var(--grey);
+  font-size:.65rem;
+  color:var(--royal);
+  letter-spacing:.04em;
+  line-height:1.6;
+}
+footer .brand{
+  font-size:.55rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--turquoise);
+  font-weight:700;
+  margin-top:.5rem;
+}
+
+.view{display:none}
+.view.active{display:block}
+
+@media(max-width:1380px){
+  .main{padding:1.5rem 1.5rem 2rem}
+  .main > * { max-width:100%; }
+}
+@media(max-width:1100px){
+  .sidebar{display:none}
+  .main{margin-left:0;width:100%;padding:1.25rem}
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .grid-2,.grid-3,.recs{grid-template-columns:1fr}
+  .page-header{flex-direction:column;align-items:flex-start;gap:.75rem}
+}
+@media(max-width:780px){
+  .kpi-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ============== SIDEBAR ============== -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Method Co</div>
+    <div class="title">ROOST Portfolio<br>Procurement Review</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Overview</div>
+    <div class="sidebar-item active" data-view="exec" onclick="switchView('exec')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Executive Summary
+    </div>
+    <div class="sidebar-item" data-view="properties" onclick="switchView('properties')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+      Property Performance
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">By Property</div>
+    <div class="sidebar-item" data-view="property-detroit" onclick="switchView('property-detroit')">
+      <span class="prop-dot" style="background:#B5503F"></span>Detroit
+    </div>
+    <div class="sidebar-item" data-view="property-tampa" onclick="switchView('property-tampa')">
+      <span class="prop-dot" style="background:#C49156"></span>Tampa
+    </div>
+    <div class="sidebar-item" data-view="property-eastmarket" onclick="switchView('property-eastmarket')">
+      <span class="prop-dot" style="background:#7FC9D4"></span>East Market
+    </div>
+    <div class="sidebar-item" data-view="property-cleveland" onclick="switchView('property-cleveland')">
+      <span class="prop-dot" style="background:#405766"></span>Cleveland
+    </div>
+    <div class="sidebar-item" data-view="property-baltimore" onclick="switchView('property-baltimore')">
+      <span class="prop-dot" style="background:#5A8C6E"></span>Baltimore
+    </div>
+    <div class="sidebar-item" data-view="property-midtown" onclick="switchView('property-midtown')">
+      <span class="prop-dot" style="background:#2BA6BB"></span>Midtown
+    </div>
+    <div class="sidebar-item" data-view="property-whitehouse" onclick="switchView('property-whitehouse')">
+      <span class="prop-dot" style="background:#BCC8BE"></span>White House
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Vendors</div>
+    <div class="sidebar-item" data-view="vendors" onclick="switchView('vendors')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      Vendor Benchmark
+    </div>
+    <div class="sidebar-item" data-view="items" onclick="switchView('items')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9h18M9 21V9"/></svg>
+      Per-Item Pricing
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Opportunity</div>
+    <div class="sidebar-item" data-view="savings" onclick="switchView('savings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Savings Model
+    </div>
+    <div class="sidebar-item" data-view="consolidation" onclick="switchView('consolidation')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/></svg>
+      Consolidation
+    </div>
+    <div class="sidebar-item" data-view="recs" onclick="switchView('recs')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Recommendations
+    </div>
+  </div>
+
+  <div class="sidebar-footer">Method Co · Procurement</div>
+</nav>
+
+<!-- ============== MAIN ============== -->
+<div class="main">
+
+<!-- ============== EXEC SUMMARY ============== -->
+<div id="view-exec" class="view active">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Trailing 12 Months · Apr 2025 – Mar 2026</div>
+      <h1>Laundry &amp; Linen Cost Analysis</h1>
+    </div>
+    <div class="meta">
+      <div class="period-badge">7 Properties</div>
+      <div class="period-badge">8 Vendors</div>
+      <div class="period-badge">123,672 Rooms</div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-label">T12 Total Spend</div>
+      <div class="kpi-value">$703K</div>
+      <div class="kpi-sub">Across 7 ROOST properties</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Portfolio Avg / Room</div>
+      <div class="kpi-value">$5.69</div>
+      <div class="kpi-sub">Range $3.99 – $8.78</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Highest-Spend Property</div>
+      <div class="kpi-value">Detroit</div>
+      <div class="kpi-sub">$190,947 · 27% of portfolio</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Per-lb Rate Spread</div>
+      <div class="kpi-value">71%</div>
+      <div class="kpi-sub">$0.468 (Tampa) → $0.80 (Phila)</div>
+    </div>
+    <div class="kpi opportunity">
+      <div class="kpi-label">Annual Savings Opp.</div>
+      <div class="kpi-value">$107K – $209K</div>
+      <div class="kpi-sub">Conservative → aggressive</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Headline finding.</strong> Three structural issues drive the savings opportunity: <strong>(1)</strong> Detroit's per-piece billing model with Luster includes <strong>$15/duvet pricing</strong> — 5–11× the rest of the portfolio; <strong>(2)</strong> Single Source Plus charges Midtown and East Market <strong>$0.80/lb plus a $300–$375 flat delivery fee</strong> per service day, the highest fixed cost in the portfolio; <strong>(3)</strong> Crown Linen (Tampa) proves a <strong>$0.468/lb base rate</strong> is achievable at scale. Bringing every property to a $4.50/room target unlocks <strong>~$157K in annual savings</strong> with no service-quality concession.
+  </div>
+
+  <div class="section-header"><h2>Cost per Occupied Room — by Property</h2></div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">$/Occupied Room Comparison</div>
+        <div class="card-badge">Lower is better</div>
+      </div>
+      <div class="chart-container"><canvas id="cprChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Spend Mix by Property</div></div>
+      <div class="chart-container"><canvas id="spendMixChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="section-header"><h2>Monthly Spend Trend</h2></div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Total Monthly Spend by Property</div>
+      <div class="card-badge">Toggle properties</div>
+    </div>
+    <div class="filters" id="trendFilters"></div>
+    <div class="chart-container tall"><canvas id="trendChart"></canvas></div>
+    <div class="notes">
+      Tampa shows extreme month-to-month variance ($5,849 → $21,858) — likely driven by specialty linen and event-driven volume despite Crown Linen's portfolio-best per-lb rate. Detroit runs steady at ~$15K/month, the largest absolute base. White House ramps from open in Sept 2025.
+    </div>
+  </div>
+</div>
+
+<!-- ============== PROPERTIES ============== -->
+<div id="view-properties" class="view">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Property-Level Performance</div>
+      <h1>T12 Spend &amp; Cost per Room</h1>
+    </div>
+    <div class="meta">
+      <div class="period-badge">7 Properties</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Property Roster · Sortable</div>
+      <div class="card-badge">Click headers</div>
+    </div>
+    <table class="data-table" id="propTable">
+      <colgroup>
+        <col style="width:18%">
+        <col style="width:22%">
+        <col style="width:14%">
+        <col style="width:10%">
+        <col style="width:18%">
+        <col style="width:18%">
+      </colgroup>
+      <thead><tr>
+        <th class="sortable">Property</th>
+        <th>Vendor</th>
+        <th class="sortable num">Annual Spend</th>
+        <th class="sortable num">Rooms</th>
+        <th class="num">$/Room</th>
+        <th class="num">vs. Portfolio</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="grid-2" style="margin-top:1rem">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Annual Spend by Property</div></div>
+      <div class="chart-container"><canvas id="spendBarChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">$/Room vs. Portfolio Average</div></div>
+      <div class="chart-container"><canvas id="cprDeltaChart"></canvas></div>
+      <div class="notes">Baltimore (Mayflower) sets the in-portfolio benchmark at <strong>$3.99/room</strong>. Midtown is 54% above portfolio average, mostly due to small property volume vs. SS Plus's $300–$375 flat delivery fee.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== VENDORS ============== -->
+<div id="view-vendors" class="view">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Vendor Pricing &amp; Terms</div>
+      <h1>Per-Pound Rate &amp; Delivery Fee Benchmark</h1>
+    </div>
+    <div class="meta">
+      <div class="period-badge">8 Vendors</div>
+      <div class="period-badge">7 Markets</div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Per-Pound Wash Rates</div>
+        <div class="card-badge">Excludes surcharges</div>
+      </div>
+      <div class="chart-container"><canvas id="poundChart"></canvas></div>
+      <div class="notes">
+        Crown Linen (Tampa) is the floor at <strong>$0.468/lb</strong>. Single Source Plus, serving Midtown <em>and</em> East Market, is <strong>71% higher at $0.80/lb</strong>. Bringing the Phila properties to Pinnacle's $0.65/lb saves ~19% on the wash component alone.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Delivery &amp; Fee Structure</div></div>
+      <table class="data-table">
+        <thead><tr>
+          <th>Vendor</th>
+          <th class="num">Delivery</th>
+          <th>Other</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><strong>Maristv</strong><br><span style="font-size:.65rem;color:var(--royal)">Cleveland</span></td><td class="num"><span class="pill good">$10/trip</span></td><td>8% sales tax</td></tr>
+          <tr><td><strong>Crown Linen</strong><br><span style="font-size:.65rem;color:var(--royal)">Tampa</span></td><td class="num"><span class="pill good">None</span></td><td>+4.8% fuel</td></tr>
+          <tr><td><strong>Luster</strong><br><span style="font-size:.65rem;color:var(--royal)">Detroit</span></td><td class="num"><span class="pill neutral">$25/trip</span></td><td>$100 rush · $200 same-day</td></tr>
+          <tr><td><strong>Pinnacle</strong><br><span style="font-size:.65rem;color:var(--royal)">White House</span></td><td class="num"><span class="pill neutral">$50 flat</span></td><td>~6% tax · 5%/mo late</td></tr>
+          <tr><td><strong>Mayflower</strong><br><span style="font-size:.65rem;color:var(--royal)">Baltimore</span></td><td class="num"><span class="pill neutral">Min charge</span></td><td>+ MD tax</td></tr>
+          <tr><td><strong>TenFold</strong><br><span style="font-size:.65rem;color:var(--royal)">Rainey/Austin</span></td><td class="num"><span class="pill neutral">$36–$45 fuel</span></td><td>~9% TX tax · Net 10</td></tr>
+          <tr><td><strong>Single Source</strong><br><span style="font-size:.65rem;color:var(--royal)">Midtown · East Market</span></td><td class="num"><span class="pill bad">$300–375</span></td><td>8% tax · CC fees</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============== ITEMS / SPECIALTY ============== -->
+<div id="view-items" class="view">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Per-Item Pricing · From 16 Uploaded Invoices</div>
+      <h1>Line-Item Cost Detail</h1>
+    </div>
+    <div class="meta">
+      <div class="period-badge">8 Vendors</div>
+      <div class="period-badge">16 Invoices</div>
+      <div class="period-badge">10+ SKU Types</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Why the matrix below is more useful.</strong> Six of the eight vendors bill <em>per pound</em> — meaning sheets, towels, and pillowcases never appear with an explicit per-piece price. To compare apples to apples, this view <strong>imputes the per-piece cost</strong> from the per-lb rate using typical hospitality linen weights (e.g., a king fitted sheet ≈ 3.0 lb). Then it shows actual <strong>volume processed in the last two weeks</strong> by item type and the verbatim <strong>line items</strong> from every uploaded invoice.
+  </div>
+
+  <!-- ============== EFFECTIVE PER-PIECE MATRIX ============== -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Effective Per-Piece Cost — All Vendors Normalized</div>
+      <div class="card-badge">Implicit from per-lb × typical weight</div>
+    </div>
+    <table class="matrix">
+      <thead><tr>
+        <th>Item · est. lbs</th>
+        <th>Crown<br>$0.468/lb</th>
+        <th>Pinnacle<br>$0.65/lb</th>
+        <th>Mayflower<br>$0.690/lb</th>
+        <th>TenFold<br>$0.70/lb</th>
+        <th>Maristv<br>$0.71/lb</th>
+        <th>Single Source<br>$0.80/lb</th>
+        <th>Luster<br>per piece</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="label">Bath Towel · 1.10 lb</td>
+          <td class="best">$0.51</td><td>$0.72</td><td>$0.76</td><td>$0.77</td><td>$0.78</td><td class="worst">$0.88</td><td>$0.70</td></tr>
+        <tr><td class="label">Hand Towel · 0.40 lb</td>
+          <td class="best">$0.19</td><td>$0.26</td><td>$0.28</td><td>$0.28</td><td>$0.28</td><td>$0.32</td><td class="worst">$0.70</td></tr>
+        <tr><td class="label">Wash Cloth · 0.15 lb</td>
+          <td class="best">$0.07</td><td>$0.10</td><td>$0.10</td><td>$0.10</td><td>$0.11</td><td>$0.12</td><td class="worst">$0.70</td></tr>
+        <tr><td class="label">Bath Mat · 1.50 lb</td>
+          <td class="best">$0.70</td><td>$0.98</td><td>$1.03</td><td>$1.05</td><td>$1.06</td><td class="worst">$1.20</td><td>$0.70</td></tr>
+        <tr><td class="label">Pillowcase King · 0.35 lb</td>
+          <td class="best">$0.16</td><td>$0.23</td><td>$0.24</td><td>$0.24</td><td>$0.25</td><td>$0.28</td><td class="worst">$0.70</td></tr>
+        <tr><td class="label">Pillowcase Standard · 0.30 lb</td>
+          <td class="best">$0.14</td><td>$0.20</td><td>$0.21</td><td>$0.21</td><td>$0.21</td><td>$0.24</td><td class="worst">$0.70</td></tr>
+        <tr><td class="label">Fitted Sheet King · 3.00 lb</td>
+          <td class="best">$1.40</td><td>$1.95</td><td>$2.07</td><td>$2.10</td><td>$2.13</td><td>$2.40</td><td class="best">$0.70</td></tr>
+        <tr><td class="label">Flat Sheet King · 2.50 lb</td>
+          <td>$1.17</td><td>$1.62</td><td>$1.72</td><td>$1.75</td><td>$1.77</td><td>$2.00</td><td class="best">$0.70</td></tr>
+        <tr><td class="label">Microfiber Towel · 0.40 lb</td>
+          <td class="best">$0.19</td><td>$0.26</td><td>$0.28</td><td>$0.28</td><td>$0.28</td><td>$0.32</td><td class="worst">$0.70</td></tr>
+        <tr><td class="label">Duvet Cover · 3.00 lb / per pc</td>
+          <td class="best">$1.36</td><td>$1.95</td><td>$2.07</td><td>$2.10</td><td>$2.13</td><td>$3.00</td><td class="worst">$15.00</td></tr>
+        <tr><td class="label">Duvet Insert · per pc</td>
+          <td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="best">$3.00</td><td class="worst">$15.00</td></tr>
+        <tr><td class="label">Blanket · per pc</td>
+          <td class="best">$2.25</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td>$3.00</td><td>$3.00</td></tr>
+        <tr><td class="label">Robe · per pc</td>
+          <td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td>$4.00</td></tr>
+        <tr><td class="label">Mattress Protector · per pc</td>
+          <td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td>$5.00</td></tr>
+        <tr><td class="label">Pillow · per pc</td>
+          <td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td>$5.00</td></tr>
+        <tr><td class="label">King Fitted Rental · per inv</td>
+          <td class="na">—</td><td class="na">—</td><td>$100 flat</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td></tr>
+      </tbody>
+    </table>
+    <div class="notes">
+      <strong>Read it like this:</strong> Crown Linen is cheapest on every weight-driven item. <strong>Luster's per-piece model overcharges on small items</strong> (a wash cloth costs $0.70 vs $0.07–$0.12 elsewhere — 6–10×) and undercharges on large items (king fitted sheets at $0.70 vs $1.40–$2.40 elsewhere). On a typical hotel mix that's heavy on small terry pieces, Luster's structure is unfavorable. Single Source is the most expensive on weight items but ties with Luster for the best duvet pricing.
+    </div>
+  </div>
+
+  <!-- ============== VOLUME PROCESSED ============== -->
+  <div class="grid-2" style="margin-top:1rem">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Items Processed — 2-Week Sample (Most Recent Invoices)</div>
+        <div class="card-badge">By Property &amp; Item</div>
+      </div>
+      <table class="data-table">
+        <thead><tr>
+          <th>Item</th>
+          <th class="num">Tampa<br>(Crown)</th>
+          <th class="num">Detroit<br>(Luster)</th>
+          <th class="num">Baltimore<br>(Mayflower)</th>
+          <th class="num">White Hse<br>(Pinnacle)</th>
+          <th class="num">East Mkt<br>(SS)</th>
+          <th class="num">Midtown<br>(SS)</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><strong>Bath Towel</strong></td><td class="num"><span style="color:var(--royal);font-style:italic">in 2,180 lb</span></td><td class="num"><span style="color:var(--royal);font-style:italic">in 8,142 pc</span></td><td class="num">515</td><td class="num">310</td><td class="num">330</td><td class="num">189</td></tr>
+          <tr><td><strong>Hand Towel</strong></td><td class="num"><span style="color:var(--royal);font-style:italic">in 2,180 lb</span></td><td class="num"><span style="color:var(--royal);font-style:italic">in 8,142 pc</span></td><td class="num">316</td><td class="num">113</td><td class="num">231</td><td class="num">107</td></tr>
+          <tr><td><strong>Wash Cloth</strong></td><td class="num"><span style="color:var(--royal);font-style:italic">in 2,180 lb</span></td><td class="num"><span style="color:var(--royal);font-style:italic">in 8,142 pc</span></td><td class="num">295</td><td class="num">168</td><td class="num">235</td><td class="num">141</td></tr>
+          <tr><td><strong>Bath Mat</strong></td><td class="num"><span style="color:var(--royal);font-style:italic">in 2,180 lb</span></td><td class="num"><span style="color:var(--royal);font-style:italic">in 8,142 pc</span></td><td class="num">250</td><td class="num">99</td><td class="num">82</td><td class="num">81</td></tr>
+          <tr><td><strong>Pillowcase King</strong></td><td class="num"><span style="color:var(--royal);font-style:italic">in 3,829 lb</span></td><td class="num"><span style="color:var(--royal);font-style:italic">in 8,142 pc</span></td><td class="num">990</td><td class="num">423</td><td class="num">371</td><td class="num">279</td></tr>
+          <tr><td><strong>Fitted Sheet King</strong></td><td class="num"><span style="color:var(--royal);font-style:italic">in 3,829 lb</span></td><td class="num"><span style="color:var(--royal);font-style:italic">in 8,142 pc</span></td><td class="num">304</td><td class="num">—</td><td class="num">102</td><td class="num">82</td></tr>
+          <tr><td><strong>Flat Sheet King</strong></td><td class="num"><span style="color:var(--royal);font-style:italic">in 3,829 lb</span></td><td class="num"><span style="color:var(--royal);font-style:italic">in 8,142 pc</span></td><td class="num">—</td><td class="num">122</td><td class="num">4</td><td class="num">1</td></tr>
+          <tr><td><strong>Microfiber Towel</strong></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">20</td><td class="num">16</td></tr>
+          <tr><td><strong>Duvet Cover (King)</strong></td><td class="num">440</td><td class="num">—</td><td class="num">181</td><td class="num">75</td><td class="num">112</td><td class="num">91</td></tr>
+          <tr><td><strong>Duvet Insert</strong></td><td class="num">—</td><td class="num">3</td><td class="num">—</td><td class="num">—</td><td class="num">1</td><td class="num">2</td></tr>
+          <tr><td><strong>Blanket</strong></td><td class="num">23</td><td class="num">1</td><td class="num">29</td><td class="num">—</td><td class="num">5</td><td class="num">1</td></tr>
+        </tbody>
+        <tfoot><tr>
+          <td>Total volume (2-week)</td>
+          <td class="num">6,009 lb</td>
+          <td class="num">8,142 pc</td>
+          <td class="num">2,801 pc</td>
+          <td class="num">1,310 pc</td>
+          <td class="num">1,498 pc</td>
+          <td class="num">990 pc</td>
+        </tr></tfoot>
+      </table>
+      <div class="notes">
+        <strong>Six of seven active properties have itemized invoices.</strong> Mayflower (Balt) and Pinnacle (WH) include packing slips with delivery-by-delivery piece counts even though they bill per-pound. Cleveland (Maristv) and Rainey (TenFold) bill purely by aggregate weight with no piece-level breakdown. Italic figures show the weight or piece bucket the items roll into.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Specialty Volume — Annualized Estimate</div>
+        <div class="card-badge">Detroit duvet exposure</div>
+      </div>
+      <p style="font-size:.78rem;color:var(--royal);margin:0 0 .85rem;line-height:1.6">
+        Single Source (Phila) processes <strong>~2,900 duvet covers/yr</strong> at $3/pc = ~$8,700/yr. If Detroit (Luster) processes a comparable volume at $15/pc, that's ~$43,500/yr just on duvets — and Detroit's room volume is 2× Phila's, so the actual exposure is meaningfully larger.
+      </p>
+      <table class="data-table">
+        <thead><tr>
+          <th>Item</th>
+          <th>Vendor</th>
+          <th class="num">Per pc</th>
+          <th class="num">2-wk Volume</th>
+          <th class="num">Annualized</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Duvet Cover</td><td>Crown · Tampa</td><td class="num"><span class="pill good">$1.36</span></td><td class="num">440</td><td class="num">~11,440</td></tr>
+          <tr><td>Duvet Cover</td><td>SS · East Market</td><td class="num">$3.00</td><td class="num">112</td><td class="num">~2,910</td></tr>
+          <tr><td>Duvet Cover</td><td>SS · Midtown</td><td class="num">$3.00</td><td class="num">91</td><td class="num">~2,365</td></tr>
+          <tr><td>Duvet Insert</td><td>Luster · Detroit</td><td class="num"><span class="pill bad">$15.00</span></td><td class="num">3</td><td class="num">~78</td></tr>
+          <tr><td>Blanket</td><td>Crown · Tampa</td><td class="num"><span class="pill good">$2.25</span></td><td class="num">23</td><td class="num">~600</td></tr>
+          <tr><td>Blanket</td><td>SS · East Market</td><td class="num">$3.00</td><td class="num">5</td><td class="num">~130</td></tr>
+        </tbody>
+      </table>
+      <div class="notes">
+        Tampa's 11,440 duvet-cover throughput is the largest in the portfolio — at $1.36/pc that's <strong>~$15,560/yr</strong>; if Tampa paid Luster's $15/pc that would balloon to ~$172K/yr. Tampa's $1.36 rate is one of the strongest deals in the portfolio.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== INVOICE LINE ITEMS ============== -->
+  <div class="section-header"><h2>Invoice Line Items — All 17 Uploaded Invoices</h2><span class="count">Verbatim</span></div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Crown Linen · Tampa</div>
+      <div class="card-badge">2 Invoices · $3,540</div>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Inv #</th><th>Date</th><th>Line Item</th><th class="num">Qty</th><th class="num">Unit</th><th class="num">Amount</th></tr></thead>
+      <tbody>
+        <tr><td>183242</td><td>2026-04-05</td><td>Room Linen</td><td class="num">1,527 lb</td><td class="num">$0.468</td><td class="num">$714.64</td></tr>
+        <tr><td>183242</td><td>2026-04-05</td><td>Towels</td><td class="num">844 lb</td><td class="num">$0.468</td><td class="num">$394.99</td></tr>
+        <tr><td>183242</td><td>2026-04-05</td><td>Duvet Covers</td><td class="num">164 pc</td><td class="num">$1.36</td><td class="num">$223.04</td></tr>
+        <tr><td>183242</td><td>2026-04-05</td><td>Blankets</td><td class="num">4 pc</td><td class="num">$2.25</td><td class="num">$9.00</td></tr>
+        <tr><td>183242</td><td>2026-04-05</td><td>Fuel Surcharge</td><td class="num">1,342 lb</td><td class="num">$0.0225</td><td class="num">$30.20</td></tr>
+        <tr style="background:var(--grey-soft);font-weight:600"><td colspan="5">Invoice 183242 Total</td><td class="num">$1,371.87</td></tr>
+        <tr><td>183673</td><td>2026-04-19</td><td>Room Linen</td><td class="num">2,302 lb</td><td class="num">$0.468</td><td class="num">$1,077.34</td></tr>
+        <tr><td>183673</td><td>2026-04-19</td><td>Towels</td><td class="num">1,336 lb</td><td class="num">$0.468</td><td class="num">$625.25</td></tr>
+        <tr><td>183673</td><td>2026-04-19</td><td>Duvet Covers</td><td class="num">276 pc</td><td class="num">$1.36</td><td class="num">$375.36</td></tr>
+        <tr><td>183673</td><td>2026-04-19</td><td>Blankets</td><td class="num">19 pc</td><td class="num">$2.25</td><td class="num">$42.75</td></tr>
+        <tr><td>183673</td><td>2026-04-19</td><td>Fuel Surcharge</td><td class="num">2,121 lb</td><td class="num">$0.0225</td><td class="num">$47.72</td></tr>
+        <tr style="background:var(--grey-soft);font-weight:600"><td colspan="5">Invoice 183673 Total</td><td class="num">$2,168.42</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-header">
+      <div class="card-title">Luster Cleaners · Detroit</div>
+      <div class="card-badge">2 Invoices · $6,547 · Per-piece model</div>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Inv #</th><th>Date</th><th>Line Item</th><th class="num">Qty</th><th class="num">Unit</th><th class="num">Amount</th></tr></thead>
+      <tbody>
+        <tr><td>519118</td><td>2026-04-06</td><td>Sheets+Towels (daily)</td><td class="num">1,050 pc</td><td class="num">$0.70</td><td class="num">$735.00</td></tr>
+        <tr><td>519118</td><td>2026-04-07</td><td>Sheets+Towels</td><td class="num">386 pc</td><td class="num">$0.70</td><td class="num">$270.20</td></tr>
+        <tr><td>519118</td><td>2026-04-08</td><td>Sheets+Towels</td><td class="num">558 pc</td><td class="num">$0.70</td><td class="num">$390.60</td></tr>
+        <tr><td>519118</td><td>2026-04-09</td><td>Sheets+Towels</td><td class="num">393 pc</td><td class="num">$0.70</td><td class="num">$275.10</td></tr>
+        <tr><td>519118</td><td>2026-04-10</td><td>Sheets+Towels</td><td class="num">568 pc</td><td class="num">$0.70</td><td class="num">$397.60</td></tr>
+        <tr><td>519118</td><td>2026-04-11</td><td>Sheets+Towels</td><td class="num">393 pc</td><td class="num">$0.70</td><td class="num">$275.10</td></tr>
+        <tr><td>519118</td><td>—</td><td>Duvet Inserts/Comforters</td><td class="num">2 pc</td><td class="num">$15.00</td><td class="num">$30.00</td></tr>
+        <tr><td>519118</td><td>—</td><td>Regular Trip Delivery</td><td class="num">6 trips</td><td class="num">$25.00</td><td class="num">$150.00</td></tr>
+        <tr style="background:var(--grey-soft);font-weight:600"><td colspan="5">Invoice 519118 Total</td><td class="num">$2,523.60</td></tr>
+        <tr><td>519124</td><td>2026-04-13</td><td>Sheets+Towels <em style="color:var(--bad)">(SAME-DAY)</em></td><td class="num">1,434 pc</td><td class="num">$0.70</td><td class="num">$1,003.80</td></tr>
+        <tr><td>519124</td><td>2026-04-14</td><td>Sheets+Towels</td><td class="num">488 pc</td><td class="num">$0.70</td><td class="num">$341.60</td></tr>
+        <tr><td>519124</td><td>2026-04-15</td><td>Sheets+Towels</td><td class="num">758 pc</td><td class="num">$0.70</td><td class="num">$530.60</td></tr>
+        <tr><td>519124</td><td>2026-04-16</td><td>Sheets+Towels</td><td class="num">456 pc</td><td class="num">$0.70</td><td class="num">$319.20</td></tr>
+        <tr><td>519124</td><td>2026-04-17</td><td>Sheets+Towels <em style="color:var(--bad)">(SAME-DAY)</em></td><td class="num">624 pc</td><td class="num">$0.70</td><td class="num">$436.80</td></tr>
+        <tr><td>519124</td><td>2026-04-18</td><td>Sheets+Towels <em style="color:var(--bad)">(SAME-DAY)</em></td><td class="num">1,034 pc</td><td class="num">$0.70</td><td class="num">$723.80</td></tr>
+        <tr><td>519124</td><td>—</td><td>Blanket</td><td class="num">1 pc</td><td class="num">$3.00</td><td class="num">$3.00</td></tr>
+        <tr><td>519124</td><td>—</td><td>Duvet Insert/Comforter</td><td class="num">1 pc</td><td class="num">$15.00</td><td class="num">$15.00</td></tr>
+        <tr><td>519124</td><td>—</td><td>Regular Trip Delivery</td><td class="num">6 trips</td><td class="num">$25.00</td><td class="num">$150.00</td></tr>
+        <tr style="color:var(--bad)"><td>519124</td><td>—</td><td><strong>Same-Day Pick-up/Delivery</strong></td><td class="num">2 trips</td><td class="num">$200.00</td><td class="num"><strong>$400.00</strong></td></tr>
+        <tr style="color:var(--bad)"><td>519124</td><td>—</td><td><strong>3-Hour Turn-Around</strong></td><td class="num">1 trip</td><td class="num">$100.00</td><td class="num"><strong>$100.00</strong></td></tr>
+        <tr style="background:var(--grey-soft);font-weight:600"><td colspan="5">Invoice 519124 Total</td><td class="num">$4,023.80</td></tr>
+      </tbody>
+    </table>
+    <div class="notes"><strong>Flag:</strong> Inv 519124 alone has <strong>$500 in same-day/rush fees</strong> (12% of invoice). Annualized at this cadence that's <strong>~$13K/yr</strong> — pure preventable cost if linen par stock is right-sized.</div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1rem">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Maristv · Cleveland</div>
+        <div class="card-badge">2 Invoices · $1,762</div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>Line</th><th class="num">Lbs</th><th class="num">Amt</th></tr></thead>
+        <tbody>
+          <tr><td>04-07</td><td>Flat Linens</td><td class="num">216</td><td class="num">$153.36</td></tr>
+          <tr><td>04-08</td><td>Flat Linens</td><td class="num">158</td><td class="num">$125.00</td></tr>
+          <tr><td>04-10</td><td>Flat Linens</td><td class="num">403</td><td class="num">$286.13</td></tr>
+          <tr><td>—</td><td>Pickup/Delivery × 3</td><td class="num">—</td><td class="num">$30.00</td></tr>
+          <tr style="background:var(--grey-soft);font-weight:600"><td colspan="3">Inv 94759 + tax</td><td class="num">$642.05</td></tr>
+          <tr><td>04-13</td><td>Flat Linens</td><td class="num">292</td><td class="num">$207.32</td></tr>
+          <tr><td>04-16</td><td>Flat Linens</td><td class="num">519</td><td class="num">$368.49</td></tr>
+          <tr><td>04-17</td><td>Flat Linens</td><td class="num">391</td><td class="num">$277.61</td></tr>
+          <tr><td>04-18</td><td>Flat Linens</td><td class="num">203</td><td class="num">$144.13</td></tr>
+          <tr><td>—</td><td>Pickup/Delivery × 4</td><td class="num">—</td><td class="num">$40.00</td></tr>
+          <tr style="background:var(--grey-soft);font-weight:600"><td colspan="3">Inv 94807 + tax</td><td class="num">$1,120.55</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Mayflower · Baltimore</div>
+        <div class="card-badge">2 Invoices · $2,361 · Itemized packing slips</div>
+      </div>
+      <table class="data-table">
+        <thead><tr>
+          <th>Item Code · Description</th>
+          <th class="num">Inv 62955<br>(3/30, 4/2, 4/4)</th>
+          <th class="num">Inv 63103<br>(4/13, 4/16, 4/18)</th>
+          <th class="num">2-wk Total</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>0003 · King Pillow Cases</td><td class="num">506</td><td class="num">484</td><td class="num">990</td></tr>
+          <tr><td>0023 · King Fitted Sheet</td><td class="num">161</td><td class="num">143</td><td class="num">304</td></tr>
+          <tr><td>0028 · Hotel Wash Cloths</td><td class="num">136</td><td class="num">159</td><td class="num">295</td></tr>
+          <tr><td>0029 · Hand Towels</td><td class="num">202</td><td class="num">114</td><td class="num">316</td></tr>
+          <tr><td>0030 · Hotel Bath Towels</td><td class="num">284</td><td class="num">231</td><td class="num">515</td></tr>
+          <tr><td>0034 · Bath Mats</td><td class="num">135</td><td class="num">115</td><td class="num">250</td></tr>
+          <tr><td>0055 · Blankets</td><td class="num">17</td><td class="num">12</td><td class="num">29</td></tr>
+          <tr><td>0830 · King Duvets</td><td class="num">97</td><td class="num">84</td><td class="num">181</td></tr>
+          <tr style="background:var(--seafoam-soft);font-weight:600"><td>Total pieces processed</td><td class="num">1,538</td><td class="num">1,342</td><td class="num">2,880</td></tr>
+        </tbody>
+      </table>
+      <table class="data-table" style="margin-top:.85rem">
+        <thead><tr><th>Inv</th><th>Charge</th><th class="num">Qty/Lbs</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead>
+        <tbody>
+          <tr><td>62955</td><td>Processed clean weight</td><td class="num">1,453 lb</td><td class="num">$0.690255</td><td class="num">$1,002.94</td></tr>
+          <tr><td>62955</td><td>Rental King Fitted Sheet</td><td class="num">flat</td><td class="num">—</td><td class="num">$100.00</td></tr>
+          <tr><td>62955</td><td>MD state surcharge</td><td class="num">—</td><td class="num">—</td><td class="num">$60.18</td></tr>
+          <tr style="background:var(--grey-soft);font-weight:600"><td colspan="4">Inv 62955 Total</td><td class="num">$1,163.12</td></tr>
+          <tr><td>63103</td><td>Processed clean weight</td><td class="num">1,348 lb</td><td class="num">$0.690255</td><td class="num">$930.46</td></tr>
+          <tr><td>63103</td><td>Rental King Fitted Sheet</td><td class="num">flat</td><td class="num">—</td><td class="num">$100.00</td></tr>
+          <tr style="color:var(--warn)"><td>63103</td><td>Min Delivery Charge</td><td class="num">152 lb</td><td class="num">$0.690255</td><td class="num">$104.92</td></tr>
+          <tr><td>63103</td><td>MD state surcharge</td><td class="num">—</td><td class="num">—</td><td class="num">$62.12</td></tr>
+          <tr style="background:var(--grey-soft);font-weight:600"><td colspan="4">Inv 63103 Total</td><td class="num">$1,197.51</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1rem">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Pinnacle · White House</div>
+        <div class="card-badge">2 Invoices · $1,300 · Per-delivery packing slips</div>
+      </div>
+      <table class="data-table">
+        <thead><tr>
+          <th>Item · per delivery</th>
+          <th class="num">3/31<br>317 lb</th>
+          <th class="num">4/2<br>493 lb</th>
+          <th class="num">4/6<br>270 lb</th>
+          <th class="num">4/7<br>371 lb</th>
+          <th class="num">4/8<br>246 lb</th>
+          <th class="num">4/9<br>45 lb</th>
+          <th class="num">2-wk Total</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Bath Towel</td><td class="num">60</td><td class="num">89</td><td class="num">40</td><td class="num">62</td><td class="num">45</td><td class="num">14</td><td class="num">310</td></tr>
+          <tr><td>Hand Towel</td><td class="num">17</td><td class="num">34</td><td class="num">22</td><td class="num">22</td><td class="num">18</td><td class="num">0</td><td class="num">113</td></tr>
+          <tr><td>Wash Towel</td><td class="num">31</td><td class="num">46</td><td class="num">31</td><td class="num">32</td><td class="num">28</td><td class="num">0</td><td class="num">168</td></tr>
+          <tr><td>Bath Mat</td><td class="num">18</td><td class="num">37</td><td class="num">18</td><td class="num">11</td><td class="num">15</td><td class="num">0</td><td class="num">99</td></tr>
+          <tr><td>Flat Sheet</td><td class="num">34</td><td class="num">33</td><td class="num">11</td><td class="num">25</td><td class="num">19</td><td class="num">0</td><td class="num">122</td></tr>
+          <tr><td>Duvet Cover</td><td class="num">19</td><td class="num">0</td><td class="num">18</td><td class="num">21</td><td class="num">17</td><td class="num">0</td><td class="num">75</td></tr>
+          <tr><td>Pillow Case</td><td class="num">83</td><td class="num">168</td><td class="num">70</td><td class="num">63</td><td class="num">21</td><td class="num">18</td><td class="num">423</td></tr>
+          <tr style="background:var(--seafoam-soft);font-weight:600"><td>Total pieces</td><td class="num">262</td><td class="num">407</td><td class="num">210</td><td class="num">236</td><td class="num">163</td><td class="num">32</td><td class="num">1,310</td></tr>
+        </tbody>
+      </table>
+      <table class="data-table" style="margin-top:.85rem">
+        <thead><tr><th>Inv</th><th>Date</th><th>Line</th><th class="num">Lbs</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead>
+        <tbody>
+          <tr><td>L3596</td><td>03-31</td><td>Laundry Service</td><td class="num">317</td><td class="num">$0.65</td><td class="num">$206.05</td></tr>
+          <tr><td>L3596</td><td>04-02</td><td>Laundry Service</td><td class="num">493</td><td class="num">$0.65</td><td class="num">$320.45</td></tr>
+          <tr><td>L3596</td><td>—</td><td>Sales Tax</td><td class="num">—</td><td class="num">—</td><td class="num">$31.59</td></tr>
+          <tr><td>L3596</td><td>—</td><td>Delivery Fee</td><td class="num">—</td><td class="num">—</td><td class="num">$50.00</td></tr>
+          <tr style="background:var(--grey-soft);font-weight:600"><td colspan="5">Inv L3596 Total</td><td class="num">$608.09</td></tr>
+          <tr><td>L3607</td><td>04-06</td><td>Laundry Service</td><td class="num">270</td><td class="num">$0.65</td><td class="num">$175.50</td></tr>
+          <tr><td>L3607</td><td>04-07</td><td>Laundry Service</td><td class="num">371</td><td class="num">$0.65</td><td class="num">$241.15</td></tr>
+          <tr><td>L3607</td><td>04-08</td><td>Laundry Service</td><td class="num">246</td><td class="num">$0.65</td><td class="num">$159.90</td></tr>
+          <tr><td>L3607</td><td>04-09</td><td>Laundry Service</td><td class="num">45</td><td class="num">$0.65</td><td class="num">$29.25</td></tr>
+          <tr><td>L3607</td><td>—</td><td>Sales Tax</td><td class="num">—</td><td class="num">—</td><td class="num">$36.35</td></tr>
+          <tr><td>L3607</td><td>—</td><td>Delivery Fee</td><td class="num">—</td><td class="num">—</td><td class="num">$50.00</td></tr>
+          <tr style="background:var(--grey-soft);font-weight:600"><td colspan="5">Inv L3607 Total</td><td class="num">$692.15</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">TenFold · Rainey/Austin</div>
+        <div class="card-badge">2 Invoices · $5,982</div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>Line</th><th class="num">Lbs</th><th class="num">Amt</th></tr></thead>
+        <tbody>
+          <tr><td>03-23</td><td>Pickup</td><td class="num">0</td><td class="num">$0.00</td></tr>
+          <tr><td>03-24</td><td>Pickup</td><td class="num">636</td><td class="num">$443.77</td></tr>
+          <tr><td>03-25</td><td>Pickup</td><td class="num">0</td><td class="num">$0.00</td></tr>
+          <tr><td>03-26</td><td>Pickup</td><td class="num">998</td><td class="num">$696.76</td></tr>
+          <tr><td>03-27</td><td>Pickup</td><td class="num">485</td><td class="num">$339.35</td></tr>
+          <tr><td>03-28</td><td>Pickup</td><td class="num">0</td><td class="num">$0.00</td></tr>
+          <tr><td>03-29</td><td>Pickup</td><td class="num">686</td><td class="num">$486.45</td></tr>
+          <tr><td>—</td><td>Fuel Surcharge</td><td class="num">—</td><td class="num">$35.80</td></tr>
+          <tr><td>—</td><td>Sales Tax</td><td class="num">—</td><td class="num">$165.18</td></tr>
+          <tr style="background:var(--grey-soft);font-weight:600"><td colspan="3">Inv 2380 Total</td><td class="num">$2,167.31</td></tr>
+          <tr><td>04-13</td><td>Pickup</td><td class="num">0</td><td class="num">$0.00</td></tr>
+          <tr><td>04-14</td><td>Pickup</td><td class="num">690</td><td class="num">$478.85</td></tr>
+          <tr><td>04-15</td><td>Pickup</td><td class="num">621</td><td class="num">$434.97</td></tr>
+          <tr><td>04-16</td><td>Pickup</td><td class="num">1,852</td><td class="num">$1,246.04</td></tr>
+          <tr><td>04-17</td><td>Pickup</td><td class="num">1,382</td><td class="num">$925.94</td></tr>
+          <tr><td>04-18</td><td>Pickup</td><td class="num">0</td><td class="num">$0.00</td></tr>
+          <tr><td>04-19</td><td>Pickup</td><td class="num">561</td><td class="num">$393.72</td></tr>
+          <tr><td>—</td><td>Fuel Surcharge</td><td class="num">—</td><td class="num">$44.75</td></tr>
+          <tr><td>—</td><td>Sales Tax</td><td class="num">—</td><td class="num">$290.75</td></tr>
+          <tr style="background:var(--grey-soft);font-weight:600"><td colspan="3">Inv 2424 Total</td><td class="num">$3,815.02</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-header">
+      <div class="card-title">Single Source · East Market — Itemized Pieces (Weight-Billed)</div>
+      <div class="card-badge">2 Invoices · $2,348 · Most granular invoices</div>
+    </div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Inv</th>
+        <th>Item Type</th>
+        <th class="num">Inv 9780 (Apr 27)</th>
+        <th class="num">Inv 9819 (May 4)</th>
+        <th class="num">2-wk Total</th>
+      </tr></thead>
+      <tbody>
+        <tr><td colspan="2"><strong>Billed by weight (per lb)</strong></td><td class="num">449 lb · $359.20</td><td class="num">958 lb · $766.40</td><td class="num">1,407 lb · $1,125.60</td></tr>
+        <tr><td>↳</td><td>Bath Towel</td><td class="num">119</td><td class="num">211</td><td class="num">330</td></tr>
+        <tr><td>↳</td><td>Hand Towel</td><td class="num">86</td><td class="num">145</td><td class="num">231</td></tr>
+        <tr><td>↳</td><td>Wash Cloth</td><td class="num">88</td><td class="num">147</td><td class="num">235</td></tr>
+        <tr><td>↳</td><td>Bath Mat</td><td class="num">26</td><td class="num">56</td><td class="num">82</td></tr>
+        <tr><td>↳</td><td>Pillowcase King</td><td class="num">95</td><td class="num">276</td><td class="num">371</td></tr>
+        <tr><td>↳</td><td>Pillowcase Standard</td><td class="num">1</td><td class="num">4</td><td class="num">5</td></tr>
+        <tr><td>↳</td><td>Fitted Sheet King</td><td class="num">27</td><td class="num">75</td><td class="num">102</td></tr>
+        <tr><td>↳</td><td>Flat Sheet King Plain</td><td class="num">1</td><td class="num">3</td><td class="num">4</td></tr>
+        <tr><td>↳</td><td>Microfiber Towel</td><td class="num">5</td><td class="num">15</td><td class="num">20</td></tr>
+        <tr><td colspan="2"><strong>Per-piece specialty</strong></td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+        <tr><td>—</td><td>Duvet King @ $3.00</td><td class="num">29 ($87)</td><td class="num">83 ($249)</td><td class="num">112 ($336)</td></tr>
+        <tr><td>—</td><td>Duvet Insert @ $3.00</td><td class="num">1 ($3)</td><td class="num">0</td><td class="num">1 ($3)</td></tr>
+        <tr><td>—</td><td>Blanket @ $3.00</td><td class="num">2 ($6)</td><td class="num">3 ($9)</td><td class="num">5 ($15)</td></tr>
+        <tr style="color:var(--bad)"><td colspan="2"><strong>Delivery (flat per service day)</strong></td><td class="num">$375.00</td><td class="num">$375.00</td><td class="num"><strong>$750.00</strong></td></tr>
+        <tr><td colspan="2">Sales Tax (8%)</td><td class="num">$36.42</td><td class="num">$81.95</td><td class="num">$118.37</td></tr>
+        <tr style="background:var(--grey-soft);font-weight:600"><td colspan="5">Combined East Market Invoice Total</td></tr>
+        <tr style="background:var(--grey-soft);font-weight:600"><td colspan="2">Inv 9780 + 9819</td><td class="num">$866.62</td><td class="num">$1,481.35</td><td class="num">$2,347.97</td></tr>
+      </tbody>
+    </table>
+    <div class="notes"><strong>Flag:</strong> $750 in flat delivery fees over 2 weeks = <strong>~$19,500/yr</strong> in fixed delivery cost on East Market alone, before any volume.</div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-header">
+      <div class="card-title">Single Source · Midtown — Itemized Pieces (Weight-Billed)</div>
+      <div class="card-badge">2 Invoices · $1,824</div>
+    </div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Inv</th>
+        <th>Item Type</th>
+        <th class="num">Inv 9781 (Apr 27)</th>
+        <th class="num">Inv 9820 (May 4)</th>
+        <th class="num">2-wk Total</th>
+      </tr></thead>
+      <tbody>
+        <tr><td colspan="2"><strong>Billed by weight (per lb)</strong></td><td class="num">436 lb · $348.80</td><td class="num">541 lb · $432.80</td><td class="num">977 lb · $781.60</td></tr>
+        <tr><td>↳</td><td>Bath Towel</td><td class="num">89</td><td class="num">100</td><td class="num">189</td></tr>
+        <tr><td>↳</td><td>Hand Towel</td><td class="num">48</td><td class="num">59</td><td class="num">107</td></tr>
+        <tr><td>↳</td><td>Wash Cloth</td><td class="num">56</td><td class="num">85</td><td class="num">141</td></tr>
+        <tr><td>↳</td><td>Bath Mat</td><td class="num">31</td><td class="num">50</td><td class="num">81</td></tr>
+        <tr><td>↳</td><td>Pillowcase King</td><td class="num">103</td><td class="num">176</td><td class="num">279</td></tr>
+        <tr><td>↳</td><td>Fitted Sheet King</td><td class="num">32</td><td class="num">50</td><td class="num">82</td></tr>
+        <tr><td>↳</td><td>Flat Sheet King Plain</td><td class="num">1</td><td class="num">0</td><td class="num">1</td></tr>
+        <tr><td>↳</td><td>Microfiber Towel</td><td class="num">9</td><td class="num">7</td><td class="num">16</td></tr>
+        <tr><td colspan="2"><strong>Per-piece specialty</strong></td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+        <tr><td>—</td><td>Duvet King @ $3.00</td><td class="num">36 ($108)</td><td class="num">55 ($165)</td><td class="num">91 ($273)</td></tr>
+        <tr><td>—</td><td>Duvet Insert @ $3.00</td><td class="num">1 ($3)</td><td class="num">1 ($3)</td><td class="num">2 ($6)</td></tr>
+        <tr><td>—</td><td>Blanket @ $3.00</td><td class="num">0</td><td class="num">1 ($3)</td><td class="num">1 ($3)</td></tr>
+        <tr style="color:var(--bad)"><td colspan="2"><strong>Delivery (flat per service day)</strong></td><td class="num">$300.00</td><td class="num">$375.00</td><td class="num"><strong>$675.00</strong></td></tr>
+        <tr><td colspan="2">Sales Tax (8%)</td><td class="num">$36.78</td><td class="num">$48.30</td><td class="num">$85.08</td></tr>
+        <tr style="background:var(--grey-soft);font-weight:600"><td colspan="2">Inv 9781 + 9820</td><td class="num">$796.58</td><td class="num">$1,027.10</td><td class="num">$1,823.68</td></tr>
+      </tbody>
+    </table>
+    <div class="notes"><strong>Combined Phila SS delivery exposure:</strong> $1,425 in flat delivery fees across both properties over 2 weeks = <strong>~$37,000/yr</strong> in fixed cost. Negotiating delivery to $200/day would save ~$15K/yr without changing rates.</div>
+  </div>
+</div>
+
+<!-- ============== SAVINGS MODEL ============== -->
+<div id="view-savings" class="view">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Savings Opportunity</div>
+      <h1>Three Target Scenarios</h1>
+    </div>
+    <div class="meta">
+      <div class="period-badge">$107K – $209K Range</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    Targets benchmarked against in-portfolio performance. <strong>Baltimore (Mayflower) already operates at $3.99/room</strong> on a $0.69/lb base rate — proving the $4–$5 range is achievable. Detroit's $190K spend dominates the savings pool — even a $1.00/room reduction recovers ~$30K.
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Property Savings at Three $/Room Target Levels</div>
+      <div class="card-badge">Savings = (Current − Target) × Rooms</div>
+    </div>
+    <table class="data-table" id="savingsTable">
+      <colgroup>
+        <col style="width:16%">
+        <col style="width:16%">
+        <col style="width:8%">
+        <col style="width:13%">
+        <col style="width:13%">
+        <col style="width:13%">
+        <col style="width:21%">
+      </colgroup>
+      <thead><tr>
+        <th>Property</th>
+        <th>Vendor</th>
+        <th class="num">$/Room</th>
+        <th class="num">Conservative<br><span style="font-weight:500;color:var(--royal);text-transform:none;letter-spacing:0">@ $5.00/room</span></th>
+        <th class="num">Moderate<br><span style="font-weight:500;color:var(--royal);text-transform:none;letter-spacing:0">@ $4.50/room</span></th>
+        <th class="num">Aggressive<br><span style="font-weight:500;color:var(--royal);text-transform:none;letter-spacing:0">@ $4.00/room</span></th>
+        <th>Lever</th>
+      </tr></thead>
+      <tbody></tbody>
+      <tfoot><tr>
+        <td colspan="3">Portfolio Total Savings</td>
+        <td class="num" id="t1">$0</td>
+        <td class="num" id="t2">$0</td>
+        <td class="num" id="t3">$0</td>
+        <td></td>
+      </tr></tfoot>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-header"><div class="card-title">Savings Decomposition by Property</div></div>
+    <div class="chart-container"><canvas id="savingsChart"></canvas></div>
+  </div>
+</div>
+
+<!-- ============== CONSOLIDATION ============== -->
+<div id="view-consolidation" class="view">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Vendor Consolidation</div>
+      <h1>Multi-Property Leverage Plays</h1>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Single Source — Already Multi-Property</div>
+        <div class="card-badge">Quick Win</div>
+      </div>
+      <p style="margin:0 0 .85rem;font-size:.78rem;color:var(--royal)">SS Plus services Midtown <em>and</em> East Market on identical pricing ($0.80/lb + $3/pc specialty + $300–$375 flat delivery) yet has not given ROOST a multi-location concession. Combined T12 spend with SS: <strong>$169,364</strong>.</p>
+      <table class="data-table">
+        <thead><tr><th>Property</th><th class="num">T12 Spend</th><th class="num">$/Room</th></tr></thead>
+        <tbody>
+          <tr><td>Roost Midtown</td><td class="num">$70,035</td><td class="num">$8.78</td></tr>
+          <tr><td>ROOST East Market</td><td class="num">$99,329</td><td class="num">$6.68</td></tr>
+        </tbody>
+        <tfoot><tr><td>Combined</td><td class="num">$169,364</td><td class="num">$7.40</td></tr></tfoot>
+      </table>
+      <div class="callout" style="margin-top:.95rem;margin-bottom:0">
+        <strong>Ask:</strong> negotiate $0.65/lb (Pinnacle parity) and reduce delivery to $200 flat. Modeled savings: <strong>~$26K/yr</strong> on Phila pair without changing vendor.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Mid-Atlantic Cluster — Cross-Vendor RFP</div>
+        <div class="card-badge">Strategic</div>
+      </div>
+      <p style="margin:0 0 .85rem;font-size:.78rem;color:var(--royal)">Four ROOSTs in a 200-mile corridor (Phila → Balt → DC) currently use three different vendors. Pinnacle (DC) at $0.65/lb and Mayflower (Balt) at $0.69/lb are within 6% of each other. Either could absorb the four-property route and price-match.</p>
+      <table class="data-table">
+        <thead><tr><th>Property</th><th>Vendor</th><th class="num">Rate</th><th class="num">T12 Spend</th></tr></thead>
+        <tbody>
+          <tr><td>Midtown</td><td>SS Plus</td><td class="num">$0.80</td><td class="num">$70,035</td></tr>
+          <tr><td>East Market</td><td>SS Plus</td><td class="num">$0.80</td><td class="num">$99,329</td></tr>
+          <tr><td>Baltimore</td><td>Mayflower</td><td class="num">$0.69</td><td class="num">$83,825</td></tr>
+          <tr><td>White House</td><td>Pinnacle</td><td class="num">$0.65</td><td class="num">$15,413</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="3">Combined</td><td class="num">$268,602</td></tr></tfoot>
+      </table>
+      <div class="callout" style="margin-top:.95rem;margin-bottom:0">
+        <strong>Ask:</strong> RFP a single Mid-Atlantic vendor at $0.60/lb. Conservative savings vs. blended current rate: <strong>~$30–$45K/yr</strong>.
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-header"><div class="card-title">Vendor Footprint Across the Portfolio</div></div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Vendor</th>
+        <th>Properties Served</th>
+        <th class="num">Combined T12 Spend</th>
+        <th class="num"># ROOSTs</th>
+        <th>Negotiating Posture</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><strong>Single Source Plus</strong></td><td>Midtown, East Market</td><td class="num">$169,364</td><td class="num">2</td><td><span class="pill warn">Multi-loc renegotiation</span></td></tr>
+        <tr><td><strong>Luster Cleaners</strong></td><td>Detroit</td><td class="num">$190,947</td><td class="num">1</td><td><span class="pill bad">Highest priority renegotiation</span></td></tr>
+        <tr><td><strong>Crown Linen</strong></td><td>Tampa</td><td class="num">$151,275</td><td class="num">1</td><td><span class="pill good">Best in class · audit volatility</span></td></tr>
+        <tr><td><strong>Maristv</strong></td><td>Cleveland</td><td class="num">$92,619</td><td class="num">1</td><td><span class="pill neutral">Hold · monitor</span></td></tr>
+        <tr><td><strong>Mayflower</strong></td><td>Baltimore</td><td class="num">$83,825</td><td class="num">1</td><td><span class="pill good">Benchmark vendor · expand?</span></td></tr>
+        <tr><td><strong>Pinnacle</strong></td><td>White House</td><td class="num">$15,413</td><td class="num">1</td><td><span class="pill good">Cleanest contract · expand?</span></td></tr>
+        <tr><td><strong>TenFold</strong></td><td>Rainey/Austin</td><td class="num">—</td><td class="num">1</td><td><span class="pill neutral">Hold · monitor</span></td></tr>
+      </tbody>
+    </table>
+    <div class="notes">Detroit and the SS Plus pair represent <strong>$360K (51%) of portfolio spend</strong> — the two highest-leverage renegotiation targets.</div>
+  </div>
+</div>
+
+<!-- ============== RECOMMENDATIONS ============== -->
+<div id="view-recs" class="view">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">Action Plan</div>
+      <h1>Six Prioritized Recommendations</h1>
+    </div>
+    <div class="meta">
+      <div class="period-badge">$105K – $170K Modeled</div>
+    </div>
+  </div>
+
+  <div class="recs">
+    <div class="rec">
+      <div class="rec-num">01</div>
+      <div class="rec-tag">Highest Impact · Detroit</div>
+      <h4>Renegotiate Luster contract — convert to per-pound and cap specialty pricing</h4>
+      <p>Detroit's $190,947 annual spend is the largest in the portfolio. Luster bills sheets/towels per piece (~$0.70/pc) and charges <strong>$15 per duvet/insert</strong> — 5–11× the rest of the portfolio. Convert the wash component to per-pound at $0.70/lb (TenFold parity) and cap duvets at $5/pc. Same-day ($200) and rush ($100) trip fees should be eliminated or capped at 2/month. Owner: <strong>Scott Sadoff / Patrick Jobst</strong>.</p>
+      <div class="rec-savings">$40,000 – $60,000 / yr</div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-num">02</div>
+      <div class="rec-tag">Quick Win · Philadelphia</div>
+      <h4>Pressure-test Single Source on multi-property rate &amp; delivery fee</h4>
+      <p>SS Plus services <em>both</em> Midtown and East Market on identical $0.80/lb pricing with a $300–$375 flat delivery fee per service day — the highest fixed cost in the portfolio. Negotiate a $0.65/lb multi-property rate (Pinnacle parity) and a $200 flat delivery, or formally RFP the Phila pair. Single Source's competitive risk is the leverage.</p>
+      <div class="rec-savings">$20,000 – $30,000 / yr</div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-num">03</div>
+      <div class="rec-tag">Strategic · Mid-Atlantic</div>
+      <h4>Issue a Mid-Atlantic regional RFP for one consolidated vendor</h4>
+      <p>Four ROOSTs (Midtown, East Market, Baltimore, White House) in a 200-mile corridor combine for ~$269K of annual spend. A single vendor could profitably underbid the current $0.65–$0.80 spread. Target rate: $0.60/lb plus $100 flat delivery. Pinnacle and Mayflower are natural incumbents to invite; SS Plus should defend.</p>
+      <div class="rec-savings">$30,000 – $45,000 / yr</div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-num">04</div>
+      <div class="rec-tag">Operational · Tampa</div>
+      <h4>Investigate Tampa monthly cost volatility ($5.8K → $21.9K)</h4>
+      <p>Crown Linen's $0.468/lb headline rate is the portfolio's best, yet Tampa's monthly cost ranges from $5,849 to $21,857 — a 3.7× swing. Possible drivers: pool/F&amp;B linen, banquet events, or specialty (duvet/blanket) volume spikes. Audit two outlier months (May 2025 at $11,728 vs Apr 2025 at $20,709) to isolate cost drivers and either price-cap specialty or shift to par-stock owned linen.</p>
+      <div class="rec-savings">$10,000 – $25,000 / yr</div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-num">05</div>
+      <div class="rec-tag">Hygiene · All Vendors</div>
+      <h4>Standardize contract terms — pricing transparency &amp; benchmarking clauses</h4>
+      <p>Current contracts span Net 10 (TenFold) to Net 30 (most), with inconsistent fuel/energy surcharges, unclear minimum-charge logic (Mayflower), and one 5%/month late-fee clause (Pinnacle). Standardize on Net 30 with capped fuel surcharge (≤2%), eliminate minimums, and require an annual rate-disclosure clause. Adds optionality without changing vendors.</p>
+      <div class="rec-savings">$5,000 – $10,000 / yr</div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-num">06</div>
+      <div class="rec-tag">Visibility · GM Scorecard</div>
+      <h4>Make $/Occupied Room a monthly KPI for each GM</h4>
+      <p>Portfolio variance is wide ($3.99 Baltimore → $8.78 Midtown). Some spread is structural (small-property delivery economics), but a monthly $/room report — alongside the property's vendor invoice spend by category — gives every GM real-time accountability and surfaces drift early. Set a $5.00/room "watch line" and $4.50/room target tied to next-cycle property planning. Aligns with Method Co.'s <em>Relentless Pursuit of Excellence</em>.</p>
+      <div class="rec-savings">Reinforces all other levers</div>
+    </div>
+  </div>
+
+  <footer>
+    <div><strong>Source data:</strong> ROOST Laundry Cost Analysis.xlsx (T12 P&amp;L Apr 2025 – Mar 2026) · 16 vendor invoices &amp; price sheets across 8 vendors. Per-item pricing extracted from Crown Linen, Luster, Maristv, Mayflower, Pinnacle, Single Source Plus (Midtown &amp; East Market), and TenFold invoices. OCR used on scanned PDFs — minor digit uncertainty noted on a handful of small fields.</div>
+    <div class="brand">Method Co · Procurement · May 2026</div>
+  </footer>
+</div>
+
+<!-- ============== BY-PROPERTY DRILL-DOWNS ============== -->
+<div id="view-property-detroit" class="view"></div>
+<div id="view-property-tampa" class="view"></div>
+<div id="view-property-eastmarket" class="view"></div>
+<div id="view-property-cleveland" class="view"></div>
+<div id="view-property-baltimore" class="view"></div>
+<div id="view-property-midtown" class="view"></div>
+<div id="view-property-whitehouse" class="view"></div>
+
+</div><!-- /main -->
+
+<script>
+// =================== DATA ===================
+const PROPERTIES = [
+  {name:'Roost Midtown', vendor:'Single Source Plus', spend:70035, rooms:7976, cpr:8.78, lever:'Renegotiate / RFP'},
+  {name:'ROOST Detroit', vendor:'Luster Cleaners', spend:190947, rooms:29843, cpr:6.40, lever:'Convert per-piece → per-lb'},
+  {name:'ROOST Cleveland', vendor:'Maristv (Parma)', spend:92619, rooms:16594, cpr:5.58, lever:'Audit specialty mix'},
+  {name:'ROOST Tampa', vendor:'Crown Linen', spend:151275, rooms:30200, cpr:5.01, lever:'Investigate volatility'},
+  {name:'ROOST Baltimore', vendor:'Mayflower Textile', spend:83825, rooms:20990, cpr:3.99, lever:'Best in class · benchmark'},
+  {name:'ROOST East Market', vendor:'Single Source Plus', spend:99329, rooms:14877, cpr:6.68, lever:'Renegotiate / RFP'},
+  {name:'ROOST White House', vendor:'Pinnacle Linens', spend:15413, rooms:3192, cpr:4.83, lever:'Monitor (new property)'},
+];
+const PORTFOLIO_CPR = 5.69;
+
+const MONTHS = ['Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
+const MONTHLY_SPEND = {
+  'Roost Midtown':       [3672.77,6920.81,6658.83,6835.64,6043.08,4278.74,6247.71,5693.37,4264.61,7160.53,5226.93,7031.57],
+  'ROOST Detroit':       [14085.59,14448.71,19524.06,14267.99,15158.00,16643.33,14481.16,16381.42,18619.15,12826.00,17736.70,16775.03],
+  'ROOST Cleveland':     [7084.07,5522.75,7375.66,9490.00,9643.63,9805.39,10564.27,6868.31,9541.67,3627.79,7314.15,5780.96],
+  'ROOST Tampa':         [20709.24,11728.24,6597.04,11108.98,9976.27,9260.21,21857.57,5849.32,18125.64,10049.13,12209.51,13803.72],
+  'ROOST Baltimore':     [6103.54,4421.63,3755.68,11707.73,7008.64,11524.95,6056.14,6253.36,8525.55,6132.55,4517.81,7817.01],
+  'ROOST East Market':   [8133.86,5763.28,6378.33,9519.46,12243.43,9170.28,5961.75,6304.80,4456.61,13926.70,7115.91,10354.17],
+  'ROOST White House':   [0,0,0,0,0,0,258.79,3410.86,2889.97,2211.39,3299.77,3341.84],
+};
+
+const PROPERTY_COLORS = {
+  'Roost Midtown':'#2BA6BB',
+  'ROOST Detroit':'#B5503F',
+  'ROOST Cleveland':'#405766',
+  'ROOST Tampa':'#C49156',
+  'ROOST Baltimore':'#5A8C6E',
+  'ROOST East Market':'#7FC9D4',
+  'ROOST White House':'#BCC8BE',
+};
+
+const VENDOR_RATES = [
+  {name:'Crown Linen', property:'Tampa', rate:0.468},
+  {name:'Pinnacle', property:'White House', rate:0.65},
+  {name:'Mayflower', property:'Baltimore', rate:0.690},
+  {name:'TenFold', property:'Rainey', rate:0.70},
+  {name:'Maristv', property:'Cleveland', rate:0.71},
+  {name:'Single Source', property:'Midtown', rate:0.80},
+  {name:'Single Source', property:'East Market', rate:0.80},
+];
+
+// Method Co brand chart palette
+const BRAND = {
+  turquoise:'#2BA6BB',
+  turquoiseMid:'#7FC9D4',
+  royal:'#405766',
+  slate:'#212931',
+  seafoam:'#BCC8BE',
+  tan:'#D8CFC4',
+  good:'#5A8C6E',
+  warn:'#C49156',
+  bad:'#B5503F',
+  grid:'#E2DEDE',
+};
+
+const fmtUSD0 = v => '$' + Math.round(v).toLocaleString();
+const fmtUSDk = v => '$' + (v/1000).toFixed(0) + 'K';
+
+Chart.defaults.font.family = "'Montserrat','Helvetica Neue',Arial,sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = BRAND.royal;
+
+// =================== VIEW SWITCH ===================
+function switchView(name){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.querySelector(`.sidebar-item[data-view="${name}"]`).classList.add('active');
+  // resize charts (Chart.js needs nudge after display change)
+  Object.values(window._charts||{}).forEach(c => c && c.resize && c.resize());
+}
+window._charts = {};
+
+// =================== TABLES ===================
+function renderPropTable(){
+  const tbody = document.querySelector('#propTable tbody');
+  const sorted = [...PROPERTIES].sort((a,b) => b.spend - a.spend);
+  const maxCpr = Math.max(...sorted.map(p => p.cpr));
+  tbody.innerHTML = sorted.map(p => {
+    const delta = p.cpr - PORTFOLIO_CPR;
+    const tag = delta > 0.5 ? `<span class="pill bad">+$${delta.toFixed(2)}</span>` : delta < -0.5 ? `<span class="pill good">${delta>=0?'+':''}$${delta.toFixed(2)}</span>` : `<span class="pill neutral">${delta>=0?'+':''}$${delta.toFixed(2)}</span>`;
+    const cprPct = (p.cpr/maxCpr*100).toFixed(0);
+    const cprColor = p.cpr > 6 ? 'bad' : p.cpr < 4.5 ? 'good' : '';
+    return `
+      <tr>
+        <td><strong>${p.name}</strong></td>
+        <td style="font-size:.75rem;color:var(--royal)">${p.vendor}</td>
+        <td class="num"><strong>${fmtUSD0(p.spend)}</strong></td>
+        <td class="num">${p.rooms.toLocaleString()}</td>
+        <td class="bar-cell">
+          <div class="bar-track">
+            <div class="bar-fill ${cprColor}" style="width:${cprPct}%"></div>
+            <span class="bar-label">$${p.cpr.toFixed(2)}</span>
+          </div>
+        </td>
+        <td class="num">${tag}</td>
+      </tr>`;
+  }).join('');
+}
+
+function renderSavingsTable(){
+  const tbody = document.querySelector('#savingsTable tbody');
+  const targets = [5.00, 4.50, 4.00];
+  let totals = [0,0,0];
+  const rows = [...PROPERTIES].sort((a,b)=>b.spend-a.spend).map(p => {
+    const sav = targets.map(t => Math.max(0, (p.cpr - t) * p.rooms));
+    sav.forEach((v,i) => totals[i] += v);
+    const cells = sav.map(v => `<td class="num">${v > 0 ? fmtUSD0(v) : '<span style="color:#B0AAA1">—</span>'}</td>`).join('');
+    return `
+      <tr>
+        <td><strong>${p.name}</strong></td>
+        <td style="font-size:.75rem;color:var(--royal)">${p.vendor}</td>
+        <td class="num">$${p.cpr.toFixed(2)}</td>
+        ${cells}
+        <td style="font-size:.7rem;color:var(--royal)">${p.lever}</td>
+      </tr>`;
+  }).join('');
+  tbody.innerHTML = rows;
+  document.querySelector('#t1').textContent = fmtUSD0(totals[0]);
+  document.querySelector('#t2').textContent = fmtUSD0(totals[1]);
+  document.querySelector('#t3').textContent = fmtUSD0(totals[2]);
+  return totals;
+}
+
+// =================== CHARTS ===================
+function renderCprChart(){
+  const sorted = [...PROPERTIES].sort((a,b)=>a.cpr-b.cpr);
+  const colors = sorted.map(p => p.cpr <= 4.5 ? BRAND.good : p.cpr <= 6 ? BRAND.turquoise : BRAND.bad);
+  window._charts.cpr = new Chart(document.getElementById('cprChart'), {
+    type: 'bar',
+    data: {
+      labels: sorted.map(p=>p.name.replace('ROOST ','').replace('Roost ','')),
+      datasets: [{
+        label: '$/Room',
+        data: sorted.map(p=>p.cpr),
+        backgroundColor: colors,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => '$' + c.parsed.x.toFixed(2) + ' / room' } }
+      },
+      scales: {
+        x: { beginAtZero: true, grid: { color: BRAND.grid }, ticks: { callback: v => '$' + v } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+function renderSpendMixChart(){
+  const sorted = [...PROPERTIES].sort((a,b)=>b.spend-a.spend);
+  window._charts.spendMix = new Chart(document.getElementById('spendMixChart'), {
+    type: 'doughnut',
+    data: {
+      labels: sorted.map(p => p.name.replace('ROOST ','').replace('Roost ','')),
+      datasets: [{
+        data: sorted.map(p => p.spend),
+        backgroundColor: sorted.map(p => PROPERTY_COLORS[p.name]),
+        borderWidth: 2,
+        borderColor: '#fff',
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 10, padding: 8, font: { size: 10 } } },
+        tooltip: { callbacks: { label: c => c.label + ': ' + fmtUSD0(c.parsed) + ' (' + (c.parsed/703441*100).toFixed(0) + '%)' } }
+      }
+    }
+  });
+}
+
+function renderTrendChart(activeProps){
+  if (window._charts.trend) window._charts.trend.destroy();
+  const datasets = PROPERTIES.filter(p => activeProps.includes(p.name)).map(p => ({
+    label: p.name.replace('ROOST ','').replace('Roost ',''),
+    data: MONTHLY_SPEND[p.name],
+    borderColor: PROPERTY_COLORS[p.name],
+    backgroundColor: PROPERTY_COLORS[p.name] + '22',
+    borderWidth: 2,
+    tension: 0.3,
+    pointRadius: 3,
+    pointHoverRadius: 6,
+    pointBackgroundColor: PROPERTY_COLORS[p.name],
+  }));
+  window._charts.trend = new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: { labels: MONTHS, datasets },
+    options: {
+      maintainAspectRatio: false,
+      interaction: { mode:'index', intersect: false },
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, font: { size: 10 } } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtUSD0(c.parsed.y) } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: BRAND.grid }, ticks: { callback: v => '$' + (v/1000) + 'K' } }
+      }
+    }
+  });
+}
+
+function renderTrendFilters(){
+  const c = document.getElementById('trendFilters');
+  let active = PROPERTIES.map(p=>p.name);
+  function rebuild(){
+    c.innerHTML = '<span class="filters-label">Show</span>' +
+      PROPERTIES.map(p =>
+        `<span class="filter-chip ${active.includes(p.name)?'active':''}" data-name="${p.name}">${p.name.replace('ROOST ','').replace('Roost ','')}</span>`
+      ).join('') +
+      `<span class="filter-chip" id="allBtn">All</span><span class="filter-chip" id="noneBtn">None</span>`;
+    c.querySelectorAll('.filter-chip[data-name]').forEach(ch => {
+      ch.onclick = () => {
+        const n = ch.dataset.name;
+        if (active.includes(n)) active = active.filter(x=>x!==n);
+        else active.push(n);
+        rebuild();
+      };
+    });
+    document.getElementById('allBtn').onclick = () => { active = PROPERTIES.map(p=>p.name); rebuild(); };
+    document.getElementById('noneBtn').onclick = () => { active = []; rebuild(); };
+    renderTrendChart(active);
+  }
+  rebuild();
+}
+
+function renderSpendBarChart(){
+  const sorted = [...PROPERTIES].sort((a,b)=>b.spend-a.spend);
+  window._charts.spendBar = new Chart(document.getElementById('spendBarChart'), {
+    type: 'bar',
+    data: {
+      labels: sorted.map(p => p.name.replace('ROOST ','').replace('Roost ','')),
+      datasets: [{
+        label: 'Annual Spend',
+        data: sorted.map(p => p.spend),
+        backgroundColor: sorted.map(p => PROPERTY_COLORS[p.name]),
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => fmtUSD0(c.parsed.y) } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+        y: { grid: { color: BRAND.grid }, ticks: { callback: v => '$' + (v/1000) + 'K' } }
+      }
+    }
+  });
+}
+
+function renderCprDeltaChart(){
+  const sorted = [...PROPERTIES].sort((a,b)=>(a.cpr-PORTFOLIO_CPR)-(b.cpr-PORTFOLIO_CPR));
+  const deltas = sorted.map(p => p.cpr - PORTFOLIO_CPR);
+  const colors = deltas.map(d => d > 0 ? BRAND.bad : BRAND.good);
+  window._charts.cprDelta = new Chart(document.getElementById('cprDeltaChart'), {
+    type: 'bar',
+    data: {
+      labels: sorted.map(p => p.name.replace('ROOST ','').replace('Roost ','')),
+      datasets: [{
+        label: 'vs. Portfolio Avg',
+        data: deltas,
+        backgroundColor: colors,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => (c.parsed.x>=0?'+':'') + '$' + c.parsed.x.toFixed(2) + ' vs avg' } }
+      },
+      scales: {
+        x: { grid: { color: BRAND.grid }, ticks: { callback: v => (v>=0?'+':'') + '$' + v.toFixed(1) } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+function renderPoundChart(){
+  const sorted = [...VENDOR_RATES].sort((a,b)=>a.rate-b.rate);
+  const colors = sorted.map((v,i) => i===0 ? BRAND.good : i >= sorted.length-2 ? BRAND.bad : BRAND.turquoise);
+  window._charts.pound = new Chart(document.getElementById('poundChart'), {
+    type: 'bar',
+    data: {
+      labels: sorted.map(v => v.name + ' · ' + v.property),
+      datasets: [{
+        label: 'Per-pound rate',
+        data: sorted.map(v=>v.rate),
+        backgroundColor: colors,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => '$' + c.parsed.x.toFixed(3) + ' / lb' } }
+      },
+      scales: {
+        x: { beginAtZero: true, max: 0.9, grid: { color: BRAND.grid }, ticks: { callback: v => '$' + v.toFixed(2) } },
+        y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+function renderSavingsChart(){
+  const targets = [5.00, 4.50, 4.00];
+  const sorted = [...PROPERTIES].sort((a,b)=>b.spend-a.spend);
+  const datasets = targets.map((t,i) => ({
+    label: '@ $' + t.toFixed(2) + '/room',
+    data: sorted.map(p => Math.max(0, (p.cpr - t) * p.rooms)),
+    backgroundColor: [BRAND.turquoiseMid, BRAND.turquoise, BRAND.royal][i],
+    borderRadius: 3,
+  }));
+  window._charts.savings = new Chart(document.getElementById('savingsChart'), {
+    type: 'bar',
+    data: {
+      labels: sorted.map(p => p.name.replace('ROOST ','').replace('Roost ','')),
+      datasets
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 10, padding: 10, font: { size: 10 } } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtUSD0(c.parsed.y) } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+        y: { grid: { color: BRAND.grid }, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } }
+      }
+    }
+  });
+}
+
+// =================== TABLE SORT ===================
+function attachSort(tableId){
+  const table = document.getElementById(tableId);
+  if (!table) return;
+  table.querySelectorAll('th.sortable').forEach((th, idx) => {
+    th.onclick = () => {
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const isAsc = th.classList.contains('sort-asc');
+      table.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc','sort-desc'));
+      th.classList.toggle('sort-asc', !isAsc);
+      th.classList.toggle('sort-desc', isAsc);
+      rows.sort((a,b) => {
+        const av = a.children[idx].innerText.replace(/[$,]/g,'').trim();
+        const bv = b.children[idx].innerText.replace(/[$,]/g,'').trim();
+        const an = parseFloat(av), bn = parseFloat(bv);
+        if (!isNaN(an) && !isNaN(bn)) return isAsc ? an-bn : bn-an;
+        return isAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    };
+  });
+}
+
+// =================== PROPERTY DRILL-DOWNS ===================
+const PROPERTY_DETAIL = {
+  'detroit': {
+    name:'ROOST Detroit', vendor:'Luster Cleaners Inc.', vendorLoc:'Livonia, MI',
+    spend:190947, rooms:29843, cpr:6.40, share:27,
+    contract:'~$0.70/piece on sheets+towels · $15/duvet · $25/regular trip · $200/same-day · $100/3-hr rush',
+    terms:'Net 30',
+    monthly:[14085.59,14448.71,19524.06,14267.99,15158.00,16643.33,14481.16,16381.42,18619.15,12826.00,17736.70,16775.03],
+    invoices:[
+      {n:'519118', d:'2026-04-14', total:2523.60, key:'7-day cycle: 3,348 pcs sheets+towels, 2 duvet inserts, 6 trips'},
+      {n:'519124', d:'2026-04-20', total:4023.80, key:'WORST WEEK — 4,794 pcs + $500 in same-day/rush fees'}
+    ],
+    flags:[
+      {sev:'bad', t:'Per-piece billing model is the portfolio outlier', d:'Luster bills sheets+towels at ~$0.70/piece — bad for small terry (wash cloth $0.70 vs $0.07–$0.12 elsewhere) but undercharges sheets ($0.70 vs $1.40–$2.40 elsewhere). On hotel mix, structurally unfavorable.'},
+      {sev:'bad', t:'$15.00 per duvet/insert — 5–11× peer pricing', d:'Crown Linen $1.36 · Single Source $3.00 · Luster $15.00. Detroit\'s ~30K rooms × turn rate makes this a six-figure exposure.'},
+      {sev:'warn', t:'$500 in same-day/rush trip fees on a single invoice', d:'Inv 519124 had 2 same-day trips ($400) + 1 rush ($100). Annualized at this cadence ≈ $13K/yr in preventable cost.'}
+    ],
+    items:[
+      {label:'Sheets+Towels (per piece, all sizes)', qty:'8,142 pc / 2 wks', unit:'$0.70'},
+      {label:'Duvet Inserts/Comforters', qty:'3 pc / 2 wks', unit:'$15.00'},
+      {label:'Blankets', qty:'1 pc / 2 wks', unit:'$3.00'},
+      {label:'Robes (price sheet)', qty:'priced', unit:'$4.00'},
+      {label:'Mattress Cover/Protector (price sheet)', qty:'priced', unit:'$5.00'},
+      {label:'Pillow (price sheet)', qty:'priced', unit:'$5.00'}
+    ],
+    rec:'Renegotiate to per-pound at $0.70/lb (TenFold parity). Cap duvets at $5/pc. Eliminate or cap rush/same-day fees. Owner: Scott Sadoff / Patrick Jobst.',
+    save:'$40K – $60K / yr'
+  },
+  'tampa': {
+    name:'ROOST Tampa', vendor:'Crown Linen', vendorLoc:'Miami, FL',
+    spend:151275, rooms:30200, cpr:5.01, share:21,
+    contract:'$0.468/lb wash + $1.36/duvet + $2.25/blanket + 4.8% fuel surcharge · No delivery fee',
+    terms:'Net 30',
+    monthly:[20709.24,11728.24,6597.04,11108.98,9976.27,9260.21,21857.57,5849.32,18125.64,10049.13,12209.51,13803.72],
+    invoices:[
+      {n:'183242', d:'2026-04-05', total:1371.87, key:'Service period 04/01–04/05 · 1,527 lb sheets · 844 lb towels · 164 duvets · 4 blankets'},
+      {n:'183673', d:'2026-04-19', total:2168.42, key:'Service period 04/13–04/19 · 2,302 lb sheets · 1,336 lb towels · 276 duvets · 19 blankets'}
+    ],
+    flags:[
+      {sev:'good', t:'Portfolio-best per-lb rate at $0.468', d:'29% below the 2nd-lowest (Pinnacle at $0.65). Crown is the benchmark every other vendor should be measured against.'},
+      {sev:'good', t:'Best-in-class duvet pricing at $1.36/pc', d:'Tampa processed 440 duvet covers in 2 weeks (~11,440/yr) at $1.36 = ~$15.6K/yr. At Luster\'s $15/pc that would be ~$172K. This contract is doing real work.'},
+      {sev:'warn', t:'Monthly cost volatility: $5,849 → $21,858 (3.7×)', d:'Despite the strong rate, swing months suggest event/specialty/pool-linen spikes that aren\'t price-controlled. Audit May 2025 vs Apr 2025 to isolate driver.'}
+    ],
+    items:[
+      {label:'Room Linen / Sheets', qty:'3,829 lb / 2 wks', unit:'$0.468/lb'},
+      {label:'Towels', qty:'2,180 lb / 2 wks', unit:'$0.468/lb'},
+      {label:'Duvet Covers', qty:'440 pc / 2 wks', unit:'$1.36'},
+      {label:'Blankets', qty:'23 pc / 2 wks', unit:'$2.25'},
+      {label:'Fuel Surcharge', qty:'~4.8% of weight', unit:'$0.0225/lb'}
+    ],
+    rec:'Investigate the volatility — pool/F&B/banquet linen, par-stock issues, or specialty volume spikes. Two outlier months should reveal the driver.',
+    save:'$10K – $25K / yr (volatility control)'
+  },
+  'eastmarket': {
+    name:'ROOST East Market', vendor:'Single Source Plus', vendorLoc:'Bellmawr, NJ',
+    spend:99329, rooms:14877, cpr:6.68, share:14,
+    contract:'$0.80/lb wash + $3/pc duvet/blanket/insert + $375 flat delivery/service day + 8% sales tax',
+    terms:'Net 15',
+    monthly:[8133.86,5763.28,6378.33,9519.46,12243.43,9170.28,5961.75,6304.80,4456.61,13926.70,7115.91,10354.17],
+    invoices:[
+      {n:'9780', d:'2026-04-27', total:866.62, key:'449 lb · 448 itemized pieces · $375 delivery'},
+      {n:'9819', d:'2026-05-04', total:1481.35, key:'958 lb · 952 itemized pieces · $375 delivery'}
+    ],
+    flags:[
+      {sev:'bad', t:'$0.80/lb is portfolio-worst — 71% above Tampa', d:'Same vendor as Midtown — $0.80/lb is identical and arguably high given two-property volume.'},
+      {sev:'bad', t:'$375 flat delivery per service day', d:'2 deliveries × $375 over 2 weeks = $750 = ~$19,500/yr in fixed delivery cost on East Market alone.'},
+      {sev:'good', t:'Most granular invoicing in the portfolio', d:'Every weight charge breaks down by SKU (Bath Towel, Hand Towel, Wash Cloth, Bath Mat, Pillowcase, Fitted Sheet, etc.) — ideal for analysis.'}
+    ],
+    items:[
+      {label:'Bath Towel', qty:'330 pc / 2 wks', unit:'$0.80/lb (~$0.88/pc implied)'},
+      {label:'Hand Towel', qty:'231 pc / 2 wks', unit:'$0.80/lb (~$0.32/pc implied)'},
+      {label:'Wash Cloth', qty:'235 pc / 2 wks', unit:'$0.80/lb (~$0.12/pc implied)'},
+      {label:'Bath Mat', qty:'82 pc / 2 wks', unit:'$0.80/lb (~$1.20/pc implied)'},
+      {label:'Pillowcase King', qty:'371 pc / 2 wks', unit:'$0.80/lb (~$0.28/pc implied)'},
+      {label:'Fitted Sheet King', qty:'102 pc / 2 wks', unit:'$0.80/lb (~$2.40/pc implied)'},
+      {label:'Duvet King', qty:'112 pc / 2 wks', unit:'$3.00'},
+      {label:'Blanket', qty:'5 pc / 2 wks', unit:'$3.00'},
+      {label:'Duvet Insert', qty:'1 pc / 2 wks', unit:'$3.00'}
+    ],
+    rec:'Renegotiate $0.65/lb (Pinnacle parity) and $200 flat delivery, OR formally RFP the Phila pair (Midtown + EM combined) into a Mid-Atlantic regional vendor. Combined Phila spend ~$169K is real leverage.',
+    save:'$10K – $15K / yr (paired with Midtown)'
+  },
+  'cleveland': {
+    name:'ROOST Cleveland', vendor:'Maristv (Parma Laundry)', vendorLoc:'Parma, OH',
+    spend:92619, rooms:16594, cpr:5.58, share:13,
+    contract:'~$0.71/lb (implied from $153.36 / 216 lb) · $10/trip pickup-delivery · 8% Ohio sales tax',
+    terms:'Min charge applied to total order, not per item',
+    monthly:[7084.07,5522.75,7375.66,9490.00,9643.63,9805.39,10564.27,6868.31,9541.67,3627.79,7314.15,5780.96],
+    invoices:[
+      {n:'94759', d:'mid-Apr 2026', total:642.05, key:'3 deliveries · 777 lb flat linens · $30 pickup/delivery'},
+      {n:'94807', d:'late-Apr 2026', total:1120.55, key:'4 deliveries · 1,405 lb flat linens · $40 pickup/delivery'}
+    ],
+    flags:[
+      {sev:'good', t:'$10/trip is the cheapest delivery in the portfolio', d:'Maristv\'s pickup/delivery is dramatically below Pinnacle ($50), Mayflower (variable), Luster ($25 + rush), and Single Source ($300–375). This is a value lever to defend.'},
+      {sev:'warn', t:'No itemization on invoices — only "Flat Linens" by weight', d:'Cleveland\'s invoices show service date and pounds, no per-item breakdown. Limits ability to audit quality issues or specialty volume.'},
+      {sev:'neutral', t:'$0.71/lb rate is mid-pack', d:'Slightly higher than Mayflower ($0.69), Pinnacle ($0.65), and TenFold ($0.70) — not aggressive but not bad given low delivery cost.'}
+    ],
+    items:[
+      {label:'Flat Linens (all categories)', qty:'2,182 lb / 2 wks', unit:'~$0.71/lb'},
+      {label:'Pickup/Delivery', qty:'7 trips / 2 wks', unit:'$10/trip'}
+    ],
+    rec:'Lowest-priority renegotiation. Preserve the $10/trip delivery economics. Could ask for itemization on invoices to enable quality audits.',
+    save:'$5K – $10K / yr (rate trim)'
+  },
+  'baltimore': {
+    name:'ROOST Baltimore', vendor:'Mayflower Textile Services', vendorLoc:'Baltimore, MD',
+    spend:83825, rooms:20990, cpr:3.99, share:12,
+    contract:'$0.690255/lb processed clean weight + $100 flat King Fitted Sheet rental + MD state surcharge ($60–62/inv) + variable min delivery charge',
+    terms:'Net 30',
+    monthly:[6103.54,4421.63,3755.68,11707.73,7008.64,11524.95,6056.14,6253.36,8525.55,6132.55,4517.81,7817.01],
+    invoices:[
+      {n:'62955', d:'2026-04-05', total:1163.12, key:'1,453 lb · 1,538 itemized pieces over 3 deliveries · $60.18 MD surcharge'},
+      {n:'63103', d:'2026-04-19', total:1197.51, key:'1,348 lb · 1,342 itemized pieces · MIN delivery charge $104.92 triggered'}
+    ],
+    flags:[
+      {sev:'good', t:'BENCHMARK PROPERTY at $3.99/room', d:'Lowest cost per occupied room in the portfolio. Proves the $4–$5/room target is achievable at scale on a $0.69/lb base rate.'},
+      {sev:'good', t:'Fully itemized packing slips', d:'Every delivery breaks down by item code (King Pillow Cases, King Fitted Sheets, Wash Cloths, Hand Towels, Bath Towels, Bath Mats, Blankets, King Duvets) by date — gold standard for analysis.'},
+      {sev:'warn', t:'Min delivery charge triggered on Inv 63103 ($104.92)', d:'Variable surcharge when volume is below threshold. Worth understanding the threshold to avoid future hits.'}
+    ],
+    items:[
+      {label:'King Pillow Cases', qty:'990 pc / 2 wks', unit:'in 2,801 lb total'},
+      {label:'King Fitted Sheet', qty:'304 pc / 2 wks', unit:'in 2,801 lb total'},
+      {label:'Hotel Wash Cloths', qty:'295 pc / 2 wks', unit:'in 2,801 lb total'},
+      {label:'Hand Towels', qty:'316 pc / 2 wks', unit:'in 2,801 lb total'},
+      {label:'Hotel Bath Towels', qty:'515 pc / 2 wks', unit:'in 2,801 lb total'},
+      {label:'Bath Mats', qty:'250 pc / 2 wks', unit:'in 2,801 lb total'},
+      {label:'Blankets', qty:'29 pc / 2 wks', unit:'in 2,801 lb total'},
+      {label:'King Duvets', qty:'181 pc / 2 wks', unit:'in 2,801 lb total'},
+      {label:'Rental King Fitted Sheet', qty:'flat per invoice', unit:'$100/inv'}
+    ],
+    rec:'Use Mayflower as the negotiating benchmark in Mid-Atlantic RFP. Could expand Mayflower into White House and Philadelphia given existing strong contract. Document why this contract works to apply playbook elsewhere.',
+    save:'Benchmark vendor — protect, don\'t cut'
+  },
+  'midtown': {
+    name:'Roost Midtown', vendor:'Single Source Plus', vendorLoc:'Bellmawr, NJ',
+    spend:70035, rooms:7976, cpr:8.78, share:10,
+    contract:'$0.80/lb + $3/pc duvet/blanket/insert + $300–$375 flat delivery + 8% sales tax',
+    terms:'Net 15',
+    monthly:[3672.77,6920.81,6658.83,6835.64,6043.08,4278.74,6247.71,5693.37,4264.61,7160.53,5226.93,7031.57],
+    invoices:[
+      {n:'9781', d:'2026-04-27', total:796.58, key:'436 lb · 369 itemized pieces · $300 delivery'},
+      {n:'9820', d:'2026-05-04', total:1027.10, key:'541 lb · 547 itemized pieces · $375 delivery'}
+    ],
+    flags:[
+      {sev:'bad', t:'$8.78/room is the portfolio HIGH — 54% above average', d:'Small property (8K rooms) hit hard by $300–375 flat delivery fee. The fixed-cost structure dominates per-room economics at this volume.'},
+      {sev:'bad', t:'$0.80/lb tied with East Market for highest in portfolio', d:'Same SS Plus contract as East Market. Combined Phila volume is $169K/yr — meaningful leverage that hasn\'t been exercised.'},
+      {sev:'warn', t:'Delivery fee inconsistency: $300 vs $375', d:'Inv 9781 charged $300, Inv 9820 charged $375. Get clarity on what triggers the higher rate.'}
+    ],
+    items:[
+      {label:'Bath Towel', qty:'189 pc / 2 wks', unit:'$0.80/lb'},
+      {label:'Hand Towel', qty:'107 pc / 2 wks', unit:'$0.80/lb'},
+      {label:'Wash Cloth', qty:'141 pc / 2 wks', unit:'$0.80/lb'},
+      {label:'Bath Mat', qty:'81 pc / 2 wks', unit:'$0.80/lb'},
+      {label:'Pillowcase King', qty:'279 pc / 2 wks', unit:'$0.80/lb'},
+      {label:'Fitted Sheet King', qty:'82 pc / 2 wks', unit:'$0.80/lb'},
+      {label:'Duvet King', qty:'91 pc / 2 wks', unit:'$3.00'},
+      {label:'Duvet Insert', qty:'2 pc / 2 wks', unit:'$3.00'},
+      {label:'Blanket', qty:'1 pc / 2 wks', unit:'$3.00'}
+    ],
+    rec:'Combined RFP with East Market — target $0.65/lb and $200 flat delivery. Or move to a regional Mid-Atlantic vendor (Mayflower or Pinnacle).',
+    save:'$15K – $20K / yr (paired with EM)'
+  },
+  'whitehouse': {
+    name:'ROOST White House', vendor:'Pinnacle Linens, LLC', vendorLoc:'Forestville, MD',
+    spend:15413, rooms:3192, cpr:4.83, share:2,
+    contract:'$0.65/lb pure per-pound + $50 flat delivery + ~6% sales tax · 5%/month late fee on overdue invoices',
+    terms:'Net 30',
+    monthly:[0,0,0,0,0,0,258.79,3410.86,2889.97,2211.39,3299.77,3341.84],
+    invoices:[
+      {n:'L3596', d:'2026-04-03', total:608.09, key:'2 deliveries · 810 lb · 669 itemized pieces · $50 delivery'},
+      {n:'L3607', d:'2026-04-10', total:692.15, key:'4 deliveries · 932 lb · 641 itemized pieces · $50 delivery'}
+    ],
+    flags:[
+      {sev:'good', t:'Cleanest contract in the portfolio', d:'Pure $0.65/lb · $50 flat delivery · ~6% tax. No per-piece specialty charges (so no $15 duvet trap), no rush surcharges, no hidden minimums.'},
+      {sev:'good', t:'Itemized packing slips per delivery', d:'Every delivery shows piece-by-piece breakdown across 7 SKUs (Bath Towel, Hand Towel, Wash Towel, Bath Mat, Flat Sheet, Duvet Cover, Pillow Case).'},
+      {sev:'neutral', t:'New property — partial-year ramp', d:'Opened Sept 2025. T12 spend of $15K is partial. Worth re-baselining at full annual run-rate.'},
+      {sev:'warn', t:'5% monthly late fee clause', d:'Annualized at 60% on overdue invoices — punitive. Push for net 30 with no late fee.'}
+    ],
+    items:[
+      {label:'Bath Towel', qty:'310 pc / 2 wks', unit:'in 1,742 lb'},
+      {label:'Hand Towel', qty:'113 pc / 2 wks', unit:'in 1,742 lb'},
+      {label:'Wash Towel', qty:'168 pc / 2 wks', unit:'in 1,742 lb'},
+      {label:'Bath Mat', qty:'99 pc / 2 wks', unit:'in 1,742 lb'},
+      {label:'Flat Sheet', qty:'122 pc / 2 wks', unit:'in 1,742 lb'},
+      {label:'Duvet Cover', qty:'75 pc / 2 wks', unit:'in 1,742 lb'},
+      {label:'Pillow Case', qty:'423 pc / 2 wks', unit:'in 1,742 lb'}
+    ],
+    rec:'Use Pinnacle as the regional incumbent for Mid-Atlantic RFP — they could absorb Phila + Baltimore. Push for late-fee removal.',
+    save:'Benchmark vendor — expand footprint'
+  }
+};
+
+function renderPropertyDetail(key){
+  const p = PROPERTY_DETAIL[key];
+  if (!p) return;
+  const sevPill = (s) => s==='good' ? 'good' : s==='bad' ? 'bad' : s==='warn' ? 'warn' : 'neutral';
+  const sevLabel = (s) => s==='good' ? 'Strength' : s==='bad' ? 'Risk' : s==='warn' ? 'Watch' : 'Note';
+  const flagsHtml = p.flags.map(f => `
+    <div style="background:var(--cream);border:1px solid var(--grey);border-radius:6px;padding:.95rem 1.1rem;margin-bottom:.65rem;display:flex;gap:.85rem;align-items:flex-start">
+      <span class="pill ${sevPill(f.sev)}" style="flex-shrink:0;margin-top:.15rem">${sevLabel(f.sev)}</span>
+      <div><div style="font-weight:600;color:var(--slate);margin-bottom:.25rem">${f.t}</div><div style="font-size:.78rem;color:var(--royal);line-height:1.55">${f.d}</div></div>
+    </div>
+  `).join('');
+  const itemsHtml = p.items.map(i => `
+    <tr><td><strong>${i.label}</strong></td><td class="num" style="color:var(--royal)">${i.qty}</td><td class="num">${i.unit}</td></tr>
+  `).join('');
+  const invHtml = p.invoices.map(inv => `
+    <tr><td><strong>${inv.n}</strong></td><td>${inv.d}</td><td style="font-size:.75rem;color:var(--royal)">${inv.key}</td><td class="num"><strong>${fmtUSD0(inv.total)}</strong></td></tr>
+  `).join('');
+
+  const view = document.getElementById('view-property-' + key);
+  view.innerHTML = `
+    <div class="page-header">
+      <div>
+        <div class="eyebrow">Property Drill-Down · T12 Apr 2025 – Mar 2026</div>
+        <h1>${p.name}</h1>
+      </div>
+      <div class="meta">
+        <div class="period-badge">${p.vendor}</div>
+        <div class="period-badge">${p.share}% of Portfolio</div>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-label">Annual Spend</div><div class="kpi-value">${fmtUSDk(p.spend)}</div><div class="kpi-sub">T12 trailing</div></div>
+      <div class="kpi"><div class="kpi-label">Occupied Rooms</div><div class="kpi-value">${p.rooms.toLocaleString()}</div><div class="kpi-sub">T12 room-nights</div></div>
+      <div class="kpi"><div class="kpi-label">$/Occupied Room</div><div class="kpi-value">$${p.cpr.toFixed(2)}</div><div class="kpi-sub">Portfolio avg $5.69</div></div>
+      <div class="kpi"><div class="kpi-label">Vendor</div><div class="kpi-value" style="font-size:1.15rem;line-height:1.2">${p.vendor}</div><div class="kpi-sub">${p.vendorLoc}</div></div>
+      <div class="kpi opportunity"><div class="kpi-label">Savings Lever</div><div class="kpi-value" style="font-size:1.15rem;line-height:1.2">${p.save}</div><div class="kpi-sub">Modeled</div></div>
+    </div>
+
+    <div class="callout">
+      <strong>Contract:</strong> ${p.contract} · <strong>Terms:</strong> ${p.terms}
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Monthly Spend Trend</div><div class="card-badge">T12</div></div>
+        <div class="chart-container"><canvas id="trend-${key}"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Strengths · Risks · Watch Items</div></div>
+        ${flagsHtml}
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:1rem">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Items Processed (Last 2 Weeks)</div></div>
+        <table class="data-table">
+          <thead><tr><th>Item</th><th class="num">Volume</th><th class="num">Rate</th></tr></thead>
+          <tbody>${itemsHtml}</tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Sample Invoices Reviewed</div></div>
+        <table class="data-table">
+          <thead><tr><th>Inv #</th><th>Date</th><th>Detail</th><th class="num">Total</th></tr></thead>
+          <tbody>${invHtml}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;border-top:3px solid var(--turquoise)">
+      <div class="card-header"><div class="card-title" style="color:var(--turquoise)">Recommended Action</div><div class="card-badge">${p.save}</div></div>
+      <p style="font-size:.9rem;line-height:1.65;color:var(--slate);margin:0">${p.rec}</p>
+    </div>
+  `;
+
+  // Render trend chart for this property
+  setTimeout(() => {
+    const canvas = document.getElementById('trend-' + key);
+    if (!canvas) return;
+    if (window._charts['propTrend-' + key]) window._charts['propTrend-' + key].destroy();
+    const color = {'detroit':'#B5503F','tampa':'#C49156','eastmarket':'#7FC9D4','cleveland':'#405766','baltimore':'#5A8C6E','midtown':'#2BA6BB','whitehouse':'#BCC8BE'}[key];
+    window._charts['propTrend-' + key] = new Chart(canvas, {
+      type: 'line',
+      data: { labels: MONTHS, datasets: [{
+        label: p.name,
+        data: p.monthly,
+        borderColor: color,
+        backgroundColor: color + '33',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.3,
+        pointRadius: 3,
+        pointHoverRadius: 6,
+        pointBackgroundColor: color,
+      }] },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: c => fmtUSD0(c.parsed.y) } }
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: { grid: { color: BRAND.grid }, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } }
+        }
+      }
+    });
+  }, 0);
+}
+
+['detroit','tampa','eastmarket','cleveland','baltimore','midtown','whitehouse'].forEach(renderPropertyDetail);
+
+// =================== INIT ===================
+renderPropTable();
+renderSavingsTable();
+renderCprChart();
+renderSpendMixChart();
+renderTrendFilters();
+renderSpendBarChart();
+renderCprDeltaChart();
+renderPoundChart();
+renderSavingsChart();
+attachSort('propTable');
+</script>
+
+</body>
+</html>
