@@ -256959,7 +256959,7 @@
     "by_segment": []
   },
   "forecast": {
-    "as_of": "2026-05-04",
+    "as_of": "2026-05-06",
     "source": "helixo2_daily_forecasts.ai_suggested_revenue",
     "daily": [
       {
@@ -257304,9 +257304,58 @@
         "guests": 147,
         "orders": null,
         "ai_confidence": 0.95
+      },
+      {
+        "date": "2026-05-11",
+        "net_sales": 11150.0,
+        "guests": 132,
+        "orders": null,
+        "ai_confidence": 0.93
+      },
+      {
+        "date": "2026-05-12",
+        "net_sales": 12500.0,
+        "guests": 137,
+        "orders": null,
+        "ai_confidence": 0.95
+      },
+      {
+        "date": "2026-05-13",
+        "net_sales": 14350.0,
+        "guests": 145,
+        "orders": null,
+        "ai_confidence": 0.95
+      },
+      {
+        "date": "2026-05-14",
+        "net_sales": 13500.0,
+        "guests": 133,
+        "orders": null,
+        "ai_confidence": 0.95
+      },
+      {
+        "date": "2026-05-15",
+        "net_sales": 21100.0,
+        "guests": 223,
+        "orders": null,
+        "ai_confidence": 0.95
+      },
+      {
+        "date": "2026-05-16",
+        "net_sales": 18500.0,
+        "guests": 235,
+        "orders": null,
+        "ai_confidence": 0.95
+      },
+      {
+        "date": "2026-05-17",
+        "net_sales": 10350.0,
+        "guests": 130,
+        "orders": null,
+        "ai_confidence": 0.95
       }
     ],
-    "_note": "range 2026-03-23 → 2026-05-10 · 49 days · ai_suggested_revenue (NOT manager_revenue)"
+    "_note": "range 2026-03-23 → 2026-05-17 · 56 days · ai_suggested_revenue (NOT manager_revenue)"
   },
   "budget": {
     "as_of": "2026-05-05",
@@ -264060,6 +264109,13 @@
       "rows_in": 1595,
       "rows_valid": 0,
       "rows_invalid": 1595,
+      "rows_warned": 0
+    },
+    "helixo2_forecast": {
+      "ran_at": "2026-05-06T15:28:10+00:00",
+      "rows_in": 56,
+      "rows_valid": 56,
+      "rows_invalid": 0,
       "rows_warned": 0
     }
   }
