@@ -75181,9 +75181,9 @@
     "total_cost": 137827.44
   },
   "cogs": {
-    "as_of": "2026-05-01",
+    "as_of": "2026-05-07",
     "source": "marginedge_api",
-    "lookback_days": 120,
+    "lookback_days": 90,
     "with_line_items": true,
     "invoices": [
       {
@@ -88996,7 +88996,7 @@
         "vendor_id": "1358",
         "vendor_name": "NY Mutual Trading, Inc.",
         "total": 460.59,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "640390542",
@@ -89051,7 +89051,7 @@
         "vendor_id": "21823",
         "vendor_name": "Samuels & Son Seafood Co.",
         "total": 230.34,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "642183795",
@@ -89089,13 +89089,178 @@
         ]
       },
       {
+        "invoice_id": "4996007",
+        "invoice_number": "444221",
+        "date": "2026-04-28",
+        "vendor_id": "1387",
+        "vendor_name": "Yama Seafood, Inc.",
+        "total": 256.2,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "640770554",
+            "product_name": "Mitsuba (Jr Parsley) - Farmed",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 5.0,
+            "unit_price": 1.95,
+            "extended": 9.75
+          },
+          {
+            "product_id": "640773837",
+            "product_name": "Oba (perilla)- Farmed (pk)",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.95,
+            "extended": 11.95
+          },
+          {
+            "product_id": "1111339200",
+            "product_name": "Frz Shrimp Spot prawn-Botan Ebi-L-(CS) Wild From Canada",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 79.0,
+            "extended": 158.0
+          },
+          {
+            "product_id": "639792603",
+            "product_name": "Japanese Cucumber-Farmed (LB) CA",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 6.5,
+            "extended": 65.0
+          },
+          {
+            "product_id": "969111652",
+            "product_name": "Frz Shrimp Peeled --Muki Ebi 41/50 P&D - 2lbs/pk",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 5.75,
+            "extended": 11.5
+          }
+        ]
+      },
+      {
+        "invoice_id": "5008954",
+        "invoice_number": "2384623",
+        "date": "2026-04-28",
+        "vendor_id": "35407",
+        "vendor_name": "Pennsylvania Liquor Control Board (PLCB)",
+        "total": 1247.24,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "887738984",
+            "product_name": "Nanbu Bijin Sake Tokubetsu Junmai",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 3.0,
+            "unit_price": 30.69,
+            "extended": 92.07
+          },
+          {
+            "product_id": "1015215435",
+            "product_name": "Hakkaisan Tokubetsu 720ML Junmai Sake",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 22.59,
+            "extended": 135.54
+          },
+          {
+            "product_id": "670495545",
+            "product_name": "Tengumai 50 Junmai Dagingo Sake",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 3.0,
+            "unit_price": 27.09,
+            "extended": 81.27
+          },
+          {
+            "product_id": "689516173",
+            "product_name": "Asahi Brewery Kubota Senju Ginjo Sake",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 25.79,
+            "extended": 154.74
+          },
+          {
+            "product_id": "952504756",
+            "product_name": "Niwa No Uguisu 60 Junmai Ginjo Sake",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 25.19,
+            "extended": 151.14
+          },
+          {
+            "product_id": "952504756",
+            "product_name": "Niwa No Uguisu Usu Nigori Junmai Ginjo Sake",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 34.59,
+            "extended": 207.54
+          },
+          {
+            "product_id": "893521953",
+            "product_name": "Nanbu Bijin Shinpaku Junmai Daiginjo Sake",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 3.0,
+            "unit_price": 38.09,
+            "extended": 114.27
+          },
+          {
+            "product_id": "952505054",
+            "product_name": "Noguchi Kanagaso Junmai Daiginjo Sake",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 31.99,
+            "extended": 191.94
+          }
+        ]
+      },
+      {
         "invoice_id": "4990892",
         "invoice_number": "5850610",
         "date": "2026-04-29",
         "vendor_id": "1358",
         "vendor_name": "NY Mutual Trading, Inc.",
         "total": 131.4,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "639790878",
@@ -89161,7 +89326,7 @@
         "vendor_id": "1358",
         "vendor_name": "NY Mutual Trading, Inc.",
         "total": 664.4,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "681845981",
@@ -89227,7 +89392,7 @@
         "vendor_id": "1358",
         "vendor_name": "NY Mutual Trading, Inc.",
         "total": 465.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "749169672",
@@ -89331,6 +89496,83 @@
         ]
       },
       {
+        "invoice_id": "5008958",
+        "invoice_number": "2385996",
+        "date": "2026-04-29",
+        "vendor_id": "35407",
+        "vendor_name": "Pennsylvania Liquor Control Board (PLCB)",
+        "total": 772.13,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1036560491",
+            "product_name": "Domaine De Bel Air Pouilly 750ML Fume",
+            "category": "Wine",
+            "category_id": "1084",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 24.39,
+            "extended": 146.34
+          },
+          {
+            "product_id": "905063741",
+            "product_name": "Tears Of Dawn Daiginjo Shu",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 3.0,
+            "unit_price": 38.29,
+            "extended": 114.87
+          },
+          {
+            "product_id": "905062451",
+            "product_name": "Kawatsuru Crane of Paradise Junmai",
+            "category": "Sake",
+            "category_id": "1070",
+            "category_type": null,
+            "cogs_bucket": "wine",
+            "quantity": 3.0,
+            "unit_price": 32.79,
+            "extended": 98.37
+          },
+          {
+            "product_id": "926306869",
+            "product_name": "Le Chai Duchet Macon Villages 2018",
+            "category": "Wine",
+            "category_id": "1084",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 20.89,
+            "extended": 125.34
+          },
+          {
+            "product_id": "909628987",
+            "product_name": "Laurent Perrier Brut 2008",
+            "category": "Wine",
+            "category_id": "1084",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 3.0,
+            "unit_price": 40.69,
+            "extended": 122.07
+          },
+          {
+            "product_id": "1128729083",
+            "product_name": "Domaine Dyckerhoff Reuilly Petit Gris 2020",
+            "category": "Wine",
+            "category_id": "1084",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 18.99,
+            "extended": 113.94
+          }
+        ]
+      },
+      {
         "invoice_id": "4991476",
         "invoice_number": "0761753",
         "date": "2026-04-30",
@@ -89416,24 +89658,169 @@
         "line_items": []
       },
       {
-        "invoice_id": "4996007",
-        "invoice_number": null,
-        "date": "2026-04-30",
-        "vendor_id": "0",
-        "vendor_name": null,
-        "total": 0.0,
-        "status": "PREPROCESSING",
-        "line_items": []
-      },
-      {
         "invoice_id": "4996010",
-        "invoice_number": null,
+        "invoice_number": "444938",
         "date": "2026-04-30",
-        "vendor_id": "0",
-        "vendor_name": null,
-        "total": 0.0,
-        "status": "PREPROCESSING",
-        "line_items": []
+        "vendor_id": "1387",
+        "vendor_name": "Yama Seafood, Inc.",
+        "total": 1044.71,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "705153534",
+            "product_name": "Kaiware (White Radish Sprouts)",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 1.75,
+            "extended": 5.25
+          },
+          {
+            "product_id": "642197645",
+            "product_name": "Japanese Wasabi Roots-Wild Japam",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 0.43,
+            "unit_price": 150.0,
+            "extended": 64.5
+          },
+          {
+            "product_id": "661656557",
+            "product_name": "Spanish Mackerel-Wild-(LB) NC",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.5,
+            "unit_price": 9.0,
+            "extended": 40.5
+          },
+          {
+            "product_id": "675011581",
+            "product_name": "Tile Fish Wild (LB) NN",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.9,
+            "unit_price": 9.5,
+            "extended": 65.55
+          },
+          {
+            "product_id": "646030069",
+            "product_name": "Akayagara-Wild-(Lb)-Chiba",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.75,
+            "unit_price": 25.0,
+            "extended": 93.75
+          },
+          {
+            "product_id": "1089100939",
+            "product_name": "Kanimiso",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 14.5,
+            "extended": 29.0
+          },
+          {
+            "product_id": "745765248",
+            "product_name": "Fresh Kanpachi Whole - Farmed - (Lb) **Kouchi",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 9.04,
+            "unit_price": 19.5,
+            "extended": 176.28
+          },
+          {
+            "product_id": "641872598",
+            "product_name": "Madai-Farmed (LB) Ehime",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 5.95,
+            "unit_price": 13.5,
+            "extended": 80.33
+          },
+          {
+            "product_id": "640771815",
+            "product_name": "Mozuku (Pk)",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 25.5,
+            "extended": 25.5
+          },
+          {
+            "product_id": "645271887",
+            "product_name": "Sashimi Kurage",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 22.5,
+            "extended": 22.5
+          },
+          {
+            "product_id": "640780460",
+            "product_name": "8-J SEO: Sengyo Other",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 23.5,
+            "extended": 23.5
+          },
+          {
+            "product_id": "1145097754",
+            "product_name": "Shirasu OKizuke-Wild-(PK)",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 22.5,
+            "extended": 22.5
+          },
+          {
+            "product_id": "639793291",
+            "product_name": "Ogawa Uni 250 Hokkaido",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 125.0,
+            "extended": 250.0
+          },
+          {
+            "product_id": "681676764",
+            "product_name": "Tsumu Buri Wild",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 9.39,
+            "unit_price": 15.5,
+            "extended": 145.55
+          }
+        ]
       },
       {
         "invoice_id": "5008928",
@@ -89465,6 +89852,358 @@
             "quantity": 5.0,
             "unit_price": 9.99,
             "extended": 49.95
+          }
+        ]
+      },
+      {
+        "invoice_id": "5125869",
+        "invoice_number": "41668",
+        "date": "2026-05-04",
+        "vendor_id": "2540322",
+        "vendor_name": "ShiftNote",
+        "total": 40.8,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "834672185",
+            "product_name": "LogBook -Daily Log- ShiftNote",
+            "category": "Dues & Subscriptions",
+            "category_id": "1034",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 40.8,
+            "extended": 40.8
+          }
+        ]
+      },
+      {
+        "invoice_id": "5126258",
+        "invoice_number": "5856464",
+        "date": "2026-05-06",
+        "vendor_id": "1358",
+        "vendor_name": "NY Mutual Trading, Inc.",
+        "total": 1084.69,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "681675718",
+            "product_name": "Bubu Arare Plain",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 6.25,
+            "extended": 6.25
+          },
+          {
+            "product_id": "24186",
+            "product_name": "Soy Bean Salad Oil",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 45.0,
+            "extended": 45.0
+          },
+          {
+            "product_id": "90231",
+            "product_name": "Seal Wrap Food Film 18\"",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 22.0,
+            "extended": 22.0
+          },
+          {
+            "product_id": "659998295",
+            "product_name": "Kinsho Rice Vinegar Yokoi",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 14.0,
+            "extended": 28.0
+          },
+          {
+            "product_id": "650366713",
+            "product_name": "Yokoi Kohaku",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 41.2,
+            "extended": 41.2
+          },
+          {
+            "product_id": "1124335317",
+            "product_name": "Monaka Kikuka",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 27.5,
+            "extended": 55.0
+          },
+          {
+            "product_id": "639796702",
+            "product_name": "San On Tou (Soft Brown Sugar)",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 5.0,
+            "unit_price": 4.0,
+            "extended": 20.0
+          },
+          {
+            "product_id": "674455328",
+            "product_name": "Hakata No Yaki Shiq",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 4.8,
+            "extended": 14.4
+          },
+          {
+            "product_id": "645279921",
+            "product_name": "24oz Mizkan Ajipon Pet Price Level 01 34054 12/24floz",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 6.0,
+            "extended": 6.0
+          },
+          {
+            "product_id": "645281097",
+            "product_name": "Cup Yude Azuki, Imuraya",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 2.8,
+            "extended": 8.4
+          },
+          {
+            "product_id": "674453882",
+            "product_name": "Kuri Kanroni (M) ,Omori",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 34.0,
+            "extended": 34.0
+          },
+          {
+            "product_id": "639785239",
+            "product_name": "Hajikami 50 (niitakaya)",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 28.0,
+            "extended": 56.0
+          },
+          {
+            "product_id": "645280574",
+            "product_name": "Yuzu Kosho AO, Ocean Foods",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.85,
+            "extended": 7.7
+          },
+          {
+            "product_id": "655353406",
+            "product_name": "Whole Ginger In sweet Vinegar",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 48.0,
+            "extended": 48.0
+          },
+          {
+            "product_id": "1138030276",
+            "product_name": "F-Kinu Atsuage Tofu Fried Tofu",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 9.5,
+            "extended": 9.5
+          },
+          {
+            "product_id": "681867539",
+            "product_name": "++F A5 Virgin Ribeye Cap Off",
+            "category": "Meat & Poultry",
+            "category_id": "1055",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 8.37,
+            "unit_price": 60.0,
+            "extended": 502.2
+          },
+          {
+            "product_id": "1103920812",
+            "product_name": "Kokei Nenryo Nichinen 10g",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 150.0,
+            "extended": 150.0
+          },
+          {
+            "product_id": "909634646",
+            "product_name": "Magu Roll Paper 70 Sheets Roll",
+            "category": "Paper Costs",
+            "category_id": "1059",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 8.0,
+            "extended": 16.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "5126312",
+        "invoice_number": "5855657",
+        "date": "2026-05-06",
+        "vendor_id": "1358",
+        "vendor_name": "NY Mutual Trading, Inc.",
+        "total": 504.92,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "640767908",
+            "product_name": "Splendid Alfonsino Kinmedai",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.19,
+            "unit_price": 23.8,
+            "extended": 99.72
+          },
+          {
+            "product_id": "661656557",
+            "product_name": "Horse Mackerel (Ma-aji)",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.75,
+            "unit_price": 23.9,
+            "extended": 89.63
+          },
+          {
+            "product_id": "726465035",
+            "product_name": "Rosy Seabass (Nodoguro)",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.11,
+            "unit_price": 68.8,
+            "extended": 76.37
+          },
+          {
+            "product_id": "640772264",
+            "product_name": "Raw Shucked Scallop",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 69.8,
+            "extended": 139.6
+          },
+          {
+            "product_id": "681889828",
+            "product_name": "Snow Crab (Zuwai-Kani) Flakes",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 24.9,
+            "extended": 99.6
+          }
+        ]
+      },
+      {
+        "invoice_id": "5126476",
+        "invoice_number": null,
+        "date": "2026-05-07",
+        "vendor_id": "0",
+        "vendor_name": null,
+        "total": 0.0,
+        "status": "PREPROCESSING",
+        "line_items": [
+          {
+            "product_id": "1029088920",
+            "product_name": "Cotton Polish Nap",
+            "category": "Laundry & Dry Cleaning",
+            "category_id": "1051",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 50.0,
+            "unit_price": 0.15,
+            "extended": 7.5
+          },
+          {
+            "product_id": "1035663404",
+            "product_name": "Sushi Napkin",
+            "category": "Laundry & Dry Cleaning",
+            "category_id": "1051",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 200.0,
+            "unit_price": 0.4,
+            "extended": 80.0
+          },
+          {
+            "product_id": "1029543282",
+            "product_name": "Rishi Washcloths",
+            "category": "Laundry & Dry Cleaning",
+            "category_id": "1051",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 30.0,
+            "extended": 30.0
+          },
+          {
+            "product_id": "1029088918",
+            "product_name": "Bar Mop",
+            "category": "Laundry & Dry Cleaning",
+            "category_id": "1051",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 22.0,
+            "extended": 22.0
           }
         ]
       }
@@ -90258,8 +90997,8 @@
             "total": 76.0
           }
         ],
-        "cogs_pct_revenue": 0.0767,
-        "cogs_only_pct_revenue": 0.033
+        "cogs_pct_revenue": 0.0987,
+        "cogs_only_pct_revenue": 0.0426
       },
       {
         "week_start": "2026-01-05",
@@ -90299,8 +91038,8 @@
             "total": 45.0
           }
         ],
-        "cogs_pct_revenue": 0.2791,
-        "cogs_only_pct_revenue": 0.269
+        "cogs_pct_revenue": 0.2658,
+        "cogs_only_pct_revenue": 0.2562
       },
       {
         "week_start": "2026-01-12",
@@ -90349,8 +91088,8 @@
             "total": 580.54
           }
         ],
-        "cogs_pct_revenue": 0.5979,
-        "cogs_only_pct_revenue": 0.4627
+        "cogs_pct_revenue": 0.5286,
+        "cogs_only_pct_revenue": 0.409
       },
       {
         "week_start": "2026-01-19",
@@ -90398,8 +91137,8 @@
             "total": 438.59
           }
         ],
-        "cogs_pct_revenue": 0.4564,
-        "cogs_only_pct_revenue": 0.3635
+        "cogs_pct_revenue": 0.5824,
+        "cogs_only_pct_revenue": 0.4639
       },
       {
         "week_start": "2026-01-26",
@@ -90449,8 +91188,8 @@
             "total": 653.78
           }
         ],
-        "cogs_pct_revenue": 0.51,
-        "cogs_only_pct_revenue": 0.4106
+        "cogs_pct_revenue": 0.4428,
+        "cogs_only_pct_revenue": 0.3565
       },
       {
         "week_start": "2026-02-02",
@@ -90495,8 +91234,8 @@
             "total": 335.64
           }
         ],
-        "cogs_pct_revenue": 0.5392,
-        "cogs_only_pct_revenue": 0.4412
+        "cogs_pct_revenue": 0.5715,
+        "cogs_only_pct_revenue": 0.4676
       },
       {
         "week_start": "2026-02-09",
@@ -90542,8 +91281,8 @@
             "total": 182.52
           }
         ],
-        "cogs_pct_revenue": 0.2222,
-        "cogs_only_pct_revenue": 0.2005
+        "cogs_pct_revenue": 0.1747,
+        "cogs_only_pct_revenue": 0.1576
       },
       {
         "week_start": "2026-02-16",
@@ -90590,8 +91329,8 @@
             "total": 221.17
           }
         ],
-        "cogs_pct_revenue": 0.2387,
-        "cogs_only_pct_revenue": 0.2292
+        "cogs_pct_revenue": 0.2943,
+        "cogs_only_pct_revenue": 0.2827
       },
       {
         "week_start": "2026-02-23",
@@ -90638,8 +91377,8 @@
             "total": 304.84
           }
         ],
-        "cogs_pct_revenue": 0.4646,
-        "cogs_only_pct_revenue": 0.3983
+        "cogs_pct_revenue": 0.4814,
+        "cogs_only_pct_revenue": 0.4128
       },
       {
         "week_start": "2026-03-02",
@@ -90692,8 +91431,8 @@
             "total": 353.37
           }
         ],
-        "cogs_pct_revenue": 0.5304,
-        "cogs_only_pct_revenue": 0.4353
+        "cogs_pct_revenue": 0.5874,
+        "cogs_only_pct_revenue": 0.4821
       },
       {
         "week_start": "2026-03-09",
@@ -90742,8 +91481,8 @@
             "total": 210.42
           }
         ],
-        "cogs_pct_revenue": 0.5527,
-        "cogs_only_pct_revenue": 0.5212
+        "cogs_pct_revenue": 0.5552,
+        "cogs_only_pct_revenue": 0.5236
       },
       {
         "week_start": "2026-03-16",
@@ -90785,8 +91524,8 @@
             "total": 150.66
           }
         ],
-        "cogs_pct_revenue": 0.3856,
-        "cogs_only_pct_revenue": 0.3113
+        "cogs_pct_revenue": 0.3855,
+        "cogs_only_pct_revenue": 0.3112
       },
       {
         "week_start": "2026-03-23",
@@ -90829,8 +91568,8 @@
             "total": 261.77
           }
         ],
-        "cogs_pct_revenue": 0.5879,
-        "cogs_only_pct_revenue": 0.4118
+        "cogs_pct_revenue": 0.6092,
+        "cogs_only_pct_revenue": 0.4267
       },
       {
         "week_start": "2026-03-30",
@@ -90881,7 +91620,7 @@
       },
       {
         "week_start": "2026-04-06",
-        "total_cogs": 1502.29,
+        "total_cogs": 191.46,
         "cogs_only_total": 0.0,
         "by_category": {
           "Dues & Subscriptions": 40.8,
@@ -90889,10 +91628,6 @@
         },
         "by_cogs_type": {},
         "by_vendor_top5": [
-          {
-            "vendor": "Rocket One Stop Office",
-            "total": 1310.83
-          },
           {
             "vendor": "Arway Linen & Uniform Rental Service",
             "total": 150.66
@@ -90902,7 +91637,7 @@
             "total": 40.8
           }
         ],
-        "cogs_pct_revenue": 0.131,
+        "cogs_pct_revenue": 0.0167,
         "cogs_only_pct_revenue": 0.0
       },
       {
@@ -90943,8 +91678,8 @@
             "total": 150.66
           }
         ],
-        "cogs_pct_revenue": 0.2899,
-        "cogs_only_pct_revenue": 0.2329
+        "cogs_pct_revenue": 0.2752,
+        "cogs_only_pct_revenue": 0.2211
       },
       {
         "week_start": "2026-04-20",
@@ -90974,33 +91709,42 @@
             "total": 150.66
           }
         ],
-        "cogs_pct_revenue": 0.1551,
-        "cogs_only_pct_revenue": 0.1477
+        "cogs_pct_revenue": 0.1604,
+        "cogs_only_pct_revenue": 0.1528
       },
       {
         "week_start": "2026-04-27",
-        "total_cogs": 3857.49,
-        "cogs_only_total": 1606.33,
+        "total_cogs": 7177.77,
+        "cogs_only_total": 4756.68,
         "by_category": {
-          "Produce": 107.88,
+          "Produce": 264.33,
           "Dairy": 116.96,
-          "Grocery & Dry Goods": 175.8,
-          "Seafood": 583.55,
+          "Seafood": 1702.51,
+          "Sake": 1341.75,
+          "Grocery & Dry Goods": 201.3,
           "Meat & Poultry": 502.2,
           "Repairs and Maintenance": 2095.0,
+          "Wine": 557.64,
           "Laundry & Dry Cleaning": 139.5,
-          "Liquor": 69.99,
-          "Wine": 49.95
+          "Liquor": 69.99
         },
         "by_cogs_type": {
-          "food": 1486.39,
-          "liquor": 69.99,
-          "wine": 49.95
+          "food": 2787.3,
+          "wine": 1899.39,
+          "liquor": 69.99
         },
         "by_vendor_top5": [
           {
             "vendor": "Logan Plumbing & Heating",
             "total": 2095.0
+          },
+          {
+            "vendor": "Pennsylvania Liquor Control Board (PLCB)",
+            "total": 2019.37
+          },
+          {
+            "vendor": "Yama Seafood, Inc.",
+            "total": 1300.91
           },
           {
             "vendor": "NY Mutual Trading, Inc.",
@@ -91009,16 +91753,10 @@
           {
             "vendor": "Samuels & Son Seafood Co.",
             "total": 230.34
-          },
-          {
-            "vendor": "Arway Linen & Uniform Rental Service",
-            "total": 150.66
-          },
-          {
-            "vendor": "Method Hospitality- Internal Transfers",
-            "total": 119.94
           }
-        ]
+        ],
+        "cogs_pct_revenue": 0.6691,
+        "cogs_only_pct_revenue": 0.4434
       }
     ],
     "monthly_rollup": [
@@ -91060,8 +91798,8 @@
             "total": 34.98
           }
         ],
-        "cogs_pct_revenue": 0.0091,
-        "cogs_only_pct_revenue": 0.0057
+        "cogs_pct_revenue": 0.009,
+        "cogs_only_pct_revenue": 0.0056
       },
       {
         "month": "2026-01",
@@ -91116,8 +91854,8 @@
             "total": 1234.32
           }
         ],
-        "cogs_pct_revenue": 0.3882,
-        "cogs_only_pct_revenue": 0.3123
+        "cogs_pct_revenue": 0.4026,
+        "cogs_only_pct_revenue": 0.3238
       },
       {
         "month": "2026-02",
@@ -91173,8 +91911,8 @@
             "total": 1690.61
           }
         ],
-        "cogs_pct_revenue": 0.3762,
-        "cogs_only_pct_revenue": 0.3271
+        "cogs_pct_revenue": 0.3605,
+        "cogs_only_pct_revenue": 0.3135
       },
       {
         "month": "2026-03",
@@ -91232,31 +91970,32 @@
             "total": 929.37
           }
         ],
-        "cogs_pct_revenue": 0.4186,
-        "cogs_only_pct_revenue": 0.3422
+        "cogs_pct_revenue": 0.4941,
+        "cogs_only_pct_revenue": 0.4039
       },
       {
         "month": "2026-04",
-        "total_cogs": 17430.63,
-        "cogs_only_total": 12016.75,
+        "total_cogs": 19440.08,
+        "cogs_only_total": 15167.1,
         "by_category": {
-          "Seafood": 7743.16,
-          "Grocery & Dry Goods": 533.0,
+          "Seafood": 8862.12,
+          "Grocery & Dry Goods": 558.5,
           "Meat & Poultry": 2155.2,
           "Repairs and Maintenance": 3200.5,
-          "Produce": 964.57,
+          "Produce": 1121.02,
           "Keg Deposit/Refund": 150.0,
           "Dairy": 350.88,
           "Laundry & Dry Cleaning": 697.5,
           "Dues & Subscriptions": 40.8,
-          "Liquor": 69.99,
-          "Wine": 49.95
+          "Sake": 1341.75,
+          "Wine": 557.64,
+          "Liquor": 69.99
         },
         "by_cogs_type": {
-          "food": 11746.81,
+          "food": 13047.72,
           "beer": 150.0,
-          "liquor": 69.99,
-          "wine": 49.95
+          "wine": 1899.39,
+          "liquor": 69.99
         },
         "by_vendor_top5": [
           {
@@ -91265,23 +92004,23 @@
           },
           {
             "vendor": "Yama Seafood, Inc.",
-            "total": 3823.36
+            "total": 5124.27
           },
           {
             "vendor": "Logan Plumbing & Heating",
             "total": 2670.0
           },
           {
-            "vendor": "Rocket One Stop Office",
-            "total": 1310.83
+            "vendor": "Pennsylvania Liquor Control Board (PLCB)",
+            "total": 2019.37
           },
           {
             "vendor": "Arway Linen & Uniform Rental Service",
             "total": 753.3
           }
         ],
-        "cogs_pct_revenue": 0.338,
-        "cogs_only_pct_revenue": 0.233
+        "cogs_pct_revenue": 0.3717,
+        "cogs_only_pct_revenue": 0.29
       }
     ]
   },
@@ -97689,6 +98428,13 @@
       "rows_valid": 35,
       "rows_invalid": 0,
       "rows_warned": 0
+    },
+    "marginedge_invoice": {
+      "ran_at": "2026-05-07T17:15:03+00:00",
+      "rows_in": 165,
+      "rows_valid": 165,
+      "rows_invalid": 0,
+      "rows_warned": 74
     }
   }
 }

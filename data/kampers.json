@@ -131373,9 +131373,9 @@
     "total_cost": 426171.05
   },
   "cogs": {
-    "as_of": "2026-05-04",
+    "as_of": "2026-05-07",
     "source": "marginedge_api",
-    "lookback_days": 7,
+    "lookback_days": 90,
     "with_line_items": true,
     "invoices": [
       {
@@ -136229,7 +136229,7 @@
           },
           {
             "product_id": "698619763",
-            "product_name": "Spice Cajun Seasoning ",
+            "product_name": "Spice Cajun Seasoning",
             "category": "Grocery & Dry Goods",
             "category_id": "1057",
             "category_type": "FOOD",
@@ -136961,7 +136961,7 @@
         "line_items": [
           {
             "product_id": "693400429",
-            "product_name": "Buil And Gine 1/12 750 Ml Bottle ",
+            "product_name": "Buil And Gine 1/12 750 Ml Bottle",
             "category": "Wine",
             "category_id": "1146",
             "category_type": "WINE",
@@ -140249,7 +140249,7 @@
         "vendor_id": "467054",
         "vendor_name": "Veritas Distributors, Inc.",
         "total": 232.0,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -142426,7 +142426,7 @@
         "vendor_id": "467054",
         "vendor_name": "Veritas Distributors, Inc.",
         "total": 232.0,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -143747,6 +143747,28 @@
         ]
       },
       {
+        "invoice_id": "40168007",
+        "invoice_number": "METT_20260505_BB9VhFC",
+        "date": "2026-04-10",
+        "vendor_id": "32939",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -759.9,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "655377118",
+            "product_name": "Suze Saveur D'Autrefois Aperitif",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -30.0,
+            "unit_price": 25.33,
+            "extended": -759.9
+          }
+        ]
+      },
+      {
         "invoice_id": "39043882",
         "invoice_number": "METF_20260412_g3Ypno0",
         "date": "2026-04-11",
@@ -144257,6 +144279,281 @@
         ]
       },
       {
+        "invoice_id": "40008215",
+        "invoice_number": "METF_20260504_TpHUQK3",
+        "date": "2026-04-17",
+        "vendor_id": "32939",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": 3325.96,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "657992547",
+            "product_name": "Old Forester Bourbon",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 12.0,
+            "unit_price": 24.56,
+            "extended": 294.72
+          },
+          {
+            "product_id": "652322476",
+            "product_name": "Mathilde Cassis",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 19.5,
+            "extended": 58.5
+          },
+          {
+            "product_id": "641918013",
+            "product_name": "High West Double Rye",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 29.68,
+            "extended": 29.68
+          },
+          {
+            "product_id": "641915886",
+            "product_name": "Montenegro Amaro",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 46.62,
+            "extended": 46.62
+          },
+          {
+            "product_id": "675950196",
+            "product_name": "Plantation O.F.T.D Overproof Rum",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 162.78,
+            "extended": 488.34
+          },
+          {
+            "product_id": "641917577",
+            "product_name": "Grand Marnier",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 31.37,
+            "extended": 94.11
+          },
+          {
+            "product_id": "652319869",
+            "product_name": "El Tesoro Reposado Tequila",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 61.06,
+            "extended": 61.06
+          },
+          {
+            "product_id": "654107737",
+            "product_name": "Fernet Branca",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 33.92,
+            "extended": 33.92
+          },
+          {
+            "product_id": "682454958",
+            "product_name": "Whistlepig Piggyback Rye",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 42.37,
+            "extended": 42.37
+          },
+          {
+            "product_id": "641916837",
+            "product_name": "Citadelle Gin",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 22.05,
+            "extended": 132.3
+          },
+          {
+            "product_id": "699688475",
+            "product_name": "Bacardi Superior Rum",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 16.11,
+            "extended": 48.33
+          },
+          {
+            "product_id": "641913896",
+            "product_name": "Tito's Vodka",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 12.0,
+            "unit_price": 23.74,
+            "extended": 284.88
+          },
+          {
+            "product_id": "641913732",
+            "product_name": "Ketel One Vodka",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 22.89,
+            "extended": 137.34
+          },
+          {
+            "product_id": "699689716",
+            "product_name": "Giffard Creme de Peche",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 24.56,
+            "extended": 73.68
+          },
+          {
+            "product_id": "818249711",
+            "product_name": "Convite Mezcal Esencial",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 25.44,
+            "extended": 152.64
+          },
+          {
+            "product_id": "641916005",
+            "product_name": "Aperol Aperitivo",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 27.8681,
+            "extended": 167.2086
+          },
+          {
+            "product_id": "639800087",
+            "product_name": "Roku Gin",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 30.5,
+            "extended": 183.0
+          },
+          {
+            "product_id": "729780333",
+            "product_name": "Corazon Reposado Tequila",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 22.05,
+            "extended": 132.3
+          },
+          {
+            "product_id": "668150991",
+            "product_name": "Giffard Elderflower Liqueur",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 29.68,
+            "extended": 178.08
+          },
+          {
+            "product_id": "655377118",
+            "product_name": "Suze Saveur D'Autrefois Aperitif",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 25.33,
+            "extended": 75.99
+          },
+          {
+            "product_id": "655374520",
+            "product_name": "Caffo Maraschino Liqueur",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 19.61,
+            "extended": 117.66
+          },
+          {
+            "product_id": "652321828",
+            "product_name": "Mahon Gin",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 6.0,
+            "unit_price": 33.92,
+            "extended": 203.52
+          },
+          {
+            "product_id": "654107970",
+            "product_name": "Lazzaroni Amaretto",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 21.2,
+            "extended": 63.6
+          },
+          {
+            "product_id": "641913932",
+            "product_name": "Woodford Reserve Bourbon",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 75.3704,
+            "extended": 226.1112
+          }
+        ]
+      },
+      {
         "invoice_id": "39046951",
         "invoice_number": "METT_20260418_CXqJa7N",
         "date": "2026-04-18",
@@ -144459,7 +144756,7 @@
           },
           {
             "product_id": "693400429",
-            "product_name": "Buil And Gine 1/12 750 Ml Bottle ",
+            "product_name": "Buil And Gine 1/12 750 Ml Bottle",
             "category": "Wine",
             "category_id": "1146",
             "category_type": "WINE",
@@ -144673,7 +144970,7 @@
         "vendor_id": "26208",
         "vendor_name": "Fortune Fish & Gourmet",
         "total": 883.78,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "798024781",
@@ -144706,7 +145003,7 @@
         "vendor_id": "26187",
         "vendor_name": "(Preferred Produce) Frog Holler Produce",
         "total": 178.1,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "640734311",
@@ -144806,6 +145103,94 @@
             "quantity": 1.0,
             "unit_price": 23.45,
             "extended": 23.45
+          }
+        ]
+      },
+      {
+        "invoice_id": "40160798",
+        "invoice_number": "METT_20260505_NpqYpMo",
+        "date": "2026-04-23",
+        "vendor_id": "32939",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -583.14,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "640718752",
+            "product_name": "Cuvee 89 Sparkling Brut",
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": -12.0,
+            "unit_price": 11.3,
+            "extended": -135.6
+          },
+          {
+            "product_id": "652320163",
+            "product_name": "Grey Goose Vodka",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 29.68,
+            "extended": -178.08
+          },
+          {
+            "product_id": "657992547",
+            "product_name": "Old Forester Bourbon",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 24.56,
+            "extended": -147.36
+          },
+          {
+            "product_id": "639798761",
+            "product_name": "Corazon Blanco Tequila",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -6.0,
+            "unit_price": 20.35,
+            "extended": -122.1
+          }
+        ]
+      },
+      {
+        "invoice_id": "40163888",
+        "invoice_number": "METT_20260505_ctVhzJp",
+        "date": "2026-04-23",
+        "vendor_id": "32939",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -192.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "646033878",
+            "product_name": "Bell's Two Hearted Ale 12oz Bottle",
+            "category": "Bottle Beer",
+            "category_id": "1032",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": -24.0,
+            "unit_price": 1.375,
+            "extended": -33.0
+          },
+          {
+            "product_id": "646033462",
+            "product_name": "Bell's Two Hearted Ale Keg (1/2BBL)",
+            "category": "Draft Beer",
+            "category_id": "1042",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": -1.0,
+            "unit_price": 159.0,
+            "extended": -159.0
           }
         ]
       },
@@ -145465,7 +145850,7 @@
         "vendor_id": "26187",
         "vendor_name": "(Preferred Produce) Frog Holler Produce",
         "total": 154.5,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "643473565",
@@ -145743,7 +146128,7 @@
         "vendor_id": "26208",
         "vendor_name": "Fortune Fish & Gourmet",
         "total": 933.84,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "675274568",
@@ -145831,7 +146216,7 @@
         "vendor_id": "26187",
         "vendor_name": "(Preferred Produce) Frog Holler Produce",
         "total": 436.35,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "660611801",
@@ -146022,7 +146407,7 @@
           },
           {
             "product_id": "693400429",
-            "product_name": "Buil And Gine 1/12 750 Ml Bottle ",
+            "product_name": "Buil And Gine 1/12 750 Ml Bottle",
             "category": "Wine",
             "category_id": "1146",
             "category_type": "WINE",
@@ -146161,15 +146546,15 @@
         "vendor_id": "17919954",
         "vendor_name": "A.H.D. Vintners",
         "total": 432.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
-            "product_id": "1190847683",
+            "product_id": "668958022",
             "product_name": "Granbazan Albarino Verde 25 12 Pack 750 ML. Bottle",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
-            "cogs_bucket": null,
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
             "quantity": 1.0,
             "unit_price": 240.0,
             "extended": 240.0
@@ -146194,7 +146579,7 @@
         "vendor_id": "26187",
         "vendor_name": "(Preferred Produce) Frog Holler Produce",
         "total": 81.35,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "678330881",
@@ -146216,7 +146601,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": 306.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "668958022",
@@ -146326,7 +146711,7 @@
         "vendor_id": "26189",
         "vendor_name": "Michael's Finer Meats & Seafoods",
         "total": 486.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "798024781",
@@ -146348,7 +146733,7 @@
         "vendor_id": "26208",
         "vendor_name": "Fortune Fish & Gourmet",
         "total": 227.88,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "639842526",
@@ -146391,7 +146776,7 @@
         "vendor_id": "26148",
         "vendor_name": "Chefs Warehouse",
         "total": 27.15,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "661016052",
@@ -146490,7 +146875,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": 549.36,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "699688256",
@@ -146512,7 +146897,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": 432.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "655381077",
@@ -146534,7 +146919,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": 1609.3,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "679973836",
@@ -146589,7 +146974,7 @@
         "vendor_id": "1727995",
         "vendor_name": "Eastown Distributors",
         "total": 170.65,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1172360341",
@@ -146655,7 +147040,7 @@
         "vendor_id": "467064",
         "vendor_name": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
         "total": 168.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "652685128",
@@ -146677,7 +147062,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": -59.36,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "714438533",
@@ -146699,7 +147084,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": 5118.32,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1172255838",
@@ -147128,7 +147513,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": 195.83,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1101931658",
@@ -147172,7 +147557,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": 23.38,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "646040729",
@@ -147205,7 +147590,7 @@
         "vendor_id": "17919954",
         "vendor_name": "A.H.D. Vintners",
         "total": 216.0,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -147235,7 +147620,7 @@
         "vendor_id": "330983",
         "vendor_name": "Imperial Beverage",
         "total": 120.0,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -147265,7 +147650,7 @@
         "vendor_id": "467054",
         "vendor_name": "Veritas Distributors, Inc.",
         "total": 232.0,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -147275,7 +147660,7 @@
         "vendor_id": "32939",
         "vendor_name": "Method Hospitality- Internal Transfers",
         "total": 116.14,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "818291897",
@@ -147331,6 +147716,226 @@
         "total": 258.96,
         "status": "SENT",
         "line_items": []
+      },
+      {
+        "invoice_id": "40008210",
+        "invoice_number": "METT_20260504_kNdv5jE",
+        "date": "2026-05-04",
+        "vendor_id": "32939",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -63.99,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "679134966",
+            "product_name": "3 1/8 x 230 Thermal Paper Receipt Rolls fits all Clover POS Cash Register Printers, Star Micronics SCP700 TSP100 TSP300 TSP400 TSP500 TSP60",
+            "category": "Paper Costs",
+            "category_id": "1122",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": -1.0,
+            "unit_price": 63.99,
+            "extended": -63.99
+          }
+        ]
+      },
+      {
+        "invoice_id": "40009349",
+        "invoice_number": "METF_20260504_ZNQfeV9",
+        "date": "2026-05-04",
+        "vendor_id": "32939",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": 85.54,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "669537490",
+            "product_name": "Cherries, Luxardo Maraschino",
+            "category": "Drink Supplies",
+            "category_id": "1054",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 85.54,
+            "extended": 85.54
+          }
+        ]
+      },
+      {
+        "invoice_id": "40009827",
+        "invoice_number": "182186",
+        "date": "2026-05-04",
+        "vendor_id": "467054",
+        "vendor_name": "Veritas Distributors, Inc.",
+        "total": 232.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "644351189",
+            "product_name": "Llopart Brut Rose 21 2021",
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 232.0,
+            "extended": 232.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "40009945",
+        "invoice_number": "6202669",
+        "date": "2026-05-05",
+        "vendor_id": "330983",
+        "vendor_name": "Imperial Beverage",
+        "total": 120.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "646036967",
+            "product_name": "Damm Estrella 30-Pet",
+            "category": "Draft Beer",
+            "category_id": "1042",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 120.0,
+            "extended": 120.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "40009966",
+        "invoice_number": "METT_20260505_QWr8VBY",
+        "date": "2026-05-05",
+        "vendor_id": "32939",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": -45.78,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "641913732",
+            "product_name": "Ketel One Vodka",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": -2.0,
+            "unit_price": 22.89,
+            "extended": -45.78
+          }
+        ]
+      },
+      {
+        "invoice_id": "40339206",
+        "invoice_number": "151796",
+        "date": "2026-05-05",
+        "vendor_id": "17919954",
+        "vendor_name": "A.H.D. Vintners",
+        "total": 240.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "668958022",
+            "product_name": "Granbazan Albarino Verde 25 12 Pack 750 ML. Bottle",
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 240.0,
+            "extended": 240.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "40341692",
+        "invoice_number": "3097",
+        "date": "2026-05-05",
+        "vendor_id": "55084",
+        "vendor_name": "Justin Serra",
+        "total": 350.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "687150373",
+            "product_name": "Dj Service",
+            "category": "Music & Entertainment",
+            "category_id": "1113",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 350.0,
+            "extended": 350.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "40341716",
+        "invoice_number": "5038",
+        "date": "2026-05-05",
+        "vendor_id": "57668",
+        "vendor_name": "Aroma Cleaning Services LLC",
+        "total": 3575.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "663544365",
+            "product_name": "Daily Cleaning Services",
+            "category": "Contract Cleaning",
+            "category_id": "1035",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 3100.0,
+            "extended": 3100.0
+          },
+          {
+            "product_id": "1195251089",
+            "product_name": "Overnight Kitchen Deep Clean",
+            "category": "Contract Cleaning",
+            "category_id": "1035",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 300.0,
+            "extended": 300.0
+          },
+          {
+            "product_id": "1195251015",
+            "product_name": "Upholstery Cleaning",
+            "category": "Contract Cleaning",
+            "category_id": "1035",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 175.0,
+            "extended": 175.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "40341727",
+        "invoice_number": "3096",
+        "date": "2026-05-05",
+        "vendor_id": "55084",
+        "vendor_name": "Justin Serra",
+        "total": 350.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "687150373",
+            "product_name": "Dj Service",
+            "category": "Music & Entertainment",
+            "category_id": "1113",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 350.0,
+            "extended": 350.0
+          }
+        ]
       }
     ],
     "vendors": [
@@ -147993,21 +148598,6 @@
     ],
     "weekly_rollup": [
       {
-        "week_start": "2025-08-18",
-        "total_cogs": -220.61,
-        "cogs_only_total": 0.0,
-        "by_category": {},
-        "by_cogs_type": {},
-        "by_vendor_top5": [
-          {
-            "vendor": "Chefs Warehouse",
-            "total": -220.61
-          }
-        ],
-        "cogs_pct_revenue": -0.0031,
-        "cogs_only_pct_revenue": 0.0
-      },
-      {
         "week_start": "2025-12-08",
         "total_cogs": -423.6,
         "cogs_only_total": -423.6,
@@ -148050,7 +148640,7 @@
       },
       {
         "week_start": "2025-12-29",
-        "total_cogs": 7988.32,
+        "total_cogs": 6237.85,
         "cogs_only_total": 2334.2,
         "by_category": {
           "Produce": 430.5,
@@ -148082,10 +148672,6 @@
             "total": 2980.0
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 983.74
-          },
-          {
             "vendor": "(Preferred Produce) Frog Holler Produce",
             "total": 655.75
           },
@@ -148094,16 +148680,20 @@
             "total": 500.0
           },
           {
-            "vendor": "Northern Haserot",
-            "total": 453.65
+            "vendor": "A.H.D. Vintners",
+            "total": 408.0
+          },
+          {
+            "vendor": "Method Hospitality- Internal Transfers",
+            "total": 295.37
           }
         ],
-        "cogs_pct_revenue": 0.3768,
+        "cogs_pct_revenue": 0.2942,
         "cogs_only_pct_revenue": 0.1101
       },
       {
         "week_start": "2026-01-05",
-        "total_cogs": 6580.35,
+        "total_cogs": 6078.35,
         "cogs_only_total": 5886.27,
         "by_category": {
           "Soft Beverage": 253.08,
@@ -148133,7 +148723,7 @@
           },
           {
             "vendor": "Great Lakes Wine & Spirits",
-            "total": 1062.96
+            "total": 972.96
           },
           {
             "vendor": "Fortune Fish & Gourmet",
@@ -148148,7 +148738,7 @@
             "total": 253.08
           }
         ],
-        "cogs_pct_revenue": 0.5116,
+        "cogs_pct_revenue": 0.4726,
         "cogs_only_pct_revenue": 0.4576
       },
       {
@@ -148192,7 +148782,7 @@
       },
       {
         "week_start": "2026-01-19",
-        "total_cogs": 4930.38,
+        "total_cogs": 4342.38,
         "cogs_only_total": 4342.38,
         "by_category": {
           "Wine": 953.59,
@@ -148226,18 +148816,14 @@
           {
             "vendor": "(Preferred Produce) Frog Holler Produce",
             "total": 490.99
-          },
-          {
-            "vendor": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
-            "total": 276.0
           }
         ],
-        "cogs_pct_revenue": 0.4498,
+        "cogs_pct_revenue": 0.3962,
         "cogs_only_pct_revenue": 0.3962
       },
       {
         "week_start": "2026-01-26",
-        "total_cogs": 7314.28,
+        "total_cogs": 6125.59,
         "cogs_only_total": 2150.49,
         "by_category": {
           "Wine": 226.53,
@@ -148265,12 +148851,12 @@
         },
         "by_vendor_top5": [
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 3376.08
-          },
-          {
             "vendor": "Aroma Cleaning Services LLC",
             "total": 3100.0
+          },
+          {
+            "vendor": "Great Lakes Wine & Spirits",
+            "total": 2992.08
           },
           {
             "vendor": "Chefs Warehouse",
@@ -148281,16 +148867,16 @@
             "total": 500.0
           },
           {
-            "vendor": "Eastown Distributors",
-            "total": 470.1
+            "vendor": "Fabiano Brothers Inc.",
+            "total": 428.2
           }
         ],
-        "cogs_pct_revenue": 0.3337,
+        "cogs_pct_revenue": 0.2795,
         "cogs_only_pct_revenue": 0.0981
       },
       {
         "week_start": "2026-02-02",
-        "total_cogs": 4602.84,
+        "total_cogs": 3910.14,
         "cogs_only_total": 3992.94,
         "by_category": {
           "Meat & Poultry": 594.01,
@@ -148325,19 +148911,19 @@
           },
           {
             "vendor": "Imperial Beverage",
-            "total": 424.0
+            "total": 218.0
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 387.6
+            "vendor": "Vintage Wine Company",
+            "total": 216.0
           }
         ],
-        "cogs_pct_revenue": 0.3676,
+        "cogs_pct_revenue": 0.3123,
         "cogs_only_pct_revenue": 0.3189
       },
       {
         "week_start": "2026-02-09",
-        "total_cogs": 2423.61,
+        "total_cogs": 1581.19,
         "cogs_only_total": 1522.99,
         "by_category": {
           "Liquor": 107.8,
@@ -148359,7 +148945,7 @@
         "by_vendor_top5": [
           {
             "vendor": "Great Lakes Wine & Spirits",
-            "total": 1226.4
+            "total": 739.2
           },
           {
             "vendor": "(Preferred Produce) Frog Holler Produce",
@@ -148370,20 +148956,20 @@
             "total": 312.64
           },
           {
-            "vendor": "Eastown Distributors",
-            "total": 186.5
+            "vendor": "Method Hospitality- Internal Transfers",
+            "total": 127.98
           },
           {
-            "vendor": "Northern Haserot",
-            "total": 168.72
+            "vendor": "Sohn Linen Service, INC.",
+            "total": 58.2
           }
         ],
-        "cogs_pct_revenue": 0.1002,
+        "cogs_pct_revenue": 0.0654,
         "cogs_only_pct_revenue": 0.063
       },
       {
         "week_start": "2026-02-16",
-        "total_cogs": 4771.05,
+        "total_cogs": 4368.09,
         "cogs_only_total": 4368.09,
         "by_category": {
           "Drink Supplies": 1928.95,
@@ -148413,24 +148999,24 @@
             "total": 493.57
           },
           {
-            "vendor": "Eastown Distributors",
-            "total": 304.8
-          },
-          {
             "vendor": "Fortune Fish & Gourmet",
             "total": 283.77
           },
           {
-            "vendor": "Northern Haserot",
-            "total": 224.96
+            "vendor": "Eastown Distributors",
+            "total": 235.8
+          },
+          {
+            "vendor": "A.H.D. Vintners",
+            "total": 192.0
           }
         ],
-        "cogs_pct_revenue": 0.2922,
+        "cogs_pct_revenue": 0.2676,
         "cogs_only_pct_revenue": 0.2676
       },
       {
         "week_start": "2026-02-23",
-        "total_cogs": 5474.85,
+        "total_cogs": 4769.1,
         "cogs_only_total": 3882.1,
         "by_category": {
           "Wine": -28.14,
@@ -148461,10 +149047,6 @@
             "total": 2757.85
           },
           {
-            "vendor": "Imperial Beverage",
-            "total": 614.04
-          },
-          {
             "vendor": "Gourmet Marketing",
             "total": 500.0
           },
@@ -148473,16 +149055,20 @@
             "total": 328.82
           },
           {
+            "vendor": "Imperial Beverage",
+            "total": 314.04
+          },
+          {
             "vendor": "(Preferred Produce) Frog Holler Produce",
             "total": 312.67
           }
         ],
-        "cogs_pct_revenue": 0.3874,
+        "cogs_pct_revenue": 0.3374,
         "cogs_only_pct_revenue": 0.2747
       },
       {
         "week_start": "2026-03-02",
-        "total_cogs": 5484.1,
+        "total_cogs": 5062.47,
         "cogs_only_total": 2582.47,
         "by_category": {
           "Wine": 245.94,
@@ -148523,12 +149109,12 @@
             "total": 434.59
           }
         ],
-        "cogs_pct_revenue": 0.2549,
+        "cogs_pct_revenue": 0.2353,
         "cogs_only_pct_revenue": 0.1201
       },
       {
         "week_start": "2026-03-09",
-        "total_cogs": 4151.4,
+        "total_cogs": 3187.8,
         "cogs_only_total": 2208.81,
         "by_category": {
           "Wine": 257.13,
@@ -148553,28 +149139,28 @@
             "total": 1518.46
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 840.75
-          },
-          {
             "vendor": "Edward Don & Company",
             "total": 743.45
+          },
+          {
+            "vendor": "Great Lakes Wine & Spirits",
+            "total": 309.15
           },
           {
             "vendor": "Fortune Fish & Gourmet",
             "total": 236.1
           },
           {
-            "vendor": "Vintage Wine Company",
-            "total": 216.0
+            "vendor": "Amazon.com",
+            "total": 151.04
           }
         ],
-        "cogs_pct_revenue": 0.2618,
+        "cogs_pct_revenue": 0.201,
         "cogs_only_pct_revenue": 0.1393
       },
       {
         "week_start": "2026-03-16",
-        "total_cogs": 5162.54,
+        "total_cogs": 4041.53,
         "cogs_only_total": 2585.78,
         "by_category": {
           "Liquor": 561.47,
@@ -148614,12 +149200,12 @@
             "total": 236.15
           }
         ],
-        "cogs_pct_revenue": 0.3017,
+        "cogs_pct_revenue": 0.2362,
         "cogs_only_pct_revenue": 0.1511
       },
       {
         "week_start": "2026-03-23",
-        "total_cogs": 8042.09,
+        "total_cogs": 6576.13,
         "cogs_only_total": 5689.31,
         "by_category": {
           "Liquor": 2609.69,
@@ -148655,28 +149241,28 @@
             "total": 3888.49
           },
           {
-            "vendor": "Northern Haserot",
-            "total": 791.43
-          },
-          {
             "vendor": "Fortune Fish & Gourmet",
             "total": 606.99
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 588.6
+            "vendor": "Northern Haserot",
+            "total": 482.11
           },
           {
             "vendor": "(Preferred Produce) Frog Holler Produce",
             "total": 480.64
+          },
+          {
+            "vendor": "World Beverage Systems",
+            "total": 335.0
           }
         ],
-        "cogs_pct_revenue": 0.3692,
+        "cogs_pct_revenue": 0.3019,
         "cogs_only_pct_revenue": 0.2612
       },
       {
         "week_start": "2026-03-30",
-        "total_cogs": 10576.03,
+        "total_cogs": 9348.28,
         "cogs_only_total": 5360.28,
         "by_category": {
           "Kitchen Utensils & Supplies": -55.99,
@@ -148715,27 +149301,27 @@
             "total": 2042.71
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 1123.8
+            "vendor": "Northern Haserot",
+            "total": 856.61
           },
           {
-            "vendor": "Northern Haserot",
-            "total": 969.09
+            "vendor": "Great Lakes Wine & Spirits",
+            "total": 852.6
           },
           {
             "vendor": "Justin Serra",
             "total": 700.0
           }
         ],
-        "cogs_pct_revenue": 0.3811,
+        "cogs_pct_revenue": 0.3369,
         "cogs_only_pct_revenue": 0.1932
       },
       {
         "week_start": "2026-04-06",
-        "total_cogs": 10912.23,
-        "cogs_only_total": 7363.83,
+        "total_cogs": 8466.33,
+        "cogs_only_total": 6603.93,
         "by_category": {
-          "Liquor": 4334.36,
+          "Liquor": 3574.46,
           "Grocery & Dry Goods": 620.49,
           "Dairy": 352.17,
           "Paper Costs": 200.0,
@@ -148753,7 +149339,7 @@
           "Music & Entertainment": 350.0
         },
         "by_cogs_type": {
-          "liquor": 5390.6,
+          "liquor": 4630.7,
           "food": 1434.87,
           "wine": 404.87,
           "beer": 133.5
@@ -148761,11 +149347,7 @@
         "by_vendor_top5": [
           {
             "vendor": "Method Hospitality- Internal Transfers",
-            "total": 5016.79
-          },
-          {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 1563.76
+            "total": 4256.89
           },
           {
             "vendor": "Chefs Warehouse",
@@ -148776,24 +149358,28 @@
             "total": 677.73
           },
           {
-            "vendor": "Vintage Wine Company",
-            "total": 432.0
+            "vendor": "Great Lakes Wine & Spirits",
+            "total": 530.16
+          },
+          {
+            "vendor": "Arway Linen & Uniform Rental Service",
+            "total": 415.4
           }
         ],
-        "cogs_pct_revenue": 0.3005,
-        "cogs_only_pct_revenue": 0.2028
+        "cogs_pct_revenue": 0.2331,
+        "cogs_only_pct_revenue": 0.1818
       },
       {
         "week_start": "2026-04-13",
-        "total_cogs": 4610.98,
-        "cogs_only_total": 2676.33,
+        "total_cogs": 6314.36,
+        "cogs_only_total": 6002.29,
         "by_category": {
           "Linen & Linen Rental": 200.56,
           "Uniforms": 36.68,
           "Bottle Beer": 341.56,
           "Grocery & Dry Goods": 28.79,
           "Wine": 933.14,
-          "Liquor": 945.18,
+          "Liquor": 4271.14,
           "Dairy": 49.21,
           "Drink Supplies": 155.25,
           "Draft Beer": 189.0,
@@ -148803,84 +149389,85 @@
           "beer": 530.56,
           "food": 112.2,
           "wine": 933.14,
-          "liquor": 1100.43
+          "liquor": 4426.39
         },
         "by_vendor_top5": [
           {
+            "vendor": "Method Hospitality- Internal Transfers",
+            "total": 3436.8
+          },
+          {
             "vendor": "Great Lakes Wine & Spirits",
-            "total": 2835.48
-          },
-          {
-            "vendor": "Eastown Distributors",
-            "total": 401.1
-          },
-          {
-            "vendor": "Rave Associates",
-            "total": 348.0
+            "total": 1954.44
           },
           {
             "vendor": "Arway Linen & Uniform Rental Service",
             "total": 304.57
           },
           {
-            "vendor": "Imperial Beverage",
-            "total": 234.22
+            "vendor": "Rave Associates",
+            "total": 189.0
+          },
+          {
+            "vendor": "Eastown Distributors",
+            "total": 176.85
           }
         ],
-        "cogs_pct_revenue": 0.1455,
-        "cogs_only_pct_revenue": 0.0845
+        "cogs_pct_revenue": 0.1992,
+        "cogs_only_pct_revenue": 0.1894
       },
       {
         "week_start": "2026-04-20",
-        "total_cogs": 8266.43,
-        "cogs_only_total": 7253.16,
+        "total_cogs": 6662.09,
+        "cogs_only_total": 6478.02,
         "by_category": {
-          "Liquor": 5281.24,
+          "Liquor": 4833.7,
           "Linen & Linen Rental": 175.3,
           "Grocery & Dry Goods": 4.15,
           "Seafood": 473.04,
           "Meat & Poultry": 410.74,
           "Produce": 105.65,
           "Drink Supplies": 502.95,
-          "Dairy": 58.9,
-          "Bottle Beer": 71.28,
-          "Wine": 345.21
+          "Wine": 209.61,
+          "Bottle Beer": 38.28,
+          "Draft Beer": -159.0,
+          "Dairy": 58.9
         },
         "by_cogs_type": {
-          "liquor": 5784.19,
+          "liquor": 5336.65,
           "food": 1052.48,
-          "beer": 71.28,
-          "wine": 345.21
+          "wine": 209.61,
+          "beer": -120.72
         },
         "by_vendor_top5": [
           {
             "vendor": "Method Hospitality- Internal Transfers",
-            "total": 5722.38
+            "total": 4947.24
           },
           {
             "vendor": "Fortune Fish & Gourmet",
             "total": 883.78
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 622.2
+            "vendor": "(Preferred Produce) Frog Holler Produce",
+            "total": 332.6
           },
           {
             "vendor": "Eastown Distributors",
-            "total": 521.4
+            "total": 314.4
           },
           {
-            "vendor": "(Preferred Produce) Frog Holler Produce",
-            "total": 332.6
+            "vendor": "Sohn Linen Service, INC.",
+            "total": 184.07
           }
         ],
-        "cogs_pct_revenue": 0.1632,
-        "cogs_only_pct_revenue": 0.1432
+        "cogs_pct_revenue": 0.1315,
+        "cogs_only_pct_revenue": 0.1279
       },
       {
         "week_start": "2026-04-27",
-        "total_cogs": 17115.2,
-        "cogs_only_total": 12534.96,
+        "total_cogs": 13227.35,
+        "cogs_only_total": 12774.96,
         "by_category": {
           "Linen & Linen Rental": 80.8,
           "Grocery & Dry Goods": 366.03,
@@ -148890,10 +149477,9 @@
           "Produce": 147.7,
           "Drink Supplies": 1975.35,
           "Liquor": 5654.46,
-          "Wine": 2515.17,
+          "Wine": 2755.17,
           "Dues & Subscriptions": 302.5,
           "Draft Beer": 120.0,
-          "Uncategorized": 240.0,
           "Soft Beverage": 229.5,
           "Bottle Beer": 115.43,
           "Keg Deposit/Refund": 16.8,
@@ -148902,7 +149488,7 @@
         "by_cogs_type": {
           "food": 1925.05,
           "liquor": 7629.81,
-          "wine": 2515.17,
+          "wine": 2755.17,
           "beer": 235.43,
           "na_beverages": 229.5
         },
@@ -148912,55 +149498,54 @@
             "total": 8062.41
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 2496.0
-          },
-          {
             "vendor": "Fortune Fish & Gourmet",
             "total": 1161.72
           },
           {
-            "vendor": "A.H.D. Vintners",
-            "total": 1047.96
+            "vendor": "Great Lakes Wine & Spirits",
+            "total": 1081.2
           },
           {
-            "vendor": "Vintage Wine Company",
-            "total": 668.7
+            "vendor": "(Preferred Produce) Frog Holler Produce",
+            "total": 517.7
+          },
+          {
+            "vendor": "Michael's Finer Meats & Seafoods",
+            "total": 486.0
           }
         ],
-        "cogs_pct_revenue": 0.2744,
-        "cogs_only_pct_revenue": 0.201
+        "cogs_pct_revenue": 0.2734,
+        "cogs_only_pct_revenue": 0.2641
       },
       {
         "week_start": "2026-05-04",
-        "total_cogs": 258.96,
-        "cogs_only_total": 0.0,
-        "by_category": {},
-        "by_cogs_type": {},
+        "total_cogs": 207.77,
+        "cogs_only_total": 271.76,
+        "by_category": {
+          "Paper Costs": -63.99,
+          "Drink Supplies": 85.54,
+          "Wine": 232.0,
+          "Liquor": -45.78
+        },
+        "by_cogs_type": {
+          "liquor": 39.76,
+          "wine": 232.0
+        },
         "by_vendor_top5": [
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 258.96
+            "vendor": "Veritas Distributors, Inc.",
+            "total": 232.0
+          },
+          {
+            "vendor": "Method Hospitality- Internal Transfers",
+            "total": -24.23
           }
-        ]
+        ],
+        "cogs_pct_revenue": 0.0214,
+        "cogs_only_pct_revenue": 0.028
       }
     ],
     "monthly_rollup": [
-      {
-        "month": "2025-08",
-        "total_cogs": -220.61,
-        "cogs_only_total": 0.0,
-        "by_category": {},
-        "by_cogs_type": {},
-        "by_vendor_top5": [
-          {
-            "vendor": "Chefs Warehouse",
-            "total": -220.61
-          }
-        ],
-        "cogs_pct_revenue": -0.0007,
-        "cogs_only_pct_revenue": 0.0
-      },
       {
         "month": "2025-12",
         "total_cogs": 731.36,
@@ -149007,7 +149592,7 @@
       },
       {
         "month": "2026-01",
-        "total_cogs": 22019.9,
+        "total_cogs": 18163.18,
         "cogs_only_total": 13750.55,
         "by_category": {
           "Soft Beverage": 467.96,
@@ -149041,7 +149626,7 @@
         "by_vendor_top5": [
           {
             "vendor": "Great Lakes Wine & Spirits",
-            "total": 5148.24
+            "total": 3539.04
           },
           {
             "vendor": "Aroma Cleaning Services LLC",
@@ -149060,12 +149645,12 @@
             "total": 1449.09
           }
         ],
-        "cogs_pct_revenue": 0.2968,
+        "cogs_pct_revenue": 0.2448,
         "cogs_only_pct_revenue": 0.1853
       },
       {
         "month": "2026-02",
-        "total_cogs": 18864.26,
+        "total_cogs": 16453.74,
         "cogs_only_total": 12433.14,
         "by_category": {
           "Sake": -12.38,
@@ -149104,24 +149689,24 @@
             "total": 3100.0
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 1998.0
-          },
-          {
             "vendor": "Fortune Fish & Gourmet",
             "total": 1782.96
           },
           {
-            "vendor": "Imperial Beverage",
-            "total": 1359.48
+            "vendor": "(Preferred Produce) Frog Holler Produce",
+            "total": 1293.51
+          },
+          {
+            "vendor": "Great Lakes Wine & Spirits",
+            "total": 1123.2
           }
         ],
-        "cogs_pct_revenue": 0.2784,
+        "cogs_pct_revenue": 0.2429,
         "cogs_only_pct_revenue": 0.1835
       },
       {
         "month": "2026-03",
-        "total_cogs": 27690.56,
+        "total_cogs": 23312.61,
         "cogs_only_total": 17067.05,
         "by_category": {
           "Liquor": 6206.35,
@@ -149163,29 +149748,29 @@
             "total": 2480.0
           },
           {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 2276.1
-          },
-          {
-            "vendor": "Northern Haserot",
-            "total": 2266.68
-          },
-          {
             "vendor": "Edward Don & Company",
             "total": 2199.2
+          },
+          {
+            "vendor": "Fortune Fish & Gourmet",
+            "total": 1916.46
+          },
+          {
+            "vendor": "Chefs Warehouse",
+            "total": 1671.21
           }
         ],
-        "cogs_pct_revenue": 0.3458,
+        "cogs_pct_revenue": 0.2911,
         "cogs_only_pct_revenue": 0.2131
       },
       {
         "month": "2026-04",
-        "total_cogs": 42165.62,
-        "cogs_only_total": 27221.12,
+        "total_cogs": 36045.37,
+        "cogs_only_total": 29252.04,
         "by_category": {
-          "Liquor": 13413.02,
-          "Wine": 4295.02,
-          "Bottle Beer": 663.94,
+          "Liquor": 15531.54,
+          "Wine": 4399.42,
+          "Bottle Beer": 630.94,
           "Contract Cleaning": 2480.0,
           "Linen & Linen Rental": 1097.66,
           "Dues & Subscriptions": 540.1,
@@ -149204,84 +149789,80 @@
           "Repairs and Maintenance": 13.71,
           "Keg Deposit/Refund": 2.4,
           "Uniforms": 36.68,
-          "Draft Beer": 309.0,
+          "Draft Beer": 150.0,
           "Meat & Poultry": 1049.51,
-          "Uncategorized": 240.0,
           "Soft Beverage": 229.5
         },
         "by_cogs_type": {
-          "liquor": 17137.31,
-          "wine": 4295.02,
-          "beer": 972.94,
+          "liquor": 19255.83,
+          "wine": 4399.42,
+          "beer": 780.94,
           "food": 4586.35,
           "na_beverages": 229.5
         },
         "by_vendor_top5": [
           {
             "vendor": "Method Hospitality- Internal Transfers",
-            "total": 15611.81
+            "total": 17402.73
           },
           {
             "vendor": "Great Lakes Wine & Spirits",
-            "total": 8289.64
+            "total": 4418.4
           },
           {
             "vendor": "Aroma Cleaning Services LLC",
             "total": 2480.0
           },
           {
-            "vendor": "Eastown Distributors",
-            "total": 2145.37
-          },
-          {
             "vendor": "Fortune Fish & Gourmet",
             "total": 2140.95
+          },
+          {
+            "vendor": "Justin Serra",
+            "total": 1050.0
           }
         ],
-        "cogs_pct_revenue": 0.253,
-        "cogs_only_pct_revenue": 0.1633
+        "cogs_pct_revenue": 0.2246,
+        "cogs_only_pct_revenue": 0.1823
       },
       {
         "month": "2026-05",
-        "total_cogs": 7334.13,
-        "cogs_only_total": 5671.37,
+        "total_cogs": 5940.73,
+        "cogs_only_total": 5943.13,
         "by_category": {
           "Bottle Beer": 108.23,
-          "Drink Supplies": 69.0,
+          "Drink Supplies": 154.54,
           "Keg Deposit/Refund": 16.8,
-          "Wine": 479.97,
-          "Liquor": 5014.17,
-          "Kitchen Utensils & Supplies": 44.79
+          "Wine": 711.97,
+          "Liquor": 4968.39,
+          "Kitchen Utensils & Supplies": 44.79,
+          "Paper Costs": -63.99
         },
         "by_cogs_type": {
           "beer": 108.23,
-          "liquor": 5083.17,
-          "wine": 479.97
+          "liquor": 5122.93,
+          "wine": 711.97
         },
         "by_vendor_top5": [
           {
             "vendor": "Method Hospitality- Internal Transfers",
-            "total": 5394.31
-          },
-          {
-            "vendor": "Great Lakes Wine & Spirits",
-            "total": 610.56
-          },
-          {
-            "vendor": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
-            "total": 348.0
-          },
-          {
-            "vendor": "Eastown Distributors",
-            "total": 328.9
+            "total": 5370.08
           },
           {
             "vendor": "Veritas Distributors, Inc.",
             "total": 232.0
+          },
+          {
+            "vendor": "Eastown Distributors",
+            "total": 170.65
+          },
+          {
+            "vendor": "RNDC (Republic National Distributing Co) / Grand Vin Ltd.",
+            "total": 168.0
           }
         ],
-        "cogs_pct_revenue": 0.1835,
-        "cogs_only_pct_revenue": 0.1419
+        "cogs_pct_revenue": 0.1419,
+        "cogs_only_pct_revenue": 0.142
       }
     ]
   },
@@ -156478,6 +157059,13 @@
       "rows_valid": 56,
       "rows_invalid": 0,
       "rows_warned": 0
+    },
+    "marginedge_invoice": {
+      "ran_at": "2026-05-07T16:31:54+00:00",
+      "rows_in": 306,
+      "rows_valid": 306,
+      "rows_invalid": 0,
+      "rows_warned": 50
     }
   }
 }
