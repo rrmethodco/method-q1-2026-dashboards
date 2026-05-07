@@ -1,6 +1,6 @@
 {
   "outlet_id": "rosemary_rose",
-  "generated_at": "2026-05-06T13:53:57+00:00",
+  "generated_at": "2026-05-07T13:52:35+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -3305,15 +3305,15 @@
         },
         {
           "date": "2026-05-04",
-          "orders": 52,
-          "guests": 121,
-          "amount": 2967.95,
-          "net_sales": 2967.95,
+          "orders": 20,
+          "guests": 39,
+          "amount": 745.7,
+          "net_sales": 745.7,
           "tip": 0.0,
           "gratuity": 0.0,
           "discount": 3.8,
-          "ticket_time_sec_sum": 114943.3,
-          "ticket_time_count": 52
+          "ticket_time_sec_sum": 30469.2,
+          "ticket_time_count": 20
         },
         {
           "date": "2026-05-05",
@@ -3326,6 +3326,18 @@
           "discount": 121.4,
           "ticket_time_sec_sum": 129071.0,
           "ticket_time_count": 63
+        },
+        {
+          "date": "2026-05-06",
+          "orders": 77,
+          "guests": 243,
+          "amount": 7914.04,
+          "net_sales": 7707.5,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 267.5,
+          "ticket_time_sec_sum": 228654.9,
+          "ticket_time_count": 77
         }
       ],
       "monthly": [
@@ -3415,12 +3427,12 @@
           "month": "2026-04"
         },
         {
-          "orders": 171,
-          "guests": 381,
-          "amount": 10095.32,
-          "net_sales": 10072.12,
+          "orders": 160,
+          "guests": 430,
+          "amount": 12343.06,
+          "net_sales": 12136.52,
           "tip": 0.0,
-          "discount": 558.6,
+          "discount": 392.7,
           "month": "2026-05"
         }
       ],
@@ -3736,9 +3748,9 @@
         {
           "hour": 16,
           "dow": "Wed",
-          "amount": 2086.5,
-          "orders": 52,
-          "guests": 122
+          "amount": 2113.75,
+          "orders": 53,
+          "guests": 123
         },
         {
           "hour": 17,
@@ -3785,9 +3797,9 @@
         {
           "hour": 17,
           "dow": "Wed",
-          "amount": 10777.26,
-          "orders": 181,
-          "guests": 391
+          "amount": 11102.26,
+          "orders": 194,
+          "guests": 422
         },
         {
           "hour": 18,
@@ -3834,9 +3846,9 @@
         {
           "hour": 18,
           "dow": "Wed",
-          "amount": 17709.55,
-          "orders": 290,
-          "guests": 744
+          "amount": 18490.05,
+          "orders": 299,
+          "guests": 780
         },
         {
           "hour": 19,
@@ -3883,9 +3895,9 @@
         {
           "hour": 19,
           "dow": "Wed",
-          "amount": 26121.47,
-          "orders": 424,
-          "guests": 1017
+          "amount": 26791.97,
+          "orders": 435,
+          "guests": 1043
         },
         {
           "hour": 20,
@@ -3932,9 +3944,9 @@
         {
           "hour": 20,
           "dow": "Wed",
-          "amount": 22578.2,
-          "orders": 379,
-          "guests": 2267
+          "amount": 27266.99,
+          "orders": 389,
+          "guests": 2322
         },
         {
           "hour": 21,
@@ -3981,9 +3993,9 @@
         {
           "hour": 21,
           "dow": "Wed",
-          "amount": 25356.56,
-          "orders": 374,
-          "guests": 809
+          "amount": 26472.06,
+          "orders": 397,
+          "guests": 883
         },
         {
           "hour": 22,
@@ -4030,9 +4042,9 @@
         {
           "hour": 22,
           "dow": "Wed",
-          "amount": 27761.02,
-          "orders": 199,
-          "guests": 386
+          "amount": 28067.52,
+          "orders": 209,
+          "guests": 406
         },
         {
           "hour": 23,
@@ -20422,6 +20434,55 @@
           "amount": 126.5,
           "orders": 2,
           "guests": 6
+        },
+        {
+          "date": "2026-05-06",
+          "hour": 16,
+          "amount": 27.25,
+          "orders": 1,
+          "guests": 1
+        },
+        {
+          "date": "2026-05-06",
+          "hour": 17,
+          "amount": 325.0,
+          "orders": 13,
+          "guests": 31
+        },
+        {
+          "date": "2026-05-06",
+          "hour": 18,
+          "amount": 780.5,
+          "orders": 9,
+          "guests": 36
+        },
+        {
+          "date": "2026-05-06",
+          "hour": 19,
+          "amount": 670.5,
+          "orders": 11,
+          "guests": 26
+        },
+        {
+          "date": "2026-05-06",
+          "hour": 20,
+          "amount": 4688.79,
+          "orders": 10,
+          "guests": 55
+        },
+        {
+          "date": "2026-05-06",
+          "hour": 21,
+          "amount": 1115.5,
+          "orders": 23,
+          "guests": 74
+        },
+        {
+          "date": "2026-05-06",
+          "hour": 22,
+          "amount": 306.5,
+          "orders": 10,
+          "guests": 20
         }
       ],
       "categories_daily": [
@@ -22150,14 +22211,20 @@
         {
           "date": "2026-05-04",
           "category": "Wine",
-          "amount": 569.0,
-          "orders": 31
+          "amount": 189.0,
+          "orders": 11
         },
         {
           "date": "2026-05-05",
           "category": "Wine",
           "amount": 472.0,
           "orders": 31
+        },
+        {
+          "date": "2026-05-06",
+          "category": "Wine",
+          "amount": 764.0,
+          "orders": 43
         }
       ],
       "service_modes_daily": [
@@ -24180,9 +24247,9 @@
         {
           "date": "2026-05-04",
           "mode": "Unspecified",
-          "amount": 2967.95,
-          "orders": 52,
-          "guests": 121
+          "amount": 745.7,
+          "orders": 20,
+          "guests": 39
         },
         {
           "date": "2026-05-05",
@@ -24190,22 +24257,29 @@
           "amount": 3683.32,
           "orders": 63,
           "guests": 148
+        },
+        {
+          "date": "2026-05-06",
+          "mode": "Unspecified",
+          "amount": 7914.04,
+          "orders": 77,
+          "guests": 243
         }
       ],
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 28161.0,
-        "guests": 60564.0,
-        "amount": 1738076.2300000004,
-        "net_sales": 914669.5500000002,
+        "orders": 28206.0,
+        "guests": 60725.0,
+        "amount": 1743768.0200000005,
+        "net_sales": 920154.8000000002,
         "tip": 0.0,
         "gratuity": 0.0,
-        "discount": 56880.94000000001,
-        "ticket_time_sec_sum": 74430271.69999999,
-        "ticket_time_count": 28061,
-        "avg_check": 61.71926529597672,
-        "avg_ticket_time_sec": 2652.4454474181243
+        "discount": 57148.44000000001,
+        "ticket_time_sec_sum": 74574452.5,
+        "ticket_time_count": 28106,
+        "avg_check": 61.822591647167286,
+        "avg_ticket_time_sec": 2653.328559738134
       }
     }
   },
@@ -24293,7 +24367,7 @@
         "text": [
           {
             "q": "Please provide feedback on your experience.",
-            "a": "This is definitely one off the top rooftop bars in Charleston rivaling if not exceeding the Cactus Club. It’s not because it’s new but the inside and outside areas are both fabulous spots with plenty of room no matter where you sit. Great vibe overall with great view of Ravenel"
+            "a": "This is definitely one off the top rooftop bars in Charleston rivaling if not exceeding the Cactus Club. It\u2019s not because it\u2019s new but the inside and outside areas are both fabulous spots with plenty of room no matter where you sit. Great vibe overall with great view of Ravenel"
           }
         ]
       },
@@ -24591,7 +24665,7 @@
           },
           {
             "q": "Is there anything we can change to make you dine with us more frequently?",
-            "a": "Drinks were a tad pricey, but what isn’t in Charleston."
+            "a": "Drinks were a tad pricey, but what isn\u2019t in Charleston."
           }
         ]
       },
@@ -24610,7 +24684,7 @@
         "text": [
           {
             "q": "Please provide feedback on your experience.",
-            "a": "This was our second visit and we really enjoyed it. Amanda, Ethan, and Sam remembered us and took good care of us. I like your wine selection and I like that you have actual wine glasses on a rooftop bar and they are a good quality. I like how tastefully done the bar is and also the other bar on the other level. It wasn’t as busy as it was the weekend before, but we enjoyed our time there."
+            "a": "This was our second visit and we really enjoyed it. Amanda, Ethan, and Sam remembered us and took good care of us. I like your wine selection and I like that you have actual wine glasses on a rooftop bar and they are a good quality. I like how tastefully done the bar is and also the other bar on the other level. It wasn\u2019t as busy as it was the weekend before, but we enjoyed our time there."
           }
         ]
       },
@@ -24752,7 +24826,7 @@
           },
           {
             "q": "Please provide any additional feedback on the food.",
-            "a": "Didn’t order any food, but saw others plates that looked good."
+            "a": "Didn\u2019t order any food, but saw others plates that looked good."
           }
         ]
       },
@@ -24886,7 +24960,7 @@
           },
           {
             "q": "Is there anything we can change to make you dine with us more frequently?",
-            "a": "Didn’t eat just drinks"
+            "a": "Didn\u2019t eat just drinks"
           }
         ]
       },
@@ -25070,7 +25144,7 @@
         {
           "author": "Nina Cash",
           "rating": 5,
-          "text": "New rooftop bar at the Nickel hotel on King street. It was my second time there so I came by after work to check out the vibes and it didn’t disappoint. The decor is charming and very chic, offers bar seats, some booths and sections indoor as well as some couches and outdoor tables. They have these fire-pit tables which was a nice touch with the cool nights. I sat at the bar this time and ordered a last word that was spot on. Snapper crudo was light and fresh, and the fried pastry was crispy, creamy and delicious. Their menu is small but had some good options across the board.\nThe prices were expected as it is a nice rooftop cocktail bar in downtown Charleston. Overall it was a nice time and I find it suitable for all types of groups for good vibes. 😎",
+          "text": "New rooftop bar at the Nickel hotel on King street. It was my second time there so I came by after work to check out the vibes and it didn\u2019t disappoint. The decor is charming and very chic, offers bar seats, some booths and sections indoor as well as some couches and outdoor tables. They have these fire-pit tables which was a nice touch with the cool nights. I sat at the bar this time and ordered a last word that was spot on. Snapper crudo was light and fresh, and the fried pastry was crispy, creamy and delicious. Their menu is small but had some good options across the board.\nThe prices were expected as it is a nice rooftop cocktail bar in downtown Charleston. Overall it was a nice time and I find it suitable for all types of groups for good vibes. \ud83d\ude0e",
           "relative": "5 months ago",
           "time": 1763323633,
           "is_local_guide": false
@@ -25078,7 +25152,7 @@
         {
           "author": "Patrick Vollmer",
           "rating": 5,
-          "text": "This is the best rooftop bar in Charleston. It’s so put together and feels like you’re in Architectural Digest. A beautifully executed interior is matched by the service and drinks. As a Charlotte native, I won’t skip this place on my trips down. Just incredible.",
+          "text": "This is the best rooftop bar in Charleston. It\u2019s so put together and feels like you\u2019re in Architectural Digest. A beautifully executed interior is matched by the service and drinks. As a Charlotte native, I won\u2019t skip this place on my trips down. Just incredible.",
           "relative": "7 months ago",
           "time": 1757851954,
           "is_local_guide": false
@@ -25086,7 +25160,7 @@
         {
           "author": "Gabriella Fielding",
           "rating": 2,
-          "text": "We ordered the shrimp, which was unfortunately incredibly fishy and not at all up to Charleston’s usual standard for fresh seafood. The tuna was good — fresh and well-prepared — and the Swiss chard ended up being the best thing we ordered.\n\nService left a lot to be desired. No one checked in after our food arrived, and one of the runners actually slammed the shrimp plate down without a word. The wine list also didn’t live up to expectations for the price point.\n\nPortions were disappointingly small, leaving us still hungry by the end of the meal, and the outdoor tables were so low it made it difficult to comfortably enjoy the food. Overall, the food, service, and atmosphere all missed the mark — I wouldn’t go back.",
+          "text": "We ordered the shrimp, which was unfortunately incredibly fishy and not at all up to Charleston\u2019s usual standard for fresh seafood. The tuna was good \u2014 fresh and well-prepared \u2014 and the Swiss chard ended up being the best thing we ordered.\n\nService left a lot to be desired. No one checked in after our food arrived, and one of the runners actually slammed the shrimp plate down without a word. The wine list also didn\u2019t live up to expectations for the price point.\n\nPortions were disappointingly small, leaving us still hungry by the end of the meal, and the outdoor tables were so low it made it difficult to comfortably enjoy the food. Overall, the food, service, and atmosphere all missed the mark \u2014 I wouldn\u2019t go back.",
           "relative": "6 months ago",
           "time": 1760744755,
           "is_local_guide": false
@@ -25094,7 +25168,7 @@
         {
           "author": "Katie Stone",
           "rating": 1,
-          "text": "I had the worst experience with a male bartender last night. He was so rude, we waited extremely long for service, and when we asked for a second round of our drinks he said “well what was your drink? I serve lots of people, I don’t remember everything”. Very VERY unnecessary.",
+          "text": "I had the worst experience with a male bartender last night. He was so rude, we waited extremely long for service, and when we asked for a second round of our drinks he said \u201cwell what was your drink? I serve lots of people, I don\u2019t remember everything\u201d. Very VERY unnecessary.",
           "relative": "2 months ago",
           "time": 1772297628,
           "is_local_guide": false
@@ -25102,7 +25176,7 @@
         {
           "author": "Michael C. Fischbach",
           "rating": 5,
-          "text": "Reminds me of rooftop bar 🍸  in DC. Decor is lush-chill. French Apps were delightful. My wife & I enjoyed the view.",
+          "text": "Reminds me of rooftop bar \ud83c\udf78  in DC. Decor is lush-chill. French Apps were delightful. My wife & I enjoyed the view.",
           "relative": "7 months ago",
           "time": 1758245668,
           "is_local_guide": false
@@ -25120,13 +25194,13 @@
     "hours_source": "google_places_api",
     "hours_as_of": "2026-05-06",
     "weekly_text": [
-      "Monday: 4:00 – 10:00 PM",
-      "Tuesday: 4:00 – 10:00 PM",
-      "Wednesday: 4:00 – 10:00 PM",
-      "Thursday: 4:00 – 10:00 PM",
-      "Friday: 2:00 PM – 12:00 AM",
-      "Saturday: 2:00 PM – 12:00 AM",
-      "Sunday: 2:00 – 10:00 PM"
+      "Monday: 4:00\u2009\u2013\u200910:00\u202fPM",
+      "Tuesday: 4:00\u2009\u2013\u200910:00\u202fPM",
+      "Wednesday: 4:00\u2009\u2013\u200910:00\u202fPM",
+      "Thursday: 4:00\u2009\u2013\u200910:00\u202fPM",
+      "Friday: 2:00\u202fPM\u2009\u2013\u200912:00\u202fAM",
+      "Saturday: 2:00\u202fPM\u2009\u2013\u200912:00\u202fAM",
+      "Sunday: 2:00\u2009\u2013\u200910:00\u202fPM"
     ]
   },
   "labor": {
@@ -27785,6 +27859,15 @@
         "total_cost": 825.44,
         "head_count": 10,
         "date": "2026-05-05"
+      },
+      {
+        "regular_hours": 88.57,
+        "overtime_hours": 0.0,
+        "regular_cost": 980.97,
+        "overtime_cost": 0.0,
+        "total_cost": 980.97,
+        "head_count": 13,
+        "date": "2026-05-06"
       }
     ],
     "hour_daily": [
@@ -50512,24 +50595,6 @@
       },
       {
         "date": "2026-05-05",
-        "hour": 0,
-        "hours": 8.0,
-        "cost": 108.02
-      },
-      {
-        "date": "2026-05-05",
-        "hour": 1,
-        "hours": 7.49,
-        "cost": 99.81
-      },
-      {
-        "date": "2026-05-05",
-        "hour": 2,
-        "hours": 1.67,
-        "cost": 13.63
-      },
-      {
-        "date": "2026-05-05",
         "hour": 18,
         "hours": 1.15,
         "cost": 8.56
@@ -50611,6 +50676,60 @@
         "hour": 7,
         "hours": 1.0,
         "cost": 0.0
+      },
+      {
+        "date": "2026-05-06",
+        "hour": 18,
+        "hours": 3.4,
+        "cost": 38.59
+      },
+      {
+        "date": "2026-05-06",
+        "hour": 19,
+        "hours": 9.37,
+        "cost": 113.52
+      },
+      {
+        "date": "2026-05-06",
+        "hour": 20,
+        "hours": 11.42,
+        "cost": 123.03
+      },
+      {
+        "date": "2026-05-06",
+        "hour": 21,
+        "hours": 12.51,
+        "cost": 131.07
+      },
+      {
+        "date": "2026-05-06",
+        "hour": 22,
+        "hours": 13.0,
+        "cost": 134.97
+      },
+      {
+        "date": "2026-05-06",
+        "hour": 23,
+        "hours": 13.0,
+        "cost": 134.97
+      },
+      {
+        "date": "2026-05-07",
+        "hour": 0,
+        "hours": 12.16,
+        "cost": 131.6
+      },
+      {
+        "date": "2026-05-07",
+        "hour": 1,
+        "hours": 8.27,
+        "cost": 106.85
+      },
+      {
+        "date": "2026-05-07",
+        "hour": 2,
+        "hours": 5.44,
+        "cost": 66.37
       }
     ],
     "by_job_daily": [
@@ -52678,6 +52797,13 @@
         "title": "Support",
         "hours": 7.14,
         "cost": 57.12
+      },
+      {
+        "date": "2026-05-06",
+        "job_guid": "4deb80aa-c490-4fba-a32d-3b49009c7144",
+        "title": "FOH Training",
+        "hours": 0.0,
+        "cost": 0.0
       }
     ],
     "hour_dow": [
@@ -52690,8 +52816,8 @@
       {
         "hour": 0,
         "dow": "TUE",
-        "hours": 267.11,
-        "cost": 3441.24
+        "hours": 259.11,
+        "cost": 3333.22
       },
       {
         "hour": 0,
@@ -52702,8 +52828,8 @@
       {
         "hour": 0,
         "dow": "THU",
-        "hours": 381.3,
-        "cost": 4777.34
+        "hours": 393.46,
+        "cost": 4908.94
       },
       {
         "hour": 0,
@@ -52732,8 +52858,8 @@
       {
         "hour": 1,
         "dow": "TUE",
-        "hours": 234.77,
-        "cost": 2938.05
+        "hours": 227.28,
+        "cost": 2838.24
       },
       {
         "hour": 1,
@@ -52744,8 +52870,8 @@
       {
         "hour": 1,
         "dow": "THU",
-        "hours": 345.77,
-        "cost": 4390.96
+        "hours": 354.04,
+        "cost": 4497.81
       },
       {
         "hour": 1,
@@ -52774,8 +52900,8 @@
       {
         "hour": 2,
         "dow": "TUE",
-        "hours": 145.09,
-        "cost": 1547.98
+        "hours": 143.42,
+        "cost": 1534.35
       },
       {
         "hour": 2,
@@ -52786,8 +52912,8 @@
       {
         "hour": 2,
         "dow": "THU",
-        "hours": 220.04,
-        "cost": 2607.09
+        "hours": 225.48,
+        "cost": 2673.46
       },
       {
         "hour": 2,
@@ -53320,8 +53446,8 @@
       {
         "hour": 18,
         "dow": "WED",
-        "hours": 121.64,
-        "cost": 1808.78
+        "hours": 125.04,
+        "cost": 1847.37
       },
       {
         "hour": 18,
@@ -53362,8 +53488,8 @@
       {
         "hour": 19,
         "dow": "WED",
-        "hours": 241.52,
-        "cost": 3418.84
+        "hours": 250.89,
+        "cost": 3532.36
       },
       {
         "hour": 19,
@@ -53404,8 +53530,8 @@
       {
         "hour": 20,
         "dow": "WED",
-        "hours": 335.34,
-        "cost": 4618.33
+        "hours": 346.76,
+        "cost": 4741.36
       },
       {
         "hour": 20,
@@ -53446,8 +53572,8 @@
       {
         "hour": 21,
         "dow": "WED",
-        "hours": 374.06,
-        "cost": 4951.26
+        "hours": 386.57,
+        "cost": 5082.33
       },
       {
         "hour": 21,
@@ -53488,8 +53614,8 @@
       {
         "hour": 22,
         "dow": "WED",
-        "hours": 402.69,
-        "cost": 5108.02
+        "hours": 415.69,
+        "cost": 5242.99
       },
       {
         "hour": 22,
@@ -53530,8 +53656,8 @@
       {
         "hour": 23,
         "dow": "WED",
-        "hours": 405.44,
-        "cost": 5079.77
+        "hours": 418.44,
+        "cost": 5214.74
       },
       {
         "hour": 23,
@@ -53560,11 +53686,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 25898.47,
+    "regular_hours": 25987.04,
     "overtime_hours": 1215.48,
-    "regular_cost": 319202.72,
+    "regular_cost": 320183.69,
     "overtime_cost": 12024.92,
-    "total_cost": 331227.63
+    "total_cost": 332208.6
   },
   "cogs": {
     "as_of": "2026-05-01",
@@ -55375,7 +55501,7 @@
         "line_items": [
           {
             "product_id": "1101418350",
-            "product_name": "Bołsius Ivory Pillar Candles - 2x3 Inches - 20 Pack Unscented - Premium European Quality - Dripless, Smokeless, and Clea n Burming Household Candles - Perfect for Wedding, Party, Dinner, And Home Décor",
+            "product_name": "Bo\u0142sius Ivory Pillar Candles - 2x3 Inches - 20 Pack Unscented - Premium European Quality - Dripless, Smokeless, and Clea n Burming Household Candles - Perfect for Wedding, Party, Dinner, And Home D\u00e9cor",
             "category": "Restaurant Supplies",
             "category_id": "3019",
             "category_type": "OTHER",
@@ -63053,7 +63179,7 @@
         "line_items": [
           {
             "product_id": "1108817006",
-            "product_name": "Aimery Cremant Brut ´Nv 12/750ml",
+            "product_name": "Aimery Cremant Brut \u00b4Nv 12/750ml",
             "category": "Wine",
             "category_id": "3018",
             "category_type": "WINE",
@@ -66584,7 +66710,7 @@
         "line_items": [
           {
             "product_id": "986800854",
-            "product_name": "Bauhaus Rocks Glass 12OZ 3-3/4¨h Sheer Rim Clear",
+            "product_name": "Bauhaus Rocks Glass 12OZ 3-3/4\u00a8h Sheer Rim Clear",
             "category": "Restaurant Supplies",
             "category_id": "3019",
             "category_type": "OTHER",
@@ -66595,7 +66721,7 @@
           },
           {
             "product_id": "986800862",
-            "product_name": "S-Line Hiball Glass 12Oz 6-1/2¨h Crystal Clear",
+            "product_name": "S-Line Hiball Glass 12Oz 6-1/2\u00a8h Crystal Clear",
             "category": "Restaurant Supplies",
             "category_id": "3019",
             "category_type": "OTHER",
@@ -66628,7 +66754,7 @@
           },
           {
             "product_id": "986800868",
-            "product_name": "Sequence Coupe Cocktail Glass 7Oz 6¨h C&S Clear",
+            "product_name": "Sequence Coupe Cocktail Glass 7Oz 6\u00a8h C&S Clear",
             "category": "Restaurant Supplies",
             "category_id": "3019",
             "category_type": "OTHER",
@@ -67771,7 +67897,7 @@
         "line_items": [
           {
             "product_id": "1124687185",
-            "product_name": "Front of the House Mezze® 2 oz. Sesame Two-Tone Round Porcelain Ramekin-12/Case",
+            "product_name": "Front of the House Mezze\u00ae 2 oz. Sesame Two-Tone Round Porcelain Ramekin-12/Case",
             "category": "Smallwares",
             "category_id": "3049",
             "category_type": "OTHER",
@@ -71278,7 +71404,7 @@
           },
           {
             "product_id": "986800868",
-            "product_name": "Sequence Coupe Cocktail Glass 7Oz 6¨h C&S Clear",
+            "product_name": "Sequence Coupe Cocktail Glass 7Oz 6\u00a8h C&S Clear",
             "category": "Restaurant Supplies",
             "category_id": "3019",
             "category_type": "OTHER",
@@ -89439,7 +89565,7 @@
           },
           {
             "product_id": "1108817006",
-            "product_name": "Aimery Cremant Brut ´Nv 12/750ml",
+            "product_name": "Aimery Cremant Brut \u00b4Nv 12/750ml",
             "category": "Wine",
             "category_id": "3018",
             "category_type": "WINE",
@@ -90633,7 +90759,7 @@
       },
       {
         "id": "3028",
-        "name": "Insurance ‐ Liability and General",
+        "name": "Insurance \u2010 Liability and General",
         "category_type": "OTHER",
         "cogs_bucket": null
       },
@@ -92641,7 +92767,7 @@
         "ai_confidence": 0.63
       }
     ],
-    "_note": "range 2026-03-23 → 2026-05-17 · 56 days · ai_suggested_revenue (NOT manager_revenue)"
+    "_note": "range 2026-03-23 \u2192 2026-05-17 \u00b7 56 days \u00b7 ai_suggested_revenue (NOT manager_revenue)"
   },
   "budget": {
     "as_of": "2026-05-06",
@@ -94832,7 +94958,7 @@
         "orders": null
       }
     ],
-    "_note": "range 2025-12-29 → 2026-12-27 · 364 days"
+    "_note": "range 2025-12-29 \u2192 2026-12-27 \u00b7 364 days"
   },
   "weather": {
     "as_of": "2026-05-06",
@@ -99384,7 +99510,7 @@
         "precipitation_pct": 16.0
       }
     ],
-    "_note": "range 2025-01-01 → 2026-05-20 · 505 days (15 forward)"
+    "_note": "range 2025-01-01 \u2192 2026-05-20 \u00b7 505 days (15 forward)"
   },
   "_validation_index": {
     "sage_budget": {
@@ -99395,16 +99521,16 @@
       "rows_warned": 0
     },
     "toast_order": {
-      "ran_at": "2026-05-06T13:53:56+00:00",
-      "rows_in": 149,
-      "rows_valid": 149,
+      "ran_at": "2026-05-07T13:52:34+00:00",
+      "rows_in": 137,
+      "rows_valid": 137,
       "rows_invalid": 0,
       "rows_warned": 0
     },
     "toast_time_entry": {
-      "ran_at": "2026-05-06T13:53:57+00:00",
-      "rows_in": 21,
-      "rows_valid": 21,
+      "ran_at": "2026-05-07T13:52:35+00:00",
+      "rows_in": 24,
+      "rows_valid": 24,
       "rows_invalid": 0,
       "rows_warned": 0
     },
