@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Book Tower / ROOST Detroit — Org Chart</title>
+<style>
+  :root {
+    --fill: #BDDEF0;
+    --border: #6AB4D4;
+    --name: #0C3A52;
+    --title: #2A6A88;
+    --tbd-fill: #C5E0B3;
+    --tbd-border: #70AD47;
+    --row-alt: #E8F1F8;
+    --section-bg: #0C3A52;
+    --section-fg: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Calibri, Helvetica, Arial, sans-serif;
+    color: var(--name);
+    background: #fff;
+  }
+  .page {
+    max-width: 100%;
+    padding: 32px 28px;
+  }
+  h1 {
+    font-size: 28px;
+    margin: 0 0 4px 0;
+    color: var(--name);
+    font-weight: 700;
+  }
+  .subtitle {
+    color: var(--title);
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  .summary {
+    background: #F4F9FC;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 13px;
+    color: var(--title);
+    line-height: 1.5;
+  }
+  .summary strong { color: var(--name); }
+
+  .chart-wrap {
+    overflow-x: auto;
+    background: #FAFCFD;
+    border: 1px solid #E0EAF1;
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 28px;
+  }
+  .chart {
+    position: relative;
+    width: 2926px;
+    height: 840px;
+  }
+  .chart svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .chart svg line {
+    stroke: var(--border);
+    stroke-width: 1;
+  }
+  .org-box {
+    position: absolute;
+    background: var(--fill);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 6px 6px 6px;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(12, 58, 82, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .org-box.vacant {
+    background: var(--tbd-fill);
+    border-color: var(--tbd-border);
+  }
+  .b-name {
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--name);
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+  .b-title {
+    font-size: 9.5px;
+    color: var(--title);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .b-salary {
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--name);
+    line-height: 1.1;
+  }
+  .b-salary.est {
+    font-style: italic;
+  }
+  .b-pct {
+    font-size: 9px;
+    font-style: italic;
+    color: var(--title);
+    margin-top: 2px;
+  }
+
+  .ss-header {
+    position: absolute;
+    left: 2482px;
+    top: 14px;
+    width: 414px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--name);
+  }
+  .ss-banner {
+    position: absolute;
+    left: 2482px;
+    top: 38px;
+    width: 414px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+  }
+
+  /* Roles table */
+  .roles-section h2 {
+    font-size: 22px;
+    margin: 30px 0 4px 0;
+    color: var(--name);
+  }
+  .roles-section .subtitle {
+    margin-bottom: 14px;
+  }
+  table.roles {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  table.roles th, table.roles td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #E5EEF4;
+    vertical-align: top;
+    text-align: left;
+  }
+  table.roles th.num, table.roles td.num {
+    text-align: right;
+    white-space: nowrap;
+  }
+  table.roles th {
+    background: var(--section-bg);
+    color: var(--section-fg);
+    font-weight: 700;
+    font-size: 12px;
+    border-bottom: none;
+  }
+  table.roles tr.role-section td {
+    background: var(--section-bg);
+    color: var(--section-fg);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 6px 10px;
+  }
+  table.roles tr.role-row:nth-of-type(even) {
+    background: var(--row-alt);
+  }
+  table.roles tr.role-row.vacant {
+    background: var(--tbd-fill) !important;
+  }
+  table.roles td.r-name {
+    font-weight: 700;
+    color: var(--name);
+    white-space: nowrap;
+  }
+  table.roles td.r-title {
+    color: var(--title);
+    white-space: nowrap;
+  }
+  table.roles td.num {
+    font-weight: 700;
+    color: var(--name);
+  }
+  table.roles td.num.est {
+    font-style: italic;
+  }
+
+  /* Efficiency plan */
+  .efficiency-section h2 {
+    font-size: 22px;
+    margin: 36px 0 4px 0;
+    color: var(--name);
+  }
+  .efficiency-section .subtitle {
+    margin-bottom: 18px;
+  }
+  .savings-banner {
+    background: linear-gradient(135deg, #0C3A52 0%, #2A6A88 100%);
+    color: #fff;
+    border-radius: 10px;
+    padding: 18px 24px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: center;
+  }
+  .savings-banner .figure {
+    display: flex;
+    flex-direction: column;
+  }
+  .savings-banner .figure .num {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .savings-banner .figure .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.82;
+    margin-top: 2px;
+  }
+  .savings-banner .figure.pct .num {
+    color: #C5E0B3;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    border: 1px solid #D6E4ED;
+    border-left: 4px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px 16px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+  .card.priority-high { border-left-color: #C0504D; }
+  .card.priority-med { border-left-color: #E0A030; }
+  .card.priority-low { border-left-color: #70AD47; }
+  .card .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .card .card-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--name);
+  }
+  .card .card-savings {
+    font-weight: 700;
+    font-size: 13px;
+    color: #2C7A2C;
+    white-space: nowrap;
+  }
+  .card .card-area {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--title);
+    margin-bottom: 8px;
+  }
+  .card .card-body {
+    font-size: 12.5px;
+    color: var(--name);
+    line-height: 1.5;
+  }
+  .card .card-action {
+    font-size: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #D6E4ED;
+    color: var(--title);
+  }
+  .card .card-action strong {
+    color: var(--name);
+  }
+  .efficiency-note {
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: #FFF8E5;
+    border-left: 3px solid #E0A030;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--name);
+    line-height: 1.5;
+  }
+
+  /* Budget vs Actual section */
+  .bva-section h2 {
+    font-size: 22px;
+    margin: 36px 0 4px 0;
+    color: var(--name);
+  }
+  .bva-section .subtitle {
+    margin-bottom: 18px;
+  }
+  .bva-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .bva-card {
+    border: 1px solid #D6E4ED;
+    border-radius: 8px;
+    padding: 12px 14px;
+    background: #fff;
+  }
+  .bva-card.bva-card-total {
+    background: var(--name);
+    color: #fff;
+    border-color: var(--name);
+  }
+  .bva-card-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: inherit;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+  .bva-card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .bva-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+  }
+  .bva-line .lbl {
+    color: var(--title);
+    font-size: 11px;
+  }
+  .bva-card-total .bva-line .lbl {
+    color: rgba(255,255,255,0.78);
+  }
+  .bva-line .val {
+    font-weight: 700;
+    color: var(--name);
+  }
+  .bva-card-total .bva-line .val {
+    color: #fff;
+  }
+  .bva-line.var.fav .val {
+    color: #2C7A2C;
+  }
+  .bva-line.var.unfav .val {
+    color: #C0504D;
+  }
+  .bva-card-total .bva-line.var.fav .val {
+    color: #B8E0B8;
+  }
+  .bva-card-total .bva-line.var.unfav .val {
+    color: #F5B7B0;
+  }
+  .bva-line .pct {
+    font-weight: 400;
+    font-size: 11px;
+    opacity: 0.85;
+  }
+  .bva-rev {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    background: #F4F9FC;
+    border: 1px solid #D6E4ED;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  .bva-rev-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .bva-rev-item .lbl {
+    font-size: 10.5px;
+    color: var(--title);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .bva-rev-item .val {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--name);
+  }
+  .bva-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #E5EEF4;
+    border-radius: 8px;
+  }
+  table.bva-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    min-width: 1100px;
+  }
+  table.bva-table thead th {
+    background: var(--name);
+    color: #fff;
+    font-weight: 700;
+    padding: 6px 8px;
+    text-align: left;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  table.bva-table thead th.num {
+    text-align: right;
+    font-size: 10px;
+  }
+  table.bva-table thead th.outlet-head {
+    text-align: center;
+    background: var(--title);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+  table.bva-table thead th.total-head {
+    background: var(--name);
+  }
+  table.bva-table tbody td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #ECF2F7;
+    vertical-align: middle;
+  }
+  table.bva-table tbody td.num {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  table.bva-table tbody td.total-col {
+    background: #F4F9FC;
+    font-weight: 700;
+  }
+  table.bva-table tbody tr:nth-child(even) td {
+    background: #FAFCFD;
+  }
+  table.bva-table tbody tr:nth-child(even) td.total-col {
+    background: #EAF1F7;
+  }
+  table.bva-table td.var.fav {
+    color: #2C7A2C;
+  }
+  table.bva-table td.var.unfav {
+    color: #C0504D;
+  }
+  table.bva-table tr.terminated td {
+    color: #888;
+    background: #FBF6EE !important;
+  }
+  table.bva-table tr.new-hire td {
+    background: #F2F8F0 !important;
+  }
+  table.bva-table tr.vacant td {
+    background: #F6F2E6 !important;
+  }
+  table.bva-table td.emp-name {
+    font-weight: 700;
+    color: var(--name);
+    white-space: nowrap;
+  }
+  table.bva-table td.emp-pos {
+    color: var(--title);
+    white-space: nowrap;
+  }
+  table.bva-table .tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: #DDD;
+    color: #555;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+  table.bva-table .tag.tag-new {
+    background: #C5E0B3;
+    color: #1B5A1B;
+  }
+  table.bva-table .tag.tag-vacant {
+    background: #F5DE9F;
+    color: #6E4F0A;
+  }
+  table.bva-table tr.grand-total td {
+    background: var(--name) !important;
+    color: #fff !important;
+    font-weight: 700;
+    border-top: 2px solid var(--name);
+    font-size: 12px;
+  }
+  table.bva-table tr.grand-total td.var.fav {
+    color: #B8E0B8 !important;
+  }
+  table.bva-table tr.grand-total td.var.unfav {
+    color: #F5B7B0 !important;
+  }
+  .bva-note {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #F4F9FC;
+    border-left: 3px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--name);
+    line-height: 1.5;
+  }
+
+  @media print {
+    .chart-wrap { overflow: visible; }
+  }
+
+  /* center all cells in BvA detail tables; left-align employee names */
+  table.bva-table th,
+  table.bva-table td,
+  table.bva-table thead th,
+  table.bva-table tbody td,
+  table.lsd-table th,
+  table.lsd-table td {
+    text-align: center !important;
+    vertical-align: middle;
+  }
+  table.bva-table td.num,
+  table.lsd-table td.num {
+    text-align: center !important;
+  }
+  table.bva-table td.lsd-emp,
+  table.lsd-table td.lsd-emp,
+  table.bva-table thead th:first-child,
+  table.lsd-table thead th:first-child {
+    text-align: left !important;
+  }
+  
+  table.bva-table td.lsd-title,
+  table.lsd-table td.lsd-title,
+  table.bva-table thead th:nth-child(2),
+  table.lsd-table thead th:nth-child(2) {
+    text-align: left !important;
+    color: var(--title);
+    font-size: 11px;
+  }
+  table.bva-table tr.lsd-grand td:first-child,
+  table.lsd-table tr.lsd-grand td:first-child {
+    text-align: left !important;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Book Tower / ROOST Detroit — Org Chart</h1>
+  <div class="subtitle">Annual salaries with % of combined revenue ($25.5M: F&amp;B $17.2M + ROOST Detroit $8.3M) · italicized salaries are estimates for vacant positions · as of 5.8.26</div>
+
+  <div class="summary">
+    Total annualized management salary across 42 positions: <strong>$3,483,980</strong> · <strong>13.66% of combined revenue</strong>. Green boxes indicate vacant or unfilled roles (Heather Majerus is a true $0 — services allocated from another entity).
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart">
+      <svg viewBox="0 0 2926 840" preserveAspectRatio="xMinYMin meet">
+        <line x1="1225" y1="170" x2="1225" y2="195" /><line x1="142" y1="195" x2="2073" y2="195" /><line x1="142" y1="195" x2="142" y2="220" /><line x1="576" y1="195" x2="576" y2="220" /><line x1="943" y1="195" x2="943" y2="220" /><line x1="1356" y1="195" x2="1356" y2="220" /><line x1="2073" y1="195" x2="2073" y2="220" /><line x1="142" y1="330" x2="142" y2="355" /><line x1="142" y1="330" x2="143" y2="380" /><line x1="143" y1="490" x2="143" y2="515" /><line x1="85" y1="515" x2="201" y2="515" /><line x1="85" y1="515" x2="85" y2="540" /><line x1="201" y1="515" x2="201" y2="540" /><line x1="576" y1="330" x2="576" y2="355" /><line x1="307" y1="355" x2="832" y2="355" /><line x1="307" y1="355" x2="307" y2="380" /><line x1="403" y1="355" x2="403" y2="380" /><line x1="499" y1="355" x2="499" y2="380" /><line x1="610" y1="355" x2="610" y2="380" /><line x1="721" y1="355" x2="721" y2="380" /><line x1="832" y1="355" x2="832" y2="380" /><line x1="610" y1="490" x2="610" y2="515" /><line x1="610" y1="515" x2="610" y2="540" /><line x1="832" y1="490" x2="832" y2="515" /><line x1="832" y1="515" x2="832" y2="540" /><line x1="1356" y1="330" x2="1356" y2="355" /><line x1="1087" y1="355" x2="1660" y2="355" /><line x1="1087" y1="355" x2="1087" y2="380" /><line x1="1231" y1="355" x2="1231" y2="380" /><line x1="1327" y1="355" x2="1327" y2="380" /><line x1="1423" y1="355" x2="1423" y2="380" /><line x1="1534" y1="355" x2="1534" y2="380" /><line x1="1660" y1="355" x2="1660" y2="380" /><line x1="1087" y1="490" x2="1087" y2="515" /><line x1="1039" y1="515" x2="1135" y2="515" /><line x1="1039" y1="515" x2="1039" y2="540" /><line x1="1135" y1="515" x2="1135" y2="540" /><line x1="1534" y1="490" x2="1534" y2="515" /><line x1="1534" y1="515" x2="1534" y2="540" /><line x1="1660" y1="490" x2="1660" y2="515" /><line x1="1660" y1="515" x2="1660" y2="540" /><line x1="2073" y1="330" x2="2073" y2="355" /><line x1="1786" y1="355" x2="2233" y2="355" /><line x1="1786" y1="355" x2="1786" y2="380" /><line x1="1945" y1="355" x2="1945" y2="380" /><line x1="2233" y1="355" x2="2233" y2="380" /><line x1="1786" y1="490" x2="1786" y2="515" /><line x1="1786" y1="515" x2="1786" y2="540" /><line x1="1945" y1="490" x2="1945" y2="515" /><line x1="1945" y1="515" x2="1945" y2="540" /><line x1="1945" y1="650" x2="1945" y2="675" /><line x1="1897" y1="675" x2="1993" y2="675" /><line x1="1897" y1="675" x2="1897" y2="700" /><line x1="1993" y1="675" x2="1993" y2="700" /><line x1="2233" y1="490" x2="2233" y2="515" /><line x1="2089" y1="515" x2="2377" y2="515" /><line x1="2089" y1="515" x2="2089" y2="540" /><line x1="2185" y1="515" x2="2185" y2="540" /><line x1="2281" y1="515" x2="2281" y2="540" /><line x1="2377" y1="515" x2="2377" y2="540" /><line x1="2831" y1="170" x2="2831" y2="195" /><line x1="2831" y1="195" x2="2831" y2="220" />
+      </svg>
+      <div class="org-box" style="left:1133px;top:60px;width:185px;height:110px"><div class="b-name">Scott Sadoff</div><div class="b-title">EVP</div><div class="b-salary">$255,000</div><div class="b-pct">1.00% of rev</div></div><div class="org-box" style="left:60px;top:220px;width:165px;height:110px"><div class="b-name">Christopher Cavanaugh</div><div class="b-title">ROOST GM</div><div class="b-salary">$80,000</div><div class="b-pct">0.31% of rev</div></div><div class="org-box" style="left:83px;top:380px;width:120px;height:110px"><div class="b-name">Jo-Nathan Gross</div><div class="b-title">AGM</div><div class="b-salary">$90,000</div><div class="b-pct">0.35% of rev</div></div><div class="org-box" style="left:30px;top:540px;width:110px;height:110px"><div class="b-name">Karla Robinson-Sims</div><div class="b-title">Hskp Manager</div><div class="b-salary">$63,000</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:146px;top:540px;width:110px;height:110px"><div class="b-name">YooRim Kim</div><div class="b-title">Director Front Office</div><div class="b-salary">$78,000</div><div class="b-pct">0.31% of rev</div></div><div class="org-box" style="left:494px;top:220px;width:165px;height:110px"><div class="b-name">John Lerchen</div><div class="b-title">VP of Sales</div><div class="b-salary">$180,000</div><div class="b-pct">0.71% of rev</div></div><div class="org-box" style="left:262px;top:380px;width:90px;height:110px"><div class="b-name">Heather Majerus</div><div class="b-title">Reg Dir Sales Ex Stay</div><div class="b-salary">$0</div><div class="b-pct">0.00% of rev</div></div><div class="org-box" style="left:358px;top:380px;width:90px;height:110px"><div class="b-name">Tamika Nixon</div><div class="b-title">Senior Sales-Corp</div><div class="b-salary">$95,000</div><div class="b-pct">0.37% of rev</div></div><div class="org-box vacant" style="left:454px;top:380px;width:90px;height:110px"><div class="b-name">TBB</div><div class="b-title">Senior Sales-Events</div><div class="b-salary est">$95,000 (est.)</div><div class="b-pct">0.37% of rev</div></div><div class="org-box" style="left:550px;top:380px;width:120px;height:110px"><div class="b-name">Lee-ann Platt</div><div class="b-title">Event Sales Manager</div><div class="b-salary">$70,000</div><div class="b-pct">0.27% of rev</div></div><div class="org-box vacant" style="left:565px;top:540px;width:90px;height:110px"><div class="b-name">TBD</div><div class="b-title">Sales Admin</div><div class="b-salary est">$48,000 (est.)</div><div class="b-pct">0.19% of rev</div></div><div class="org-box vacant" style="left:676px;top:380px;width:90px;height:110px"><div class="b-name">TBD</div><div class="b-title">SMERF</div><div class="b-salary est">$70,000 (est.)</div><div class="b-pct">0.27% of rev</div></div><div class="org-box" style="left:772px;top:380px;width:120px;height:110px"><div class="b-name">Lyndsay Zelenak</div><div class="b-title">Event Services Coord</div><div class="b-salary">$65,000</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:787px;top:540px;width:90px;height:110px"><div class="b-name">Keeley Najor</div><div class="b-title">AE Admin</div><div class="b-salary est">$48,000 (est.)</div><div class="b-pct">0.19% of rev</div></div><div class="org-box" style="left:898px;top:220px;width:90px;height:110px"><div class="b-name">Patrick Jobst</div><div class="b-title">Director of Beverage</div><div class="b-salary">$135,000</div><div class="b-pct">0.53% of rev</div></div><div class="org-box" style="left:1274px;top:220px;width:165px;height:110px"><div class="b-name">Nyle Flynn</div><div class="b-title">Executive Chef</div><div class="b-salary">$145,000</div><div class="b-pct">0.57% of rev</div></div><div class="org-box" style="left:1027px;top:380px;width:120px;height:110px"><div class="b-name">Christian Vasquez-Yax</div><div class="b-title">EC Hiroki-San</div><div class="b-salary">$95,000</div><div class="b-pct">0.37% of rev</div></div><div class="org-box" style="left:994px;top:540px;width:90px;height:110px"><div class="b-name">Louis Placido</div><div class="b-title">Sushi Chef-HS</div><div class="b-salary">$75,000</div><div class="b-pct">0.29% of rev</div></div><div class="org-box" style="left:1090px;top:540px;width:90px;height:110px"><div class="b-name">Aiden Toby</div><div class="b-title">Sous Chef-HS</div><div class="b-salary">$64,000</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:1186px;top:380px;width:90px;height:110px"><div class="b-name">Dylan Trippe-Edwards</div><div class="b-title">Sous-LSD</div><div class="b-salary">$68,000</div><div class="b-pct">0.27% of rev</div></div><div class="org-box" style="left:1282px;top:380px;width:90px;height:110px"><div class="b-name">Mitchell Driesenga</div><div class="b-title">Sous Chef LSD</div><div class="b-salary">$65,000</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:1378px;top:380px;width:90px;height:110px"><div class="b-name">Nino Toigo</div><div class="b-title">Sous Chef LSD</div><div class="b-salary">$64,000</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:1474px;top:380px;width:120px;height:110px"><div class="b-name">Benjamin Zemach</div><div class="b-title">EC AE/K</div><div class="b-salary">$105,000</div><div class="b-pct">0.41% of rev</div></div><div class="org-box" style="left:1489px;top:540px;width:90px;height:110px"><div class="b-name">Dylan Clement</div><div class="b-title">Sous AE/K</div><div class="b-salary">$59,280</div><div class="b-pct">0.23% of rev</div></div><div class="org-box" style="left:1600px;top:380px;width:120px;height:110px"><div class="b-name">Hailey Enszer</div><div class="b-title">EC Pastry</div><div class="b-salary">$99,000</div><div class="b-pct">0.39% of rev</div></div><div class="org-box" style="left:1615px;top:540px;width:90px;height:110px"><div class="b-name">Neal Murakami</div><div class="b-title">Sous Pastry</div><div class="b-salary">$57,200</div><div class="b-pct">0.22% of rev</div></div><div class="org-box" style="left:1991px;top:220px;width:165px;height:110px"><div class="b-name">David Massoni</div><div class="b-title">Director of Operations</div><div class="b-salary">$160,000</div><div class="b-pct">0.63% of rev</div></div><div class="org-box" style="left:1726px;top:380px;width:120px;height:110px"><div class="b-name">Naomi Scott</div><div class="b-title">AGM HS</div><div class="b-salary">$80,000</div><div class="b-pct">0.31% of rev</div></div><div class="org-box" style="left:1741px;top:540px;width:90px;height:110px"><div class="b-name">Petr Balcarovsky</div><div class="b-title">Ops HS</div><div class="b-salary">$70,000</div><div class="b-pct">0.27% of rev</div></div><div class="org-box" style="left:1885px;top:380px;width:120px;height:110px"><div class="b-name">Stephanie Jordan</div><div class="b-title">GM AE/K</div><div class="b-salary">$100,000</div><div class="b-pct">0.39% of rev</div></div><div class="org-box" style="left:1900px;top:540px;width:90px;height:110px"><div class="b-name">Zachary Adkins</div><div class="b-title">AGM AE/K</div><div class="b-salary">$80,000</div><div class="b-pct">0.31% of rev</div></div><div class="org-box" style="left:1852px;top:700px;width:90px;height:110px"><div class="b-name">Shianna Bakos</div><div class="b-title">Ops AE/K</div><div class="b-salary">$65,000</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:1948px;top:700px;width:90px;height:110px"><div class="b-name">Sarah Russell</div><div class="b-title">Ops AE/K</div><div class="b-salary">$65,000</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:2173px;top:380px;width:120px;height:110px"><div class="b-name">Jonathan Taccolini</div><div class="b-title">AGM LSD/BR</div><div class="b-salary">$73,000</div><div class="b-pct">0.29% of rev</div></div><div class="org-box" style="left:2044px;top:540px;width:90px;height:110px"><div class="b-name">Dominic Fosmore</div><div class="b-title">Ops LSD/BR</div><div class="b-salary">$62,500</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:2140px;top:540px;width:90px;height:110px"><div class="b-name">Shannon Beaudoin</div><div class="b-title">Ops LSD/BR</div><div class="b-salary">$65,000</div><div class="b-pct">0.25% of rev</div></div><div class="org-box" style="left:2236px;top:540px;width:90px;height:110px"><div class="b-name">Briana Swayze</div><div class="b-title">Ops LSD/BR</div><div class="b-salary">$67,000</div><div class="b-pct">0.26% of rev</div></div><div class="org-box" style="left:2332px;top:540px;width:90px;height:110px"><div class="b-name">Emily Meyers</div><div class="b-title">Ops LSD/BR</div><div class="b-salary">$58,000</div><div class="b-pct">0.23% of rev</div></div><div class="org-box" style="left:2482px;top:60px;width:130px;height:110px"><div class="b-name">Craig Zerbe</div><div class="b-title">Facilities Manager</div><div class="b-salary">$75,000</div><div class="b-pct">0.29% of rev</div></div><div class="org-box" style="left:2624px;top:60px;width:130px;height:110px"><div class="b-name">Jenna Chimenti</div><div class="b-title">HR Coordinator</div><div class="b-salary">$60,000</div><div class="b-pct">0.24% of rev</div></div><div class="org-box vacant" style="left:2766px;top:60px;width:130px;height:110px"><div class="b-name">TBD</div><div class="b-title">Marketing Manager</div><div class="b-salary est">$75,000 (est.)</div><div class="b-pct">0.29% of rev</div></div><div class="org-box" style="left:2766px;top:220px;width:130px;height:110px"><div class="b-name">Olivia Brazer</div><div class="b-title">Mkt/Comm Coord</div><div class="b-salary">$60,000</div><div class="b-pct">0.24% of rev</div></div>
+      <div class="ss-header">SHARED SERVICES</div>
+      <div class="ss-banner"></div>
+    </div>
+  </div>
+
+  <div class="roles-section">
+    <h2>Roles &amp; Responsibilities</h2>
+    <table class="roles">
+      <thead>
+        <tr class="role-header"><th>Name</th><th>Title</th><th class="num">Salary</th><th>Role &amp; Responsibilities</th></tr>
+      </thead>
+      <tbody>
+        <tr class="role-section"><td colspan="4">ROOST</td></tr><tr class="role-row"><td class="r-name">Christopher Cavanaugh</td><td class="r-title">ROOST GM</td><td class="num">$80,000</td><td>Hotel operations, sales strategy, partner relations, point of contact for ROOST BT</td></tr><tr class="role-row"><td class="r-name">Jo-Nathan Gross</td><td class="r-title">ROOST AGM</td><td class="num">$90,000</td><td>Employee oversight, ordering, housekeeping</td></tr><tr class="role-row"><td class="r-name">Karla Robinson-Sims</td><td class="r-title">Housekeeping Manager</td><td class="num">$63,000</td><td>Housekeeping scheduling and adherence, general cleanliness</td></tr><tr class="role-row"><td class="r-name">YooRim Kim</td><td class="r-title">Director of Front Office</td><td class="num">$78,000</td><td>Employee scheduling, counseling, hiring — property ambassadors</td></tr><tr class="role-section"><td colspan="4">SALES</td></tr><tr class="role-row"><td class="r-name">John Lerchen</td><td class="r-title">VP of Sales</td><td class="num">$180,000</td><td>Sales growth — ROOST and Anthology Events; team lead, sales initiatives &amp; strategy, corporate outreach</td></tr><tr class="role-row"><td class="r-name">Heather Majerus</td><td class="r-title">Reg Dir of Sales — Ex Stay</td><td class="num">$0</td><td>Group Extended Stay / room nights (allocated elsewhere — services provided at $0 cost to BT)</td></tr><tr class="role-row"><td class="r-name">Tamika Nixon</td><td class="r-title">Senior Sales — Corporate</td><td class="num">$95,000</td><td>Corporate bookings / room nights</td></tr><tr class="role-row vacant"><td class="r-name">Vacant</td><td class="r-title">Senior Sales — Events</td><td class="num est">$95,000 (est.)</td><td>—</td></tr><tr class="role-row"><td class="r-name">Lee-ann Platt</td><td class="r-title">Event Sales Manager</td><td class="num">$70,000</td><td>Social / Weddings / Restaurant buyouts</td></tr><tr class="role-row vacant"><td class="r-name">Vacant</td><td class="r-title">SMERF</td><td class="num est">$70,000 (est.)</td><td>—</td></tr><tr class="role-row"><td class="r-name">Lyndsay Zelenak</td><td class="r-title">Event Services Coordinator</td><td class="num">$65,000</td><td>Social / Weddings / Restaurant buyouts</td></tr><tr class="role-row"><td class="r-name">Keeley Najor</td><td class="r-title">AE Admin — Hourly</td><td class="num est">$48,000 (est.)</td><td>Admin / PDR</td></tr><tr class="role-row vacant"><td class="r-name">Vacant</td><td class="r-title">Sales Admin</td><td class="num est">$48,000 (est.)</td><td>—</td></tr><tr class="role-section"><td colspan="4">F&B</td></tr><tr class="role-row"><td class="r-name">Scott Sadoff</td><td class="r-title">EVP</td><td class="num">$255,000</td><td>Overall operational ownership; P&amp;L ownership/reporting; partner/ownership relations; forecast/budget; sales &amp; event initiative oversight/strategy; HR oversight; accounting management; marketing &amp; social ownership; schedule ownership; vendor/guest relations; ROOST involvement; team development; Security/EVS/Valet/Engineering relationships; point of contact for BT</td></tr><tr class="role-row"><td class="r-name">Patrick Jobst</td><td class="r-title">Director of Beverage</td><td class="num">$135,000</td><td>Portfolio beverage cost controls, menu creation, education, training, vendor relations, daily beverage sales-inventory ownership, P&amp;L ownership, wine events, team development</td></tr><tr class="role-row"><td class="r-name">David Massoni</td><td class="r-title">Director of Operations</td><td class="num">$160,000</td><td>Day-to-day operations, training, hospitality, education, scheduling, OpEx controls, LSD/BR focus as acting GM, employee &amp; guest relations, P&amp;L involvement, team development</td></tr><tr class="role-row"><td class="r-name">Nyle Flynn</td><td class="r-title">Executive Chef</td><td class="num">$145,000</td><td>Culinary portfolio oversight &amp; cost controls, menu creation, education, training, schedule approval, day-to-day LSD/BR impact, building inventory ownership, BOH payroll, chemical ordering, Avendra adherence, team development</td></tr><tr class="role-row"><td class="r-name">Christian Vasquez-Yax</td><td class="r-title">EC — Hiroki-San / SZ / AS</td><td class="num">$95,000</td><td>Culinary oversight of Hiroki-San and Sakazuki; menu creation, schedule approval, ordering, education, training, quality assurance; inventory &amp; prep oversight; sushi and sous chef oversight; BOH payroll; chemical ordering</td></tr><tr class="role-row"><td class="r-name">Louis Placido</td><td class="r-title">Sushi Chef — HS / SZ / AS</td><td class="num">$75,000</td><td>Fish ordering / production / breakdown, scheduling, Omakase production, education, training, scheduling of BOH employees, day-to-day oversight on all sushi</td></tr><tr class="role-row"><td class="r-name">Aiden Toby</td><td class="r-title">Sous Chef — HS / SZ / AS</td><td class="num">$64,000</td><td>Culinary support — operations and production oversight, expediting, works all stations, dishwasher scheduling</td></tr><tr class="role-row"><td class="r-name">Dylan Trippe-Edwards</td><td class="r-title">Sous Chef — LSD/BR</td><td class="num">$68,000</td><td>Culinary support — operations, inventory compliance, scheduling, expediting, works all stations</td></tr><tr class="role-row"><td class="r-name">Mitchell Driesenga</td><td class="r-title">Sous Chef — LSD/BR</td><td class="num">$65,000</td><td>Culinary support — operations and production oversight, expediting, works all stations, dishwasher scheduling</td></tr><tr class="role-row"><td class="r-name">Nino Toigo</td><td class="r-title">Sous Chef — LSD/BR</td><td class="num">$64,000</td><td>Day-to-day prep oversight, ordering</td></tr><tr class="role-row"><td class="r-name">Benjamin Zemach</td><td class="r-title">EC — AE / Kamper&#x27;s</td><td class="num">$105,000</td><td>Culinary oversight of Anthology Events &amp; Kamper&#x27;s; menu creation, schedule approval, ordering, education, training, quality assurance, inventory</td></tr><tr class="role-row"><td class="r-name">Dylan Clement</td><td class="r-title">Sous Chef — AE / Kamper&#x27;s</td><td class="num">$59,280</td><td>Culinary support, inventory compliance, scheduling, expediting, all stations, prep oversight</td></tr><tr class="role-row"><td class="r-name">Hailey Enszer</td><td class="r-title">Executive Pastry Chef</td><td class="num">$99,000</td><td>Culinary oversight of pastry for the building; menu creation, schedule approval, ordering, education, training, quality assurance; inventory &amp; prep oversight across all events &amp; locations; vendor relations</td></tr><tr class="role-row"><td class="r-name">Neal Murakami</td><td class="r-title">Sous Chef — Pastry</td><td class="num">$57,200</td><td>Culinary support on bread production for the building; LSD/BR pastry ops; menu creation — LSD</td></tr><tr class="role-row"><td class="r-name">Naomi Scott</td><td class="r-title">AGM — HS / SZ / AS</td><td class="num">$80,000</td><td>Ops oversight of HS/SZ/AS; manager scheduling, service training, education, inventory review, guest relations, P&amp;L involvement, payroll, employee documentation</td></tr><tr class="role-row"><td class="r-name">Petr Balcarovsky</td><td class="r-title">Ops Manager — HS / SZ / AS</td><td class="num">$70,000</td><td>Ops support of HS/SZ/AS; bar scheduling &amp; prep oversight, LBW ordering, training &amp; sales, education, inventory involvement, guest relations</td></tr><tr class="role-row"><td class="r-name">Stephanie Jordan</td><td class="r-title">GM — AE / Kamper&#x27;s</td><td class="num">$100,000</td><td>Ops oversight of AE &amp; Kamper&#x27;s; scheduling, training, education, inventory oversight, guest relations, P&amp;L oversight, BEO coordination for day-of events, main point of contact upon all turnover events as well as day-of operations point of contact, payroll</td></tr><tr class="role-row"><td class="r-name">Zachary Adkins</td><td class="r-title">AGM — AE / Kamper&#x27;s</td><td class="num">$80,000</td><td>Ops oversight of Kamper&#x27;s; bar scheduling, inventory, training, education, guest relations, P&amp;L involvement, AE support</td></tr><tr class="role-row"><td class="r-name">Shianna Bakos</td><td class="r-title">Ops Manager — AE / Kamper&#x27;s</td><td class="num">$65,000</td><td>Ops support of Kamper&#x27;s; FOH scheduling, training, education, guest relations, day-to-day ops, AE support</td></tr><tr class="role-row"><td class="r-name">Sarah Russell</td><td class="r-title">Ops Manager — AE / Kamper&#x27;s</td><td class="num">$65,000</td><td>Ops support of AE; FOH scheduling, training, education, guest relations, day-to-day ops, Kamper&#x27;s support</td></tr><tr class="role-row"><td class="r-name">Jonathan Taccolini</td><td class="r-title">AGM — LSD/BR</td><td class="num">$73,000</td><td>Ops oversight of LSD/BR; manager scheduling, wine training, education, inventory review, guest relations, P&amp;L involvement, payroll, employee documentation</td></tr><tr class="role-row"><td class="r-name">Dominic Fosmore</td><td class="r-title">Ops Manager — LSD/BR</td><td class="num">$62,500</td><td>Ops support of LSD/BR; bar scheduling &amp; prep oversight, LBW ordering, training &amp; sales, education, inventory involvement, guest relations, Bar Rotunda oversight (PM), glassware inventory</td></tr><tr class="role-row"><td class="r-name">Shannon Beaudoin</td><td class="r-title">Ops Manager — LSD/BR</td><td class="num">$65,000</td><td>Ops support of LSD/BR; collateral, uniform, linen, &amp; plateware inventory/ordering, new hire onboarding/training</td></tr><tr class="role-row"><td class="r-name">Briana Swayze</td><td class="r-title">Ops Manager — LSD/BR</td><td class="num">$67,000</td><td>Ops support of LSD/BR; host/front door focus, guest relations communication, applicant and training focus</td></tr><tr class="role-row"><td class="r-name">Emily Meyers</td><td class="r-title">Ops Manager — LSD/BR</td><td class="num">$58,000</td><td>Ops support of LSD/BR; events/BEO involvement, Bar Rotunda AM support, barista training, coffee ordering</td></tr><tr class="role-section"><td colspan="4">SHARED SERVICES</td></tr><tr class="role-row"><td class="r-name">Craig Zerbe</td><td class="r-title">Facility Manager</td><td class="num">$75,000</td><td>Equipment maintenance &amp; calibration, engineering contact, weekly cleaning of ejector pit, repairs of all BOH equipment, vendor relations for all PM</td></tr><tr class="role-row"><td class="r-name">Jenna Chimenti</td><td class="r-title">HR Coordinator</td><td class="num">$60,000</td><td>Orientation, HR compliance, garnishment notices, payroll support</td></tr><tr class="role-row"><td class="r-name">Olivia Brazer</td><td class="r-title">Mkt/Comm Coordinator</td><td class="num">$60,000</td><td>Social coordination, email campaign support, large party assistance, badges, door scheduling</td></tr><tr class="role-row vacant"><td class="r-name">Vacant</td><td class="r-title">Marketing Manager</td><td class="num est">$75,000 (est.)</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="bva-section">
+    <h2>F&amp;B Budget vs Actual / Forecast</h2>
+    <div class="subtitle">2026 approved management labor budget vs April 2026 actual annualized (× 24 pay periods) — by outlet and by employee. Revenue Act/For = revenue through April plus remaining year forecast.</div>
+
+    <div class="bva-cards">
+      <div class="bva-card">
+        <div class="bva-card-title">Le Supreme</div>
+        <div class="bva-card-grid">
+          <div class="bva-line"><span class="lbl">Budget</span><span class="val">$896,185</span></div>
+          <div class="bva-line"><span class="lbl">Act / For</span><span class="val">$1,080,176</span></div>
+          <div class="bva-line var unfav"><span class="lbl">Variance</span><span class="val">+$183,991 <span class="pct">(+20.5%)</span></span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Bud</span><span class="val">$7,338,313</span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Act/For</span><span class="val">$6,800,000</span></div>
+          <div class="bva-line subtle"><span class="lbl">Labor % Rev</span><span class="val">12.21% → 15.88%</span></div>
+        </div>
+      </div>
+      <div class="bva-card">
+        <div class="bva-card-title">HIROKI-SAN</div>
+        <div class="bva-card-grid">
+          <div class="bva-line"><span class="lbl">Budget</span><span class="val">$606,425</span></div>
+          <div class="bva-line"><span class="lbl">Act / For</span><span class="val">$561,487</span></div>
+          <div class="bva-line var fav"><span class="lbl">Variance</span><span class="val">−$44,938 <span class="pct">(-7.4%)</span></span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Bud</span><span class="val">$4,303,210</span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Act/For</span><span class="val">$4,100,000</span></div>
+          <div class="bva-line subtle"><span class="lbl">Labor % Rev</span><span class="val">14.09% → 13.69%</span></div>
+        </div>
+      </div>
+      <div class="bva-card">
+        <div class="bva-card-title">Anthology</div>
+        <div class="bva-card-grid">
+          <div class="bva-line"><span class="lbl">Budget</span><span class="val">$835,848</span></div>
+          <div class="bva-line"><span class="lbl">Act / For</span><span class="val">$705,669</span></div>
+          <div class="bva-line var fav"><span class="lbl">Variance</span><span class="val">−$130,179 <span class="pct">(-15.6%)</span></span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Bud</span><span class="val">$4,566,259</span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Act/For</span><span class="val">$4,300,000</span></div>
+          <div class="bva-line subtle"><span class="lbl">Labor % Rev</span><span class="val">18.30% → 16.41%</span></div>
+        </div>
+      </div>
+      <div class="bva-card">
+        <div class="bva-card-title">Kamper's</div>
+        <div class="bva-card-grid">
+          <div class="bva-line"><span class="lbl">Budget</span><span class="val">$357,313</span></div>
+          <div class="bva-line"><span class="lbl">Act / For</span><span class="val">$324,626</span></div>
+          <div class="bva-line var fav"><span class="lbl">Variance</span><span class="val">−$32,687 <span class="pct">(-9.1%)</span></span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Bud</span><span class="val">$2,564,087</span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Act/For</span><span class="val">$2,500,000</span></div>
+          <div class="bva-line subtle"><span class="lbl">Labor % Rev</span><span class="val">13.94% → 12.99%</span></div>
+        </div>
+      </div>
+      <div class="bva-card bva-card-total">
+        <div class="bva-card-title">Total F&B</div>
+        <div class="bva-card-grid">
+          <div class="bva-line"><span class="lbl">Budget</span><span class="val">$2,695,771</span></div>
+          <div class="bva-line"><span class="lbl">Act / For</span><span class="val">$2,671,958</span></div>
+          <div class="bva-line var fav"><span class="lbl">Variance</span><span class="val">−$23,813 <span class="pct">(-0.9%)</span></span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Bud</span><span class="val">$18,771,869</span></div>
+          <div class="bva-line subtle"><span class="lbl">Rev Act/For</span><span class="val">$17,700,000</span></div>
+          <div class="bva-line subtle"><span class="lbl">Labor % Rev</span><span class="val">14.36% → 15.10%</span></div>
+        </div>
+      </div></div>
+
+    <div class="bva-rev">
+      <div class="bva-rev-item"><span class="lbl">Revenue Budget (Total)</span><span class="val">$18,771,869</span></div>
+      <div class="bva-rev-item"><span class="lbl">Revenue Act/For (Total)</span><span class="val">$17,700,000</span></div>
+      <div class="bva-rev-item"><span class="lbl">Labor % Rev — Budget</span><span class="val">14.36%</span></div>
+      <div class="bva-rev-item"><span class="lbl">Labor % Rev — Act/For</span><span class="val">15.10%</span></div>
+      <div class="bva-rev-item"><span class="lbl">Δ Labor %</span><span class="val">+0.74 pts</span></div>
+    </div>
+
+    <h3 class="bva-sub">Le Supreme — Detail by Employee <span class="rev-tag">Rev Bud $7,338,313  ·  Rev Act/For $6,800,000  ·  Labor 12.21% bud → 15.88% act</span></h3>
+    <p class="bva-subtext">Actual = sum of every line item per employee from April 2026 payroll × 24 pay periods.</p>
+    <div class="bva-table-wrap"><table class="bva-table lsd-table"><thead><tr class="lsd-head"><th>Employee</th><th>Title</th><th>Budget $</th><th>Budget %</th><th>Revenue Budget $</th><th>Actual $</th><th>Actual %</th><th>Act/For Revenue</th><th>Variance</th></tr></thead><tbody><tr class="lsd-row status-ok"><td class="lsd-emp">Scott Sadoff </td><td class="lsd-title">EVP</td><td class="num">$57,375</td><td class="num">0.78%</td><td class="num subtle">$7,338,313</td><td class="num">$81,726</td><td class="num">1.20%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$24,351</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Patrick Jobst </td><td class="lsd-title">Director of Beverage</td><td class="num">$27,000</td><td class="num">0.37%</td><td class="num subtle">$7,338,313</td><td class="num">$27,000</td><td class="num">0.40%</td><td class="num subtle">$6,800,000</td><td class="num var ">—</td></tr><tr class="lsd-row status-new"><td class="lsd-emp">David Massoni </td><td class="lsd-title">Director of Operations</td><td class="num">$30,000</td><td class="num">0.41%</td><td class="num subtle">$7,338,313</td><td class="num">$96,000</td><td class="num">1.41%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$66,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Jenna Chimenti </td><td class="lsd-title">HR Coordinator</td><td class="num">$16,500</td><td class="num">0.22%</td><td class="num subtle">$7,338,313</td><td class="num">$18,000</td><td class="num">0.26%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$1,500</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Olivia Brazer </td><td class="lsd-title">Mkt/Comm Coord</td><td class="num">$18,000</td><td class="num">0.25%</td><td class="num subtle">$7,338,313</td><td class="num">$15,000</td><td class="num">0.22%</td><td class="num subtle">$6,800,000</td><td class="num var fav">−$3,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Craig Zerbe </td><td class="lsd-title">Facilities Manager</td><td class="num">$23,400</td><td class="num">0.32%</td><td class="num subtle">$7,338,313</td><td class="num">$18,750</td><td class="num">0.28%</td><td class="num subtle">$6,800,000</td><td class="num var fav">−$4,650</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Nyle Flynn </td><td class="lsd-title">Executive Chef</td><td class="num">$94,250</td><td class="num">1.28%</td><td class="num subtle">$7,338,313</td><td class="num">$145,000</td><td class="num">2.13%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$50,750</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Dylan Trippe-Edwards </td><td class="lsd-title">Sous-LSD</td><td class="num">$82,000</td><td class="num">1.12%</td><td class="num subtle">$7,338,313</td><td class="num">$68,000</td><td class="num">1.00%</td><td class="num subtle">$6,800,000</td><td class="num var fav">−$14,000</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Nino Toigo </td><td class="lsd-title">Sous Chef LSD</td><td class="num">$64,000</td><td class="num">0.87%</td><td class="num subtle">$7,338,313</td><td class="num">$64,000</td><td class="num">0.94%</td><td class="num subtle">$6,800,000</td><td class="num var ">—</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Hailey Enszer </td><td class="lsd-title">EC Pastry</td><td class="num">$29,640</td><td class="num">0.40%</td><td class="num subtle">$7,338,313</td><td class="num">$99,000</td><td class="num">1.46%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$69,360</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Neal Murakami </td><td class="lsd-title">Sous Pastry</td><td class="num">$37,180</td><td class="num">0.51%</td><td class="num subtle">$7,338,313</td><td class="num">$57,200</td><td class="num">0.84%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$20,020</td></tr><tr class="lsd-row status-terminated"><td class="lsd-emp">Steve Carlton <span class="tag">not on payroll</span></td><td class="lsd-title">Sous Chef</td><td class="num">$72,000</td><td class="num">0.98%</td><td class="num subtle">$7,338,313</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$6,800,000</td><td class="num var fav">−$72,000</td></tr><tr class="lsd-row status-terminated"><td class="lsd-emp">Kris Peterson <span class="tag">not on payroll</span></td><td class="lsd-title">General Manager</td><td class="num">$92,040</td><td class="num">1.25%</td><td class="num subtle">$7,338,313</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$6,800,000</td><td class="num var fav">−$92,040</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Jonathan Taccolini </td><td class="lsd-title">AGM LSD/BR</td><td class="num">$72,800</td><td class="num">0.99%</td><td class="num subtle">$7,338,313</td><td class="num">$73,000</td><td class="num">1.07%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$200</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Dominic Fosmore </td><td class="lsd-title">Ops LSD/BR</td><td class="num">$65,000</td><td class="num">0.89%</td><td class="num subtle">$7,338,313</td><td class="num">$62,500</td><td class="num">0.92%</td><td class="num subtle">$6,800,000</td><td class="num var fav">−$2,500</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Briana Swayze </td><td class="lsd-title">Ops LSD/BR</td><td class="num">$60,000</td><td class="num">0.82%</td><td class="num subtle">$7,338,313</td><td class="num">$67,000</td><td class="num">0.99%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$7,000</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Shannon Beaudoin </td><td class="lsd-title">Ops LSD/BR</td><td class="num">$55,000</td><td class="num">0.75%</td><td class="num subtle">$7,338,313</td><td class="num">$65,000</td><td class="num">0.96%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$10,000</td></tr><tr class="lsd-row status-over"><td class="lsd-emp">Mitchell Driesenga</td><td class="lsd-title">Sous Chef LSD</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$7,338,313</td><td class="num">$65,000</td><td class="num">0.96%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$65,000</td></tr><tr class="lsd-row status-over"><td class="lsd-emp">Emily Meyers</td><td class="lsd-title">Ops LSD/BR</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$7,338,313</td><td class="num">$58,000</td><td class="num">0.85%</td><td class="num subtle">$6,800,000</td><td class="num var unfav">+$58,000</td></tr><tr class="lsd-grand"><td><strong>LE SUPREME TOTAL</strong></td><td></td><td class="num"><strong>$896,185</strong></td><td class="num"><strong>12.21%</strong></td><td class="num"><strong>$7,338,313</strong></td><td class="num"><strong>$1,080,176</strong></td><td class="num"><strong>15.88%</strong></td><td class="num"><strong>$6,800,000</strong></td><td class="num var unfav"><strong>+$183,991</strong></td></tr></tbody></table></div>
+
+    <h3 class="bva-sub">HIROKI-SAN — Detail by Employee <span class="rev-tag">Rev Bud $4,303,210  ·  Rev Act/For $4,100,000  ·  Labor 14.09% bud → 13.69% act</span></h3>
+    <p class="bva-subtext">Actual = sum of every line item per employee from April 2026 payroll × 24 pay periods.</p>
+    <div class="bva-table-wrap"><table class="bva-table lsd-table"><thead><tr class="lsd-head"><th>Employee</th><th>Title</th><th>Budget $</th><th>Budget %</th><th>Revenue Budget $</th><th>Actual $</th><th>Actual %</th><th>Act/For Revenue</th><th>Variance</th></tr></thead><tbody><tr class="lsd-row status-ok"><td class="lsd-emp">Scott Sadoff </td><td class="lsd-title">EVP</td><td class="num">$57,375</td><td class="num">1.33%</td><td class="num subtle">$4,303,210</td><td class="num">$54,122</td><td class="num">1.32%</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$3,253</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Patrick Jobst </td><td class="lsd-title">Director of Beverage</td><td class="num">$27,000</td><td class="num">0.63%</td><td class="num subtle">$4,303,210</td><td class="num">$27,000</td><td class="num">0.66%</td><td class="num subtle">$4,100,000</td><td class="num var ">—</td></tr><tr class="lsd-row status-new"><td class="lsd-emp">David Massoni </td><td class="lsd-title">Director of Operations</td><td class="num">$26,000</td><td class="num">0.60%</td><td class="num subtle">$4,303,210</td><td class="num">$40,000</td><td class="num">0.98%</td><td class="num subtle">$4,100,000</td><td class="num var unfav">+$14,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Craig Zerbe </td><td class="lsd-title">Facilities Manager</td><td class="num">$15,600</td><td class="num">0.36%</td><td class="num subtle">$4,303,210</td><td class="num">$18,750</td><td class="num">0.46%</td><td class="num subtle">$4,100,000</td><td class="num var unfav">+$3,150</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Olivia Brazer </td><td class="lsd-title">Mkt/Comm Coord</td><td class="num">$12,000</td><td class="num">0.28%</td><td class="num subtle">$4,303,210</td><td class="num">$15,000</td><td class="num">0.37%</td><td class="num subtle">$4,100,000</td><td class="num var unfav">+$3,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Jenna Chimenti </td><td class="lsd-title">HR Coordinator</td><td class="num">$11,000</td><td class="num">0.26%</td><td class="num subtle">$4,303,210</td><td class="num">$16,500</td><td class="num">0.40%</td><td class="num subtle">$4,100,000</td><td class="num var unfav">+$5,500</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Hiroki Fujiyama </td><td class="lsd-title">Executive Chef</td><td class="num">$11,500</td><td class="num">0.27%</td><td class="num subtle">$4,303,210</td><td class="num">$11,500</td><td class="num">0.28%</td><td class="num subtle">$4,100,000</td><td class="num var ">—</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Nyle Flynn </td><td class="lsd-title">Executive Chef</td><td class="num">$7,250</td><td class="num">0.17%</td><td class="num subtle">$4,303,210</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$7,250</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Christian Vasquez-Yax </td><td class="lsd-title">EC Hiroki-San</td><td class="num">$97,000</td><td class="num">2.25%</td><td class="num subtle">$4,303,210</td><td class="num">$95,000</td><td class="num">2.32%</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$2,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Louis Placido </td><td class="lsd-title">Sushi Chef-HS</td><td class="num">$78,000</td><td class="num">1.81%</td><td class="num subtle">$4,303,210</td><td class="num">$75,000</td><td class="num">1.83%</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$3,000</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Aiden Toby </td><td class="lsd-title">Sous Chef-HS</td><td class="num">$70,000</td><td class="num">1.63%</td><td class="num subtle">$4,303,210</td><td class="num">$64,000</td><td class="num">1.56%</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$6,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Hailey Enszer </td><td class="lsd-title">EC Pastry</td><td class="num">$14,820</td><td class="num">0.34%</td><td class="num subtle">$4,303,210</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$14,820</td></tr><tr class="lsd-row status-terminated"><td class="lsd-emp">Kris Peterson <span class="tag">not on payroll</span></td><td class="lsd-title">General Manager</td><td class="num">$30,680</td><td class="num">0.71%</td><td class="num subtle">$4,303,210</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$30,680</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Naomi Scott </td><td class="lsd-title">AGM HS</td><td class="num">$83,200</td><td class="num">1.93%</td><td class="num subtle">$4,303,210</td><td class="num">$80,000</td><td class="num">1.95%</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$3,200</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Petr Balcarovsky </td><td class="lsd-title">Ops HS</td><td class="num">$65,000</td><td class="num">1.51%</td><td class="num subtle">$4,303,210</td><td class="num">$64,615</td><td class="num">1.58%</td><td class="num subtle">$4,100,000</td><td class="num var fav">−$385</td></tr><tr class="lsd-grand"><td><strong>HIROKI-SAN TOTAL</strong></td><td></td><td class="num"><strong>$606,425</strong></td><td class="num"><strong>14.09%</strong></td><td class="num"><strong>$4,303,210</strong></td><td class="num"><strong>$561,487</strong></td><td class="num"><strong>13.69%</strong></td><td class="num"><strong>$4,100,000</strong></td><td class="num var fav"><strong>−$44,938</strong></td></tr></tbody></table></div>
+
+    <h3 class="bva-sub">Anthology — Detail by Employee <span class="rev-tag">Rev Bud $4,566,259  ·  Rev Act/For $4,300,000  ·  Labor 18.30% bud → 16.41% act</span></h3>
+    <p class="bva-subtext">Actual = sum of every line item per employee from April 2026 payroll × 24 pay periods.</p>
+    <div class="bva-table-wrap"><table class="bva-table lsd-table"><thead><tr class="lsd-head"><th>Employee</th><th>Title</th><th>Budget $</th><th>Budget %</th><th>Revenue Budget $</th><th>Actual $</th><th>Actual %</th><th>Act/For Revenue</th><th>Variance</th></tr></thead><tbody><tr class="lsd-row status-ok"><td class="lsd-emp">Scott Sadoff </td><td class="lsd-title">EVP</td><td class="num">$70,125</td><td class="num">1.54%</td><td class="num subtle">$4,566,259</td><td class="num">$73,278</td><td class="num">1.70%</td><td class="num subtle">$4,300,000</td><td class="num var unfav">+$3,153</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Patrick Jobst </td><td class="lsd-title">Director of Beverage</td><td class="num">$27,000</td><td class="num">0.59%</td><td class="num subtle">$4,566,259</td><td class="num">$27,000</td><td class="num">0.63%</td><td class="num subtle">$4,300,000</td><td class="num var ">—</td></tr><tr class="lsd-row status-new"><td class="lsd-emp">David Massoni </td><td class="lsd-title">Director of Operations</td><td class="num">$30,000</td><td class="num">0.66%</td><td class="num subtle">$4,566,259</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$30,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Jenna Chimenti </td><td class="lsd-title">HR Coordinator</td><td class="num">$16,500</td><td class="num">0.36%</td><td class="num subtle">$4,566,259</td><td class="num">$12,000</td><td class="num">0.28%</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$4,500</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Olivia Brazer </td><td class="lsd-title">Mkt/Comm Coord</td><td class="num">$18,000</td><td class="num">0.39%</td><td class="num subtle">$4,566,259</td><td class="num">$12,000</td><td class="num">0.28%</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$6,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Craig Zerbe </td><td class="lsd-title">Facilities Manager</td><td class="num">$27,300</td><td class="num">0.60%</td><td class="num subtle">$4,566,259</td><td class="num">$22,500</td><td class="num">0.52%</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$4,800</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Benjamin Zemach </td><td class="lsd-title">EC AE/K</td><td class="num">$87,360</td><td class="num">1.91%</td><td class="num subtle">$4,566,259</td><td class="num">$78,750</td><td class="num">1.83%</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$8,610</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Dylan Clement </td><td class="lsd-title">Sous AE/K</td><td class="num">$30,000</td><td class="num">0.66%</td><td class="num subtle">$4,566,259</td><td class="num">$59,280</td><td class="num">1.38%</td><td class="num subtle">$4,300,000</td><td class="num var unfav">+$29,280</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Nyle Flynn </td><td class="lsd-title">Executive Chef</td><td class="num">$29,000</td><td class="num">0.64%</td><td class="num subtle">$4,566,259</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$29,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Hailey Enszer </td><td class="lsd-title">EC Pastry</td><td class="num">$34,580</td><td class="num">0.76%</td><td class="num subtle">$4,566,259</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$34,580</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Neal Murakami </td><td class="lsd-title">Sous Pastry</td><td class="num">$14,300</td><td class="num">0.31%</td><td class="num subtle">$4,566,259</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$14,300</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Nicole Lakatos </td><td class="lsd-title">Event Manager</td><td class="num">$137,500</td><td class="num">3.01%</td><td class="num subtle">$4,566,259</td><td class="num">$62,500</td><td class="num">1.45%</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$75,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Lee-ann Platt </td><td class="lsd-title">Event Sales Manager</td><td class="num">$72,800</td><td class="num">1.59%</td><td class="num subtle">$4,566,259</td><td class="num">$60,179</td><td class="num">1.40%</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$12,621</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Stephanie Jordan </td><td class="lsd-title">GM AE/K</td><td class="num">$75,263</td><td class="num">1.65%</td><td class="num subtle">$4,566,259</td><td class="num">$90,000</td><td class="num">2.09%</td><td class="num subtle">$4,300,000</td><td class="num var unfav">+$14,737</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Lyndsay Zelenak </td><td class="lsd-title">Event Services Coord</td><td class="num">$67,600</td><td class="num">1.48%</td><td class="num subtle">$4,566,259</td><td class="num">$65,000</td><td class="num">1.51%</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$2,600</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Shianna Bakos </td><td class="lsd-title">Ops AE/K</td><td class="num">$13,520</td><td class="num">0.30%</td><td class="num subtle">$4,566,259</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,300,000</td><td class="num var fav">−$13,520</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">John Lerchen </td><td class="lsd-title">VP of Sales</td><td class="num">$85,000</td><td class="num">1.86%</td><td class="num subtle">$4,566,259</td><td class="num">$90,000</td><td class="num">2.09%</td><td class="num subtle">$4,300,000</td><td class="num var unfav">+$5,000</td></tr><tr class="lsd-row status-over"><td class="lsd-emp">Sarah Russell</td><td class="lsd-title">Ops AE/K</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$4,566,259</td><td class="num">$53,182</td><td class="num">1.24%</td><td class="num subtle">$4,300,000</td><td class="num var unfav">+$53,182</td></tr><tr class="lsd-grand"><td><strong>ANTHOLOGY TOTAL</strong></td><td></td><td class="num"><strong>$835,848</strong></td><td class="num"><strong>18.30%</strong></td><td class="num"><strong>$4,566,259</strong></td><td class="num"><strong>$705,669</strong></td><td class="num"><strong>16.41%</strong></td><td class="num"><strong>$4,300,000</strong></td><td class="num var fav"><strong>−$130,179</strong></td></tr></tbody></table></div>
+
+    <h3 class="bva-sub">Kamper's — Detail by Employee <span class="rev-tag">Rev Bud $2,564,087  ·  Rev Act/For $2,500,000  ·  Labor 13.94% bud → 12.99% act</span></h3>
+    <p class="bva-subtext">Actual = sum of every line item per employee from April 2026 payroll × 24 pay periods.</p>
+    <div class="bva-table-wrap"><table class="bva-table lsd-table"><thead><tr class="lsd-head"><th>Employee</th><th>Title</th><th>Budget $</th><th>Budget %</th><th>Revenue Budget $</th><th>Actual $</th><th>Actual %</th><th>Act/For Revenue</th><th>Variance</th></tr></thead><tbody><tr class="lsd-row status-ok"><td class="lsd-emp">Scott Sadoff </td><td class="lsd-title">EVP</td><td class="num">$44,625</td><td class="num">1.74%</td><td class="num subtle">$2,564,087</td><td class="num">$45,874</td><td class="num">1.83%</td><td class="num subtle">$2,500,000</td><td class="num var unfav">+$1,249</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Patrick Jobst </td><td class="lsd-title">Director of Beverage</td><td class="num">$27,000</td><td class="num">1.05%</td><td class="num subtle">$2,564,087</td><td class="num">$27,000</td><td class="num">1.08%</td><td class="num subtle">$2,500,000</td><td class="num var ">—</td></tr><tr class="lsd-row status-new"><td class="lsd-emp">David Massoni </td><td class="lsd-title">Director of Operations</td><td class="num">$30,000</td><td class="num">1.17%</td><td class="num subtle">$2,564,087</td><td class="num">$24,000</td><td class="num">0.96%</td><td class="num subtle">$2,500,000</td><td class="num var fav">−$6,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Jenna Chimenti </td><td class="lsd-title">HR Coordinator</td><td class="num">$11,000</td><td class="num">0.43%</td><td class="num subtle">$2,564,087</td><td class="num">$13,500</td><td class="num">0.54%</td><td class="num subtle">$2,500,000</td><td class="num var unfav">+$2,500</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Olivia Brazer </td><td class="lsd-title">Mkt/Comm Coord</td><td class="num">$12,000</td><td class="num">0.47%</td><td class="num subtle">$2,564,087</td><td class="num">$18,000</td><td class="num">0.72%</td><td class="num subtle">$2,500,000</td><td class="num var unfav">+$6,000</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Craig Zerbe </td><td class="lsd-title">Facilities Manager</td><td class="num">$11,700</td><td class="num">0.46%</td><td class="num subtle">$2,564,087</td><td class="num">$15,000</td><td class="num">0.60%</td><td class="num subtle">$2,500,000</td><td class="num var unfav">+$3,300</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Benjamin Zemach </td><td class="lsd-title">EC AE/K</td><td class="num">$21,840</td><td class="num">0.85%</td><td class="num subtle">$2,564,087</td><td class="num">$26,250</td><td class="num">1.05%</td><td class="num subtle">$2,500,000</td><td class="num var unfav">+$4,410</td></tr><tr class="lsd-row status-filled"><td class="lsd-emp">Nyle Flynn </td><td class="lsd-title">Executive Chef</td><td class="num">$14,500</td><td class="num">0.57%</td><td class="num subtle">$2,564,087</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$2,500,000</td><td class="num var fav">−$14,500</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Hailey Enszer </td><td class="lsd-title">EC Pastry</td><td class="num">$19,760</td><td class="num">0.77%</td><td class="num subtle">$2,564,087</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$2,500,000</td><td class="num var fav">−$19,760</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Neal Murakami </td><td class="lsd-title">Sous Pastry</td><td class="num">$5,720</td><td class="num">0.22%</td><td class="num subtle">$2,564,087</td><td class="num">—</td><td class="num">—</td><td class="num subtle">$2,500,000</td><td class="num var fav">−$5,720</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Stephanie Jordan </td><td class="lsd-title">GM AE/K</td><td class="num">$25,088</td><td class="num">0.98%</td><td class="num subtle">$2,564,087</td><td class="num">$10,000</td><td class="num">0.40%</td><td class="num subtle">$2,500,000</td><td class="num var fav">−$15,088</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Zachary Adkins </td><td class="lsd-title">AGM AE/K</td><td class="num">$80,000</td><td class="num">3.12%</td><td class="num subtle">$2,564,087</td><td class="num">$80,002</td><td class="num">3.20%</td><td class="num subtle">$2,500,000</td><td class="num var unfav">+$2</td></tr><tr class="lsd-row status-ok"><td class="lsd-emp">Shianna Bakos </td><td class="lsd-title">Ops AE/K</td><td class="num">$54,080</td><td class="num">2.11%</td><td class="num subtle">$2,564,087</td><td class="num">$65,000</td><td class="num">2.60%</td><td class="num subtle">$2,500,000</td><td class="num var unfav">+$10,920</td></tr><tr class="lsd-grand"><td><strong>KAMPER'S TOTAL</strong></td><td></td><td class="num"><strong>$357,313</strong></td><td class="num"><strong>13.94%</strong></td><td class="num"><strong>$2,564,087</strong></td><td class="num"><strong>$324,626</strong></td><td class="num"><strong>12.99%</strong></td><td class="num"><strong>$2,500,000</strong></td><td class="num var fav"><strong>−$32,687</strong></td></tr></tbody></table></div>
+
+    <div class="bva-note">
+      <strong>Methodology:</strong> Actual $ = sum of every line item (net pay + all deductions/taxes/contributions) per employee per outlet from April 2026 payroll × 24. Budget % = Budget $ / Revenue Budget for that outlet. Actual % = Actual $ / Act/For Revenue. <strong>Key observation:</strong> Several cross-outlet roles (Massoni, Flynn, Enszer, Murakami, Lerchen, Zemach, Jordan, Bakos) are paid 100% from one outlet's payroll in April rather than split per budget plan — Le Supreme runs +$246k unfav while Anthology and HIROKI-SAN run favorable since their would-be allocations are concentrated at LSD. Net F&amp;B is within 0.4% of budget.
+    </div>
+  </div>
+
+  <div class="efficiency-section">
+    <h2>Efficiency Plan</h2>
+    <div class="subtitle">Realistic management-payroll reductions without compromising service quality. Estimates use current or estimated salaries; net of any role bumps where noted.</div>
+
+    <div class="savings-banner">
+      <div class="figure">
+        <span class="num">$330k – $410k</span>
+        <span class="lbl">Estimated annual savings</span>
+      </div>
+      <div class="figure pct">
+        <span class="num">~1.3% – 1.6%</span>
+        <span class="lbl">of combined revenue</span>
+      </div>
+      <div class="figure">
+        <span class="num">5</span>
+        <span class="lbl">Recommended actions</span>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card priority-high">
+        <div class="card-head">
+          <div class="card-title">Don't backfill 2 of 3 vacant Sales roles</div>
+          <div class="card-savings">−$140k to $165k</div>
+        </div>
+        <div class="card-area">Sales · John Lerchen</div>
+        <div class="card-body">SMERF and Sales Admin overlap with work Lee-ann Platt and Lyndsay Zelenak already own per their role descriptions (Social / Weddings / Restaurant buyouts). Holding all three vacancies costs ~$213k of estimated payroll for slots that aren't even filled.</div>
+        <div class="card-action"><strong>Action:</strong> Backfill Senior Sales-Events only. Fold SMERF & Sales Admin scope into existing seats with a small comp adjustment to Lee-ann/Lyndsay.</div>
+      </div>
+
+      <div class="card priority-high">
+        <div class="card-head">
+          <div class="card-title">Don't fill Marketing Manager — promote Olivia</div>
+          <div class="card-savings">−$60k to $65k net</div>
+        </div>
+        <div class="card-area">Shared Services · Scott Sadoff</div>
+        <div class="card-body">Olivia Brazer's role description (social coordination, email campaigns, large party assistance, badges, door scheduling) already covers most Marketing Manager scope. Filling the vacancy at $75k est. duplicates capability.</div>
+        <div class="card-action"><strong>Action:</strong> Re-title Olivia to Marketing Manager with a $10–15k bump. Net property savings ~$60k.</div>
+      </div>
+
+      <div class="card priority-med">
+        <div class="card-head">
+          <div class="card-title">Consolidate Ops Managers at LSD/BR</div>
+          <div class="card-savings">−$60k to $65k</div>
+        </div>
+        <div class="card-area">Operations · Jonathan Taccolini</div>
+        <div class="card-body">Four Ops Managers (Fosmore, Beaudoin, Swayze, Meyers) under one AGM for two adjacent venues = $252.5k. Their specializations are real (bar/inventory, linen/onboarding, host/door, AM/events) but four direct reports is dense for two rooms in one building.</div>
+        <div class="card-action"><strong>Action:</strong> Pilot 4 → 3 by combining host/door focus into the AM/events role. Reassess after one quarter.</div>
+      </div>
+
+      <div class="card priority-med">
+        <div class="card-head">
+          <div class="card-title">Reduce Sous Chefs at LSD/BR (3 → 2)</div>
+          <div class="card-savings">−$65k</div>
+        </div>
+        <div class="card-area">Culinary · Nyle Flynn</div>
+        <div class="card-body">Three Sous Chefs (Trippe-Edwards, Driesenga, Toigo) at LSD/BR with overlapping role descriptions — all "culinary support, all stations, scheduling." Two strong Sous chefs should cover LSD + Bar Rotunda with cross-utilization to AE/Kamper's on slow LSD covers.</div>
+        <div class="card-action"><strong>Action:</strong> Retain the two strongest performers. Build a cross-utilization schedule across LSD/BR and AE/K.</div>
+      </div>
+
+      <div class="card priority-low">
+        <div class="card-head">
+          <div class="card-title">Clarify Director of Beverage vs Director of Operations scope</div>
+          <div class="card-savings">Review only</div>
+        </div>
+        <div class="card-area">F&amp;B Leadership · Scott Sadoff</div>
+        <div class="card-body">Patrick Jobst ($135k) and David Massoni ($160k) both report to Sadoff with overlapping P&amp;L involvement. Stephanie Jordan and Jono Taccolini effectively have dotted lines into both. Worth confirming whether Patrick's portfolio role is still required as a separate seat once the beverage program stabilizes.</div>
+        <div class="card-action"><strong>Action:</strong> Document explicit scope split for FY26. Revisit consolidation at year-end if overlap persists. Potential additional ~$100k+ if absorbed.</div>
+      </div>
+    </div>
+
+    <div class="efficiency-note">
+      <strong>Note on Heather Majerus ($0):</strong> Her cost is allocated to another entity; BT/ROOST receives Regional Director of Sales coverage on Extended Stay/group room nights at zero cost. This is a structural positive — not an efficiency target. Worth pinning down the room-night attribution before considering any incremental Sales hires on this P&amp;L.
+    </div>
+  </div>
+</div>
+</body>
+</html>
