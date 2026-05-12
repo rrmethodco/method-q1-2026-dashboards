@@ -75582,7 +75582,7 @@
     "total_cost": 139422.3
   },
   "cogs": {
-    "as_of": "2026-05-07",
+    "as_of": "2026-05-12",
     "source": "marginedge_api",
     "lookback_days": 90,
     "with_line_items": true,
@@ -90257,6 +90257,39 @@
         ]
       },
       {
+        "invoice_id": "5126536",
+        "invoice_number": null,
+        "date": "2026-05-01",
+        "vendor_id": "5126967",
+        "vendor_name": "Ohta Foods Market Co., Ltd",
+        "total": 439.93,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "675215915",
+            "product_name": "Wild Adult Yellowtail (Tennen Buri)",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 19.63,
+            "unit_price": 14.8,
+            "extended": 290.52
+          },
+          {
+            "product_id": "640777204",
+            "product_name": "High Grade]snow Crab (Zuwaigani)",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.0,
+            "unit_price": 24.9,
+            "extended": 149.4
+          }
+        ]
+      },
+      {
         "invoice_id": "5125869",
         "invoice_number": "41668",
         "date": "2026-05-04",
@@ -90279,13 +90312,68 @@
         ]
       },
       {
+        "invoice_id": "5126513",
+        "invoice_number": "817855",
+        "date": "2026-05-05",
+        "vendor_id": "21823",
+        "vendor_name": "Samuels & Son Seafood Co.",
+        "total": 122.71,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "645273851",
+            "product_name": "Jidori Egg USA Cage Free Vegetarian Hens",
+            "category": "Dairy",
+            "category_id": "1030",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 9.0,
+            "unit_price": 12.995,
+            "extended": 116.96
+          }
+        ]
+      },
+      {
+        "invoice_id": "5126539",
+        "invoice_number": "446166",
+        "date": "2026-05-05",
+        "vendor_id": "1387",
+        "vendor_name": "Yama Seafood, Inc.",
+        "total": 1183.5,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "639791631",
+            "product_name": "Bf Tuna (LB) Farmed Spain",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 28.7,
+            "unit_price": 37.0,
+            "extended": 1061.9
+          },
+          {
+            "product_id": "675011581",
+            "product_name": "Tile Fish Wild (LB) NN",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 12.8,
+            "unit_price": 9.5,
+            "extended": 121.6
+          }
+        ]
+      },
+      {
         "invoice_id": "5126258",
         "invoice_number": "5856464",
         "date": "2026-05-06",
         "vendor_id": "1358",
         "vendor_name": "NY Mutual Trading, Inc.",
         "total": 1084.69,
-        "status": "AM_REVIEW",
+        "status": "PENDING_APPROVAL",
         "line_items": [
           {
             "product_id": "681675718",
@@ -90299,22 +90387,22 @@
             "extended": 6.25
           },
           {
-            "product_id": "24186",
+            "product_id": "1203124258",
             "product_name": "Soy Bean Salad Oil",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
-            "cogs_bucket": null,
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
             "quantity": 1.0,
             "unit_price": 45.0,
             "extended": 45.0
           },
           {
-            "product_id": "90231",
+            "product_id": "1203124429",
             "product_name": "Seal Wrap Food Film 18\"",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
+            "category": "Paper Costs",
+            "category_id": "1059",
+            "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 1.0,
             "unit_price": 22.0,
@@ -90555,12 +90643,12 @@
       },
       {
         "invoice_id": "5126476",
-        "invoice_number": null,
+        "invoice_number": "0763730",
         "date": "2026-05-07",
-        "vendor_id": "0",
-        "vendor_name": null,
-        "total": 0.0,
-        "status": "PREPROCESSING",
+        "vendor_id": "2541934",
+        "vendor_name": "Arway Linen & Uniform Rental Service",
+        "total": 150.66,
+        "status": "PENDING_APPROVAL",
         "line_items": [
           {
             "product_id": "1029088920",
@@ -90605,6 +90693,215 @@
             "quantity": 1.0,
             "unit_price": 22.0,
             "extended": 22.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "5126507",
+        "invoice_number": "446710",
+        "date": "2026-05-07",
+        "vendor_id": "1387",
+        "vendor_name": "Yama Seafood, Inc.",
+        "total": 824.08,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "705153534",
+            "product_name": "Kaiware (White Radish Sprouts)",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 1.75,
+            "extended": 7.0
+          },
+          {
+            "product_id": "640770554",
+            "product_name": "Mitsuba (Jp Parsley)- Farmed (BN) CA",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 5.0,
+            "unit_price": 1.95,
+            "extended": 9.75
+          },
+          {
+            "product_id": "642197645",
+            "product_name": "Japanese Wasabi Roots-Wild Japam",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 0.5,
+            "unit_price": 150.0,
+            "extended": 75.0
+          },
+          {
+            "product_id": "640773837",
+            "product_name": "Oba (perilla)- Farmed (pk)",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 11.95,
+            "extended": 23.9
+          },
+          {
+            "product_id": "675011581",
+            "product_name": "Tile Fish Wild (LB) NN",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 8.6,
+            "unit_price": 9.5,
+            "extended": 81.7
+          },
+          {
+            "product_id": "733123572",
+            "product_name": "(T) Miyabiai From (Lb) **Kumamoto",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 8.25,
+            "unit_price": 16.5,
+            "extended": 136.13
+          },
+          {
+            "product_id": "681885325",
+            "product_name": "(T) Ogawa Uni Narabi (Pk)",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 135.0,
+            "extended": 270.0
+          },
+          {
+            "product_id": "835362611",
+            "product_name": "(T) Hotaru Ika (PK) Hyogo",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 25.0,
+            "extended": 25.0
+          },
+          {
+            "product_id": "1123583783",
+            "product_name": "(T) Shiroita Kombu (OK) Hokkaido",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1044",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 70.0,
+            "extended": 70.0
+          },
+          {
+            "product_id": "640777204",
+            "product_name": "(T) Zuwalgani (Pk)",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 68.0,
+            "extended": 68.0
+          },
+          {
+            "product_id": "661656557",
+            "product_name": "Spanish Mackerel-Wild-(LB) NC",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.4,
+            "unit_price": 9.0,
+            "extended": 57.6
+          }
+        ]
+      },
+      {
+        "invoice_id": "5127232",
+        "invoice_number": "5859398",
+        "date": "2026-05-09",
+        "vendor_id": "1358",
+        "vendor_name": "NY Mutual Trading, Inc.",
+        "total": 316.25,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "661656557",
+            "product_name": "Young Spanish Mackerel",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.65,
+            "unit_price": 20.8,
+            "extended": 55.12
+          },
+          {
+            "product_id": "645267070",
+            "product_name": "Bigfin Reef Squid (Aori-ika)",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.31,
+            "unit_price": 48.8,
+            "extended": 161.53
+          },
+          {
+            "product_id": "681889828",
+            "product_name": "Snow Crab (Zuwai-Kani) Flakes",
+            "category": "Seafood",
+            "category_id": "1071",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 24.9,
+            "extended": 99.6
+          }
+        ]
+      },
+      {
+        "invoice_id": "5127469",
+        "invoice_number": "826370",
+        "date": "2026-05-09",
+        "vendor_id": "21823",
+        "vendor_name": "Samuels & Son Seafood Co.",
+        "total": 227.63,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "642183795",
+            "product_name": "Mushroom Maitake 6LB Unit Hen Of The Woods",
+            "category": "Produce",
+            "category_id": "1066",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.0,
+            "unit_price": 10.99,
+            "extended": 65.94
+          },
+          {
+            "product_id": "645273851",
+            "product_name": "Jidori Egg USA Cage Free Vegetarian Hens",
+            "category": "Dairy",
+            "category_id": "1030",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 12.0,
+            "unit_price": 12.995,
+            "extended": 155.94
           }
         ]
       }
@@ -90769,6 +91066,10 @@
       {
         "id": "1358",
         "name": "NY Mutual Trading, Inc."
+      },
+      {
+        "id": "5126967",
+        "name": "Ohta Foods Market Co., Ltd"
       },
       {
         "id": "35407",
@@ -98876,11 +99177,11 @@
       "rows_warned": 0
     },
     "marginedge_invoice": {
-      "ran_at": "2026-05-07T17:15:03+00:00",
-      "rows_in": 165,
-      "rows_valid": 165,
+      "ran_at": "2026-05-12T17:22:08+00:00",
+      "rows_in": 160,
+      "rows_valid": 160,
       "rows_invalid": 0,
-      "rows_warned": 74
+      "rows_warned": 71
     }
   }
 }

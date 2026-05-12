@@ -45950,7 +45950,7 @@
     "total_cost": 199469.1
   },
   "cogs": {
-    "as_of": "2026-05-07",
+    "as_of": "2026-05-12",
     "source": "marginedge_api",
     "lookback_days": 90,
     "with_line_items": true,
@@ -64996,7 +64996,7 @@
         "line_items": [
           {
             "product_id": "725329466",
-            "product_name": "Strawberries 8x1 Lb",
+            "product_name": "Strawberries",
             "category": "Produce",
             "category_id": "1567",
             "category_type": "FOOD",
@@ -68901,7 +68901,7 @@
         "line_items": [
           {
             "product_id": "725329466",
-            "product_name": "Strawberries 8x1 Lb",
+            "product_name": "Strawberries",
             "category": "Produce",
             "category_id": "1567",
             "category_type": "FOOD",
@@ -72080,7 +72080,7 @@
         "line_items": [
           {
             "product_id": "725329466",
-            "product_name": "Strawberries 8x1 Lb",
+            "product_name": "Strawberries",
             "category": "Produce",
             "category_id": "1567",
             "category_type": "FOOD",
@@ -72278,7 +72278,7 @@
           },
           {
             "product_id": "944655056",
-            "product_name": "Juice Lime Natural Strength Concentrate 6x32OZ Orchid Isla",
+            "product_name": "Juice Lime Natural Strength Concentrate 6x32 Oz Orchid Island",
             "category": "Grocery and Dry Goods",
             "category_id": "1565",
             "category_type": "FOOD",
@@ -78640,7 +78640,7 @@
         "vendor_id": "4662",
         "vendor_name": "Kneads Bakeshop",
         "total": 86.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "685288300",
@@ -78783,7 +78783,7 @@
         "vendor_id": "4662",
         "vendor_name": "Kneads Bakeshop",
         "total": 46.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "662831259",
@@ -79135,7 +79135,7 @@
         "vendor_id": "4662",
         "vendor_name": "Kneads Bakeshop",
         "total": 46.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "961110885",
@@ -79223,7 +79223,7 @@
         "vendor_id": "14137077",
         "vendor_name": "Canton Crossing Wine & Spirits LLC",
         "total": 273.65,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1198257334",
@@ -79267,7 +79267,7 @@
         "vendor_id": "4662",
         "vendor_name": "Kneads Bakeshop",
         "total": 79.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "685288263",
@@ -79399,7 +79399,7 @@
         "vendor_id": "4662",
         "vendor_name": "Kneads Bakeshop",
         "total": 41.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "685288263",
@@ -79422,6 +79422,963 @@
             "quantity": 1.0,
             "unit_price": 22.001,
             "extended": 22.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "14145086",
+        "invoice_number": "C21002843",
+        "date": "2026-05-06",
+        "vendor_id": "57580",
+        "vendor_name": "Cozzini Bros., Inc.",
+        "total": 36.45,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "703917794",
+            "product_name": "Knife Service - Cozzini Bros",
+            "category": "R&M - Furniture & Equipment",
+            "category_id": "1556",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 7.0,
+            "unit_price": 4.65,
+            "extended": 32.55
+          }
+        ]
+      },
+      {
+        "invoice_id": "14147133",
+        "invoice_number": "9035280275",
+        "date": "2026-05-06",
+        "vendor_id": "12909434",
+        "vendor_name": "Gordon Food Service",
+        "total": 480.31,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "1209358446",
+            "product_name": "Towel Roll Ktch Perf 9x11in",
+            "category": "Paper & Plastics",
+            "category_id": "1501",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 4.0,
+            "unit_price": 29.4,
+            "extended": 117.6
+          },
+          {
+            "product_id": "1186498623",
+            "product_name": "Tissue Facial Nat Boutq 36-95c",
+            "category": "Paper",
+            "category_id": "1493",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 4.0,
+            "unit_price": 33.79,
+            "extended": 135.16
+          },
+          {
+            "product_id": "1132402656",
+            "product_name": "Tissue Toilt",
+            "category": "Paper",
+            "category_id": "1493",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 4.0,
+            "unit_price": 50.09,
+            "extended": 200.36
+          }
+        ]
+      },
+      {
+        "invoice_id": "14145059",
+        "invoice_number": "351009142",
+        "date": "2026-05-07",
+        "vendor_id": "4662",
+        "vendor_name": "Kneads Bakeshop",
+        "total": 67.5,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "961110885",
+            "product_name": "Croissant - Plain",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 0.0,
+            "unit_price": 0.0,
+            "extended": 0.0
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Chocolate Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.25,
+            "extended": 2.25
+          },
+          {
+            "product_id": "685288263",
+            "product_name": "Artisan - Ciabatta",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 0.0,
+            "unit_price": 0.0,
+            "extended": 0.0
+          },
+          {
+            "product_id": "776144233",
+            "product_name": "Croissant Chocolate",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 3.001,
+            "extended": 12.0
+          },
+          {
+            "product_id": "973038289",
+            "product_name": "Danish - Cream Cheese",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.001,
+            "extended": 6.0
+          },
+          {
+            "product_id": "974402661",
+            "product_name": "Danish Jalapeno Pinwheel",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 5.001,
+            "extended": 5.0
+          },
+          {
+            "product_id": "1019489182",
+            "product_name": "Danish - Spanakopita",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "974402912",
+            "product_name": "Donut - Glazed Ring",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.001,
+            "extended": 6.0
+          },
+          {
+            "product_id": "662831259",
+            "product_name": "Muffin-Blueberry Crumb",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 2.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Pastry - Vanilla Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          },
+          {
+            "product_id": "776144792",
+            "product_name": "Croissant Traditional",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 2.75,
+            "extended": 11.0
+          },
+          {
+            "product_id": "685288263",
+            "product_name": "Ciabatta Roll",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 1.0,
+            "extended": 10.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "14145250",
+        "invoice_number": "351094656",
+        "date": "2026-05-07",
+        "vendor_id": "4662",
+        "vendor_name": "Kneads Bakeshop",
+        "total": 103.5,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "907840339",
+            "product_name": "Almond Croissant",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.0,
+            "extended": 4.0
+          },
+          {
+            "product_id": "1060241811",
+            "product_name": "Croissant- Pistachio",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.0,
+            "extended": 4.0
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Chocolate Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.25,
+            "extended": 2.25
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Pastry - Vanilla Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.25,
+            "extended": 2.25
+          },
+          {
+            "product_id": "685288263",
+            "product_name": "Artisan - Ciabatta",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 1.0,
+            "extended": 10.0
+          },
+          {
+            "product_id": "907579698",
+            "product_name": "6pk Plain Bagels",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 6.0,
+            "extended": 6.0
+          },
+          {
+            "product_id": "776144233",
+            "product_name": "Croissant Chocolate",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 3.001,
+            "extended": 12.0
+          },
+          {
+            "product_id": "961110885",
+            "product_name": "Croissant - Plain",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 2.751,
+            "extended": 11.0
+          },
+          {
+            "product_id": "973038289",
+            "product_name": "Danish - Cream Cheese",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.001,
+            "extended": 6.0
+          },
+          {
+            "product_id": "974402661",
+            "product_name": "Danish Jalapeno Pinwheel",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 5.001,
+            "extended": 5.0
+          },
+          {
+            "product_id": "1019489182",
+            "product_name": "Danish - Spanakopita",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "974402912",
+            "product_name": "Donut - Glazed Ring",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.001,
+            "extended": 6.0
+          },
+          {
+            "product_id": "685288300",
+            "product_name": "Rosemary Focaccia Bread Full Sheet",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 22.001,
+            "extended": 22.0
+          },
+          {
+            "product_id": "662831259",
+            "product_name": "Muffin-Blueberry Crumb",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 2.001,
+            "extended": 4.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "14147032",
+        "invoice_number": "351173490",
+        "date": "2026-05-08",
+        "vendor_id": "4662",
+        "vendor_name": "Kneads Bakeshop",
+        "total": 75.5,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "685288263",
+            "product_name": "Artisan - Ciabatta",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 1.0,
+            "extended": 10.0
+          },
+          {
+            "product_id": "907840339",
+            "product_name": "Almond Croissant",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "776144233",
+            "product_name": "Croissant Chocolate",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 3.001,
+            "extended": 12.0
+          },
+          {
+            "product_id": "1060241811",
+            "product_name": "Croissant- Pistachio",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "961110885",
+            "product_name": "Croissant - Plain",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 2.751,
+            "extended": 11.0
+          },
+          {
+            "product_id": "973038289",
+            "product_name": "Danish - Cream Cheese",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.001,
+            "extended": 6.0
+          },
+          {
+            "product_id": "974402661",
+            "product_name": "Danish Jalapeno Pinwheel",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 5.001,
+            "extended": 5.0
+          },
+          {
+            "product_id": "1019489182",
+            "product_name": "Danish - Spanakopita",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "974402912",
+            "product_name": "Donut - Glazed Ring",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.001,
+            "extended": 6.0
+          },
+          {
+            "product_id": "662831259",
+            "product_name": "Muffin-Blueberry Crumb",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 2.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Chocolate Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Pastry - Vanilla Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          }
+        ]
+      },
+      {
+        "invoice_id": "14147361",
+        "invoice_number": "351247961",
+        "date": "2026-05-10",
+        "vendor_id": "4662",
+        "vendor_name": "Kneads Bakeshop",
+        "total": 86.75,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "685288300",
+            "product_name": "Focaccia-Plain-Half Sheet",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 10.0,
+            "extended": 10.0
+          },
+          {
+            "product_id": "685288300",
+            "product_name": "Focaccia-Rosemary & Garlic-Half Sheet",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.0,
+            "extended": 11.0
+          },
+          {
+            "product_id": "685288263",
+            "product_name": "Artisan - Ciabatta",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 1.0,
+            "extended": 10.0
+          },
+          {
+            "product_id": "996850077",
+            "product_name": "Bagel - Asiago",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 7.0,
+            "extended": 7.0
+          },
+          {
+            "product_id": "933767924",
+            "product_name": "6pk Everything Bagles",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 6.0,
+            "extended": 6.0
+          },
+          {
+            "product_id": "907579698",
+            "product_name": "6pk Plain Bagels",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 6.0,
+            "extended": 6.0
+          },
+          {
+            "product_id": "776144233",
+            "product_name": "Croissant Chocolate",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 3.001,
+            "extended": 9.0
+          },
+          {
+            "product_id": "961110885",
+            "product_name": "Croissant - Plain",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 2.751,
+            "extended": 8.25
+          },
+          {
+            "product_id": "973038289",
+            "product_name": "Danish - Cream Cheese",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.001,
+            "extended": 6.0
+          },
+          {
+            "product_id": "662831259",
+            "product_name": "Muffin-Blueberry Crumb",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 2.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Chocolate Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Pastry - Vanilla Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          }
+        ]
+      },
+      {
+        "invoice_id": "14148157",
+        "invoice_number": "351285871",
+        "date": "2026-05-10",
+        "vendor_id": "4662",
+        "vendor_name": "Kneads Bakeshop",
+        "total": 46.75,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "685288263",
+            "product_name": "Artisan - Ciabatta",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 1.0,
+            "extended": 10.0
+          },
+          {
+            "product_id": "776144233",
+            "product_name": "Croissant Chocolate",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 3.001,
+            "extended": 9.0
+          },
+          {
+            "product_id": "961110885",
+            "product_name": "Croissant - Plain",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 2.751,
+            "extended": 8.25
+          },
+          {
+            "product_id": "973038289",
+            "product_name": "Danish - Cream Cheese",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.001,
+            "extended": 6.0
+          },
+          {
+            "product_id": "662831259",
+            "product_name": "Muffin-Blueberry Crumb",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 2.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Chocolate Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Pastry - Vanilla Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          }
+        ]
+      },
+      {
+        "invoice_id": "14147719",
+        "invoice_number": "4268820800",
+        "date": "2026-05-11",
+        "vendor_id": "22142",
+        "vendor_name": "Cintas",
+        "total": 234.41,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "679120235",
+            "product_name": "3X5 Traffic Mat",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 13.95,
+            "extended": 13.95
+          },
+          {
+            "product_id": "1010041622",
+            "product_name": "4X6 Traffic Mat",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 14.95,
+            "extended": 29.9
+          },
+          {
+            "product_id": "669719594",
+            "product_name": "3X5 Duralite Mat",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 6.0,
+            "unit_price": 6.895,
+            "extended": 41.37
+          },
+          {
+            "product_id": "669719600",
+            "product_name": "Terry Towel-White",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 100.0,
+            "unit_price": 0.393,
+            "extended": 39.3
+          },
+          {
+            "product_id": "785800298",
+            "product_name": "Terry Towel - White - L",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 5.0,
+            "unit_price": 1.0,
+            "extended": 5.0
+          },
+          {
+            "product_id": "855883757",
+            "product_name": "Brute/32GAL/Ld/Blk/Roll",
+            "category": "Cleaning Supplies",
+            "category_id": "1511",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 12.089,
+            "extended": 24.18
+          },
+          {
+            "product_id": "1010145779",
+            "product_name": "Cintas Drain Service",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 25.0,
+            "extended": 25.0
+          },
+          {
+            "product_id": "855883784",
+            "product_name": "White Microfibr Wipe",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 25.0,
+            "unit_price": 0.439,
+            "extended": 10.98
+          },
+          {
+            "product_id": "855883790",
+            "product_name": "White Microfibr Wipe L",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 1.662,
+            "extended": 1.66
+          },
+          {
+            "product_id": "1210167798",
+            "product_name": "Apron/Chlkstrp/U/Dlkwt/Dnesize-DSA",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 10.0,
+            "unit_price": 0.649,
+            "extended": 6.49
+          },
+          {
+            "product_id": "1210167835",
+            "product_name": "Chef Coat/CW/Vented/White/SS-RG00L",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 1.105,
+            "extended": 2.21
+          },
+          {
+            "product_id": "1210167834",
+            "product_name": "Chef Shirt/CW/Vented/U/Black-Rgoom",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 5.0,
+            "unit_price": 0.684,
+            "extended": 3.42
+          },
+          {
+            "product_id": "1061069301",
+            "product_name": "Chefshirt/Cw/Vented/M/White/Ss-Rg00L",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 6.0,
+            "unit_price": 0.684,
+            "extended": 4.1
+          }
+        ]
+      },
+      {
+        "invoice_id": "14147915",
+        "invoice_number": "4268820810",
+        "date": "2026-05-11",
+        "vendor_id": "22142",
+        "vendor_name": "Cintas",
+        "total": 67.58,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "669719594",
+            "product_name": "3X5 Duralite Mat",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 4.0,
+            "unit_price": 7.031,
+            "extended": 28.12
+          },
+          {
+            "product_id": "669719600",
+            "product_name": "Terry Towel-White",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 25.0,
+            "unit_price": 0.398,
+            "extended": 9.95
+          },
+          {
+            "product_id": "778720159",
+            "product_name": "Twl/Qkdry Try/White W Clu Strp L",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 3.0,
+            "unit_price": 1.33,
+            "extended": 3.99
+          },
+          {
+            "product_id": "778720146",
+            "product_name": "Chefshirt/Cw/Vented/U/black/Ss-RG00M",
+            "category": "Linen",
+            "category_id": "1514",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 8.0,
+            "unit_price": 1.035,
+            "extended": 8.28
           }
         ]
       }
@@ -81193,14 +82150,14 @@
       },
       {
         "week_start": "2026-04-27",
-        "total_cogs": 2731.92,
-        "cogs_only_total": 1741.4,
+        "total_cogs": 2865.42,
+        "cogs_only_total": 1864.9,
         "by_category": {
           "Linen": 233.73,
           "Paper & Plastics": 569.96,
           "Cleaning Supplies": 24.18,
-          "Bread": 295.5,
-          "Grocery and Dry Goods": 298.5,
+          "Bread": 410.0,
+          "Grocery and Dry Goods": 307.5,
           "Meat": 357.82,
           "Produce": 157.5,
           "Non Alcoholic": 262.66,
@@ -81208,7 +82165,7 @@
           "Equipment Rental": 4.54
         },
         "by_cogs_type": {
-          "food": 1478.74,
+          "food": 1602.24,
           "na_beverages": 262.66
         },
         "by_vendor_top5": [
@@ -81222,7 +82179,7 @@
           },
           {
             "vendor": "Kneads Bakeshop",
-            "total": 373.0
+            "total": 506.5
           },
           {
             "vendor": "Cintas",
@@ -81236,12 +82193,53 @@
       },
       {
         "week_start": "2026-05-04",
-        "total_cogs": 519.97,
-        "cogs_only_total": 0.0,
+        "total_cogs": 1244.07,
+        "cogs_only_total": 650.8,
         "by_category": {
           "Paper & Plastics": 205.64,
           "Linen": 234.68,
           "Uniform Costs": 1.24,
+          "Cleaning Supplies": 24.18,
+          "Bread": 336.5,
+          "Grocery and Dry Goods": 52.5,
+          "Beer- Bottled": 111.92,
+          "Wine": 149.88,
+          "R&M - Furniture & Equipment": 32.55
+        },
+        "by_cogs_type": {
+          "food": 389.0,
+          "beer": 111.92,
+          "wine": 149.88
+        },
+        "by_vendor_top5": [
+          {
+            "vendor": "Kneads Bakeshop",
+            "total": 414.0
+          },
+          {
+            "vendor": "Cintas",
+            "total": 301.99
+          },
+          {
+            "vendor": "Canton Crossing Wine & Spirits LLC",
+            "total": 273.65
+          },
+          {
+            "vendor": "Edward Don & Company",
+            "total": 217.98
+          },
+          {
+            "vendor": "Cozzini Bros., Inc.",
+            "total": 36.45
+          }
+        ]
+      },
+      {
+        "week_start": "2026-05-11",
+        "total_cogs": 301.99,
+        "cogs_only_total": 0.0,
+        "by_category": {
+          "Linen": 233.72,
           "Cleaning Supplies": 24.18
         },
         "by_cogs_type": {},
@@ -81249,10 +82247,6 @@
           {
             "vendor": "Cintas",
             "total": 301.99
-          },
-          {
-            "vendor": "Edward Don & Company",
-            "total": 217.98
           }
         ]
       }
@@ -81499,31 +82493,44 @@
       },
       {
         "month": "2026-05",
-        "total_cogs": 698.97,
-        "cogs_only_total": 169.0,
+        "total_cogs": 1858.56,
+        "cogs_only_total": 943.3,
         "by_category": {
-          "Bread": 140.0,
-          "Grocery and Dry Goods": 29.0,
+          "Bread": 591.0,
+          "Grocery and Dry Goods": 90.5,
           "Paper & Plastics": 205.64,
-          "Linen": 234.68,
+          "Linen": 468.4,
           "Uniform Costs": 1.24,
-          "Cleaning Supplies": 24.18
+          "Cleaning Supplies": 48.36,
+          "Beer- Bottled": 111.92,
+          "Wine": 149.88,
+          "R&M - Furniture & Equipment": 32.55
         },
         "by_cogs_type": {
-          "food": 169.0
+          "food": 681.5,
+          "beer": 111.92,
+          "wine": 149.88
         },
         "by_vendor_top5": [
           {
+            "vendor": "Kneads Bakeshop",
+            "total": 726.5
+          },
+          {
             "vendor": "Cintas",
-            "total": 301.99
+            "total": 603.98
+          },
+          {
+            "vendor": "Canton Crossing Wine & Spirits LLC",
+            "total": 273.65
           },
           {
             "vendor": "Edward Don & Company",
             "total": 217.98
           },
           {
-            "vendor": "Kneads Bakeshop",
-            "total": 179.0
+            "vendor": "Cozzini Bros., Inc.",
+            "total": 36.45
           }
         ]
       }
@@ -94148,11 +95155,11 @@
       "rows_warned": 0
     },
     "marginedge_invoice": {
-      "ran_at": "2026-05-07T17:35:27+00:00",
-      "rows_in": 260,
-      "rows_valid": 260,
+      "ran_at": "2026-05-12T17:42:36+00:00",
+      "rows_in": 254,
+      "rows_valid": 254,
       "rows_invalid": 0,
-      "rows_warned": 144
+      "rows_warned": 147
     }
   }
 }
