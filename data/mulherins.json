@@ -195448,7 +195448,7 @@
     "total_cost": 953118.07
   },
   "cogs": {
-    "as_of": "2026-05-12",
+    "as_of": "2026-05-14",
     "source": "marginedge_api",
     "lookback_days": 90,
     "with_line_items": true,
@@ -235289,7 +235289,7 @@
         "line_items": [
           {
             "product_id": "640499772",
-            "product_name": "Tortillas 6''corn Yellow Harbar",
+            "product_name": "Tortillas 6corn Yellow Harbar",
             "category": "Grocery & Dry Goods",
             "category_id": "1132",
             "category_type": "FOOD",
@@ -272563,7 +272563,7 @@
         "vendor_id": "5652",
         "vendor_name": "Blue Moon Acres Inc.",
         "total": 131.69,
-        "status": "AM_REVIEW",
+        "status": "PENDING_APPROVAL",
         "line_items": [
           {
             "product_id": "647650150",
@@ -272577,23 +272577,23 @@
             "extended": 22.06
           },
           {
-            "product_id": "",
+            "product_id": "1216214357",
             "product_name": "NJ Fram Products:Njfilf",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
-            "cogs_bucket": null,
+            "category": "Produce",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
             "quantity": 1.0,
             "unit_price": 10.88,
             "extended": 10.88
           },
           {
-            "product_id": "",
+            "product_id": "865643809",
             "product_name": "PA Chef Micros Single Variety:rsol Red-Veined Sorrel 3 oz",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
-            "cogs_bucket": null,
+            "category": "Produce",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
             "quantity": 3.0,
             "unit_price": 7.95,
             "extended": 23.85
@@ -273239,6 +273239,28 @@
         ]
       },
       {
+        "invoice_id": "20574987",
+        "invoice_number": "111-0687189-7314641",
+        "date": "2026-05-07",
+        "vendor_id": "207115",
+        "vendor_name": "Amazon.com",
+        "total": 148.39,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "1212779394",
+            "product_name": "5000 MAX PSI Pressure Washer 2026 NEW, Touch Screen 8 Level, 4 Nozzles and FOAM Cannon, Power Cleaner (Yellow)",
+            "category": "Repairs and Maintenance",
+            "category_id": "1081",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 139.99,
+            "extended": 139.99
+          }
+        ]
+      },
+      {
         "invoice_id": "20567774",
         "invoice_number": "3998525",
         "date": "2026-05-08",
@@ -273564,25 +273586,25 @@
         "vendor_id": "3368110",
         "vendor_name": "Economy Restaurant & Bar Supply Inc",
         "total": 217.73,
-        "status": "AM_REVIEW",
+        "status": "PENDING_APPROVAL",
         "line_items": [
           {
-            "product_id": "",
+            "product_id": "1212999216",
             "product_name": "3OZ Bell Creamer",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
+            "category": "Kitchen Utensils & Supplies",
+            "category_id": "1122",
+            "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 36.0,
             "unit_price": 2.19,
             "extended": 78.84
           },
           {
-            "product_id": "",
+            "product_id": "1212999223",
             "product_name": "12OZ Super White Mug China",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
+            "category": "Kitchen Utensils & Supplies",
+            "category_id": "1122",
+            "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 1.0,
             "unit_price": 129.0,
@@ -273597,7 +273619,7 @@
         "vendor_id": "1837",
         "vendor_name": "Sogno Toscano Tuscan Dream",
         "total": 503.16,
-        "status": "AM_REVIEW",
+        "status": "PENDING_APPROVAL",
         "line_items": [
           {
             "product_id": "640653950",
@@ -273611,7 +273633,7 @@
             "extended": 31.5
           },
           {
-            "product_id": "645225076",
+            "product_id": "1216213812",
             "product_name": "Black Summer Truffle Slices",
             "category": "Produce",
             "category_id": "1053",
@@ -274669,6 +274691,61 @@
         ]
       },
       {
+        "invoice_id": "20574968",
+        "invoice_number": "111-9194246-3734667",
+        "date": "2026-05-09",
+        "vendor_id": "207115",
+        "vendor_name": "Amazon.com",
+        "total": 44.5,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "1215454497",
+            "product_name": "Aqziill 15 Pack Amber Glass Bottles 16oz With Pump Dispensers, Refillable Pump Bottles For Shampoo, Dish Soap, Hand",
+            "category": "Cleaning Chemicals & Soaps",
+            "category_id": "1108",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 34.99,
+            "extended": 34.99
+          }
+        ]
+      },
+      {
+        "invoice_id": "20574972",
+        "invoice_number": "111-8646073-2512217",
+        "date": "2026-05-09",
+        "vendor_id": "207115",
+        "vendor_name": "Amazon.com",
+        "total": 80.03,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "1212770707",
+            "product_name": "1 of: Amazon Basics 91% Isopropyl Alcohol First Aid Antiseptic for Minor Cuts, Scrapes and Infection Protection, Unscented, 16 fl oz, 12-Pack",
+            "category": "Cleaning Chemicals & Soaps",
+            "category_id": "1108",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 20.58,
+            "extended": 20.58
+          },
+          {
+            "product_id": "1212770472",
+            "product_name": "Romadedi Mini Decorative Lantern for Centerpieces 10 Pcs Small Gold Candle Lanterns with Flickering LED Candles for We Table Decor Christmas Party Halloween, Battery Included",
+            "category": "Flowers & Decorations",
+            "category_id": "1120",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 24.69,
+            "extended": 49.38
+          }
+        ]
+      },
+      {
         "invoice_id": "20569002",
         "invoice_number": "3999371",
         "date": "2026-05-11",
@@ -274983,7 +275060,7 @@
         "vendor_id": "1646",
         "vendor_name": "Giordano",
         "total": 111.5,
-        "status": "AM_REVIEW",
+        "status": "PENDING_APPROVAL",
         "line_items": [
           {
             "product_id": "652308500",
@@ -275019,12 +275096,12 @@
             "extended": 23.5
           },
           {
-            "product_id": "beebagocs",
+            "product_id": "846116666",
             "product_name": "Beets Baby Gold",
-            "category": null,
-            "category_id": null,
-            "category_type": null,
-            "cogs_bucket": null,
+            "category": "Produce",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
             "quantity": 0.0,
             "unit_price": 24.5,
             "extended": 0.0
@@ -275038,7 +275115,7 @@
         "vendor_id": "3125",
         "vendor_name": "Julius Silvert, Inc.",
         "total": 84.12,
-        "status": "AM_REVIEW",
+        "status": "PENDING_APPROVAL",
         "line_items": [
           {
             "product_id": "649386355",
@@ -275446,6 +275523,270 @@
         "total": 0.0,
         "status": "PREPROCESSING",
         "line_items": []
+      },
+      {
+        "invoice_id": "20575488",
+        "invoice_number": "389906",
+        "date": "2026-05-12",
+        "vendor_id": "5687",
+        "vendor_name": "Regalis Foods",
+        "total": 329.57,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "642183795",
+            "product_name": "Regalis Black Maitake, 3lb Case",
+            "category": "Produce",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.0,
+            "unit_price": 14.95,
+            "extended": 89.7
+          },
+          {
+            "product_id": "790911241",
+            "product_name": "Regalis Donko Shiitake 1/11#",
+            "category": "Produce",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.2,
+            "unit_price": 11.15,
+            "extended": 69.13
+          },
+          {
+            "product_id": "640656308",
+            "product_name": "Ivory Amish Whole Chicken",
+            "category": "Meat & Poultry",
+            "category_id": "1069",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 48.48,
+            "unit_price": 2.8,
+            "extended": 135.74
+          },
+          {
+            "product_id": "650959846",
+            "product_name": "Regalis Tempranillo (Rose) Vinegar, 6/2L",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1132",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 35.0,
+            "extended": 35.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "20575798",
+        "invoice_number": "4000365",
+        "date": "2026-05-13",
+        "vendor_id": "3125",
+        "vendor_name": "Julius Silvert, Inc.",
+        "total": 535.93,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "676238554",
+            "product_name": "Parmigiano Reggiano 1/4",
+            "category": "Dairy",
+            "category_id": "1102",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 21.79,
+            "unit_price": 13.424,
+            "extended": 292.51
+          },
+          {
+            "product_id": "640653950",
+            "product_name": "Mozzerrala Di buffala",
+            "category": "Dairy",
+            "category_id": "1102",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.0,
+            "unit_price": 27.8895,
+            "extended": 167.34
+          },
+          {
+            "product_id": "640575663",
+            "product_name": "Salt Kosher 3#",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1132",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 68.5176,
+            "extended": 68.52
+          }
+        ]
+      },
+      {
+        "invoice_id": "20576700",
+        "invoice_number": "2551",
+        "date": "2026-05-13",
+        "vendor_id": "20576772",
+        "vendor_name": "Total Leather Care",
+        "total": 875.0,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "1215778561",
+            "product_name": "Store Repair",
+            "category": "Repairs and Maintenance",
+            "category_id": "1081",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 875.0,
+            "extended": 875.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "20576850",
+        "invoice_number": "4000923",
+        "date": "2026-05-14",
+        "vendor_id": "3125",
+        "vendor_name": "Julius Silvert, Inc.",
+        "total": 614.61,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "640669196",
+            "product_name": "Ricotta Whole Milk Tins Hand",
+            "category": "Dairy",
+            "category_id": "1102",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 48.6,
+            "extended": 97.2
+          },
+          {
+            "product_id": "640666876",
+            "product_name": "Burrata",
+            "category": "Dairy",
+            "category_id": "1102",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 55.645,
+            "extended": 111.29
+          },
+          {
+            "product_id": "644118230",
+            "product_name": "Mascarpone Cheese",
+            "category": "Dairy",
+            "category_id": "1102",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 30.8,
+            "extended": 61.6
+          },
+          {
+            "product_id": "703452536",
+            "product_name": "Ricotta Impastata",
+            "category": "Dairy",
+            "category_id": "1102",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 37.5,
+            "extended": 37.5
+          },
+          {
+            "product_id": "657544501",
+            "product_name": "Oil Canola Fry",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1132",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 37.52,
+            "extended": 112.56
+          },
+          {
+            "product_id": "640575643",
+            "product_name": "Corn Starch 1#",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1132",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 39.95,
+            "extended": 39.95
+          },
+          {
+            "product_id": "647649519",
+            "product_name": "Salt Sea Maldon Tub",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1132",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 29.98,
+            "extended": 29.98
+          },
+          {
+            "product_id": "703451736",
+            "product_name": "Flour All Purpose Beehive Malted Or",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1132",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 39.985,
+            "extended": 79.97
+          },
+          {
+            "product_id": "642183809",
+            "product_name": "Farro Organic",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1132",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 18.5,
+            "extended": 37.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "20576886",
+        "invoice_number": "4000924",
+        "date": "2026-05-14",
+        "vendor_id": "3125",
+        "vendor_name": "Julius Silvert, Inc.",
+        "total": 167.31,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "640670957",
+            "product_name": "Liner Can 38X58 60 GAL Black 1.2 Mil Lid",
+            "category": "Trash Liners",
+            "category_id": "1057",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 29.9484,
+            "extended": 59.9
+          },
+          {
+            "product_id": "642663900",
+            "product_name": "Towel C-Fold 1Ply 10X12 1/4 White",
+            "category": "Paper Costs",
+            "category_id": "1075",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 3.0,
+            "unit_price": 31.5,
+            "extended": 94.5
+          }
+        ]
       }
     ],
     "vendors": [
@@ -275992,6 +276333,10 @@
       {
         "id": "216281",
         "name": "The Wine Merchant, Ltd."
+      },
+      {
+        "id": "20576772",
+        "name": "Total Leather Care"
       },
       {
         "id": "778638",
@@ -277786,8 +278131,8 @@
             "total": 323.14
           }
         ],
-        "cogs_pct_revenue": 0.0365,
-        "cogs_only_pct_revenue": 0.0287
+        "cogs_pct_revenue": 0.0483,
+        "cogs_only_pct_revenue": 0.038
       }
     ],
     "monthly_rollup": [
@@ -278216,8 +278561,8 @@
             "total": 1045.25
           }
         ],
-        "cogs_pct_revenue": 0.0882,
-        "cogs_only_pct_revenue": 0.0782
+        "cogs_pct_revenue": 0.0928,
+        "cogs_only_pct_revenue": 0.0824
       }
     ]
   },
@@ -285381,11 +285726,11 @@
       "rows_warned": 0
     },
     "marginedge_invoice": {
-      "ran_at": "2026-05-12T16:15:29+00:00",
-      "rows_in": 902,
-      "rows_valid": 902,
+      "ran_at": "2026-05-14T15:58:14+00:00",
+      "rows_in": 884,
+      "rows_valid": 884,
       "rows_invalid": 0,
-      "rows_warned": 458
+      "rows_warned": 448
     }
   }
 }

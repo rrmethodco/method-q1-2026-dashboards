@@ -133004,7 +133004,7 @@
     "total_cost": 432369.02
   },
   "cogs": {
-    "as_of": "2026-05-12",
+    "as_of": "2026-05-14",
     "source": "marginedge_api",
     "lookback_days": 90,
     "with_line_items": true,
@@ -145756,8 +145756,8 @@
           {
             "product_id": "1171836470",
             "product_name": "Sweet Cream Panna Cotta Kampers 2026",
-            "category": "Pastry",
-            "category_id": "1103",
+            "category": "Dairy",
+            "category_id": "1030",
             "category_type": "FOOD",
             "cogs_bucket": "food",
             "quantity": 21.0,
@@ -147365,8 +147365,8 @@
           {
             "product_id": "1171836470",
             "product_name": "Sweet Cream Panna Cotta Kampers 2026",
-            "category": "Pastry",
-            "category_id": "1103",
+            "category": "Dairy",
+            "category_id": "1030",
             "category_type": "FOOD",
             "cogs_bucket": "food",
             "quantity": 20.0,
@@ -149461,6 +149461,61 @@
         ]
       },
       {
+        "invoice_id": "40346338",
+        "invoice_number": "739966",
+        "date": "2026-05-02",
+        "vendor_id": "26187",
+        "vendor_name": "(Preferred Produce) Frog Holler Produce",
+        "total": 43.9,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "",
+            "product_name": "Lettuce Romaine Heart 12/3CT",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 14.75,
+            "extended": 14.75
+          },
+          {
+            "product_id": "641919397",
+            "product_name": "ONIONS SPANISH JUMBO 50#",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 5.75,
+            "extended": 5.75
+          },
+          {
+            "product_id": "652688824",
+            "product_name": "Onion Green (Bunch) 48Ct",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 7.95,
+            "extended": 7.95
+          },
+          {
+            "product_id": "655320918",
+            "product_name": "Pineapple Gold 5/6CT",
+            "category": "Drink Supplies",
+            "category_id": "1054",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 15.45,
+            "extended": 15.45
+          }
+        ]
+      },
+      {
         "invoice_id": "39399335",
         "invoice_number": null,
         "date": "2026-05-03",
@@ -149532,7 +149587,7 @@
         "vendor_id": "68345",
         "vendor_name": "Great Lakes Wine & Spirits",
         "total": 258.96,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -150614,8 +150669,8 @@
           {
             "product_id": "1171836470",
             "product_name": "Sweet Cream Panna Cotta Kampers 2026",
-            "category": "Pastry",
-            "category_id": "1103",
+            "category": "Dairy",
+            "category_id": "1030",
             "category_type": "FOOD",
             "cogs_bucket": "food",
             "quantity": 20.0,
@@ -150691,13 +150746,57 @@
         ]
       },
       {
+        "invoice_id": "40346399",
+        "invoice_number": "742412",
+        "date": "2026-05-09",
+        "vendor_id": "26187",
+        "vendor_name": "(Preferred Produce) Frog Holler Produce",
+        "total": 91.65,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "640536387",
+            "product_name": "Lemons 115 Ct",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 39.3,
+            "extended": 78.6
+          },
+          {
+            "product_id": "652688824",
+            "product_name": "Onion Green (Bunch) 48Ct",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 7.75,
+            "extended": 7.75
+          },
+          {
+            "product_id": "641919397",
+            "product_name": "Onion Spanish Jumbo",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 5.3,
+            "extended": 5.3
+          }
+        ]
+      },
+      {
         "invoice_id": "40345392",
         "invoice_number": null,
         "date": "2026-05-10",
         "vendor_id": "17919954",
         "vendor_name": "A.H.D. Vintners",
         "total": 399.96,
-        "status": "SENT",
+        "status": "COMPLETED",
         "line_items": []
       },
       {
@@ -150749,6 +150848,413 @@
         "total": 201.0,
         "status": "SENT",
         "line_items": []
+      },
+      {
+        "invoice_id": "40347248",
+        "invoice_number": "5596096",
+        "date": "2026-05-10",
+        "vendor_id": "68345",
+        "vendor_name": "Great Lakes Wine & Spirits",
+        "total": 807.6,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "1214931974",
+            "product_name": "Lubberi Orlegi, Rioja 2023",
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 126.0,
+            "extended": 126.0
+          },
+          {
+            "product_id": "655371128",
+            "product_name": "Acha Rojo-Vino Vermouth Spain",
+            "category": "Liquor",
+            "category_id": "1071",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 96.0,
+            "extended": 96.0
+          },
+          {
+            "product_id": "872310322",
+            "product_name": "Avinyo Cava Reserva Brut, Penedes 2021",
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 168.0,
+            "extended": 168.0
+          },
+          {
+            "product_id": "640718752",
+            "product_name": "Cuvee 89 Sparkling Brut,New mexico",
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 135.6,
+            "extended": 135.6
+          },
+          {
+            "product_id": "671151949",
+            "product_name": "Isastegi Sagardo Cider, Spain-Can",
+            "category": "Bottle Beer",
+            "category_id": "1032",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 96.0,
+            "extended": 96.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "40346321",
+        "invoice_number": "742769",
+        "date": "2026-05-11",
+        "vendor_id": "26187",
+        "vendor_name": "(Preferred Produce) Frog Holler Produce",
+        "total": 192.2,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "643473565",
+            "product_name": "Limes 200Ct 40#",
+            "category": "Drink Supplies",
+            "category_id": "1054",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 63.65,
+            "extended": 63.65
+          },
+          {
+            "product_id": "1213660294",
+            "product_name": "Peppers Thai Chili Red",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 21.95,
+            "extended": 21.95
+          },
+          {
+            "product_id": "639841038",
+            "product_name": "Shallot Whole Peeled",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 23.45,
+            "extended": 23.45
+          },
+          {
+            "product_id": "639841716",
+            "product_name": "Tarragon 1#",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 26.05,
+            "extended": 26.05
+          },
+          {
+            "product_id": "641919290",
+            "product_name": "Celery 24Ct",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 9.35,
+            "extended": 18.7
+          },
+          {
+            "product_id": "647646823",
+            "product_name": "Mint 1#",
+            "category": "Drink Supplies",
+            "category_id": "1054",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 2.0,
+            "unit_price": 19.2,
+            "extended": 38.4
+          }
+        ]
+      },
+      {
+        "invoice_id": "40346293",
+        "invoice_number": "METF_20260512_pniEhS2",
+        "date": "2026-05-12",
+        "vendor_id": "32939",
+        "vendor_name": "Method Hospitality- Internal Transfers",
+        "total": 37.97,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "969408332",
+            "product_name": "Commissary - Basque Cheesecake Portion (Kamper's)",
+            "category": "Dairy",
+            "category_id": "1030",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 12.43,
+            "extended": 24.86
+          },
+          {
+            "product_id": "1177983370",
+            "product_name": "jasmine Rhubarb compote",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 0.5,
+            "unit_price": 17.1,
+            "extended": 8.55
+          },
+          {
+            "product_id": "1178026146",
+            "product_name": "caramel Saffron sauce",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1057",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.56,
+            "extended": 4.56
+          }
+        ]
+      },
+      {
+        "invoice_id": "40346307",
+        "invoice_number": "152638",
+        "date": "2026-05-12",
+        "vendor_id": "17919954",
+        "vendor_name": "A.H.D. Vintners",
+        "total": 432.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "668958022",
+            "product_name": "Granbazan Albarino Verde 25 12 Pack 750 ML. Bottle",
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 240.0,
+            "extended": 240.0
+          },
+          {
+            "product_id": "689640241",
+            "product_name": "Guimaro Ribeira Sacra Tinto 24 12 Pack 750 ML Bottle",
+            "category": "Wine",
+            "category_id": "1146",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 192.0,
+            "extended": 192.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "40346353",
+        "invoice_number": "2976746",
+        "date": "2026-05-12",
+        "vendor_id": "26189",
+        "vendor_name": "Michael's Finer Meats & Seafoods",
+        "total": 486.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "798024781",
+            "product_name": "Lobster Meat - Ckl - (NL)",
+            "category": "Seafood",
+            "category_id": "1123",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 12.0,
+            "unit_price": 40.5,
+            "extended": 486.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "40346385",
+        "invoice_number": "743250",
+        "date": "2026-05-12",
+        "vendor_id": "26187",
+        "vendor_name": "(Preferred Produce) Frog Holler Produce",
+        "total": 35.19,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "660981280",
+            "product_name": "Cilantro 60ct",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 4.65,
+            "extended": 4.65
+          },
+          {
+            "product_id": "642644861",
+            "product_name": "Dill Fresh 24Ct",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.5,
+            "extended": 11.5
+          },
+          {
+            "product_id": "640734311",
+            "product_name": "Chives 1 #",
+            "category": "Produce",
+            "category_id": "1116",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 19.04,
+            "extended": 19.04
+          }
+        ]
+      },
+      {
+        "invoice_id": "40346535",
+        "invoice_number": "72351514",
+        "date": "2026-05-12",
+        "vendor_id": "26148",
+        "vendor_name": "Chefs Warehouse",
+        "total": 624.22,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "659205148",
+            "product_name": "Shrimp Pd T/on Iqf 21/25w Xw",
+            "category": "Seafood",
+            "category_id": "1123",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 109.0,
+            "extended": 109.0
+          },
+          {
+            "product_id": "644152892",
+            "product_name": "Delouis Sherry Vin Fr",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1057",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 85.74,
+            "extended": 85.74
+          },
+          {
+            "product_id": "660951662",
+            "product_name": "Marcona Almonds Fried/salted",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1057",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 134.35,
+            "extended": 134.35
+          },
+          {
+            "product_id": "661006093",
+            "product_name": "Bread French Baguette PB 19 IN",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1057",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 48.84,
+            "extended": 48.84
+          },
+          {
+            "product_id": "710691585",
+            "product_name": "Ffry Natural Cut Chip",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1057",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 69.69,
+            "extended": 69.69
+          },
+          {
+            "product_id": "661016052",
+            "product_name": "Bread Hot Dog Bun Split Top",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1057",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 27.15,
+            "extended": 54.3
+          },
+          {
+            "product_id": "639823830",
+            "product_name": "Evoo Vista Del Sol Es",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1057",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 122.3,
+            "extended": 122.3
+          }
+        ]
+      },
+      {
+        "invoice_id": "40347231",
+        "invoice_number": "I-00019637",
+        "date": "2026-05-13",
+        "vendor_id": "40347370",
+        "vendor_name": "Eastern Market Brewing Co.",
+        "total": 229.0,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "1178290971",
+            "product_name": "Wunderboi Kolsch 1/2 BBL",
+            "category": "Draft Beer",
+            "category_id": "1042",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 199.0,
+            "extended": 199.0
+          },
+          {
+            "product_id": "646032367",
+            "product_name": "Keg Deposit - At Purchase($30)",
+            "category": "Draft Beer",
+            "category_id": "1042",
+            "category_type": "BEER",
+            "cogs_bucket": "beer",
+            "quantity": 1.0,
+            "unit_price": 30.0,
+            "extended": 30.0
+          }
+        ]
       }
     ],
     "vendors": [
@@ -150795,6 +151301,10 @@
       {
         "id": "21929203",
         "name": "Detroit Spectrum Painters, Inc"
+      },
+      {
+        "id": "40347370",
+        "name": "Eastern Market Brewing Co."
       },
       {
         "id": "1727995",
@@ -152193,11 +152703,10 @@
           "Grocery & Dry Goods": 28.79,
           "Wine": 933.14,
           "Liquor": 4271.14,
-          "Pastry": 32.55,
+          "Dairy": 49.21,
           "Drink Supplies": 155.25,
           "Draft Beer": 189.0,
-          "Produce": 34.2,
-          "Dairy": 16.66
+          "Produce": 34.2
         },
         "by_cogs_type": {
           "beer": 530.56,
@@ -152245,8 +152754,7 @@
           "Wine": 209.61,
           "Bottle Beer": 38.28,
           "Draft Beer": -159.0,
-          "Pastry": 31.0,
-          "Dairy": 27.9
+          "Dairy": 58.9
         },
         "by_cogs_type": {
           "liquor": 5336.65,
@@ -152344,9 +152852,8 @@
           "Seafood": 274.4,
           "Liquor": -121.15,
           "Produce": 236.8,
-          "Dairy": 152.34,
-          "Soft Beverage": 36.84,
-          "Pastry": 31.0
+          "Dairy": 183.34,
+          "Soft Beverage": 36.84
         },
         "by_cogs_type": {
           "liquor": 327.09,
@@ -152376,8 +152883,8 @@
             "total": -68.6
           }
         ],
-        "cogs_pct_revenue": 0.0369,
-        "cogs_only_pct_revenue": 0.0384
+        "cogs_pct_revenue": 0.0616,
+        "cogs_only_pct_revenue": 0.0642
       }
     ],
     "monthly_rollup": [
@@ -152613,8 +153120,8 @@
           "Music & Entertainment": 1050.0,
           "Drink Supplies": 3724.29,
           "Grocery & Dry Goods": 1046.41,
-          "Pastry": 80.51,
-          "Dairy": 511.16,
+          "Pastry": 16.96,
+          "Dairy": 574.71,
           "Paper Costs": 200.0,
           "Seafood": 1525.39,
           "Produce": 373.38,
@@ -152676,9 +153183,8 @@
           "Meat & Poultry": 274.35,
           "Paper Costs": -63.99,
           "Grocery & Dry Goods": 296.8,
-          "Dairy": 152.34,
-          "Soft Beverage": 36.84,
-          "Pastry": 31.0
+          "Dairy": 183.34,
+          "Soft Beverage": 36.84
         },
         "by_cogs_type": {
           "beer": 108.23,
@@ -152709,8 +153215,8 @@
             "total": 232.0
           }
         ],
-        "cogs_pct_revenue": 0.102,
-        "cogs_only_pct_revenue": 0.102
+        "cogs_pct_revenue": 0.1136,
+        "cogs_only_pct_revenue": 0.1136
       }
     ]
   },
@@ -159972,11 +160478,11 @@
       "rows_warned": 0
     },
     "marginedge_invoice": {
-      "ran_at": "2026-05-12T16:39:43+00:00",
-      "rows_in": 318,
-      "rows_valid": 318,
+      "ran_at": "2026-05-14T16:22:17+00:00",
+      "rows_in": 320,
+      "rows_valid": 320,
       "rows_invalid": 0,
-      "rows_warned": 51
+      "rows_warned": 49
     }
   }
 }

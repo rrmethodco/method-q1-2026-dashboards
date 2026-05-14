@@ -46168,7 +46168,7 @@
     "total_cost": 202264.46
   },
   "cogs": {
-    "as_of": "2026-05-12",
+    "as_of": "2026-05-14",
     "source": "marginedge_api",
     "lookback_days": 90,
     "with_line_items": true,
@@ -61848,7 +61848,7 @@
           },
           {
             "product_id": "782768637",
-            "product_name": "Pastry - Coffee Cake",
+            "product_name": "Pastry - Cinnamon Roll",
             "category": "Grocery and Dry Goods",
             "category_id": "1565",
             "category_type": "FOOD",
@@ -80161,13 +80161,57 @@
         ]
       },
       {
+        "invoice_id": "14149356",
+        "invoice_number": "6359145321",
+        "date": "2026-05-09",
+        "vendor_id": "2697",
+        "vendor_name": "Ecolab Inc.",
+        "total": 208.27,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1096468207",
+            "product_name": "Rental Charges - Ecolab",
+            "category": "Equipment Rental",
+            "category_id": "1512",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 181.69,
+            "extended": 181.69
+          }
+        ]
+      },
+      {
+        "invoice_id": "14149595",
+        "invoice_number": "351272994",
+        "date": "2026-05-09",
+        "vendor_id": "4662",
+        "vendor_name": "Kneads Bakeshop",
+        "total": 7.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "685288263",
+            "product_name": "Ciabatta Roll",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 7.0,
+            "unit_price": 1.0,
+            "extended": 7.0
+          }
+        ]
+      },
+      {
         "invoice_id": "14147361",
         "invoice_number": "351247961",
         "date": "2026-05-10",
         "vendor_id": "4662",
         "vendor_name": "Kneads Bakeshop",
         "total": 86.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "685288300",
@@ -80310,7 +80354,7 @@
         "vendor_id": "4662",
         "vendor_name": "Kneads Bakeshop",
         "total": 46.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "685288263",
@@ -80597,6 +80641,677 @@
             "quantity": 8.0,
             "unit_price": 1.035,
             "extended": 8.28
+          }
+        ]
+      },
+      {
+        "invoice_id": "14148222",
+        "invoice_number": "113-9464105-5432264",
+        "date": "2026-05-11",
+        "vendor_id": "14227",
+        "vendor_name": "Amazon.com",
+        "total": 86.56,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "758680900",
+            "product_name": "Monin - Gourmet Dark Chocolate Sauce, Velvety & Rich Great For Desserts, Coffee, & Snacks, Gluten-Free, Vegan, Non-Gmo",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 28.53,
+            "extended": 57.06
+          },
+          {
+            "product_id": "",
+            "product_name": "Rishi Tea London Fog Latte - Organic Black Tea Concontrato with Borgamot, Easy-to-Sorve Hot or Iced Earl Groy Mix - 32 loz Carton, 8 Servings (Pack of 3)",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 29.5,
+            "extended": 29.5
+          }
+        ]
+      },
+      {
+        "invoice_id": "14148644",
+        "invoice_number": "351346704",
+        "date": "2026-05-11",
+        "vendor_id": "4662",
+        "vendor_name": "Kneads Bakeshop",
+        "total": 46.75,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "685288263",
+            "product_name": "Artisan - Ciabatta",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 1.0,
+            "extended": 10.0
+          },
+          {
+            "product_id": "776144233",
+            "product_name": "Croissant Chocolate",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 3.001,
+            "extended": 9.0
+          },
+          {
+            "product_id": "961110885",
+            "product_name": "Croissant - Plain",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 2.751,
+            "extended": 8.25
+          },
+          {
+            "product_id": "973038289",
+            "product_name": "Danish - Cream Cheese",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.0,
+            "extended": 6.0
+          },
+          {
+            "product_id": "662831259",
+            "product_name": "Muffin-Blueberry Crumb",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 2.001,
+            "extended": 4.0
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Chocolate Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Pastry - Vanilla Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.251,
+            "extended": 2.25
+          }
+        ]
+      },
+      {
+        "invoice_id": "14149370",
+        "invoice_number": "6359186238",
+        "date": "2026-05-11",
+        "vendor_id": "2697",
+        "vendor_name": "Ecolab Inc.",
+        "total": 636.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "936667642",
+            "product_name": "MPPA Charges - Ecolab Inc.",
+            "category": "Equipment Rental",
+            "category_id": "1512",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 600.0,
+            "extended": 600.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "14148209",
+        "invoice_number": "IV105 0003330762",
+        "date": "2026-05-12",
+        "vendor_id": "2287",
+        "vendor_name": "Baldor Specialty Foods Inc.",
+        "total": 1207.95,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "662794825",
+            "product_name": "Banana Box Singles 10 Lb",
+            "category": "Produce",
+            "category_id": "1567",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 9.75,
+            "extended": 9.75
+          },
+          {
+            "product_id": "681679287",
+            "product_name": "Cheese American Yellow Unsliced Block 5 Lb",
+            "category": "Dairy",
+            "category_id": "1564",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 17.99,
+            "extended": 17.99
+          },
+          {
+            "product_id": "950272013",
+            "product_name": "Half & Half 1 Qt (12) Clover Farms Dairy",
+            "category": "Dairy",
+            "category_id": "1564",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 4.0,
+            "unit_price": 2.51,
+            "extended": 10.04
+          },
+          {
+            "product_id": "661010040",
+            "product_name": "Milk Whole Cs Only 4x1 Gal Clover Farms Dairy",
+            "category": "Dairy",
+            "category_id": "1564",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 20.9,
+            "extended": 41.8
+          },
+          {
+            "product_id": "817183680",
+            "product_name": "Cream Heavy 40% 1 Qt Clover Farms Dairy",
+            "category": "Dairy",
+            "category_id": "1564",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 4.69,
+            "extended": 9.38
+          },
+          {
+            "product_id": "661008253",
+            "product_name": "Milk Oat Barista 12x32 Oz Califia",
+            "category": "Dairy",
+            "category_id": "1564",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 44.09,
+            "extended": 132.27
+          },
+          {
+            "product_id": "661007081",
+            "product_name": "Milk Almond Barista Unsweetened 6x32 Oz Califia",
+            "category": "Dairy",
+            "category_id": "1564",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 25.39,
+            "extended": 50.78
+          },
+          {
+            "product_id": "678977926",
+            "product_name": "Yogurt 10% Greek 11 Lb Kourellas",
+            "category": "Dairy",
+            "category_id": "1564",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 43.89,
+            "extended": 87.78
+          },
+          {
+            "product_id": "679189332",
+            "product_name": "Eggs Liquid Whole 15x2 Lb Deb El",
+            "category": "Dairy",
+            "category_id": "1564",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 64.6,
+            "extended": 64.6
+          },
+          {
+            "product_id": "899221713",
+            "product_name": "Lemonade Guava 6x12 Oz Natalies Orchid Island Lto",
+            "category": "Non Alcoholic",
+            "category_id": "1486",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 1.0,
+            "unit_price": 14.09,
+            "extended": 14.09
+          },
+          {
+            "product_id": "899221713",
+            "product_name": "Lemonade Natural 6x12 Oz Natalies Orchid Island",
+            "category": "Non Alcoholic",
+            "category_id": "1486",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 2.0,
+            "unit_price": 12.19,
+            "extended": 24.38
+          },
+          {
+            "product_id": "725329466",
+            "product_name": "Strawberries",
+            "category": "Produce",
+            "category_id": "1567",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 45.0,
+            "extended": 45.0
+          },
+          {
+            "product_id": "702264798",
+            "product_name": "Juice Orange 6x12 OZ Natalies Orchid Island O",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 21.99,
+            "extended": 21.99
+          },
+          {
+            "product_id": "663491557",
+            "product_name": "Lemons Meyer 10 Lb",
+            "category": "Produce",
+            "category_id": "1567",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 28.75,
+            "extended": 28.75
+          },
+          {
+            "product_id": "686367000",
+            "product_name": "Lettuce Little Gem 8x4 Ct Church Bros",
+            "category": "Produce",
+            "category_id": "1567",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 27.75,
+            "extended": 55.5
+          },
+          {
+            "product_id": "663491625",
+            "product_name": "Limes Pony 48 Ct",
+            "category": "Produce",
+            "category_id": "1567",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 21.25,
+            "extended": 21.25
+          },
+          {
+            "product_id": "662794125",
+            "product_name": "Bacon Applewood Smoked Sliced Layout 10-12",
+            "category": "Meat",
+            "category_id": "1566",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 127.49,
+            "extended": 127.49
+          },
+          {
+            "product_id": "684766856",
+            "product_name": "Turkey Breast Oven Roast",
+            "category": "Meat",
+            "category_id": "1566",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 6.45,
+            "unit_price": 10.99,
+            "extended": 70.89
+          },
+          {
+            "product_id": "MU5",
+            "product_name": "Mush Portobello Med 5 Lb",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 18.0,
+            "extended": 18.0
+          },
+          {
+            "product_id": "743093598",
+            "product_name": "Shrimp 8-12 P&d Tail On 2 Lb Apanie Fz",
+            "category": "Seafood",
+            "category_id": "1568",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 28.99,
+            "extended": 28.99
+          },
+          {
+            "product_id": "903427014",
+            "product_name": "Syrup Maple 1/2 Gal Catskill Provisions Lcl",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 54.19,
+            "extended": 54.19
+          },
+          {
+            "product_id": "678977625",
+            "product_name": "Blueberries 6 Oz 1/2 Cs",
+            "category": "Produce",
+            "category_id": "1567",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 20.25,
+            "extended": 20.25
+          },
+          {
+            "product_id": "678977625",
+            "product_name": "Blueberries 12x1 Pt Driscoll",
+            "category": "Produce",
+            "category_id": "1567",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 57.0,
+            "extended": 57.0
+          },
+          {
+            "product_id": "735446571",
+            "product_name": "Water Sparkling Blue Plastic Bottle 24x16 Oz Saratoga Springs",
+            "category": "Non Alcoholic",
+            "category_id": "1486",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 2.0,
+            "unit_price": 28.69,
+            "extended": 57.38
+          },
+          {
+            "product_id": "735447103",
+            "product_name": "Water Still Blue Plastic 12X28OZ Saratoga Lc",
+            "category": "Non Alcoholic",
+            "category_id": "1486",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 3.0,
+            "unit_price": 24.29,
+            "extended": 72.87
+          },
+          {
+            "product_id": "735446203",
+            "product_name": "Soda Coke Classic Cans 12x12 Oz Coca Cola",
+            "category": "Non Alcoholic",
+            "category_id": "1486",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 2.0,
+            "unit_price": 10.79,
+            "extended": 21.58
+          },
+          {
+            "product_id": "735446308",
+            "product_name": "Soda Diet Coke Can 12x12 Oz Coca Cola",
+            "category": "Non Alcoholic",
+            "category_id": "1486",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 2.0,
+            "unit_price": 10.79,
+            "extended": 21.58
+          },
+          {
+            "product_id": "735447366",
+            "product_name": "Soda Ginger Ale Cans 12x12 Oz Seagrams",
+            "category": "Non Alcoholic",
+            "category_id": "1486",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 2.0,
+            "unit_price": 11.19,
+            "extended": 22.38
+          }
+        ]
+      },
+      {
+        "invoice_id": "14148236",
+        "invoice_number": "35209383",
+        "date": "2026-05-12",
+        "vendor_id": "4838",
+        "vendor_name": "Edward Don & Company",
+        "total": 280.3,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "832571394",
+            "product_name": "Cup Hot Double Wall 16OZ Paper Don -500",
+            "category": "Paper & Plastics",
+            "category_id": "1501",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 100.31,
+            "extended": 100.31
+          },
+          {
+            "product_id": "709471340",
+            "product_name": "Cup Hot Double Wall 12OZ Paper Don -500/",
+            "category": "Paper & Plastics",
+            "category_id": "1501",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 82.06,
+            "extended": 164.12
+          }
+        ]
+      },
+      {
+        "invoice_id": "14149384",
+        "invoice_number": "6359202394",
+        "date": "2026-05-12",
+        "vendor_id": "2697",
+        "vendor_name": "Ecolab Inc.",
+        "total": 190.7,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1215240985",
+            "product_name": "Rental - Ecolab Inc.",
+            "category": "Equipment Rental",
+            "category_id": "1512",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 168.48,
+            "extended": 168.48
+          }
+        ]
+      },
+      {
+        "invoice_id": "14149398",
+        "invoice_number": "6359202395",
+        "date": "2026-05-12",
+        "vendor_id": "2697",
+        "vendor_name": "Ecolab Inc.",
+        "total": 190.7,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1215240985",
+            "product_name": "Rental - Ecolab Inc.",
+            "category": "Equipment Rental",
+            "category_id": "1512",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 168.48,
+            "extended": 168.48
+          }
+        ]
+      },
+      {
+        "invoice_id": "14149526",
+        "invoice_number": "351463511",
+        "date": "2026-05-12",
+        "vendor_id": "4662",
+        "vendor_name": "Kneads Bakeshop",
+        "total": 79.75,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "685288263",
+            "product_name": "Artisan - Ciabatta",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.0,
+            "unit_price": 1.0,
+            "extended": 10.0
+          },
+          {
+            "product_id": "933767924",
+            "product_name": "6pk Everything Bagles",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 6.0,
+            "extended": 6.0
+          },
+          {
+            "product_id": "907579698",
+            "product_name": "6pk Plain Bagels",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 6.0,
+            "extended": 6.0
+          },
+          {
+            "product_id": "776144233",
+            "product_name": "Croissant Chocolate",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 3.0,
+            "extended": 9.0
+          },
+          {
+            "product_id": "961110885",
+            "product_name": "Croissant - Plain",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 2.75,
+            "extended": 8.25
+          },
+          {
+            "product_id": "973038289",
+            "product_name": "Danish - Cream Cheese",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 3.0,
+            "extended": 6.0
+          },
+          {
+            "product_id": "685288300",
+            "product_name": "Focaccia Rosemary",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 10.0,
+            "extended": 10.0
+          },
+          {
+            "product_id": "685288300",
+            "product_name": "Focaccia-Rosemary & Garlic-Half Sheet",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.0,
+            "extended": 11.0
+          },
+          {
+            "product_id": "662831259",
+            "product_name": "Muffin-Blueberry Crumb",
+            "category": "Bread",
+            "category_id": "1563",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 2.0,
+            "extended": 4.0
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Chocolate Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.25,
+            "extended": 2.25
+          },
+          {
+            "product_id": "1114777452",
+            "product_name": "Pastry - Vanilla Cupcake",
+            "category": "Grocery and Dry Goods",
+            "category_id": "1565",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 2.25,
+            "extended": 2.25
           }
         ]
       }
@@ -82411,28 +83126,29 @@
       },
       {
         "week_start": "2026-05-04",
-        "total_cogs": 1244.07,
-        "cogs_only_total": 650.8,
+        "total_cogs": 1585.84,
+        "cogs_only_total": 774.3,
         "by_category": {
           "Paper & Plastics": 205.64,
           "Linen": 234.68,
           "Uniform Costs": 1.24,
           "Cleaning Supplies": 24.18,
-          "Bread": 336.5,
-          "Grocery and Dry Goods": 52.5,
+          "Bread": 451.0,
+          "Grocery and Dry Goods": 61.5,
           "Beer- Bottled": 111.92,
           "Wine": 149.88,
-          "R&M - Furniture & Equipment": 32.55
+          "R&M - Furniture & Equipment": 32.55,
+          "Equipment Rental": 181.69
         },
         "by_cogs_type": {
-          "food": 389.0,
+          "food": 512.5,
           "beer": 111.92,
           "wine": 149.88
         },
         "by_vendor_top5": [
           {
             "vendor": "Kneads Bakeshop",
-            "total": 414.0
+            "total": 547.5
           },
           {
             "vendor": "Cintas",
@@ -82447,24 +83163,34 @@
             "total": 217.98
           },
           {
-            "vendor": "Cozzini Bros., Inc.",
-            "total": 36.45
+            "vendor": "Ecolab Inc.",
+            "total": 208.27
           }
         ]
       },
       {
         "week_start": "2026-05-11",
-        "total_cogs": 301.99,
+        "total_cogs": 1599.69,
         "cogs_only_total": 0.0,
         "by_category": {
           "Linen": 233.72,
-          "Cleaning Supplies": 24.18
+          "Cleaning Supplies": 24.18,
+          "Equipment Rental": 936.96,
+          "Paper & Plastics": 264.43
         },
         "by_cogs_type": {},
         "by_vendor_top5": [
           {
+            "vendor": "Ecolab Inc.",
+            "total": 1017.4
+          },
+          {
             "vendor": "Cintas",
             "total": 301.99
+          },
+          {
+            "vendor": "Edward Don & Company",
+            "total": 280.3
           }
         ]
       }
@@ -82711,44 +83437,45 @@
       },
       {
         "month": "2026-05",
-        "total_cogs": 1858.56,
-        "cogs_only_total": 943.3,
+        "total_cogs": 3498.03,
+        "cogs_only_total": 1066.8,
         "by_category": {
-          "Bread": 591.0,
-          "Grocery and Dry Goods": 90.5,
-          "Paper & Plastics": 205.64,
+          "Bread": 705.5,
+          "Grocery and Dry Goods": 99.5,
+          "Paper & Plastics": 470.07,
           "Linen": 468.4,
           "Uniform Costs": 1.24,
           "Cleaning Supplies": 48.36,
           "Beer- Bottled": 111.92,
           "Wine": 149.88,
-          "R&M - Furniture & Equipment": 32.55
+          "R&M - Furniture & Equipment": 32.55,
+          "Equipment Rental": 1118.65
         },
         "by_cogs_type": {
-          "food": 681.5,
+          "food": 805.0,
           "beer": 111.92,
           "wine": 149.88
         },
         "by_vendor_top5": [
           {
+            "vendor": "Ecolab Inc.",
+            "total": 1225.67
+          },
+          {
             "vendor": "Kneads Bakeshop",
-            "total": 726.5
+            "total": 860.0
           },
           {
             "vendor": "Cintas",
             "total": 603.98
           },
           {
+            "vendor": "Edward Don & Company",
+            "total": 498.28
+          },
+          {
             "vendor": "Canton Crossing Wine & Spirits LLC",
             "total": 273.65
-          },
-          {
-            "vendor": "Edward Don & Company",
-            "total": 217.98
-          },
-          {
-            "vendor": "Cozzini Bros., Inc.",
-            "total": 36.45
           }
         ]
       }
@@ -95391,11 +96118,11 @@
       "rows_warned": 0
     },
     "marginedge_invoice": {
-      "ran_at": "2026-05-12T17:42:36+00:00",
-      "rows_in": 254,
-      "rows_valid": 254,
+      "ran_at": "2026-05-14T17:24:51+00:00",
+      "rows_in": 242,
+      "rows_valid": 242,
       "rows_invalid": 0,
-      "rows_warned": 147
+      "rows_warned": 152
     }
   }
 }

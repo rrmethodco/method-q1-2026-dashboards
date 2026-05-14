@@ -131158,7 +131158,7 @@
     "total_cost": 762945.62
   },
   "cogs": {
-    "as_of": "2026-05-12",
+    "as_of": "2026-05-14",
     "source": "marginedge_api",
     "lookback_days": 90,
     "with_line_items": true,
@@ -150321,8 +150321,8 @@
           {
             "product_id": "639867983",
             "product_name": "20X16 Captive",
-            "category": "Repairs and Maintenance",
-            "category_id": "1067",
+            "category": "Contract Cleaning",
+            "category_id": "1028",
             "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 5.0,
@@ -156183,8 +156183,8 @@
           {
             "product_id": "639867983",
             "product_name": "20X16 Captive",
-            "category": "Repairs and Maintenance",
-            "category_id": "1067",
+            "category": "Contract Cleaning",
+            "category_id": "1028",
             "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 10.0,
@@ -156205,8 +156205,8 @@
           {
             "product_id": "639867983",
             "product_name": "20X16 Captive",
-            "category": "Repairs and Maintenance",
-            "category_id": "1067",
+            "category": "Contract Cleaning",
+            "category_id": "1028",
             "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 7.0,
@@ -161342,8 +161342,8 @@
           {
             "product_id": "639867983",
             "product_name": "20X16 Captive",
-            "category": "Repairs and Maintenance",
-            "category_id": "1067",
+            "category": "Contract Cleaning",
+            "category_id": "1028",
             "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 10.0,
@@ -167194,8 +167194,8 @@
           {
             "product_id": "639867983",
             "product_name": "20X16 Captive",
-            "category": "Repairs and Maintenance",
-            "category_id": "1067",
+            "category": "Contract Cleaning",
+            "category_id": "1028",
             "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 10.0,
@@ -167216,8 +167216,8 @@
           {
             "product_id": "639867983",
             "product_name": "20X16 Captive",
-            "category": "Repairs and Maintenance",
-            "category_id": "1067",
+            "category": "Contract Cleaning",
+            "category_id": "1028",
             "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 7.0,
@@ -178678,8 +178678,8 @@
           {
             "product_id": "639867983",
             "product_name": "20X16 Captive",
-            "category": "Repairs and Maintenance",
-            "category_id": "1067",
+            "category": "Contract Cleaning",
+            "category_id": "1028",
             "category_type": "OTHER",
             "cogs_bucket": null,
             "quantity": 10.0,
@@ -180554,7 +180554,7 @@
         "vendor_id": "1455",
         "vendor_name": "Samuels & Son Seafood Co.",
         "total": 91.79,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1169062362",
@@ -181214,7 +181214,7 @@
         "vendor_id": "1545",
         "vendor_name": "Chefs Warehouse",
         "total": 1504.03,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "642661492",
@@ -181351,10 +181351,10 @@
           {
             "product_id": "714764076",
             "product_name": "Sugar Demerara",
-            "category": "Pastry",
-            "category_id": "1059",
-            "category_type": "FOOD",
-            "cogs_bucket": "food",
+            "category": "Drink Suppplies",
+            "category_id": "1032",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
             "quantity": 1.0,
             "unit_price": 103.15,
             "extended": 103.15
@@ -182160,7 +182160,7 @@
         "vendor_id": "3172",
         "vendor_name": "Arway Linen & Uniform Rental Service",
         "total": 298.94,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "642662577",
@@ -182194,6 +182194,28 @@
             "quantity": 1.0,
             "unit_price": 25.8,
             "extended": 25.8
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124231",
+        "invoice_number": "A4004928",
+        "date": "2026-05-07",
+        "vendor_id": "11119",
+        "vendor_name": "Singer Equipment Company",
+        "total": 107.44,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "1215454121",
+            "product_name": "Basics Mug 11-1/2Oz Stacking 3-5/8\"h Bright White",
+            "category": "Glassware",
+            "category_id": "1041",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 107.44,
+            "extended": 107.44
           }
         ]
       },
@@ -182886,7 +182908,7 @@
         "vendor_id": "1545",
         "vendor_name": "Chefs Warehouse",
         "total": 62.61,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1004768525",
@@ -182908,7 +182930,7 @@
         "vendor_id": "1545",
         "vendor_name": "Chefs Warehouse",
         "total": 601.15,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "653621047",
@@ -183062,7 +183084,7 @@
         "vendor_id": "1455",
         "vendor_name": "Samuels & Son Seafood Co.",
         "total": 139.65,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1204534831",
@@ -183084,7 +183106,7 @@
         "vendor_id": "1455",
         "vendor_name": "Samuels & Son Seafood Co.",
         "total": 104.0,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1204570475",
@@ -183096,17 +183118,6 @@
             "quantity": 2.0,
             "unit_price": 52.0,
             "extended": 104.0
-          },
-          {
-            "product_id": "1205347950",
-            "product_name": "Add On",
-            "category": "Seafood",
-            "category_id": "1069",
-            "category_type": "FOOD",
-            "cogs_bucket": "food",
-            "quantity": 1.0,
-            "unit_price": 0.0,
-            "extended": 0.0
           }
         ]
       },
@@ -183117,7 +183128,7 @@
         "vendor_id": "1455",
         "vendor_name": "Samuels & Son Seafood Co.",
         "total": 688.75,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1035424865",
@@ -183172,7 +183183,7 @@
         "vendor_id": "1583",
         "vendor_name": "Baldor Specialty Foods Inc.",
         "total": 182.18,
-        "status": "AM_REVIEW",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "639863316",
@@ -183197,7 +183208,7 @@
             "extended": 44.0
           },
           {
-            "product_id": "956973656",
+            "product_id": "1214144927",
             "product_name": "Micro Shiso Purple Cress Living 16 Ct Koppert Cress Lcl",
             "category": "Produce",
             "category_id": "1064",
@@ -183265,13 +183276,35 @@
         ]
       },
       {
+        "invoice_id": "17110940",
+        "invoice_number": "9E6CE2D4-0170",
+        "date": "2026-05-09",
+        "vendor_id": "202467",
+        "vendor_name": "American Clear Ice Company LLC",
+        "total": 248.5,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "785915031",
+            "product_name": "Clear Ice Cube 2\"X2\"",
+            "category": "Bar Utensils & Supplies",
+            "category_id": "1022",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 300.0,
+            "unit_price": 0.75,
+            "extended": 225.0
+          }
+        ]
+      },
+      {
         "invoice_id": "17109922",
         "invoice_number": "0764289",
         "date": "2026-05-11",
         "vendor_id": "3172",
         "vendor_name": "Arway Linen & Uniform Rental Service",
         "total": 355.62,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "642662577",
@@ -183381,7 +183414,7 @@
         "vendor_id": "1455",
         "vendor_name": "Samuels & Son Seafood Co.",
         "total": 681.99,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "1182124532",
@@ -183419,13 +183452,35 @@
         ]
       },
       {
+        "invoice_id": "17111080",
+        "invoice_number": "FPH964208",
+        "date": "2026-05-11",
+        "vendor_id": "1503",
+        "vendor_name": "The Filter Man, Inc.",
+        "total": 75.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "639867983",
+            "product_name": "20X16 Captive",
+            "category": "Contract Cleaning",
+            "category_id": "1028",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 10.0,
+            "unit_price": 7.5,
+            "extended": 75.0
+          }
+        ]
+      },
+      {
         "invoice_id": "17109839",
         "invoice_number": "3999795",
         "date": "2026-05-12",
         "vendor_id": "3175",
         "vendor_name": "Julius Silvert, Inc.",
         "total": 2313.05,
-        "status": "PENDING_APPROVAL",
+        "status": "CLOSED",
         "line_items": [
           {
             "product_id": "642388652",
@@ -183832,7 +183887,7 @@
         "vendor_id": "19273",
         "vendor_name": "Vintage Imports, Inc",
         "total": 252.0,
-        "status": "FINAL_REVIEW",
+        "status": "PENDING_APPROVAL",
         "line_items": [
           {
             "product_id": "656115203",
@@ -183866,6 +183921,974 @@
             "quantity": 3.0,
             "unit_price": 20.0,
             "extended": 60.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "17110878",
+        "invoice_number": "509930",
+        "date": "2026-05-12",
+        "vendor_id": "21783",
+        "vendor_name": "Prestige-Ledroit Distributing Co.",
+        "total": 964.68,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "673894439",
+            "product_name": "1.0lt El Dorado 3 Year White Rum",
+            "category": "Liquor",
+            "category_id": "1051",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 20.66,
+            "extended": 61.98
+          },
+          {
+            "product_id": "776344448",
+            "product_name": "1.0lt Rock Town Vodka",
+            "category": "Liquor",
+            "category_id": "1051",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 115.92,
+            "extended": 115.92
+          },
+          {
+            "product_id": "738238983",
+            "product_name": "Cap Corse Mattei Blanc Quinquina",
+            "category": "Liquor",
+            "category_id": "1051",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 17.99,
+            "extended": 17.99
+          },
+          {
+            "product_id": "1184532904",
+            "product_name": "Champalou Vouvray Sec 2023,2024",
+            "category": "Wine",
+            "category_id": "1081",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 2.0,
+            "unit_price": 18.66,
+            "extended": 37.32
+          },
+          {
+            "product_id": "673899792",
+            "product_name": "Cocchi Vermouth di Torino 'Storico' Nv",
+            "category": "Liquor",
+            "category_id": "1051",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 2.0,
+            "unit_price": 17.99,
+            "extended": 35.98
+          },
+          {
+            "product_id": "828601513",
+            "product_name": "Dolin Genepy Le Chamois Nv",
+            "category": "Liquor",
+            "category_id": "1051",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 24.66,
+            "extended": 73.98
+          },
+          {
+            "product_id": "1116111020",
+            "product_name": "750Ml Dom Collotte Marsanny Les Champsalomon Rouge 21",
+            "category": "Wine",
+            "category_id": "1081",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 3.0,
+            "unit_price": 33.99,
+            "extended": 101.97
+          },
+          {
+            "product_id": "1196659307",
+            "product_name": "750ML Dom. Michel Juillot Bourgogne Rouge 22,23",
+            "category": "Wine",
+            "category_id": "1081",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 3.0,
+            "unit_price": 23.33,
+            "extended": 69.99
+          },
+          {
+            "product_id": "698069871",
+            "product_name": "750ML Hayman's Vibrant Citrus Gin",
+            "category": "Liquor",
+            "category_id": "1051",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 21.33,
+            "extended": 63.99
+          },
+          {
+            "product_id": "1144135214",
+            "product_name": "The Better Half Sauvignon Blanc 2025",
+            "category": "Wine",
+            "category_id": "1081",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 151.92,
+            "extended": 151.92
+          },
+          {
+            "product_id": "1151870739",
+            "product_name": "Rock Town Gin",
+            "category": "Liquor",
+            "category_id": "1051",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 1.0,
+            "unit_price": 127.92,
+            "extended": 127.92
+          },
+          {
+            "product_id": "1067750913",
+            "product_name": "La Giustiniana Gavi Di Gavi Terre Antiche 24",
+            "category": "Wine",
+            "category_id": "1081",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 6.0,
+            "unit_price": 13.33,
+            "extended": 79.98
+          }
+        ]
+      },
+      {
+        "invoice_id": "17111095",
+        "invoice_number": "IV114-0000933649",
+        "date": "2026-05-12",
+        "vendor_id": "1583",
+        "vendor_name": "Baldor Specialty Foods Inc.",
+        "total": 721.5,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "1191592712",
+            "product_name": "Peas English In Shell 10 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 65.5,
+            "extended": 65.5
+          },
+          {
+            "product_id": "639860492",
+            "product_name": "Chicken Whole Air Chilled 12X3.25 Lb La Belle Farm",
+            "category": "Meat & Poultry",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 39.5,
+            "unit_price": 3.49,
+            "extended": 137.86
+          },
+          {
+            "product_id": "676248545",
+            "product_name": "Thyme 1 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.0,
+            "extended": 11.0
+          },
+          {
+            "product_id": "642659862",
+            "product_name": "Blueberries 6 Oz 1/2 Cs",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 19.25,
+            "extended": 19.25
+          },
+          {
+            "product_id": "642377381",
+            "product_name": "Fennel 1/2 Box",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 36.75,
+            "extended": 36.75
+          },
+          {
+            "product_id": "706851491",
+            "product_name": "Celery 3 Ct",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 11.25,
+            "extended": 22.5
+          },
+          {
+            "product_id": "653350852",
+            "product_name": "Garlic Whole 5 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 27.0,
+            "extended": 27.0
+          },
+          {
+            "product_id": "658999010",
+            "product_name": "Mozzarella Ciliegini In Water Tub 3 Lb Lioni",
+            "category": "Dairy",
+            "category_id": "1029",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 20.89,
+            "extended": 20.89
+          },
+          {
+            "product_id": "829453316",
+            "product_name": "Carrot French Baby 24 Ct California",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 44.0,
+            "extended": 44.0
+          },
+          {
+            "product_id": "639867388",
+            "product_name": "Strawberries 8x1 Lb Driscoll",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 50.0,
+            "extended": 50.0
+          },
+          {
+            "product_id": "639863316",
+            "product_name": "Mint 1 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.0,
+            "extended": 11.0
+          },
+          {
+            "product_id": "650184979",
+            "product_name": "Potato Gpod 70 Ct 50 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 24.25,
+            "extended": 24.25
+          },
+          {
+            "product_id": "642660162",
+            "product_name": "Dill 1 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.0,
+            "extended": 11.0
+          },
+          {
+            "product_id": "639863520",
+            "product_name": "Onion Cipollini Peeled Jar 5 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 29.0,
+            "extended": 29.0
+          },
+          {
+            "product_id": "LV10BB",
+            "product_name": "Leaves Shiso Oba Red 50Ct Fresh Origins",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 24.5,
+            "extended": 24.5
+          },
+          {
+            "product_id": "650336739",
+            "product_name": "Leeks Holland Style 11 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 32.25,
+            "extended": 32.25
+          },
+          {
+            "product_id": "642377409",
+            "product_name": "Avocado Ripe 2 Ct",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.0,
+            "unit_price": 3.5,
+            "extended": 10.5
+          },
+          {
+            "product_id": "1163606796",
+            "product_name": "Broccolini 3x2 Lb Manns Packing",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 44.0,
+            "extended": 44.0
+          },
+          {
+            "product_id": "1173051301",
+            "product_name": "Mush Chef's Mix 6 Lb Mycopia Org",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 71.75,
+            "extended": 71.75
+          },
+          {
+            "product_id": "706823736",
+            "product_name": "Potato Fingerling Russian Medium 5 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 2.0,
+            "unit_price": 14.25,
+            "extended": 28.5
+          }
+        ]
+      },
+      {
+        "invoice_id": "17111126",
+        "invoice_number": "IV114-0000933632",
+        "date": "2026-05-12",
+        "vendor_id": "1583",
+        "vendor_name": "Baldor Specialty Foods Inc.",
+        "total": 245.22,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1170379412",
+            "product_name": "Beef Flat Iron High Choice 20x8 Oz",
+            "category": "Meat & Poultry",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 10.62,
+            "unit_price": 23.09,
+            "extended": 245.22
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124152",
+        "invoice_number": "DE0010978",
+        "date": "2026-05-12",
+        "vendor_id": "9637",
+        "vendor_name": "Winebow, Inc",
+        "total": 550.27,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "30137633",
+            "product_name": "MEDLEY BROS BOURBON WHISKEY 4 YR OLD",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 5.0,
+            "unit_price": 27.91,
+            "extended": 139.55
+          },
+          {
+            "product_id": "30331048",
+            "product_name": "VINS AUVIGUE POUILLY FUISSE LES VILLAGES 2022",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 37.99,
+            "extended": 75.98
+          },
+          {
+            "product_id": "742467096",
+            "product_name": "Amaro Dell'etna",
+            "category": "Liquor",
+            "category_id": "1051",
+            "category_type": "LIQUOR",
+            "cogs_bucket": "liquor",
+            "quantity": 3.0,
+            "unit_price": 33.66,
+            "extended": 100.98
+          },
+          {
+            "product_id": "905063245",
+            "product_name": "Figuiere Magali Cotes De Provence Rose_2024",
+            "category": "Wine",
+            "category_id": "1081",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 97.8,
+            "extended": 97.8
+          },
+          {
+            "product_id": "963350290",
+            "product_name": "Tiefenbrunner Pinot Grigio Igt Screw Cap 2024",
+            "category": "Wine",
+            "category_id": "1081",
+            "category_type": "WINE",
+            "cogs_bucket": "wine",
+            "quantity": 1.0,
+            "unit_price": 135.96,
+            "extended": 135.96
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124410",
+        "invoice_number": "72356059",
+        "date": "2026-05-12",
+        "vendor_id": "1545",
+        "vendor_name": "Chefs Warehouse",
+        "total": 579.43,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "639862104",
+            "product_name": "Soda Coca Cola",
+            "category": "Soft Beverage",
+            "category_id": "1071",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 4.0,
+            "unit_price": 10.33,
+            "extended": 41.32
+          },
+          {
+            "product_id": "639862217",
+            "product_name": "Soda Coke Diet",
+            "category": "Soft Beverage",
+            "category_id": "1071",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 4.0,
+            "unit_price": 10.33,
+            "extended": 41.32
+          },
+          {
+            "product_id": "642661492",
+            "product_name": "Soda Sprite",
+            "category": "Soft Beverage",
+            "category_id": "1071",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 4.0,
+            "unit_price": 10.33,
+            "extended": 41.32
+          },
+          {
+            "product_id": "639861606",
+            "product_name": "Saratoga Water Flat",
+            "category": "Soft Beverage",
+            "category_id": "1071",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 4.0,
+            "unit_price": 29.07,
+            "extended": 116.28
+          },
+          {
+            "product_id": "639861606",
+            "product_name": "Saratoga Water Sparkling",
+            "category": "Soft Beverage",
+            "category_id": "1071",
+            "category_type": "NA_BEVERAGES",
+            "cogs_bucket": "na_beverages",
+            "quantity": 4.0,
+            "unit_price": 29.07,
+            "extended": 116.28
+          },
+          {
+            "product_id": "1094587040",
+            "product_name": "Tissue Toilet 2ply 500sht Tork",
+            "category": "Paper Costs",
+            "category_id": "1057",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 80.39,
+            "extended": 80.39
+          },
+          {
+            "product_id": "694903916",
+            "product_name": "Ketchup Heinz Rm Svc Gls",
+            "category": "Grocery & Dry Goods",
+            "category_id": "1042",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 68.31,
+            "extended": 68.31
+          },
+          {
+            "product_id": "660800133",
+            "product_name": "Bag Debbie Trim 10x5x13-kraft",
+            "category": "Paper Costs",
+            "category_id": "1057",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 74.21,
+            "extended": 74.21
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124493",
+        "invoice_number": "72350425",
+        "date": "2026-05-12",
+        "vendor_id": "1545",
+        "vendor_name": "Chefs Warehouse",
+        "total": 206.75,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "642662586",
+            "product_name": "Napkins Linen Like White 12x17",
+            "category": "Paper Costs",
+            "category_id": "1057",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 2.0,
+            "unit_price": 98.9,
+            "extended": 197.8
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124170",
+        "invoice_number": "3",
+        "date": "2026-05-13",
+        "vendor_id": "11854056",
+        "vendor_name": "Jaimi Blackburn",
+        "total": 1500.0,
+        "status": "PENDING_APPROVAL",
+        "line_items": [
+          {
+            "product_id": "1162640827",
+            "product_name": "Public Relation Service",
+            "category": "Advertising",
+            "category_id": "1019",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 1500.0,
+            "extended": 1500.0
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124248",
+        "invoice_number": "831295",
+        "date": "2026-05-13",
+        "vendor_id": "1455",
+        "vendor_name": "Samuels & Son Seafood Co.",
+        "total": 903.19,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1182124551",
+            "product_name": "Clam Littleneck Farm VA",
+            "category": "Seafood",
+            "category_id": "1069",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 100.0,
+            "unit_price": 0.32,
+            "extended": 32.0
+          },
+          {
+            "product_id": "1175270864",
+            "product_name": "Shrimp U15 Texas Gold U/15 Gold Wild USA",
+            "category": "Seafood",
+            "category_id": "1069",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 50.0,
+            "unit_price": 14.995,
+            "extended": 749.75
+          },
+          {
+            "product_id": "1169062362",
+            "product_name": "Berkshire French Rack 1EA Chine/F Cap/F 5Pc 40#",
+            "category": "Meat & Poultry",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 9.42,
+            "unit_price": 9.999,
+            "extended": 94.19
+          },
+          {
+            "product_id": "1068586602",
+            "product_name": "Mussels - Black Ice Smallest 10lb Bag (Canada",
+            "category": "Seafood",
+            "category_id": "1069",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 21.5,
+            "extended": 21.5
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124267",
+        "invoice_number": "IV114-0000934767",
+        "date": "2026-05-13",
+        "vendor_id": "1583",
+        "vendor_name": "Baldor Specialty Foods Inc.",
+        "total": 1615.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1163606796",
+            "product_name": "Broccolini 3x2 Lb Manns Packing",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 44.0,
+            "extended": 44.0
+          },
+          {
+            "product_id": "660797671",
+            "product_name": "Cheese Pecorino Crotonese Sheep Wheel 4 Lb Fattoria Della",
+            "category": "Dairy",
+            "category_id": "1029",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 3.25,
+            "unit_price": 14.99,
+            "extended": 48.72
+          },
+          {
+            "product_id": "1048073254",
+            "product_name": "Tomato Plum X Large Red Ripe 25 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 51.5,
+            "extended": 51.5
+          },
+          {
+            "product_id": "1158188146",
+            "product_name": "Rhubarb 10 Lb Richters Farm",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 49.25,
+            "extended": 49.25
+          },
+          {
+            "product_id": "642660969",
+            "product_name": "Basil 1 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 12.5,
+            "extended": 12.5
+          },
+          {
+            "product_id": "676248545",
+            "product_name": "Thyme 1 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.0,
+            "extended": 11.0
+          },
+          {
+            "product_id": "893516061",
+            "product_name": "Beef Rib Eye High Choice Angus 15 Lb Demkota Halal",
+            "category": "Meat & Poultry",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 17.6,
+            "unit_price": 20.39,
+            "extended": 358.86
+          },
+          {
+            "product_id": "642377291",
+            "product_name": "Asparagus Large 11 Lb Lcl Nj",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 54.5,
+            "extended": 54.5
+          },
+          {
+            "product_id": "650337319",
+            "product_name": "Peppers Red 5 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 20.25,
+            "extended": 20.25
+          },
+          {
+            "product_id": "650336739",
+            "product_name": "Leeks Loose 12 Ct Canadian",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 21.75,
+            "extended": 21.75
+          },
+          {
+            "product_id": "642377335",
+            "product_name": "Chives 1 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 16.75,
+            "extended": 16.75
+          },
+          {
+            "product_id": "1191592712",
+            "product_name": "Peas English In Shell 10 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 65.5,
+            "extended": 65.5
+          },
+          {
+            "product_id": "642377313",
+            "product_name": "Lettuce Little Gem T&a",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 43.0,
+            "extended": 43.0
+          },
+          {
+            "product_id": "639860492",
+            "product_name": "Chicken Whole Air Chilled 12X3.25 Lb La Belle Farm",
+            "category": "Meat & Poultry",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 40.62,
+            "unit_price": 3.49,
+            "extended": 141.76
+          },
+          {
+            "product_id": "653342615",
+            "product_name": "Cucumber Persian 12x1 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 24.75,
+            "extended": 24.75
+          },
+          {
+            "product_id": "658999010",
+            "product_name": "Mozzarella Salted Ball Wrapped 1 Lb Lioni",
+            "category": "Dairy",
+            "category_id": "1029",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 5.0,
+            "unit_price": 7.09,
+            "extended": 35.45
+          },
+          {
+            "product_id": "829453316",
+            "product_name": "Carrot French Baby 24 Ct California",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 43.75,
+            "extended": 43.75
+          },
+          {
+            "product_id": "1170379412",
+            "product_name": "Beef Flat Iron High Choice 20x8 Oz",
+            "category": "Meat & Poultry",
+            "category_id": "1053",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 21.3,
+            "unit_price": 25.89,
+            "extended": 551.46
+          },
+          {
+            "product_id": "642396798",
+            "product_name": "Shallots Peeled 5 Lb",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 20.25,
+            "extended": 20.25
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124295",
+        "invoice_number": "IV114 0000934765",
+        "date": "2026-05-13",
+        "vendor_id": "1583",
+        "vendor_name": "Baldor Specialty Foods Inc.",
+        "total": 195.5,
+        "status": "AM_REVIEW",
+        "line_items": [
+          {
+            "product_id": "1215045513",
+            "product_name": "Apple Royal Gala Panta-pack 20 Ct",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 28.0,
+            "extended": 28.0
+          },
+          {
+            "product_id": "639867388",
+            "product_name": "Strawberries 8x1 Lb Driscoll Org",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 23.25,
+            "extended": 23.25
+          },
+          {
+            "product_id": "660648778",
+            "product_name": "Oranges Panta Pack 20 Ct",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 11.25,
+            "extended": 11.25
+          },
+          {
+            "product_id": "BA",
+            "product_name": "Banana Box Singles 10 Lb",
+            "category": null,
+            "category_id": null,
+            "category_type": null,
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 75.5,
+            "extended": 75.5
+          },
+          {
+            "product_id": "642659862",
+            "product_name": "Blueberries 12x6 Oz Driscoll Org",
+            "category": "Produce",
+            "category_id": "1064",
+            "category_type": "FOOD",
+            "cogs_bucket": "food",
+            "quantity": 1.0,
+            "unit_price": 57.5,
+            "extended": 57.5
+          }
+        ]
+      },
+      {
+        "invoice_id": "17124318",
+        "invoice_number": "TPH1371758",
+        "date": "2026-05-13",
+        "vendor_id": "1526",
+        "vendor_name": "Termac Corporation",
+        "total": 795.0,
+        "status": "CLOSED",
+        "line_items": [
+          {
+            "product_id": "1036565925",
+            "product_name": "Rental Charges - Termac Corporation",
+            "category": "Equipment/Other Rentals",
+            "category_id": "1036",
+            "category_type": "OTHER",
+            "cogs_bucket": null,
+            "quantity": 1.0,
+            "unit_price": 795.0,
+            "extended": 795.0
           }
         ]
       }
@@ -185145,7 +186168,8 @@
           "Dues & Subscriptions": 40.8,
           "Laundry & Dry Cleaning": 471.92,
           "Linen & Linen Rental": 130.42,
-          "Repairs and Maintenance": 47.5,
+          "Contract Cleaning": 37.5,
+          "Repairs and Maintenance": 10.0,
           "Dairy": 1282.78,
           "Meat & Poultry": 2006.5,
           "Kitchen Utensils & Supplies": 380.88,
@@ -185277,7 +186301,7 @@
           "Meat & Poultry": 953.23,
           "Laundry & Dry Cleaning": 471.92,
           "Linen & Linen Rental": 130.42,
-          "Repairs and Maintenance": 1169.52,
+          "Contract Cleaning": 138.0,
           "Wine": 1963.83,
           "Liquor": 1586.07,
           "Produce": 1951.66,
@@ -185286,6 +186310,7 @@
           "Firewood": 346.85,
           "Seafood": 1696.87,
           "Pizza Boxes/ To-Go Containers": 186.9,
+          "Repairs and Maintenance": 1031.52,
           "Draft Beer": 248.05,
           "Bottle Beer": 53.9,
           "Keg Deposit/Refund": 60.0,
@@ -185390,7 +186415,7 @@
           "Dues & Subscriptions": 40.8,
           "Laundry & Dry Cleaning": 471.92,
           "Linen & Linen Rental": 130.42,
-          "Repairs and Maintenance": 75.0,
+          "Contract Cleaning": 75.0,
           "Produce": 1790.7,
           "Grocery & Dry Goods": 1156.61,
           "Dairy": 1063.65,
@@ -185519,7 +186544,7 @@
           "Laundry & Dry Cleaning": 471.92,
           "Linen & Linen Rental": 259.37,
           "Soft Beverage": 759.82,
-          "Repairs and Maintenance": 138.0,
+          "Contract Cleaning": 138.0,
           "Office Supplies": 375.0,
           "Advertising": 1500.0,
           "Liquor": 1472.89,
@@ -185762,16 +186787,16 @@
       },
       {
         "week_start": "2026-04-27",
-        "total_cogs": 12801.71,
-        "cogs_only_total": 9868.18,
+        "total_cogs": 12893.5,
+        "cogs_only_total": 9959.97,
         "by_category": {
           "Laundry & Dry Cleaning": 367.42,
           "Linen & Linen Rental": 130.42,
-          "Repairs and Maintenance": 75.0,
+          "Contract Cleaning": 75.0,
           "Dues & Subscriptions": 302.5,
           "Grocery & Dry Goods": 972.1,
           "Produce": 1749.27,
-          "Meat & Poultry": 1776.88,
+          "Meat & Poultry": 1868.67,
           "Dairy": 1078.95,
           "Drink Suppplies": 500.95,
           "Seafood": 2333.07,
@@ -185787,7 +186812,7 @@
           "Paper Costs": 286.64
         },
         "by_cogs_type": {
-          "food": 8539.85,
+          "food": 8631.64,
           "na_beverages": 820.96,
           "wine": 308.67,
           "liquor": 164.0,
@@ -185808,48 +186833,58 @@
           },
           {
             "vendor": "Samuels & Son Seafood Co.",
-            "total": 2023.85
+            "total": 2115.64
           },
           {
             "vendor": "Arway Linen & Uniform Rental Service",
             "total": 589.13
           }
         ],
-        "cogs_pct_revenue": 0.2238,
-        "cogs_only_pct_revenue": 0.1725
+        "cogs_pct_revenue": 0.2254,
+        "cogs_only_pct_revenue": 0.1741
       },
       {
         "week_start": "2026-05-04",
-        "total_cogs": 10945.92,
-        "cogs_only_total": 8497.32,
+        "total_cogs": 14527.23,
+        "cogs_only_total": 10669.65,
         "by_category": {
-          "Laundry & Dry Cleaning": 165.52,
+          "Laundry & Dry Cleaning": 426.12,
           "Linen & Linen Rental": 130.42,
-          "Produce": 884.78,
+          "Produce": 1019.53,
           "Grocery & Dry Goods": 1000.42,
-          "Soft Beverage": 141.61,
-          "Drink Suppplies": 218.42,
+          "Soft Beverage": 1246.75,
+          "Drink Suppplies": 639.72,
           "Liquor": 2879.65,
           "Wine": 837.7,
+          "Paper Costs": 234.94,
+          "Kitchen Utensils & Supplies": 294.44,
+          "Candles": 417.56,
           "Glassware": 272.17,
           "Bottle Beer": 150.58,
-          "Meat & Poultry": 563.67,
-          "Dairy": 824.39,
-          "Seafood": 1163.84,
+          "Meat & Poultry": 651.66,
+          "Dairy": 835.93,
+          "Seafood": 1996.75,
           "Firewood": 1132.99,
           "Pastry": 50.68,
-          "Kitchen Utensils & Supplies": 199.68,
           "Cleaning Chemicals & Soaps": 31.51,
-          "Paper Costs": 156.73
+          "Pizza Boxes/ To-Go Containers": 70.81
         },
         "by_cogs_type": {
-          "food": 4487.78,
-          "na_beverages": 141.61,
+          "food": 5554.97,
+          "na_beverages": 1246.75,
           "liquor": 2879.65,
           "wine": 837.7,
           "beer": 150.58
         },
         "by_vendor_top5": [
+          {
+            "vendor": "Chefs Warehouse",
+            "total": 3304.04
+          },
+          {
+            "vendor": "Samuels & Son Seafood Co.",
+            "total": 2247.82
+          },
           {
             "vendor": "Julius Silvert, Inc.",
             "total": 1567.83
@@ -185859,20 +186894,61 @@
             "total": 1473.94
           },
           {
-            "vendor": "Samuels & Son Seafood Co.",
-            "total": 1315.42
-          },
-          {
             "vendor": "Breakthru Beverage Delaware",
             "total": 1203.61
+          }
+        ],
+        "cogs_pct_revenue": 0.5395,
+        "cogs_only_pct_revenue": 0.3962
+      },
+      {
+        "week_start": "2026-05-11",
+        "total_cogs": 7770.25,
+        "cogs_only_total": 5944.55,
+        "by_category": {
+          "Laundry & Dry Cleaning": 165.52,
+          "Linen & Linen Rental": 130.42,
+          "Seafood": 1860.46,
+          "Contract Cleaning": 75.0,
+          "Dairy": 956.57,
+          "Soft Beverage": 380.94,
+          "Grocery & Dry Goods": 335.35,
+          "Pastry": 236.4,
+          "Paper Costs": 462.34,
+          "Kitchen Utensils & Supplies": 110.29,
+          "Produce": 488.64,
+          "Spices": 9.99,
+          "Meat & Poultry": 1676.2,
+          "Equipment/Other Rentals": 795.0
+        },
+        "by_cogs_type": {
+          "food": 5563.61,
+          "na_beverages": 380.94
+        },
+        "by_vendor_top5": [
+          {
+            "vendor": "Julius Silvert, Inc.",
+            "total": 2313.05
+          },
+          {
+            "vendor": "Baldor Specialty Foods Inc.",
+            "total": 1860.22
+          },
+          {
+            "vendor": "Samuels & Son Seafood Co.",
+            "total": 1585.18
+          },
+          {
+            "vendor": "Termac Corporation",
+            "total": 795.0
           },
           {
             "vendor": "Chefs Warehouse",
-            "total": 1136.25
+            "total": 786.18
           }
         ],
-        "cogs_pct_revenue": 0.2144,
-        "cogs_only_pct_revenue": 0.1664
+        "cogs_pct_revenue": 0.5004,
+        "cogs_only_pct_revenue": 0.3829
       }
     ],
     "monthly_rollup": [
@@ -186016,7 +187092,7 @@
           "Draft Beer": 1227.0,
           "Keg Deposit/Refund": 60.0,
           "Bottle Beer": 2096.3,
-          "Repairs and Maintenance": 390.5,
+          "Repairs and Maintenance": 353.0,
           "Paper Costs": 2201.94,
           "Candles": 2026.11,
           "Drink Suppplies": 1031.13,
@@ -186037,8 +187113,8 @@
           "Hand Soap & Lotion": 127.9,
           "Cleaning Equipment": 117.85,
           "Fruit": 32.75,
+          "Contract Cleaning": 357.48,
           "Landscaping": 672.0,
-          "Contract Cleaning": 319.98,
           "Music & Entertainment": 300.0
         },
         "by_cogs_type": {
@@ -186094,7 +187170,7 @@
           "Meat & Poultry": 6428.85,
           "Laundry & Dry Cleaning": 1994.5,
           "Linen & Linen Rental": 718.05,
-          "Repairs and Maintenance": 2103.52,
+          "Contract Cleaning": 351.0,
           "Wine": 5295.58,
           "Liquor": 7534.09,
           "Produce": 8069.25,
@@ -186102,6 +187178,7 @@
           "Pastry": 1551.71,
           "Firewood": 1685.93,
           "Pizza Boxes/ To-Go Containers": 448.95,
+          "Repairs and Maintenance": 1752.52,
           "Candles": 1712.94,
           "Bar Utensils & Supplies": 985.15,
           "Music & Entertainment": 300.0,
@@ -186175,13 +187252,13 @@
           "Glassware": 306.72,
           "Tableware & Smallware": 141.84,
           "Insurance Liability & General": 375.0,
-          "Repairs and Maintenance": 3936.64,
+          "Repairs and Maintenance": 3861.64,
           "Music & Entertainment": 300.0,
           "Pizza Boxes/ To-Go Containers": 120.62,
           "Bar Utensils & Supplies": 417.55,
           "Cleaning Equipment": 353.55,
           "Advertising": 1500.0,
-          "Contract Cleaning": 319.98,
+          "Contract Cleaning": 394.98,
           "Draft Beer": 154.0,
           "Keg Deposit/Refund": 0.0,
           "Trash Liners": 77.28
@@ -186220,60 +187297,64 @@
       },
       {
         "month": "2026-05",
-        "total_cogs": 15109.67,
-        "cogs_only_total": 11349.78,
+        "total_cogs": 26553.02,
+        "cogs_only_total": 19558.45,
         "by_category": {
-          "Equipment/Other Rentals": 524.6,
+          "Equipment/Other Rentals": 1319.6,
           "Bottle Beer": 185.28,
-          "Produce": 1593.78,
-          "Meat & Poultry": 1063.27,
-          "Dairy": 924.86,
-          "Pastry": 111.48,
-          "Drink Suppplies": 503.65,
-          "Seafood": 2001.53,
-          "Kitchen Utensils & Supplies": 289.56,
-          "Soft Beverage": 633.55,
-          "Paper Costs": 443.37,
+          "Produce": 2217.17,
+          "Meat & Poultry": 2919.25,
+          "Dairy": 1892.97,
+          "Pastry": 347.88,
+          "Drink Suppplies": 924.95,
+          "Seafood": 4694.9,
+          "Kitchen Utensils & Supplies": 494.61,
+          "Soft Beverage": 2119.63,
+          "Paper Costs": 983.92,
           "Cleaning Chemicals & Soaps": 113.89,
-          "Grocery & Dry Goods": 1118.68,
-          "Laundry & Dry Cleaning": 165.52,
-          "Linen & Linen Rental": 130.42,
+          "Grocery & Dry Goods": 1454.03,
+          "Laundry & Dry Cleaning": 591.64,
+          "Linen & Linen Rental": 260.84,
           "Liquor": 2879.65,
           "Wine": 837.7,
+          "Candles": 417.56,
           "Glassware": 272.17,
-          "Firewood": 1132.99
+          "Firewood": 1132.99,
+          "Pizza Boxes/ To-Go Containers": 70.81,
+          "Contract Cleaning": 75.0,
+          "Spices": 9.99
         },
         "by_cogs_type": {
           "beer": 185.28,
-          "food": 6813.6,
-          "na_beverages": 633.55,
+          "food": 13536.19,
+          "na_beverages": 2119.63,
           "liquor": 2879.65,
           "wine": 837.7
         },
         "by_vendor_top5": [
           {
-            "vendor": "Baldor Specialty Foods Inc.",
-            "total": 2415.18
-          },
-          {
             "vendor": "Chefs Warehouse",
-            "total": 2344.15
+            "total": 5298.12
           },
           {
             "vendor": "Samuels & Son Seafood Co.",
-            "total": 2254.49
+            "total": 4863.86
+          },
+          {
+            "vendor": "Baldor Specialty Foods Inc.",
+            "total": 4457.58
           },
           {
             "vendor": "Julius Silvert, Inc.",
-            "total": 1582.34
+            "total": 3895.39
           },
           {
             "vendor": "Southern Glazer's Wine & Spirits, LLC",
             "total": 1473.94
           }
         ],
-        "cogs_pct_revenue": 0.2077,
-        "cogs_only_pct_revenue": 0.156
+        "cogs_pct_revenue": 0.4149,
+        "cogs_only_pct_revenue": 0.3056
       }
     ]
   },
@@ -193321,11 +194402,11 @@
       "rows_warned": 0
     },
     "marginedge_invoice": {
-      "ran_at": "2026-05-12T16:50:59+00:00",
-      "rows_in": 517,
-      "rows_valid": 517,
+      "ran_at": "2026-05-14T16:33:29+00:00",
+      "rows_in": 519,
+      "rows_valid": 519,
       "rows_invalid": 0,
-      "rows_warned": 213
+      "rows_warned": 210
     }
   }
 }
