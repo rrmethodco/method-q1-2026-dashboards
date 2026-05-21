@@ -1,6 +1,6 @@
 {
   "outlet_id": "anthology",
-  "generated_at": "2026-05-20T14:51:30+00:00",
+  "generated_at": "2026-05-21T14:52:21+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -2536,6 +2536,18 @@
           "discount": 1632.0,
           "ticket_time_sec_sum": 0.0,
           "ticket_time_count": 0
+        },
+        {
+          "date": "2026-05-20",
+          "orders": 1,
+          "guests": 1,
+          "amount": 2343.75,
+          "net_sales": 1975.0,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 0.0,
+          "ticket_time_sec_sum": 359.2,
+          "ticket_time_count": 1
         }
       ],
       "monthly": [
@@ -2649,10 +2661,10 @@
           "month": "2026-04"
         },
         {
-          "orders": 3,
-          "guests": 6,
-          "amount": 82419.01,
-          "net_sales": 66951.39,
+          "orders": 4,
+          "guests": 7,
+          "amount": 84762.76,
+          "net_sales": 68926.39,
           "tip": 0.0,
           "discount": 1632.0,
           "month": "2026-05"
@@ -2844,9 +2856,9 @@
         {
           "hour": 12,
           "dow": "Wed",
-          "amount": 23897.5,
-          "orders": 5,
-          "guests": 5
+          "amount": 26241.25,
+          "orders": 6,
+          "guests": 6
         },
         {
           "hour": 13,
@@ -5418,6 +5430,13 @@
           "amount": 36379.99,
           "orders": 1,
           "guests": 2
+        },
+        {
+          "date": "2026-05-20",
+          "hour": 12,
+          "amount": 2343.75,
+          "orders": 1,
+          "guests": 1
         }
       ],
       "categories_daily": [
@@ -6758,6 +6777,12 @@
           "category": "Wine",
           "amount": 10280.32,
           "orders": 80
+        },
+        {
+          "date": "2026-05-20",
+          "category": "Room Rental",
+          "amount": 500.0,
+          "orders": 1
         }
       ],
       "service_modes_daily": [
@@ -8335,22 +8360,29 @@
           "amount": 82419.01,
           "orders": 3,
           "guests": 6
+        },
+        {
+          "date": "2026-05-20",
+          "mode": "Unspecified",
+          "amount": 2343.75,
+          "orders": 1,
+          "guests": 1
         }
       ],
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 534.0,
-        "guests": 856.0,
-        "amount": 4934361.619999999,
-        "net_sales": 1020867.6100000001,
+        "orders": 535.0,
+        "guests": 857.0,
+        "amount": 4936705.369999999,
+        "net_sales": 1022842.6100000001,
         "tip": 0.0,
         "gratuity": 0.0,
         "discount": 12533.2,
-        "ticket_time_sec_sum": 1111755.9999999995,
-        "ticket_time_count": 459,
-        "avg_check": 9240.377565543069,
-        "avg_ticket_time_sec": 2422.1263616557726
+        "ticket_time_sec_sum": 1112115.1999999995,
+        "ticket_time_count": 460,
+        "avg_check": 9227.486672897196,
+        "avg_ticket_time_sec": 2417.6417391304335
       }
     }
   },
@@ -8375,7 +8407,7 @@
         {
           "author": "Peyton Bias",
           "rating": 5,
-          "text": "We got married at Book Tower on 12/29/24 and it was truly the perfect day. I knew when we toured the venue back while it was still under construction that it was going to be special, and I was thrilled to be totally correct! We had such a great experience with the Anthology Events team, Lauren was always super responsive and collaborative throughout the planning process and Maggie ensured everything was flawless on wedding day. The food is excellent, drinks were on point, the staff was friendly and attentive. They really went the extra mile to make sure we had a beautiful day, they even provided sweetheart tray of our cocktail hour bites for us to enjoy privately in the bridal suite and those first few moments alone together as husband and wife were so appreciated. I highly recommend Book Tower, you really couldn’t ask for a more beautiful, modern Detroit venue or a better staff.",
+          "text": "We got married at Book Tower on 12/29/24 and it was truly the perfect day. I knew when we toured the venue back while it was still under construction that it was going to be special, and I was thrilled to be totally correct! We had such a great experience with the Anthology Events team, Lauren was always super responsive and collaborative throughout the planning process and Maggie ensured everything was flawless on wedding day. The food is excellent, drinks were on point, the staff was friendly and attentive. They really went the extra mile to make sure we had a beautiful day, they even provided sweetheart tray of our cocktail hour bites for us to enjoy privately in the bridal suite and those first few moments alone together as husband and wife were so appreciated. I highly recommend Book Tower, you really couldn\u2019t ask for a more beautiful, modern Detroit venue or a better staff.",
           "relative": "a year ago",
           "time": 1736966635,
           "is_local_guide": false
@@ -11923,13 +11955,22 @@
         "date": "2026-05-19"
       },
       {
+        "regular_hours": 35.83,
+        "overtime_hours": 0.0,
+        "regular_cost": 832.88,
+        "overtime_cost": 0.0,
+        "total_cost": 832.88,
+        "head_count": 5,
+        "date": "2026-05-20"
+      },
+      {
         "regular_hours": 0.0,
         "overtime_hours": 0.0,
         "regular_cost": 0.0,
         "overtime_cost": 0.0,
         "total_cost": 0.0,
         "head_count": 3,
-        "date": "2026-05-20"
+        "date": "2026-05-21"
       }
     ],
     "hour_daily": [
@@ -45058,6 +45099,126 @@
         "hour": 21,
         "hours": 0.93,
         "cost": 23.13
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 9,
+        "hours": 0.48,
+        "cost": 14.33
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 10,
+        "hours": 1.0,
+        "cost": 29.99
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 11,
+        "hours": 1.33,
+        "cost": 35.28
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 12,
+        "hours": 2.0,
+        "cost": 45.98
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 13,
+        "hours": 2.89,
+        "cost": 68.27
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 14,
+        "hours": 3.0,
+        "cost": 70.99
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 15,
+        "hours": 3.0,
+        "cost": 70.99
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 16,
+        "hours": 3.0,
+        "cost": 70.99
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 17,
+        "hours": 2.5,
+        "cost": 63.03
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 18,
+        "hours": 2.0,
+        "cost": 55.0
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 19,
+        "hours": 2.0,
+        "cost": 55.0
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 20,
+        "hours": 2.99,
+        "cost": 73.26
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 21,
+        "hours": 2.48,
+        "cost": 50.52
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 22,
+        "hours": 1.54,
+        "cost": 27.93
+      },
+      {
+        "date": "2026-05-20",
+        "hour": 23,
+        "hours": 1.0,
+        "cost": 18.01
+      },
+      {
+        "date": "2026-05-21",
+        "hour": 0,
+        "hours": 1.0,
+        "cost": 18.01
+      },
+      {
+        "date": "2026-05-21",
+        "hour": 1,
+        "hours": 1.0,
+        "cost": 18.01
+      },
+      {
+        "date": "2026-05-21",
+        "hour": 2,
+        "hours": 1.0,
+        "cost": 18.01
+      },
+      {
+        "date": "2026-05-21",
+        "hour": 3,
+        "hours": 1.0,
+        "cost": 18.01
+      },
+      {
+        "date": "2026-05-21",
+        "hour": 4,
+        "hours": 0.63,
+        "cost": 11.29
       }
     ],
     "by_job_daily": [
@@ -47795,6 +47956,13 @@
         "date": "2026-05-20",
         "job_guid": "5216a90f-a5a1-43f8-90b8-6e3a5a6ac1bd",
         "title": "Sales Coordinator",
+        "hours": 8.67,
+        "cost": 216.75
+      },
+      {
+        "date": "2026-05-21",
+        "job_guid": "b1512743-6e6a-4139-b7bf-992b8cd12290",
+        "title": "Cook",
         "hours": 0.0,
         "cost": 0.0
       }
@@ -47821,8 +47989,8 @@
       {
         "hour": 0,
         "dow": "THU",
-        "hours": 118.17,
-        "cost": 2741.63
+        "hours": 119.17,
+        "cost": 2759.64
       },
       {
         "hour": 0,
@@ -47863,8 +48031,8 @@
       {
         "hour": 1,
         "dow": "THU",
-        "hours": 82.68,
-        "cost": 1901.69
+        "hours": 83.68,
+        "cost": 1919.7
       },
       {
         "hour": 1,
@@ -47905,8 +48073,8 @@
       {
         "hour": 2,
         "dow": "THU",
-        "hours": 41.35,
-        "cost": 924.36
+        "hours": 42.35,
+        "cost": 942.37
       },
       {
         "hour": 2,
@@ -47947,8 +48115,8 @@
       {
         "hour": 3,
         "dow": "THU",
-        "hours": 29.53,
-        "cost": 652.66
+        "hours": 30.53,
+        "cost": 670.67
       },
       {
         "hour": 3,
@@ -47989,8 +48157,8 @@
       {
         "hour": 4,
         "dow": "THU",
-        "hours": 22.66,
-        "cost": 505.02
+        "hours": 23.29,
+        "cost": 516.31
       },
       {
         "hour": 4,
@@ -48175,8 +48343,8 @@
       {
         "hour": 9,
         "dow": "WED",
-        "hours": 4.44,
-        "cost": 108.69
+        "hours": 4.92,
+        "cost": 123.02
       },
       {
         "hour": 9,
@@ -48217,8 +48385,8 @@
       {
         "hour": 10,
         "dow": "WED",
-        "hours": 18.95,
-        "cost": 481.24
+        "hours": 19.95,
+        "cost": 511.23
       },
       {
         "hour": 10,
@@ -48259,8 +48427,8 @@
       {
         "hour": 11,
         "dow": "WED",
-        "hours": 48.66,
-        "cost": 1206.06
+        "hours": 49.99,
+        "cost": 1241.34
       },
       {
         "hour": 11,
@@ -48301,8 +48469,8 @@
       {
         "hour": 12,
         "dow": "WED",
-        "hours": 81.53,
-        "cost": 1913.92
+        "hours": 83.53,
+        "cost": 1959.9
       },
       {
         "hour": 12,
@@ -48343,8 +48511,8 @@
       {
         "hour": 13,
         "dow": "WED",
-        "hours": 136.09,
-        "cost": 3149.09
+        "hours": 138.98,
+        "cost": 3217.36
       },
       {
         "hour": 13,
@@ -48385,8 +48553,8 @@
       {
         "hour": 14,
         "dow": "WED",
-        "hours": 183.42,
-        "cost": 4264.43
+        "hours": 186.42,
+        "cost": 4335.42
       },
       {
         "hour": 14,
@@ -48427,8 +48595,8 @@
       {
         "hour": 15,
         "dow": "WED",
-        "hours": 222.57,
-        "cost": 5165.75
+        "hours": 225.57,
+        "cost": 5236.74
       },
       {
         "hour": 15,
@@ -48469,8 +48637,8 @@
       {
         "hour": 16,
         "dow": "WED",
-        "hours": 253.27,
-        "cost": 5907.0
+        "hours": 256.27,
+        "cost": 5977.99
       },
       {
         "hour": 16,
@@ -48511,8 +48679,8 @@
       {
         "hour": 17,
         "dow": "WED",
-        "hours": 279.37,
-        "cost": 6525.85
+        "hours": 281.87,
+        "cost": 6588.88
       },
       {
         "hour": 17,
@@ -48553,8 +48721,8 @@
       {
         "hour": 18,
         "dow": "WED",
-        "hours": 292.13,
-        "cost": 6892.51
+        "hours": 294.13,
+        "cost": 6947.51
       },
       {
         "hour": 18,
@@ -48595,8 +48763,8 @@
       {
         "hour": 19,
         "dow": "WED",
-        "hours": 295.9,
-        "cost": 7069.25
+        "hours": 297.9,
+        "cost": 7124.25
       },
       {
         "hour": 19,
@@ -48637,8 +48805,8 @@
       {
         "hour": 20,
         "dow": "WED",
-        "hours": 297.99,
-        "cost": 7114.2
+        "hours": 300.98,
+        "cost": 7187.46
       },
       {
         "hour": 20,
@@ -48679,8 +48847,8 @@
       {
         "hour": 21,
         "dow": "WED",
-        "hours": 282.16,
-        "cost": 6717.99
+        "hours": 284.64,
+        "cost": 6768.51
       },
       {
         "hour": 21,
@@ -48721,8 +48889,8 @@
       {
         "hour": 22,
         "dow": "WED",
-        "hours": 239.81,
-        "cost": 5651.95
+        "hours": 241.35,
+        "cost": 5679.88
       },
       {
         "hour": 22,
@@ -48763,8 +48931,8 @@
       {
         "hour": 23,
         "dow": "WED",
-        "hours": 182.7,
-        "cost": 4300.57
+        "hours": 183.7,
+        "cost": 4318.58
       },
       {
         "hour": 23,
@@ -48793,11 +48961,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 29571.76,
+    "regular_hours": 29607.59,
     "overtime_hours": 985.62,
-    "regular_cost": 683169.8,
+    "regular_cost": 684002.68,
     "overtime_cost": 38612.23,
-    "total_cost": 721781.96
+    "total_cost": 722614.84
   },
   "cogs": {
     "as_of": "2026-05-14",
@@ -56409,7 +56577,7 @@
         "line_items": [
           {
             "product_id": "640721416",
-            "product_name": "Joseph Drouhin Mâcon-Villages BTG",
+            "product_name": "Joseph Drouhin M\u00e2con-Villages BTG",
             "category": "Wine",
             "category_id": "1088",
             "category_type": "WINE",
@@ -83611,7 +83779,7 @@
         "ai_confidence": 0.6
       }
     ],
-    "_note": "range 2026-03-23 → 2026-06-14 · 84 days · ai_suggested_revenue (NOT manager_revenue)"
+    "_note": "range 2026-03-23 \u2192 2026-06-14 \u00b7 84 days \u00b7 ai_suggested_revenue (NOT manager_revenue)"
   },
   "budget": {
     "as_of": "2026-05-20",
@@ -84776,7 +84944,7 @@
         "orders": null
       }
     ],
-    "_note": "range 2026-01-01 → 2026-12-23 · 193 days"
+    "_note": "range 2026-01-01 \u2192 2026-12-23 \u00b7 193 days"
   },
   "weather": {
     "as_of": "2026-05-20",
@@ -89454,7 +89622,7 @@
         "precipitation_pct": 26.0
       }
     ],
-    "_note": "range 2025-01-01 → 2026-06-03 · 519 days (15 forward)"
+    "_note": "range 2025-01-01 \u2192 2026-06-03 \u00b7 519 days (15 forward)"
   },
   "_validation_index": {
     "sage_budget": {
@@ -89465,16 +89633,16 @@
       "rows_warned": 0
     },
     "toast_order": {
-      "ran_at": "2026-05-20T14:51:29+00:00",
-      "rows_in": 3,
-      "rows_valid": 3,
+      "ran_at": "2026-05-21T14:52:20+00:00",
+      "rows_in": 4,
+      "rows_valid": 4,
       "rows_invalid": 0,
       "rows_warned": 0
     },
     "toast_time_entry": {
-      "ran_at": "2026-05-20T14:51:30+00:00",
-      "rows_in": 7,
-      "rows_valid": 7,
+      "ran_at": "2026-05-21T14:52:21+00:00",
+      "rows_in": 9,
+      "rows_valid": 9,
       "rows_invalid": 0,
       "rows_warned": 0
     },
