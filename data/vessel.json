@@ -1,6 +1,6 @@
 {
   "outlet_id": "vessel",
-  "generated_at": "2026-06-01T17:26:17+00:00",
+  "generated_at": "2026-06-02T16:11:24+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "main": {
@@ -5817,13 +5817,22 @@
         "date": "2026-05-31"
       },
       {
-        "regular_hours": 0.0,
+        "regular_hours": 15.44,
         "overtime_hours": 0.0,
-        "regular_cost": 0.0,
+        "regular_cost": 293.9,
         "overtime_cost": 0.0,
-        "total_cost": 0.0,
+        "total_cost": 293.9,
         "head_count": 2,
         "date": "2026-06-01"
+      },
+      {
+        "regular_hours": 5.81,
+        "overtime_hours": 0.0,
+        "regular_cost": 104.58,
+        "overtime_cost": 0.0,
+        "total_cost": 104.58,
+        "head_count": 2,
+        "date": "2026-06-02"
       }
     ],
     "hour_daily": [
@@ -43875,12 +43884,6 @@
       },
       {
         "date": "2026-05-31",
-        "hour": 0,
-        "hours": 0.28,
-        "cost": 4.98
-      },
-      {
-        "date": "2026-05-31",
         "hour": 10,
         "hours": 0.89,
         "cost": 17.8
@@ -43974,6 +43977,138 @@
         "hour": 1,
         "hours": 2.25,
         "cost": 78.91
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 10,
+        "hours": 0.7,
+        "cost": 12.68
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 11,
+        "hours": 1.0,
+        "cost": 18.0
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 12,
+        "hours": 1.0,
+        "cost": 18.0
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 13,
+        "hours": 1.0,
+        "cost": 18.0
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 14,
+        "hours": 1.0,
+        "cost": 18.0
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 15,
+        "hours": 1.0,
+        "cost": 18.0
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 16,
+        "hours": 1.99,
+        "cost": 37.82
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 17,
+        "hours": 1.75,
+        "cost": 33.41
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 18,
+        "hours": 1.0,
+        "cost": 19.99
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 19,
+        "hours": 1.0,
+        "cost": 19.99
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 20,
+        "hours": 1.0,
+        "cost": 19.99
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 21,
+        "hours": 1.0,
+        "cost": 19.99
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 22,
+        "hours": 1.0,
+        "cost": 19.99
+      },
+      {
+        "date": "2026-06-01",
+        "hour": 23,
+        "hours": 1.0,
+        "cost": 19.99
+      },
+      {
+        "date": "2026-06-02",
+        "hour": 0,
+        "hours": 0.0,
+        "cost": 0.04
+      },
+      {
+        "date": "2026-06-02",
+        "hour": 10,
+        "hours": 0.72,
+        "cost": 13.0
+      },
+      {
+        "date": "2026-06-02",
+        "hour": 11,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-06-02",
+        "hour": 12,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-06-02",
+        "hour": 13,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-06-02",
+        "hour": 14,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-06-02",
+        "hour": 15,
+        "hours": 1.0,
+        "cost": 17.99
+      },
+      {
+        "date": "2026-06-02",
+        "hour": 16,
+        "hours": 0.09,
+        "cost": 1.64
       }
     ],
     "by_job_daily": [
@@ -47003,8 +47138,15 @@
       },
       {
         "date": "2026-06-01",
-        "job_guid": "cd62458d-03ee-415d-a07d-8f18b152d1bf",
-        "title": "Shift Manager / Assistant Manager",
+        "job_guid": "07207f65-569c-4b5b-903d-936101e14cad",
+        "title": "Barista",
+        "hours": 7.45,
+        "cost": 134.1
+      },
+      {
+        "date": "2026-06-02",
+        "job_guid": "9d0edf66-432b-48c6-855d-0afe0eb53164",
+        "title": "Cook",
         "hours": 0.0,
         "cost": 0.0
       }
@@ -47020,7 +47162,7 @@
         "hour": 0,
         "dow": "TUE",
         "hours": 8.13,
-        "cost": 162.49
+        "cost": 162.53
       },
       {
         "hour": 0,
@@ -47049,8 +47191,8 @@
       {
         "hour": 0,
         "dow": "SUN",
-        "hours": 117.61,
-        "cost": 1917.72
+        "hours": 117.33,
+        "cost": 1912.74
       },
       {
         "hour": 1,
@@ -47421,14 +47563,14 @@
       {
         "hour": 10,
         "dow": "MON",
-        "hours": 46.85,
-        "cost": 888.48
+        "hours": 47.55,
+        "cost": 901.16
       },
       {
         "hour": 10,
         "dow": "TUE",
-        "hours": 49.32,
-        "cost": 972.04
+        "hours": 50.04,
+        "cost": 985.04
       },
       {
         "hour": 10,
@@ -47463,14 +47605,14 @@
       {
         "hour": 11,
         "dow": "MON",
-        "hours": 84.54,
-        "cost": 1596.85
+        "hours": 85.54,
+        "cost": 1614.85
       },
       {
         "hour": 11,
         "dow": "TUE",
-        "hours": 90.05,
-        "cost": 1783.72
+        "hours": 91.05,
+        "cost": 1801.71
       },
       {
         "hour": 11,
@@ -47505,14 +47647,14 @@
       {
         "hour": 12,
         "dow": "MON",
-        "hours": 94.27,
-        "cost": 1780.71
+        "hours": 95.27,
+        "cost": 1798.71
       },
       {
         "hour": 12,
         "dow": "TUE",
-        "hours": 106.4,
-        "cost": 2095.14
+        "hours": 107.4,
+        "cost": 2113.13
       },
       {
         "hour": 12,
@@ -47547,14 +47689,14 @@
       {
         "hour": 13,
         "dow": "MON",
-        "hours": 102.05,
-        "cost": 1948.02
+        "hours": 103.05,
+        "cost": 1966.02
       },
       {
         "hour": 13,
         "dow": "TUE",
-        "hours": 116.41,
-        "cost": 2308.16
+        "hours": 117.41,
+        "cost": 2326.15
       },
       {
         "hour": 13,
@@ -47589,14 +47731,14 @@
       {
         "hour": 14,
         "dow": "MON",
-        "hours": 132.22,
-        "cost": 2526.61
+        "hours": 133.22,
+        "cost": 2544.61
       },
       {
         "hour": 14,
         "dow": "TUE",
-        "hours": 144.66,
-        "cost": 2840.0
+        "hours": 145.66,
+        "cost": 2857.99
       },
       {
         "hour": 14,
@@ -47631,14 +47773,14 @@
       {
         "hour": 15,
         "dow": "MON",
-        "hours": 134.37,
-        "cost": 2574.86
+        "hours": 135.37,
+        "cost": 2592.86
       },
       {
         "hour": 15,
         "dow": "TUE",
-        "hours": 143.48,
-        "cost": 2827.8
+        "hours": 144.48,
+        "cost": 2845.79
       },
       {
         "hour": 15,
@@ -47673,14 +47815,14 @@
       {
         "hour": 16,
         "dow": "MON",
-        "hours": 135.45,
-        "cost": 2604.55
+        "hours": 137.44,
+        "cost": 2642.37
       },
       {
         "hour": 16,
         "dow": "TUE",
-        "hours": 143.81,
-        "cost": 2870.71
+        "hours": 143.9,
+        "cost": 2872.35
       },
       {
         "hour": 16,
@@ -47715,8 +47857,8 @@
       {
         "hour": 17,
         "dow": "MON",
-        "hours": 114.45,
-        "cost": 2216.22
+        "hours": 116.2,
+        "cost": 2249.63
       },
       {
         "hour": 17,
@@ -47757,8 +47899,8 @@
       {
         "hour": 18,
         "dow": "MON",
-        "hours": 83.6,
-        "cost": 1618.08
+        "hours": 84.6,
+        "cost": 1638.07
       },
       {
         "hour": 18,
@@ -47799,8 +47941,8 @@
       {
         "hour": 19,
         "dow": "MON",
-        "hours": 73.67,
-        "cost": 1446.66
+        "hours": 74.67,
+        "cost": 1466.65
       },
       {
         "hour": 19,
@@ -47841,8 +47983,8 @@
       {
         "hour": 20,
         "dow": "MON",
-        "hours": 63.12,
-        "cost": 1235.29
+        "hours": 64.12,
+        "cost": 1255.28
       },
       {
         "hour": 20,
@@ -47883,8 +48025,8 @@
       {
         "hour": 21,
         "dow": "MON",
-        "hours": 52.56,
-        "cost": 1011.99
+        "hours": 53.56,
+        "cost": 1031.98
       },
       {
         "hour": 21,
@@ -47925,8 +48067,8 @@
       {
         "hour": 22,
         "dow": "MON",
-        "hours": 29.56,
-        "cost": 578.45
+        "hours": 30.56,
+        "cost": 598.44
       },
       {
         "hour": 22,
@@ -47967,8 +48109,8 @@
       {
         "hour": 23,
         "dow": "MON",
-        "hours": 20.45,
-        "cost": 416.5
+        "hours": 21.45,
+        "cost": 436.49
       },
       {
         "hour": 23,
@@ -48009,11 +48151,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 11870.48,
+    "regular_hours": 11891.73,
     "overtime_hours": 191.39,
-    "regular_cost": 209555.1,
+    "regular_cost": 209953.58,
     "overtime_cost": 3328.78,
-    "total_cost": 212883.86
+    "total_cost": 213282.34
   },
   "cogs": {
     "as_of": "2026-05-14",
@@ -92400,17 +92542,17 @@
       "rows_warned": 0
     },
     "toast_order": {
-      "ran_at": "2026-06-01T17:26:17+00:00",
+      "ran_at": "2026-06-02T16:11:23+00:00",
       "rows_in": 0,
       "rows_valid": 0,
       "rows_invalid": 0,
       "rows_warned": 0
     },
     "toast_time_entry": {
-      "ran_at": "2026-06-01T17:26:17+00:00",
-      "rows_in": 14,
-      "rows_valid": 13,
-      "rows_invalid": 1,
+      "ran_at": "2026-06-02T16:11:24+00:00",
+      "rows_in": 10,
+      "rows_valid": 10,
+      "rows_invalid": 0,
       "rows_warned": 0
     },
     "tripleseat_event": {
