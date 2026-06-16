@@ -1,6 +1,6 @@
 {
   "outlet_id": "hiroki_det",
-  "generated_at": "2026-06-15T17:06:25+00:00",
+  "generated_at": "2026-06-16T16:39:48+00:00",
   "source": "toast_api_v2",
   "order_details": {
     "hiroki_san": {
@@ -4409,15 +4409,15 @@
         },
         {
           "date": "2026-06-13",
-          "orders": 111,
-          "guests": 363,
-          "amount": 17401.49,
-          "net_sales": 17383.43,
+          "orders": 93,
+          "guests": 327,
+          "amount": 15091.49,
+          "net_sales": 15073.43,
           "tip": 0.0,
           "gratuity": 0.0,
-          "discount": 900.04,
-          "ticket_time_sec_sum": 487816.3,
-          "ticket_time_count": 111
+          "discount": 894.88,
+          "ticket_time_sec_sum": 430047.1,
+          "ticket_time_count": 93
         },
         {
           "date": "2026-06-14",
@@ -4430,6 +4430,18 @@
           "discount": 255.07,
           "ticket_time_sec_sum": 251845.5,
           "ticket_time_count": 52
+        },
+        {
+          "date": "2026-06-15",
+          "orders": 32,
+          "guests": 71,
+          "amount": 15853.01,
+          "net_sales": 15853.01,
+          "tip": 0.0,
+          "gratuity": 0.0,
+          "discount": 239.16,
+          "ticket_time_sec_sum": 207963.2,
+          "ticket_time_count": 32
         }
       ],
       "monthly": [
@@ -4560,12 +4572,12 @@
           "month": "2026-05"
         },
         {
-          "orders": 238,
-          "guests": 690,
-          "amount": 37059.22,
-          "net_sales": 36841.16,
+          "orders": 178,
+          "guests": 535,
+          "amount": 38401.29,
+          "net_sales": 38183.23,
           "tip": 0.0,
-          "discount": 1268.22,
+          "discount": 1389.11,
           "month": "2026-06"
         }
       ],
@@ -5126,9 +5138,9 @@
         {
           "hour": 17,
           "dow": "Sat",
-          "amount": 57180.5,
-          "orders": 416,
-          "guests": 950
+          "amount": 56900.5,
+          "orders": 413,
+          "guests": 943
         },
         {
           "hour": 17,
@@ -5168,9 +5180,9 @@
         {
           "hour": 18,
           "dow": "Mon",
-          "amount": 6020.0,
-          "orders": 2,
-          "guests": 2
+          "amount": 6131.0,
+          "orders": 4,
+          "guests": 6
         },
         {
           "hour": 18,
@@ -5217,16 +5229,16 @@
         {
           "hour": 19,
           "dow": "Mon",
-          "amount": 100.0,
-          "orders": 1,
-          "guests": 1
+          "amount": 1168.0,
+          "orders": 11,
+          "guests": 29
         },
         {
           "hour": 19,
           "dow": "Sat",
-          "amount": 208202.51,
-          "orders": 1078,
-          "guests": 2882
+          "amount": 207039.51,
+          "orders": 1069,
+          "guests": 2865
         },
         {
           "hour": 19,
@@ -5314,6 +5326,13 @@
         },
         {
           "hour": 21,
+          "dow": "Mon",
+          "amount": 254.0,
+          "orders": 6,
+          "guests": 11
+        },
+        {
+          "hour": 21,
           "dow": "Sat",
           "amount": 240480.07,
           "orders": 1255,
@@ -5357,9 +5376,9 @@
         {
           "hour": 22,
           "dow": "Mon",
-          "amount": 4800.0,
-          "orders": 2,
-          "guests": 2
+          "amount": 19220.01,
+          "orders": 16,
+          "guests": 30
         },
         {
           "hour": 22,
@@ -22894,9 +22913,9 @@
         {
           "date": "2026-06-13",
           "hour": 17,
-          "amount": 333.0,
-          "orders": 4,
-          "guests": 8
+          "amount": 53.0,
+          "orders": 1,
+          "guests": 1
         },
         {
           "date": "2026-06-13",
@@ -22908,9 +22927,9 @@
         {
           "date": "2026-06-13",
           "hour": 19,
-          "amount": 3641.0,
-          "orders": 15,
-          "guests": 46
+          "amount": 2478.0,
+          "orders": 6,
+          "guests": 29
         },
         {
           "date": "2026-06-13",
@@ -22995,6 +23014,34 @@
           "amount": 0.0,
           "orders": 3,
           "guests": 8
+        },
+        {
+          "date": "2026-06-15",
+          "hour": 18,
+          "amount": 111.0,
+          "orders": 2,
+          "guests": 4
+        },
+        {
+          "date": "2026-06-15",
+          "hour": 19,
+          "amount": 1068.0,
+          "orders": 10,
+          "guests": 28
+        },
+        {
+          "date": "2026-06-15",
+          "hour": 21,
+          "amount": 254.0,
+          "orders": 6,
+          "guests": 11
+        },
+        {
+          "date": "2026-06-15",
+          "hour": 22,
+          "amount": 14420.01,
+          "orders": 14,
+          "guests": 28
         }
       ],
       "categories_daily": [
@@ -25311,14 +25358,20 @@
         {
           "date": "2026-06-13",
           "category": "NA Beverage",
-          "amount": 227.0,
-          "orders": 44
+          "amount": 204.0,
+          "orders": 38
         },
         {
           "date": "2026-06-14",
           "category": "Other",
           "amount": 200.0,
           "orders": 1
+        },
+        {
+          "date": "2026-06-15",
+          "category": "Other",
+          "amount": 13845.0,
+          "orders": 13
         }
       ],
       "service_modes_daily": [
@@ -28027,9 +28080,9 @@
         {
           "date": "2026-06-13",
           "mode": "Dine In",
-          "amount": 17401.49,
-          "orders": 111,
-          "guests": 363
+          "amount": 15091.49,
+          "orders": 93,
+          "guests": 327
         },
         {
           "date": "2026-06-14",
@@ -28037,22 +28090,29 @@
           "amount": 200.0,
           "orders": 1,
           "guests": 1
+        },
+        {
+          "date": "2026-06-15",
+          "mode": "Dine In",
+          "amount": 15853.01,
+          "orders": 32,
+          "guests": 71
         }
       ],
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 24466.0,
-        "guests": 63904.0,
-        "amount": 4179370.9599999995,
-        "net_sales": 1613193.86,
+        "orders": 24480.0,
+        "guests": 63939.0,
+        "amount": 4192913.9699999993,
+        "net_sales": 1626736.87,
         "tip": 0.0,
         "gratuity": 0.0,
-        "discount": 108533.90000000013,
-        "ticket_time_sec_sum": 102726107.90000004,
-        "ticket_time_count": 24450,
-        "avg_check": 170.823631161612,
-        "avg_ticket_time_sec": 4201.476805725973
+        "discount": 108767.90000000014,
+        "ticket_time_sec_sum": 102876301.90000004,
+        "ticket_time_count": 24464,
+        "avg_check": 171.27916544117645,
+        "avg_ticket_time_sec": 4205.211817364292
       }
     },
     "sakazuki": {
@@ -32211,15 +32271,15 @@
         },
         {
           "date": "2026-06-13",
-          "orders": 67,
-          "guests": 159,
-          "amount": 1990.0,
-          "net_sales": 1990.0,
+          "orders": 33,
+          "guests": 69,
+          "amount": 1296.0,
+          "net_sales": 1296.0,
           "tip": 0.0,
           "gratuity": 0.0,
           "discount": 14.0,
-          "ticket_time_sec_sum": 104086.6,
-          "ticket_time_count": 67
+          "ticket_time_sec_sum": 26886.3,
+          "ticket_time_count": 33
         },
         {
           "date": "2026-06-14",
@@ -32362,12 +32422,12 @@
           "month": "2026-05"
         },
         {
-          "orders": 111,
-          "guests": 238,
-          "amount": 3495.5,
-          "net_sales": 3495.5,
+          "orders": 51,
+          "guests": 95,
+          "amount": 1806.5,
+          "net_sales": 1806.5,
           "tip": 0.0,
-          "discount": 101.5,
+          "discount": 96.5,
           "month": "2026-06"
         }
       ],
@@ -50812,8 +50872,8 @@
         {
           "date": "2026-06-13",
           "category": "Other",
-          "amount": 9.0,
-          "orders": 3
+          "amount": 3.0,
+          "orders": 1
         },
         {
           "date": "2026-06-14",
@@ -53389,17 +53449,17 @@
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 7812.0,
-        "guests": 14636.0,
-        "amount": 308865.35,
-        "net_sales": 127771.31999999999,
+        "orders": 7778.0,
+        "guests": 14546.0,
+        "amount": 308171.35,
+        "net_sales": 127077.31999999999,
         "tip": 0.0,
         "gratuity": 0.0,
         "discount": 10518.799999999997,
-        "ticket_time_sec_sum": 19916075.800000004,
-        "ticket_time_count": 7771,
-        "avg_check": 39.53729518689196,
-        "avg_ticket_time_sec": 2562.87167674688
+        "ticket_time_sec_sum": 19838875.500000004,
+        "ticket_time_count": 7737,
+        "avg_check": 39.6208986886089,
+        "avg_ticket_time_sec": 2564.1560682435056
       }
     },
     "aladdin_sane": {
@@ -57697,15 +57757,15 @@
         },
         {
           "date": "2026-06-13",
-          "orders": 33,
-          "guests": 96,
-          "amount": 1796.0,
-          "net_sales": 1796.0,
+          "orders": 27,
+          "guests": 80,
+          "amount": 1431.0,
+          "net_sales": 1431.0,
           "tip": 0.0,
           "gratuity": 0.0,
           "discount": 0.0,
-          "ticket_time_sec_sum": 60675.6,
-          "ticket_time_count": 33
+          "ticket_time_sec_sum": 54961.8,
+          "ticket_time_count": 27
         },
         {
           "date": "2026-06-14",
@@ -57848,12 +57908,12 @@
           "month": "2026-05"
         },
         {
-          "orders": 57,
-          "guests": 159,
-          "amount": 3239.0,
-          "net_sales": 3239.0,
+          "orders": 37,
+          "guests": 107,
+          "amount": 2040.5,
+          "net_sales": 2040.5,
           "tip": 0.0,
-          "discount": 22.0,
+          "discount": 12.5,
           "month": "2026-06"
         }
       ],
@@ -73994,9 +74054,9 @@
         },
         {
           "date": "2026-06-13",
-          "category": "Other",
-          "amount": 12.0,
-          "orders": 1
+          "category": "Liquor",
+          "amount": 1344.0,
+          "orders": 69
         },
         {
           "date": "2026-06-14",
@@ -76648,9 +76708,9 @@
         {
           "date": "2026-06-13",
           "mode": "Dine In",
-          "amount": 1796.0,
-          "orders": 33,
-          "guests": 96
+          "amount": 1431.0,
+          "orders": 27,
+          "guests": 80
         },
         {
           "date": "2026-06-14",
@@ -76663,17 +76723,17 @@
       "servers": [],
       "tables": [],
       "totals": {
-        "orders": 5876.0,
-        "guests": 15419.0,
-        "amount": 326882.82999999996,
-        "net_sales": 108677.01,
+        "orders": 5870.0,
+        "guests": 15403.0,
+        "amount": 326517.82999999996,
+        "net_sales": 108312.01,
         "tip": 0.0,
         "gratuity": 0.0,
         "discount": 5815.08,
-        "ticket_time_sec_sum": 13989449.400000008,
-        "ticket_time_count": 5872,
-        "avg_check": 55.63016167460857,
-        "avg_ticket_time_sec": 2382.399420980928
+        "ticket_time_sec_sum": 13983735.600000009,
+        "ticket_time_count": 5866,
+        "avg_check": 55.624843270868816,
+        "avg_ticket_time_sec": 2383.862188885102
       }
     }
   },
@@ -134544,13 +134604,22 @@
         "date": "2026-06-14"
       },
       {
+        "regular_hours": 124.6,
+        "overtime_hours": 0.0,
+        "regular_cost": 1663.03,
+        "overtime_cost": 0.0,
+        "total_cost": 1663.03,
+        "head_count": 19,
+        "date": "2026-06-15"
+      },
+      {
         "regular_hours": 0.0,
         "overtime_hours": 0.0,
         "regular_cost": 0.0,
         "overtime_cost": 0.0,
         "total_cost": 0.0,
-        "head_count": 1,
-        "date": "2026-06-15"
+        "head_count": 2,
+        "date": "2026-06-16"
       }
     ],
     "hour_daily": [
@@ -168138,42 +168207,6 @@
       },
       {
         "date": "2026-06-14",
-        "hour": 0,
-        "hours": 34.59,
-        "cost": 394.51
-      },
-      {
-        "date": "2026-06-14",
-        "hour": 1,
-        "hours": 30.47,
-        "cost": 336.69
-      },
-      {
-        "date": "2026-06-14",
-        "hour": 2,
-        "hours": 24.45,
-        "cost": 278.82
-      },
-      {
-        "date": "2026-06-14",
-        "hour": 3,
-        "hours": 20.62,
-        "cost": 234.21
-      },
-      {
-        "date": "2026-06-14",
-        "hour": 4,
-        "hours": 8.42,
-        "cost": 82.81
-      },
-      {
-        "date": "2026-06-14",
-        "hour": 5,
-        "hours": 1.14,
-        "cost": 1.7
-      },
-      {
-        "date": "2026-06-14",
         "hour": 15,
         "hours": 0.61,
         "cost": 12.85
@@ -168249,6 +168282,72 @@
         "hour": 3,
         "hours": 0.07,
         "cost": 1.26
+      },
+      {
+        "date": "2026-06-15",
+        "hour": 17,
+        "hours": 1.54,
+        "cost": 34.1
+      },
+      {
+        "date": "2026-06-15",
+        "hour": 18,
+        "hours": 5.24,
+        "cost": 115.26
+      },
+      {
+        "date": "2026-06-15",
+        "hour": 19,
+        "hours": 6.35,
+        "cost": 138.5
+      },
+      {
+        "date": "2026-06-15",
+        "hour": 20,
+        "hours": 13.78,
+        "cost": 194.45
+      },
+      {
+        "date": "2026-06-15",
+        "hour": 21,
+        "hours": 17.21,
+        "cost": 226.28
+      },
+      {
+        "date": "2026-06-15",
+        "hour": 22,
+        "hours": 19.0,
+        "cost": 240.96
+      },
+      {
+        "date": "2026-06-15",
+        "hour": 23,
+        "hours": 19.0,
+        "cost": 240.96
+      },
+      {
+        "date": "2026-06-16",
+        "hour": 0,
+        "hours": 17.6,
+        "cost": 213.61
+      },
+      {
+        "date": "2026-06-16",
+        "hour": 1,
+        "hours": 15.03,
+        "cost": 167.35
+      },
+      {
+        "date": "2026-06-16",
+        "hour": 2,
+        "hours": 9.59,
+        "cost": 88.94
+      },
+      {
+        "date": "2026-06-16",
+        "hour": 3,
+        "hours": 0.26,
+        "cost": 2.62
       }
     ],
     "by_job_daily": [
@@ -170998,8 +171097,15 @@
       },
       {
         "date": "2026-06-15",
-        "job_guid": "921cb2f5-cfdf-41dc-a2bf-be838ce9df32",
-        "title": "Sushi Cook",
+        "job_guid": "2183bfb7-8a8f-432c-a1f2-8df9d5994a02",
+        "title": "HS- Server Assistant",
+        "hours": 12.25,
+        "cost": 70.44
+      },
+      {
+        "date": "2026-06-16",
+        "job_guid": "ad0f7a34-2214-4b12-bf11-4a25c0e07860",
+        "title": "Prep Cook",
         "hours": 0.0,
         "cost": 0.0
       }
@@ -171014,8 +171120,8 @@
       {
         "hour": 0,
         "dow": "TUE",
-        "hours": 7.76,
-        "cost": 143.87
+        "hours": 25.36,
+        "cost": 357.48
       },
       {
         "hour": 0,
@@ -171044,8 +171150,8 @@
       {
         "hour": 0,
         "dow": "SUN",
-        "hours": 1900.66,
-        "cost": 21903.99
+        "hours": 1866.07,
+        "cost": 21509.48
       },
       {
         "hour": 1,
@@ -171056,8 +171162,8 @@
       {
         "hour": 1,
         "dow": "TUE",
-        "hours": 3.31,
-        "cost": 44.57
+        "hours": 18.34,
+        "cost": 211.92
       },
       {
         "hour": 1,
@@ -171086,8 +171192,8 @@
       {
         "hour": 1,
         "dow": "SUN",
-        "hours": 1850.48,
-        "cost": 21139.9
+        "hours": 1820.01,
+        "cost": 20803.21
       },
       {
         "hour": 2,
@@ -171098,8 +171204,8 @@
       {
         "hour": 2,
         "dow": "TUE",
-        "hours": 1.78,
-        "cost": 16.98
+        "hours": 11.37,
+        "cost": 105.92
       },
       {
         "hour": 2,
@@ -171128,8 +171234,8 @@
       {
         "hour": 2,
         "dow": "SUN",
-        "hours": 1717.31,
-        "cost": 19580.44
+        "hours": 1692.86,
+        "cost": 19301.62
       },
       {
         "hour": 3,
@@ -171140,8 +171246,8 @@
       {
         "hour": 3,
         "dow": "TUE",
-        "hours": 1.0,
-        "cost": 0.0
+        "hours": 1.26,
+        "cost": 2.62
       },
       {
         "hour": 3,
@@ -171170,8 +171276,8 @@
       {
         "hour": 3,
         "dow": "SUN",
-        "hours": 1418.29,
-        "cost": 16753.52
+        "hours": 1397.67,
+        "cost": 16519.31
       },
       {
         "hour": 4,
@@ -171212,8 +171318,8 @@
       {
         "hour": 4,
         "dow": "SUN",
-        "hours": 748.45,
-        "cost": 8814.08
+        "hours": 740.03,
+        "cost": 8731.27
       },
       {
         "hour": 5,
@@ -171254,8 +171360,8 @@
       {
         "hour": 5,
         "dow": "SUN",
-        "hours": 211.77,
-        "cost": 2375.13
+        "hours": 210.63,
+        "cost": 2373.43
       },
       {
         "hour": 6,
@@ -171680,8 +171786,8 @@
       {
         "hour": 17,
         "dow": "MON",
-        "hours": 56.58,
-        "cost": 1227.66
+        "hours": 58.12,
+        "cost": 1261.76
       },
       {
         "hour": 17,
@@ -171722,8 +171828,8 @@
       {
         "hour": 18,
         "dow": "MON",
-        "hours": 51.26,
-        "cost": 1111.99
+        "hours": 56.5,
+        "cost": 1227.25
       },
       {
         "hour": 18,
@@ -171764,8 +171870,8 @@
       {
         "hour": 19,
         "dow": "MON",
-        "hours": 47.93,
-        "cost": 1042.98
+        "hours": 54.28,
+        "cost": 1181.48
       },
       {
         "hour": 19,
@@ -171806,8 +171912,8 @@
       {
         "hour": 20,
         "dow": "MON",
-        "hours": 45.48,
-        "cost": 979.88
+        "hours": 59.26,
+        "cost": 1174.33
       },
       {
         "hour": 20,
@@ -171848,8 +171954,8 @@
       {
         "hour": 21,
         "dow": "MON",
-        "hours": 36.59,
-        "cost": 731.25
+        "hours": 53.8,
+        "cost": 957.53
       },
       {
         "hour": 21,
@@ -171890,8 +171996,8 @@
       {
         "hour": 22,
         "dow": "MON",
-        "hours": 27.7,
-        "cost": 532.02
+        "hours": 46.7,
+        "cost": 772.98
       },
       {
         "hour": 22,
@@ -171932,8 +172038,8 @@
       {
         "hour": 23,
         "dow": "MON",
-        "hours": 17.12,
-        "cost": 300.01
+        "hours": 36.12,
+        "cost": 540.97
       },
       {
         "hour": 23,
@@ -171974,11 +172080,11 @@
     ],
     "by_job": [],
     "hours": 0.0,
-    "regular_hours": 67623.3,
+    "regular_hours": 67747.9,
     "overtime_hours": 1446.06,
-    "regular_cost": 865128.75,
+    "regular_cost": 866791.78,
     "overtime_cost": 34608.34,
-    "total_cost": 899737.01
+    "total_cost": 901400.04
   },
   "cogs": {
     "as_of": "2026-05-14",
@@ -242409,17 +242515,17 @@
       "rows_warned": 0
     },
     "toast_order": {
-      "ran_at": "2026-06-15T17:06:24+00:00",
-      "rows_in": 51,
-      "rows_valid": 51,
+      "ran_at": "2026-06-16T16:39:47+00:00",
+      "rows_in": 31,
+      "rows_valid": 31,
       "rows_invalid": 0,
       "rows_warned": 0
     },
     "toast_time_entry": {
-      "ran_at": "2026-06-15T17:06:25+00:00",
-      "rows_in": 61,
-      "rows_valid": 60,
-      "rows_invalid": 1,
+      "ran_at": "2026-06-16T16:39:48+00:00",
+      "rows_in": 44,
+      "rows_valid": 44,
+      "rows_invalid": 0,
       "rows_warned": 0
     },
     "tripleseat_event": {
